@@ -8034,9 +8034,8 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        match input.set_as_active {
-            Some(ref x) => params.put("setAsActive", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.set_as_active {
+            params.put("setAsActive", x);
         }
         request.set_params(params);
 
@@ -8198,9 +8197,8 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_endpoint_prefix("iot".to_string());
         request.set_payload(Some(encoded.into_bytes()));
         let mut params = Params::new();
-        match input.set_as_active {
-            Some(ref x) => params.put("setAsActive", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.set_as_active {
+            params.put("setAsActive", x);
         }
         request.set_params(params);
 
@@ -8245,9 +8243,8 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        match input.set_as_active {
-            Some(ref x) => params.put("setAsActive", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.set_as_active {
+            params.put("setAsActive", x);
         }
         request.set_params(params);
 
@@ -8332,9 +8329,8 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_endpoint_prefix("iot".to_string());
         request.set_payload(Some(encoded.into_bytes()));
         let mut params = Params::new();
-        match input.set_as_default {
-            Some(ref x) => params.put("setAsDefault", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.set_as_default {
+            params.put("setAsDefault", x);
         }
         request.set_params(params);
 
@@ -8680,9 +8676,8 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        match input.expected_version {
-            Some(ref x) => params.put("expectedVersion", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.expected_version {
+            params.put("expectedVersion", x);
         }
         request.set_params(params);
 
@@ -9383,17 +9378,14 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        match input.ascending_order {
-            Some(ref x) => params.put("ascendingOrder", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.ascending_order {
+            params.put("ascendingOrder", x);
         }
-        match input.marker {
-            Some(ref x) => params.put("marker", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.marker {
+            params.put("marker", x);
         }
-        match input.page_size {
-            Some(ref x) => params.put("pageSize", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.page_size {
+            params.put("pageSize", x);
         }
         request.set_params(params);
 
@@ -9434,17 +9426,14 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        match input.ascending_order {
-            Some(ref x) => params.put("ascendingOrder", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.ascending_order {
+            params.put("ascendingOrder", x);
         }
-        match input.marker {
-            Some(ref x) => params.put("marker", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.marker {
+            params.put("marker", x);
         }
-        match input.page_size {
-            Some(ref x) => params.put("pageSize", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.page_size {
+            params.put("pageSize", x);
         }
         request.set_params(params);
 
@@ -9489,17 +9478,14 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        match input.ascending_order {
-            Some(ref x) => params.put("ascendingOrder", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.ascending_order {
+            params.put("ascendingOrder", x);
         }
-        match input.marker {
-            Some(ref x) => params.put("marker", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.marker {
+            params.put("marker", x);
         }
-        match input.page_size {
-            Some(ref x) => params.put("pageSize", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.page_size {
+            params.put("pageSize", x);
         }
         request.set_params(params);
 
@@ -9541,17 +9527,14 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        match input.ascending_order {
-            Some(ref x) => params.put("ascendingOrder", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.ascending_order {
+            params.put("ascendingOrder", x);
         }
-        match input.marker {
-            Some(ref x) => params.put("marker", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.marker {
+            params.put("marker", x);
         }
-        match input.page_size {
-            Some(ref x) => params.put("pageSize", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.page_size {
+            params.put("pageSize", x);
         }
         request.set_params(params);
 
@@ -9595,17 +9578,14 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        match input.ascending_order {
-            Some(ref x) => params.put("ascendingOrder", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.ascending_order {
+            params.put("ascendingOrder", x);
         }
-        match input.marker {
-            Some(ref x) => params.put("marker", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.marker {
+            params.put("marker", x);
         }
-        match input.page_size {
-            Some(ref x) => params.put("pageSize", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.page_size {
+            params.put("pageSize", x);
         }
         request.set_params(params);
 
@@ -9649,17 +9629,14 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        match input.ascending_order {
-            Some(ref x) => params.put("ascendingOrder", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.ascending_order {
+            params.put("ascendingOrder", x);
         }
-        match input.marker {
-            Some(ref x) => params.put("marker", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.marker {
+            params.put("marker", x);
         }
-        match input.page_size {
-            Some(ref x) => params.put("pageSize", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.page_size {
+            params.put("pageSize", x);
         }
         request.set_params(params);
 
@@ -9740,17 +9717,14 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        match input.ascending_order {
-            Some(ref x) => params.put("ascendingOrder", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.ascending_order {
+            params.put("ascendingOrder", x);
         }
-        match input.marker {
-            Some(ref x) => params.put("marker", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.marker {
+            params.put("marker", x);
         }
-        match input.page_size {
-            Some(ref x) => params.put("pageSize", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.page_size {
+            params.put("pageSize", x);
         }
         request.set_params(params);
 
@@ -9793,13 +9767,11 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        match input.max_results {
-            Some(ref x) => params.put("maxResults", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
         }
-        match input.next_token {
-            Some(ref x) => params.put("nextToken", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
         }
         request.set_params(params);
 
@@ -9879,17 +9851,14 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        match input.max_results {
-            Some(ref x) => params.put("maxResults", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
         }
-        match input.next_token {
-            Some(ref x) => params.put("nextToken", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
         }
-        match input.thing_type_name {
-            Some(ref x) => params.put("thingTypeName", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.thing_type_name {
+            params.put("thingTypeName", x);
         }
         request.set_params(params);
 
@@ -9932,25 +9901,20 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        match input.attribute_name {
-            Some(ref x) => params.put("attributeName", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.attribute_name {
+            params.put("attributeName", x);
         }
-        match input.attribute_value {
-            Some(ref x) => params.put("attributeValue", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.attribute_value {
+            params.put("attributeValue", x);
         }
-        match input.max_results {
-            Some(ref x) => params.put("maxResults", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
         }
-        match input.next_token {
-            Some(ref x) => params.put("nextToken", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
         }
-        match input.thing_type_name {
-            Some(ref x) => params.put("thingTypeName", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.thing_type_name {
+            params.put("thingTypeName", x);
         }
         request.set_params(params);
 
@@ -9993,21 +9957,17 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        match input.max_results {
-            Some(ref x) => params.put("maxResults", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
         }
-        match input.next_token {
-            Some(ref x) => params.put("nextToken", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
         }
-        match input.rule_disabled {
-            Some(ref x) => params.put("ruleDisabled", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.rule_disabled {
+            params.put("ruleDisabled", x);
         }
-        match input.topic {
-            Some(ref x) => params.put("topic", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.topic {
+            params.put("topic", x);
         }
         request.set_params(params);
 
@@ -10051,13 +10011,11 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_endpoint_prefix("iot".to_string());
         request.set_payload(Some(encoded.into_bytes()));
         let mut params = Params::new();
-        match input.allow_auto_registration {
-            Some(ref x) => params.put("allowAutoRegistration", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.allow_auto_registration {
+            params.put("allowAutoRegistration", x);
         }
-        match input.set_as_active {
-            Some(ref x) => params.put("setAsActive", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.set_as_active {
+            params.put("setAsActive", x);
         }
         request.set_params(params);
 
@@ -10292,7 +10250,7 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_endpoint_prefix("iot".to_string());
         request.set_payload(Some(encoded.into_bytes()));
         let mut params = Params::new();
-        params.put("targetAwsAccount", &input.target_aws_account.to_string());
+        params.put("targetAwsAccount", &input.target_aws_account);
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));
@@ -10333,13 +10291,11 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        match input.new_auto_registration_status {
-            Some(ref x) => params.put("newAutoRegistrationStatus", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.new_auto_registration_status {
+            params.put("newAutoRegistrationStatus", x);
         }
-        match input.new_status {
-            Some(ref x) => params.put("newStatus", &x.to_string()),
-            None => {}
+        if let Some(ref x) = input.new_status {
+            params.put("newStatus", x);
         }
         request.set_params(params);
 
@@ -10379,7 +10335,7 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        params.put("newStatus", &input.new_status.to_string());
+        params.put("newStatus", &input.new_status);
         request.set_params(params);
 
         request.sign(&try!(self.credentials_provider.credentials()));

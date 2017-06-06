@@ -24,6 +24,7 @@ pub struct AddTagsToOnPremisesInstancesInput {
     pub tags: TagList,
 }
 
+pub type AdditionalDeploymentStatusInfo = String;
 #[doc="<p>Information about an alarm.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Alarm {
@@ -63,6 +64,9 @@ pub struct ApplicationInfo {
     #[doc="<p>The time at which the application was created.</p>"]
     #[serde(rename="createTime")]
     pub create_time: Option<Timestamp>,
+    #[doc="<p>The name for a connection to a GitHub account.</p>"]
+    #[serde(rename="gitHubAccountName")]
+    pub git_hub_account_name: Option<GitHubAccountTokenName>,
     #[doc="<p>True if the user has authenticated with GitHub for the specified application; otherwise, false.</p>"]
     #[serde(rename="linkedToGitHub")]
     #[serde(skip_serializing_if="::std::option::Option::is_none")]
@@ -102,7 +106,7 @@ pub type AutoScalingGroupHook = String;
 pub type AutoScalingGroupList = Vec<AutoScalingGroup>;
 pub type AutoScalingGroupName = String;
 pub type AutoScalingGroupNameList = Vec<AutoScalingGroupName>;
-#[doc="<p>Represents the input of a batch get application revisions operation.</p>"]
+#[doc="<p>Represents the input of a BatchGetApplicationRevisions operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct BatchGetApplicationRevisionsInput {
     #[doc="<p>The name of an AWS CodeDeploy application about which to get revision information.</p>"]
@@ -113,7 +117,7 @@ pub struct BatchGetApplicationRevisionsInput {
     pub revisions: RevisionLocationList,
 }
 
-#[doc="<p>Represents the output of a batch get application revisions operation.</p>"]
+#[doc="<p>Represents the output of a BatchGetApplicationRevisions operation.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct BatchGetApplicationRevisionsOutput {
     #[doc="<p>The name of the application that corresponds to the revisions.</p>"]
@@ -127,7 +131,7 @@ pub struct BatchGetApplicationRevisionsOutput {
     pub revisions: Option<RevisionInfoList>,
 }
 
-#[doc="<p>Represents the input of a batch get applications operation.</p>"]
+#[doc="<p>Represents the input of a BatchGetApplications operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct BatchGetApplicationsInput {
     #[doc="<p>A list of application names separated by spaces.</p>"]
@@ -135,7 +139,7 @@ pub struct BatchGetApplicationsInput {
     pub application_names: Option<ApplicationsList>,
 }
 
-#[doc="<p>Represents the output of a batch get applications operation.</p>"]
+#[doc="<p>Represents the output of a BatchGetApplications operation.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct BatchGetApplicationsOutput {
     #[doc="<p>Information about the applications.</p>"]
@@ -143,7 +147,7 @@ pub struct BatchGetApplicationsOutput {
     pub applications_info: Option<ApplicationsInfoList>,
 }
 
-#[doc="<p>Represents the input of a batch get deployment groups operation.</p>"]
+#[doc="<p>Represents the input of a BatchGetDeploymentGroups operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct BatchGetDeploymentGroupsInput {
     #[doc="<p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>"]
@@ -154,7 +158,7 @@ pub struct BatchGetDeploymentGroupsInput {
     pub deployment_group_names: DeploymentGroupsList,
 }
 
-#[doc="<p>Represents the output of a batch get deployment groups operation.</p>"]
+#[doc="<p>Represents the output of a BatchGetDeploymentGroups operation.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct BatchGetDeploymentGroupsOutput {
     #[doc="<p>Information about the deployment groups.</p>"]
@@ -165,7 +169,7 @@ pub struct BatchGetDeploymentGroupsOutput {
     pub error_message: Option<ErrorMessage>,
 }
 
-#[doc="<p>Represents the input of a batch get deployment instances operation.</p>"]
+#[doc="<p>Represents the input of a BatchGetDeploymentInstances operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct BatchGetDeploymentInstancesInput {
     #[doc="<p>The unique ID of a deployment.</p>"]
@@ -176,7 +180,7 @@ pub struct BatchGetDeploymentInstancesInput {
     pub instance_ids: InstancesList,
 }
 
-#[doc="<p>Represents the output of a batch get deployment instance operation.</p>"]
+#[doc="<p>Represents the output of a BatchGetDeploymentInstances operation.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct BatchGetDeploymentInstancesOutput {
     #[doc="<p>Information about errors that may have occurred during the API call.</p>"]
@@ -187,7 +191,7 @@ pub struct BatchGetDeploymentInstancesOutput {
     pub instances_summary: Option<InstanceSummaryList>,
 }
 
-#[doc="<p>Represents the input of a batch get deployments operation.</p>"]
+#[doc="<p>Represents the input of a BatchGetDeployments operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct BatchGetDeploymentsInput {
     #[doc="<p>A list of deployment IDs, separated by spaces.</p>"]
@@ -195,7 +199,7 @@ pub struct BatchGetDeploymentsInput {
     pub deployment_ids: Option<DeploymentsList>,
 }
 
-#[doc="<p>Represents the output of a batch get deployments operation.</p>"]
+#[doc="<p>Represents the output of a BatchGetDeployments operation.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct BatchGetDeploymentsOutput {
     #[doc="<p>Information about the deployments.</p>"]
@@ -203,7 +207,7 @@ pub struct BatchGetDeploymentsOutput {
     pub deployments_info: Option<DeploymentsInfoList>,
 }
 
-#[doc="<p>Represents the input of a batch get on-premises instances operation.</p>"]
+#[doc="<p>Represents the input of a BatchGetOnPremisesInstances operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct BatchGetOnPremisesInstancesInput {
     #[doc="<p>The names of the on-premises instances about which to get information.</p>"]
@@ -211,7 +215,7 @@ pub struct BatchGetOnPremisesInstancesInput {
     pub instance_names: Option<InstanceNameList>,
 }
 
-#[doc="<p>Represents the output of a batch get on-premises instances operation.</p>"]
+#[doc="<p>Represents the output of a BatchGetOnPremisesInstances operation.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct BatchGetOnPremisesInstancesOutput {
     #[doc="<p>Information about the on-premises instances.</p>"]
@@ -219,10 +223,42 @@ pub struct BatchGetOnPremisesInstancesOutput {
     pub instance_infos: Option<InstanceInfoList>,
 }
 
+#[doc="<p>Information about blue/green deployment options for a deployment group.</p>"]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+pub struct BlueGreenDeploymentConfiguration {
+    #[doc="<p>Information about the action to take when newly provisioned instances are ready to receive traffic in a blue/green deployment.</p>"]
+    #[serde(rename="deploymentReadyOption")]
+    pub deployment_ready_option: Option<DeploymentReadyOption>,
+    #[doc="<p>Information about how instances are provisioned for a replacement environment in a blue/green deployment.</p>"]
+    #[serde(rename="greenFleetProvisioningOption")]
+    pub green_fleet_provisioning_option: Option<GreenFleetProvisioningOption>,
+    #[doc="<p>Information about whether to terminate instances in the original fleet during a blue/green deployment.</p>"]
+    #[serde(rename="terminateBlueInstancesOnDeploymentSuccess")]
+    pub terminate_blue_instances_on_deployment_success: Option<BlueInstanceTerminationOption>,
+}
+
+#[doc="<p>Information about whether instances in the original environment are terminated when a blue/green deployment is successful.</p>"]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+pub struct BlueInstanceTerminationOption {
+    #[doc="<p>The action to take on instances in the original environment after a successful blue/green deployment.</p> <ul> <li> <p>TERMINATE: Instances are terminated after a specified wait time.</p> </li> <li> <p>KEEP_ALIVE: Instances are left running after they are deregistered from the load balancer and removed from the deployment group.</p> </li> </ul>"]
+    #[serde(rename="action")]
+    pub action: Option<InstanceAction>,
+    #[doc="<p>The number of minutes to wait after a successful blue/green deployment before terminating instances from the original environment.</p>"]
+    #[serde(rename="terminationWaitTimeInMinutes")]
+    pub termination_wait_time_in_minutes: Option<Duration>,
+}
+
 pub type Boolean = bool;
 pub type BundleType = String;
 pub type CommitId = String;
-#[doc="<p>Represents the input of a create application operation.</p>"]
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct ContinueDeploymentInput {
+    #[doc="<p>The deployment ID of the blue/green deployment for which you want to start rerouting traffic to the replacement environment.</p>"]
+    #[serde(rename="deploymentId")]
+    pub deployment_id: Option<DeploymentId>,
+}
+
+#[doc="<p>Represents the input of a CreateApplication operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateApplicationInput {
     #[doc="<p>The name of the application. This name must be unique with the applicable IAM user or AWS account.</p>"]
@@ -230,7 +266,7 @@ pub struct CreateApplicationInput {
     pub application_name: ApplicationName,
 }
 
-#[doc="<p>Represents the output of a create application operation.</p>"]
+#[doc="<p>Represents the output of a CreateApplication operation.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct CreateApplicationOutput {
     #[doc="<p>A unique application ID.</p>"]
@@ -238,7 +274,7 @@ pub struct CreateApplicationOutput {
     pub application_id: Option<ApplicationId>,
 }
 
-#[doc="<p>Represents the input of a create deployment configuration operation.</p>"]
+#[doc="<p>Represents the input of a CreateDeploymentConfig operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateDeploymentConfigInput {
     #[doc="<p>The name of the deployment configuration to create.</p>"]
@@ -249,7 +285,7 @@ pub struct CreateDeploymentConfigInput {
     pub minimum_healthy_hosts: Option<MinimumHealthyHosts>,
 }
 
-#[doc="<p>Represents the output of a create deployment configuration operation.</p>"]
+#[doc="<p>Represents the output of a CreateDeploymentConfig operation.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct CreateDeploymentConfigOutput {
     #[doc="<p>A unique deployment configuration ID.</p>"]
@@ -257,10 +293,10 @@ pub struct CreateDeploymentConfigOutput {
     pub deployment_config_id: Option<DeploymentConfigId>,
 }
 
-#[doc="<p>Represents the input of a create deployment group operation.</p>"]
+#[doc="<p>Represents the input of a CreateDeploymentGroup operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateDeploymentGroupInput {
-    #[doc="<p>Information to add about Amazon CloudWatch alarms when the deployment group is created. </p>"]
+    #[doc="<p>Information to add about Amazon CloudWatch alarms when the deployment group is created.</p>"]
     #[serde(rename="alarmConfiguration")]
     pub alarm_configuration: Option<AlarmConfiguration>,
     #[doc="<p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>"]
@@ -272,16 +308,25 @@ pub struct CreateDeploymentGroupInput {
     #[doc="<p>A list of associated Auto Scaling groups.</p>"]
     #[serde(rename="autoScalingGroups")]
     pub auto_scaling_groups: Option<AutoScalingGroupNameList>,
-    #[doc="<p>If specified, the deployment configuration name can be either one of the predefined configurations provided with AWS CodeDeploy or a custom deployment configuration that you create by calling the create deployment configuration operation.</p> <p>CodeDeployDefault.OneAtATime is the default deployment configuration. It is used if a configuration isn't specified for the deployment or the deployment group.</p> <p>For more information about the predefined deployment configurations in AWS CodeDeploy, see see <a href=\"http://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations.html\">Working with Deployment Groups in AWS CodeDeploy</a> in the AWS CodeDeploy User Guide.</p>"]
+    #[doc="<p>Information about blue/green deployment options for a deployment group.</p>"]
+    #[serde(rename="blueGreenDeploymentConfiguration")]
+    pub blue_green_deployment_configuration: Option<BlueGreenDeploymentConfiguration>,
+    #[doc="<p>If specified, the deployment configuration name can be either one of the predefined configurations provided with AWS CodeDeploy or a custom deployment configuration that you create by calling the create deployment configuration operation.</p> <p>CodeDeployDefault.OneAtATime is the default deployment configuration. It is used if a configuration isn't specified for the deployment or the deployment group.</p> <p>For more information about the predefined deployment configurations in AWS CodeDeploy, see <a href=\"http://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations.html\">Working with Deployment Groups in AWS CodeDeploy</a> in the AWS CodeDeploy User Guide.</p>"]
     #[serde(rename="deploymentConfigName")]
     pub deployment_config_name: Option<DeploymentConfigName>,
     #[doc="<p>The name of a new deployment group for the specified application.</p>"]
     #[serde(rename="deploymentGroupName")]
     pub deployment_group_name: DeploymentGroupName,
-    #[doc="<p>The Amazon EC2 tags on which to filter.</p>"]
+    #[doc="<p>Information about the type of deployment, in-place or blue/green, that you want to run and whether to route deployment traffic behind a load balancer.</p>"]
+    #[serde(rename="deploymentStyle")]
+    pub deployment_style: Option<DeploymentStyle>,
+    #[doc="<p>The Amazon EC2 tags on which to filter. The deployment group will include EC2 instances with any of the specified tags.</p>"]
     #[serde(rename="ec2TagFilters")]
     pub ec_2_tag_filters: Option<EC2TagFilterList>,
-    #[doc="<p>The on-premises instance tags on which to filter.</p>"]
+    #[doc="<p>Information about the load balancer used in a deployment.</p>"]
+    #[serde(rename="loadBalancerInfo")]
+    pub load_balancer_info: Option<LoadBalancerInfo>,
+    #[doc="<p>The on-premises instance tags on which to filter. The deployment group will include on-premises instances with any of the specified tags.</p>"]
     #[serde(rename="onPremisesInstanceTagFilters")]
     pub on_premises_instance_tag_filters: Option<TagFilterList>,
     #[doc="<p>A service role ARN that allows AWS CodeDeploy to act on the user's behalf when interacting with AWS services.</p>"]
@@ -292,7 +337,7 @@ pub struct CreateDeploymentGroupInput {
     pub trigger_configurations: Option<TriggerConfigList>,
 }
 
-#[doc="<p>Represents the output of a create deployment group operation.</p>"]
+#[doc="<p>Represents the output of a CreateDeploymentGroup operation.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct CreateDeploymentGroupOutput {
     #[doc="<p>A unique deployment group ID.</p>"]
@@ -300,7 +345,7 @@ pub struct CreateDeploymentGroupOutput {
     pub deployment_group_id: Option<DeploymentGroupId>,
 }
 
-#[doc="<p>Represents the input of a create deployment operation.</p>"]
+#[doc="<p>Represents the input of a CreateDeployment operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateDeploymentInput {
     #[doc="<p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>"]
@@ -318,6 +363,9 @@ pub struct CreateDeploymentInput {
     #[doc="<p>A comment about the deployment.</p>"]
     #[serde(rename="description")]
     pub description: Option<Description>,
+    #[doc="<p>Information about how AWS CodeDeploy handles files that already exist in a deployment target location but weren't part of the previous successful deployment.</p> <p>The fileExistsBehavior parameter takes any of the following values:</p> <ul> <li> <p>DISALLOW: The deployment fails. This is also the default behavior if no option is specified.</p> </li> <li> <p>OVERWRITE: The version of the file from the application revision currently being deployed replaces the version already on the instance.</p> </li> <li> <p>RETAIN: The version of the file already on the instance is kept and used as part of the new deployment.</p> </li> </ul>"]
+    #[serde(rename="fileExistsBehavior")]
+    pub file_exists_behavior: Option<FileExistsBehavior>,
     #[doc="<p>If set to true, then if the deployment causes the ApplicationStop deployment lifecycle event to an instance to fail, the deployment to that instance will not be considered to have failed at that point and will continue on to the BeforeInstall deployment lifecycle event.</p> <p>If set to false or not specified, then if the deployment causes the ApplicationStop deployment lifecycle event to fail to an instance, the deployment to that instance will stop, and the deployment to that instance will be considered to have failed.</p>"]
     #[serde(rename="ignoreApplicationStopFailures")]
     #[serde(skip_serializing_if="::std::option::Option::is_none")]
@@ -325,13 +373,16 @@ pub struct CreateDeploymentInput {
     #[doc="<p>The type and location of the revision to deploy.</p>"]
     #[serde(rename="revision")]
     pub revision: Option<RevisionLocation>,
+    #[doc="<p>Information about the instances that will belong to the replacement environment in a blue/green deployment.</p>"]
+    #[serde(rename="targetInstances")]
+    pub target_instances: Option<TargetInstances>,
     #[doc="<p>Indicates whether to deploy to all instances or only to instances that are not running the latest application revision.</p>"]
     #[serde(rename="updateOutdatedInstancesOnly")]
     #[serde(skip_serializing_if="::std::option::Option::is_none")]
     pub update_outdated_instances_only: Option<Boolean>,
 }
 
-#[doc="<p>Represents the output of a create deployment operation.</p>"]
+#[doc="<p>Represents the output of a CreateDeployment operation.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct CreateDeploymentOutput {
     #[doc="<p>A unique deployment ID.</p>"]
@@ -339,7 +390,7 @@ pub struct CreateDeploymentOutput {
     pub deployment_id: Option<DeploymentId>,
 }
 
-#[doc="<p>Represents the input of a delete application operation.</p>"]
+#[doc="<p>Represents the input of a DeleteApplication operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteApplicationInput {
     #[doc="<p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>"]
@@ -347,7 +398,7 @@ pub struct DeleteApplicationInput {
     pub application_name: ApplicationName,
 }
 
-#[doc="<p>Represents the input of a delete deployment configuration operation.</p>"]
+#[doc="<p>Represents the input of a DeleteDeploymentConfig operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteDeploymentConfigInput {
     #[doc="<p>The name of a deployment configuration associated with the applicable IAM user or AWS account.</p>"]
@@ -355,7 +406,7 @@ pub struct DeleteDeploymentConfigInput {
     pub deployment_config_name: DeploymentConfigName,
 }
 
-#[doc="<p>Represents the input of a delete deployment group operation.</p>"]
+#[doc="<p>Represents the input of a DeleteDeploymentGroup operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteDeploymentGroupInput {
     #[doc="<p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>"]
@@ -366,7 +417,7 @@ pub struct DeleteDeploymentGroupInput {
     pub deployment_group_name: DeploymentGroupName,
 }
 
-#[doc="<p>Represents the output of a delete deployment group operation.</p>"]
+#[doc="<p>Represents the output of a DeleteDeploymentGroup operation.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DeleteDeploymentGroupOutput {
     #[doc="<p>If the output contains no data, and the corresponding deployment group contained at least one Auto Scaling group, AWS CodeDeploy successfully removed all corresponding Auto Scaling lifecycle event hooks from the Amazon EC2 instances in the Auto Scaling group. If the output contains data, AWS CodeDeploy could not remove some Auto Scaling lifecycle event hooks from the Amazon EC2 instances in the Auto Scaling group.</p>"]
@@ -411,6 +462,9 @@ pub struct DeploymentGroupInfo {
     #[doc="<p>A list of associated Auto Scaling groups.</p>"]
     #[serde(rename="autoScalingGroups")]
     pub auto_scaling_groups: Option<AutoScalingGroupList>,
+    #[doc="<p>Information about blue/green deployment options for a deployment group.</p>"]
+    #[serde(rename="blueGreenDeploymentConfiguration")]
+    pub blue_green_deployment_configuration: Option<BlueGreenDeploymentConfiguration>,
     #[doc="<p>The deployment configuration name.</p>"]
     #[serde(rename="deploymentConfigName")]
     pub deployment_config_name: Option<DeploymentConfigName>,
@@ -420,9 +474,21 @@ pub struct DeploymentGroupInfo {
     #[doc="<p>The deployment group name.</p>"]
     #[serde(rename="deploymentGroupName")]
     pub deployment_group_name: Option<DeploymentGroupName>,
+    #[doc="<p>Information about the type of deployment, either in-place or blue/green, you want to run and whether to route deployment traffic behind a load balancer.</p>"]
+    #[serde(rename="deploymentStyle")]
+    pub deployment_style: Option<DeploymentStyle>,
     #[doc="<p>The Amazon EC2 tags on which to filter.</p>"]
     #[serde(rename="ec2TagFilters")]
     pub ec_2_tag_filters: Option<EC2TagFilterList>,
+    #[doc="<p>Information about the most recent attempted deployment to the deployment group.</p>"]
+    #[serde(rename="lastAttemptedDeployment")]
+    pub last_attempted_deployment: Option<LastDeploymentInfo>,
+    #[doc="<p>Information about the most recent successful deployment to the deployment group.</p>"]
+    #[serde(rename="lastSuccessfulDeployment")]
+    pub last_successful_deployment: Option<LastDeploymentInfo>,
+    #[doc="<p>Information about the load balancer to use in a deployment.</p>"]
+    #[serde(rename="loadBalancerInfo")]
+    pub load_balancer_info: Option<LoadBalancerInfo>,
     #[doc="<p>The on-premises instance tags on which to filter.</p>"]
     #[serde(rename="onPremisesInstanceTagFilters")]
     pub on_premises_instance_tag_filters: Option<TagFilterList>,
@@ -444,12 +510,18 @@ pub type DeploymentId = String;
 #[doc="<p>Information about a deployment.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DeploymentInfo {
+    #[doc="<p>Provides information about the results of a deployment, such as whether instances in the original environment in a blue/green deployment were not terminated.</p>"]
+    #[serde(rename="additionalDeploymentStatusInfo")]
+    pub additional_deployment_status_info: Option<AdditionalDeploymentStatusInfo>,
     #[doc="<p>The application name.</p>"]
     #[serde(rename="applicationName")]
     pub application_name: Option<ApplicationName>,
     #[doc="<p>Information about the automatic rollback configuration associated with the deployment.</p>"]
     #[serde(rename="autoRollbackConfiguration")]
     pub auto_rollback_configuration: Option<AutoRollbackConfiguration>,
+    #[doc="<p>Information about blue/green deployment options for this deployment.</p>"]
+    #[serde(rename="blueGreenDeploymentConfiguration")]
+    pub blue_green_deployment_configuration: Option<BlueGreenDeploymentConfiguration>,
     #[doc="<p>A timestamp indicating when the deployment was complete.</p>"]
     #[serde(rename="completeTime")]
     pub complete_time: Option<Timestamp>,
@@ -471,16 +543,32 @@ pub struct DeploymentInfo {
     #[doc="<p>A summary of the deployment status of the instances in the deployment.</p>"]
     #[serde(rename="deploymentOverview")]
     pub deployment_overview: Option<DeploymentOverview>,
+    #[doc="<p>Information about the type of deployment, either in-place or blue/green, you want to run and whether to route deployment traffic behind a load balancer.</p>"]
+    #[serde(rename="deploymentStyle")]
+    pub deployment_style: Option<DeploymentStyle>,
     #[doc="<p>A comment about the deployment.</p>"]
     #[serde(rename="description")]
     pub description: Option<Description>,
     #[doc="<p>Information about any error associated with this deployment.</p>"]
     #[serde(rename="errorInformation")]
     pub error_information: Option<ErrorInformation>,
+    #[doc="<p>Information about how AWS CodeDeploy handles files that already exist in a deployment target location but weren't part of the previous successful deployment.</p> <ul> <li> <p>DISALLOW: The deployment fails. This is also the default behavior if no option is specified.</p> </li> <li> <p>OVERWRITE: The version of the file from the application revision currently being deployed replaces the version already on the instance.</p> </li> <li> <p>RETAIN: The version of the file already on the instance is kept and used as part of the new deployment.</p> </li> </ul>"]
+    #[serde(rename="fileExistsBehavior")]
+    pub file_exists_behavior: Option<FileExistsBehavior>,
     #[doc="<p>If true, then if the deployment causes the ApplicationStop deployment lifecycle event to an instance to fail, the deployment to that instance will not be considered to have failed at that point and will continue on to the BeforeInstall deployment lifecycle event.</p> <p>If false or not specified, then if the deployment causes the ApplicationStop deployment lifecycle event to an instance to fail, the deployment to that instance will stop, and the deployment to that instance will be considered to have failed.</p>"]
     #[serde(rename="ignoreApplicationStopFailures")]
     #[serde(skip_serializing_if="::std::option::Option::is_none")]
     pub ignore_application_stop_failures: Option<Boolean>,
+    #[doc="<p>Indicates whether the wait period set for the termination of instances in the original environment has started. Status is 'false' if the KEEP_ALIVE option is specified; otherwise, 'true' as soon as the termination wait period starts.</p>"]
+    #[serde(rename="instanceTerminationWaitTimeStarted")]
+    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    pub instance_termination_wait_time_started: Option<Boolean>,
+    #[doc="<p>Information about the load balancer used in the deployment.</p>"]
+    #[serde(rename="loadBalancerInfo")]
+    pub load_balancer_info: Option<LoadBalancerInfo>,
+    #[doc="<p>Information about the application revision that was deployed to the deployment group before the most recent successful deployment.</p>"]
+    #[serde(rename="previousRevision")]
+    pub previous_revision: Option<RevisionLocation>,
     #[doc="<p>Information about the location of stored application artifacts and the service from which to retrieve them.</p>"]
     #[serde(rename="revision")]
     pub revision: Option<RevisionLocation>,
@@ -493,12 +581,16 @@ pub struct DeploymentInfo {
     #[doc="<p>The current state of the deployment as a whole.</p>"]
     #[serde(rename="status")]
     pub status: Option<DeploymentStatus>,
+    #[doc="<p>Information about the instances that belong to the replacement environment in a blue/green deployment.</p>"]
+    #[serde(rename="targetInstances")]
+    pub target_instances: Option<TargetInstances>,
     #[doc="<p>Indicates whether only instances that are not running the latest application revision are to be deployed to.</p>"]
     #[serde(rename="updateOutdatedInstancesOnly")]
     #[serde(skip_serializing_if="::std::option::Option::is_none")]
     pub update_outdated_instances_only: Option<Boolean>,
 }
 
+pub type DeploymentOption = String;
 #[doc="<p>Information about the deployment status of the instances in the deployment.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DeploymentOverview {
@@ -511,6 +603,9 @@ pub struct DeploymentOverview {
     #[doc="<p>The number of instances in the deployment in a pending state.</p>"]
     #[serde(rename="Pending")]
     pub pending: Option<InstanceCount>,
+    #[doc="<p>The number of instances in a replacement environment ready to receive traffic in a blue/green deployment.</p>"]
+    #[serde(rename="Ready")]
+    pub ready: Option<InstanceCount>,
     #[doc="<p>The number of instances in the deployment in a skipped state.</p>"]
     #[serde(rename="Skipped")]
     pub skipped: Option<InstanceCount>,
@@ -519,11 +614,35 @@ pub struct DeploymentOverview {
     pub succeeded: Option<InstanceCount>,
 }
 
+pub type DeploymentReadyAction = String;
+#[doc="<p>Information about how traffic is rerouted to instances in a replacement environment in a blue/green deployment.</p>"]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+pub struct DeploymentReadyOption {
+    #[doc="<p>Information about when to reroute traffic from an original environment to a replacement environment in a blue/green deployment.</p> <ul> <li> <p>CONTINUE_DEPLOYMENT: Register new instances with the load balancer immediately after the new application revision is installed on the instances in the replacement environment.</p> </li> <li> <p>STOP_DEPLOYMENT: Do not register new instances with load balancer unless traffic is rerouted manually. If traffic is not rerouted manually before the end of the specified wait period, the deployment status is changed to Stopped.</p> </li> </ul>"]
+    #[serde(rename="actionOnTimeout")]
+    pub action_on_timeout: Option<DeploymentReadyAction>,
+    #[doc="<p>The number of minutes to wait before the status of a blue/green deployment changed to Stopped if rerouting is not started manually. Applies only to the STOP_DEPLOYMENT option for actionOnTimeout</p>"]
+    #[serde(rename="waitTimeInMinutes")]
+    pub wait_time_in_minutes: Option<Duration>,
+}
+
 pub type DeploymentStatus = String;
 pub type DeploymentStatusList = Vec<DeploymentStatus>;
+#[doc="<p>Information about the type of deployment, either in-place or blue/green, you want to run and whether to route deployment traffic behind a load balancer.</p>"]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+pub struct DeploymentStyle {
+    #[doc="<p>Indicates whether to route deployment traffic behind a load balancer.</p>"]
+    #[serde(rename="deploymentOption")]
+    pub deployment_option: Option<DeploymentOption>,
+    #[doc="<p>Indicates whether to run an in-place deployment or a blue/green deployment.</p>"]
+    #[serde(rename="deploymentType")]
+    pub deployment_type: Option<DeploymentType>,
+}
+
+pub type DeploymentType = String;
 pub type DeploymentsInfoList = Vec<DeploymentInfo>;
 pub type DeploymentsList = Vec<DeploymentId>;
-#[doc="<p>Represents the input of a deregister on-premises instance operation.</p>"]
+#[doc="<p>Represents the input of a DeregisterOnPremisesInstance operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeregisterOnPremisesInstanceInput {
     #[doc="<p>The name of the on-premises instance to deregister.</p>"]
@@ -549,7 +668,8 @@ pub struct Diagnostics {
     pub script_name: Option<ScriptName>,
 }
 
-#[doc="<p>Information about a tag filter.</p>"]
+pub type Duration = i64;
+#[doc="<p>Information about an EC2 tag filter.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EC2TagFilter {
     #[doc="<p>The tag filter key.</p>"]
@@ -565,12 +685,22 @@ pub struct EC2TagFilter {
 
 pub type EC2TagFilterList = Vec<EC2TagFilter>;
 pub type EC2TagFilterType = String;
+#[doc="<p>Information about a load balancer in Elastic Load Balancing to use in a deployment.</p>"]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+pub struct ELBInfo {
+    #[doc="<p>For blue/green deployments, the name of the load balancer that will be used to route traffic from original instances to replacement instances in a blue/green deployment. For in-place deployments, the name of the load balancer that instances are deregistered from so they are not serving traffic during a deployment, and then re-registered with after the deployment completes.</p>"]
+    #[serde(rename="name")]
+    pub name: Option<ELBName>,
+}
+
+pub type ELBInfoList = Vec<ELBInfo>;
+pub type ELBName = String;
 pub type ETag = String;
 pub type ErrorCode = String;
 #[doc="<p>Information about a deployment error.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ErrorInformation {
-    #[doc="<p>The error code:</p> <ul> <li> <p>APPLICATION_MISSING: The application was missing. This error code will most likely be raised if the application is deleted after the deployment is created but before it is started.</p> </li> <li> <p>DEPLOYMENT_GROUP_MISSING: The deployment group was missing. This error code will most likely be raised if the deployment group is deleted after the deployment is created but before it is started.</p> </li> <li> <p>HEALTH_CONSTRAINTS: The deployment failed on too many instances to be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>HEALTH_CONSTRAINTS_INVALID: The revision cannot be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>IAM_ROLE_MISSING: The service role cannot be accessed.</p> </li> <li> <p>IAM_ROLE_PERMISSIONS: The service role does not have the correct permissions.</p> </li> <li> <p>INTERNAL_ERROR: There was an internal error.</p> </li> <li> <p>NO_EC2_SUBSCRIPTION: The calling account is not subscribed to the Amazon EC2 service.</p> </li> <li> <p>NO_INSTANCES: No instance were specified, or no instance can be found.</p> </li> <li> <p>OVER_MAX_INSTANCES: The maximum number of instance was exceeded.</p> </li> <li> <p>THROTTLED: The operation was throttled because the calling account exceeded the throttling limits of one or more AWS services.</p> </li> <li> <p>TIMEOUT: The deployment has timed out.</p> </li> <li> <p>REVISION_MISSING: The revision ID was missing. This error code will most likely be raised if the revision is deleted after the deployment is created but before it is started.</p> </li> </ul>"]
+    #[doc="<p>For information about additional error codes, see <a href=\"http://docs.aws.amazon.com/codedeploy/latest/userguide/error-codes.html\">Error Codes for AWS CodeDeploy</a> in the <a href=\"http://docs.aws.amazon.com/codedeploy/latest/userguide\">AWS CodeDeploy User Guide</a>.</p> <p>The error code:</p> <ul> <li> <p>APPLICATION_MISSING: The application was missing. This error code will most likely be raised if the application is deleted after the deployment is created but before it is started.</p> </li> <li> <p>DEPLOYMENT_GROUP_MISSING: The deployment group was missing. This error code will most likely be raised if the deployment group is deleted after the deployment is created but before it is started.</p> </li> <li> <p>HEALTH_CONSTRAINTS: The deployment failed on too many instances to be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>HEALTH_CONSTRAINTS_INVALID: The revision cannot be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>IAM_ROLE_MISSING: The service role cannot be accessed.</p> </li> <li> <p>IAM_ROLE_PERMISSIONS: The service role does not have the correct permissions.</p> </li> <li> <p>INTERNAL_ERROR: There was an internal error.</p> </li> <li> <p>NO_EC2_SUBSCRIPTION: The calling account is not subscribed to the Amazon EC2 service.</p> </li> <li> <p>NO_INSTANCES: No instance were specified, or no instance can be found.</p> </li> <li> <p>OVER_MAX_INSTANCES: The maximum number of instance was exceeded.</p> </li> <li> <p>THROTTLED: The operation was throttled because the calling account exceeded the throttling limits of one or more AWS services.</p> </li> <li> <p>TIMEOUT: The deployment has timed out.</p> </li> <li> <p>REVISION_MISSING: The revision ID was missing. This error code will most likely be raised if the revision is deleted after the deployment is created but before it is started.</p> </li> </ul>"]
     #[serde(rename="code")]
     pub code: Option<ErrorCode>,
     #[doc="<p>An accompanying error message.</p>"]
@@ -579,6 +709,7 @@ pub struct ErrorInformation {
 }
 
 pub type ErrorMessage = String;
+pub type FileExistsBehavior = String;
 #[doc="<p>Information about an application revision.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GenericRevisionInfo {
@@ -599,7 +730,7 @@ pub struct GenericRevisionInfo {
     pub register_time: Option<Timestamp>,
 }
 
-#[doc="<p>Represents the input of a get application operation.</p>"]
+#[doc="<p>Represents the input of a GetApplication operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetApplicationInput {
     #[doc="<p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>"]
@@ -607,7 +738,7 @@ pub struct GetApplicationInput {
     pub application_name: ApplicationName,
 }
 
-#[doc="<p>Represents the output of a get application operation.</p>"]
+#[doc="<p>Represents the output of a GetApplication operation.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GetApplicationOutput {
     #[doc="<p>Information about the application.</p>"]
@@ -615,7 +746,7 @@ pub struct GetApplicationOutput {
     pub application: Option<ApplicationInfo>,
 }
 
-#[doc="<p>Represents the input of a get application revision operation.</p>"]
+#[doc="<p>Represents the input of a GetApplicationRevision operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetApplicationRevisionInput {
     #[doc="<p>The name of the application that corresponds to the revision.</p>"]
@@ -626,7 +757,7 @@ pub struct GetApplicationRevisionInput {
     pub revision: RevisionLocation,
 }
 
-#[doc="<p>Represents the output of a get application revision operation.</p>"]
+#[doc="<p>Represents the output of a GetApplicationRevision operation.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GetApplicationRevisionOutput {
     #[doc="<p>The name of the application that corresponds to the revision.</p>"]
@@ -640,7 +771,7 @@ pub struct GetApplicationRevisionOutput {
     pub revision_info: Option<GenericRevisionInfo>,
 }
 
-#[doc="<p>Represents the input of a get deployment configuration operation.</p>"]
+#[doc="<p>Represents the input of a GetDeploymentConfig operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetDeploymentConfigInput {
     #[doc="<p>The name of a deployment configuration associated with the applicable IAM user or AWS account.</p>"]
@@ -648,7 +779,7 @@ pub struct GetDeploymentConfigInput {
     pub deployment_config_name: DeploymentConfigName,
 }
 
-#[doc="<p>Represents the output of a get deployment configuration operation.</p>"]
+#[doc="<p>Represents the output of a GetDeploymentConfig operation.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GetDeploymentConfigOutput {
     #[doc="<p>Information about the deployment configuration.</p>"]
@@ -656,7 +787,7 @@ pub struct GetDeploymentConfigOutput {
     pub deployment_config_info: Option<DeploymentConfigInfo>,
 }
 
-#[doc="<p>Represents the input of a get deployment group operation.</p>"]
+#[doc="<p>Represents the input of a GetDeploymentGroup operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetDeploymentGroupInput {
     #[doc="<p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>"]
@@ -667,7 +798,7 @@ pub struct GetDeploymentGroupInput {
     pub deployment_group_name: DeploymentGroupName,
 }
 
-#[doc="<p>Represents the output of a get deployment group operation.</p>"]
+#[doc="<p>Represents the output of a GetDeploymentGroup operation.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GetDeploymentGroupOutput {
     #[doc="<p>Information about the deployment group.</p>"]
@@ -675,7 +806,7 @@ pub struct GetDeploymentGroupOutput {
     pub deployment_group_info: Option<DeploymentGroupInfo>,
 }
 
-#[doc="<p>Represents the input of a get deployment operation.</p>"]
+#[doc="<p>Represents the input of a GetDeployment operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetDeploymentInput {
     #[doc="<p>A deployment ID associated with the applicable IAM user or AWS account.</p>"]
@@ -683,7 +814,7 @@ pub struct GetDeploymentInput {
     pub deployment_id: DeploymentId,
 }
 
-#[doc="<p>Represents the input of a get deployment instance operation.</p>"]
+#[doc="<p>Represents the input of a GetDeploymentInstance operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetDeploymentInstanceInput {
     #[doc="<p>The unique ID of a deployment.</p>"]
@@ -694,7 +825,7 @@ pub struct GetDeploymentInstanceInput {
     pub instance_id: InstanceId,
 }
 
-#[doc="<p>Represents the output of a get deployment instance operation.</p>"]
+#[doc="<p>Represents the output of a GetDeploymentInstance operation.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GetDeploymentInstanceOutput {
     #[doc="<p>Information about the instance.</p>"]
@@ -702,7 +833,7 @@ pub struct GetDeploymentInstanceOutput {
     pub instance_summary: Option<InstanceSummary>,
 }
 
-#[doc="<p>Represents the output of a get deployment operation.</p>"]
+#[doc="<p>Represents the output of a GetDeployment operation.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GetDeploymentOutput {
     #[doc="<p>Information about the deployment.</p>"]
@@ -710,7 +841,7 @@ pub struct GetDeploymentOutput {
     pub deployment_info: Option<DeploymentInfo>,
 }
 
-#[doc="<p>Represents the input of a get on-premises instance operation.</p>"]
+#[doc="<p>Represents the input of a GetOnPremisesInstance operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetOnPremisesInstanceInput {
     #[doc="<p>The name of the on-premises instance about which to get information.</p>"]
@@ -718,7 +849,7 @@ pub struct GetOnPremisesInstanceInput {
     pub instance_name: InstanceName,
 }
 
-#[doc="<p>Represents the output of a get on-premises instance operation.</p>"]
+#[doc="<p>Represents the output of a GetOnPremisesInstance operation.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GetOnPremisesInstanceOutput {
     #[doc="<p>Information about the on-premises instance.</p>"]
@@ -726,6 +857,8 @@ pub struct GetOnPremisesInstanceOutput {
     pub instance_info: Option<InstanceInfo>,
 }
 
+pub type GitHubAccountTokenName = String;
+pub type GitHubAccountTokenNameList = Vec<GitHubAccountTokenName>;
 #[doc="<p>Information about the location of application artifacts stored in GitHub.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GitHubLocation {
@@ -737,8 +870,18 @@ pub struct GitHubLocation {
     pub repository: Option<Repository>,
 }
 
+pub type GreenFleetProvisioningAction = String;
+#[doc="<p>Information about the instances that belong to the replacement environment in a blue/green deployment.</p>"]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+pub struct GreenFleetProvisioningOption {
+    #[doc="<p>The method used to add instances to a replacement environment.</p> <ul> <li> <p>DISCOVER_EXISTING: Use instances that already exist or will be created manually.</p> </li> <li> <p>COPY_AUTO_SCALING_GROUP: Use settings from a specified Auto Scaling group to define and create instances in a new Auto Scaling group.</p> </li> </ul>"]
+    #[serde(rename="action")]
+    pub action: Option<GreenFleetProvisioningAction>,
+}
+
 pub type IamSessionArn = String;
 pub type IamUserArn = String;
+pub type InstanceAction = String;
 pub type InstanceArn = String;
 pub type InstanceCount = i64;
 pub type InstanceId = String;
@@ -782,6 +925,9 @@ pub struct InstanceSummary {
     #[doc="<p>The instance ID.</p>"]
     #[serde(rename="instanceId")]
     pub instance_id: Option<InstanceId>,
+    #[doc="<p>Information about which environment an instance belongs to in a blue/green deployment.</p> <ul> <li> <p>BLUE: The instance is part of the original environment.</p> </li> <li> <p>GREEN: The instance is part of the replacement environment.</p> </li> </ul>"]
+    #[serde(rename="instanceType")]
+    pub instance_type: Option<InstanceType>,
     #[doc="<p>A timestamp indicating when the instance information was last updated.</p>"]
     #[serde(rename="lastUpdatedAt")]
     pub last_updated_at: Option<Timestamp>,
@@ -794,8 +940,27 @@ pub struct InstanceSummary {
 }
 
 pub type InstanceSummaryList = Vec<InstanceSummary>;
+pub type InstanceType = String;
+pub type InstanceTypeList = Vec<InstanceType>;
 pub type InstancesList = Vec<InstanceId>;
 pub type Key = String;
+#[doc="<p>Information about the most recent attempted or successful deployment to a deployment group.</p>"]
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct LastDeploymentInfo {
+    #[doc="<p>A timestamp indicating when the most recent deployment to the deployment group started.</p>"]
+    #[serde(rename="createTime")]
+    pub create_time: Option<Timestamp>,
+    #[doc="<p>The deployment ID.</p>"]
+    #[serde(rename="deploymentId")]
+    pub deployment_id: Option<DeploymentId>,
+    #[doc="<p>A timestamp indicating when the most recent deployment to the deployment group completed.</p>"]
+    #[serde(rename="endTime")]
+    pub end_time: Option<Timestamp>,
+    #[doc="<p>The status of the most recent deployment.</p>"]
+    #[serde(rename="status")]
+    pub status: Option<DeploymentStatus>,
+}
+
 pub type LifecycleErrorCode = String;
 #[doc="<p>Information about a deployment lifecycle event.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -821,7 +986,7 @@ pub type LifecycleEventList = Vec<LifecycleEvent>;
 pub type LifecycleEventName = String;
 pub type LifecycleEventStatus = String;
 pub type LifecycleMessage = String;
-#[doc="<p>Represents the input of a list application revisions operation.</p>"]
+#[doc="<p>Represents the input of a ListApplicationRevisions operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListApplicationRevisionsInput {
     #[doc="<p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>"]
@@ -847,7 +1012,7 @@ pub struct ListApplicationRevisionsInput {
     pub sort_order: Option<SortOrder>,
 }
 
-#[doc="<p>Represents the output of a list application revisions operation.</p>"]
+#[doc="<p>Represents the output of a ListApplicationRevisions operation.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ListApplicationRevisionsOutput {
     #[doc="<p>If a large amount of information is returned, an identifier will also be returned. It can be used in a subsequent list application revisions call to return the next set of application revisions in the list.</p>"]
@@ -858,7 +1023,7 @@ pub struct ListApplicationRevisionsOutput {
     pub revisions: Option<RevisionLocationList>,
 }
 
-#[doc="<p>Represents the input of a list applications operation.</p>"]
+#[doc="<p>Represents the input of a ListApplications operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListApplicationsInput {
     #[doc="<p>An identifier returned from the previous list applications call. It can be used to return the next set of applications in the list.</p>"]
@@ -866,7 +1031,7 @@ pub struct ListApplicationsInput {
     pub next_token: Option<NextToken>,
 }
 
-#[doc="<p>Represents the output of a list applications operation.</p>"]
+#[doc="<p>Represents the output of a ListApplications operation.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ListApplicationsOutput {
     #[doc="<p>A list of application names.</p>"]
@@ -877,7 +1042,7 @@ pub struct ListApplicationsOutput {
     pub next_token: Option<NextToken>,
 }
 
-#[doc="<p>Represents the input of a list deployment configurations operation.</p>"]
+#[doc="<p>Represents the input of a ListDeploymentConfigs operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListDeploymentConfigsInput {
     #[doc="<p>An identifier returned from the previous list deployment configurations call. It can be used to return the next set of deployment configurations in the list. </p>"]
@@ -885,7 +1050,7 @@ pub struct ListDeploymentConfigsInput {
     pub next_token: Option<NextToken>,
 }
 
-#[doc="<p>Represents the output of a list deployment configurations operation.</p>"]
+#[doc="<p>Represents the output of a ListDeploymentConfigs operation.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ListDeploymentConfigsOutput {
     #[doc="<p>A list of deployment configurations, including built-in configurations such as CodeDeployDefault.OneAtATime.</p>"]
@@ -896,7 +1061,7 @@ pub struct ListDeploymentConfigsOutput {
     pub next_token: Option<NextToken>,
 }
 
-#[doc="<p>Represents the input of a list deployment groups operation.</p>"]
+#[doc="<p>Represents the input of a ListDeploymentGroups operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListDeploymentGroupsInput {
     #[doc="<p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>"]
@@ -907,7 +1072,7 @@ pub struct ListDeploymentGroupsInput {
     pub next_token: Option<NextToken>,
 }
 
-#[doc="<p>Represents the output of a list deployment groups operation.</p>"]
+#[doc="<p>Represents the output of a ListDeploymentGroups operation.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ListDeploymentGroupsOutput {
     #[doc="<p>The application name.</p>"]
@@ -921,7 +1086,7 @@ pub struct ListDeploymentGroupsOutput {
     pub next_token: Option<NextToken>,
 }
 
-#[doc="<p>Represents the input of a list deployment instances operation.</p>"]
+#[doc="<p>Represents the input of a ListDeploymentInstances operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListDeploymentInstancesInput {
     #[doc="<p>The unique ID of a deployment.</p>"]
@@ -930,12 +1095,15 @@ pub struct ListDeploymentInstancesInput {
     #[doc="<p>A subset of instances to list by status:</p> <ul> <li> <p>Pending: Include those instance with pending deployments.</p> </li> <li> <p>InProgress: Include those instance where deployments are still in progress.</p> </li> <li> <p>Succeeded: Include those instances with successful deployments.</p> </li> <li> <p>Failed: Include those instance with failed deployments.</p> </li> <li> <p>Skipped: Include those instance with skipped deployments.</p> </li> <li> <p>Unknown: Include those instance with deployments in an unknown state.</p> </li> </ul>"]
     #[serde(rename="instanceStatusFilter")]
     pub instance_status_filter: Option<InstanceStatusList>,
+    #[doc="<p>The set of instances in a blue/green deployment, either those in the original environment (\"BLUE\") or those in the replacement environment (\"GREEN\"), for which you want to view instance information.</p>"]
+    #[serde(rename="instanceTypeFilter")]
+    pub instance_type_filter: Option<InstanceTypeList>,
     #[doc="<p>An identifier returned from the previous list deployment instances call. It can be used to return the next set of deployment instances in the list.</p>"]
     #[serde(rename="nextToken")]
     pub next_token: Option<NextToken>,
 }
 
-#[doc="<p>Represents the output of a list deployment instances operation.</p>"]
+#[doc="<p>Represents the output of a ListDeploymentInstances operation.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ListDeploymentInstancesOutput {
     #[doc="<p>A list of instance IDs.</p>"]
@@ -946,7 +1114,7 @@ pub struct ListDeploymentInstancesOutput {
     pub next_token: Option<NextToken>,
 }
 
-#[doc="<p>Represents the input of a list deployments operation.</p>"]
+#[doc="<p>Represents the input of a ListDeployments operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListDeploymentsInput {
     #[doc="<p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>"]
@@ -966,7 +1134,7 @@ pub struct ListDeploymentsInput {
     pub next_token: Option<NextToken>,
 }
 
-#[doc="<p>Represents the output of a list deployments operation.</p>"]
+#[doc="<p>Represents the output of a ListDeployments operation.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ListDeploymentsOutput {
     #[doc="<p>A list of deployment IDs.</p>"]
@@ -977,7 +1145,26 @@ pub struct ListDeploymentsOutput {
     pub next_token: Option<NextToken>,
 }
 
-#[doc="<p>Represents the input of a list on-premises instances operation.</p>"]
+#[doc="<p>Represents the input of a ListGitHubAccountTokenNames operation.</p>"]
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct ListGitHubAccountTokenNamesInput {
+    #[doc="<p>An identifier returned from the previous ListGitHubAccountTokenNames call. It can be used to return the next set of names in the list. </p>"]
+    #[serde(rename="nextToken")]
+    pub next_token: Option<NextToken>,
+}
+
+#[doc="<p>Represents the output of a ListGitHubAccountTokenNames operation.</p>"]
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct ListGitHubAccountTokenNamesOutput {
+    #[doc="<p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent ListGitHubAccountTokenNames call to return the next set of names in the list. </p>"]
+    #[serde(rename="nextToken")]
+    pub next_token: Option<NextToken>,
+    #[doc="<p>A list of names of connections to GitHub accounts.</p>"]
+    #[serde(rename="tokenNameList")]
+    pub token_name_list: Option<GitHubAccountTokenNameList>,
+}
+
+#[doc="<p>Represents the input of a ListOnPremisesInstances operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListOnPremisesInstancesInput {
     #[doc="<p>An identifier returned from the previous list on-premises instances call. It can be used to return the next set of on-premises instances in the list.</p>"]
@@ -1003,12 +1190,20 @@ pub struct ListOnPremisesInstancesOutput {
 }
 
 pub type ListStateFilterAction = String;
+#[doc="<p>Information about the load balancer used in a deployment.</p>"]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+pub struct LoadBalancerInfo {
+    #[doc="<p>An array containing information about the load balancer in Elastic Load Balancing to use in a deployment.</p>"]
+    #[serde(rename="elbInfoList")]
+    pub elb_info_list: Option<ELBInfoList>,
+}
+
 pub type LogTail = String;
 pub type Message = String;
 #[doc="<p>Information about minimum healthy instance.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct MinimumHealthyHosts {
-    #[doc="<p>The minimum healthy instance type:</p> <ul> <li> <p>HOST_COUNT: The minimum number of healthy instance as an absolute value.</p> </li> <li> <p>FLEET_PERCENT: The minimum number of healthy instance as a percentage of the total number of instance in the deployment.</p> </li> </ul> <p>In an example of nine instance, if a HOST_COUNT of six is specified, deploy to up to three instances at a time. The deployment will be successful if six or more instances are deployed to successfully; otherwise, the deployment fails. If a FLEET_PERCENT of 40 is specified, deploy to up to five instance at a time. The deployment will be successful if four or more instance are deployed to successfully; otherwise, the deployment fails.</p> <note> <p>In a call to the get deployment configuration operation, CodeDeployDefault.OneAtATime will return a minimum healthy instance type of MOST_CONCURRENCY and a value of 1. This means a deployment to only one instance at a time. (You cannot set the type to MOST_CONCURRENCY, only to HOST_COUNT or FLEET_PERCENT.) In addition, with CodeDeployDefault.OneAtATime, AWS CodeDeploy will try to ensure that all instances but one are kept in a healthy state during the deployment. Although this allows one instance at a time to be taken offline for a new deployment, it also means that if the deployment to the last instance fails, the overall deployment still succeeds.</p> </note>"]
+    #[doc="<p>The minimum healthy instance type:</p> <ul> <li> <p>HOST_COUNT: The minimum number of healthy instance as an absolute value.</p> </li> <li> <p>FLEET_PERCENT: The minimum number of healthy instance as a percentage of the total number of instance in the deployment.</p> </li> </ul> <p>In an example of nine instance, if a HOST_COUNT of six is specified, deploy to up to three instances at a time. The deployment will be successful if six or more instances are deployed to successfully; otherwise, the deployment fails. If a FLEET_PERCENT of 40 is specified, deploy to up to five instance at a time. The deployment will be successful if four or more instance are deployed to successfully; otherwise, the deployment fails.</p> <note> <p>In a call to the get deployment configuration operation, CodeDeployDefault.OneAtATime will return a minimum healthy instance type of MOST_CONCURRENCY and a value of 1. This means a deployment to only one instance at a time. (You cannot set the type to MOST_CONCURRENCY, only to HOST_COUNT or FLEET_PERCENT.) In addition, with CodeDeployDefault.OneAtATime, AWS CodeDeploy will try to ensure that all instances but one are kept in a healthy state during the deployment. Although this allows one instance at a time to be taken offline for a new deployment, it also means that if the deployment to the last instance fails, the overall deployment still succeeds.</p> </note> <p>For more information, see <a href=\"http://docs.aws.amazon.com/codedeploy/latest/userguide/instances-health.html\">AWS CodeDeploy Instance Health</a> in the <i>AWS CodeDeploy User Guide</i>.</p>"]
     #[serde(rename="type")]
     pub type_: Option<MinimumHealthyHostsType>,
     #[doc="<p>The minimum healthy instance value.</p>"]
@@ -1020,7 +1215,7 @@ pub type MinimumHealthyHostsType = String;
 pub type MinimumHealthyHostsValue = i64;
 pub type NextToken = String;
 pub type NullableBoolean = bool;
-#[doc="<p>Represents the input of a register application revision operation.</p>"]
+#[doc="<p>Represents the input of a RegisterApplicationRevision operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct RegisterApplicationRevisionInput {
     #[doc="<p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>"]
@@ -1049,7 +1244,7 @@ pub struct RegisterOnPremisesInstanceInput {
 }
 
 pub type RegistrationStatus = String;
-#[doc="<p>Represents the input of a remove tags from on-premises instances operation.</p>"]
+#[doc="<p>Represents the input of a RemoveTagsFromOnPremisesInstances operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct RemoveTagsFromOnPremisesInstancesInput {
     #[doc="<p>The names of the on-premises instances from which to remove tags.</p>"]
@@ -1064,7 +1259,7 @@ pub type Repository = String;
 #[doc="<p>Information about an application revision.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct RevisionInfo {
-    #[doc="<p>Information about an application revision, including usage details and currently associated deployment groups.</p>"]
+    #[doc="<p>Information about an application revision, including usage details and associated deployment groups.</p>"]
     #[serde(rename="genericRevisionInfo")]
     pub generic_revision_info: Option<GenericRevisionInfo>,
     #[doc="<p>Information about the location and type of an application revision.</p>"]
@@ -1127,8 +1322,15 @@ pub struct S3Location {
 }
 
 pub type ScriptName = String;
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct SkipWaitTimeForInstanceTerminationInput {
+    #[doc="<p>The ID of the blue/green deployment for which you want to skip the instance termination wait time.</p>"]
+    #[serde(rename="deploymentId")]
+    pub deployment_id: Option<DeploymentId>,
+}
+
 pub type SortOrder = String;
-#[doc="<p>Represents the input of a stop deployment operation.</p>"]
+#[doc="<p>Represents the input of a StopDeployment operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct StopDeploymentInput {
     #[doc="<p>Indicates, when a deployment is stopped, whether instances that have been updated should be rolled back to the previous version of the application revision.</p>"]
@@ -1140,7 +1342,7 @@ pub struct StopDeploymentInput {
     pub deployment_id: DeploymentId,
 }
 
-#[doc="<p>Represents the output of a stop deployment operation.</p>"]
+#[doc="<p>Represents the output of a StopDeployment operation.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct StopDeploymentOutput {
     #[doc="<p>The status of the stop deployment operation:</p> <ul> <li> <p>Pending: The stop operation is pending.</p> </li> <li> <p>Succeeded: The stop operation was successful.</p> </li> </ul>"]
@@ -1180,6 +1382,17 @@ pub struct TagFilter {
 pub type TagFilterList = Vec<TagFilter>;
 pub type TagFilterType = String;
 pub type TagList = Vec<Tag>;
+#[doc="<p>Information about the instances to be used in the replacement environment in a blue/green deployment.</p>"]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+pub struct TargetInstances {
+    #[doc="<p>The names of one or more Auto Scaling groups to identify a replacement environment for a blue/green deployment.</p>"]
+    #[serde(rename="autoScalingGroups")]
+    pub auto_scaling_groups: Option<AutoScalingGroupNameList>,
+    #[doc="<p>The tag filter key, type, and value used to identify Amazon EC2 instances in a replacement environment for a blue/green deployment.</p>"]
+    #[serde(rename="tagFilters")]
+    pub tag_filters: Option<EC2TagFilterList>,
+}
+
 #[doc="<p>Information about a time range.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct TimeRange {
@@ -1211,7 +1424,7 @@ pub type TriggerEventType = String;
 pub type TriggerEventTypeList = Vec<TriggerEventType>;
 pub type TriggerName = String;
 pub type TriggerTargetArn = String;
-#[doc="<p>Represents the input of an update application operation.</p>"]
+#[doc="<p>Represents the input of an UpdateApplication operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateApplicationInput {
     #[doc="<p>The current name of the application you want to change.</p>"]
@@ -1222,10 +1435,10 @@ pub struct UpdateApplicationInput {
     pub new_application_name: Option<ApplicationName>,
 }
 
-#[doc="<p>Represents the input of an update deployment group operation.</p>"]
+#[doc="<p>Represents the input of an UpdateDeploymentGroup operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateDeploymentGroupInput {
-    #[doc="<p>Information to add or change about Amazon CloudWatch alarms when the deployment group is updated. </p>"]
+    #[doc="<p>Information to add or change about Amazon CloudWatch alarms when the deployment group is updated.</p>"]
     #[serde(rename="alarmConfiguration")]
     pub alarm_configuration: Option<AlarmConfiguration>,
     #[doc="<p>The application name corresponding to the deployment group to update.</p>"]
@@ -1237,15 +1450,24 @@ pub struct UpdateDeploymentGroupInput {
     #[doc="<p>The replacement list of Auto Scaling groups to be included in the deployment group, if you want to change them. To keep the Auto Scaling groups, enter their names. To remove Auto Scaling groups, do not enter any Auto Scaling group names.</p>"]
     #[serde(rename="autoScalingGroups")]
     pub auto_scaling_groups: Option<AutoScalingGroupNameList>,
+    #[doc="<p>Information about blue/green deployment options for a deployment group.</p>"]
+    #[serde(rename="blueGreenDeploymentConfiguration")]
+    pub blue_green_deployment_configuration: Option<BlueGreenDeploymentConfiguration>,
     #[doc="<p>The current name of the deployment group.</p>"]
     #[serde(rename="currentDeploymentGroupName")]
     pub current_deployment_group_name: DeploymentGroupName,
     #[doc="<p>The replacement deployment configuration name to use, if you want to change it.</p>"]
     #[serde(rename="deploymentConfigName")]
     pub deployment_config_name: Option<DeploymentConfigName>,
+    #[doc="<p>Information about the type of deployment, either in-place or blue/green, you want to run and whether to route deployment traffic behind a load balancer.</p>"]
+    #[serde(rename="deploymentStyle")]
+    pub deployment_style: Option<DeploymentStyle>,
     #[doc="<p>The replacement set of Amazon EC2 tags on which to filter, if you want to change them. To keep the existing tags, enter their names. To remove tags, do not enter any tag names.</p>"]
     #[serde(rename="ec2TagFilters")]
     pub ec_2_tag_filters: Option<EC2TagFilterList>,
+    #[doc="<p>Information about the load balancer used in a deployment.</p>"]
+    #[serde(rename="loadBalancerInfo")]
+    pub load_balancer_info: Option<LoadBalancerInfo>,
     #[doc="<p>The new name of the deployment group, if you want to change it.</p>"]
     #[serde(rename="newDeploymentGroupName")]
     pub new_deployment_group_name: Option<DeploymentGroupName>,
@@ -1260,7 +1482,7 @@ pub struct UpdateDeploymentGroupInput {
     pub trigger_configurations: Option<TriggerConfigList>,
 }
 
-#[doc="<p>Represents the output of an update deployment group operation.</p>"]
+#[doc="<p>Represents the output of an UpdateDeploymentGroup operation.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct UpdateDeploymentGroupOutput {
     #[doc="<p>If the output contains no data, and the corresponding deployment group contained at least one Auto Scaling group, AWS CodeDeploy successfully removed all corresponding Auto Scaling lifecycle event hooks from the AWS account. If the output contains data, AWS CodeDeploy could not remove some Auto Scaling lifecycle event hooks from the AWS account.</p>"]
@@ -1908,6 +2130,106 @@ impl Error for BatchGetOnPremisesInstancesError {
         }
     }
 }
+/// Errors returned by ContinueDeployment
+#[derive(Debug, PartialEq)]
+pub enum ContinueDeploymentError {
+    ///<p>The deployment is already complete.</p>
+    DeploymentAlreadyCompleted(String),
+    ///<p>The deployment does not exist with the applicable IAM user or AWS account.</p>
+    DeploymentDoesNotExist(String),
+    ///<p>At least one deployment ID must be specified.</p>
+    DeploymentIdRequired(String),
+    ///<p>The deployment does not have a status of Ready and can't continue yet.</p>
+    DeploymentIsNotInReadyState(String),
+    ///<p>At least one of the deployment IDs was specified in an invalid format.</p>
+    InvalidDeploymentId(String),
+    ///<p>A call was submitted that is not supported for the specified deployment type.</p>
+    UnsupportedActionForDeploymentType(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl ContinueDeploymentError {
+    pub fn from_body(body: &str) -> ContinueDeploymentError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "DeploymentAlreadyCompletedException" => ContinueDeploymentError::DeploymentAlreadyCompleted(String::from(error_message)),
+                    "DeploymentDoesNotExistException" => {
+                        ContinueDeploymentError::DeploymentDoesNotExist(String::from(error_message))
+                    }
+                    "DeploymentIdRequiredException" => {
+                        ContinueDeploymentError::DeploymentIdRequired(String::from(error_message))
+                    }
+                    "DeploymentIsNotInReadyStateException" => ContinueDeploymentError::DeploymentIsNotInReadyState(String::from(error_message)),
+                    "InvalidDeploymentIdException" => {
+                        ContinueDeploymentError::InvalidDeploymentId(String::from(error_message))
+                    }
+                    "UnsupportedActionForDeploymentTypeException" => ContinueDeploymentError::UnsupportedActionForDeploymentType(String::from(error_message)),
+                    "ValidationException" => {
+                        ContinueDeploymentError::Validation(error_message.to_string())
+                    }
+                    _ => ContinueDeploymentError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ContinueDeploymentError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ContinueDeploymentError {
+    fn from(err: serde_json::error::Error) -> ContinueDeploymentError {
+        ContinueDeploymentError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ContinueDeploymentError {
+    fn from(err: CredentialsError) -> ContinueDeploymentError {
+        ContinueDeploymentError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ContinueDeploymentError {
+    fn from(err: HttpDispatchError) -> ContinueDeploymentError {
+        ContinueDeploymentError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for ContinueDeploymentError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ContinueDeploymentError {
+    fn description(&self) -> &str {
+        match *self {
+            ContinueDeploymentError::DeploymentAlreadyCompleted(ref cause) => cause,
+            ContinueDeploymentError::DeploymentDoesNotExist(ref cause) => cause,
+            ContinueDeploymentError::DeploymentIdRequired(ref cause) => cause,
+            ContinueDeploymentError::DeploymentIsNotInReadyState(ref cause) => cause,
+            ContinueDeploymentError::InvalidDeploymentId(ref cause) => cause,
+            ContinueDeploymentError::UnsupportedActionForDeploymentType(ref cause) => cause,
+            ContinueDeploymentError::Validation(ref cause) => cause,
+            ContinueDeploymentError::Credentials(ref err) => err.description(),
+            ContinueDeploymentError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ContinueDeploymentError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateApplication
 #[derive(Debug, PartialEq)]
 pub enum CreateApplicationError {
@@ -2023,8 +2345,14 @@ pub enum CreateDeploymentError {
     InvalidDeploymentConfigName(String),
     ///<p>The deployment group name was specified in an invalid format.</p>
     InvalidDeploymentGroupName(String),
+    ///<p>An invalid fileExistsBehavior option was specified to determine how AWS CodeDeploy handles files or directories that already exist in a deployment target location but weren't part of the previous successful deployment. Valid values include "DISALLOW", "OVERWRITE", and "RETAIN".</p>
+    InvalidFileExistsBehavior(String),
+    ///<p>An invalid load balancer name, or no load balancer name, was specified.</p>
+    InvalidLoadBalancerInfo(String),
     ///<p>The revision was specified in an invalid format.</p>
     InvalidRevision(String),
+    ///<p>The target instance configuration is invalid. Possible causes include:</p> <ul> <li> <p>Configuration data for target instances was entered for an in-place deployment.</p> </li> <li> <p>The limit of 10 tags for a tag type was exceeded.</p> </li> <li> <p>The combined length of the tag names exceeded the limit. </p> </li> <li> <p>A specified tag is not currently applied to any instances.</p> </li> </ul>
+    InvalidTargetInstances(String),
     ///<p>The named revision does not exist with the applicable IAM user or AWS account.</p>
     RevisionDoesNotExist(String),
     ///<p>The revision ID was not specified.</p>
@@ -2074,8 +2402,15 @@ impl CreateDeploymentError {
                     "InvalidAutoRollbackConfigException" => CreateDeploymentError::InvalidAutoRollbackConfig(String::from(error_message)),
                     "InvalidDeploymentConfigNameException" => CreateDeploymentError::InvalidDeploymentConfigName(String::from(error_message)),
                     "InvalidDeploymentGroupNameException" => CreateDeploymentError::InvalidDeploymentGroupName(String::from(error_message)),
+                    "InvalidFileExistsBehaviorException" => CreateDeploymentError::InvalidFileExistsBehavior(String::from(error_message)),
+                    "InvalidLoadBalancerInfoException" => {
+                        CreateDeploymentError::InvalidLoadBalancerInfo(String::from(error_message))
+                    }
                     "InvalidRevisionException" => {
                         CreateDeploymentError::InvalidRevision(String::from(error_message))
+                    }
+                    "InvalidTargetInstancesException" => {
+                        CreateDeploymentError::InvalidTargetInstances(String::from(error_message))
                     }
                     "RevisionDoesNotExistException" => {
                         CreateDeploymentError::RevisionDoesNotExist(String::from(error_message))
@@ -2128,7 +2463,10 @@ impl Error for CreateDeploymentError {
             CreateDeploymentError::InvalidAutoRollbackConfig(ref cause) => cause,
             CreateDeploymentError::InvalidDeploymentConfigName(ref cause) => cause,
             CreateDeploymentError::InvalidDeploymentGroupName(ref cause) => cause,
+            CreateDeploymentError::InvalidFileExistsBehavior(ref cause) => cause,
+            CreateDeploymentError::InvalidLoadBalancerInfo(ref cause) => cause,
             CreateDeploymentError::InvalidRevision(ref cause) => cause,
+            CreateDeploymentError::InvalidTargetInstances(ref cause) => cause,
             CreateDeploymentError::RevisionDoesNotExist(ref cause) => cause,
             CreateDeploymentError::RevisionRequired(ref cause) => cause,
             CreateDeploymentError::Validation(ref cause) => cause,
@@ -2253,12 +2591,18 @@ pub enum CreateDeploymentGroupError {
     InvalidAutoRollbackConfig(String),
     ///<p>The Auto Scaling group was specified in an invalid format or does not exist.</p>
     InvalidAutoScalingGroup(String),
+    ///<p>The configuration for the blue/green deployment group was provided in an invalid format. For information about deployment configuration format, see <a>CreateDeploymentConfig</a>.</p>
+    InvalidBlueGreenDeploymentConfiguration(String),
     ///<p>The deployment configuration name was specified in an invalid format.</p>
     InvalidDeploymentConfigName(String),
     ///<p>The deployment group name was specified in an invalid format.</p>
     InvalidDeploymentGroupName(String),
+    ///<p>An invalid deployment style was specified. Valid deployment types include "IN_PLACE" and "BLUE_GREEN". Valid deployment options include "WITH_TRAFFIC_CONTROL" and "WITHOUT_TRAFFIC_CONTROL".</p>
+    InvalidDeploymentStyle(String),
     ///<p>The tag was specified in an invalid format.</p>
     InvalidEC2Tag(String),
+    ///<p>An invalid load balancer name, or no load balancer name, was specified.</p>
+    InvalidLoadBalancerInfo(String),
     ///<p>The service role ARN was specified in an invalid format. Or, if an Auto Scaling group was specified, the specified service role does not grant the appropriate permissions to Auto Scaling.</p>
     InvalidRole(String),
     ///<p>The specified tag was specified in an invalid format.</p>
@@ -2310,11 +2654,14 @@ impl CreateDeploymentGroupError {
                     "InvalidApplicationNameException" => CreateDeploymentGroupError::InvalidApplicationName(String::from(error_message)),
                     "InvalidAutoRollbackConfigException" => CreateDeploymentGroupError::InvalidAutoRollbackConfig(String::from(error_message)),
                     "InvalidAutoScalingGroupException" => CreateDeploymentGroupError::InvalidAutoScalingGroup(String::from(error_message)),
+                    "InvalidBlueGreenDeploymentConfigurationException" => CreateDeploymentGroupError::InvalidBlueGreenDeploymentConfiguration(String::from(error_message)),
                     "InvalidDeploymentConfigNameException" => CreateDeploymentGroupError::InvalidDeploymentConfigName(String::from(error_message)),
                     "InvalidDeploymentGroupNameException" => CreateDeploymentGroupError::InvalidDeploymentGroupName(String::from(error_message)),
+                    "InvalidDeploymentStyleException" => CreateDeploymentGroupError::InvalidDeploymentStyle(String::from(error_message)),
                     "InvalidEC2TagException" => {
                         CreateDeploymentGroupError::InvalidEC2Tag(String::from(error_message))
                     }
+                    "InvalidLoadBalancerInfoException" => CreateDeploymentGroupError::InvalidLoadBalancerInfo(String::from(error_message)),
                     "InvalidRoleException" => {
                         CreateDeploymentGroupError::InvalidRole(String::from(error_message))
                     }
@@ -2372,9 +2719,12 @@ impl Error for CreateDeploymentGroupError {
             CreateDeploymentGroupError::InvalidApplicationName(ref cause) => cause,
             CreateDeploymentGroupError::InvalidAutoRollbackConfig(ref cause) => cause,
             CreateDeploymentGroupError::InvalidAutoScalingGroup(ref cause) => cause,
+            CreateDeploymentGroupError::InvalidBlueGreenDeploymentConfiguration(ref cause) => cause,
             CreateDeploymentGroupError::InvalidDeploymentConfigName(ref cause) => cause,
             CreateDeploymentGroupError::InvalidDeploymentGroupName(ref cause) => cause,
+            CreateDeploymentGroupError::InvalidDeploymentStyle(ref cause) => cause,
             CreateDeploymentGroupError::InvalidEC2Tag(ref cause) => cause,
+            CreateDeploymentGroupError::InvalidLoadBalancerInfo(ref cause) => cause,
             CreateDeploymentGroupError::InvalidRole(ref cause) => cause,
             CreateDeploymentGroupError::InvalidTag(ref cause) => cause,
             CreateDeploymentGroupError::InvalidTriggerConfig(ref cause) => cause,
@@ -3727,8 +4077,12 @@ pub enum ListDeploymentInstancesError {
     DeploymentNotStarted(String),
     ///<p>At least one of the deployment IDs was specified in an invalid format.</p>
     InvalidDeploymentId(String),
+    ///<p>An instance type was specified for an in-place deployment. Instance types are supported for blue/green deployments only.</p>
+    InvalidDeploymentInstanceType(String),
     ///<p>The specified instance status does not exist.</p>
     InvalidInstanceStatus(String),
+    ///<p>An invalid instance type was specified for instances in a blue/green deployment. Valid values include "Blue" for an original environment and "Green" for a replacement environment.</p>
+    InvalidInstanceType(String),
     ///<p>The next token was specified in an invalid format.</p>
     InvalidNextToken(String),
     /// An error occurred dispatching the HTTP request
@@ -3759,7 +4113,9 @@ impl ListDeploymentInstancesError {
                     "DeploymentIdRequiredException" => ListDeploymentInstancesError::DeploymentIdRequired(String::from(error_message)),
                     "DeploymentNotStartedException" => ListDeploymentInstancesError::DeploymentNotStarted(String::from(error_message)),
                     "InvalidDeploymentIdException" => ListDeploymentInstancesError::InvalidDeploymentId(String::from(error_message)),
+                    "InvalidDeploymentInstanceTypeException" => ListDeploymentInstancesError::InvalidDeploymentInstanceType(String::from(error_message)),
                     "InvalidInstanceStatusException" => ListDeploymentInstancesError::InvalidInstanceStatus(String::from(error_message)),
+                    "InvalidInstanceTypeException" => ListDeploymentInstancesError::InvalidInstanceType(String::from(error_message)),
                     "InvalidNextTokenException" => {
                         ListDeploymentInstancesError::InvalidNextToken(String::from(error_message))
                     }
@@ -3801,7 +4157,9 @@ impl Error for ListDeploymentInstancesError {
             ListDeploymentInstancesError::DeploymentIdRequired(ref cause) => cause,
             ListDeploymentInstancesError::DeploymentNotStarted(ref cause) => cause,
             ListDeploymentInstancesError::InvalidDeploymentId(ref cause) => cause,
+            ListDeploymentInstancesError::InvalidDeploymentInstanceType(ref cause) => cause,
             ListDeploymentInstancesError::InvalidInstanceStatus(ref cause) => cause,
+            ListDeploymentInstancesError::InvalidInstanceType(ref cause) => cause,
             ListDeploymentInstancesError::InvalidNextToken(ref cause) => cause,
             ListDeploymentInstancesError::Validation(ref cause) => cause,
             ListDeploymentInstancesError::Credentials(ref err) => err.description(),
@@ -3925,6 +4283,84 @@ impl Error for ListDeploymentsError {
             ListDeploymentsError::Credentials(ref err) => err.description(),
             ListDeploymentsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             ListDeploymentsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListGitHubAccountTokenNames
+#[derive(Debug, PartialEq)]
+pub enum ListGitHubAccountTokenNamesError {
+    ///<p>The next token was specified in an invalid format.</p>
+    InvalidNextToken(String),
+    ///<p>The specified resource could not be validated.</p>
+    ResourceValidation(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl ListGitHubAccountTokenNamesError {
+    pub fn from_body(body: &str) -> ListGitHubAccountTokenNamesError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidNextTokenException" => ListGitHubAccountTokenNamesError::InvalidNextToken(String::from(error_message)),
+                    "ResourceValidationException" => ListGitHubAccountTokenNamesError::ResourceValidation(String::from(error_message)),
+                    "ValidationException" => {
+                        ListGitHubAccountTokenNamesError::Validation(error_message.to_string())
+                    }
+                    _ => ListGitHubAccountTokenNamesError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListGitHubAccountTokenNamesError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListGitHubAccountTokenNamesError {
+    fn from(err: serde_json::error::Error) -> ListGitHubAccountTokenNamesError {
+        ListGitHubAccountTokenNamesError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListGitHubAccountTokenNamesError {
+    fn from(err: CredentialsError) -> ListGitHubAccountTokenNamesError {
+        ListGitHubAccountTokenNamesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListGitHubAccountTokenNamesError {
+    fn from(err: HttpDispatchError) -> ListGitHubAccountTokenNamesError {
+        ListGitHubAccountTokenNamesError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for ListGitHubAccountTokenNamesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListGitHubAccountTokenNamesError {
+    fn description(&self) -> &str {
+        match *self {
+            ListGitHubAccountTokenNamesError::InvalidNextToken(ref cause) => cause,
+            ListGitHubAccountTokenNamesError::ResourceValidation(ref cause) => cause,
+            ListGitHubAccountTokenNamesError::Validation(ref cause) => cause,
+            ListGitHubAccountTokenNamesError::Credentials(ref err) => err.description(),
+            ListGitHubAccountTokenNamesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListGitHubAccountTokenNamesError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -4315,6 +4751,101 @@ impl Error for RemoveTagsFromOnPremisesInstancesError {
         }
     }
 }
+/// Errors returned by SkipWaitTimeForInstanceTermination
+#[derive(Debug, PartialEq)]
+pub enum SkipWaitTimeForInstanceTerminationError {
+    ///<p>The deployment is already complete.</p>
+    DeploymentAlreadyCompleted(String),
+    ///<p>The deployment does not exist with the applicable IAM user or AWS account.</p>
+    DeploymentDoesNotExist(String),
+    ///<p>At least one deployment ID must be specified.</p>
+    DeploymentIdRequired(String),
+    ///<p>The specified deployment has not started.</p>
+    DeploymentNotStarted(String),
+    ///<p>At least one of the deployment IDs was specified in an invalid format.</p>
+    InvalidDeploymentId(String),
+    ///<p>A call was submitted that is not supported for the specified deployment type.</p>
+    UnsupportedActionForDeploymentType(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl SkipWaitTimeForInstanceTerminationError {
+    pub fn from_body(body: &str) -> SkipWaitTimeForInstanceTerminationError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "DeploymentAlreadyCompletedException" => SkipWaitTimeForInstanceTerminationError::DeploymentAlreadyCompleted(String::from(error_message)),
+                    "DeploymentDoesNotExistException" => SkipWaitTimeForInstanceTerminationError::DeploymentDoesNotExist(String::from(error_message)),
+                    "DeploymentIdRequiredException" => SkipWaitTimeForInstanceTerminationError::DeploymentIdRequired(String::from(error_message)),
+                    "DeploymentNotStartedException" => SkipWaitTimeForInstanceTerminationError::DeploymentNotStarted(String::from(error_message)),
+                    "InvalidDeploymentIdException" => SkipWaitTimeForInstanceTerminationError::InvalidDeploymentId(String::from(error_message)),
+                    "UnsupportedActionForDeploymentTypeException" => SkipWaitTimeForInstanceTerminationError::UnsupportedActionForDeploymentType(String::from(error_message)),
+                    "ValidationException" => {
+                        SkipWaitTimeForInstanceTerminationError::Validation(error_message
+                                                                                .to_string())
+                    }
+                    _ => SkipWaitTimeForInstanceTerminationError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => SkipWaitTimeForInstanceTerminationError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for SkipWaitTimeForInstanceTerminationError {
+    fn from(err: serde_json::error::Error) -> SkipWaitTimeForInstanceTerminationError {
+        SkipWaitTimeForInstanceTerminationError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for SkipWaitTimeForInstanceTerminationError {
+    fn from(err: CredentialsError) -> SkipWaitTimeForInstanceTerminationError {
+        SkipWaitTimeForInstanceTerminationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for SkipWaitTimeForInstanceTerminationError {
+    fn from(err: HttpDispatchError) -> SkipWaitTimeForInstanceTerminationError {
+        SkipWaitTimeForInstanceTerminationError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for SkipWaitTimeForInstanceTerminationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for SkipWaitTimeForInstanceTerminationError {
+    fn description(&self) -> &str {
+        match *self {
+            SkipWaitTimeForInstanceTerminationError::DeploymentAlreadyCompleted(ref cause) => cause,
+            SkipWaitTimeForInstanceTerminationError::DeploymentDoesNotExist(ref cause) => cause,
+            SkipWaitTimeForInstanceTerminationError::DeploymentIdRequired(ref cause) => cause,
+            SkipWaitTimeForInstanceTerminationError::DeploymentNotStarted(ref cause) => cause,
+            SkipWaitTimeForInstanceTerminationError::InvalidDeploymentId(ref cause) => cause,
+            SkipWaitTimeForInstanceTerminationError::UnsupportedActionForDeploymentType(ref cause) => cause,
+            SkipWaitTimeForInstanceTerminationError::Validation(ref cause) => cause,
+            SkipWaitTimeForInstanceTerminationError::Credentials(ref err) => err.description(),
+            SkipWaitTimeForInstanceTerminationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            SkipWaitTimeForInstanceTerminationError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by StopDeployment
 #[derive(Debug, PartialEq)]
 pub enum StopDeploymentError {
@@ -4524,12 +5055,18 @@ pub enum UpdateDeploymentGroupError {
     InvalidAutoRollbackConfig(String),
     ///<p>The Auto Scaling group was specified in an invalid format or does not exist.</p>
     InvalidAutoScalingGroup(String),
+    ///<p>The configuration for the blue/green deployment group was provided in an invalid format. For information about deployment configuration format, see <a>CreateDeploymentConfig</a>.</p>
+    InvalidBlueGreenDeploymentConfiguration(String),
     ///<p>The deployment configuration name was specified in an invalid format.</p>
     InvalidDeploymentConfigName(String),
     ///<p>The deployment group name was specified in an invalid format.</p>
     InvalidDeploymentGroupName(String),
+    ///<p>An invalid deployment style was specified. Valid deployment types include "IN_PLACE" and "BLUE_GREEN". Valid deployment options include "WITH_TRAFFIC_CONTROL" and "WITHOUT_TRAFFIC_CONTROL".</p>
+    InvalidDeploymentStyle(String),
     ///<p>The tag was specified in an invalid format.</p>
     InvalidEC2Tag(String),
+    ///<p>An invalid load balancer name, or no load balancer name, was specified.</p>
+    InvalidLoadBalancerInfo(String),
     ///<p>The service role ARN was specified in an invalid format. Or, if an Auto Scaling group was specified, the specified service role does not grant the appropriate permissions to Auto Scaling.</p>
     InvalidRole(String),
     ///<p>The specified tag was specified in an invalid format.</p>
@@ -4579,11 +5116,14 @@ impl UpdateDeploymentGroupError {
                     "InvalidApplicationNameException" => UpdateDeploymentGroupError::InvalidApplicationName(String::from(error_message)),
                     "InvalidAutoRollbackConfigException" => UpdateDeploymentGroupError::InvalidAutoRollbackConfig(String::from(error_message)),
                     "InvalidAutoScalingGroupException" => UpdateDeploymentGroupError::InvalidAutoScalingGroup(String::from(error_message)),
+                    "InvalidBlueGreenDeploymentConfigurationException" => UpdateDeploymentGroupError::InvalidBlueGreenDeploymentConfiguration(String::from(error_message)),
                     "InvalidDeploymentConfigNameException" => UpdateDeploymentGroupError::InvalidDeploymentConfigName(String::from(error_message)),
                     "InvalidDeploymentGroupNameException" => UpdateDeploymentGroupError::InvalidDeploymentGroupName(String::from(error_message)),
+                    "InvalidDeploymentStyleException" => UpdateDeploymentGroupError::InvalidDeploymentStyle(String::from(error_message)),
                     "InvalidEC2TagException" => {
                         UpdateDeploymentGroupError::InvalidEC2Tag(String::from(error_message))
                     }
+                    "InvalidLoadBalancerInfoException" => UpdateDeploymentGroupError::InvalidLoadBalancerInfo(String::from(error_message)),
                     "InvalidRoleException" => {
                         UpdateDeploymentGroupError::InvalidRole(String::from(error_message))
                     }
@@ -4638,9 +5178,12 @@ impl Error for UpdateDeploymentGroupError {
             UpdateDeploymentGroupError::InvalidApplicationName(ref cause) => cause,
             UpdateDeploymentGroupError::InvalidAutoRollbackConfig(ref cause) => cause,
             UpdateDeploymentGroupError::InvalidAutoScalingGroup(ref cause) => cause,
+            UpdateDeploymentGroupError::InvalidBlueGreenDeploymentConfiguration(ref cause) => cause,
             UpdateDeploymentGroupError::InvalidDeploymentConfigName(ref cause) => cause,
             UpdateDeploymentGroupError::InvalidDeploymentGroupName(ref cause) => cause,
+            UpdateDeploymentGroupError::InvalidDeploymentStyle(ref cause) => cause,
             UpdateDeploymentGroupError::InvalidEC2Tag(ref cause) => cause,
+            UpdateDeploymentGroupError::InvalidLoadBalancerInfo(ref cause) => cause,
             UpdateDeploymentGroupError::InvalidRole(ref cause) => cause,
             UpdateDeploymentGroupError::InvalidTag(ref cause) => cause,
             UpdateDeploymentGroupError::InvalidTriggerConfig(ref cause) => cause,
@@ -4701,6 +5244,12 @@ pub trait CodeDeploy {
         (&self,
          input: &BatchGetOnPremisesInstancesInput)
          -> Result<BatchGetOnPremisesInstancesOutput, BatchGetOnPremisesInstancesError>;
+
+
+    #[doc="<p>For a blue/green deployment, starts the process of rerouting traffic from instances in the original environment to instances in the replacement environment without waiting for a specified wait time to elapse. (Traffic rerouting, which is achieved by registering instances in the replacement environment with the load balancer, can start as soon as all instances have a status of Ready.) </p>"]
+    fn continue_deployment(&self,
+                           input: &ContinueDeploymentInput)
+                           -> Result<(), ContinueDeploymentError>;
 
 
     #[doc="<p>Creates an application.</p>"]
@@ -4838,6 +5387,13 @@ pub trait CodeDeploy {
                         -> Result<ListDeploymentsOutput, ListDeploymentsError>;
 
 
+    #[doc="<p>Lists the names of stored connections to GitHub accounts.</p>"]
+    fn list_git_hub_account_token_names
+        (&self,
+         input: &ListGitHubAccountTokenNamesInput)
+         -> Result<ListGitHubAccountTokenNamesOutput, ListGitHubAccountTokenNamesError>;
+
+
     #[doc="<p>Gets a list of names for one or more on-premises instances.</p> <p>Unless otherwise specified, both registered and deregistered on-premises instance names will be listed. To list only registered or deregistered on-premises instance names, use the registration status parameter.</p>"]
     fn list_on_premises_instances
         (&self,
@@ -4862,6 +5418,13 @@ pub trait CodeDeploy {
         (&self,
          input: &RemoveTagsFromOnPremisesInstancesInput)
          -> Result<(), RemoveTagsFromOnPremisesInstancesError>;
+
+
+    #[doc="<p>In a blue/green deployment, overrides any specified wait time and starts terminating instances immediately after the traffic routing is completed.</p>"]
+    fn skip_wait_time_for_instance_termination
+        (&self,
+         input: &SkipWaitTimeForInstanceTerminationInput)
+         -> Result<(), SkipWaitTimeForInstanceTerminationError>;
 
 
     #[doc="<p>Attempts to stop an ongoing deployment.</p>"]
@@ -5086,6 +5649,31 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
                             Ok(serde_json::from_str::<BatchGetOnPremisesInstancesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(BatchGetOnPremisesInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        }
+    }
+
+
+    #[doc="<p>For a blue/green deployment, starts the process of rerouting traffic from instances in the original environment to instances in the replacement environment without waiting for a specified wait time to elapse. (Traffic rerouting, which is achieved by registering instances in the replacement environment with the load balancer, can start as soon as all instances have a status of Ready.) </p>"]
+    fn continue_deployment(&self,
+                           input: &ContinueDeploymentInput)
+                           -> Result<(), ContinueDeploymentError> {
+        let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeDeploy_20141006.ContinueDeployment");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => Ok(()),
+            _ => {
+                Err(ContinueDeploymentError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
+            }
         }
     }
 
@@ -5653,6 +6241,32 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
     }
 
 
+    #[doc="<p>Lists the names of stored connections to GitHub accounts.</p>"]
+    fn list_git_hub_account_token_names
+        (&self,
+         input: &ListGitHubAccountTokenNamesInput)
+         -> Result<ListGitHubAccountTokenNamesOutput, ListGitHubAccountTokenNamesError> {
+        let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target",
+                           "CodeDeploy_20141006.ListGitHubAccountTokenNames");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                            Ok(serde_json::from_str::<ListGitHubAccountTokenNamesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                        }
+            _ => Err(ListGitHubAccountTokenNamesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        }
+    }
+
+
     #[doc="<p>Gets a list of names for one or more on-premises instances.</p> <p>Unless otherwise specified, both registered and deregistered on-premises instance names will be listed. To list only registered or deregistered on-premises instance names, use the registration status parameter.</p>"]
     fn list_on_premises_instances
         (&self,
@@ -5745,6 +6359,30 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
         match response.status {
             StatusCode::Ok => Ok(()),
             _ => Err(RemoveTagsFromOnPremisesInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        }
+    }
+
+
+    #[doc="<p>In a blue/green deployment, overrides any specified wait time and starts terminating instances immediately after the traffic routing is completed.</p>"]
+    fn skip_wait_time_for_instance_termination
+        (&self,
+         input: &SkipWaitTimeForInstanceTerminationInput)
+         -> Result<(), SkipWaitTimeForInstanceTerminationError> {
+        let mut request = SignedRequest::new("POST", "codedeploy", self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target",
+                           "CodeDeploy_20141006.SkipWaitTimeForInstanceTermination");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => Ok(()),
+            _ => Err(SkipWaitTimeForInstanceTerminationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
 

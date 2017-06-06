@@ -50,8 +50,10 @@ impl AddTagsToResourceMessageSerializer {
     }
 }
 
+#[doc="<p>Represents the allowed node types you can use to modify your cache cluster or replication group.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct AllowedNodeTypeModificationsMessage {
+    #[doc="<p>A string list, each element of which specifies a cache node type which you can use to scale your cache cluster or replication group.</p> <p>When scaling up a Redis cluster or replication group using <code>ModifyCacheCluster</code> or <code>ModifyReplicationGroup</code>, use a value from this list for the <code>CacheNodeType</code> parameter.</p>"]
     pub scale_up_modifications: Option<NodeTypeList>,
 }
 
@@ -315,6 +317,20 @@ impl BooleanDeserializer {
     }
 }
 pub type BooleanOptional = bool;
+struct BooleanOptionalDeserializer;
+impl BooleanOptionalDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<BooleanOptional, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
 #[doc="<p>Contains all of the attributes of a specific cache cluster.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct CacheCluster {
@@ -337,6 +353,7 @@ pub struct CacheCluster {
     pub cache_subnet_group_name: Option<String>,
     #[doc="<p>The URL of the web page where you can download the latest ElastiCache client library.</p>"]
     pub client_download_landing_page: Option<String>,
+    #[doc="<p>Represents a Memcached cluster endpoint which, if Automatic Discovery is enabled on the cluster, can be used by an application to connect to any node in the cluster. The configuration endpoint will always have <code>.cfg</code> in it.</p> <p>Example: <code>mem-3.9dvc4r<u>.cfg</u>.usw2.cache.amazonaws.com:11211</code> </p>"]
     pub configuration_endpoint: Option<Endpoint>,
     #[doc="<p>The name of the cache engine (<code>memcached</code> or <code>redis</code>) to be used for this cache cluster.</p>"]
     pub engine: Option<String>,
@@ -2117,7 +2134,7 @@ impl CopySnapshotResultDeserializer {
 pub struct CreateCacheClusterMessage {
     #[doc="<p>Specifies whether the nodes in this Memcached cluster are created in a single Availability Zone or created across multiple Availability Zones in the cluster's region.</p> <p>This parameter is only supported for Memcached cache clusters.</p> <p>If the <code>AZMode</code> and <code>PreferredAvailabilityZones</code> are not specified, ElastiCache assumes <code>single-az</code> mode.</p>"]
     pub az_mode: Option<AZMode>,
-    #[doc="<p>The password used to access a password protected server.</p> <p>Password constraints:</p> <ul> <li> <p>Must be only printable ASCII characters.</p> </li> <li> <p>Must be at least 16 characters and no more than 128 characters in length.</p> </li> <li> <p>Cannot contain any of the following characters: '/', '\"', or \"@\". </p> </li> </ul> <p>For more information, see <a href=\"http://redis.io/commands/AUTH\">AUTH password</a> at Redis.</p>"]
+    #[doc="<p> <b>Reserved parameter.</b> The password used to access a password protected server.</p> <p>Password constraints:</p> <ul> <li> <p>Must be only printable ASCII characters.</p> </li> <li> <p>Must be at least 16 characters and no more than 128 characters in length.</p> </li> <li> <p>Cannot contain any of the following characters: '/', '\"', or \"@\". </p> </li> </ul> <p>For more information, see <a href=\"http://redis.io/commands/AUTH\">AUTH password</a> at Redis.</p>"]
     pub auth_token: Option<String>,
     #[doc="<p>This parameter is currently disabled.</p>"]
     pub auto_minor_version_upgrade: Option<BooleanOptional>,
@@ -2549,7 +2566,7 @@ impl CreateCacheSubnetGroupResultDeserializer {
 #[doc="<p>Represents the input of a <code>CreateReplicationGroup</code> operation.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct CreateReplicationGroupMessage {
-    #[doc="<p>The password used to access a password protected server.</p> <p>Password constraints:</p> <ul> <li> <p>Must be only printable ASCII characters.</p> </li> <li> <p>Must be at least 16 characters and no more than 128 characters in length.</p> </li> <li> <p>Cannot contain any of the following characters: '/', '\"', or \"@\". </p> </li> </ul> <p>For more information, see <a href=\"http://redis.io/commands/AUTH\">AUTH password</a> at Redis.</p>"]
+    #[doc="<p> <b>Reserved parameter.</b> The password used to access a password protected server.</p> <p>Password constraints:</p> <ul> <li> <p>Must be only printable ASCII characters.</p> </li> <li> <p>Must be at least 16 characters and no more than 128 characters in length.</p> </li> <li> <p>Cannot contain any of the following characters: '/', '\"', or \"@\". </p> </li> </ul> <p>For more information, see <a href=\"http://redis.io/commands/AUTH\">AUTH password</a> at Redis.</p>"]
     pub auth_token: Option<String>,
     #[doc="<p>This parameter is currently disabled.</p>"]
     pub auto_minor_version_upgrade: Option<BooleanOptional>,
@@ -2567,11 +2584,11 @@ pub struct CreateReplicationGroupMessage {
     pub engine: Option<String>,
     #[doc="<p>The version number of the cache engine to be used for the cache clusters in this replication group. To view the supported cache engine versions, use the <code>DescribeCacheEngineVersions</code> operation.</p> <p> <b>Important:</b> You can upgrade to a newer engine version (see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/SelectEngine.html#VersionManagement\">Selecting a Cache Engine and Version</a>) in the <i>ElastiCache User Guide</i>, but you cannot downgrade to an earlier engine version. If you want to use an earlier engine version, you must delete the existing cache cluster or replication group and create it anew with the earlier engine version. </p>"]
     pub engine_version: Option<String>,
-    #[doc="<p>A list of node group (shard) configuration options. Each node group (shard) configuration has the following: Slots, PrimaryAvailabilityZone, ReplicaAvailabilityZones, ReplicaCount.</p> <p>If you're creating a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group, you can use this parameter to configure one node group (shard) or you can omit this parameter.</p>"]
+    #[doc="<p>A list of node group (shard) configuration options. Each node group (shard) configuration has the following: Slots, PrimaryAvailabilityZone, ReplicaAvailabilityZones, ReplicaCount.</p> <p>If you're creating a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group, you can use this parameter to individually configure each node group (shard), or you can omit this parameter.</p>"]
     pub node_group_configuration: Option<NodeGroupConfigurationList>,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (SNS) topic to which notifications are sent.</p> <note> <p>The Amazon SNS topic owner must be the same as the cache cluster owner.</p> </note>"]
     pub notification_topic_arn: Option<String>,
-    #[doc="<p>The number of clusters this replication group initially has.</p> <p>This parameter is not used if there is more than one node group (shard). You should use <code>ReplicasPerNodeGroup</code> instead.</p> <p>If <code>Multi-AZ</code> is <code>enabled</code>, the value of this parameter must be at least 2.</p> <p>The maximum permitted value for <code>NumCacheClusters</code> is 6 (primary plus 5 replicas).</p>"]
+    #[doc="<p>The number of clusters this replication group initially has.</p> <p>This parameter is not used if there is more than one node group (shard). You should use <code>ReplicasPerNodeGroup</code> instead.</p> <p>If <code>AutomaticFailoverEnabled</code> is <code>true</code>, the value of this parameter must be at least 2. If <code>AutomaticFailoverEnabled</code> is <code>false</code> you can omit this parameter (it will default to 1), or you can explicitly set it to a value between 2 and 6.</p> <p>The maximum permitted value for <code>NumCacheClusters</code> is 6 (primary plus 5 replicas).</p>"]
     pub num_cache_clusters: Option<IntegerOptional>,
     #[doc="<p>An optional parameter that specifies the number of node groups (shards) for this Redis (cluster mode enabled) replication group. For Redis (cluster mode disabled) either omit this parameter or set it to 1.</p> <p>Default: 1</p>"]
     pub num_node_groups: Option<IntegerOptional>,
@@ -2591,7 +2608,7 @@ pub struct CreateReplicationGroupMessage {
     pub replication_group_id: String,
     #[doc="<p>One or more Amazon VPC security groups associated with this replication group.</p> <p>Use this parameter only when you are creating a replication group in an Amazon Virtual Private Cloud (Amazon VPC).</p>"]
     pub security_group_ids: Option<SecurityGroupIdsList>,
-    #[doc="<p>A list of Amazon Resource Names (ARN) that uniquely identify the Redis RDB snapshot files stored in Amazon S3. The snapshot files are used to populate the replication group. The Amazon S3 object name in the ARN cannot contain any commas. The list must match the number of node groups (shards) in the replication group, which means you cannot repartition.</p> <note> <p>This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p> </note> <p>Example of an Amazon S3 ARN: <code>arn:aws:s3:::my_bucket/snapshot1.rdb</code> </p>"]
+    #[doc="<p>A list of Amazon Resource Names (ARN) that uniquely identify the Redis RDB snapshot files stored in Amazon S3. The snapshot files are used to populate the new replication group. The Amazon S3 object name in the ARN cannot contain any commas. The new replication group will have the number of node groups (console: shards) specified by the parameter <i>NumNodeGroups</i> or the number of node groups configured by <i>NodeGroupConfiguration</i> regardless of the number of ARNs specified here.</p> <note> <p>This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p> </note> <p>Example of an Amazon S3 ARN: <code>arn:aws:s3:::my_bucket/snapshot1.rdb</code> </p>"]
     pub snapshot_arns: Option<SnapshotArnsList>,
     #[doc="<p>The name of a snapshot from which to restore data into the new replication group. The snapshot status changes to <code>restoring</code> while the new replication group is being created.</p> <note> <p>This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p> </note>"]
     pub snapshot_name: Option<String>,
@@ -3153,7 +3170,9 @@ pub struct DescribeCacheClustersMessage {
     pub marker: Option<String>,
     #[doc="<p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: minimum 20; maximum 100.</p>"]
     pub max_records: Option<IntegerOptional>,
-    #[doc="<p>An optional flag that can be included in the DescribeCacheCluster request to retrieve information about the individual cache nodes.</p>"]
+    #[doc="<p>An optional flag that can be included in the <code>DescribeCacheCluster</code> request to show only nodes (API/CLI: clusters) that are not members of a replication group. In practice, this mean Memcached and single node Redis clusters.</p>"]
+    pub show_cache_clusters_not_in_replication_groups: Option<BooleanOptional>,
+    #[doc="<p>An optional flag that can be included in the <code>DescribeCacheCluster</code> request to retrieve information about the individual cache nodes.</p>"]
     pub show_cache_node_info: Option<BooleanOptional>,
 }
 
@@ -3175,6 +3194,10 @@ impl DescribeCacheClustersMessageSerializer {
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"),
+                       &field_value.to_string());
+        }
+        if let Some(ref field_value) = obj.show_cache_clusters_not_in_replication_groups {
+            params.put(&format!("{}{}", prefix, "ShowCacheClustersNotInReplicationGroups"),
                        &field_value.to_string());
         }
         if let Some(ref field_value) = obj.show_cache_node_info {
@@ -3470,9 +3493,9 @@ impl DescribeEngineDefaultParametersResultDeserializer {
 #[doc="<p>Represents the input of a <code>DescribeEvents</code> operation.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct DescribeEventsMessage {
-    #[doc="<p>The number of minutes' worth of events to retrieve.</p>"]
+    #[doc="<p>The number of minutes worth of events to retrieve.</p>"]
     pub duration: Option<IntegerOptional>,
-    #[doc="<p>The end of the time interval for which to retrieve events, specified in ISO 8601 format.</p>"]
+    #[doc="<p>The end of the time interval for which to retrieve events, specified in ISO 8601 format.</p> <p> <b>Example:</b> 2017-03-30T07:03:49.555Z</p>"]
     pub end_time: Option<TStamp>,
     #[doc="<p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>"]
     pub marker: Option<String>,
@@ -3482,7 +3505,7 @@ pub struct DescribeEventsMessage {
     pub source_identifier: Option<String>,
     #[doc="<p>The event source to retrieve events for. If no value is specified, all events are returned.</p>"]
     pub source_type: Option<SourceType>,
-    #[doc="<p>The beginning of the time interval to retrieve events for, specified in ISO 8601 format.</p>"]
+    #[doc="<p>The beginning of the time interval to retrieve events for, specified in ISO 8601 format.</p> <p> <b>Example:</b> 2017-03-30T07:03:49.555Z</p>"]
     pub start_time: Option<TStamp>,
 }
 
@@ -4594,6 +4617,8 @@ pub struct ModifyReplicationGroupMessage {
     pub cache_security_group_names: Option<CacheSecurityGroupNameList>,
     #[doc="<p>The upgraded version of the cache engine to be run on the cache clusters in the replication group.</p> <p> <b>Important:</b> You can upgrade to a newer engine version (see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/SelectEngine.html#VersionManagement\">Selecting a Cache Engine and Version</a>), but you cannot downgrade to an earlier engine version. If you want to use an earlier engine version, you must delete the existing replication group and create it anew with the earlier engine version. </p>"]
     pub engine_version: Option<String>,
+    #[doc="<p>The name of the Node Group (called shard in the console).</p>"]
+    pub node_group_id: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon SNS topic to which notifications are sent.</p> <note> <p>The Amazon SNS topic owner must be same as the replication group owner. </p> </note>"]
     pub notification_topic_arn: Option<String>,
     #[doc="<p>The status of the Amazon SNS notification topic for the replication group. Notifications are sent only if the status is <code>active</code>.</p> <p>Valid values: <code>active</code> | <code>inactive</code> </p>"]
@@ -4654,6 +4679,9 @@ impl ModifyReplicationGroupMessageSerializer {
         }
         if let Some(ref field_value) = obj.engine_version {
             params.put(&format!("{}{}", prefix, "EngineVersion"), &field_value);
+        }
+        if let Some(ref field_value) = obj.node_group_id {
+            params.put(&format!("{}{}", prefix, "NodeGroupId"), &field_value);
         }
         if let Some(ref field_value) = obj.notification_topic_arn {
             params.put(&format!("{}{}", prefix, "NotificationTopicArn"),
@@ -4827,7 +4855,7 @@ pub struct NodeGroupConfiguration {
     pub replica_availability_zones: Option<AvailabilityZonesList>,
     #[doc="<p>The number of read replica nodes in this node group (shard).</p>"]
     pub replica_count: Option<IntegerOptional>,
-    #[doc="<p>A string that specifies the keyspaces as a series of comma separated values. Keyspaces are 0 to 16,383. The string is in the format <code>startkey-endkey</code>.</p> <p>Example: <code>\"0-3999\"</code> </p>"]
+    #[doc="<p>A string that specifies the keyspace for a particular node group. Keyspaces range from 0 to 16,383. The string is in the format <code>startkey-endkey</code>.</p> <p>Example: <code>\"0-3999\"</code> </p>"]
     pub slots: Option<String>,
 }
 
@@ -5894,6 +5922,10 @@ impl RemoveTagsFromResourceMessageSerializer {
 pub struct ReplicationGroup {
     #[doc="<p>Indicates the status of Multi-AZ for this replication group.</p> <note> <p>ElastiCache Multi-AZ replication groups are not supported on:</p> <ul> <li> <p>Redis versions earlier than 2.8.6.</p> </li> <li> <p>Redis (cluster mode disabled):T1 and T2 cache node types.</p> <p>Redis (cluster mode enabled): T1 node types.</p> </li> </ul> </note>"]
     pub automatic_failover: Option<AutomaticFailoverStatus>,
+    #[doc="<p>The name of the compute and memory capacity node type for each node in the replication group.</p>"]
+    pub cache_node_type: Option<String>,
+    #[doc="<p>A flag indicating whether or not this replication group is cluster enabled; i.e., whether its data can be partitioned across multiple shards (API/CLI: node groups).</p> <p>Valid values: <code>true</code> | <code>false</code> </p>"]
+    pub cluster_enabled: Option<BooleanOptional>,
     #[doc="<p>The configuration endpoint for this replicaiton group. Use the configuration endpoint to connect to this replication group.</p>"]
     pub configuration_endpoint: Option<Endpoint>,
     #[doc="<p>The description of the replication group.</p>"]
@@ -5942,6 +5974,15 @@ impl ReplicationGroupDeserializer {
                             obj.automatic_failover =
                                 Some(try!(AutomaticFailoverStatusDeserializer::deserialize("AutomaticFailover",
                                                                                            stack)));
+                        }
+                        "CacheNodeType" => {
+                            obj.cache_node_type =
+                                Some(try!(StringDeserializer::deserialize("CacheNodeType", stack)));
+                        }
+                        "ClusterEnabled" => {
+                            obj.cluster_enabled =
+                                Some(try!(BooleanOptionalDeserializer::deserialize("ClusterEnabled",
+                                                                                   stack)));
                         }
                         "ConfigurationEndpoint" => {
                             obj.configuration_endpoint =
@@ -7216,9 +7257,9 @@ impl TStampDeserializer {
 #[doc="<p>A cost allocation Tag that can be added to an ElastiCache cluster or replication group. Tags are composed of a Key/Value pair. A tag with a null Value is permitted.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct Tag {
-    #[doc="<p>The key for the tag.</p>"]
+    #[doc="<p>The key for the tag. May not be null.</p>"]
     pub key: Option<String>,
-    #[doc="<p>The tag's value. May not be null.</p>"]
+    #[doc="<p>The tag's value. May be null.</p>"]
     pub value: Option<String>,
 }
 
@@ -7340,7 +7381,7 @@ impl TagListSerializer {
     }
 }
 
-#[doc="<p>Represents the output from the <code>AddTagsToResource</code>, <code>ListTagsOnResource</code>, and <code>RemoveTagsFromResource</code> operations.</p>"]
+#[doc="<p>Represents the output from the <code>AddTagsToResource</code>, <code>ListTagsForResource</code>, and <code>RemoveTagsFromResource</code> operations.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct TagListMessage {
     #[doc="<p>A list of cost allocation tags as key-value pairs.</p>"]
@@ -7389,6 +7430,79 @@ impl TagListMessageDeserializer {
 
     }
 }
+#[derive(Default,Debug,Clone)]
+pub struct TestFailoverMessage {
+    #[doc="<p>The name of the node group (called shard in the console) in this replication group on which automatic failover is to be tested. You may test automatic failover on up to 5 node groups in any rolling 24-hour period.</p>"]
+    pub node_group_id: String,
+    #[doc="<p>The name of the replication group (console: cluster) whose automatic failover is being tested by this operation.</p>"]
+    pub replication_group_id: String,
+}
+
+
+/// Serialize `TestFailoverMessage` contents to a `SignedRequest`.
+struct TestFailoverMessageSerializer;
+impl TestFailoverMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &TestFailoverMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "NodeGroupId"), &obj.node_group_id);
+        params.put(&format!("{}{}", prefix, "ReplicationGroupId"),
+                   &obj.replication_group_id);
+
+    }
+}
+
+#[derive(Default,Debug,Clone)]
+pub struct TestFailoverResult {
+    pub replication_group: Option<ReplicationGroup>,
+}
+
+struct TestFailoverResultDeserializer;
+impl TestFailoverResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<TestFailoverResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = TestFailoverResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "ReplicationGroup" => {
+                            obj.replication_group =
+                                Some(try!(ReplicationGroupDeserializer::deserialize("ReplicationGroup",
+                                                                                    stack)));
+                        }
+                        _ => skip_tree(stack),
+                    }
+                }
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
 /// Errors returned by AddTagsToResource
 #[derive(Debug, PartialEq)]
 pub enum AddTagsToResourceError {
@@ -7398,7 +7512,7 @@ pub enum AddTagsToResourceError {
     InvalidARNFault(String),
     ///<p>The requested snapshot name does not refer to an existing snapshot.</p>
     SnapshotNotFoundFault(String),
-    ///<p>The request cannot be processed because it would cause the resource to have more than the allowed number of tags. The maximum number of tags permitted on a resource is 10.</p>
+    ///<p>The request cannot be processed because it would cause the resource to have more than the allowed number of tags. The maximum number of tags permitted on a resource is 50.</p>
     TagQuotaPerResourceExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7680,7 +7794,7 @@ pub enum CreateCacheClusterError {
     NodeQuotaForCustomerExceededFault(String),
     ///<p>The specified replication group does not exist.</p>
     ReplicationGroupNotFoundFault(String),
-    ///<p>The request cannot be processed because it would cause the resource to have more than the allowed number of tags. The maximum number of tags permitted on a resource is 10.</p>
+    ///<p>The request cannot be processed because it would cause the resource to have more than the allowed number of tags. The maximum number of tags permitted on a resource is 50.</p>
     TagQuotaPerResourceExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8052,7 +8166,7 @@ pub enum CreateReplicationGroupError {
     NodeQuotaForCustomerExceededFault(String),
     ///<p>The specified replication group already exists.</p>
     ReplicationGroupAlreadyExistsFault(String),
-    ///<p>The request cannot be processed because it would cause the resource to have more than the allowed number of tags. The maximum number of tags permitted on a resource is 10.</p>
+    ///<p>The request cannot be processed because it would cause the resource to have more than the allowed number of tags. The maximum number of tags permitted on a resource is 50.</p>
     TagQuotaPerResourceExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10577,9 +10691,105 @@ impl Error for RevokeCacheSecurityGroupIngressError {
         }
     }
 }
+/// Errors returned by TestFailover
+#[derive(Debug, PartialEq)]
+pub enum TestFailoverError {
+    ///<p>The customer has exceeded the allowed rate of API calls.</p>
+    APICallRateForCustomerExceededFault(String),
+    ///<p>The requested cache cluster is not in the <code>available</code> state.</p>
+    InvalidCacheClusterStateFault(String),
+    ///<p>Two or more incompatible parameters were specified.</p>
+    InvalidParameterCombination(String),
+    ///<p>The value for a parameter is invalid.</p>
+    InvalidParameterValue(String),
+    ///<p>The requested replication group is not in the <code>available</code> state.</p>
+    InvalidReplicationGroupStateFault(String),
+    ///<p>The node group specified by the <code>NodeGroupId</code> parameter could not be found. Please verify that the node group exists and that you spelled the <code>NodeGroupId</code> value correctly.</p>
+    NodeGroupNotFoundFault(String),
+    ///<p>The specified replication group does not exist.</p>
+    ReplicationGroupNotFoundFault(String),
+    ///
+    TestFailoverNotAvailableFault(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl TestFailoverError {
+    pub fn from_body(body: &str) -> TestFailoverError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    "APICallRateForCustomerExceededFault" => TestFailoverError::APICallRateForCustomerExceededFault(String::from(parsed_error.message)),
+                    "InvalidCacheClusterStateFault" => TestFailoverError::InvalidCacheClusterStateFault(String::from(parsed_error.message)),
+                    "InvalidParameterCombinationException" => TestFailoverError::InvalidParameterCombination(String::from(parsed_error.message)),
+                    "InvalidParameterValueException" => {
+                        TestFailoverError::InvalidParameterValue(String::from(parsed_error.message))
+                    }
+                    "InvalidReplicationGroupStateFault" => TestFailoverError::InvalidReplicationGroupStateFault(String::from(parsed_error.message)),
+                    "NodeGroupNotFoundFault" => TestFailoverError::NodeGroupNotFoundFault(String::from(parsed_error.message)),
+                    "ReplicationGroupNotFoundFault" => TestFailoverError::ReplicationGroupNotFoundFault(String::from(parsed_error.message)),
+                    "TestFailoverNotAvailableFault" => TestFailoverError::TestFailoverNotAvailableFault(String::from(parsed_error.message)),
+                    _ => TestFailoverError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => TestFailoverError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for TestFailoverError {
+    fn from(err: XmlParseError) -> TestFailoverError {
+        let XmlParseError(message) = err;
+        TestFailoverError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for TestFailoverError {
+    fn from(err: CredentialsError) -> TestFailoverError {
+        TestFailoverError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for TestFailoverError {
+    fn from(err: HttpDispatchError) -> TestFailoverError {
+        TestFailoverError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for TestFailoverError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for TestFailoverError {
+    fn description(&self) -> &str {
+        match *self {
+            TestFailoverError::APICallRateForCustomerExceededFault(ref cause) => cause,
+            TestFailoverError::InvalidCacheClusterStateFault(ref cause) => cause,
+            TestFailoverError::InvalidParameterCombination(ref cause) => cause,
+            TestFailoverError::InvalidParameterValue(ref cause) => cause,
+            TestFailoverError::InvalidReplicationGroupStateFault(ref cause) => cause,
+            TestFailoverError::NodeGroupNotFoundFault(ref cause) => cause,
+            TestFailoverError::ReplicationGroupNotFoundFault(ref cause) => cause,
+            TestFailoverError::TestFailoverNotAvailableFault(ref cause) => cause,
+            TestFailoverError::Validation(ref cause) => cause,
+            TestFailoverError::Credentials(ref err) => err.description(),
+            TestFailoverError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            TestFailoverError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Trait representing the capabilities of the Amazon ElastiCache API. Amazon ElastiCache clients implement this trait.
 pub trait ElastiCache {
-    #[doc="<p>Adds up to 10 cost allocation tags to the named resource. A cost allocation tag is a key-value pair where the key and value are case-sensitive. You can use cost allocation tags to categorize and track your AWS costs.</p> <p> When you apply tags to your ElastiCache resources, AWS generates a cost allocation report as a comma-separated value (CSV) file with your usage and costs aggregated by your tags. You can apply tags that represent business categories (such as cost centers, application names, or owners) to organize your costs across multiple services. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Tagging.html\">Using Cost Allocation Tags in Amazon ElastiCache</a> in the <i>ElastiCache User Guide</i>.</p>"]
+    #[doc="<p>Adds up to 50 cost allocation tags to the named resource. A cost allocation tag is a key-value pair where the key and value are case-sensitive. You can use cost allocation tags to categorize and track your AWS costs.</p> <p> When you apply tags to your ElastiCache resources, AWS generates a cost allocation report as a comma-separated value (CSV) file with your usage and costs aggregated by your tags. You can apply tags that represent business categories (such as cost centers, application names, or owners) to organize your costs across multiple services. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Tagging.html\">Using Cost Allocation Tags in Amazon ElastiCache</a> in the <i>ElastiCache User Guide</i>.</p>"]
     fn add_tags_to_resource(&self,
                             input: &AddTagsToResourceMessage)
                             -> Result<TagListMessage, AddTagsToResourceError>;
@@ -10605,7 +10815,7 @@ pub trait ElastiCache {
                             -> Result<CreateCacheClusterResult, CreateCacheClusterError>;
 
 
-    #[doc="<p>Creates a new cache parameter group. A cache parameter group is a collection of parameters that you apply to all of the nodes in a cache cluster.</p>"]
+    #[doc="<p>Creates a new Amazon ElastiCache cache parameter group. An ElastiCache cache parameter group is a collection of parameters and their values that are applied to all of the nodes in any cache cluster or replication group using the CacheParameterGroup.</p> <p>A newly created CacheParameterGroup is an exact duplicate of the default parameter group for the CacheParameterGroupFamily. To customize the newly created CacheParameterGroup you can change the values of specific parameters. For more information, see:</p> <ul> <li> <p> <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_ModifyCacheParameterGroup.html\">ModifyCacheParameterGroup</a> in the ElastiCache API Reference.</p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/ParameterGroups.html\">Parameters and Parameter Groups</a> in the ElastiCache User Guide.</p> </li> </ul>"]
     fn create_cache_parameter_group
         (&self,
          input: &CreateCacheParameterGroupMessage)
@@ -10626,7 +10836,7 @@ pub trait ElastiCache {
          -> Result<CreateCacheSubnetGroupResult, CreateCacheSubnetGroupError>;
 
 
-    #[doc="<p>Creates a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group.</p> <p>A Redis (cluster mode disabled) replication group is a collection of cache clusters, where one of the cache clusters is a read/write primary and the others are read-only replicas. Writes to the primary are asynchronously propagated to the replicas.</p> <p>A Redis (cluster mode enabled) replication group is a collection of 1 to 15 node groups (shards). Each node group (shard) has one read/write primary node and up to 5 read-only replica nodes. Writes to the primary are asynchronously propagated to the replicas. Redis (cluster mode enabled) replication groups partition the data across node groups (shards).</p> <p>When a Redis (cluster mode disabled) replication group has been successfully created, you can add one or more read replicas to it, up to a total of 5 read replicas. You cannot alter a Redis (cluster mode enabled) replication group after it has been created.</p> <note> <p>This operation is valid for Redis only.</p> </note>"]
+    #[doc="<p>Creates a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group.</p> <p>A Redis (cluster mode disabled) replication group is a collection of cache clusters, where one of the cache clusters is a read/write primary and the others are read-only replicas. Writes to the primary are asynchronously propagated to the replicas.</p> <p>A Redis (cluster mode enabled) replication group is a collection of 1 to 15 node groups (shards). Each node group (shard) has one read/write primary node and up to 5 read-only replica nodes. Writes to the primary are asynchronously propagated to the replicas. Redis (cluster mode enabled) replication groups partition the data across node groups (shards).</p> <p>When a Redis (cluster mode disabled) replication group has been successfully created, you can add one or more read replicas to it, up to a total of 5 read replicas. You cannot alter a Redis (cluster mode enabled) replication group after it has been created. However, if you need to increase or decrease the number of node groups (console: shards), you can avail yourself of ElastiCache for Redis' enhanced backup and restore. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/backups-restoring.html\">Restoring From a Backup with Cluster Resizing</a> in the <i>ElastiCache User Guide</i>.</p> <note> <p>This operation is valid for Redis only.</p> </note>"]
     fn create_replication_group
         (&self,
          input: &CreateReplicationGroupMessage)
@@ -10676,7 +10886,7 @@ pub trait ElastiCache {
                        -> Result<DeleteSnapshotResult, DeleteSnapshotError>;
 
 
-    #[doc="<p>Returns information about all provisioned cache clusters if no cache cluster identifier is specified, or about a specific cache cluster if a cache cluster identifier is supplied.</p> <p>By default, abbreviated information about the cache clusters are returned. You can use the optional <code>ShowDetails</code> flag to retrieve detailed information about the cache nodes associated with the cache clusters. These details include the DNS address and port for the cache node endpoint.</p> <p>If the cluster is in the CREATING state, only cluster-level information is displayed until all of the nodes are successfully provisioned.</p> <p>If the cluster is in the DELETING state, only cluster-level information is displayed.</p> <p>If cache nodes are currently being added to the cache cluster, node endpoint information and creation time for the additional nodes are not displayed until they are completely provisioned. When the cache cluster state is <code>available</code>, the cluster is ready for use.</p> <p>If cache nodes are currently being removed from the cache cluster, no endpoint information for the removed nodes is displayed.</p>"]
+    #[doc="<p>Returns information about all provisioned cache clusters if no cache cluster identifier is specified, or about a specific cache cluster if a cache cluster identifier is supplied.</p> <p>By default, abbreviated information about the cache clusters is returned. You can use the optional <i>ShowCacheNodeInfo</i> flag to retrieve detailed information about the cache nodes associated with the cache clusters. These details include the DNS address and port for the cache node endpoint.</p> <p>If the cluster is in the <i>creating</i> state, only cluster-level information is displayed until all of the nodes are successfully provisioned.</p> <p>If the cluster is in the <i>deleting</i> state, only cluster-level information is displayed.</p> <p>If cache nodes are currently being added to the cache cluster, node endpoint information and creation time for the additional nodes are not displayed until they are completely provisioned. When the cache cluster state is <i>available</i>, the cluster is ready for use.</p> <p>If cache nodes are currently being removed from the cache cluster, no endpoint information for the removed nodes is displayed.</p>"]
     fn describe_cache_clusters(&self,
                                input: &DescribeCacheClustersMessage)
                                -> Result<CacheClusterMessage, DescribeCacheClustersError>;
@@ -10764,7 +10974,7 @@ pub trait ElastiCache {
          -> Result<AllowedNodeTypeModificationsMessage, ListAllowedNodeTypeModificationsError>;
 
 
-    #[doc="<p>Lists all cost allocation tags currently on the named resource. A <code>cost allocation tag</code> is a key-value pair where the key is case-sensitive and the value is optional. You can use cost allocation tags to categorize and track your AWS costs.</p> <p>You can have a maximum of 10 cost allocation tags on an ElastiCache resource. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/BestPractices.html\">Using Cost Allocation Tags in Amazon ElastiCache</a>.</p>"]
+    #[doc="<p>Lists all cost allocation tags currently on the named resource. A <code>cost allocation tag</code> is a key-value pair where the key is case-sensitive and the value is optional. You can use cost allocation tags to categorize and track your AWS costs.</p> <p>You can have a maximum of 50 cost allocation tags on an ElastiCache resource. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/BestPractices.html\">Using Cost Allocation Tags in Amazon ElastiCache</a>.</p>"]
     fn list_tags_for_resource(&self,
                               input: &ListTagsForResourceMessage)
                               -> Result<TagListMessage, ListTagsForResourceError>;
@@ -10829,6 +11039,12 @@ pub trait ElastiCache {
         (&self,
          input: &RevokeCacheSecurityGroupIngressMessage)
          -> Result<RevokeCacheSecurityGroupIngressResult, RevokeCacheSecurityGroupIngressError>;
+
+
+    #[doc="<p>Represents the input of a <code>TestFailover</code> operation which test automatic failover on a specified node group (called shard in the console) in a replication group (called cluster in the console).</p> <p class=\"title\"> <b>Note the following</b> </p> <ul> <li> <p>A customer can use this operation to test automatic failover on up to 5 shards (called node groups in the ElastiCache API and AWS CLI) in any rolling 24-hour period.</p> </li> <li> <p>If calling this operation on shards in different clusters (called replication groups in the API and CLI), the calls can be made concurrently.</p> <p> </p> </li> <li> <p>If calling this operation multiple times on different shards in the same Redis (cluster mode enabled) replication group, the first node replacement must complete before a subsequent call can be made.</p> </li> <li> <p>To determine whether the node replacement is complete you can check Events using the Amazon ElastiCache console, the AWS CLI, or the ElastiCache API. Look for the following automatic failover related events, listed here in order of occurrance:</p> <ol> <li> <p>Replication group message: <code>Test Failover API called for node group &lt;node-group-id&gt;</code> </p> </li> <li> <p>Cache cluster message: <code>Failover from master node &lt;primary-node-id&gt; to replica node &lt;node-id&gt; completed</code> </p> </li> <li> <p>Replication group message: <code>Failover from master node &lt;primary-node-id&gt; to replica node &lt;node-id&gt; completed</code> </p> </li> <li> <p>Cache cluster message: <code>Recovering cache nodes &lt;node-id&gt;</code> </p> </li> <li> <p>Cache cluster message: <code>Finished recovery for cache nodes &lt;node-id&gt;</code> </p> </li> </ol> <p>For more information see:</p> <ul> <li> <p> <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/ECEvents.Viewing.html\">Viewing ElastiCache Events</a> in the <i>ElastiCache User Guide</i> </p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_DescribeEvents.html\">DescribeEvents</a> in the ElastiCache API Reference</p> </li> </ul> </li> </ul> <p>Also see, <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/AutoFailover.html#auto-failover-test\">Testing Multi-AZ with Automatic Failover</a> in the <i>ElastiCache User Guide</i>.</p>"]
+    fn test_failover(&self,
+                     input: &TestFailoverMessage)
+                     -> Result<TestFailoverResult, TestFailoverError>;
 }
 /// A client for the Amazon ElastiCache API.
 pub struct ElastiCacheClient<P, D>
@@ -10857,7 +11073,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
     where P: ProvideAwsCredentials,
           D: DispatchSignedRequest
 {
-    #[doc="<p>Adds up to 10 cost allocation tags to the named resource. A cost allocation tag is a key-value pair where the key and value are case-sensitive. You can use cost allocation tags to categorize and track your AWS costs.</p> <p> When you apply tags to your ElastiCache resources, AWS generates a cost allocation report as a comma-separated value (CSV) file with your usage and costs aggregated by your tags. You can apply tags that represent business categories (such as cost centers, application names, or owners) to organize your costs across multiple services. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Tagging.html\">Using Cost Allocation Tags in Amazon ElastiCache</a> in the <i>ElastiCache User Guide</i>.</p>"]
+    #[doc="<p>Adds up to 50 cost allocation tags to the named resource. A cost allocation tag is a key-value pair where the key and value are case-sensitive. You can use cost allocation tags to categorize and track your AWS costs.</p> <p> When you apply tags to your ElastiCache resources, AWS generates a cost allocation report as a comma-separated value (CSV) file with your usage and costs aggregated by your tags. You can apply tags that represent business categories (such as cost centers, application names, or owners) to organize your costs across multiple services. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Tagging.html\">Using Cost Allocation Tags in Amazon ElastiCache</a> in the <i>ElastiCache User Guide</i>.</p>"]
     fn add_tags_to_resource(&self,
                             input: &AddTagsToResourceMessage)
                             -> Result<TagListMessage, AddTagsToResourceError> {
@@ -11032,7 +11248,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
     }
 
 
-    #[doc="<p>Creates a new cache parameter group. A cache parameter group is a collection of parameters that you apply to all of the nodes in a cache cluster.</p>"]
+    #[doc="<p>Creates a new Amazon ElastiCache cache parameter group. An ElastiCache cache parameter group is a collection of parameters and their values that are applied to all of the nodes in any cache cluster or replication group using the CacheParameterGroup.</p> <p>A newly created CacheParameterGroup is an exact duplicate of the default parameter group for the CacheParameterGroupFamily. To customize the newly created CacheParameterGroup you can change the values of specific parameters. For more information, see:</p> <ul> <li> <p> <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_ModifyCacheParameterGroup.html\">ModifyCacheParameterGroup</a> in the ElastiCache API Reference.</p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/ParameterGroups.html\">Parameters and Parameter Groups</a> in the ElastiCache User Guide.</p> </li> </ul>"]
     fn create_cache_parameter_group
         (&self,
          input: &CreateCacheParameterGroupMessage)
@@ -11168,7 +11384,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
     }
 
 
-    #[doc="<p>Creates a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group.</p> <p>A Redis (cluster mode disabled) replication group is a collection of cache clusters, where one of the cache clusters is a read/write primary and the others are read-only replicas. Writes to the primary are asynchronously propagated to the replicas.</p> <p>A Redis (cluster mode enabled) replication group is a collection of 1 to 15 node groups (shards). Each node group (shard) has one read/write primary node and up to 5 read-only replica nodes. Writes to the primary are asynchronously propagated to the replicas. Redis (cluster mode enabled) replication groups partition the data across node groups (shards).</p> <p>When a Redis (cluster mode disabled) replication group has been successfully created, you can add one or more read replicas to it, up to a total of 5 read replicas. You cannot alter a Redis (cluster mode enabled) replication group after it has been created.</p> <note> <p>This operation is valid for Redis only.</p> </note>"]
+    #[doc="<p>Creates a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group.</p> <p>A Redis (cluster mode disabled) replication group is a collection of cache clusters, where one of the cache clusters is a read/write primary and the others are read-only replicas. Writes to the primary are asynchronously propagated to the replicas.</p> <p>A Redis (cluster mode enabled) replication group is a collection of 1 to 15 node groups (shards). Each node group (shard) has one read/write primary node and up to 5 read-only replica nodes. Writes to the primary are asynchronously propagated to the replicas. Redis (cluster mode enabled) replication groups partition the data across node groups (shards).</p> <p>When a Redis (cluster mode disabled) replication group has been successfully created, you can add one or more read replicas to it, up to a total of 5 read replicas. You cannot alter a Redis (cluster mode enabled) replication group after it has been created. However, if you need to increase or decrease the number of node groups (console: shards), you can avail yourself of ElastiCache for Redis' enhanced backup and restore. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/backups-restoring.html\">Restoring From a Backup with Cluster Resizing</a> in the <i>ElastiCache User Guide</i>.</p> <note> <p>This operation is valid for Redis only.</p> </note>"]
     fn create_replication_group
         (&self,
          input: &CreateReplicationGroupMessage)
@@ -11471,7 +11687,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
     }
 
 
-    #[doc="<p>Returns information about all provisioned cache clusters if no cache cluster identifier is specified, or about a specific cache cluster if a cache cluster identifier is supplied.</p> <p>By default, abbreviated information about the cache clusters are returned. You can use the optional <code>ShowDetails</code> flag to retrieve detailed information about the cache nodes associated with the cache clusters. These details include the DNS address and port for the cache node endpoint.</p> <p>If the cluster is in the CREATING state, only cluster-level information is displayed until all of the nodes are successfully provisioned.</p> <p>If the cluster is in the DELETING state, only cluster-level information is displayed.</p> <p>If cache nodes are currently being added to the cache cluster, node endpoint information and creation time for the additional nodes are not displayed until they are completely provisioned. When the cache cluster state is <code>available</code>, the cluster is ready for use.</p> <p>If cache nodes are currently being removed from the cache cluster, no endpoint information for the removed nodes is displayed.</p>"]
+    #[doc="<p>Returns information about all provisioned cache clusters if no cache cluster identifier is specified, or about a specific cache cluster if a cache cluster identifier is supplied.</p> <p>By default, abbreviated information about the cache clusters is returned. You can use the optional <i>ShowCacheNodeInfo</i> flag to retrieve detailed information about the cache nodes associated with the cache clusters. These details include the DNS address and port for the cache node endpoint.</p> <p>If the cluster is in the <i>creating</i> state, only cluster-level information is displayed until all of the nodes are successfully provisioned.</p> <p>If the cluster is in the <i>deleting</i> state, only cluster-level information is displayed.</p> <p>If cache nodes are currently being added to the cache cluster, node endpoint information and creation time for the additional nodes are not displayed until they are completely provisioned. When the cache cluster state is <i>available</i>, the cluster is ready for use.</p> <p>If cache nodes are currently being removed from the cache cluster, no endpoint information for the removed nodes is displayed.</p>"]
     fn describe_cache_clusters(&self,
                                input: &DescribeCacheClustersMessage)
                                -> Result<CacheClusterMessage, DescribeCacheClustersError> {
@@ -12041,7 +12257,7 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
     }
 
 
-    #[doc="<p>Lists all cost allocation tags currently on the named resource. A <code>cost allocation tag</code> is a key-value pair where the key is case-sensitive and the value is optional. You can use cost allocation tags to categorize and track your AWS costs.</p> <p>You can have a maximum of 10 cost allocation tags on an ElastiCache resource. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/BestPractices.html\">Using Cost Allocation Tags in Amazon ElastiCache</a>.</p>"]
+    #[doc="<p>Lists all cost allocation tags currently on the named resource. A <code>cost allocation tag</code> is a key-value pair where the key is case-sensitive and the value is optional. You can use cost allocation tags to categorize and track your AWS costs.</p> <p>You can have a maximum of 50 cost allocation tags on an ElastiCache resource. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/BestPractices.html\">Using Cost Allocation Tags in Amazon ElastiCache</a>.</p>"]
     fn list_tags_for_resource(&self,
                               input: &ListTagsForResourceMessage)
                               -> Result<TagListMessage, ListTagsForResourceError> {
@@ -12482,6 +12698,49 @@ impl<P, D> ElastiCache for ElastiCacheClient<P, D>
             _ => {
                             Err(RevokeCacheSecurityGroupIngressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
                         }
+        }
+    }
+
+
+    #[doc="<p>Represents the input of a <code>TestFailover</code> operation which test automatic failover on a specified node group (called shard in the console) in a replication group (called cluster in the console).</p> <p class=\"title\"> <b>Note the following</b> </p> <ul> <li> <p>A customer can use this operation to test automatic failover on up to 5 shards (called node groups in the ElastiCache API and AWS CLI) in any rolling 24-hour period.</p> </li> <li> <p>If calling this operation on shards in different clusters (called replication groups in the API and CLI), the calls can be made concurrently.</p> <p> </p> </li> <li> <p>If calling this operation multiple times on different shards in the same Redis (cluster mode enabled) replication group, the first node replacement must complete before a subsequent call can be made.</p> </li> <li> <p>To determine whether the node replacement is complete you can check Events using the Amazon ElastiCache console, the AWS CLI, or the ElastiCache API. Look for the following automatic failover related events, listed here in order of occurrance:</p> <ol> <li> <p>Replication group message: <code>Test Failover API called for node group &lt;node-group-id&gt;</code> </p> </li> <li> <p>Cache cluster message: <code>Failover from master node &lt;primary-node-id&gt; to replica node &lt;node-id&gt; completed</code> </p> </li> <li> <p>Replication group message: <code>Failover from master node &lt;primary-node-id&gt; to replica node &lt;node-id&gt; completed</code> </p> </li> <li> <p>Cache cluster message: <code>Recovering cache nodes &lt;node-id&gt;</code> </p> </li> <li> <p>Cache cluster message: <code>Finished recovery for cache nodes &lt;node-id&gt;</code> </p> </li> </ol> <p>For more information see:</p> <ul> <li> <p> <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/ECEvents.Viewing.html\">Viewing ElastiCache Events</a> in the <i>ElastiCache User Guide</i> </p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_DescribeEvents.html\">DescribeEvents</a> in the ElastiCache API Reference</p> </li> </ul> </li> </ul> <p>Also see, <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/AutoFailover.html#auto-failover-test\">Testing Multi-AZ with Automatic Failover</a> in the <i>ElastiCache User Guide</i>.</p>"]
+    fn test_failover(&self,
+                     input: &TestFailoverMessage)
+                     -> Result<TestFailoverResult, TestFailoverError> {
+        let mut request = SignedRequest::new("POST", "elasticache", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "TestFailover");
+        params.put("Version", "2015-02-02");
+        TestFailoverMessageSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = TestFailoverResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(TestFailoverResultDeserializer::deserialize("TestFailoverResult",
+                                                                              &mut stack));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                Err(TestFailoverError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+            }
         }
     }
 }

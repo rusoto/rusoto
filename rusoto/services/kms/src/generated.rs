@@ -60,13 +60,13 @@ pub struct CreateAliasRequest {
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateGrantRequest {
-    #[doc="<p>The conditions under which the operations permitted by the grant are allowed.</p> <p>You can use this value to allow the operations permitted by the grant only when a specified encryption context is present. For more information, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html\">Encryption Context</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
+    #[doc="<p>A structure that you can use to allow certain operations in the grant only when the desired encryption context is present. For more information about encryption context, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html\">Encryption Context</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
     #[serde(rename="Constraints")]
     pub constraints: Option<GrantConstraints>,
     #[doc="<p>A list of grant tokens.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#grant_token\">Grant Tokens</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
     #[serde(rename="GrantTokens")]
     pub grant_tokens: Option<GrantTokenList>,
-    #[doc="<p>The principal that is given permission to perform the operations that the grant permits.</p> <p>To specify the principal, use the <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Name (ARN)</a> of an AWS principal. Valid AWS principals include AWS accounts (root), IAM users, federated users, and assumed role users. For examples of the ARN syntax to use for specifying a principal, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-iam\">AWS Identity and Access Management (IAM)</a> in the Example ARNs section of the <i>AWS General Reference</i>.</p>"]
+    #[doc="<p>The principal that is given permission to perform the operations that the grant permits.</p> <p>To specify the principal, use the <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Name (ARN)</a> of an AWS principal. Valid AWS principals include AWS accounts (root), IAM users, IAM roles, federated users, and assumed role users. For examples of the ARN syntax to use for specifying a principal, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-iam\">AWS Identity and Access Management (IAM)</a> in the Example ARNs section of the <i>AWS General Reference</i>.</p>"]
     #[serde(rename="GranteePrincipal")]
     pub grantee_principal: PrincipalIdType,
     #[doc="<p>The unique identifier for the customer master key (CMK) that the grant applies to.</p> <p>To specify this value, use the globally unique key ID or the Amazon Resource Name (ARN) of the key. Examples:</p> <ul> <li> <p>Globally unique key ID: 12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Key ARN: arn:aws:kms:us-west-2:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> </ul>"]
@@ -95,7 +95,7 @@ pub struct CreateGrantResponse {
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateKeyRequest {
-    #[doc="<p>A flag to indicate whether to bypass the key policy lockout safety check.</p> <important> <p>Setting this value to true increases the likelihood that the CMK becomes unmanageable. Do not set this value to true indiscriminately.</p> <p>For more information, refer to the scenario in the <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default-allow-root-enable-iam\">Default Key Policy</a> section in the <i>AWS Key Management Service Developer Guide</i>.</p> </important> <p>Use this parameter only when you include a policy in the request and you intend to prevent the principal making the request from making a subsequent <a>PutKeyPolicy</a> request on the CMK.</p> <p>The default value is false.</p>"]
+    #[doc="<p>A flag to indicate whether to bypass the key policy lockout safety check.</p> <important> <p>Setting this value to true increases the likelihood that the CMK becomes unmanageable. Do not set this value to true indiscriminately.</p> <p>For more information, refer to the scenario in the <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default-allow-root-enable-iam\">Default Key Policy</a> section in the <i>AWS Key Management Service Developer Guide</i>.</p> </important> <p>Use this parameter only when you include a policy in the request and you intend to prevent the principal that is making the request from making a subsequent <a>PutKeyPolicy</a> request on the CMK.</p> <p>The default value is false.</p>"]
     #[serde(rename="BypassPolicyLockoutSafetyCheck")]
     #[serde(skip_serializing_if="::std::option::Option::is_none")]
     pub bypass_policy_lockout_safety_check: Option<BooleanType>,
@@ -108,9 +108,12 @@ pub struct CreateKeyRequest {
     #[doc="<p>The source of the CMK's key material.</p> <p>The default is <code>AWS_KMS</code>, which means AWS KMS creates the key material. When this parameter is set to <code>EXTERNAL</code>, the request creates a CMK without key material so that you can import key material from your existing key management infrastructure. For more information about importing key material into AWS KMS, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html\">Importing Key Material</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>The CMK's <code>Origin</code> is immutable and is set when the CMK is created.</p>"]
     #[serde(rename="Origin")]
     pub origin: Option<OriginType>,
-    #[doc="<p>The key policy to attach to the CMK.</p> <p>If you specify a policy and do not set <code>BypassPolicyLockoutSafetyCheck</code> to true, the policy must meet the following criteria:</p> <ul> <li> <p>It must allow the principal making the <code>CreateKey</code> request to make a subsequent <a>PutKeyPolicy</a> request on the CMK. This reduces the likelihood that the CMK becomes unmanageable. For more information, refer to the scenario in the <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default-allow-root-enable-iam\">Default Key Policy</a> section in the <i>AWS Key Management Service Developer Guide</i>.</p> </li> <li> <p>The principal(s) specified in the key policy must exist and be visible to AWS KMS. When you create a new AWS principal (for example, an IAM user or role), you might need to enforce a delay before specifying the new principal in a key policy because the new principal might not immediately be visible to AWS KMS. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/troubleshoot_general.html#troubleshoot_general_eventual-consistency\">Changes that I make are not always immediately visible</a> in the <i>IAM User Guide</i>.</p> </li> </ul> <p>If you do not specify a policy, AWS KMS attaches a default key policy to the CMK. For more information, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default\">Default Key Policy</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>The policy size limit is 32 KiB (32768 bytes).</p>"]
+    #[doc="<p>The key policy to attach to the CMK.</p> <p>If you specify a policy and do not set <code>BypassPolicyLockoutSafetyCheck</code> to true, the policy must meet the following criteria:</p> <ul> <li> <p>It must allow the principal that is making the <code>CreateKey</code> request to make a subsequent <a>PutKeyPolicy</a> request on the CMK. This reduces the likelihood that the CMK becomes unmanageable. For more information, refer to the scenario in the <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default-allow-root-enable-iam\">Default Key Policy</a> section in the <i>AWS Key Management Service Developer Guide</i>.</p> </li> <li> <p>The principals that are specified in the key policy must exist and be visible to AWS KMS. When you create a new AWS principal (for example, an IAM user or role), you might need to enforce a delay before specifying the new principal in a key policy because the new principal might not immediately be visible to AWS KMS. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/troubleshoot_general.html#troubleshoot_general_eventual-consistency\">Changes that I make are not always immediately visible</a> in the <i>IAM User Guide</i>.</p> </li> </ul> <p>If you do not specify a policy, AWS KMS attaches a default key policy to the CMK. For more information, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default\">Default Key Policy</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>The policy size limit is 32 KiB (32768 bytes).</p>"]
     #[serde(rename="Policy")]
     pub policy: Option<PolicyType>,
+    #[doc="<p>One or more tags. Each tag consists of a tag key and a tag value. Tag keys and tag values are both required, but tag values can be empty (null) strings.</p> <p>Use this parameter to tag the CMK when it is created. Alternately, you can omit this parameter and instead tag the CMK after it is created using <a>TagResource</a>.</p>"]
+    #[serde(rename="Tags")]
+    pub tags: Option<TagList>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -342,7 +345,7 @@ pub struct GenerateRandomRequest {
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GenerateRandomResponse {
-    #[doc="<p>The unpredictable byte string.</p>"]
+    #[doc="<p>The random byte string.</p>"]
     #[serde(rename="Plaintext")]
     #[serde(
                             deserialize_with="::rusoto_core::serialization::SerdeBlob::deserialize_blob",
@@ -423,13 +426,13 @@ pub struct GetParametersForImportResponse {
     pub public_key: Option<PlaintextType>,
 }
 
-#[doc="<p>A structure for specifying the conditions under which the operations permitted by the grant are allowed.</p> <p>You can use this structure to allow the operations permitted by the grant only when a specified encryption context is present. For more information about encryption context, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html\">Encryption Context</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
+#[doc="<p>A structure that you can use to allow certain operations in the grant only when the desired encryption context is present. For more information about encryption context, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html\">Encryption Context</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>Grant constraints apply only to operations that accept encryption context as input. For example, the <code> <a>DescribeKey</a> </code> operation does not accept encryption context as input. A grant that allows the <code>DescribeKey</code> operation does so regardless of the grant constraints. In constrast, the <code> <a>Encrypt</a> </code> operation accepts encryption context as input. A grant that allows the <code>Encrypt</code> operation does so only when the encryption context of the <code>Encrypt</code> operation satisfies the grant constraints.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GrantConstraints {
-    #[doc="<p>Contains a list of key-value pairs that must be present in the encryption context of a subsequent operation permitted by the grant. When a subsequent operation permitted by the grant includes an encryption context that matches this list, the grant allows the operation. Otherwise, the operation is not allowed.</p>"]
+    #[doc="<p>A list of key-value pairs that must be present in the encryption context of certain subsequent operations that the grant allows. When certain subsequent operations allowed by the grant include encryption context that matches this list, the grant allows the operation. Otherwise, the grant does not allow the operation.</p>"]
     #[serde(rename="EncryptionContextEquals")]
     pub encryption_context_equals: Option<EncryptionContextType>,
-    #[doc="<p>Contains a list of key-value pairs, a subset of which must be present in the encryption context of a subsequent operation permitted by the grant. When a subsequent operation permitted by the grant includes an encryption context that matches this list or is a subset of this list, the grant allows the operation. Otherwise, the operation is not allowed.</p>"]
+    #[doc="<p>A list of key-value pairs, all of which must be present in the encryption context of certain subsequent operations that the grant allows. When certain subsequent operations allowed by the grant include encryption context that matches this list or is a superset of this list, the grant allows the operation. Otherwise, the grant does not allow the operation.</p>"]
     #[serde(rename="EncryptionContextSubset")]
     pub encryption_context_subset: Option<EncryptionContextType>,
 }
@@ -439,7 +442,7 @@ pub type GrantList = Vec<GrantListEntry>;
 #[doc="<p>Contains information about an entry in a list of grants.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GrantListEntry {
-    #[doc="<p>The conditions under which the grant's operations are allowed.</p>"]
+    #[doc="<p>A list of key-value pairs that must be present in the encryption context of certain subsequent operations that the grant allows.</p>"]
     #[serde(rename="Constraints")]
     pub constraints: Option<GrantConstraints>,
     #[doc="<p>The date and time when the grant was created.</p>"]
@@ -565,10 +568,10 @@ pub type KeyUsageType = String;
 pub type LimitType = i64;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListAliasesRequest {
-    #[doc="<p>When paginating results, specify the maximum number of items to return in the response. If additional items exist beyond the number you specify, the <code>Truncated</code> element in the response is set to true.</p> <p>This value is optional. If you include a value, it must be between 1 and 100, inclusive. If you do not include a value, it defaults to 50.</p>"]
+    #[doc="<p>Use this parameter to specify the maximum number of items to return. When this value is present, AWS KMS does not return more than the specified number of items, but it might return fewer.</p> <p>This value is optional. If you include a value, it must be between 1 and 100, inclusive. If you do not include a value, it defaults to 50.</p>"]
     #[serde(rename="Limit")]
     pub limit: Option<LimitType>,
-    #[doc="<p>Use this parameter only when paginating results and only in a subsequent request after you receive a response with truncated results. Set it to the value of <code>NextMarker</code> from the response you just received.</p>"]
+    #[doc="<p>Use this parameter in a subsequent request after you receive a response with truncated results. Set it to the value of <code>NextMarker</code> from the truncated response you just received.</p>"]
     #[serde(rename="Marker")]
     pub marker: Option<MarkerType>,
 }
@@ -578,10 +581,10 @@ pub struct ListAliasesResponse {
     #[doc="<p>A list of key aliases in the user's account.</p>"]
     #[serde(rename="Aliases")]
     pub aliases: Option<AliasList>,
-    #[doc="<p>When <code>Truncated</code> is true, this value is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
+    #[doc="<p>When <code>Truncated</code> is true, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent request.</p>"]
     #[serde(rename="NextMarker")]
     pub next_marker: Option<MarkerType>,
-    #[doc="<p>A flag that indicates whether there are more items in the list. If your results were truncated, you can use the <code>Marker</code> parameter to make a subsequent pagination request to retrieve more items in the list.</p>"]
+    #[doc="<p>A flag that indicates whether there are more items in the list. When this value is true, the list in this response is truncated. To retrieve more items, pass the value of the <code>NextMarker</code> element in this response to the <code>Marker</code> parameter in a subsequent request.</p>"]
     #[serde(rename="Truncated")]
     #[serde(skip_serializing_if="::std::option::Option::is_none")]
     pub truncated: Option<BooleanType>,
@@ -592,10 +595,10 @@ pub struct ListGrantsRequest {
     #[doc="<p>A unique identifier for the customer master key. This value can be a globally unique identifier or the fully specified ARN to a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul>"]
     #[serde(rename="KeyId")]
     pub key_id: KeyIdType,
-    #[doc="<p>When paginating results, specify the maximum number of items to return in the response. If additional items exist beyond the number you specify, the <code>Truncated</code> element in the response is set to true.</p> <p>This value is optional. If you include a value, it must be between 1 and 100, inclusive. If you do not include a value, it defaults to 50.</p>"]
+    #[doc="<p>Use this parameter to specify the maximum number of items to return. When this value is present, AWS KMS does not return more than the specified number of items, but it might return fewer.</p> <p>This value is optional. If you include a value, it must be between 1 and 100, inclusive. If you do not include a value, it defaults to 50.</p>"]
     #[serde(rename="Limit")]
     pub limit: Option<LimitType>,
-    #[doc="<p>Use this parameter only when paginating results and only in a subsequent request after you receive a response with truncated results. Set it to the value of <code>NextMarker</code> from the response you just received.</p>"]
+    #[doc="<p>Use this parameter in a subsequent request after you receive a response with truncated results. Set it to the value of <code>NextMarker</code> from the truncated response you just received.</p>"]
     #[serde(rename="Marker")]
     pub marker: Option<MarkerType>,
 }
@@ -605,10 +608,10 @@ pub struct ListGrantsResponse {
     #[doc="<p>A list of grants.</p>"]
     #[serde(rename="Grants")]
     pub grants: Option<GrantList>,
-    #[doc="<p>When <code>Truncated</code> is true, this value is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
+    #[doc="<p>When <code>Truncated</code> is true, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent request.</p>"]
     #[serde(rename="NextMarker")]
     pub next_marker: Option<MarkerType>,
-    #[doc="<p>A flag that indicates whether there are more items in the list. If your results were truncated, you can use the <code>Marker</code> parameter to make a subsequent pagination request to retrieve more items in the list.</p>"]
+    #[doc="<p>A flag that indicates whether there are more items in the list. When this value is true, the list in this response is truncated. To retrieve more items, pass the value of the <code>NextMarker</code> element in this response to the <code>Marker</code> parameter in a subsequent request.</p>"]
     #[serde(rename="Truncated")]
     #[serde(skip_serializing_if="::std::option::Option::is_none")]
     pub truncated: Option<BooleanType>,
@@ -619,23 +622,23 @@ pub struct ListKeyPoliciesRequest {
     #[doc="<p>A unique identifier for the customer master key (CMK). You can use the unique key ID or the Amazon Resource Name (ARN) of the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul>"]
     #[serde(rename="KeyId")]
     pub key_id: KeyIdType,
-    #[doc="<p>When paginating results, specify the maximum number of items to return in the response. If additional items exist beyond the number you specify, the <code>Truncated</code> element in the response is set to true.</p> <p>This value is optional. If you include a value, it must be between 1 and 1000, inclusive. If you do not include a value, it defaults to 100.</p> <p>Currently only 1 policy can be attached to a key.</p>"]
+    #[doc="<p>Use this parameter to specify the maximum number of items to return. When this value is present, AWS KMS does not return more than the specified number of items, but it might return fewer.</p> <p>This value is optional. If you include a value, it must be between 1 and 1000, inclusive. If you do not include a value, it defaults to 100.</p> <p>Currently only 1 policy can be attached to a key.</p>"]
     #[serde(rename="Limit")]
     pub limit: Option<LimitType>,
-    #[doc="<p>Use this parameter only when paginating results and only in a subsequent request after you receive a response with truncated results. Set it to the value of <code>NextMarker</code> from the response you just received.</p>"]
+    #[doc="<p>Use this parameter in a subsequent request after you receive a response with truncated results. Set it to the value of <code>NextMarker</code> from the truncated response you just received.</p>"]
     #[serde(rename="Marker")]
     pub marker: Option<MarkerType>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ListKeyPoliciesResponse {
-    #[doc="<p>When <code>Truncated</code> is true, this value is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
+    #[doc="<p>When <code>Truncated</code> is true, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent request.</p>"]
     #[serde(rename="NextMarker")]
     pub next_marker: Option<MarkerType>,
     #[doc="<p>A list of policy names. Currently, there is only one policy and it is named \"Default\".</p>"]
     #[serde(rename="PolicyNames")]
     pub policy_names: Option<PolicyNameList>,
-    #[doc="<p>A flag that indicates whether there are more items in the list. If your results were truncated, you can use the <code>Marker</code> parameter to make a subsequent pagination request to retrieve more items in the list.</p>"]
+    #[doc="<p>A flag that indicates whether there are more items in the list. When this value is true, the list in this response is truncated. To retrieve more items, pass the value of the <code>NextMarker</code> element in this response to the <code>Marker</code> parameter in a subsequent request.</p>"]
     #[serde(rename="Truncated")]
     #[serde(skip_serializing_if="::std::option::Option::is_none")]
     pub truncated: Option<BooleanType>,
@@ -643,10 +646,10 @@ pub struct ListKeyPoliciesResponse {
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListKeysRequest {
-    #[doc="<p>When paginating results, specify the maximum number of items to return in the response. If additional items exist beyond the number you specify, the <code>Truncated</code> element in the response is set to true.</p> <p>This value is optional. If you include a value, it must be between 1 and 1000, inclusive. If you do not include a value, it defaults to 100.</p>"]
+    #[doc="<p>Use this parameter to specify the maximum number of items to return. When this value is present, AWS KMS does not return more than the specified number of items, but it might return fewer.</p> <p>This value is optional. If you include a value, it must be between 1 and 1000, inclusive. If you do not include a value, it defaults to 100.</p>"]
     #[serde(rename="Limit")]
     pub limit: Option<LimitType>,
-    #[doc="<p>Use this parameter only when paginating results and only in a subsequent request after you receive a response with truncated results. Set it to the value of <code>NextMarker</code> from the response you just received.</p>"]
+    #[doc="<p>Use this parameter in a subsequent request after you receive a response with truncated results. Set it to the value of <code>NextMarker</code> from the truncated response you just received.</p>"]
     #[serde(rename="Marker")]
     pub marker: Option<MarkerType>,
 }
@@ -656,10 +659,37 @@ pub struct ListKeysResponse {
     #[doc="<p>A list of keys.</p>"]
     #[serde(rename="Keys")]
     pub keys: Option<KeyList>,
-    #[doc="<p>When <code>Truncated</code> is true, this value is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
+    #[doc="<p>When <code>Truncated</code> is true, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent request.</p>"]
     #[serde(rename="NextMarker")]
     pub next_marker: Option<MarkerType>,
-    #[doc="<p>A flag that indicates whether there are more items in the list. If your results were truncated, you can use the <code>Marker</code> parameter to make a subsequent pagination request to retrieve more items in the list.</p>"]
+    #[doc="<p>A flag that indicates whether there are more items in the list. When this value is true, the list in this response is truncated. To retrieve more items, pass the value of the <code>NextMarker</code> element in this response to the <code>Marker</code> parameter in a subsequent request.</p>"]
+    #[serde(rename="Truncated")]
+    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    pub truncated: Option<BooleanType>,
+}
+
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct ListResourceTagsRequest {
+    #[doc="<p>A unique identifier for the CMK whose tags you are listing. You can use the unique key ID or the Amazon Resource Name (ARN) of the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul>"]
+    #[serde(rename="KeyId")]
+    pub key_id: KeyIdType,
+    #[doc="<p>Use this parameter to specify the maximum number of items to return. When this value is present, AWS KMS does not return more than the specified number of items, but it might return fewer.</p> <p>This value is optional. If you include a value, it must be between 1 and 50, inclusive. If you do not include a value, it defaults to 50.</p>"]
+    #[serde(rename="Limit")]
+    pub limit: Option<LimitType>,
+    #[doc="<p>Use this parameter in a subsequent request after you receive a response with truncated results. Set it to the value of <code>NextMarker</code> from the truncated response you just received.</p> <p>Do not attempt to construct this value. Use only the value of <code>NextMarker</code> from the truncated response you just received.</p>"]
+    #[serde(rename="Marker")]
+    pub marker: Option<MarkerType>,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct ListResourceTagsResponse {
+    #[doc="<p>When <code>Truncated</code> is true, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent request.</p> <p>Do not assume or infer any information from this value.</p>"]
+    #[serde(rename="NextMarker")]
+    pub next_marker: Option<MarkerType>,
+    #[doc="<p>A list of tags. Each tag consists of a tag key and a tag value.</p>"]
+    #[serde(rename="Tags")]
+    pub tags: Option<TagList>,
+    #[doc="<p>A flag that indicates whether there are more items in the list. When this value is true, the list in this response is truncated. To retrieve more items, pass the value of the <code>NextMarker</code> element in this response to the <code>Marker</code> parameter in a subsequent request.</p>"]
     #[serde(rename="Truncated")]
     #[serde(skip_serializing_if="::std::option::Option::is_none")]
     pub truncated: Option<BooleanType>,
@@ -667,10 +697,10 @@ pub struct ListKeysResponse {
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListRetirableGrantsRequest {
-    #[doc="<p>When paginating results, specify the maximum number of items to return in the response. If additional items exist beyond the number you specify, the <code>Truncated</code> element in the response is set to true.</p> <p>This value is optional. If you include a value, it must be between 1 and 100, inclusive. If you do not include a value, it defaults to 50.</p>"]
+    #[doc="<p>Use this parameter to specify the maximum number of items to return. When this value is present, AWS KMS does not return more than the specified number of items, but it might return fewer.</p> <p>This value is optional. If you include a value, it must be between 1 and 100, inclusive. If you do not include a value, it defaults to 50.</p>"]
     #[serde(rename="Limit")]
     pub limit: Option<LimitType>,
-    #[doc="<p>Use this parameter only when paginating results and only in a subsequent request after you receive a response with truncated results. Set it to the value of <code>NextMarker</code> from the response you just received.</p>"]
+    #[doc="<p>Use this parameter in a subsequent request after you receive a response with truncated results. Set it to the value of <code>NextMarker</code> from the truncated response you just received.</p>"]
     #[serde(rename="Marker")]
     pub marker: Option<MarkerType>,
     #[doc="<p>The retiring principal for which to list grants.</p> <p>To specify the retiring principal, use the <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Name (ARN)</a> of an AWS principal. Valid AWS principals include AWS accounts (root), IAM users, federated users, and assumed role users. For examples of the ARN syntax for specifying a principal, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-iam\">AWS Identity and Access Management (IAM)</a> in the Example ARNs section of the <i>Amazon Web Services General Reference</i>.</p>"]
@@ -689,14 +719,14 @@ pub type PolicyType = String;
 pub type PrincipalIdType = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct PutKeyPolicyRequest {
-    #[doc="<p>A flag to indicate whether to bypass the key policy lockout safety check.</p> <important> <p>Setting this value to true increases the likelihood that the CMK becomes unmanageable. Do not set this value to true indiscriminately.</p> <p>For more information, refer to the scenario in the <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default-allow-root-enable-iam\">Default Key Policy</a> section in the <i>AWS Key Management Service Developer Guide</i>.</p> </important> <p>Use this parameter only when you intend to prevent the principal making the request from making a subsequent <code>PutKeyPolicy</code> request on the CMK.</p> <p>The default value is false.</p>"]
+    #[doc="<p>A flag to indicate whether to bypass the key policy lockout safety check.</p> <important> <p>Setting this value to true increases the likelihood that the CMK becomes unmanageable. Do not set this value to true indiscriminately.</p> <p>For more information, refer to the scenario in the <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default-allow-root-enable-iam\">Default Key Policy</a> section in the <i>AWS Key Management Service Developer Guide</i>.</p> </important> <p>Use this parameter only when you intend to prevent the principal that is making the request from making a subsequent <code>PutKeyPolicy</code> request on the CMK.</p> <p>The default value is false.</p>"]
     #[serde(rename="BypassPolicyLockoutSafetyCheck")]
     #[serde(skip_serializing_if="::std::option::Option::is_none")]
     pub bypass_policy_lockout_safety_check: Option<BooleanType>,
     #[doc="<p>A unique identifier for the CMK.</p> <p>Use the CMK's unique identifier or its Amazon Resource Name (ARN). For example:</p> <ul> <li> <p>Unique ID: 1234abcd-12ab-34cd-56ef-1234567890ab</p> </li> <li> <p>ARN: arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</p> </li> </ul>"]
     #[serde(rename="KeyId")]
     pub key_id: KeyIdType,
-    #[doc="<p>The key policy to attach to the CMK.</p> <p>If you do not set <code>BypassPolicyLockoutSafetyCheck</code> to true, the policy must meet the following criteria:</p> <ul> <li> <p>It must allow the principal making the <code>PutKeyPolicy</code> request to make a subsequent <code>PutKeyPolicy</code> request on the CMK. This reduces the likelihood that the CMK becomes unmanageable. For more information, refer to the scenario in the <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default-allow-root-enable-iam\">Default Key Policy</a> section in the <i>AWS Key Management Service Developer Guide</i>.</p> </li> <li> <p>The principal(s) specified in the key policy must exist and be visible to AWS KMS. When you create a new AWS principal (for example, an IAM user or role), you might need to enforce a delay before specifying the new principal in a key policy because the new principal might not immediately be visible to AWS KMS. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/troubleshoot_general.html#troubleshoot_general_eventual-consistency\">Changes that I make are not always immediately visible</a> in the <i>IAM User Guide</i>.</p> </li> </ul> <p>The policy size limit is 32 KiB (32768 bytes).</p>"]
+    #[doc="<p>The key policy to attach to the CMK.</p> <p>If you do not set <code>BypassPolicyLockoutSafetyCheck</code> to true, the policy must meet the following criteria:</p> <ul> <li> <p>It must allow the principal that is making the <code>PutKeyPolicy</code> request to make a subsequent <code>PutKeyPolicy</code> request on the CMK. This reduces the likelihood that the CMK becomes unmanageable. For more information, refer to the scenario in the <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default-allow-root-enable-iam\">Default Key Policy</a> section in the <i>AWS Key Management Service Developer Guide</i>.</p> </li> <li> <p>The principals that are specified in the key policy must exist and be visible to AWS KMS. When you create a new AWS principal (for example, an IAM user or role), you might need to enforce a delay before specifying the new principal in a key policy because the new principal might not immediately be visible to AWS KMS. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/troubleshoot_general.html#troubleshoot_general_eventual-consistency\">Changes that I make are not always immediately visible</a> in the <i>IAM User Guide</i>.</p> </li> </ul> <p>The policy size limit is 32 KiB (32768 bytes).</p>"]
     #[serde(rename="Policy")]
     pub policy: PolicyType,
     #[doc="<p>The name of the key policy.</p> <p>This value must be <code>default</code>.</p>"]
@@ -787,6 +817,41 @@ pub struct ScheduleKeyDeletionResponse {
     #[doc="<p>The unique identifier of the customer master key (CMK) for which deletion is scheduled.</p>"]
     #[serde(rename="KeyId")]
     pub key_id: Option<KeyIdType>,
+}
+
+#[doc="<p>A key-value pair. A tag consists of a tag key and a tag value. Tag keys and tag values are both required, but tag values can be empty (null) strings.</p>"]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+pub struct Tag {
+    #[doc="<p>The key of the tag.</p>"]
+    #[serde(rename="TagKey")]
+    pub tag_key: TagKeyType,
+    #[doc="<p>The value of the tag.</p>"]
+    #[serde(rename="TagValue")]
+    pub tag_value: TagValueType,
+}
+
+pub type TagKeyList = Vec<TagKeyType>;
+pub type TagKeyType = String;
+pub type TagList = Vec<Tag>;
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct TagResourceRequest {
+    #[doc="<p>A unique identifier for the CMK you are tagging. You can use the unique key ID or the Amazon Resource Name (ARN) of the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul>"]
+    #[serde(rename="KeyId")]
+    pub key_id: KeyIdType,
+    #[doc="<p>One or more tags. Each tag consists of a tag key and a tag value.</p>"]
+    #[serde(rename="Tags")]
+    pub tags: TagList,
+}
+
+pub type TagValueType = String;
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct UntagResourceRequest {
+    #[doc="<p>A unique identifier for the CMK from which you are removing tags. You can use the unique key ID or the Amazon Resource Name (ARN) of the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul>"]
+    #[serde(rename="KeyId")]
+    pub key_id: KeyIdType,
+    #[doc="<p>One or more tag keys. Specify only the tag keys, not the tag values.</p>"]
+    #[serde(rename="TagKeys")]
+    pub tag_keys: TagKeyList,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -1143,6 +1208,8 @@ pub enum CreateKeyError {
     LimitExceeded(String),
     ///<p>The request was rejected because the specified policy is not syntactically or semantically correct.</p>
     MalformedPolicyDocument(String),
+    ///<p>The request was rejected because one or more tags are not valid.</p>
+    Tag(String),
     ///<p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
     UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
@@ -1184,6 +1251,7 @@ impl CreateKeyError {
                     "MalformedPolicyDocumentException" => {
                         CreateKeyError::MalformedPolicyDocument(String::from(error_message))
                     }
+                    "TagException" => CreateKeyError::Tag(String::from(error_message)),
                     "UnsupportedOperationException" => {
                         CreateKeyError::UnsupportedOperation(String::from(error_message))
                     }
@@ -1224,6 +1292,7 @@ impl Error for CreateKeyError {
             CreateKeyError::KMSInternal(ref cause) => cause,
             CreateKeyError::LimitExceeded(ref cause) => cause,
             CreateKeyError::MalformedPolicyDocument(ref cause) => cause,
+            CreateKeyError::Tag(ref cause) => cause,
             CreateKeyError::UnsupportedOperation(ref cause) => cause,
             CreateKeyError::Validation(ref cause) => cause,
             CreateKeyError::Credentials(ref err) => err.description(),
@@ -3258,6 +3327,98 @@ impl Error for ListKeysError {
         }
     }
 }
+/// Errors returned by ListResourceTags
+#[derive(Debug, PartialEq)]
+pub enum ListResourceTagsError {
+    ///<p>The request was rejected because a specified ARN was not valid.</p>
+    InvalidArn(String),
+    ///<p>The request was rejected because the marker that specifies where pagination should next begin is not valid.</p>
+    InvalidMarker(String),
+    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    KMSInternal(String),
+    ///<p>The request was rejected because the specified entity or resource could not be found.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl ListResourceTagsError {
+    pub fn from_body(body: &str) -> ListResourceTagsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidArnException" => {
+                        ListResourceTagsError::InvalidArn(String::from(error_message))
+                    }
+                    "InvalidMarkerException" => {
+                        ListResourceTagsError::InvalidMarker(String::from(error_message))
+                    }
+                    "KMSInternalException" => {
+                        ListResourceTagsError::KMSInternal(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        ListResourceTagsError::NotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListResourceTagsError::Validation(error_message.to_string())
+                    }
+                    _ => ListResourceTagsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListResourceTagsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListResourceTagsError {
+    fn from(err: serde_json::error::Error) -> ListResourceTagsError {
+        ListResourceTagsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListResourceTagsError {
+    fn from(err: CredentialsError) -> ListResourceTagsError {
+        ListResourceTagsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListResourceTagsError {
+    fn from(err: HttpDispatchError) -> ListResourceTagsError {
+        ListResourceTagsError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for ListResourceTagsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListResourceTagsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListResourceTagsError::InvalidArn(ref cause) => cause,
+            ListResourceTagsError::InvalidMarker(ref cause) => cause,
+            ListResourceTagsError::KMSInternal(ref cause) => cause,
+            ListResourceTagsError::NotFound(ref cause) => cause,
+            ListResourceTagsError::Validation(ref cause) => cause,
+            ListResourceTagsError::Credentials(ref err) => err.description(),
+            ListResourceTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            ListResourceTagsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListRetirableGrants
 #[derive(Debug, PartialEq)]
 pub enum ListRetirableGrantsError {
@@ -3892,6 +4053,202 @@ impl Error for ScheduleKeyDeletionError {
         }
     }
 }
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    ///<p>The request was rejected because a specified ARN was not valid.</p>
+    InvalidArn(String),
+    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    KMSInternal(String),
+    ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    KMSInvalidState(String),
+    ///<p>The request was rejected because a limit was exceeded. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/limits.html">Limits</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    LimitExceeded(String),
+    ///<p>The request was rejected because the specified entity or resource could not be found.</p>
+    NotFound(String),
+    ///<p>The request was rejected because one or more tags are not valid.</p>
+    Tag(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl TagResourceError {
+    pub fn from_body(body: &str) -> TagResourceError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidArnException" => {
+                        TagResourceError::InvalidArn(String::from(error_message))
+                    }
+                    "KMSInternalException" => {
+                        TagResourceError::KMSInternal(String::from(error_message))
+                    }
+                    "KMSInvalidStateException" => {
+                        TagResourceError::KMSInvalidState(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        TagResourceError::LimitExceeded(String::from(error_message))
+                    }
+                    "NotFoundException" => TagResourceError::NotFound(String::from(error_message)),
+                    "TagException" => TagResourceError::Tag(String::from(error_message)),
+                    "ValidationException" => {
+                        TagResourceError::Validation(error_message.to_string())
+                    }
+                    _ => TagResourceError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => TagResourceError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for TagResourceError {
+    fn from(err: serde_json::error::Error) -> TagResourceError {
+        TagResourceError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for TagResourceError {
+    fn from(err: CredentialsError) -> TagResourceError {
+        TagResourceError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for TagResourceError {
+    fn from(err: HttpDispatchError) -> TagResourceError {
+        TagResourceError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for TagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for TagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            TagResourceError::InvalidArn(ref cause) => cause,
+            TagResourceError::KMSInternal(ref cause) => cause,
+            TagResourceError::KMSInvalidState(ref cause) => cause,
+            TagResourceError::LimitExceeded(ref cause) => cause,
+            TagResourceError::NotFound(ref cause) => cause,
+            TagResourceError::Tag(ref cause) => cause,
+            TagResourceError::Validation(ref cause) => cause,
+            TagResourceError::Credentials(ref err) => err.description(),
+            TagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            TagResourceError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    ///<p>The request was rejected because a specified ARN was not valid.</p>
+    InvalidArn(String),
+    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    KMSInternal(String),
+    ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    KMSInvalidState(String),
+    ///<p>The request was rejected because the specified entity or resource could not be found.</p>
+    NotFound(String),
+    ///<p>The request was rejected because one or more tags are not valid.</p>
+    Tag(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl UntagResourceError {
+    pub fn from_body(body: &str) -> UntagResourceError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidArnException" => {
+                        UntagResourceError::InvalidArn(String::from(error_message))
+                    }
+                    "KMSInternalException" => {
+                        UntagResourceError::KMSInternal(String::from(error_message))
+                    }
+                    "KMSInvalidStateException" => {
+                        UntagResourceError::KMSInvalidState(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        UntagResourceError::NotFound(String::from(error_message))
+                    }
+                    "TagException" => UntagResourceError::Tag(String::from(error_message)),
+                    "ValidationException" => {
+                        UntagResourceError::Validation(error_message.to_string())
+                    }
+                    _ => UntagResourceError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UntagResourceError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UntagResourceError {
+    fn from(err: serde_json::error::Error) -> UntagResourceError {
+        UntagResourceError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UntagResourceError {
+    fn from(err: CredentialsError) -> UntagResourceError {
+        UntagResourceError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UntagResourceError {
+    fn from(err: HttpDispatchError) -> UntagResourceError {
+        UntagResourceError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for UntagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UntagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            UntagResourceError::InvalidArn(ref cause) => cause,
+            UntagResourceError::KMSInternal(ref cause) => cause,
+            UntagResourceError::KMSInvalidState(ref cause) => cause,
+            UntagResourceError::NotFound(ref cause) => cause,
+            UntagResourceError::Tag(ref cause) => cause,
+            UntagResourceError::Validation(ref cause) => cause,
+            UntagResourceError::Credentials(ref err) => err.description(),
+            UntagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            UntagResourceError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateAlias
 #[derive(Debug, PartialEq)]
 pub enum UpdateAliasError {
@@ -4148,7 +4505,7 @@ pub trait Kms {
     fn encrypt(&self, input: &EncryptRequest) -> Result<EncryptResponse, EncryptError>;
 
 
-    #[doc="<p>Returns a data encryption key that you can use in your application to encrypt data locally.</p> <p>You must specify the customer master key (CMK) under which to generate the data key. You must also specify the length of the data key using either the <code>KeySpec</code> or <code>NumberOfBytes</code> field. You must specify one field or the other, but not both. For common key lengths (128-bit and 256-bit symmetric keys), we recommend that you use <code>KeySpec</code>.</p> <p>This operation returns a plaintext copy of the data key in the <code>Plaintext</code> field of the response, and an encrypted copy of the data key in the <code>CiphertextBlob</code> field. The data key is encrypted under the CMK specified in the <code>KeyId</code> field of the request.</p> <p>We recommend that you use the following pattern to encrypt data locally in your application:</p> <ol> <li> <p>Use this operation (<code>GenerateDataKey</code>) to retrieve a data encryption key.</p> </li> <li> <p>Use the plaintext data encryption key (returned in the <code>Plaintext</code> field of the response) to encrypt data locally, then erase the plaintext data key from memory.</p> </li> <li> <p>Store the encrypted data key (returned in the <code>CiphertextBlob</code> field of the response) alongside the locally encrypted data.</p> </li> </ol> <p>To decrypt data locally:</p> <ol> <li> <p>Use the <a>Decrypt</a> operation to decrypt the encrypted data key into a plaintext copy of the data key.</p> </li> <li> <p>Use the plaintext data key to decrypt data locally, then erase the plaintext data key from memory.</p> </li> </ol> <p>To return only an encrypted copy of the data key, use <a>GenerateDataKeyWithoutPlaintext</a>. To return an arbitrary unpredictable byte string, use <a>GenerateRandom</a>.</p> <p>If you use the optional <code>EncryptionContext</code> field, you must store at least enough information to be able to reconstruct the full encryption context when you later send the ciphertext to the <a>Decrypt</a> operation. It is a good practice to choose an encryption context that you can reconstruct on the fly to better secure the ciphertext. For more information, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html\">Encryption Context</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
+    #[doc="<p>Returns a data encryption key that you can use in your application to encrypt data locally.</p> <p>You must specify the customer master key (CMK) under which to generate the data key. You must also specify the length of the data key using either the <code>KeySpec</code> or <code>NumberOfBytes</code> field. You must specify one field or the other, but not both. For common key lengths (128-bit and 256-bit symmetric keys), we recommend that you use <code>KeySpec</code>.</p> <p>This operation returns a plaintext copy of the data key in the <code>Plaintext</code> field of the response, and an encrypted copy of the data key in the <code>CiphertextBlob</code> field. The data key is encrypted under the CMK specified in the <code>KeyId</code> field of the request.</p> <p>We recommend that you use the following pattern to encrypt data locally in your application:</p> <ol> <li> <p>Use this operation (<code>GenerateDataKey</code>) to retrieve a data encryption key.</p> </li> <li> <p>Use the plaintext data encryption key (returned in the <code>Plaintext</code> field of the response) to encrypt data locally, then erase the plaintext data key from memory.</p> </li> <li> <p>Store the encrypted data key (returned in the <code>CiphertextBlob</code> field of the response) alongside the locally encrypted data.</p> </li> </ol> <p>To decrypt data locally:</p> <ol> <li> <p>Use the <a>Decrypt</a> operation to decrypt the encrypted data key into a plaintext copy of the data key.</p> </li> <li> <p>Use the plaintext data key to decrypt data locally, then erase the plaintext data key from memory.</p> </li> </ol> <p>To return only an encrypted copy of the data key, use <a>GenerateDataKeyWithoutPlaintext</a>. To return a random byte string that is cryptographically secure, use <a>GenerateRandom</a>.</p> <p>If you use the optional <code>EncryptionContext</code> field, you must store at least enough information to be able to reconstruct the full encryption context when you later send the ciphertext to the <a>Decrypt</a> operation. It is a good practice to choose an encryption context that you can reconstruct on the fly to better secure the ciphertext. For more information, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html\">Encryption Context</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
     fn generate_data_key(&self,
                          input: &GenerateDataKeyRequest)
                          -> Result<GenerateDataKeyResponse, GenerateDataKeyError>;
@@ -4161,7 +4518,7 @@ pub trait Kms {
          -> Result<GenerateDataKeyWithoutPlaintextResponse, GenerateDataKeyWithoutPlaintextError>;
 
 
-    #[doc="<p>Generates an unpredictable byte string.</p>"]
+    #[doc="<p>Returns a random byte string that is cryptographically secure.</p> <p>For more information about entropy and random number generation, see the <a href=\"https://d0.awsstatic.com/whitepapers/KMS-Cryptographic-Details.pdf\">AWS Key Management Service Cryptographic Details</a> whitepaper.</p>"]
     fn generate_random(&self,
                        input: &GenerateRandomRequest)
                        -> Result<GenerateRandomResponse, GenerateRandomError>;
@@ -4215,6 +4572,12 @@ pub trait Kms {
     fn list_keys(&self, input: &ListKeysRequest) -> Result<ListKeysResponse, ListKeysError>;
 
 
+    #[doc="<p>Returns a list of all tags for the specified customer master key (CMK).</p>"]
+    fn list_resource_tags(&self,
+                          input: &ListResourceTagsRequest)
+                          -> Result<ListResourceTagsResponse, ListResourceTagsError>;
+
+
     #[doc="<p>Returns a list of all grants for which the grant's <code>RetiringPrincipal</code> matches the one specified.</p> <p>A typical use is to list all grants that you are able to retire. To retire a grant, use <a>RetireGrant</a>.</p>"]
     fn list_retirable_grants(&self,
                              input: &ListRetirableGrantsRequest)
@@ -4241,6 +4604,14 @@ pub trait Kms {
     fn schedule_key_deletion(&self,
                              input: &ScheduleKeyDeletionRequest)
                              -> Result<ScheduleKeyDeletionResponse, ScheduleKeyDeletionError>;
+
+
+    #[doc="<p>Adds or overwrites one or more tags for the specified customer master key (CMK). </p> <p>Each tag consists of a tag key and a tag value. Tag keys and tag values are both required, but tag values can be empty (null) strings.</p> <p>You cannot use the same tag key more than once per CMK. For example, consider a CMK with one tag whose tag key is <code>Purpose</code> and tag value is <code>Test</code>. If you send a <code>TagResource</code> request for this CMK with a tag key of <code>Purpose</code> and a tag value of <code>Prod</code>, it does not create a second tag. Instead, the original tag is overwritten with the new tag value.</p>"]
+    fn tag_resource(&self, input: &TagResourceRequest) -> Result<(), TagResourceError>;
+
+
+    #[doc="<p>Removes the specified tag or tags from the specified customer master key (CMK). </p> <p>To remove a tag, you specify the tag key for each tag to remove. You do not specify the tag value. To overwrite the tag value for an existing tag, use <a>TagResource</a>.</p>"]
+    fn untag_resource(&self, input: &UntagResourceRequest) -> Result<(), UntagResourceError>;
 
 
     #[doc="<p>Updates an alias to map it to a different key.</p> <p>An alias is not a property of a key. Therefore, an alias can be mapped to and unmapped from an existing key without changing the properties of the key.</p> <p>An alias name can contain only alphanumeric characters, forward slashes (/), underscores (_), and dashes (-). An alias must start with the word \"alias\" followed by a forward slash (alias/). An alias that begins with \"aws\" after the forward slash (alias/aws...) is reserved by Amazon Web Services (AWS).</p> <p>The alias and the key it is mapped to must be in the same AWS account and the same region.</p>"]
@@ -4576,7 +4947,7 @@ impl<P, D> Kms for KmsClient<P, D>
     }
 
 
-    #[doc="<p>Returns a data encryption key that you can use in your application to encrypt data locally.</p> <p>You must specify the customer master key (CMK) under which to generate the data key. You must also specify the length of the data key using either the <code>KeySpec</code> or <code>NumberOfBytes</code> field. You must specify one field or the other, but not both. For common key lengths (128-bit and 256-bit symmetric keys), we recommend that you use <code>KeySpec</code>.</p> <p>This operation returns a plaintext copy of the data key in the <code>Plaintext</code> field of the response, and an encrypted copy of the data key in the <code>CiphertextBlob</code> field. The data key is encrypted under the CMK specified in the <code>KeyId</code> field of the request.</p> <p>We recommend that you use the following pattern to encrypt data locally in your application:</p> <ol> <li> <p>Use this operation (<code>GenerateDataKey</code>) to retrieve a data encryption key.</p> </li> <li> <p>Use the plaintext data encryption key (returned in the <code>Plaintext</code> field of the response) to encrypt data locally, then erase the plaintext data key from memory.</p> </li> <li> <p>Store the encrypted data key (returned in the <code>CiphertextBlob</code> field of the response) alongside the locally encrypted data.</p> </li> </ol> <p>To decrypt data locally:</p> <ol> <li> <p>Use the <a>Decrypt</a> operation to decrypt the encrypted data key into a plaintext copy of the data key.</p> </li> <li> <p>Use the plaintext data key to decrypt data locally, then erase the plaintext data key from memory.</p> </li> </ol> <p>To return only an encrypted copy of the data key, use <a>GenerateDataKeyWithoutPlaintext</a>. To return an arbitrary unpredictable byte string, use <a>GenerateRandom</a>.</p> <p>If you use the optional <code>EncryptionContext</code> field, you must store at least enough information to be able to reconstruct the full encryption context when you later send the ciphertext to the <a>Decrypt</a> operation. It is a good practice to choose an encryption context that you can reconstruct on the fly to better secure the ciphertext. For more information, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html\">Encryption Context</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
+    #[doc="<p>Returns a data encryption key that you can use in your application to encrypt data locally.</p> <p>You must specify the customer master key (CMK) under which to generate the data key. You must also specify the length of the data key using either the <code>KeySpec</code> or <code>NumberOfBytes</code> field. You must specify one field or the other, but not both. For common key lengths (128-bit and 256-bit symmetric keys), we recommend that you use <code>KeySpec</code>.</p> <p>This operation returns a plaintext copy of the data key in the <code>Plaintext</code> field of the response, and an encrypted copy of the data key in the <code>CiphertextBlob</code> field. The data key is encrypted under the CMK specified in the <code>KeyId</code> field of the request.</p> <p>We recommend that you use the following pattern to encrypt data locally in your application:</p> <ol> <li> <p>Use this operation (<code>GenerateDataKey</code>) to retrieve a data encryption key.</p> </li> <li> <p>Use the plaintext data encryption key (returned in the <code>Plaintext</code> field of the response) to encrypt data locally, then erase the plaintext data key from memory.</p> </li> <li> <p>Store the encrypted data key (returned in the <code>CiphertextBlob</code> field of the response) alongside the locally encrypted data.</p> </li> </ol> <p>To decrypt data locally:</p> <ol> <li> <p>Use the <a>Decrypt</a> operation to decrypt the encrypted data key into a plaintext copy of the data key.</p> </li> <li> <p>Use the plaintext data key to decrypt data locally, then erase the plaintext data key from memory.</p> </li> </ol> <p>To return only an encrypted copy of the data key, use <a>GenerateDataKeyWithoutPlaintext</a>. To return a random byte string that is cryptographically secure, use <a>GenerateRandom</a>.</p> <p>If you use the optional <code>EncryptionContext</code> field, you must store at least enough information to be able to reconstruct the full encryption context when you later send the ciphertext to the <a>Decrypt</a> operation. It is a good practice to choose an encryption context that you can reconstruct on the fly to better secure the ciphertext. For more information, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html\">Encryption Context</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
     fn generate_data_key(&self,
                          input: &GenerateDataKeyRequest)
                          -> Result<GenerateDataKeyResponse, GenerateDataKeyError> {
@@ -4629,7 +5000,7 @@ impl<P, D> Kms for KmsClient<P, D>
     }
 
 
-    #[doc="<p>Generates an unpredictable byte string.</p>"]
+    #[doc="<p>Returns a random byte string that is cryptographically secure.</p> <p>For more information about entropy and random number generation, see the <a href=\"https://d0.awsstatic.com/whitepapers/KMS-Cryptographic-Details.pdf\">AWS Key Management Service Cryptographic Details</a> whitepaper.</p>"]
     fn generate_random(&self,
                        input: &GenerateRandomRequest)
                        -> Result<GenerateRandomResponse, GenerateRandomError> {
@@ -4862,6 +5233,33 @@ impl<P, D> Kms for KmsClient<P, D>
     }
 
 
+    #[doc="<p>Returns a list of all tags for the specified customer master key (CMK).</p>"]
+    fn list_resource_tags(&self,
+                          input: &ListResourceTagsRequest)
+                          -> Result<ListResourceTagsResponse, ListResourceTagsError> {
+        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "TrentService.ListResourceTags");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                            Ok(serde_json::from_str::<ListResourceTagsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                        }
+            _ => {
+                Err(ListResourceTagsError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
+            }
+        }
+    }
+
+
     #[doc="<p>Returns a list of all grants for which the grant's <code>RetiringPrincipal</code> matches the one specified.</p> <p>A typical use is to list all grants that you are able to retire. To retire a grant, use <a>RetireGrant</a>.</p>"]
     fn list_retirable_grants(&self,
                              input: &ListRetirableGrantsRequest)
@@ -4995,6 +5393,48 @@ impl<P, D> Kms for KmsClient<P, D>
             _ => {
                 Err(ScheduleKeyDeletionError::from_body(String::from_utf8_lossy(&response.body)
                                                             .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Adds or overwrites one or more tags for the specified customer master key (CMK). </p> <p>Each tag consists of a tag key and a tag value. Tag keys and tag values are both required, but tag values can be empty (null) strings.</p> <p>You cannot use the same tag key more than once per CMK. For example, consider a CMK with one tag whose tag key is <code>Purpose</code> and tag value is <code>Test</code>. If you send a <code>TagResource</code> request for this CMK with a tag key of <code>Purpose</code> and a tag value of <code>Prod</code>, it does not create a second tag. Instead, the original tag is overwritten with the new tag value.</p>"]
+    fn tag_resource(&self, input: &TagResourceRequest) -> Result<(), TagResourceError> {
+        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "TrentService.TagResource");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => Ok(()),
+            _ => Err(TagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        }
+    }
+
+
+    #[doc="<p>Removes the specified tag or tags from the specified customer master key (CMK). </p> <p>To remove a tag, you specify the tag key for each tag to remove. You do not specify the tag value. To overwrite the tag value for an existing tag, use <a>TagResource</a>.</p>"]
+    fn untag_resource(&self, input: &UntagResourceRequest) -> Result<(), UntagResourceError> {
+        let mut request = SignedRequest::new("POST", "kms", self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "TrentService.UntagResource");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => Ok(()),
+            _ => {
+                Err(UntagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
             }
         }
     }

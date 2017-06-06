@@ -22,19 +22,19 @@ pub struct ActivateGatewayInput {
     #[doc="<p>The name you configured for your gateway.</p>"]
     #[serde(rename="GatewayName")]
     pub gateway_name: GatewayName,
-    #[doc="<p>A value that indicates the region where you want to store the snapshot backups. The gateway region specified must be the same region as the region in your <code>Host</code> header in the request. For more information about available regions and endpoints for AWS Storage Gateway, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/rande.html#sg_region\">Regions and Endpoints</a> in the <i>Amazon Web Services Glossary</i>.</p> <p> Valid Values: \"us-east-1\", \"us-west-1\", \"us-west-2\", \"eu-west-1\", \"eu-central-1\", \"ap-northeast-1\", \"ap-northeast-2\", \"ap-southeast-1\", \"ap-southeast-2\", \"sa-east-1\"</p>"]
+    #[doc="<p>A value that indicates the region where you want to store your data. The gateway region specified must be the same region as the region in your <code>Host</code> header in the request. For more information about available regions and endpoints for AWS Storage Gateway, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/rande.html#sg_region\">Regions and Endpoints</a> in the <i>Amazon Web Services Glossary</i>.</p> <p> Valid Values: \"us-east-1\", \"us-east-2\", \"us-west-1\", \"us-west-2\", \"ca-central-1\", \"eu-west-1\", \"eu-central-1\", \"eu-west-2\", \"ap-northeast-1\", \"ap-northeast-2\", \"ap-southeast-1\", \"ap-southeast-2\", \"ap-south-1\", \"sa-east-1\"</p>"]
     #[serde(rename="GatewayRegion")]
     pub gateway_region: RegionId,
-    #[doc="<p>A value that indicates the time zone you want to set for the gateway. The time zone is used, for example, for scheduling snapshots and your gateway's maintenance schedule.</p>"]
+    #[doc="<p>A value that indicates the time zone you want to set for the gateway. The time zone is of the format \"GMT-hr:mm\" or \"GMT+hr:mm\". For example, GMT-4:00 indicates the time is 4 hours behind GMT. GMT+2:00 indicates the time is 2 hours ahead of GMT. The time zone is used, for example, for scheduling snapshots and your gateway's maintenance schedule.</p>"]
     #[serde(rename="GatewayTimezone")]
     pub gateway_timezone: GatewayTimezone,
-    #[doc="<p>A value that defines the type of gateway to activate. The type specified is critical to all later functions of the gateway and cannot be changed after activation. The default value is <code>STORED</code>. </p>"]
+    #[doc="<p>A value that defines the type of gateway to activate. The type specified is critical to all later functions of the gateway and cannot be changed after activation. The default value is <code>STORED</code>. </p> <p> Valid Values: \"STORED\", \"CACHED\", \"VTL\", \"FILE_S3\"</p>"]
     #[serde(rename="GatewayType")]
     pub gateway_type: Option<GatewayType>,
-    #[doc="<p>The value that indicates the type of medium changer to use for gateway-VTL. This field is optional.</p> <p> Valid Values: \"STK-L700\", \"AWS-Gateway-VTL\"</p>"]
+    #[doc="<p>The value that indicates the type of medium changer to use for tape gateway. This field is optional.</p> <p> Valid Values: \"STK-L700\", \"AWS-Gateway-VTL\"</p>"]
     #[serde(rename="MediumChangerType")]
     pub medium_changer_type: Option<MediumChangerType>,
-    #[doc="<p>The value that indicates the type of tape drive to use for gateway-VTL. This field is optional.</p> <p> Valid Values: \"IBM-ULT3580-TD5\" </p>"]
+    #[doc="<p>The value that indicates the type of tape drive to use for tape gateway. This field is optional.</p> <p> Valid Values: \"IBM-ULT3580-TD5\" </p>"]
     #[serde(rename="TapeDriveType")]
     pub tape_drive_type: Option<TapeDriveType>,
 }
@@ -118,6 +118,7 @@ pub type Boolean = bool;
 #[doc="<p>Describes an iSCSI cached volume.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct CachediSCSIVolume {
+    #[doc="<p>The date the volume was created. Volumes created prior to March 28, 2017 don’t have this time stamp.</p>"]
     #[serde(rename="CreatedDate")]
     pub created_date: Option<CreatedDate>,
     #[doc="<p>If the cached volume was created from a snapshot, this field contains the snapshot ID used, e.g. snap-78e22663. Otherwise, this field is not included.</p>"]
@@ -233,6 +234,9 @@ pub struct CreateCachediSCSIVolumeOutput {
 #[doc="<p>CreateNFSFileShareInput</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateNFSFileShareInput {
+    #[doc="<p>The list of clients that are allowed to access the file gateway. The list must contain either valid IP addresses or valid CIDR blocks. </p>"]
+    #[serde(rename="ClientList")]
+    pub client_list: Option<FileShareClientList>,
     #[doc="<p>A unique string value that you supply that is used by file gateway to ensure idempotent file share creation.</p>"]
     #[serde(rename="ClientToken")]
     pub client_token: ClientToken,
@@ -249,15 +253,22 @@ pub struct CreateNFSFileShareInput {
     #[doc="<p>The KMS key used for Amazon S3 server side encryption. This value can only be set when KmsEncrypted is true. Optional.</p>"]
     #[serde(rename="KMSKey")]
     pub kms_key: Option<KMSKey>,
-    #[doc="<p>The ARN of the backend storage used for storing file data. </p>"]
+    #[doc="<p>The ARN of the backed storage used for storing file data. </p>"]
     #[serde(rename="LocationARN")]
     pub location_arn: LocationARN,
     #[doc="<p>File share default values. Optional.</p>"]
     #[serde(rename="NFSFileShareDefaults")]
     pub nfs_file_share_defaults: Option<NFSFileShareDefaults>,
+    #[doc="<p>Sets the write status of a file share: \"true\" if the write status is read-only, and otherwise \"false\".</p>"]
+    #[serde(rename="ReadOnly")]
+    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    pub read_only: Option<Boolean>,
     #[doc="<p>The ARN of the AWS Identity and Access Management (IAM) role that a file gateway assumes when it accesses the underlying storage. </p>"]
     #[serde(rename="Role")]
     pub role: Role,
+    #[doc="<p>Maps a user to anonymous user. Valid options are the following: </p> <ul> <li> <p>\"RootSquash\" - Only root is mapped to anonymous user.</p> </li> <li> <p>\"NoSquash\" - No one is mapped to anonymous user.</p> </li> <li> <p>\"AllSquash\" - Everyone is mapped to anonymous user.</p> </li> </ul>"]
+    #[serde(rename="Squash")]
+    pub squash: Option<Squash>,
 }
 
 #[doc="<p>CreateNFSFileShareOutput</p>"]
@@ -779,7 +790,7 @@ pub struct DescribeTapesInput {
     #[doc="<p>A marker value, obtained in a previous call to <code>DescribeTapes</code>. This marker indicates which page of results to retrieve. </p> <p>If not specified, the first page of results is retrieved.</p>"]
     #[serde(rename="Marker")]
     pub marker: Option<Marker>,
-    #[doc="<p>Specifies one or more unique Amazon Resource Names (ARNs) that represent the virtual tapes you want to describe. If this parameter is not specified, AWS Storage Gateway returns a description of all virtual tapes associated with the specified gateway.</p>"]
+    #[doc="<p>Specifies one or more unique Amazon Resource Names (ARNs) that represent the virtual tapes you want to describe. If this parameter is not specified, Tape gateway returns a description of all virtual tapes associated with the specified gateway.</p>"]
     #[serde(rename="TapeARNs")]
     pub tape_ar_ns: Option<TapeARNs>,
 }
@@ -929,6 +940,8 @@ pub type ErrorDetails = ::std::collections::HashMap<String, String>;
 #[doc="<p>The Amazon Resource Name (ARN) of the file share. </p>"]
 pub type FileShareARN = String;
 pub type FileShareARNList = Vec<FileShareARN>;
+#[doc="<p>The list of clients that are allowed to access the file gateway. The list must contain either valid IP addresses or valid CIDR blocks. </p>"]
+pub type FileShareClientList = Vec<IPV4AddressCIDR>;
 #[doc="<p>The ID of the file share. </p>"]
 pub type FileShareId = String;
 #[doc="<p>Describes a file share.</p>"]
@@ -979,6 +992,7 @@ pub type GatewayTimezone = String;
 pub type GatewayType = String;
 pub type Gateways = Vec<GatewayInfo>;
 pub type HourOfDay = i64;
+pub type IPV4AddressCIDR = String;
 pub type Initiator = String;
 pub type Initiators = Vec<Initiator>;
 pub type Integer = i64;
@@ -1159,7 +1173,7 @@ pub type Long = i64;
 pub type Marker = String;
 pub type MediumChangerType = String;
 pub type MinuteOfHour = i64;
-#[doc="<p>Describes file share default values. Files and folders stored as Amazon S3 objects in S3 buckets don't, by default, have Unix file permissions assigned to them. Upon discovery in an S3 bucket by Storage Gateway, the S3 objects that represent files and folders are assigned these default Unix permissions. </p>"]
+#[doc="<p>Describes file share default values. Files and folders stored as Amazon S3 objects in S3 buckets don't, by default, have Unix file permissions assigned to them. Upon discovery in an S3 bucket by Storage Gateway, the S3 objects that represent files and folders are assigned these default Unix permissions. This operation is only supported in the file gateway architecture.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct NFSFileShareDefaults {
     #[doc="<p>The Unix directory mode in the form \"nnnn\". For example, \"0666\" represents the default access mode for all directories inside the file share. The default value is 0777.</p>"]
@@ -1176,9 +1190,11 @@ pub struct NFSFileShareDefaults {
     pub owner_id: Option<PermissionId>,
 }
 
-#[doc="<p>The Unix file permissions and ownership information assigned, by default, to native S3 objects when Storage Gateway discovers them in S3 buckets.</p>"]
+#[doc="<p>The Unix file permissions and ownership information assigned, by default, to native S3 objects when file gateway discovers them in S3 buckets. This operation is only supported in file gateways.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct NFSFileShareInfo {
+    #[serde(rename="ClientList")]
+    pub client_list: Option<FileShareClientList>,
     #[doc="<p>The default storage class for objects put into an Amazon S3 bucket by file gateway. Possible values are S3_STANDARD or S3_STANDARD_IA. If this field is not populated, the default value S3_STANDARD is used. Optional.</p>"]
     #[serde(rename="DefaultStorageClass")]
     pub default_storage_class: Option<StorageClass>,
@@ -1202,8 +1218,13 @@ pub struct NFSFileShareInfo {
     pub nfs_file_share_defaults: Option<NFSFileShareDefaults>,
     #[serde(rename="Path")]
     pub path: Option<Path>,
+    #[serde(rename="ReadOnly")]
+    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    pub read_only: Option<Boolean>,
     #[serde(rename="Role")]
     pub role: Option<Role>,
+    #[serde(rename="Squash")]
+    pub squash: Option<Squash>,
 }
 
 pub type NFSFileShareInfoList = Vec<NFSFileShareInfo>;
@@ -1230,6 +1251,18 @@ pub type PermissionId = i64;
 pub type PermissionMode = String;
 pub type PositiveIntObject = i64;
 pub type RecurrenceInHours = i64;
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct RefreshCacheInput {
+    #[serde(rename="FileShareARN")]
+    pub file_share_arn: FileShareARN,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct RefreshCacheOutput {
+    #[serde(rename="FileShareARN")]
+    pub file_share_arn: Option<FileShareARN>,
+}
+
 pub type RegionId = String;
 #[doc="<p>RemoveTagsFromResourceInput</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
@@ -1266,7 +1299,7 @@ pub type ResourceARN = String;
 #[doc="<p>RetrieveTapeArchiveInput</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct RetrieveTapeArchiveInput {
-    #[doc="<p>The Amazon Resource Name (ARN) of the gateway you want to retrieve the virtual tape to. Use the <a>ListGateways</a> operation to return a list of gateways for your account and region.</p> <p>You retrieve archived virtual tapes to only one gateway and the gateway must be a gateway-VTL.</p>"]
+    #[doc="<p>The Amazon Resource Name (ARN) of the gateway you want to retrieve the virtual tape to. Use the <a>ListGateways</a> operation to return a list of gateways for your account and region.</p> <p>You retrieve archived virtual tapes to only one gateway and the gateway must be a tape gateway.</p>"]
     #[serde(rename="GatewayARN")]
     pub gateway_arn: GatewayARN,
     #[doc="<p>The Amazon Resource Name (ARN) of the virtual tape you want to retrieve from the virtual tape shelf (VTS).</p>"]
@@ -1334,6 +1367,8 @@ pub struct ShutdownGatewayOutput {
 
 pub type SnapshotDescription = String;
 pub type SnapshotId = String;
+#[doc="<p>The user mapped to anonymous user. Valid options are the following: </p> <ul> <li> <p>\"RootSquash\" - Only root is mapped to anonymous user.</p> </li> <li> <p>\"NoSquash\" - No one is mapped to anonymous user</p> </li> <li> <p>\"AllSquash\" - Everyone is mapped to anonymous user.</p> </li> </ul>"]
+pub type Squash = String;
 #[doc="<p>A JSON object containing the of the gateway to start.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct StartGatewayInput {
@@ -1362,6 +1397,7 @@ pub struct StorageGatewayError {
 #[doc="<p>Describes an iSCSI stored volume.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct StorediSCSIVolume {
+    #[doc="<p>The date the volume was created. Volumes created prior to March 28, 2017 don’t have this time stamp.</p>"]
     #[serde(rename="CreatedDate")]
     pub created_date: Option<CreatedDate>,
     #[doc="<p>Indicates if when the stored volume was created, existing data on the underlying local disk was preserved.</p> <p> Valid Values: true, false</p>"]
@@ -1422,14 +1458,18 @@ pub struct Tape {
     #[doc="<p>The barcode that identifies a specific virtual tape.</p>"]
     #[serde(rename="TapeBarcode")]
     pub tape_barcode: Option<TapeBarcode>,
+    #[doc="<p>The date the virtual tape was created.</p>"]
     #[serde(rename="TapeCreatedDate")]
     pub tape_created_date: Option<Time>,
-    #[doc="<p>The size, in bytes, of the virtual tape.</p>"]
+    #[doc="<p>The size, in bytes, of the virtual tape capacity.</p>"]
     #[serde(rename="TapeSizeInBytes")]
     pub tape_size_in_bytes: Option<TapeSize>,
     #[doc="<p>The current state of the virtual tape.</p>"]
     #[serde(rename="TapeStatus")]
     pub tape_status: Option<TapeStatus>,
+    #[doc="<p>The size, in bytes, of data written to the virtual tape.</p> <note> <p>This value is not available for tapes created prior to May,13 2015.</p> </note>"]
+    #[serde(rename="TapeUsedInBytes")]
+    pub tape_used_in_bytes: Option<TapeUsage>,
     #[doc="<p>The virtual tape library (VTL) device that the virtual tape is associated with.</p>"]
     #[serde(rename="VTLDevice")]
     pub vtl_device: Option<VTLDeviceARN>,
@@ -1444,7 +1484,7 @@ pub struct TapeArchive {
     #[doc="<p>The time that the archiving of the virtual tape was completed.</p> <p>The string format of the completion time is in the ISO8601 extended YYYY-MM-DD'T'HH:MM:SS'Z' format.</p>"]
     #[serde(rename="CompletionTime")]
     pub completion_time: Option<Time>,
-    #[doc="<p>The Amazon Resource Name (ARN) of the gateway-VTL that the virtual tape is being retrieved to.</p> <p>The virtual tape is retrieved from the virtual tape shelf (VTS).</p>"]
+    #[doc="<p>The Amazon Resource Name (ARN) of the tape gateway that the virtual tape is being retrieved to.</p> <p>The virtual tape is retrieved from the virtual tape shelf (VTS).</p>"]
     #[serde(rename="RetrievedTo")]
     pub retrieved_to: Option<GatewayARN>,
     #[doc="<p>The Amazon Resource Name (ARN) of an archived virtual tape.</p>"]
@@ -1461,6 +1501,9 @@ pub struct TapeArchive {
     #[doc="<p>The current state of the archived virtual tape.</p>"]
     #[serde(rename="TapeStatus")]
     pub tape_status: Option<TapeArchiveStatus>,
+    #[doc="<p>The size, in bytes, of data written to the virtual tape.</p> <note> <p>This value is not available for tapes created prior to May,13 2015.</p> </note>"]
+    #[serde(rename="TapeUsedInBytes")]
+    pub tape_used_in_bytes: Option<TapeUsage>,
 }
 
 pub type TapeArchiveStatus = String;
@@ -1510,6 +1553,7 @@ pub type TapeRecoveryPointInfos = Vec<TapeRecoveryPointInfo>;
 pub type TapeRecoveryPointStatus = String;
 pub type TapeSize = i64;
 pub type TapeStatus = String;
+pub type TapeUsage = i64;
 pub type Tapes = Vec<Tape>;
 pub type TargetARN = String;
 pub type TargetName = String;
@@ -1621,6 +1665,9 @@ pub struct UpdateMaintenanceStartTimeOutput {
 #[doc="<p>UpdateNFSFileShareInput</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateNFSFileShareInput {
+    #[doc="<p>The list of clients that are allowed to access the file gateway. The list must contain either valid IP addresses or valid CIDR blocks.</p>"]
+    #[serde(rename="ClientList")]
+    pub client_list: Option<FileShareClientList>,
     #[doc="<p>The default storage class for objects put into an Amazon S3 bucket by a file gateway. Possible values are S3_STANDARD or S3_STANDARD_IA. If this field is not populated, the default value S3_STANDARD is used. Optional.</p>"]
     #[serde(rename="DefaultStorageClass")]
     pub default_storage_class: Option<StorageClass>,
@@ -1637,6 +1684,13 @@ pub struct UpdateNFSFileShareInput {
     #[doc="<p>The default values for the file share. Optional.</p>"]
     #[serde(rename="NFSFileShareDefaults")]
     pub nfs_file_share_defaults: Option<NFSFileShareDefaults>,
+    #[doc="<p>Sets the write status of a file share: \"true\" if the write status is read-only, and otherwise \"false\".</p>"]
+    #[serde(rename="ReadOnly")]
+    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    pub read_only: Option<Boolean>,
+    #[doc="<p>The user mapped to anonymous user. Valid options are the following:</p> <ul> <li> <p>\"RootSquash\" - Only root is mapped to anonymous user.</p> </li> <li> <p>\"NoSquash\" - No one is mapped to anonymous user</p> </li> <li> <p>\"AllSquash\" - Everyone is mapped to anonymous user.</p> </li> </ul>"]
+    #[serde(rename="Squash")]
+    pub squash: Option<Squash>,
 }
 
 #[doc="<p>UpdateNFSFileShareOutput</p>"]
@@ -1690,7 +1744,7 @@ pub struct UpdateVTLDeviceTypeOutput {
     pub vtl_device_arn: Option<VTLDeviceARN>,
 }
 
-#[doc="<p>Represents a device object associated with a gateway-VTL.</p>"]
+#[doc="<p>Represents a device object associated with a tape gateway.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct VTLDevice {
     #[doc="<p>A list of iSCSI information about a VTL device.</p>"]
@@ -5441,6 +5495,86 @@ impl Error for ListVolumesError {
         }
     }
 }
+/// Errors returned by RefreshCache
+#[derive(Debug, PartialEq)]
+pub enum RefreshCacheError {
+    ///<p>An internal server error has occurred during the request. For more information, see the error and message fields.</p>
+    InternalServerError(String),
+    ///<p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
+    InvalidGatewayRequest(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl RefreshCacheError {
+    pub fn from_body(body: &str) -> RefreshCacheError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalServerError" => {
+                        RefreshCacheError::InternalServerError(String::from(error_message))
+                    }
+                    "InvalidGatewayRequestException" => {
+                        RefreshCacheError::InvalidGatewayRequest(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        RefreshCacheError::Validation(error_message.to_string())
+                    }
+                    _ => RefreshCacheError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => RefreshCacheError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for RefreshCacheError {
+    fn from(err: serde_json::error::Error) -> RefreshCacheError {
+        RefreshCacheError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for RefreshCacheError {
+    fn from(err: CredentialsError) -> RefreshCacheError {
+        RefreshCacheError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for RefreshCacheError {
+    fn from(err: HttpDispatchError) -> RefreshCacheError {
+        RefreshCacheError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for RefreshCacheError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for RefreshCacheError {
+    fn description(&self) -> &str {
+        match *self {
+            RefreshCacheError::InternalServerError(ref cause) => cause,
+            RefreshCacheError::InvalidGatewayRequest(ref cause) => cause,
+            RefreshCacheError::Validation(ref cause) => cause,
+            RefreshCacheError::Credentials(ref err) => err.description(),
+            RefreshCacheError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            RefreshCacheError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by RemoveTagsFromResource
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsFromResourceError {
@@ -6631,13 +6765,13 @@ impl Error for UpdateVTLDeviceTypeError {
 }
 /// Trait representing the capabilities of the AWS Storage Gateway API. AWS Storage Gateway clients implement this trait.
 pub trait StorageGateway {
-    #[doc="<p>Activates the gateway you previously deployed on your host. For more information, see <a href=\"http://docs.aws.amazon.com/storagegateway/latest/userguide/GettingStartedActivateGateway-common.html\"> Activate the AWS Storage Gateway</a>. In the activation process, you specify information such as the you want to use for storing snapshots, the time zone for scheduled snapshots the gateway snapshot schedule window, an activation key, and a name for your gateway. The activation process also associates your gateway with your account; for more information, see <a>UpdateGatewayInformation</a>.</p> <note> <p>You must turn on the gateway VM before you can activate your gateway.</p> </note>"]
+    #[doc="<p>Activates the gateway you previously deployed on your host. For more information, see <a href=\"http://docs.aws.amazon.com/storagegateway/latest/userguide/GettingStartedActivateGateway-common.html\"> Activate the AWS Storage Gateway</a>. In the activation process, you specify information such as the region you want to use for storing snapshots or tapes, the time zone for scheduled snapshots the gateway snapshot schedule window, an activation key, and a name for your gateway. The activation process also associates your gateway with your account; for more information, see <a>UpdateGatewayInformation</a>.</p> <note> <p>You must turn on the gateway VM before you can activate your gateway.</p> </note>"]
     fn activate_gateway(&self,
                         input: &ActivateGatewayInput)
                         -> Result<ActivateGatewayOutput, ActivateGatewayError>;
 
 
-    #[doc="<p>Configures one or more gateway local disks as cache for a cached-volume gateway. This operation is supported only for the gateway-cached volume architecture (see <a href=\"http://docs.aws.amazon.com/storagegateway/latest/userguide/StorageGatewayConcepts.html\">Storage Gateway Concepts</a>).</p> <p>In the request, you specify the gateway Amazon Resource Name (ARN) to which you want to add cache, and one or more disk IDs that you want to configure as cache.</p>"]
+    #[doc="<p>Configures one or more gateway local disks as cache for a gateway. This operation is only supported in the cached volume, tape and file gateway architectures (see <a href=\"http://docs.aws.amazon.com/storagegateway/latest/userguide/StorageGatewayConcepts.html\">Storage Gateway Concepts</a>).</p> <p>In the request, you specify the gateway Amazon Resource Name (ARN) to which you want to add cache, and one or more disk IDs that you want to configure as cache.</p>"]
     fn add_cache(&self, input: &AddCacheInput) -> Result<AddCacheOutput, AddCacheError>;
 
 
@@ -6647,19 +6781,19 @@ pub trait StorageGateway {
                             -> Result<AddTagsToResourceOutput, AddTagsToResourceError>;
 
 
-    #[doc="<p>Configures one or more gateway local disks as upload buffer for a specified gateway. This operation is supported for both the gateway-stored and gateway-cached volume architectures.</p> <p>In the request, you specify the gateway Amazon Resource Name (ARN) to which you want to add upload buffer, and one or more disk IDs that you want to configure as upload buffer.</p>"]
+    #[doc="<p>Configures one or more gateway local disks as upload buffer for a specified gateway. This operation is supported for the stored volume, cached volume and tape gateway architectures.</p> <p>In the request, you specify the gateway Amazon Resource Name (ARN) to which you want to add upload buffer, and one or more disk IDs that you want to configure as upload buffer.</p>"]
     fn add_upload_buffer(&self,
                          input: &AddUploadBufferInput)
                          -> Result<AddUploadBufferOutput, AddUploadBufferError>;
 
 
-    #[doc="<p>Configures one or more gateway local disks as working storage for a gateway. This operation is supported only for the gateway-stored volume architecture. This operation is deprecated in cached-volumes API version 20120630. Use <a>AddUploadBuffer</a> instead.</p> <note> <p>Working storage is also referred to as upload buffer. You can also use the <a>AddUploadBuffer</a> operation to add upload buffer to a stored-volume gateway.</p> </note> <p>In the request, you specify the gateway Amazon Resource Name (ARN) to which you want to add working storage, and one or more disk IDs that you want to configure as working storage.</p>"]
+    #[doc="<p>Configures one or more gateway local disks as working storage for a gateway. This operation is only supported in the stored volume gateway architecture. This operation is deprecated in cached volume API version 20120630. Use <a>AddUploadBuffer</a> instead.</p> <note> <p>Working storage is also referred to as upload buffer. You can also use the <a>AddUploadBuffer</a> operation to add upload buffer to a stored volume gateway.</p> </note> <p>In the request, you specify the gateway Amazon Resource Name (ARN) to which you want to add working storage, and one or more disk IDs that you want to configure as working storage.</p>"]
     fn add_working_storage(&self,
                            input: &AddWorkingStorageInput)
                            -> Result<AddWorkingStorageOutput, AddWorkingStorageError>;
 
 
-    #[doc="<p>Cancels archiving of a virtual tape to the virtual tape shelf (VTS) after the archiving process is initiated.</p>"]
+    #[doc="<p>Cancels archiving of a virtual tape to the virtual tape shelf (VTS) after the archiving process is initiated. This operation is only supported in the tape gateway architecture.</p>"]
     fn cancel_archival(&self,
                        input: &CancelArchivalInput)
                        -> Result<CancelArchivalOutput, CancelArchivalError>;
@@ -6671,44 +6805,44 @@ pub trait StorageGateway {
                         -> Result<CancelRetrievalOutput, CancelRetrievalError>;
 
 
-    #[doc="<p>Creates a cached volume on a specified cached gateway. This operation is supported only for the gateway-cached volume architecture.</p> <note> <p>Cache storage must be allocated to the gateway before you can create a cached volume. Use the <a>AddCache</a> operation to add cache storage to a gateway. </p> </note> <p>In the request, you must specify the gateway, size of the volume in bytes, the iSCSI target name, an IP address on which to expose the target, and a unique client token. In response, AWS Storage Gateway creates the volume and returns information about it. This information includes the volume Amazon Resource Name (ARN), its size, and the iSCSI target ARN that initiators can use to connect to the volume target.</p> <p>Optionally, you can provide the ARN for an existing volume as the <code>SourceVolumeARN</code> for this cached volume, which creates an exact copy of the existing volume’s latest recovery point. The <code>VolumeSizeInBytes</code> value must be equal to or larger than the size of the copied volume, in bytes.</p>"]
+    #[doc="<p>Creates a cached volume on a specified cached volume gateway. This operation is only supported in the cached volume gateway architecture.</p> <note> <p>Cache storage must be allocated to the gateway before you can create a cached volume. Use the <a>AddCache</a> operation to add cache storage to a gateway. </p> </note> <p>In the request, you must specify the gateway, size of the volume in bytes, the iSCSI target name, an IP address on which to expose the target, and a unique client token. In response, the gateway creates the volume and returns information about it. This information includes the volume Amazon Resource Name (ARN), its size, and the iSCSI target ARN that initiators can use to connect to the volume target.</p> <p>Optionally, you can provide the ARN for an existing volume as the <code>SourceVolumeARN</code> for this cached volume, which creates an exact copy of the existing volume’s latest recovery point. The <code>VolumeSizeInBytes</code> value must be equal to or larger than the size of the copied volume, in bytes.</p>"]
     fn create_cachedi_scsi_volume
         (&self,
          input: &CreateCachediSCSIVolumeInput)
          -> Result<CreateCachediSCSIVolumeOutput, CreateCachediSCSIVolumeError>;
 
 
-    #[doc="<p>Creates a file share on an existing file gateway. In Storage Gateway, a file share is a file system mount point backed by Amazon S3 cloud storage. Storage Gateway exposes file shares using a Network File System (NFS) interface.</p>"]
+    #[doc="<p>Creates a file share on an existing file gateway. In Storage Gateway, a file share is a file system mount point backed by Amazon S3 cloud storage. Storage Gateway exposes file shares using a Network File System (NFS) interface. This operation is only supported in the file gateway architecture.</p> <important> <p>File gateway requires AWS Security Token Service (AWS STS) to be activated to enable you create a file share. Make sure AWS STS is activated in the region you are creating your file gateway in. If AWS STS is not activated in the region, activate it. For information about how to activate AWS STS, see Activating and Deactivating AWS STS in an AWS Region in the AWS Identity and Access Management User Guide. </p> <p>File gateway does not support creating hard or symbolic links on a file share.</p> </important>"]
     fn create_nfs_file_share(&self,
                              input: &CreateNFSFileShareInput)
                              -> Result<CreateNFSFileShareOutput, CreateNFSFileShareError>;
 
 
-    #[doc="<p>Initiates a snapshot of a volume.</p> <p>AWS Storage Gateway provides the ability to back up point-in-time snapshots of your data to Amazon Simple Storage (S3) for durable off-site recovery, as well as import the data to an Amazon Elastic Block Store (EBS) volume in Amazon Elastic Compute Cloud (EC2). You can take snapshots of your gateway volume on a scheduled or ad-hoc basis. This API enables you to take ad-hoc snapshot. For more information, see <a href=\"http://docs.aws.amazon.com/storagegateway/latest/userguide/WorkingWithSnapshots.html\">Working With Snapshots in the AWS Storage Gateway Console</a>.</p> <p>In the CreateSnapshot request you identify the volume by providing its Amazon Resource Name (ARN). You must also provide description for the snapshot. When AWS Storage Gateway takes the snapshot of specified volume, the snapshot and description appears in the AWS Storage Gateway Console. In response, AWS Storage Gateway returns you a snapshot ID. You can use this snapshot ID to check the snapshot progress or later use it when you want to create a volume from a snapshot.</p> <note> <p>To list or delete a snapshot, you must use the Amazon EC2 API. For more information, see DescribeSnapshots or DeleteSnapshot in the <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_Operations.html\">EC2 API reference</a>.</p> </note> <important> <p>Volume and snapshot IDs are changing to a longer length ID format. For more information, see the important note on the <a href=\"http://docs.aws.amazon.com/storagegateway/latest/APIReference/Welcome.html\">Welcome</a> page.</p> </important>"]
+    #[doc="<p>Initiates a snapshot of a volume.</p> <p>AWS Storage Gateway provides the ability to back up point-in-time snapshots of your data to Amazon Simple Storage (S3) for durable off-site recovery, as well as import the data to an Amazon Elastic Block Store (EBS) volume in Amazon Elastic Compute Cloud (EC2). You can take snapshots of your gateway volume on a scheduled or ad-hoc basis. This API enables you to take ad-hoc snapshot. For more information, see <a href=\"http://docs.aws.amazon.com/storagegateway/latest/userguide/managing-volumes.html#SchedulingSnapshot\">Editing a Snapshot Schedule</a>.</p> <p>In the CreateSnapshot request you identify the volume by providing its Amazon Resource Name (ARN). You must also provide description for the snapshot. When AWS Storage Gateway takes the snapshot of specified volume, the snapshot and description appears in the AWS Storage Gateway Console. In response, AWS Storage Gateway returns you a snapshot ID. You can use this snapshot ID to check the snapshot progress or later use it when you want to create a volume from a snapshot. This operation is only supported in stored and cached volume gateway architecture.</p> <note> <p>To list or delete a snapshot, you must use the Amazon EC2 API. For more information, see DescribeSnapshots or DeleteSnapshot in the <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_Operations.html\">EC2 API reference</a>.</p> </note> <important> <p>Volume and snapshot IDs are changing to a longer length ID format. For more information, see the important note on the <a href=\"http://docs.aws.amazon.com/storagegateway/latest/APIReference/Welcome.html\">Welcome</a> page.</p> </important>"]
     fn create_snapshot(&self,
                        input: &CreateSnapshotInput)
                        -> Result<CreateSnapshotOutput, CreateSnapshotError>;
 
 
-    #[doc="<p>Initiates a snapshot of a gateway from a volume recovery point. This operation is supported only for the gateway-cached volume architecture.</p> <p>A volume recovery point is a point in time at which all data of the volume is consistent and from which you can create a snapshot. To get a list of volume recovery point for gateway-cached volumes, use <a>ListVolumeRecoveryPoints</a>.</p> <p>In the <code>CreateSnapshotFromVolumeRecoveryPoint</code> request, you identify the volume by providing its Amazon Resource Name (ARN). You must also provide a description for the snapshot. When AWS Storage Gateway takes a snapshot of the specified volume, the snapshot and its description appear in the AWS Storage Gateway console. In response, AWS Storage Gateway returns you a snapshot ID. You can use this snapshot ID to check the snapshot progress or later use it when you want to create a volume from a snapshot.</p> <note> <p>To list or delete a snapshot, you must use the Amazon EC2 API. For more information, in <i>Amazon Elastic Compute Cloud API Reference</i>.</p> </note>"]
+    #[doc="<p>Initiates a snapshot of a gateway from a volume recovery point. This operation is only supported in the cached volume gateway architecture.</p> <p>A volume recovery point is a point in time at which all data of the volume is consistent and from which you can create a snapshot. To get a list of volume recovery point for cached volume gateway, use <a>ListVolumeRecoveryPoints</a>.</p> <p>In the <code>CreateSnapshotFromVolumeRecoveryPoint</code> request, you identify the volume by providing its Amazon Resource Name (ARN). You must also provide a description for the snapshot. When the gateway takes a snapshot of the specified volume, the snapshot and its description appear in the AWS Storage Gateway console. In response, the gateway returns you a snapshot ID. You can use this snapshot ID to check the snapshot progress or later use it when you want to create a volume from a snapshot.</p> <note> <p>To list or delete a snapshot, you must use the Amazon EC2 API. For more information, in <i>Amazon Elastic Compute Cloud API Reference</i>.</p> </note>"]
     fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromVolumeRecoveryPointInput)  -> Result<CreateSnapshotFromVolumeRecoveryPointOutput, CreateSnapshotFromVolumeRecoveryPointError>;
 
 
-    #[doc="<p>Creates a volume on a specified gateway. This operation is supported only for the gateway-stored volume architecture.</p> <p>The size of the volume to create is inferred from the disk size. You can choose to preserve existing data on the disk, create volume from an existing snapshot, or create an empty volume. If you choose to create an empty gateway volume, then any existing data on the disk is erased.</p> <p>In the request you must specify the gateway and the disk information on which you are creating the volume. In response, AWS Storage Gateway creates the volume and returns volume information such as the volume Amazon Resource Name (ARN), its size, and the iSCSI target ARN that initiators can use to connect to the volume target.</p>"]
+    #[doc="<p>Creates a volume on a specified gateway. This operation is only supported in the stored volume gateway architecture.</p> <p>The size of the volume to create is inferred from the disk size. You can choose to preserve existing data on the disk, create volume from an existing snapshot, or create an empty volume. If you choose to create an empty gateway volume, then any existing data on the disk is erased.</p> <p>In the request you must specify the gateway and the disk information on which you are creating the volume. In response, the gateway creates the volume and returns volume information such as the volume Amazon Resource Name (ARN), its size, and the iSCSI target ARN that initiators can use to connect to the volume target.</p>"]
     fn create_storedi_scsi_volume
         (&self,
          input: &CreateStorediSCSIVolumeInput)
          -> Result<CreateStorediSCSIVolumeOutput, CreateStorediSCSIVolumeError>;
 
 
-    #[doc="<p>Creates a virtual tape by using your own barcode. You write data to the virtual tape and then archive the tape.</p> <note> <p>Cache storage must be allocated to the gateway before you can create a virtual tape. Use the <a>AddCache</a> operation to add cache storage to a gateway.</p> </note>"]
+    #[doc="<p>Creates a virtual tape by using your own barcode. You write data to the virtual tape and then archive the tape. This operation is only supported in the tape gateway architecture.</p> <note> <p>Cache storage must be allocated to the gateway before you can create a virtual tape. Use the <a>AddCache</a> operation to add cache storage to a gateway.</p> </note>"]
     fn create_tape_with_barcode
         (&self,
          input: &CreateTapeWithBarcodeInput)
          -> Result<CreateTapeWithBarcodeOutput, CreateTapeWithBarcodeError>;
 
 
-    #[doc="<p>Creates one or more virtual tapes. You write data to the virtual tapes and then archive the tapes.</p> <note> <p>Cache storage must be allocated to the gateway before you can create virtual tapes. Use the <a>AddCache</a> operation to add cache storage to a gateway. </p> </note>"]
+    #[doc="<p>Creates one or more virtual tapes. You write data to the virtual tapes and then archive the tapes. This operation is only supported in the tape gateway architecture.</p> <note> <p>Cache storage must be allocated to the gateway before you can create virtual tapes. Use the <a>AddCache</a> operation to add cache storage to a gateway. </p> </note>"]
     fn create_tapes(&self,
                     input: &CreateTapesInput)
                     -> Result<CreateTapesOutput, CreateTapesError>;
@@ -6728,7 +6862,7 @@ pub trait StorageGateway {
          -> Result<DeleteChapCredentialsOutput, DeleteChapCredentialsError>;
 
 
-    #[doc="<p>Deletes a file share from a file gateway.</p>"]
+    #[doc="<p>Deletes a file share from a file gateway. This operation is only supported in the file gateway architecture.</p>"]
     fn delete_file_share(&self,
                          input: &DeleteFileShareInput)
                          -> Result<DeleteFileShareOutput, DeleteFileShareError>;
@@ -6747,17 +6881,17 @@ pub trait StorageGateway {
          -> Result<DeleteSnapshotScheduleOutput, DeleteSnapshotScheduleError>;
 
 
-    #[doc="<p>Deletes the specified virtual tape.</p>"]
+    #[doc="<p>Deletes the specified virtual tape. This operation is only supported in the tape gateway architecture.</p>"]
     fn delete_tape(&self, input: &DeleteTapeInput) -> Result<DeleteTapeOutput, DeleteTapeError>;
 
 
-    #[doc="<p>Deletes the specified virtual tape from the virtual tape shelf (VTS).</p>"]
+    #[doc="<p>Deletes the specified virtual tape from the virtual tape shelf (VTS). This operation is only supported in the tape gateway architecture.</p>"]
     fn delete_tape_archive(&self,
                            input: &DeleteTapeArchiveInput)
                            -> Result<DeleteTapeArchiveOutput, DeleteTapeArchiveError>;
 
 
-    #[doc="<p>Deletes the specified gateway volume that you previously created using the <a>CreateCachediSCSIVolume</a> or <a>CreateStorediSCSIVolume</a> API. For gateway-stored volumes, the local disk that was configured as the storage volume is not deleted. You can reuse the local disk to create another storage volume. </p> <p>Before you delete a gateway volume, make sure there are no iSCSI connections to the volume you are deleting. You should also make sure there is no snapshot in progress. You can use the Amazon Elastic Compute Cloud (Amazon EC2) API to query snapshots on the volume you are deleting and check the snapshot status. For more information, go to <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-DescribeSnapshots.html\">DescribeSnapshots</a> in the <i>Amazon Elastic Compute Cloud API Reference</i>.</p> <p>In the request, you must provide the Amazon Resource Name (ARN) of the storage volume you want to delete.</p>"]
+    #[doc="<p>Deletes the specified storage volume that you previously created using the <a>CreateCachediSCSIVolume</a> or <a>CreateStorediSCSIVolume</a> API. This operation is only supported in the cached volume and stored volume architectures. For stored volume gateways, the local disk that was configured as the storage volume is not deleted. You can reuse the local disk to create another storage volume. </p> <p>Before you delete a volume, make sure there are no iSCSI connections to the volume you are deleting. You should also make sure there is no snapshot in progress. You can use the Amazon Elastic Compute Cloud (Amazon EC2) API to query snapshots on the volume you are deleting and check the snapshot status. For more information, go to <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-DescribeSnapshots.html\">DescribeSnapshots</a> in the <i>Amazon Elastic Compute Cloud API Reference</i>.</p> <p>In the request, you must provide the Amazon Resource Name (ARN) of the storage volume you want to delete.</p>"]
     fn delete_volume(&self,
                      input: &DeleteVolumeInput)
                      -> Result<DeleteVolumeOutput, DeleteVolumeError>;
@@ -6770,13 +6904,13 @@ pub trait StorageGateway {
          -> Result<DescribeBandwidthRateLimitOutput, DescribeBandwidthRateLimitError>;
 
 
-    #[doc="<p>Returns information about the cache of a gateway. This operation is supported only for the gateway-cached volume architecture.</p> <p>The response includes disk IDs that are configured as cache, and it includes the amount of cache allocated and used.</p>"]
+    #[doc="<p>Returns information about the cache of a gateway. This operation is only supported in the cached volume,tape and file gateway architectures.</p> <p>The response includes disk IDs that are configured as cache, and it includes the amount of cache allocated and used.</p>"]
     fn describe_cache(&self,
                       input: &DescribeCacheInput)
                       -> Result<DescribeCacheOutput, DescribeCacheError>;
 
 
-    #[doc="<p>Returns a description of the gateway volumes specified in the request. This operation is supported only for the gateway-cached volume architecture.</p> <p>The list of gateway volumes in the request must be from one gateway. In the response Amazon Storage Gateway returns volume information sorted by volume Amazon Resource Name (ARN).</p>"]
+    #[doc="<p>Returns a description of the gateway volumes specified in the request. This operation is only supported in the cached volume gateway architecture.</p> <p>The list of gateway volumes in the request must be from one gateway. In the response Amazon Storage Gateway returns volume information sorted by volume Amazon Resource Name (ARN).</p>"]
     fn describe_cachedi_scsi_volumes
         (&self,
          input: &DescribeCachediSCSIVolumesInput)
@@ -6804,72 +6938,72 @@ pub trait StorageGateway {
          -> Result<DescribeMaintenanceStartTimeOutput, DescribeMaintenanceStartTimeError>;
 
 
-    #[doc="<p>Gets a description for one or more file shares from a file gateway.</p>"]
+    #[doc="<p>Gets a description for one or more file shares from a file gateway. This operation is only supported in file gateways.</p>"]
     fn describe_nfs_file_shares
         (&self,
          input: &DescribeNFSFileSharesInput)
          -> Result<DescribeNFSFileSharesOutput, DescribeNFSFileSharesError>;
 
 
-    #[doc="<p>Describes the snapshot schedule for the specified gateway volume. The snapshot schedule information includes intervals at which snapshots are automatically initiated on the volume.</p>"]
+    #[doc="<p>Describes the snapshot schedule for the specified gateway volume. The snapshot schedule information includes intervals at which snapshots are automatically initiated on the volume. This operation is only supported in the cached volume and stored volume architectures.</p>"]
     fn describe_snapshot_schedule
         (&self,
          input: &DescribeSnapshotScheduleInput)
          -> Result<DescribeSnapshotScheduleOutput, DescribeSnapshotScheduleError>;
 
 
-    #[doc="<p>Returns the description of the gateway volumes specified in the request. The list of gateway volumes in the request must be from one gateway. In the response Amazon Storage Gateway returns volume information sorted by volume ARNs.</p>"]
+    #[doc="<p>Returns the description of the gateway volumes specified in the request. The list of gateway volumes in the request must be from one gateway. In the response Amazon Storage Gateway returns volume information sorted by volume ARNs. This operation is only supported in stored volume gateway architecture.</p>"]
     fn describe_storedi_scsi_volumes
         (&self,
          input: &DescribeStorediSCSIVolumesInput)
          -> Result<DescribeStorediSCSIVolumesOutput, DescribeStorediSCSIVolumesError>;
 
 
-    #[doc="<p>Returns a description of specified virtual tapes in the virtual tape shelf (VTS).</p> <p>If a specific <code>TapeARN</code> is not specified, AWS Storage Gateway returns a description of all virtual tapes found in the VTS associated with your account.</p>"]
+    #[doc="<p>Returns a description of specified virtual tapes in the virtual tape shelf (VTS). This operation is only supported in the tape gateway architecture.</p> <p>If a specific <code>TapeARN</code> is not specified, AWS Storage Gateway returns a description of all virtual tapes found in the VTS associated with your account.</p>"]
     fn describe_tape_archives(&self,
                               input: &DescribeTapeArchivesInput)
                               -> Result<DescribeTapeArchivesOutput, DescribeTapeArchivesError>;
 
 
-    #[doc="<p>Returns a list of virtual tape recovery points that are available for the specified gateway-VTL.</p> <p>A recovery point is a point-in-time view of a virtual tape at which all the data on the virtual tape is consistent. If your gateway crashes, virtual tapes that have recovery points can be recovered to a new gateway.</p>"]
+    #[doc="<p>Returns a list of virtual tape recovery points that are available for the specified tape gateway.</p> <p>A recovery point is a point-in-time view of a virtual tape at which all the data on the virtual tape is consistent. If your gateway crashes, virtual tapes that have recovery points can be recovered to a new gateway. This operation is only supported in the tape gateway architecture.</p>"]
     fn describe_tape_recovery_points
         (&self,
          input: &DescribeTapeRecoveryPointsInput)
          -> Result<DescribeTapeRecoveryPointsOutput, DescribeTapeRecoveryPointsError>;
 
 
-    #[doc="<p>Returns a description of the specified Amazon Resource Name (ARN) of virtual tapes. If a <code>TapeARN</code> is not specified, returns a description of all virtual tapes associated with the specified gateway.</p>"]
+    #[doc="<p>Returns a description of the specified Amazon Resource Name (ARN) of virtual tapes. If a <code>TapeARN</code> is not specified, returns a description of all virtual tapes associated with the specified gateway. This operation is only supported in the tape gateway architecture.</p>"]
     fn describe_tapes(&self,
                       input: &DescribeTapesInput)
                       -> Result<DescribeTapesOutput, DescribeTapesError>;
 
 
-    #[doc="<p>Returns information about the upload buffer of a gateway. This operation is supported for both the gateway-stored and gateway-cached volume architectures.</p> <p>The response includes disk IDs that are configured as upload buffer space, and it includes the amount of upload buffer space allocated and used.</p>"]
+    #[doc="<p>Returns information about the upload buffer of a gateway. This operation is supported for the stored volume, cached volume and tape gateway architectures.</p> <p>The response includes disk IDs that are configured as upload buffer space, and it includes the amount of upload buffer space allocated and used.</p>"]
     fn describe_upload_buffer(&self,
                               input: &DescribeUploadBufferInput)
                               -> Result<DescribeUploadBufferOutput, DescribeUploadBufferError>;
 
 
-    #[doc="<p>Returns a description of virtual tape library (VTL) devices for the specified gateway. In the response, AWS Storage Gateway returns VTL device information.</p> <p>The list of VTL devices must be from one gateway.</p>"]
+    #[doc="<p>Returns a description of virtual tape library (VTL) devices for the specified tape gateway. In the response, AWS Storage Gateway returns VTL device information.</p> <p>This operation is only supported in the tape gateway architecture.</p>"]
     fn describe_vtl_devices(&self,
                             input: &DescribeVTLDevicesInput)
                             -> Result<DescribeVTLDevicesOutput, DescribeVTLDevicesError>;
 
 
-    #[doc="<p>Returns information about the working storage of a gateway. This operation is supported only for the gateway-stored volume architecture. This operation is deprecated in cached-volumes API version (20120630). Use DescribeUploadBuffer instead.</p> <note> <p>Working storage is also referred to as upload buffer. You can also use the DescribeUploadBuffer operation to add upload buffer to a stored-volume gateway.</p> </note> <p>The response includes disk IDs that are configured as working storage, and it includes the amount of working storage allocated and used.</p>"]
+    #[doc="<p>Returns information about the working storage of a gateway. This operation is only supported in the stored volumes gateway architecture. This operation is deprecated in cached volumes API version (20120630). Use DescribeUploadBuffer instead.</p> <note> <p>Working storage is also referred to as upload buffer. You can also use the DescribeUploadBuffer operation to add upload buffer to a stored volume gateway.</p> </note> <p>The response includes disk IDs that are configured as working storage, and it includes the amount of working storage allocated and used.</p>"]
     fn describe_working_storage
         (&self,
          input: &DescribeWorkingStorageInput)
          -> Result<DescribeWorkingStorageOutput, DescribeWorkingStorageError>;
 
 
-    #[doc="<p>Disables a gateway when the gateway is no longer functioning. For example, if your gateway VM is damaged, you can disable the gateway so you can recover virtual tapes.</p> <p>Use this operation for a gateway-VTL that is not reachable or not functioning.</p> <important> <p>Once a gateway is disabled it cannot be enabled.</p> </important>"]
+    #[doc="<p>Disables a tape gateway when the gateway is no longer functioning. For example, if your gateway VM is damaged, you can disable the gateway so you can recover virtual tapes.</p> <p>Use this operation for a tape gateway that is not reachable or not functioning. This operation is only supported in the tape gateway architectures.</p> <important> <p>Once a gateway is disabled it cannot be enabled.</p> </important>"]
     fn disable_gateway(&self,
                        input: &DisableGatewayInput)
                        -> Result<DisableGatewayOutput, DisableGatewayError>;
 
 
-    #[doc="<p>Gets a list of the file shares for a specific file gateway, or the list of file shares that belong to the calling user account. </p>"]
+    #[doc="<p>Gets a list of the file shares for a specific file gateway, or the list of file shares that belong to the calling user account. This operation is only supported in the file gateway architecture.</p>"]
     fn list_file_shares(&self,
                         input: &ListFileSharesInput)
                         -> Result<ListFileSharesOutput, ListFileSharesError>;
@@ -6881,59 +7015,65 @@ pub trait StorageGateway {
                      -> Result<ListGatewaysOutput, ListGatewaysError>;
 
 
-    #[doc="<p>Returns a list of the gateway's local disks. To specify which gateway to describe, you use the Amazon Resource Name (ARN) of the gateway in the body of the request.</p> <p>The request returns a list of all disks, specifying which are configured as working storage, cache storage, or stored volume or not configured at all. The response includes a <code>DiskStatus</code> field. This field can have a value of present (the disk is available to use), missing (the disk is no longer connected to the gateway), or mismatch (the disk node is occupied by a disk that has incorrect metadata or the disk content is corrupted). </p>"]
+    #[doc="<p>Returns a list of the gateway's local disks. To specify which gateway to describe, you use the Amazon Resource Name (ARN) of the gateway in the body of the request.</p> <p>The request returns a list of all disks, specifying which are configured as working storage, cache storage, or stored volume or not configured at all. The response includes a <code>DiskStatus</code> field. This field can have a value of present (the disk is available to use), missing (the disk is no longer connected to the gateway), or mismatch (the disk node is occupied by a disk that has incorrect metadata or the disk content is corrupted).</p>"]
     fn list_local_disks(&self,
                         input: &ListLocalDisksInput)
                         -> Result<ListLocalDisksOutput, ListLocalDisksError>;
 
 
-    #[doc="<p>Lists the tags that have been added to the specified resource.</p>"]
+    #[doc="<p>Lists the tags that have been added to the specified resource. This operation is only supported in the cached volume, stored volume and tape gateway architecture.</p>"]
     fn list_tags_for_resource(&self,
                               input: &ListTagsForResourceInput)
                               -> Result<ListTagsForResourceOutput, ListTagsForResourceError>;
 
 
-    #[doc="<p>Lists virtual tapes in your virtual tape library (VTL) and your virtual tape shelf (VTS). You specify the tapes to list by specifying one or more tape Amazon Resource Names (ARNs). If you don't specify a tape ARN, the operation lists all virtual tapes in both your VTL and VTS.</p> <p>This operation supports pagination. By default, the operation returns a maximum of up to 100 tapes. You can optionally specify the <code>Limit</code> parameter in the body to limit the number of tapes in the response. If the number of tapes returned in the response is truncated, the response includes a <code>Marker</code> element that you can use in your subsequent request to retrieve the next set of tapes.</p>"]
+    #[doc="<p>Lists virtual tapes in your virtual tape library (VTL) and your virtual tape shelf (VTS). You specify the tapes to list by specifying one or more tape Amazon Resource Names (ARNs). If you don't specify a tape ARN, the operation lists all virtual tapes in both your VTL and VTS.</p> <p>This operation supports pagination. By default, the operation returns a maximum of up to 100 tapes. You can optionally specify the <code>Limit</code> parameter in the body to limit the number of tapes in the response. If the number of tapes returned in the response is truncated, the response includes a <code>Marker</code> element that you can use in your subsequent request to retrieve the next set of tapes. This operation is only supported in the tape gateway architecture.</p>"]
     fn list_tapes(&self, input: &ListTapesInput) -> Result<ListTapesOutput, ListTapesError>;
 
 
-    #[doc="<p>Lists iSCSI initiators that are connected to a volume. You can use this operation to determine whether a volume is being used or not.</p>"]
+    #[doc="<p>Lists iSCSI initiators that are connected to a volume. You can use this operation to determine whether a volume is being used or not. This operation is only supported in the cached volume and stored volume gateway architecture.</p>"]
     fn list_volume_initiators(&self,
                               input: &ListVolumeInitiatorsInput)
                               -> Result<ListVolumeInitiatorsOutput, ListVolumeInitiatorsError>;
 
 
-    #[doc="<p>Lists the recovery points for a specified gateway. This operation is supported only for the gateway-cached volume architecture.</p> <p>Each gateway-cached volume has one recovery point. A volume recovery point is a point in time at which all data of the volume is consistent and from which you can create a snapshot. To create a snapshot from a volume recovery point use the <a>CreateSnapshotFromVolumeRecoveryPoint</a> operation.</p>"]
+    #[doc="<p>Lists the recovery points for a specified gateway. This operation is only supported in the cached volume gateway architecture.</p> <p>Each cache volume has one recovery point. A volume recovery point is a point in time at which all data of the volume is consistent and from which you can create a snapshot or clone a new cached volume from a source volume. To create a snapshot from a volume recovery point use the <a>CreateSnapshotFromVolumeRecoveryPoint</a> operation.</p>"]
     fn list_volume_recovery_points
         (&self,
          input: &ListVolumeRecoveryPointsInput)
          -> Result<ListVolumeRecoveryPointsOutput, ListVolumeRecoveryPointsError>;
 
 
-    #[doc="<p>Lists the iSCSI stored volumes of a gateway. Results are sorted by volume ARN. The response includes only the volume ARNs. If you want additional volume information, use the <a>DescribeStorediSCSIVolumes</a> or the <a>DescribeCachediSCSIVolumes</a> API.</p> <p>The operation supports pagination. By default, the operation returns a maximum of up to 100 volumes. You can optionally specify the <code>Limit</code> field in the body to limit the number of volumes in the response. If the number of volumes returned in the response is truncated, the response includes a Marker field. You can use this Marker value in your subsequent request to retrieve the next set of volumes.</p>"]
+    #[doc="<p>Lists the iSCSI stored volumes of a gateway. Results are sorted by volume ARN. The response includes only the volume ARNs. If you want additional volume information, use the <a>DescribeStorediSCSIVolumes</a> or the <a>DescribeCachediSCSIVolumes</a> API.</p> <p>The operation supports pagination. By default, the operation returns a maximum of up to 100 volumes. You can optionally specify the <code>Limit</code> field in the body to limit the number of volumes in the response. If the number of volumes returned in the response is truncated, the response includes a Marker field. You can use this Marker value in your subsequent request to retrieve the next set of volumes. This operation is only supported in the cached volume and stored volume gateway architectures.</p>"]
     fn list_volumes(&self,
                     input: &ListVolumesInput)
                     -> Result<ListVolumesOutput, ListVolumesError>;
 
 
-    #[doc="<p>Removes one or more tags from the specified resource.</p>"]
+    #[doc="<p>Refreshes the cache for the specified file share. This operation finds objects in the Amazon S3 bucket that were added or removed since the gateway last listed the bucket's contents and cached the results.</p>"]
+    fn refresh_cache(&self,
+                     input: &RefreshCacheInput)
+                     -> Result<RefreshCacheOutput, RefreshCacheError>;
+
+
+    #[doc="<p>Removes one or more tags from the specified resource. This operation is only supported in the cached volume, stored volume and tape gateway architectures.</p>"]
     fn remove_tags_from_resource
         (&self,
          input: &RemoveTagsFromResourceInput)
          -> Result<RemoveTagsFromResourceOutput, RemoveTagsFromResourceError>;
 
 
-    #[doc="<p>Resets all cache disks that have encountered a error and makes the disks available for reconfiguration as cache storage. If your cache disk encounters a error, the gateway prevents read and write operations on virtual tapes in the gateway. For example, an error can occur when a disk is corrupted or removed from the gateway. When a cache is reset, the gateway loses its cache storage. At this point you can reconfigure the disks as cache disks.</p> <important> <p>If the cache disk you are resetting contains data that has not been uploaded to Amazon S3 yet, that data can be lost. After you reset cache disks, there will be no configured cache disks left in the gateway, so you must configure at least one new cache disk for your gateway to function properly.</p> </important>"]
+    #[doc="<p>Resets all cache disks that have encountered a error and makes the disks available for reconfiguration as cache storage. If your cache disk encounters a error, the gateway prevents read and write operations on virtual tapes in the gateway. For example, an error can occur when a disk is corrupted or removed from the gateway. When a cache is reset, the gateway loses its cache storage. At this point you can reconfigure the disks as cache disks. This operation is only supported in the cached volume,tape and file gateway architectures.</p> <important> <p>If the cache disk you are resetting contains data that has not been uploaded to Amazon S3 yet, that data can be lost. After you reset cache disks, there will be no configured cache disks left in the gateway, so you must configure at least one new cache disk for your gateway to function properly.</p> </important>"]
     fn reset_cache(&self, input: &ResetCacheInput) -> Result<ResetCacheOutput, ResetCacheError>;
 
 
-    #[doc="<p>Retrieves an archived virtual tape from the virtual tape shelf (VTS) to a gateway-VTL. Virtual tapes archived in the VTS are not associated with any gateway. However after a tape is retrieved, it is associated with a gateway, even though it is also listed in the VTS.</p> <p>Once a tape is successfully retrieved to a gateway, it cannot be retrieved again to another gateway. You must archive the tape again before you can retrieve it to another gateway.</p>"]
+    #[doc="<p>Retrieves an archived virtual tape from the virtual tape shelf (VTS) to a tape gateway. Virtual tapes archived in the VTS are not associated with any gateway. However after a tape is retrieved, it is associated with a gateway, even though it is also listed in the VTS, that is, archive. This operation is only supported in the tape gateway architecture.</p> <p>Once a tape is successfully retrieved to a gateway, it cannot be retrieved again to another gateway. You must archive the tape again before you can retrieve it to another gateway. This operation is only supported in the tape gateway architecture.</p>"]
     fn retrieve_tape_archive(&self,
                              input: &RetrieveTapeArchiveInput)
                              -> Result<RetrieveTapeArchiveOutput, RetrieveTapeArchiveError>;
 
 
-    #[doc="<p>Retrieves the recovery point for the specified virtual tape.</p> <p>A recovery point is a point in time view of a virtual tape at which all the data on the tape is consistent. If your gateway crashes, virtual tapes that have recovery points can be recovered to a new gateway.</p> <note> <p>The virtual tape can be retrieved to only one gateway. The retrieved tape is read-only. The virtual tape can be retrieved to only a gateway-VTL. There is no charge for retrieving recovery points.</p> </note>"]
+    #[doc="<p>Retrieves the recovery point for the specified virtual tape. This operation is only supported in the tape gateway architecture.</p> <p>A recovery point is a point in time view of a virtual tape at which all the data on the tape is consistent. If your gateway crashes, virtual tapes that have recovery points can be recovered to a new gateway.</p> <note> <p>The virtual tape can be retrieved to only one gateway. The retrieved tape is read-only. The virtual tape can be retrieved to only a tape gateway. There is no charge for retrieving recovery points.</p> </note>"]
     fn retrieve_tape_recovery_point
         (&self,
          input: &RetrieveTapeRecoveryPointInput)
@@ -6947,7 +7087,7 @@ pub trait StorageGateway {
          -> Result<SetLocalConsolePasswordOutput, SetLocalConsolePasswordError>;
 
 
-    #[doc="<p>Shuts down a gateway. To specify which gateway to shut down, use the Amazon Resource Name (ARN) of the gateway in the body of your request.</p> <p>The operation shuts down the gateway service component running in the storage gateway's virtual machine (VM) and not the VM.</p> <note> <p>If you want to shut down the VM, it is recommended that you first shut down the gateway component in the VM to avoid unpredictable conditions.</p> </note> <p>After the gateway is shutdown, you cannot call any other API except <a>StartGateway</a>, <a>DescribeGatewayInformation</a>, and <a>ListGateways</a>. For more information, see <a>ActivateGateway</a>. Your applications cannot read from or write to the gateway's storage volumes, and there are no snapshots taken.</p> <note> <p>When you make a shutdown request, you will get a <code>200 OK</code> success response immediately. However, it might take some time for the gateway to shut down. You can call the <a>DescribeGatewayInformation</a> API to check the status. For more information, see <a>ActivateGateway</a>.</p> </note> <p>If do not intend to use the gateway again, you must delete the gateway (using <a>DeleteGateway</a>) to no longer pay software charges associated with the gateway.</p>"]
+    #[doc="<p>Shuts down a gateway. To specify which gateway to shut down, use the Amazon Resource Name (ARN) of the gateway in the body of your request.</p> <p>The operation shuts down the gateway service component running in the gateway's virtual machine (VM) and not the host VM.</p> <note> <p>If you want to shut down the VM, it is recommended that you first shut down the gateway component in the VM to avoid unpredictable conditions.</p> </note> <p>After the gateway is shutdown, you cannot call any other API except <a>StartGateway</a>, <a>DescribeGatewayInformation</a>, and <a>ListGateways</a>. For more information, see <a>ActivateGateway</a>. Your applications cannot read from or write to the gateway's storage volumes, and there are no snapshots taken.</p> <note> <p>When you make a shutdown request, you will get a <code>200 OK</code> success response immediately. However, it might take some time for the gateway to shut down. You can call the <a>DescribeGatewayInformation</a> API to check the status. For more information, see <a>ActivateGateway</a>.</p> </note> <p>If do not intend to use the gateway again, you must delete the gateway (using <a>DeleteGateway</a>) to no longer pay software charges associated with the gateway.</p>"]
     fn shutdown_gateway(&self,
                         input: &ShutdownGatewayInput)
                         -> Result<ShutdownGatewayOutput, ShutdownGatewayError>;
@@ -6994,20 +7134,20 @@ pub trait StorageGateway {
          -> Result<UpdateMaintenanceStartTimeOutput, UpdateMaintenanceStartTimeError>;
 
 
-    #[doc="<p>Updates a file share. </p> <note> <p>To leave a file share field unchanged, set the corresponding input field to null.</p> </note>"]
+    #[doc="<p>Updates a file share. This operation is only supported in the file gateway architecture.</p> <note> <p>To leave a file share field unchanged, set the corresponding input field to null.</p> </note> <p>Updates the following file share setting:</p> <ul> <li> <p>Default storage class for your S3 bucket</p> </li> <li> <p>Metadata defaults for your S3 bucket</p> </li> <li> <p>Allowed NFS clients for your file share</p> </li> <li> <p>Squash settings</p> </li> <li> <p>Write status of your file share</p> </li> </ul> <note> <p>To leave a file share field unchanged, set the corresponding input field to null. This operation is only supported in file gateways.</p> </note>"]
     fn update_nfs_file_share(&self,
                              input: &UpdateNFSFileShareInput)
                              -> Result<UpdateNFSFileShareOutput, UpdateNFSFileShareError>;
 
 
-    #[doc="<p>Updates a snapshot schedule configured for a gateway volume.</p> <p>The default snapshot schedule for volume is once every 24 hours, starting at the creation time of the volume. You can use this API to change the snapshot schedule configured for the volume.</p> <p>In the request you must identify the gateway volume whose snapshot schedule you want to update, and the schedule information, including when you want the snapshot to begin on a day and the frequency (in hours) of snapshots.</p>"]
+    #[doc="<p>Updates a snapshot schedule configured for a gateway volume. This operation is only supported in the cached volume and stored volume gateway architectures.</p> <p>The default snapshot schedule for volume is once every 24 hours, starting at the creation time of the volume. You can use this API to change the snapshot schedule configured for the volume.</p> <p>In the request you must identify the gateway volume whose snapshot schedule you want to update, and the schedule information, including when you want the snapshot to begin on a day and the frequency (in hours) of snapshots.</p>"]
     fn update_snapshot_schedule
         (&self,
          input: &UpdateSnapshotScheduleInput)
          -> Result<UpdateSnapshotScheduleOutput, UpdateSnapshotScheduleError>;
 
 
-    #[doc="<p>Updates the type of medium changer in a gateway-VTL. When you activate a gateway-VTL, you select a medium changer type for the gateway-VTL. This operation enables you to select a different type of medium changer after a gateway-VTL is activated.</p>"]
+    #[doc="<p>Updates the type of medium changer in a tape gateway. When you activate a tape gateway, you select a medium changer type for the tape gateway. This operation enables you to select a different type of medium changer after a tape gateway is activated. This operation is only supported in the tape gateway architecture.</p>"]
     fn update_vtl_device_type(&self,
                               input: &UpdateVTLDeviceTypeInput)
                               -> Result<UpdateVTLDeviceTypeOutput, UpdateVTLDeviceTypeError>;
@@ -7039,7 +7179,7 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
     where P: ProvideAwsCredentials,
           D: DispatchSignedRequest
 {
-    #[doc="<p>Activates the gateway you previously deployed on your host. For more information, see <a href=\"http://docs.aws.amazon.com/storagegateway/latest/userguide/GettingStartedActivateGateway-common.html\"> Activate the AWS Storage Gateway</a>. In the activation process, you specify information such as the you want to use for storing snapshots, the time zone for scheduled snapshots the gateway snapshot schedule window, an activation key, and a name for your gateway. The activation process also associates your gateway with your account; for more information, see <a>UpdateGatewayInformation</a>.</p> <note> <p>You must turn on the gateway VM before you can activate your gateway.</p> </note>"]
+    #[doc="<p>Activates the gateway you previously deployed on your host. For more information, see <a href=\"http://docs.aws.amazon.com/storagegateway/latest/userguide/GettingStartedActivateGateway-common.html\"> Activate the AWS Storage Gateway</a>. In the activation process, you specify information such as the region you want to use for storing snapshots or tapes, the time zone for scheduled snapshots the gateway snapshot schedule window, an activation key, and a name for your gateway. The activation process also associates your gateway with your account; for more information, see <a>UpdateGatewayInformation</a>.</p> <note> <p>You must turn on the gateway VM before you can activate your gateway.</p> </note>"]
     fn activate_gateway(&self,
                         input: &ActivateGatewayInput)
                         -> Result<ActivateGatewayOutput, ActivateGatewayError> {
@@ -7066,7 +7206,7 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
     }
 
 
-    #[doc="<p>Configures one or more gateway local disks as cache for a cached-volume gateway. This operation is supported only for the gateway-cached volume architecture (see <a href=\"http://docs.aws.amazon.com/storagegateway/latest/userguide/StorageGatewayConcepts.html\">Storage Gateway Concepts</a>).</p> <p>In the request, you specify the gateway Amazon Resource Name (ARN) to which you want to add cache, and one or more disk IDs that you want to configure as cache.</p>"]
+    #[doc="<p>Configures one or more gateway local disks as cache for a gateway. This operation is only supported in the cached volume, tape and file gateway architectures (see <a href=\"http://docs.aws.amazon.com/storagegateway/latest/userguide/StorageGatewayConcepts.html\">Storage Gateway Concepts</a>).</p> <p>In the request, you specify the gateway Amazon Resource Name (ARN) to which you want to add cache, and one or more disk IDs that you want to configure as cache.</p>"]
     fn add_cache(&self, input: &AddCacheInput) -> Result<AddCacheOutput, AddCacheError> {
         let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
 
@@ -7117,7 +7257,7 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
     }
 
 
-    #[doc="<p>Configures one or more gateway local disks as upload buffer for a specified gateway. This operation is supported for both the gateway-stored and gateway-cached volume architectures.</p> <p>In the request, you specify the gateway Amazon Resource Name (ARN) to which you want to add upload buffer, and one or more disk IDs that you want to configure as upload buffer.</p>"]
+    #[doc="<p>Configures one or more gateway local disks as upload buffer for a specified gateway. This operation is supported for the stored volume, cached volume and tape gateway architectures.</p> <p>In the request, you specify the gateway Amazon Resource Name (ARN) to which you want to add upload buffer, and one or more disk IDs that you want to configure as upload buffer.</p>"]
     fn add_upload_buffer(&self,
                          input: &AddUploadBufferInput)
                          -> Result<AddUploadBufferOutput, AddUploadBufferError> {
@@ -7144,7 +7284,7 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
     }
 
 
-    #[doc="<p>Configures one or more gateway local disks as working storage for a gateway. This operation is supported only for the gateway-stored volume architecture. This operation is deprecated in cached-volumes API version 20120630. Use <a>AddUploadBuffer</a> instead.</p> <note> <p>Working storage is also referred to as upload buffer. You can also use the <a>AddUploadBuffer</a> operation to add upload buffer to a stored-volume gateway.</p> </note> <p>In the request, you specify the gateway Amazon Resource Name (ARN) to which you want to add working storage, and one or more disk IDs that you want to configure as working storage.</p>"]
+    #[doc="<p>Configures one or more gateway local disks as working storage for a gateway. This operation is only supported in the stored volume gateway architecture. This operation is deprecated in cached volume API version 20120630. Use <a>AddUploadBuffer</a> instead.</p> <note> <p>Working storage is also referred to as upload buffer. You can also use the <a>AddUploadBuffer</a> operation to add upload buffer to a stored volume gateway.</p> </note> <p>In the request, you specify the gateway Amazon Resource Name (ARN) to which you want to add working storage, and one or more disk IDs that you want to configure as working storage.</p>"]
     fn add_working_storage(&self,
                            input: &AddWorkingStorageInput)
                            -> Result<AddWorkingStorageOutput, AddWorkingStorageError> {
@@ -7171,7 +7311,7 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
     }
 
 
-    #[doc="<p>Cancels archiving of a virtual tape to the virtual tape shelf (VTS) after the archiving process is initiated.</p>"]
+    #[doc="<p>Cancels archiving of a virtual tape to the virtual tape shelf (VTS) after the archiving process is initiated. This operation is only supported in the tape gateway architecture.</p>"]
     fn cancel_archival(&self,
                        input: &CancelArchivalInput)
                        -> Result<CancelArchivalOutput, CancelArchivalError> {
@@ -7225,7 +7365,7 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
     }
 
 
-    #[doc="<p>Creates a cached volume on a specified cached gateway. This operation is supported only for the gateway-cached volume architecture.</p> <note> <p>Cache storage must be allocated to the gateway before you can create a cached volume. Use the <a>AddCache</a> operation to add cache storage to a gateway. </p> </note> <p>In the request, you must specify the gateway, size of the volume in bytes, the iSCSI target name, an IP address on which to expose the target, and a unique client token. In response, AWS Storage Gateway creates the volume and returns information about it. This information includes the volume Amazon Resource Name (ARN), its size, and the iSCSI target ARN that initiators can use to connect to the volume target.</p> <p>Optionally, you can provide the ARN for an existing volume as the <code>SourceVolumeARN</code> for this cached volume, which creates an exact copy of the existing volume’s latest recovery point. The <code>VolumeSizeInBytes</code> value must be equal to or larger than the size of the copied volume, in bytes.</p>"]
+    #[doc="<p>Creates a cached volume on a specified cached volume gateway. This operation is only supported in the cached volume gateway architecture.</p> <note> <p>Cache storage must be allocated to the gateway before you can create a cached volume. Use the <a>AddCache</a> operation to add cache storage to a gateway. </p> </note> <p>In the request, you must specify the gateway, size of the volume in bytes, the iSCSI target name, an IP address on which to expose the target, and a unique client token. In response, the gateway creates the volume and returns information about it. This information includes the volume Amazon Resource Name (ARN), its size, and the iSCSI target ARN that initiators can use to connect to the volume target.</p> <p>Optionally, you can provide the ARN for an existing volume as the <code>SourceVolumeARN</code> for this cached volume, which creates an exact copy of the existing volume’s latest recovery point. The <code>VolumeSizeInBytes</code> value must be equal to or larger than the size of the copied volume, in bytes.</p>"]
     fn create_cachedi_scsi_volume
         (&self,
          input: &CreateCachediSCSIVolumeInput)
@@ -7251,7 +7391,7 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
     }
 
 
-    #[doc="<p>Creates a file share on an existing file gateway. In Storage Gateway, a file share is a file system mount point backed by Amazon S3 cloud storage. Storage Gateway exposes file shares using a Network File System (NFS) interface.</p>"]
+    #[doc="<p>Creates a file share on an existing file gateway. In Storage Gateway, a file share is a file system mount point backed by Amazon S3 cloud storage. Storage Gateway exposes file shares using a Network File System (NFS) interface. This operation is only supported in the file gateway architecture.</p> <important> <p>File gateway requires AWS Security Token Service (AWS STS) to be activated to enable you create a file share. Make sure AWS STS is activated in the region you are creating your file gateway in. If AWS STS is not activated in the region, activate it. For information about how to activate AWS STS, see Activating and Deactivating AWS STS in an AWS Region in the AWS Identity and Access Management User Guide. </p> <p>File gateway does not support creating hard or symbolic links on a file share.</p> </important>"]
     fn create_nfs_file_share(&self,
                              input: &CreateNFSFileShareInput)
                              -> Result<CreateNFSFileShareOutput, CreateNFSFileShareError> {
@@ -7278,7 +7418,7 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
     }
 
 
-    #[doc="<p>Initiates a snapshot of a volume.</p> <p>AWS Storage Gateway provides the ability to back up point-in-time snapshots of your data to Amazon Simple Storage (S3) for durable off-site recovery, as well as import the data to an Amazon Elastic Block Store (EBS) volume in Amazon Elastic Compute Cloud (EC2). You can take snapshots of your gateway volume on a scheduled or ad-hoc basis. This API enables you to take ad-hoc snapshot. For more information, see <a href=\"http://docs.aws.amazon.com/storagegateway/latest/userguide/WorkingWithSnapshots.html\">Working With Snapshots in the AWS Storage Gateway Console</a>.</p> <p>In the CreateSnapshot request you identify the volume by providing its Amazon Resource Name (ARN). You must also provide description for the snapshot. When AWS Storage Gateway takes the snapshot of specified volume, the snapshot and description appears in the AWS Storage Gateway Console. In response, AWS Storage Gateway returns you a snapshot ID. You can use this snapshot ID to check the snapshot progress or later use it when you want to create a volume from a snapshot.</p> <note> <p>To list or delete a snapshot, you must use the Amazon EC2 API. For more information, see DescribeSnapshots or DeleteSnapshot in the <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_Operations.html\">EC2 API reference</a>.</p> </note> <important> <p>Volume and snapshot IDs are changing to a longer length ID format. For more information, see the important note on the <a href=\"http://docs.aws.amazon.com/storagegateway/latest/APIReference/Welcome.html\">Welcome</a> page.</p> </important>"]
+    #[doc="<p>Initiates a snapshot of a volume.</p> <p>AWS Storage Gateway provides the ability to back up point-in-time snapshots of your data to Amazon Simple Storage (S3) for durable off-site recovery, as well as import the data to an Amazon Elastic Block Store (EBS) volume in Amazon Elastic Compute Cloud (EC2). You can take snapshots of your gateway volume on a scheduled or ad-hoc basis. This API enables you to take ad-hoc snapshot. For more information, see <a href=\"http://docs.aws.amazon.com/storagegateway/latest/userguide/managing-volumes.html#SchedulingSnapshot\">Editing a Snapshot Schedule</a>.</p> <p>In the CreateSnapshot request you identify the volume by providing its Amazon Resource Name (ARN). You must also provide description for the snapshot. When AWS Storage Gateway takes the snapshot of specified volume, the snapshot and description appears in the AWS Storage Gateway Console. In response, AWS Storage Gateway returns you a snapshot ID. You can use this snapshot ID to check the snapshot progress or later use it when you want to create a volume from a snapshot. This operation is only supported in stored and cached volume gateway architecture.</p> <note> <p>To list or delete a snapshot, you must use the Amazon EC2 API. For more information, see DescribeSnapshots or DeleteSnapshot in the <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_Operations.html\">EC2 API reference</a>.</p> </note> <important> <p>Volume and snapshot IDs are changing to a longer length ID format. For more information, see the important note on the <a href=\"http://docs.aws.amazon.com/storagegateway/latest/APIReference/Welcome.html\">Welcome</a> page.</p> </important>"]
     fn create_snapshot(&self,
                        input: &CreateSnapshotInput)
                        -> Result<CreateSnapshotOutput, CreateSnapshotError> {
@@ -7305,7 +7445,7 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
     }
 
 
-    #[doc="<p>Initiates a snapshot of a gateway from a volume recovery point. This operation is supported only for the gateway-cached volume architecture.</p> <p>A volume recovery point is a point in time at which all data of the volume is consistent and from which you can create a snapshot. To get a list of volume recovery point for gateway-cached volumes, use <a>ListVolumeRecoveryPoints</a>.</p> <p>In the <code>CreateSnapshotFromVolumeRecoveryPoint</code> request, you identify the volume by providing its Amazon Resource Name (ARN). You must also provide a description for the snapshot. When AWS Storage Gateway takes a snapshot of the specified volume, the snapshot and its description appear in the AWS Storage Gateway console. In response, AWS Storage Gateway returns you a snapshot ID. You can use this snapshot ID to check the snapshot progress or later use it when you want to create a volume from a snapshot.</p> <note> <p>To list or delete a snapshot, you must use the Amazon EC2 API. For more information, in <i>Amazon Elastic Compute Cloud API Reference</i>.</p> </note>"]
+    #[doc="<p>Initiates a snapshot of a gateway from a volume recovery point. This operation is only supported in the cached volume gateway architecture.</p> <p>A volume recovery point is a point in time at which all data of the volume is consistent and from which you can create a snapshot. To get a list of volume recovery point for cached volume gateway, use <a>ListVolumeRecoveryPoints</a>.</p> <p>In the <code>CreateSnapshotFromVolumeRecoveryPoint</code> request, you identify the volume by providing its Amazon Resource Name (ARN). You must also provide a description for the snapshot. When the gateway takes a snapshot of the specified volume, the snapshot and its description appear in the AWS Storage Gateway console. In response, the gateway returns you a snapshot ID. You can use this snapshot ID to check the snapshot progress or later use it when you want to create a volume from a snapshot.</p> <note> <p>To list or delete a snapshot, you must use the Amazon EC2 API. For more information, in <i>Amazon Elastic Compute Cloud API Reference</i>.</p> </note>"]
 fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromVolumeRecoveryPointInput)  -> Result<CreateSnapshotFromVolumeRecoveryPointOutput, CreateSnapshotFromVolumeRecoveryPointError>{
         let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
 
@@ -7328,7 +7468,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Creates a volume on a specified gateway. This operation is supported only for the gateway-stored volume architecture.</p> <p>The size of the volume to create is inferred from the disk size. You can choose to preserve existing data on the disk, create volume from an existing snapshot, or create an empty volume. If you choose to create an empty gateway volume, then any existing data on the disk is erased.</p> <p>In the request you must specify the gateway and the disk information on which you are creating the volume. In response, AWS Storage Gateway creates the volume and returns volume information such as the volume Amazon Resource Name (ARN), its size, and the iSCSI target ARN that initiators can use to connect to the volume target.</p>"]
+    #[doc="<p>Creates a volume on a specified gateway. This operation is only supported in the stored volume gateway architecture.</p> <p>The size of the volume to create is inferred from the disk size. You can choose to preserve existing data on the disk, create volume from an existing snapshot, or create an empty volume. If you choose to create an empty gateway volume, then any existing data on the disk is erased.</p> <p>In the request you must specify the gateway and the disk information on which you are creating the volume. In response, the gateway creates the volume and returns volume information such as the volume Amazon Resource Name (ARN), its size, and the iSCSI target ARN that initiators can use to connect to the volume target.</p>"]
     fn create_storedi_scsi_volume
         (&self,
          input: &CreateStorediSCSIVolumeInput)
@@ -7354,7 +7494,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Creates a virtual tape by using your own barcode. You write data to the virtual tape and then archive the tape.</p> <note> <p>Cache storage must be allocated to the gateway before you can create a virtual tape. Use the <a>AddCache</a> operation to add cache storage to a gateway.</p> </note>"]
+    #[doc="<p>Creates a virtual tape by using your own barcode. You write data to the virtual tape and then archive the tape. This operation is only supported in the tape gateway architecture.</p> <note> <p>Cache storage must be allocated to the gateway before you can create a virtual tape. Use the <a>AddCache</a> operation to add cache storage to a gateway.</p> </note>"]
     fn create_tape_with_barcode
         (&self,
          input: &CreateTapeWithBarcodeInput)
@@ -7383,7 +7523,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Creates one or more virtual tapes. You write data to the virtual tapes and then archive the tapes.</p> <note> <p>Cache storage must be allocated to the gateway before you can create virtual tapes. Use the <a>AddCache</a> operation to add cache storage to a gateway. </p> </note>"]
+    #[doc="<p>Creates one or more virtual tapes. You write data to the virtual tapes and then archive the tapes. This operation is only supported in the tape gateway architecture.</p> <note> <p>Cache storage must be allocated to the gateway before you can create virtual tapes. Use the <a>AddCache</a> operation to add cache storage to a gateway. </p> </note>"]
     fn create_tapes(&self,
                     input: &CreateTapesInput)
                     -> Result<CreateTapesOutput, CreateTapesError> {
@@ -7462,7 +7602,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Deletes a file share from a file gateway.</p>"]
+    #[doc="<p>Deletes a file share from a file gateway. This operation is only supported in the file gateway architecture.</p>"]
     fn delete_file_share(&self,
                          input: &DeleteFileShareInput)
                          -> Result<DeleteFileShareOutput, DeleteFileShareError> {
@@ -7544,7 +7684,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Deletes the specified virtual tape.</p>"]
+    #[doc="<p>Deletes the specified virtual tape. This operation is only supported in the tape gateway architecture.</p>"]
     fn delete_tape(&self, input: &DeleteTapeInput) -> Result<DeleteTapeOutput, DeleteTapeError> {
         let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
 
@@ -7566,7 +7706,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Deletes the specified virtual tape from the virtual tape shelf (VTS).</p>"]
+    #[doc="<p>Deletes the specified virtual tape from the virtual tape shelf (VTS). This operation is only supported in the tape gateway architecture.</p>"]
     fn delete_tape_archive(&self,
                            input: &DeleteTapeArchiveInput)
                            -> Result<DeleteTapeArchiveOutput, DeleteTapeArchiveError> {
@@ -7593,7 +7733,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Deletes the specified gateway volume that you previously created using the <a>CreateCachediSCSIVolume</a> or <a>CreateStorediSCSIVolume</a> API. For gateway-stored volumes, the local disk that was configured as the storage volume is not deleted. You can reuse the local disk to create another storage volume. </p> <p>Before you delete a gateway volume, make sure there are no iSCSI connections to the volume you are deleting. You should also make sure there is no snapshot in progress. You can use the Amazon Elastic Compute Cloud (Amazon EC2) API to query snapshots on the volume you are deleting and check the snapshot status. For more information, go to <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-DescribeSnapshots.html\">DescribeSnapshots</a> in the <i>Amazon Elastic Compute Cloud API Reference</i>.</p> <p>In the request, you must provide the Amazon Resource Name (ARN) of the storage volume you want to delete.</p>"]
+    #[doc="<p>Deletes the specified storage volume that you previously created using the <a>CreateCachediSCSIVolume</a> or <a>CreateStorediSCSIVolume</a> API. This operation is only supported in the cached volume and stored volume architectures. For stored volume gateways, the local disk that was configured as the storage volume is not deleted. You can reuse the local disk to create another storage volume. </p> <p>Before you delete a volume, make sure there are no iSCSI connections to the volume you are deleting. You should also make sure there is no snapshot in progress. You can use the Amazon Elastic Compute Cloud (Amazon EC2) API to query snapshots on the volume you are deleting and check the snapshot status. For more information, go to <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-DescribeSnapshots.html\">DescribeSnapshots</a> in the <i>Amazon Elastic Compute Cloud API Reference</i>.</p> <p>In the request, you must provide the Amazon Resource Name (ARN) of the storage volume you want to delete.</p>"]
     fn delete_volume(&self,
                      input: &DeleteVolumeInput)
                      -> Result<DeleteVolumeOutput, DeleteVolumeError> {
@@ -7645,7 +7785,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Returns information about the cache of a gateway. This operation is supported only for the gateway-cached volume architecture.</p> <p>The response includes disk IDs that are configured as cache, and it includes the amount of cache allocated and used.</p>"]
+    #[doc="<p>Returns information about the cache of a gateway. This operation is only supported in the cached volume,tape and file gateway architectures.</p> <p>The response includes disk IDs that are configured as cache, and it includes the amount of cache allocated and used.</p>"]
     fn describe_cache(&self,
                       input: &DescribeCacheInput)
                       -> Result<DescribeCacheOutput, DescribeCacheError> {
@@ -7671,7 +7811,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Returns a description of the gateway volumes specified in the request. This operation is supported only for the gateway-cached volume architecture.</p> <p>The list of gateway volumes in the request must be from one gateway. In the response Amazon Storage Gateway returns volume information sorted by volume Amazon Resource Name (ARN).</p>"]
+    #[doc="<p>Returns a description of the gateway volumes specified in the request. This operation is only supported in the cached volume gateway architecture.</p> <p>The list of gateway volumes in the request must be from one gateway. In the response Amazon Storage Gateway returns volume information sorted by volume Amazon Resource Name (ARN).</p>"]
     fn describe_cachedi_scsi_volumes
         (&self,
          input: &DescribeCachediSCSIVolumesInput)
@@ -7775,7 +7915,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Gets a description for one or more file shares from a file gateway.</p>"]
+    #[doc="<p>Gets a description for one or more file shares from a file gateway. This operation is only supported in file gateways.</p>"]
     fn describe_nfs_file_shares
         (&self,
          input: &DescribeNFSFileSharesInput)
@@ -7804,7 +7944,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Describes the snapshot schedule for the specified gateway volume. The snapshot schedule information includes intervals at which snapshots are automatically initiated on the volume.</p>"]
+    #[doc="<p>Describes the snapshot schedule for the specified gateway volume. The snapshot schedule information includes intervals at which snapshots are automatically initiated on the volume. This operation is only supported in the cached volume and stored volume architectures.</p>"]
     fn describe_snapshot_schedule
         (&self,
          input: &DescribeSnapshotScheduleInput)
@@ -7830,7 +7970,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Returns the description of the gateway volumes specified in the request. The list of gateway volumes in the request must be from one gateway. In the response Amazon Storage Gateway returns volume information sorted by volume ARNs.</p>"]
+    #[doc="<p>Returns the description of the gateway volumes specified in the request. The list of gateway volumes in the request must be from one gateway. In the response Amazon Storage Gateway returns volume information sorted by volume ARNs. This operation is only supported in stored volume gateway architecture.</p>"]
     fn describe_storedi_scsi_volumes
         (&self,
          input: &DescribeStorediSCSIVolumesInput)
@@ -7856,7 +7996,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Returns a description of specified virtual tapes in the virtual tape shelf (VTS).</p> <p>If a specific <code>TapeARN</code> is not specified, AWS Storage Gateway returns a description of all virtual tapes found in the VTS associated with your account.</p>"]
+    #[doc="<p>Returns a description of specified virtual tapes in the virtual tape shelf (VTS). This operation is only supported in the tape gateway architecture.</p> <p>If a specific <code>TapeARN</code> is not specified, AWS Storage Gateway returns a description of all virtual tapes found in the VTS associated with your account.</p>"]
     fn describe_tape_archives(&self,
                               input: &DescribeTapeArchivesInput)
                               -> Result<DescribeTapeArchivesOutput, DescribeTapeArchivesError> {
@@ -7884,7 +8024,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Returns a list of virtual tape recovery points that are available for the specified gateway-VTL.</p> <p>A recovery point is a point-in-time view of a virtual tape at which all the data on the virtual tape is consistent. If your gateway crashes, virtual tapes that have recovery points can be recovered to a new gateway.</p>"]
+    #[doc="<p>Returns a list of virtual tape recovery points that are available for the specified tape gateway.</p> <p>A recovery point is a point-in-time view of a virtual tape at which all the data on the virtual tape is consistent. If your gateway crashes, virtual tapes that have recovery points can be recovered to a new gateway. This operation is only supported in the tape gateway architecture.</p>"]
     fn describe_tape_recovery_points
         (&self,
          input: &DescribeTapeRecoveryPointsInput)
@@ -7910,7 +8050,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Returns a description of the specified Amazon Resource Name (ARN) of virtual tapes. If a <code>TapeARN</code> is not specified, returns a description of all virtual tapes associated with the specified gateway.</p>"]
+    #[doc="<p>Returns a description of the specified Amazon Resource Name (ARN) of virtual tapes. If a <code>TapeARN</code> is not specified, returns a description of all virtual tapes associated with the specified gateway. This operation is only supported in the tape gateway architecture.</p>"]
     fn describe_tapes(&self,
                       input: &DescribeTapesInput)
                       -> Result<DescribeTapesOutput, DescribeTapesError> {
@@ -7936,7 +8076,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Returns information about the upload buffer of a gateway. This operation is supported for both the gateway-stored and gateway-cached volume architectures.</p> <p>The response includes disk IDs that are configured as upload buffer space, and it includes the amount of upload buffer space allocated and used.</p>"]
+    #[doc="<p>Returns information about the upload buffer of a gateway. This operation is supported for the stored volume, cached volume and tape gateway architectures.</p> <p>The response includes disk IDs that are configured as upload buffer space, and it includes the amount of upload buffer space allocated and used.</p>"]
     fn describe_upload_buffer(&self,
                               input: &DescribeUploadBufferInput)
                               -> Result<DescribeUploadBufferOutput, DescribeUploadBufferError> {
@@ -7964,7 +8104,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Returns a description of virtual tape library (VTL) devices for the specified gateway. In the response, AWS Storage Gateway returns VTL device information.</p> <p>The list of VTL devices must be from one gateway.</p>"]
+    #[doc="<p>Returns a description of virtual tape library (VTL) devices for the specified tape gateway. In the response, AWS Storage Gateway returns VTL device information.</p> <p>This operation is only supported in the tape gateway architecture.</p>"]
     fn describe_vtl_devices(&self,
                             input: &DescribeVTLDevicesInput)
                             -> Result<DescribeVTLDevicesOutput, DescribeVTLDevicesError> {
@@ -7991,7 +8131,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Returns information about the working storage of a gateway. This operation is supported only for the gateway-stored volume architecture. This operation is deprecated in cached-volumes API version (20120630). Use DescribeUploadBuffer instead.</p> <note> <p>Working storage is also referred to as upload buffer. You can also use the DescribeUploadBuffer operation to add upload buffer to a stored-volume gateway.</p> </note> <p>The response includes disk IDs that are configured as working storage, and it includes the amount of working storage allocated and used.</p>"]
+    #[doc="<p>Returns information about the working storage of a gateway. This operation is only supported in the stored volumes gateway architecture. This operation is deprecated in cached volumes API version (20120630). Use DescribeUploadBuffer instead.</p> <note> <p>Working storage is also referred to as upload buffer. You can also use the DescribeUploadBuffer operation to add upload buffer to a stored volume gateway.</p> </note> <p>The response includes disk IDs that are configured as working storage, and it includes the amount of working storage allocated and used.</p>"]
     fn describe_working_storage
         (&self,
          input: &DescribeWorkingStorageInput)
@@ -8020,7 +8160,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Disables a gateway when the gateway is no longer functioning. For example, if your gateway VM is damaged, you can disable the gateway so you can recover virtual tapes.</p> <p>Use this operation for a gateway-VTL that is not reachable or not functioning.</p> <important> <p>Once a gateway is disabled it cannot be enabled.</p> </important>"]
+    #[doc="<p>Disables a tape gateway when the gateway is no longer functioning. For example, if your gateway VM is damaged, you can disable the gateway so you can recover virtual tapes.</p> <p>Use this operation for a tape gateway that is not reachable or not functioning. This operation is only supported in the tape gateway architectures.</p> <important> <p>Once a gateway is disabled it cannot be enabled.</p> </important>"]
     fn disable_gateway(&self,
                        input: &DisableGatewayInput)
                        -> Result<DisableGatewayOutput, DisableGatewayError> {
@@ -8047,7 +8187,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Gets a list of the file shares for a specific file gateway, or the list of file shares that belong to the calling user account. </p>"]
+    #[doc="<p>Gets a list of the file shares for a specific file gateway, or the list of file shares that belong to the calling user account. This operation is only supported in the file gateway architecture.</p>"]
     fn list_file_shares(&self,
                         input: &ListFileSharesInput)
                         -> Result<ListFileSharesOutput, ListFileSharesError> {
@@ -8100,7 +8240,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Returns a list of the gateway's local disks. To specify which gateway to describe, you use the Amazon Resource Name (ARN) of the gateway in the body of the request.</p> <p>The request returns a list of all disks, specifying which are configured as working storage, cache storage, or stored volume or not configured at all. The response includes a <code>DiskStatus</code> field. This field can have a value of present (the disk is available to use), missing (the disk is no longer connected to the gateway), or mismatch (the disk node is occupied by a disk that has incorrect metadata or the disk content is corrupted). </p>"]
+    #[doc="<p>Returns a list of the gateway's local disks. To specify which gateway to describe, you use the Amazon Resource Name (ARN) of the gateway in the body of the request.</p> <p>The request returns a list of all disks, specifying which are configured as working storage, cache storage, or stored volume or not configured at all. The response includes a <code>DiskStatus</code> field. This field can have a value of present (the disk is available to use), missing (the disk is no longer connected to the gateway), or mismatch (the disk node is occupied by a disk that has incorrect metadata or the disk content is corrupted).</p>"]
     fn list_local_disks(&self,
                         input: &ListLocalDisksInput)
                         -> Result<ListLocalDisksOutput, ListLocalDisksError> {
@@ -8127,7 +8267,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Lists the tags that have been added to the specified resource.</p>"]
+    #[doc="<p>Lists the tags that have been added to the specified resource. This operation is only supported in the cached volume, stored volume and tape gateway architecture.</p>"]
     fn list_tags_for_resource(&self,
                               input: &ListTagsForResourceInput)
                               -> Result<ListTagsForResourceOutput, ListTagsForResourceError> {
@@ -8155,7 +8295,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Lists virtual tapes in your virtual tape library (VTL) and your virtual tape shelf (VTS). You specify the tapes to list by specifying one or more tape Amazon Resource Names (ARNs). If you don't specify a tape ARN, the operation lists all virtual tapes in both your VTL and VTS.</p> <p>This operation supports pagination. By default, the operation returns a maximum of up to 100 tapes. You can optionally specify the <code>Limit</code> parameter in the body to limit the number of tapes in the response. If the number of tapes returned in the response is truncated, the response includes a <code>Marker</code> element that you can use in your subsequent request to retrieve the next set of tapes.</p>"]
+    #[doc="<p>Lists virtual tapes in your virtual tape library (VTL) and your virtual tape shelf (VTS). You specify the tapes to list by specifying one or more tape Amazon Resource Names (ARNs). If you don't specify a tape ARN, the operation lists all virtual tapes in both your VTL and VTS.</p> <p>This operation supports pagination. By default, the operation returns a maximum of up to 100 tapes. You can optionally specify the <code>Limit</code> parameter in the body to limit the number of tapes in the response. If the number of tapes returned in the response is truncated, the response includes a <code>Marker</code> element that you can use in your subsequent request to retrieve the next set of tapes. This operation is only supported in the tape gateway architecture.</p>"]
     fn list_tapes(&self, input: &ListTapesInput) -> Result<ListTapesOutput, ListTapesError> {
         let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
 
@@ -8179,7 +8319,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Lists iSCSI initiators that are connected to a volume. You can use this operation to determine whether a volume is being used or not.</p>"]
+    #[doc="<p>Lists iSCSI initiators that are connected to a volume. You can use this operation to determine whether a volume is being used or not. This operation is only supported in the cached volume and stored volume gateway architecture.</p>"]
     fn list_volume_initiators(&self,
                               input: &ListVolumeInitiatorsInput)
                               -> Result<ListVolumeInitiatorsOutput, ListVolumeInitiatorsError> {
@@ -8207,7 +8347,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Lists the recovery points for a specified gateway. This operation is supported only for the gateway-cached volume architecture.</p> <p>Each gateway-cached volume has one recovery point. A volume recovery point is a point in time at which all data of the volume is consistent and from which you can create a snapshot. To create a snapshot from a volume recovery point use the <a>CreateSnapshotFromVolumeRecoveryPoint</a> operation.</p>"]
+    #[doc="<p>Lists the recovery points for a specified gateway. This operation is only supported in the cached volume gateway architecture.</p> <p>Each cache volume has one recovery point. A volume recovery point is a point in time at which all data of the volume is consistent and from which you can create a snapshot or clone a new cached volume from a source volume. To create a snapshot from a volume recovery point use the <a>CreateSnapshotFromVolumeRecoveryPoint</a> operation.</p>"]
     fn list_volume_recovery_points
         (&self,
          input: &ListVolumeRecoveryPointsInput)
@@ -8233,7 +8373,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Lists the iSCSI stored volumes of a gateway. Results are sorted by volume ARN. The response includes only the volume ARNs. If you want additional volume information, use the <a>DescribeStorediSCSIVolumes</a> or the <a>DescribeCachediSCSIVolumes</a> API.</p> <p>The operation supports pagination. By default, the operation returns a maximum of up to 100 volumes. You can optionally specify the <code>Limit</code> field in the body to limit the number of volumes in the response. If the number of volumes returned in the response is truncated, the response includes a Marker field. You can use this Marker value in your subsequent request to retrieve the next set of volumes.</p>"]
+    #[doc="<p>Lists the iSCSI stored volumes of a gateway. Results are sorted by volume ARN. The response includes only the volume ARNs. If you want additional volume information, use the <a>DescribeStorediSCSIVolumes</a> or the <a>DescribeCachediSCSIVolumes</a> API.</p> <p>The operation supports pagination. By default, the operation returns a maximum of up to 100 volumes. You can optionally specify the <code>Limit</code> field in the body to limit the number of volumes in the response. If the number of volumes returned in the response is truncated, the response includes a Marker field. You can use this Marker value in your subsequent request to retrieve the next set of volumes. This operation is only supported in the cached volume and stored volume gateway architectures.</p>"]
     fn list_volumes(&self,
                     input: &ListVolumesInput)
                     -> Result<ListVolumesOutput, ListVolumesError> {
@@ -8257,7 +8397,33 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Removes one or more tags from the specified resource.</p>"]
+    #[doc="<p>Refreshes the cache for the specified file share. This operation finds objects in the Amazon S3 bucket that were added or removed since the gateway last listed the bucket's contents and cached the results.</p>"]
+    fn refresh_cache(&self,
+                     input: &RefreshCacheInput)
+                     -> Result<RefreshCacheOutput, RefreshCacheError> {
+        let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "StorageGateway_20130630.RefreshCache");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                            Ok(serde_json::from_str::<RefreshCacheOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                        }
+            _ => {
+                Err(RefreshCacheError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Removes one or more tags from the specified resource. This operation is only supported in the cached volume, stored volume and tape gateway architectures.</p>"]
     fn remove_tags_from_resource
         (&self,
          input: &RemoveTagsFromResourceInput)
@@ -8286,7 +8452,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Resets all cache disks that have encountered a error and makes the disks available for reconfiguration as cache storage. If your cache disk encounters a error, the gateway prevents read and write operations on virtual tapes in the gateway. For example, an error can occur when a disk is corrupted or removed from the gateway. When a cache is reset, the gateway loses its cache storage. At this point you can reconfigure the disks as cache disks.</p> <important> <p>If the cache disk you are resetting contains data that has not been uploaded to Amazon S3 yet, that data can be lost. After you reset cache disks, there will be no configured cache disks left in the gateway, so you must configure at least one new cache disk for your gateway to function properly.</p> </important>"]
+    #[doc="<p>Resets all cache disks that have encountered a error and makes the disks available for reconfiguration as cache storage. If your cache disk encounters a error, the gateway prevents read and write operations on virtual tapes in the gateway. For example, an error can occur when a disk is corrupted or removed from the gateway. When a cache is reset, the gateway loses its cache storage. At this point you can reconfigure the disks as cache disks. This operation is only supported in the cached volume,tape and file gateway architectures.</p> <important> <p>If the cache disk you are resetting contains data that has not been uploaded to Amazon S3 yet, that data can be lost. After you reset cache disks, there will be no configured cache disks left in the gateway, so you must configure at least one new cache disk for your gateway to function properly.</p> </important>"]
     fn reset_cache(&self, input: &ResetCacheInput) -> Result<ResetCacheOutput, ResetCacheError> {
         let mut request = SignedRequest::new("POST", "storagegateway", self.region, "/");
 
@@ -8308,7 +8474,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Retrieves an archived virtual tape from the virtual tape shelf (VTS) to a gateway-VTL. Virtual tapes archived in the VTS are not associated with any gateway. However after a tape is retrieved, it is associated with a gateway, even though it is also listed in the VTS.</p> <p>Once a tape is successfully retrieved to a gateway, it cannot be retrieved again to another gateway. You must archive the tape again before you can retrieve it to another gateway.</p>"]
+    #[doc="<p>Retrieves an archived virtual tape from the virtual tape shelf (VTS) to a tape gateway. Virtual tapes archived in the VTS are not associated with any gateway. However after a tape is retrieved, it is associated with a gateway, even though it is also listed in the VTS, that is, archive. This operation is only supported in the tape gateway architecture.</p> <p>Once a tape is successfully retrieved to a gateway, it cannot be retrieved again to another gateway. You must archive the tape again before you can retrieve it to another gateway. This operation is only supported in the tape gateway architecture.</p>"]
     fn retrieve_tape_archive(&self,
                              input: &RetrieveTapeArchiveInput)
                              -> Result<RetrieveTapeArchiveOutput, RetrieveTapeArchiveError> {
@@ -8336,7 +8502,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Retrieves the recovery point for the specified virtual tape.</p> <p>A recovery point is a point in time view of a virtual tape at which all the data on the tape is consistent. If your gateway crashes, virtual tapes that have recovery points can be recovered to a new gateway.</p> <note> <p>The virtual tape can be retrieved to only one gateway. The retrieved tape is read-only. The virtual tape can be retrieved to only a gateway-VTL. There is no charge for retrieving recovery points.</p> </note>"]
+    #[doc="<p>Retrieves the recovery point for the specified virtual tape. This operation is only supported in the tape gateway architecture.</p> <p>A recovery point is a point in time view of a virtual tape at which all the data on the tape is consistent. If your gateway crashes, virtual tapes that have recovery points can be recovered to a new gateway.</p> <note> <p>The virtual tape can be retrieved to only one gateway. The retrieved tape is read-only. The virtual tape can be retrieved to only a tape gateway. There is no charge for retrieving recovery points.</p> </note>"]
     fn retrieve_tape_recovery_point
         (&self,
          input: &RetrieveTapeRecoveryPointInput)
@@ -8388,7 +8554,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Shuts down a gateway. To specify which gateway to shut down, use the Amazon Resource Name (ARN) of the gateway in the body of your request.</p> <p>The operation shuts down the gateway service component running in the storage gateway's virtual machine (VM) and not the VM.</p> <note> <p>If you want to shut down the VM, it is recommended that you first shut down the gateway component in the VM to avoid unpredictable conditions.</p> </note> <p>After the gateway is shutdown, you cannot call any other API except <a>StartGateway</a>, <a>DescribeGatewayInformation</a>, and <a>ListGateways</a>. For more information, see <a>ActivateGateway</a>. Your applications cannot read from or write to the gateway's storage volumes, and there are no snapshots taken.</p> <note> <p>When you make a shutdown request, you will get a <code>200 OK</code> success response immediately. However, it might take some time for the gateway to shut down. You can call the <a>DescribeGatewayInformation</a> API to check the status. For more information, see <a>ActivateGateway</a>.</p> </note> <p>If do not intend to use the gateway again, you must delete the gateway (using <a>DeleteGateway</a>) to no longer pay software charges associated with the gateway.</p>"]
+    #[doc="<p>Shuts down a gateway. To specify which gateway to shut down, use the Amazon Resource Name (ARN) of the gateway in the body of your request.</p> <p>The operation shuts down the gateway service component running in the gateway's virtual machine (VM) and not the host VM.</p> <note> <p>If you want to shut down the VM, it is recommended that you first shut down the gateway component in the VM to avoid unpredictable conditions.</p> </note> <p>After the gateway is shutdown, you cannot call any other API except <a>StartGateway</a>, <a>DescribeGatewayInformation</a>, and <a>ListGateways</a>. For more information, see <a>ActivateGateway</a>. Your applications cannot read from or write to the gateway's storage volumes, and there are no snapshots taken.</p> <note> <p>When you make a shutdown request, you will get a <code>200 OK</code> success response immediately. However, it might take some time for the gateway to shut down. You can call the <a>DescribeGatewayInformation</a> API to check the status. For more information, see <a>ActivateGateway</a>.</p> </note> <p>If do not intend to use the gateway again, you must delete the gateway (using <a>DeleteGateway</a>) to no longer pay software charges associated with the gateway.</p>"]
     fn shutdown_gateway(&self,
                         input: &ShutdownGatewayInput)
                         -> Result<ShutdownGatewayOutput, ShutdownGatewayError> {
@@ -8574,7 +8740,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Updates a file share. </p> <note> <p>To leave a file share field unchanged, set the corresponding input field to null.</p> </note>"]
+    #[doc="<p>Updates a file share. This operation is only supported in the file gateway architecture.</p> <note> <p>To leave a file share field unchanged, set the corresponding input field to null.</p> </note> <p>Updates the following file share setting:</p> <ul> <li> <p>Default storage class for your S3 bucket</p> </li> <li> <p>Metadata defaults for your S3 bucket</p> </li> <li> <p>Allowed NFS clients for your file share</p> </li> <li> <p>Squash settings</p> </li> <li> <p>Write status of your file share</p> </li> </ul> <note> <p>To leave a file share field unchanged, set the corresponding input field to null. This operation is only supported in file gateways.</p> </note>"]
     fn update_nfs_file_share(&self,
                              input: &UpdateNFSFileShareInput)
                              -> Result<UpdateNFSFileShareOutput, UpdateNFSFileShareError> {
@@ -8601,7 +8767,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Updates a snapshot schedule configured for a gateway volume.</p> <p>The default snapshot schedule for volume is once every 24 hours, starting at the creation time of the volume. You can use this API to change the snapshot schedule configured for the volume.</p> <p>In the request you must identify the gateway volume whose snapshot schedule you want to update, and the schedule information, including when you want the snapshot to begin on a day and the frequency (in hours) of snapshots.</p>"]
+    #[doc="<p>Updates a snapshot schedule configured for a gateway volume. This operation is only supported in the cached volume and stored volume gateway architectures.</p> <p>The default snapshot schedule for volume is once every 24 hours, starting at the creation time of the volume. You can use this API to change the snapshot schedule configured for the volume.</p> <p>In the request you must identify the gateway volume whose snapshot schedule you want to update, and the schedule information, including when you want the snapshot to begin on a day and the frequency (in hours) of snapshots.</p>"]
     fn update_snapshot_schedule
         (&self,
          input: &UpdateSnapshotScheduleInput)
@@ -8630,7 +8796,7 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
     }
 
 
-    #[doc="<p>Updates the type of medium changer in a gateway-VTL. When you activate a gateway-VTL, you select a medium changer type for the gateway-VTL. This operation enables you to select a different type of medium changer after a gateway-VTL is activated.</p>"]
+    #[doc="<p>Updates the type of medium changer in a tape gateway. When you activate a tape gateway, you select a medium changer type for the tape gateway. This operation enables you to select a different type of medium changer after a tape gateway is activated. This operation is only supported in the tape gateway architecture.</p>"]
     fn update_vtl_device_type(&self,
                               input: &UpdateVTLDeviceTypeInput)
                               -> Result<UpdateVTLDeviceTypeOutput, UpdateVTLDeviceTypeError> {

@@ -17250,7 +17250,7 @@ impl<P, D> S3 for S3Client<P, D>
         if let Some(ref request_payer) = input.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
-        params.put("uploadId", &input.upload_id.to_string());
+        params.put("uploadId", &input.upload_id);
 
 
         request.set_params(params);
@@ -17310,7 +17310,7 @@ impl<P, D> S3 for S3Client<P, D>
         if let Some(ref request_payer) = input.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
-        params.put("uploadId", &input.upload_id.to_string());
+        params.put("uploadId", &input.upload_id);
         let mut payload: Vec<u8>;
         if input.multipart_upload.is_some() {
             payload = CompletedMultipartUploadSerializer::serialize("CompletedMultipartUpload",
@@ -17899,7 +17899,7 @@ impl<P, D> S3 for S3Client<P, D>
         let mut request = SignedRequest::new("DELETE", "s3", self.region, &request_uri);
 
 
-        params.put("id", &input.id.to_string());
+        params.put("id", &input.id);
 
 
         request.set_params(params);
@@ -17971,7 +17971,7 @@ impl<P, D> S3 for S3Client<P, D>
         let mut request = SignedRequest::new("DELETE", "s3", self.region, &request_uri);
 
 
-        params.put("id", &input.id.to_string());
+        params.put("id", &input.id);
 
 
         request.set_params(params);
@@ -18042,7 +18042,7 @@ impl<P, D> S3 for S3Client<P, D>
         let mut request = SignedRequest::new("DELETE", "s3", self.region, &request_uri);
 
 
-        params.put("id", &input.id.to_string());
+        params.put("id", &input.id);
 
 
         request.set_params(params);
@@ -18231,7 +18231,7 @@ impl<P, D> S3 for S3Client<P, D>
         }
 
         if let Some(ref version_id) = input.version_id {
-            params.put("versionId", &version_id.to_string());
+            params.put("versionId", version_id);
         }
 
 
@@ -18296,7 +18296,7 @@ impl<P, D> S3 for S3Client<P, D>
 
 
         if let Some(ref version_id) = input.version_id {
-            params.put("versionId", &version_id.to_string());
+            params.put("versionId", version_id);
         }
 
 
@@ -18521,7 +18521,7 @@ impl<P, D> S3 for S3Client<P, D>
         let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
 
 
-        params.put("id", &input.id.to_string());
+        params.put("id", &input.id);
 
 
         request.set_params(params);
@@ -18619,7 +18619,7 @@ impl<P, D> S3 for S3Client<P, D>
         let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
 
 
-        params.put("id", &input.id.to_string());
+        params.put("id", &input.id);
 
 
         request.set_params(params);
@@ -18871,7 +18871,7 @@ impl<P, D> S3 for S3Client<P, D>
         let mut request = SignedRequest::new("GET", "s3", self.region, &request_uri);
 
 
-        params.put("id", &input.id.to_string());
+        params.put("id", &input.id);
 
 
         request.set_params(params);
@@ -19354,39 +19354,35 @@ impl<P, D> S3 for S3Client<P, D>
         }
 
         if let Some(ref part_number) = input.part_number {
-            params.put("partNumber", &part_number.to_string());
+            params.put("partNumber", part_number);
         }
 
         if let Some(ref response_cache_control) = input.response_cache_control {
-            params.put("response-cache-control",
-                       &response_cache_control.to_string());
+            params.put("response-cache-control", response_cache_control);
         }
 
         if let Some(ref response_content_disposition) = input.response_content_disposition {
-            params.put("response-content-disposition",
-                       &response_content_disposition.to_string());
+            params.put("response-content-disposition", response_content_disposition);
         }
 
         if let Some(ref response_content_encoding) = input.response_content_encoding {
-            params.put("response-content-encoding",
-                       &response_content_encoding.to_string());
+            params.put("response-content-encoding", response_content_encoding);
         }
 
         if let Some(ref response_content_language) = input.response_content_language {
-            params.put("response-content-language",
-                       &response_content_language.to_string());
+            params.put("response-content-language", response_content_language);
         }
 
         if let Some(ref response_content_type) = input.response_content_type {
-            params.put("response-content-type", &response_content_type.to_string());
+            params.put("response-content-type", response_content_type);
         }
 
         if let Some(ref response_expires) = input.response_expires {
-            params.put("response-expires", &response_expires.to_string());
+            params.put("response-expires", response_expires);
         }
 
         if let Some(ref version_id) = input.version_id {
-            params.put("versionId", &version_id.to_string());
+            params.put("versionId", version_id);
         }
 
 
@@ -19552,7 +19548,7 @@ impl<P, D> S3 for S3Client<P, D>
         }
 
         if let Some(ref version_id) = input.version_id {
-            params.put("versionId", &version_id.to_string());
+            params.put("versionId", version_id);
         }
 
 
@@ -19609,7 +19605,7 @@ impl<P, D> S3 for S3Client<P, D>
 
 
         if let Some(ref version_id) = input.version_id {
-            params.put("versionId", &version_id.to_string());
+            params.put("versionId", version_id);
         }
 
 
@@ -19783,11 +19779,11 @@ impl<P, D> S3 for S3Client<P, D>
         }
 
         if let Some(ref part_number) = input.part_number {
-            params.put("partNumber", &part_number.to_string());
+            params.put("partNumber", part_number);
         }
 
         if let Some(ref version_id) = input.version_id {
-            params.put("versionId", &version_id.to_string());
+            params.put("versionId", version_id);
         }
 
 
@@ -19953,7 +19949,7 @@ impl<P, D> S3 for S3Client<P, D>
 
 
         if let Some(ref continuation_token) = input.continuation_token {
-            params.put("continuation-token", &continuation_token.to_string());
+            params.put("continuation-token", continuation_token);
         }
 
 
@@ -20004,7 +20000,7 @@ impl<P, D> S3 for S3Client<P, D>
 
 
         if let Some(ref continuation_token) = input.continuation_token {
-            params.put("continuation-token", &continuation_token.to_string());
+            params.put("continuation-token", continuation_token);
         }
 
 
@@ -20055,7 +20051,7 @@ impl<P, D> S3 for S3Client<P, D>
 
 
         if let Some(ref continuation_token) = input.continuation_token {
-            params.put("continuation-token", &continuation_token.to_string());
+            params.put("continuation-token", continuation_token);
         }
 
 
@@ -20151,27 +20147,27 @@ impl<P, D> S3 for S3Client<P, D>
 
 
         if let Some(ref delimiter) = input.delimiter {
-            params.put("delimiter", &delimiter.to_string());
+            params.put("delimiter", delimiter);
         }
 
         if let Some(ref encoding_type) = input.encoding_type {
-            params.put("encoding-type", &encoding_type.to_string());
+            params.put("encoding-type", encoding_type);
         }
 
         if let Some(ref key_marker) = input.key_marker {
-            params.put("key-marker", &key_marker.to_string());
+            params.put("key-marker", key_marker);
         }
 
         if let Some(ref max_uploads) = input.max_uploads {
-            params.put("max-uploads", &max_uploads.to_string());
+            params.put("max-uploads", max_uploads);
         }
 
         if let Some(ref prefix) = input.prefix {
-            params.put("prefix", &prefix.to_string());
+            params.put("prefix", prefix);
         }
 
         if let Some(ref upload_id_marker) = input.upload_id_marker {
-            params.put("upload-id-marker", &upload_id_marker.to_string());
+            params.put("upload-id-marker", upload_id_marker);
         }
 
 
@@ -20226,27 +20222,27 @@ impl<P, D> S3 for S3Client<P, D>
 
 
         if let Some(ref delimiter) = input.delimiter {
-            params.put("delimiter", &delimiter.to_string());
+            params.put("delimiter", delimiter);
         }
 
         if let Some(ref encoding_type) = input.encoding_type {
-            params.put("encoding-type", &encoding_type.to_string());
+            params.put("encoding-type", encoding_type);
         }
 
         if let Some(ref key_marker) = input.key_marker {
-            params.put("key-marker", &key_marker.to_string());
+            params.put("key-marker", key_marker);
         }
 
         if let Some(ref max_keys) = input.max_keys {
-            params.put("max-keys", &max_keys.to_string());
+            params.put("max-keys", max_keys);
         }
 
         if let Some(ref prefix) = input.prefix {
-            params.put("prefix", &prefix.to_string());
+            params.put("prefix", prefix);
         }
 
         if let Some(ref version_id_marker) = input.version_id_marker {
-            params.put("version-id-marker", &version_id_marker.to_string());
+            params.put("version-id-marker", version_id_marker);
         }
 
 
@@ -20304,23 +20300,23 @@ impl<P, D> S3 for S3Client<P, D>
         }
 
         if let Some(ref delimiter) = input.delimiter {
-            params.put("delimiter", &delimiter.to_string());
+            params.put("delimiter", delimiter);
         }
 
         if let Some(ref encoding_type) = input.encoding_type {
-            params.put("encoding-type", &encoding_type.to_string());
+            params.put("encoding-type", encoding_type);
         }
 
         if let Some(ref marker) = input.marker {
-            params.put("marker", &marker.to_string());
+            params.put("marker", marker);
         }
 
         if let Some(ref max_keys) = input.max_keys {
-            params.put("max-keys", &max_keys.to_string());
+            params.put("max-keys", max_keys);
         }
 
         if let Some(ref prefix) = input.prefix {
-            params.put("prefix", &prefix.to_string());
+            params.put("prefix", prefix);
         }
 
 
@@ -20374,31 +20370,31 @@ impl<P, D> S3 for S3Client<P, D>
         }
 
         if let Some(ref continuation_token) = input.continuation_token {
-            params.put("continuation-token", &continuation_token.to_string());
+            params.put("continuation-token", continuation_token);
         }
 
         if let Some(ref delimiter) = input.delimiter {
-            params.put("delimiter", &delimiter.to_string());
+            params.put("delimiter", delimiter);
         }
 
         if let Some(ref encoding_type) = input.encoding_type {
-            params.put("encoding-type", &encoding_type.to_string());
+            params.put("encoding-type", encoding_type);
         }
 
         if let Some(ref fetch_owner) = input.fetch_owner {
-            params.put("fetch-owner", &fetch_owner.to_string());
+            params.put("fetch-owner", fetch_owner);
         }
 
         if let Some(ref max_keys) = input.max_keys {
-            params.put("max-keys", &max_keys.to_string());
+            params.put("max-keys", max_keys);
         }
 
         if let Some(ref prefix) = input.prefix {
-            params.put("prefix", &prefix.to_string());
+            params.put("prefix", prefix);
         }
 
         if let Some(ref start_after) = input.start_after {
-            params.put("start-after", &start_after.to_string());
+            params.put("start-after", start_after);
         }
 
 
@@ -20453,13 +20449,13 @@ impl<P, D> S3 for S3Client<P, D>
         }
 
         if let Some(ref max_parts) = input.max_parts {
-            params.put("max-parts", &max_parts.to_string());
+            params.put("max-parts", max_parts);
         }
 
         if let Some(ref part_number_marker) = input.part_number_marker {
-            params.put("part-number-marker", &part_number_marker.to_string());
+            params.put("part-number-marker", part_number_marker);
         }
-        params.put("uploadId", &input.upload_id.to_string());
+        params.put("uploadId", &input.upload_id);
 
 
         request.set_params(params);
@@ -20630,7 +20626,7 @@ impl<P, D> S3 for S3Client<P, D>
         let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
 
 
-        params.put("id", &input.id.to_string());
+        params.put("id", &input.id);
         let mut payload: Vec<u8>;
         payload = AnalyticsConfigurationSerializer::serialize("AnalyticsConfiguration",
                                                               &input.analytics_configuration)
@@ -20718,7 +20714,7 @@ impl<P, D> S3 for S3Client<P, D>
         let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
 
 
-        params.put("id", &input.id.to_string());
+        params.put("id", &input.id);
         let mut payload: Vec<u8>;
         payload = InventoryConfigurationSerializer::serialize("InventoryConfiguration",
                                                               &input.inventory_configuration)
@@ -20915,7 +20911,7 @@ impl<P, D> S3 for S3Client<P, D>
         let mut request = SignedRequest::new("PUT", "s3", self.region, &request_uri);
 
 
-        params.put("id", &input.id.to_string());
+        params.put("id", &input.id);
         let mut payload: Vec<u8>;
         payload = MetricsConfigurationSerializer::serialize("MetricsConfiguration",
                                                             &input.metrics_configuration)
@@ -21536,7 +21532,7 @@ impl<P, D> S3 for S3Client<P, D>
         }
 
         if let Some(ref version_id) = input.version_id {
-            params.put("versionId", &version_id.to_string());
+            params.put("versionId", version_id);
         }
         let mut payload: Vec<u8>;
         if input.access_control_policy.is_some() {
@@ -21608,7 +21604,7 @@ impl<P, D> S3 for S3Client<P, D>
         }
 
         if let Some(ref version_id) = input.version_id {
-            params.put("versionId", &version_id.to_string());
+            params.put("versionId", version_id);
         }
         let mut payload: Vec<u8>;
         payload = TaggingSerializer::serialize("Tagging", &input.tagging).into_bytes();
@@ -21673,7 +21669,7 @@ impl<P, D> S3 for S3Client<P, D>
         }
 
         if let Some(ref version_id) = input.version_id {
-            params.put("versionId", &version_id.to_string());
+            params.put("versionId", version_id);
         }
         let mut payload: Vec<u8>;
         if input.restore_request.is_some() {
@@ -21761,8 +21757,8 @@ impl<P, D> S3 for S3Client<P, D>
             request.add_header("x-amz-server-side-encryption-customer-key-MD5",
                                &sse_customer_key_md5.to_string());
         }
-        params.put("partNumber", &input.part_number.to_string());
-        params.put("uploadId", &input.upload_id.to_string());
+        params.put("partNumber", &input.part_number);
+        params.put("uploadId", &input.upload_id);
         let mut payload: Vec<u8>;
         payload = input.body.clone().unwrap();
 
@@ -21906,8 +21902,8 @@ impl<P, D> S3 for S3Client<P, D>
             request.add_header("x-amz-server-side-encryption-customer-key-MD5",
                                &sse_customer_key_md5.to_string());
         }
-        params.put("partNumber", &input.part_number.to_string());
-        params.put("uploadId", &input.upload_id.to_string());
+        params.put("partNumber", &input.part_number);
+        params.put("uploadId", &input.upload_id);
 
 
         request.set_params(params);

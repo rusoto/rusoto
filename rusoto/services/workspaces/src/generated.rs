@@ -1236,11 +1236,11 @@ impl Error for DescribeWorkspacesConnectionStatusError {
 /// Errors returned by ModifyWorkspaceProperties
 #[derive(Debug, PartialEq)]
 pub enum ModifyWorkspacePropertiesError {
-    ///
+    ///<p>The user is not authorized to access a resource.</p>
     AccessDenied(String),
     ///<p>One or more parameter values are not valid.</p>
     InvalidParameterValues(String),
-    ///<p>The specified WorkSpace has an invalid state for this operation.</p>
+    ///<p>The state of the WorkSpace is not valid for this operation.</p>
     InvalidResourceState(String),
     ///<p>The properties of this WorkSpace are currently being modified. Try again in a moment.</p>
     OperationInProgress(String),
@@ -1248,7 +1248,7 @@ pub enum ModifyWorkspacePropertiesError {
     ResourceNotFound(String),
     ///<p>The specified resource is not available.</p>
     ResourceUnavailable(String),
-    ///<p>The WorkSpace does not have the supported configuration for this operation. For more information, see the <a href="http://docs.aws.amazon.com/workspaces/latest/adminguide">Amazon WorkSpaces Administration Guide</a>. </p>
+    ///<p>The configuration of this WorkSpace is not supported for this operation. For more information, see the <a href="http://docs.aws.amazon.com/workspaces/latest/adminguide/">Amazon WorkSpaces Administration Guide</a>. </p>
     UnsupportedWorkspaceConfiguration(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1727,7 +1727,7 @@ pub trait Workspaces {
                    DescribeWorkspacesConnectionStatusError>;
 
 
-    #[doc="<p>Modifies the WorkSpace properties, including the RunningMode and AutoStop time.</p>"]
+    #[doc="<p>Modifies the WorkSpace properties, including the running mode and AutoStop time.</p>"]
     fn modify_workspace_properties
         (&self,
          input: &ModifyWorkspacePropertiesRequest)
@@ -1746,13 +1746,13 @@ pub trait Workspaces {
                           -> Result<RebuildWorkspacesResult, RebuildWorkspacesError>;
 
 
-    #[doc="<p>Starts the specified WorkSpaces. The API only works with WorkSpaces that have RunningMode configured as AutoStop and the State set to “STOPPED.”</p>"]
+    #[doc="<p>Starts the specified WorkSpaces. The WorkSpaces must have a running mode of AutoStop and a state of STOPPED.</p>"]
     fn start_workspaces(&self,
                         input: &StartWorkspacesRequest)
                         -> Result<StartWorkspacesResult, StartWorkspacesError>;
 
 
-    #[doc="<p> Stops the specified WorkSpaces. The API only works with WorkSpaces that have RunningMode configured as AutoStop and the State set to AVAILABLE, IMPAIRED, UNHEALTHY, or ERROR.</p>"]
+    #[doc="<p> Stops the specified WorkSpaces. The WorkSpaces must have a running mode of AutoStop and a state of AVAILABLE, IMPAIRED, UNHEALTHY, or ERROR.</p>"]
     fn stop_workspaces(&self,
                        input: &StopWorkspacesRequest)
                        -> Result<StopWorkspacesResult, StopWorkspacesError>;
@@ -1992,7 +1992,7 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
     }
 
 
-    #[doc="<p>Modifies the WorkSpace properties, including the RunningMode and AutoStop time.</p>"]
+    #[doc="<p>Modifies the WorkSpace properties, including the running mode and AutoStop time.</p>"]
     fn modify_workspace_properties
         (&self,
          input: &ModifyWorkspacePropertiesRequest)
@@ -2072,7 +2072,7 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
     }
 
 
-    #[doc="<p>Starts the specified WorkSpaces. The API only works with WorkSpaces that have RunningMode configured as AutoStop and the State set to “STOPPED.”</p>"]
+    #[doc="<p>Starts the specified WorkSpaces. The WorkSpaces must have a running mode of AutoStop and a state of STOPPED.</p>"]
     fn start_workspaces(&self,
                         input: &StartWorkspacesRequest)
                         -> Result<StartWorkspacesResult, StartWorkspacesError> {
@@ -2099,7 +2099,7 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
     }
 
 
-    #[doc="<p> Stops the specified WorkSpaces. The API only works with WorkSpaces that have RunningMode configured as AutoStop and the State set to AVAILABLE, IMPAIRED, UNHEALTHY, or ERROR.</p>"]
+    #[doc="<p> Stops the specified WorkSpaces. The WorkSpaces must have a running mode of AutoStop and a state of AVAILABLE, IMPAIRED, UNHEALTHY, or ERROR.</p>"]
     fn stop_workspaces(&self,
                        input: &StopWorkspacesRequest)
                        -> Result<StopWorkspacesResult, StopWorkspacesError> {

@@ -401,6 +401,8 @@ impl AccountAttributeValueListDeserializer {
 #[doc="<p>Describes a running instance in a Spot fleet.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct ActiveInstance {
+    #[doc="<p>The health status of the instance. If the status of either the instance status check or the system status check is <code>impaired</code>, the health status of the instance is <code>unhealthy</code>. Otherwise, the health status is <code>healthy</code>.</p>"]
+    pub instance_health: Option<InstanceHealthStatus>,
     #[doc="<p>The ID of the instance.</p>"]
     pub instance_id: Option<String>,
     #[doc="<p>The instance type.</p>"]
@@ -431,6 +433,11 @@ impl ActiveInstanceDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     match &name[..] {
+                        "instanceHealth" => {
+                            obj.instance_health =
+                                Some(try!(InstanceHealthStatusDeserializer::deserialize("instanceHealth",
+                                                                                        stack)));
+                        }
                         "instanceId" => {
                             obj.instance_id = Some(try!(StringDeserializer::deserialize("instanceId",
                                                                                         stack)));
@@ -1162,6 +1169,82 @@ impl AssociateDhcpOptionsRequestSerializer {
     }
 }
 
+#[derive(Default,Debug,Clone)]
+pub struct AssociateIamInstanceProfileRequest {
+    #[doc="<p>The IAM instance profile.</p>"]
+    pub iam_instance_profile: IamInstanceProfileSpecification,
+    #[doc="<p>The ID of the instance.</p>"]
+    pub instance_id: String,
+}
+
+
+/// Serialize `AssociateIamInstanceProfileRequest` contents to a `SignedRequest`.
+struct AssociateIamInstanceProfileRequestSerializer;
+impl AssociateIamInstanceProfileRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &AssociateIamInstanceProfileRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        IamInstanceProfileSpecificationSerializer::serialize(params,
+                                                             &format!("{}{}",
+                                                                     prefix,
+                                                                     "IamInstanceProfile"),
+                                                             &obj.iam_instance_profile);
+        params.put(&format!("{}{}", prefix, "InstanceId"), &obj.instance_id);
+
+    }
+}
+
+#[derive(Default,Debug,Clone)]
+pub struct AssociateIamInstanceProfileResult {
+    #[doc="<p>Information about the IAM instance profile association.</p>"]
+    pub iam_instance_profile_association: Option<IamInstanceProfileAssociation>,
+}
+
+struct AssociateIamInstanceProfileResultDeserializer;
+impl AssociateIamInstanceProfileResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<AssociateIamInstanceProfileResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = AssociateIamInstanceProfileResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "iamInstanceProfileAssociation" => {
+                            obj.iam_instance_profile_association = Some(try!(IamInstanceProfileAssociationDeserializer::deserialize("iamInstanceProfileAssociation", stack)));
+                        }
+                        _ => skip_tree(stack),
+                    }
+                }
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
 #[doc="<p>Contains the parameters for AssociateRouteTable.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct AssociateRouteTableRequest {
@@ -1400,6 +1483,19 @@ impl AssociateVpcCidrBlockResultDeserializer {
 
     }
 }
+pub type AssociationIdList = Vec<String>;
+
+/// Serialize `AssociationIdList` contents to a `SignedRequest`.
+struct AssociationIdListSerializer;
+impl AssociationIdListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &AssociationIdList) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
+}
+
 #[doc="<p>Contains the parameters for AttachClassicLinkVpc.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct AttachClassicLinkVpcRequest {
@@ -2343,6 +2439,19 @@ impl BatchStateDeserializer {
 
     }
 }
+pub type BillingProductList = Vec<String>;
+
+/// Serialize `BillingProductList` contents to a `SignedRequest`.
+struct BillingProductListSerializer;
+impl BillingProductListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &BillingProductList) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
+}
+
 pub type Blob = Vec<u8>;
 struct BlobDeserializer;
 impl BlobDeserializer {
@@ -4737,6 +4846,111 @@ impl CreateFlowLogsResultDeserializer {
 
     }
 }
+#[derive(Default,Debug,Clone)]
+pub struct CreateFpgaImageRequest {
+    #[doc="<p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html\">Ensuring Idempotency</a>.</p>"]
+    pub client_token: Option<String>,
+    #[doc="<p>A description for the AFI.</p>"]
+    pub description: Option<String>,
+    #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    pub dry_run: Option<Boolean>,
+    #[doc="<p>The location of the encrypted design checkpoint in Amazon S3. The input must be a tarball.</p>"]
+    pub input_storage_location: StorageLocation,
+    #[doc="<p>The location in Amazon S3 for the output logs.</p>"]
+    pub logs_storage_location: Option<StorageLocation>,
+    #[doc="<p>A name for the AFI.</p>"]
+    pub name: Option<String>,
+}
+
+
+/// Serialize `CreateFpgaImageRequest` contents to a `SignedRequest`.
+struct CreateFpgaImageRequestSerializer;
+impl CreateFpgaImageRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateFpgaImageRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.client_token {
+            params.put(&format!("{}{}", prefix, "ClientToken"), &field_value);
+        }
+        if let Some(ref field_value) = obj.description {
+            params.put(&format!("{}{}", prefix, "Description"), &field_value);
+        }
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+        }
+        StorageLocationSerializer::serialize(params,
+                                             &format!("{}{}", prefix, "InputStorageLocation"),
+                                             &obj.input_storage_location);
+        if let Some(ref field_value) = obj.logs_storage_location {
+            StorageLocationSerializer::serialize(params,
+                                                 &format!("{}{}", prefix, "LogsStorageLocation"),
+                                                 field_value);
+        }
+        if let Some(ref field_value) = obj.name {
+            params.put(&format!("{}{}", prefix, "Name"), &field_value);
+        }
+
+    }
+}
+
+#[derive(Default,Debug,Clone)]
+pub struct CreateFpgaImageResult {
+    #[doc="<p>The global FPGA image identifier (AGFI ID).</p>"]
+    pub fpga_image_global_id: Option<String>,
+    #[doc="<p>The FPGA image identifier (AFI ID).</p>"]
+    pub fpga_image_id: Option<String>,
+}
+
+struct CreateFpgaImageResultDeserializer;
+impl CreateFpgaImageResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<CreateFpgaImageResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = CreateFpgaImageResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "fpgaImageGlobalId" => {
+                            obj.fpga_image_global_id =
+                                Some(try!(StringDeserializer::deserialize("fpgaImageGlobalId",
+                                                                          stack)));
+                        }
+                        "fpgaImageId" => {
+                            obj.fpga_image_id = Some(try!(StringDeserializer::deserialize("fpgaImageId",
+                                                                                          stack)));
+                        }
+                        _ => skip_tree(stack),
+                    }
+                }
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
 #[doc="<p>Contains the parameters for CreateImage.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct CreateImageRequest {
@@ -6193,6 +6407,8 @@ pub struct CreateVolumeRequest {
     pub size: Option<Integer>,
     #[doc="<p>The snapshot from which to create the volume.</p>"]
     pub snapshot_id: Option<String>,
+    #[doc="<p>The tags to apply to the volume during creation.</p>"]
+    pub tag_specifications: Option<TagSpecificationList>,
     #[doc="<p>The volume type. This can be <code>gp2</code> for General Purpose SSD, <code>io1</code> for Provisioned IOPS SSD, <code>st1</code> for Throughput Optimized HDD, <code>sc1</code> for Cold HDD, or <code>standard</code> for Magnetic volumes.</p> <p>Default: <code>standard</code> </p>"]
     pub volume_type: Option<VolumeType>,
 }
@@ -6227,6 +6443,11 @@ impl CreateVolumeRequestSerializer {
         }
         if let Some(ref field_value) = obj.snapshot_id {
             params.put(&format!("{}{}", prefix, "SnapshotId"), &field_value);
+        }
+        if let Some(ref field_value) = obj.tag_specifications {
+            TagSpecificationListSerializer::serialize(params,
+                                                      &format!("{}{}", prefix, "TagSpecification"),
+                                                      field_value);
         }
         if let Some(ref field_value) = obj.volume_type {
             params.put(&format!("{}{}", prefix, "VolumeType"), &field_value);
@@ -8472,7 +8693,7 @@ pub struct DescribeCustomerGatewaysRequest {
     pub customer_gateway_ids: Option<CustomerGatewayIdStringList>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
     pub dry_run: Option<Boolean>,
-    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>bgp-asn</code> - The customer gateway's Border Gateway Protocol (BGP) Autonomous System Number (ASN).</p> </li> <li> <p> <code>customer-gateway-id</code> - The ID of the customer gateway.</p> </li> <li> <p> <code>ip-address</code> - The IP address of the customer gateway's Internet-routable external interface.</p> </li> <li> <p> <code>state</code> - The state of the customer gateway (<code>pending</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>).</p> </li> <li> <p> <code>type</code> - The type of customer gateway. Currently, the only supported type is <code>ipsec.1</code>.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> </ul>"]
+    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>bgp-asn</code> - The customer gateway's Border Gateway Protocol (BGP) Autonomous System Number (ASN).</p> </li> <li> <p> <code>customer-gateway-id</code> - The ID of the customer gateway.</p> </li> <li> <p> <code>ip-address</code> - The IP address of the customer gateway's Internet-routable external interface.</p> </li> <li> <p> <code>state</code> - The state of the customer gateway (<code>pending</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>).</p> </li> <li> <p> <code>type</code> - The type of customer gateway. Currently, the only supported type is <code>ipsec.1</code>.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> </ul>"]
     pub filters: Option<FilterList>,
 }
 
@@ -8562,7 +8783,7 @@ pub struct DescribeDhcpOptionsRequest {
     pub dhcp_options_ids: Option<DhcpOptionsIdStringList>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
     pub dry_run: Option<Boolean>,
-    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>dhcp-options-id</code> - The ID of a set of DHCP options.</p> </li> <li> <p> <code>key</code> - The key for one of the options (for example, <code>domain-name</code>).</p> </li> <li> <p> <code>value</code> - The value for one of the options.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> </ul>"]
+    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>dhcp-options-id</code> - The ID of a set of DHCP options.</p> </li> <li> <p> <code>key</code> - The key for one of the options (for example, <code>domain-name</code>).</p> </li> <li> <p> <code>value</code> - The value for one of the options.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> </ul>"]
     pub filters: Option<FilterList>,
 }
 
@@ -8919,7 +9140,7 @@ impl DescribeFlowLogsResultDeserializer {
 }
 #[derive(Default,Debug,Clone)]
 pub struct DescribeHostReservationOfferingsRequest {
-    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>instance-family</code> - The instance family of the offering (e.g., <code>m4</code>).</p> </li> <li> <p> <code>payment-option</code> - The payment option (<code>No Upfront</code> | <code>Partial Upfront</code> | <code>All Upfront</code>).</p> </li> </ul>"]
+    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>instance-family</code> - The instance family of the offering (e.g., <code>m4</code>).</p> </li> <li> <p> <code>payment-option</code> - The payment option (<code>NoUpfront</code> | <code>PartialUpfront</code> | <code>AllUpfront</code>).</p> </li> </ul>"]
     pub filter: Option<FilterList>,
     #[doc="<p>This is the maximum duration of the reservation you'd like to purchase, specified in seconds. Reservations are available in one-year and three-year terms. The number of seconds specified must be the number of seconds in a year (365x24x60x60) times one of the supported durations (1 or 3). For example, specify 94608000 for three years.</p>"]
     pub max_duration: Option<Integer>,
@@ -9028,7 +9249,7 @@ impl DescribeHostReservationOfferingsResultDeserializer {
 }
 #[derive(Default,Debug,Clone)]
 pub struct DescribeHostReservationsRequest {
-    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>instance-family</code> - The instance family (e.g., <code>m4</code>).</p> </li> <li> <p> <code>payment-option</code> - The payment option (<code>No Upfront</code> | <code>Partial Upfront</code> | <code>All Upfront</code>).</p> </li> <li> <p> <code>state</code> - The state of the reservation (<code>payment-pending</code> | <code>payment-failed</code> | <code>active</code> | <code>retired</code>).</p> </li> </ul>"]
+    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>instance-family</code> - The instance family (e.g., <code>m4</code>).</p> </li> <li> <p> <code>payment-option</code> - The payment option (<code>NoUpfront</code> | <code>PartialUpfront</code> | <code>AllUpfront</code>).</p> </li> <li> <p> <code>state</code> - The state of the reservation (<code>payment-pending</code> | <code>payment-failed</code> | <code>active</code> | <code>retired</code>).</p> </li> </ul>"]
     pub filter: Option<FilterList>,
     #[doc="<p>One or more host reservation IDs.</p>"]
     pub host_reservation_id_set: Option<HostReservationIdSet>,
@@ -9208,6 +9429,105 @@ impl DescribeHostsResultDeserializer {
                         "nextToken" => {
                             obj.next_token = Some(try!(StringDeserializer::deserialize("nextToken",
                                                                                        stack)));
+                        }
+                        _ => skip_tree(stack),
+                    }
+                }
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
+#[derive(Default,Debug,Clone)]
+pub struct DescribeIamInstanceProfileAssociationsRequest {
+    #[doc="<p>One or more IAM instance profile associations.</p>"]
+    pub association_ids: Option<AssociationIdList>,
+    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>instance-id</code> - The ID of the instance.</p> </li> <li> <p> <code>state</code> - The state of the association (<code>associating</code> | <code>associated</code> | <code>disassociating</code> | <code>disassociated</code>).</p> </li> </ul>"]
+    pub filters: Option<FilterList>,
+    #[doc="<p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>"]
+    pub max_results: Option<MaxResults>,
+    #[doc="<p>The token to request the next page of results.</p>"]
+    pub next_token: Option<NextToken>,
+}
+
+
+/// Serialize `DescribeIamInstanceProfileAssociationsRequest` contents to a `SignedRequest`.
+struct DescribeIamInstanceProfileAssociationsRequestSerializer;
+impl DescribeIamInstanceProfileAssociationsRequestSerializer {
+    fn serialize(params: &mut Params,
+                 name: &str,
+                 obj: &DescribeIamInstanceProfileAssociationsRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.association_ids {
+            AssociationIdListSerializer::serialize(params,
+                                                   &format!("{}{}", prefix, "AssociationId"),
+                                                   field_value);
+        }
+        if let Some(ref field_value) = obj.filters {
+            FilterListSerializer::serialize(params,
+                                            &format!("{}{}", prefix, "Filter"),
+                                            field_value);
+        }
+        if let Some(ref field_value) = obj.max_results {
+            params.put(&format!("{}{}", prefix, "MaxResults"),
+                       &field_value.to_string());
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+        }
+
+    }
+}
+
+#[derive(Default,Debug,Clone)]
+pub struct DescribeIamInstanceProfileAssociationsResult {
+    #[doc="<p>Information about one or more IAM instance profile associations.</p>"]
+    pub iam_instance_profile_associations: Option<IamInstanceProfileAssociationSet>,
+    #[doc="<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
+    pub next_token: Option<NextToken>,
+}
+
+struct DescribeIamInstanceProfileAssociationsResultDeserializer;
+impl DescribeIamInstanceProfileAssociationsResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<DescribeIamInstanceProfileAssociationsResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = DescribeIamInstanceProfileAssociationsResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "iamInstanceProfileAssociationSet" => {
+                            obj.iam_instance_profile_associations = Some(try!(IamInstanceProfileAssociationSetDeserializer::deserialize("iamInstanceProfileAssociationSet", stack)));
+                        }
+                        "nextToken" => {
+                            obj.next_token = Some(try!(NextTokenDeserializer::deserialize("nextToken",
+                                                                                          stack)));
                         }
                         _ => skip_tree(stack),
                     }
@@ -9411,7 +9731,7 @@ pub struct DescribeImagesRequest {
     pub dry_run: Option<Boolean>,
     #[doc="<p>Scopes the images by users with explicit launch permissions. Specify an AWS account ID, <code>self</code> (the sender of the request), or <code>all</code> (public AMIs).</p>"]
     pub executable_users: Option<ExecutableByStringList>,
-    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>architecture</code> - The image architecture (<code>i386</code> | <code>x86_64</code>).</p> </li> <li> <p> <code>block-device-mapping.delete-on-termination</code> - A Boolean value that indicates whether the Amazon EBS volume is deleted on instance termination.</p> </li> <li> <p> <code>block-device-mapping.device-name</code> - The device name for the EBS volume (for example, <code>/dev/sdh</code>).</p> </li> <li> <p> <code>block-device-mapping.snapshot-id</code> - The ID of the snapshot used for the EBS volume.</p> </li> <li> <p> <code>block-device-mapping.volume-size</code> - The volume size of the EBS volume, in GiB.</p> </li> <li> <p> <code>block-device-mapping.volume-type</code> - The volume type of the EBS volume (<code>gp2</code> | <code>io1</code> | <code>st1 </code>| <code>sc1</code> | <code>standard</code>).</p> </li> <li> <p> <code>description</code> - The description of the image (provided during image creation).</p> </li> <li> <p> <code>ena-support</code> - A Boolean that indicates whether enhanced networking with ENA is enabled.</p> </li> <li> <p> <code>hypervisor</code> - The hypervisor type (<code>ovm</code> | <code>xen</code>).</p> </li> <li> <p> <code>image-id</code> - The ID of the image.</p> </li> <li> <p> <code>image-type</code> - The image type (<code>machine</code> | <code>kernel</code> | <code>ramdisk</code>).</p> </li> <li> <p> <code>is-public</code> - A Boolean that indicates whether the image is public.</p> </li> <li> <p> <code>kernel-id</code> - The kernel ID.</p> </li> <li> <p> <code>manifest-location</code> - The location of the image manifest.</p> </li> <li> <p> <code>name</code> - The name of the AMI (provided during image creation).</p> </li> <li> <p> <code>owner-alias</code> - String value from an Amazon-maintained list (<code>amazon</code> | <code>aws-marketplace</code> | <code>microsoft</code>) of snapshot owners. Not to be confused with the user-configured AWS account alias, which is set from the IAM console.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the image owner.</p> </li> <li> <p> <code>platform</code> - The platform. To only list Windows-based AMIs, use <code>windows</code>.</p> </li> <li> <p> <code>product-code</code> - The product code.</p> </li> <li> <p> <code>product-code.type</code> - The type of the product code (<code>devpay</code> | <code>marketplace</code>).</p> </li> <li> <p> <code>ramdisk-id</code> - The RAM disk ID.</p> </li> <li> <p> <code>root-device-name</code> - The name of the root device volume (for example, <code>/dev/sda1</code>).</p> </li> <li> <p> <code>root-device-type</code> - The type of the root device volume (<code>ebs</code> | <code>instance-store</code>).</p> </li> <li> <p> <code>state</code> - The state of the image (<code>available</code> | <code>pending</code> | <code>failed</code>).</p> </li> <li> <p> <code>state-reason-code</code> - The reason code for the state change.</p> </li> <li> <p> <code>state-reason-message</code> - The message for the state change.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the tag-value filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>virtualization-type</code> - The virtualization type (<code>paravirtual</code> | <code>hvm</code>).</p> </li> </ul>"]
+    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>architecture</code> - The image architecture (<code>i386</code> | <code>x86_64</code>).</p> </li> <li> <p> <code>block-device-mapping.delete-on-termination</code> - A Boolean value that indicates whether the Amazon EBS volume is deleted on instance termination.</p> </li> <li> <p> <code>block-device-mapping.device-name</code> - The device name for the EBS volume (for example, <code>/dev/sdh</code>).</p> </li> <li> <p> <code>block-device-mapping.snapshot-id</code> - The ID of the snapshot used for the EBS volume.</p> </li> <li> <p> <code>block-device-mapping.volume-size</code> - The volume size of the EBS volume, in GiB.</p> </li> <li> <p> <code>block-device-mapping.volume-type</code> - The volume type of the EBS volume (<code>gp2</code> | <code>io1</code> | <code>st1 </code>| <code>sc1</code> | <code>standard</code>).</p> </li> <li> <p> <code>description</code> - The description of the image (provided during image creation).</p> </li> <li> <p> <code>ena-support</code> - A Boolean that indicates whether enhanced networking with ENA is enabled.</p> </li> <li> <p> <code>hypervisor</code> - The hypervisor type (<code>ovm</code> | <code>xen</code>).</p> </li> <li> <p> <code>image-id</code> - The ID of the image.</p> </li> <li> <p> <code>image-type</code> - The image type (<code>machine</code> | <code>kernel</code> | <code>ramdisk</code>).</p> </li> <li> <p> <code>is-public</code> - A Boolean that indicates whether the image is public.</p> </li> <li> <p> <code>kernel-id</code> - The kernel ID.</p> </li> <li> <p> <code>manifest-location</code> - The location of the image manifest.</p> </li> <li> <p> <code>name</code> - The name of the AMI (provided during image creation).</p> </li> <li> <p> <code>owner-alias</code> - String value from an Amazon-maintained list (<code>amazon</code> | <code>aws-marketplace</code> | <code>microsoft</code>) of snapshot owners. Not to be confused with the user-configured AWS account alias, which is set from the IAM console.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the image owner.</p> </li> <li> <p> <code>platform</code> - The platform. To only list Windows-based AMIs, use <code>windows</code>.</p> </li> <li> <p> <code>product-code</code> - The product code.</p> </li> <li> <p> <code>product-code.type</code> - The type of the product code (<code>devpay</code> | <code>marketplace</code>).</p> </li> <li> <p> <code>ramdisk-id</code> - The RAM disk ID.</p> </li> <li> <p> <code>root-device-name</code> - The name of the root device volume (for example, <code>/dev/sda1</code>).</p> </li> <li> <p> <code>root-device-type</code> - The type of the root device volume (<code>ebs</code> | <code>instance-store</code>).</p> </li> <li> <p> <code>state</code> - The state of the image (<code>available</code> | <code>pending</code> | <code>failed</code>).</p> </li> <li> <p> <code>state-reason-code</code> - The reason code for the state change.</p> </li> <li> <p> <code>state-reason-message</code> - The message for the state change.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the tag-value filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>virtualization-type</code> - The virtualization type (<code>paravirtual</code> | <code>hvm</code>).</p> </li> </ul>"]
     pub filters: Option<FilterList>,
     #[doc="<p>One or more image IDs.</p> <p>Default: Describes all images available to you.</p>"]
     pub image_ids: Option<ImageIdStringList>,
@@ -9862,7 +10182,7 @@ impl DescribeInstanceStatusResultDeserializer {
 pub struct DescribeInstancesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
     pub dry_run: Option<Boolean>,
-    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>affinity</code> - The affinity setting for an instance running on a Dedicated Host (<code>default</code> | <code>host</code>).</p> </li> <li> <p> <code>architecture</code> - The instance architecture (<code>i386</code> | <code>x86_64</code>).</p> </li> <li> <p> <code>association.public-ip</code> - The address of the Elastic IP address (IPv4) bound to the network interface.</p> </li> <li> <p> <code>association.ip-owner-id</code> - The owner of the Elastic IP address (IPv4) associated with the network interface.</p> </li> <li> <p> <code>association.allocation-id</code> - The allocation ID returned when you allocated the Elastic IP address (IPv4) for your network interface.</p> </li> <li> <p> <code>association.association-id</code> - The association ID returned when the network interface was associated with an IPv4 address.</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone of the instance.</p> </li> <li> <p> <code>block-device-mapping.attach-time</code> - The attach time for an EBS volume mapped to the instance, for example, <code>2010-09-15T17:15:20.000Z</code>.</p> </li> <li> <p> <code>block-device-mapping.delete-on-termination</code> - A Boolean that indicates whether the EBS volume is deleted on instance termination.</p> </li> <li> <p> <code>block-device-mapping.device-name</code> - The device name for the EBS volume (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p> </li> <li> <p> <code>block-device-mapping.status</code> - The status for the EBS volume (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>block-device-mapping.volume-id</code> - The volume ID of the EBS volume.</p> </li> <li> <p> <code>client-token</code> - The idempotency token you provided when you launched the instance.</p> </li> <li> <p> <code>dns-name</code> - The public DNS name of the instance.</p> </li> <li> <p> <code>group-id</code> - The ID of the security group for the instance. EC2-Classic only.</p> </li> <li> <p> <code>group-name</code> - The name of the security group for the instance. EC2-Classic only.</p> </li> <li> <p> <code>host-id</code> - The ID of the Dedicated Host on which the instance is running, if applicable.</p> </li> <li> <p> <code>hypervisor</code> - The hypervisor type of the instance (<code>ovm</code> | <code>xen</code>).</p> </li> <li> <p> <code>iam-instance-profile.arn</code> - The instance profile associated with the instance. Specified as an ARN.</p> </li> <li> <p> <code>image-id</code> - The ID of the image used to launch the instance.</p> </li> <li> <p> <code>instance-id</code> - The ID of the instance.</p> </li> <li> <p> <code>instance-lifecycle</code> - Indicates whether this is a Spot Instance or a Scheduled Instance (<code>spot</code> | <code>scheduled</code>).</p> </li> <li> <p> <code>instance-state-code</code> - The state of the instance, as a 16-bit unsigned integer. The high byte is an opaque internal value and should be ignored. The low byte is set based on the state represented. The valid values are: 0 (pending), 16 (running), 32 (shutting-down), 48 (terminated), 64 (stopping), and 80 (stopped).</p> </li> <li> <p> <code>instance-state-name</code> - The state of the instance (<code>pending</code> | <code>running</code> | <code>shutting-down</code> | <code>terminated</code> | <code>stopping</code> | <code>stopped</code>).</p> </li> <li> <p> <code>instance-type</code> - The type of instance (for example, <code>t2.micro</code>).</p> </li> <li> <p> <code>instance.group-id</code> - The ID of the security group for the instance. </p> </li> <li> <p> <code>instance.group-name</code> - The name of the security group for the instance. </p> </li> <li> <p> <code>ip-address</code> - The public IPv4 address of the instance.</p> </li> <li> <p> <code>kernel-id</code> - The kernel ID.</p> </li> <li> <p> <code>key-name</code> - The name of the key pair used when the instance was launched.</p> </li> <li> <p> <code>launch-index</code> - When launching multiple instances, this is the index for the instance in the launch group (for example, 0, 1, 2, and so on). </p> </li> <li> <p> <code>launch-time</code> - The time when the instance was launched.</p> </li> <li> <p> <code>monitoring-state</code> - Indicates whether detailed monitoring is enabled (<code>disabled</code> | <code>enabled</code>).</p> </li> <li> <p> <code>network-interface.addresses.private-ip-address</code> - The private IPv4 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.addresses.primary</code> - Specifies whether the IPv4 address of the network interface is the primary private IPv4 address.</p> </li> <li> <p> <code>network-interface.addresses.association.public-ip</code> - The ID of the association of an Elastic IP address (IPv4) with a network interface.</p> </li> <li> <p> <code>network-interface.addresses.association.ip-owner-id</code> - The owner ID of the private IPv4 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.attachment.attachment-id</code> - The ID of the interface attachment.</p> </li> <li> <p> <code>network-interface.attachment.instance-id</code> - The ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.instance-owner-id</code> - The owner ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.device-index</code> - The device index to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.status</code> - The status of the attachment (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>network-interface.attachment.attach-time</code> - The time that the network interface was attached to an instance.</p> </li> <li> <p> <code>network-interface.attachment.delete-on-termination</code> - Specifies whether the attachment is deleted when an instance is terminated.</p> </li> <li> <p> <code>network-interface.availability-zone</code> - The Availability Zone for the network interface.</p> </li> <li> <p> <code>network-interface.description</code> - The description of the network interface.</p> </li> <li> <p> <code>network-interface.group-id</code> - The ID of a security group associated with the network interface.</p> </li> <li> <p> <code>network-interface.group-name</code> - The name of a security group associated with the network interface.</p> </li> <li> <p> <code>network-interface.ipv6-addresses.ipv6-address</code> - The IPv6 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.mac-address</code> - The MAC address of the network interface.</p> </li> <li> <p> <code>network-interface.network-interface-id</code> - The ID of the network interface.</p> </li> <li> <p> <code>network-interface.owner-id</code> - The ID of the owner of the network interface.</p> </li> <li> <p> <code>network-interface.private-dns-name</code> - The private DNS name of the network interface.</p> </li> <li> <p> <code>network-interface.requester-id</code> - The requester ID for the network interface.</p> </li> <li> <p> <code>network-interface.requester-managed</code> - Indicates whether the network interface is being managed by AWS.</p> </li> <li> <p> <code>network-interface.status</code> - The status of the network interface (<code>available</code>) | <code>in-use</code>).</p> </li> <li> <p> <code>network-interface.source-dest-check</code> - Whether the network interface performs source/destination checking. A value of <code>true</code> means checking is enabled, and <code>false</code> means checking is disabled. The value must be <code>false</code> for the network interface to perform network address translation (NAT) in your VPC.</p> </li> <li> <p> <code>network-interface.subnet-id</code> - The ID of the subnet for the network interface.</p> </li> <li> <p> <code>network-interface.vpc-id</code> - The ID of the VPC for the network interface.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the instance owner.</p> </li> <li> <p> <code>placement-group-name</code> - The name of the placement group for the instance.</p> </li> <li> <p> <code>platform</code> - The platform. Use <code>windows</code> if you have Windows instances; otherwise, leave blank.</p> </li> <li> <p> <code>private-dns-name</code> - The private IPv4 DNS name of the instance.</p> </li> <li> <p> <code>private-ip-address</code> - The private IPv4 address of the instance.</p> </li> <li> <p> <code>product-code</code> - The product code associated with the AMI used to launch the instance.</p> </li> <li> <p> <code>product-code.type</code> - The type of product code (<code>devpay</code> | <code>marketplace</code>).</p> </li> <li> <p> <code>ramdisk-id</code> - The RAM disk ID.</p> </li> <li> <p> <code>reason</code> - The reason for the current state of the instance (for example, shows \"User Initiated [date]\" when you stop or terminate the instance). Similar to the state-reason-code filter.</p> </li> <li> <p> <code>requester-id</code> - The ID of the entity that launched the instance on your behalf (for example, AWS Management Console, Auto Scaling, and so on).</p> </li> <li> <p> <code>reservation-id</code> - The ID of the instance's reservation. A reservation ID is created any time you launch an instance. A reservation ID has a one-to-one relationship with an instance launch request, but can be associated with more than one instance if you launch multiple instances using the same launch request. For example, if you launch one instance, you'll get one reservation ID. If you launch ten instances using the same launch request, you'll also get one reservation ID.</p> </li> <li> <p> <code>root-device-name</code> - The name of the root device for the instance (for example, <code>/dev/sda1</code> or <code>/dev/xvda</code>).</p> </li> <li> <p> <code>root-device-type</code> - The type of root device that the instance uses (<code>ebs</code> | <code>instance-store</code>).</p> </li> <li> <p> <code>source-dest-check</code> - Indicates whether the instance performs source/destination checking. A value of <code>true</code> means that checking is enabled, and <code>false</code> means checking is disabled. The value must be <code>false</code> for the instance to perform network address translation (NAT) in your VPC. </p> </li> <li> <p> <code>spot-instance-request-id</code> - The ID of the Spot instance request.</p> </li> <li> <p> <code>state-reason-code</code> - The reason code for the state change.</p> </li> <li> <p> <code>state-reason-message</code> - A message that describes the state change.</p> </li> <li> <p> <code>subnet-id</code> - The ID of the subnet for the instance.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource, where <code>tag</code>:<i>key</i> is the tag's key. </p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>tenancy</code> - The tenancy of an instance (<code>dedicated</code> | <code>default</code> | <code>host</code>).</p> </li> <li> <p> <code>virtualization-type</code> - The virtualization type of the instance (<code>paravirtual</code> | <code>hvm</code>).</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC that the instance is running in.</p> </li> </ul>"]
+    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>affinity</code> - The affinity setting for an instance running on a Dedicated Host (<code>default</code> | <code>host</code>).</p> </li> <li> <p> <code>architecture</code> - The instance architecture (<code>i386</code> | <code>x86_64</code>).</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone of the instance.</p> </li> <li> <p> <code>block-device-mapping.attach-time</code> - The attach time for an EBS volume mapped to the instance, for example, <code>2010-09-15T17:15:20.000Z</code>.</p> </li> <li> <p> <code>block-device-mapping.delete-on-termination</code> - A Boolean that indicates whether the EBS volume is deleted on instance termination.</p> </li> <li> <p> <code>block-device-mapping.device-name</code> - The device name for the EBS volume (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p> </li> <li> <p> <code>block-device-mapping.status</code> - The status for the EBS volume (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>block-device-mapping.volume-id</code> - The volume ID of the EBS volume.</p> </li> <li> <p> <code>client-token</code> - The idempotency token you provided when you launched the instance.</p> </li> <li> <p> <code>dns-name</code> - The public DNS name of the instance.</p> </li> <li> <p> <code>group-id</code> - The ID of the security group for the instance. EC2-Classic only.</p> </li> <li> <p> <code>group-name</code> - The name of the security group for the instance. EC2-Classic only.</p> </li> <li> <p> <code>host-id</code> - The ID of the Dedicated Host on which the instance is running, if applicable.</p> </li> <li> <p> <code>hypervisor</code> - The hypervisor type of the instance (<code>ovm</code> | <code>xen</code>).</p> </li> <li> <p> <code>iam-instance-profile.arn</code> - The instance profile associated with the instance. Specified as an ARN.</p> </li> <li> <p> <code>image-id</code> - The ID of the image used to launch the instance.</p> </li> <li> <p> <code>instance-id</code> - The ID of the instance.</p> </li> <li> <p> <code>instance-lifecycle</code> - Indicates whether this is a Spot Instance or a Scheduled Instance (<code>spot</code> | <code>scheduled</code>).</p> </li> <li> <p> <code>instance-state-code</code> - The state of the instance, as a 16-bit unsigned integer. The high byte is an opaque internal value and should be ignored. The low byte is set based on the state represented. The valid values are: 0 (pending), 16 (running), 32 (shutting-down), 48 (terminated), 64 (stopping), and 80 (stopped).</p> </li> <li> <p> <code>instance-state-name</code> - The state of the instance (<code>pending</code> | <code>running</code> | <code>shutting-down</code> | <code>terminated</code> | <code>stopping</code> | <code>stopped</code>).</p> </li> <li> <p> <code>instance-type</code> - The type of instance (for example, <code>t2.micro</code>).</p> </li> <li> <p> <code>instance.group-id</code> - The ID of the security group for the instance. </p> </li> <li> <p> <code>instance.group-name</code> - The name of the security group for the instance. </p> </li> <li> <p> <code>ip-address</code> - The public IPv4 address of the instance.</p> </li> <li> <p> <code>kernel-id</code> - The kernel ID.</p> </li> <li> <p> <code>key-name</code> - The name of the key pair used when the instance was launched.</p> </li> <li> <p> <code>launch-index</code> - When launching multiple instances, this is the index for the instance in the launch group (for example, 0, 1, 2, and so on). </p> </li> <li> <p> <code>launch-time</code> - The time when the instance was launched.</p> </li> <li> <p> <code>monitoring-state</code> - Indicates whether detailed monitoring is enabled (<code>disabled</code> | <code>enabled</code>).</p> </li> <li> <p> <code>network-interface.addresses.private-ip-address</code> - The private IPv4 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.addresses.primary</code> - Specifies whether the IPv4 address of the network interface is the primary private IPv4 address.</p> </li> <li> <p> <code>network-interface.addresses.association.public-ip</code> - The ID of the association of an Elastic IP address (IPv4) with a network interface.</p> </li> <li> <p> <code>network-interface.addresses.association.ip-owner-id</code> - The owner ID of the private IPv4 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.association.public-ip</code> - The address of the Elastic IP address (IPv4) bound to the network interface.</p> </li> <li> <p> <code>network-interface.association.ip-owner-id</code> - The owner of the Elastic IP address (IPv4) associated with the network interface.</p> </li> <li> <p> <code>network-interface.association.allocation-id</code> - The allocation ID returned when you allocated the Elastic IP address (IPv4) for your network interface.</p> </li> <li> <p> <code>network-interface.association.association-id</code> - The association ID returned when the network interface was associated with an IPv4 address.</p> </li> <li> <p> <code>network-interface.attachment.attachment-id</code> - The ID of the interface attachment.</p> </li> <li> <p> <code>network-interface.attachment.instance-id</code> - The ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.instance-owner-id</code> - The owner ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.device-index</code> - The device index to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.status</code> - The status of the attachment (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>network-interface.attachment.attach-time</code> - The time that the network interface was attached to an instance.</p> </li> <li> <p> <code>network-interface.attachment.delete-on-termination</code> - Specifies whether the attachment is deleted when an instance is terminated.</p> </li> <li> <p> <code>network-interface.availability-zone</code> - The Availability Zone for the network interface.</p> </li> <li> <p> <code>network-interface.description</code> - The description of the network interface.</p> </li> <li> <p> <code>network-interface.group-id</code> - The ID of a security group associated with the network interface.</p> </li> <li> <p> <code>network-interface.group-name</code> - The name of a security group associated with the network interface.</p> </li> <li> <p> <code>network-interface.ipv6-addresses.ipv6-address</code> - The IPv6 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.mac-address</code> - The MAC address of the network interface.</p> </li> <li> <p> <code>network-interface.network-interface-id</code> - The ID of the network interface.</p> </li> <li> <p> <code>network-interface.owner-id</code> - The ID of the owner of the network interface.</p> </li> <li> <p> <code>network-interface.private-dns-name</code> - The private DNS name of the network interface.</p> </li> <li> <p> <code>network-interface.requester-id</code> - The requester ID for the network interface.</p> </li> <li> <p> <code>network-interface.requester-managed</code> - Indicates whether the network interface is being managed by AWS.</p> </li> <li> <p> <code>network-interface.status</code> - The status of the network interface (<code>available</code>) | <code>in-use</code>).</p> </li> <li> <p> <code>network-interface.source-dest-check</code> - Whether the network interface performs source/destination checking. A value of <code>true</code> means checking is enabled, and <code>false</code> means checking is disabled. The value must be <code>false</code> for the network interface to perform network address translation (NAT) in your VPC.</p> </li> <li> <p> <code>network-interface.subnet-id</code> - The ID of the subnet for the network interface.</p> </li> <li> <p> <code>network-interface.vpc-id</code> - The ID of the VPC for the network interface.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the instance owner.</p> </li> <li> <p> <code>placement-group-name</code> - The name of the placement group for the instance.</p> </li> <li> <p> <code>platform</code> - The platform. Use <code>windows</code> if you have Windows instances; otherwise, leave blank.</p> </li> <li> <p> <code>private-dns-name</code> - The private IPv4 DNS name of the instance.</p> </li> <li> <p> <code>private-ip-address</code> - The private IPv4 address of the instance.</p> </li> <li> <p> <code>product-code</code> - The product code associated with the AMI used to launch the instance.</p> </li> <li> <p> <code>product-code.type</code> - The type of product code (<code>devpay</code> | <code>marketplace</code>).</p> </li> <li> <p> <code>ramdisk-id</code> - The RAM disk ID.</p> </li> <li> <p> <code>reason</code> - The reason for the current state of the instance (for example, shows \"User Initiated [date]\" when you stop or terminate the instance). Similar to the state-reason-code filter.</p> </li> <li> <p> <code>requester-id</code> - The ID of the entity that launched the instance on your behalf (for example, AWS Management Console, Auto Scaling, and so on).</p> </li> <li> <p> <code>reservation-id</code> - The ID of the instance's reservation. A reservation ID is created any time you launch an instance. A reservation ID has a one-to-one relationship with an instance launch request, but can be associated with more than one instance if you launch multiple instances using the same launch request. For example, if you launch one instance, you'll get one reservation ID. If you launch ten instances using the same launch request, you'll also get one reservation ID.</p> </li> <li> <p> <code>root-device-name</code> - The name of the root device for the instance (for example, <code>/dev/sda1</code> or <code>/dev/xvda</code>).</p> </li> <li> <p> <code>root-device-type</code> - The type of root device that the instance uses (<code>ebs</code> | <code>instance-store</code>).</p> </li> <li> <p> <code>source-dest-check</code> - Indicates whether the instance performs source/destination checking. A value of <code>true</code> means that checking is enabled, and <code>false</code> means checking is disabled. The value must be <code>false</code> for the instance to perform network address translation (NAT) in your VPC. </p> </li> <li> <p> <code>spot-instance-request-id</code> - The ID of the Spot instance request.</p> </li> <li> <p> <code>state-reason-code</code> - The reason code for the state change.</p> </li> <li> <p> <code>state-reason-message</code> - A message that describes the state change.</p> </li> <li> <p> <code>subnet-id</code> - The ID of the subnet for the instance.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>tenancy</code> - The tenancy of an instance (<code>dedicated</code> | <code>default</code> | <code>host</code>).</p> </li> <li> <p> <code>virtualization-type</code> - The virtualization type of the instance (<code>paravirtual</code> | <code>hvm</code>).</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC that the instance is running in.</p> </li> </ul>"]
     pub filters: Option<FilterList>,
     #[doc="<p>One or more instance IDs.</p> <p>Default: Describes all your instances.</p>"]
     pub instance_ids: Option<InstanceIdStringList>,
@@ -9967,7 +10287,7 @@ impl DescribeInstancesResultDeserializer {
 pub struct DescribeInternetGatewaysRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
     pub dry_run: Option<Boolean>,
-    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>attachment.state</code> - The current state of the attachment between the gateway and the VPC (<code>available</code>). Present only if a VPC is attached.</p> </li> <li> <p> <code>attachment.vpc-id</code> - The ID of an attached VPC.</p> </li> <li> <p> <code>internet-gateway-id</code> - The ID of the Internet gateway.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> </ul>"]
+    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>attachment.state</code> - The current state of the attachment between the gateway and the VPC (<code>available</code>). Present only if a VPC is attached.</p> </li> <li> <p> <code>attachment.vpc-id</code> - The ID of an attached VPC.</p> </li> <li> <p> <code>internet-gateway-id</code> - The ID of the Internet gateway.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> </ul>"]
     pub filters: Option<FilterList>,
     #[doc="<p>One or more Internet gateway IDs.</p> <p>Default: Describes all your Internet gateways.</p>"]
     pub internet_gateway_ids: Option<ValueStringList>,
@@ -10347,7 +10667,7 @@ impl DescribeNatGatewaysResultDeserializer {
 pub struct DescribeNetworkAclsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
     pub dry_run: Option<Boolean>,
-    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>association.association-id</code> - The ID of an association ID for the ACL.</p> </li> <li> <p> <code>association.network-acl-id</code> - The ID of the network ACL involved in the association.</p> </li> <li> <p> <code>association.subnet-id</code> - The ID of the subnet involved in the association.</p> </li> <li> <p> <code>default</code> - Indicates whether the ACL is the default network ACL for the VPC.</p> </li> <li> <p> <code>entry.cidr</code> - The IPv4 CIDR range specified in the entry.</p> </li> <li> <p> <code>entry.egress</code> - Indicates whether the entry applies to egress traffic.</p> </li> <li> <p> <code>entry.icmp.code</code> - The ICMP code specified in the entry, if any.</p> </li> <li> <p> <code>entry.icmp.type</code> - The ICMP type specified in the entry, if any.</p> </li> <li> <p> <code>entry.ipv6-cidr</code> - The IPv6 CIDR range specified in the entry.</p> </li> <li> <p> <code>entry.port-range.from</code> - The start of the port range specified in the entry. </p> </li> <li> <p> <code>entry.port-range.to</code> - The end of the port range specified in the entry. </p> </li> <li> <p> <code>entry.protocol</code> - The protocol specified in the entry (<code>tcp</code> | <code>udp</code> | <code>icmp</code> or a protocol number).</p> </li> <li> <p> <code>entry.rule-action</code> - Allows or denies the matching traffic (<code>allow</code> | <code>deny</code>).</p> </li> <li> <p> <code>entry.rule-number</code> - The number of an entry (in other words, rule) in the ACL's set of entries.</p> </li> <li> <p> <code>network-acl-id</code> - The ID of the network ACL.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC for the network ACL.</p> </li> </ul>"]
+    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>association.association-id</code> - The ID of an association ID for the ACL.</p> </li> <li> <p> <code>association.network-acl-id</code> - The ID of the network ACL involved in the association.</p> </li> <li> <p> <code>association.subnet-id</code> - The ID of the subnet involved in the association.</p> </li> <li> <p> <code>default</code> - Indicates whether the ACL is the default network ACL for the VPC.</p> </li> <li> <p> <code>entry.cidr</code> - The IPv4 CIDR range specified in the entry.</p> </li> <li> <p> <code>entry.egress</code> - Indicates whether the entry applies to egress traffic.</p> </li> <li> <p> <code>entry.icmp.code</code> - The ICMP code specified in the entry, if any.</p> </li> <li> <p> <code>entry.icmp.type</code> - The ICMP type specified in the entry, if any.</p> </li> <li> <p> <code>entry.ipv6-cidr</code> - The IPv6 CIDR range specified in the entry.</p> </li> <li> <p> <code>entry.port-range.from</code> - The start of the port range specified in the entry. </p> </li> <li> <p> <code>entry.port-range.to</code> - The end of the port range specified in the entry. </p> </li> <li> <p> <code>entry.protocol</code> - The protocol specified in the entry (<code>tcp</code> | <code>udp</code> | <code>icmp</code> or a protocol number).</p> </li> <li> <p> <code>entry.rule-action</code> - Allows or denies the matching traffic (<code>allow</code> | <code>deny</code>).</p> </li> <li> <p> <code>entry.rule-number</code> - The number of an entry (in other words, rule) in the ACL's set of entries.</p> </li> <li> <p> <code>network-acl-id</code> - The ID of the network ACL.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC for the network ACL.</p> </li> </ul>"]
     pub filters: Option<FilterList>,
     #[doc="<p>One or more network ACL IDs.</p> <p>Default: Describes all your network ACLs.</p>"]
     pub network_acl_ids: Option<ValueStringList>,
@@ -10433,7 +10753,7 @@ impl DescribeNetworkAclsResultDeserializer {
 #[doc="<p>Contains the parameters for DescribeNetworkInterfaceAttribute.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct DescribeNetworkInterfaceAttributeRequest {
-    #[doc="<p>The attribute of the network interface.</p>"]
+    #[doc="<p>The attribute of the network interface. This parameter is required.</p>"]
     pub attribute: Option<NetworkInterfaceAttribute>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
     pub dry_run: Option<Boolean>,
@@ -10545,7 +10865,7 @@ impl DescribeNetworkInterfaceAttributeResultDeserializer {
 pub struct DescribeNetworkInterfacesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
     pub dry_run: Option<Boolean>,
-    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>addresses.private-ip-address</code> - The private IPv4 addresses associated with the network interface.</p> </li> <li> <p> <code>addresses.primary</code> - Whether the private IPv4 address is the primary IP address associated with the network interface. </p> </li> <li> <p> <code>addresses.association.public-ip</code> - The association ID returned when the network interface was associated with the Elastic IP address (IPv4).</p> </li> <li> <p> <code>addresses.association.owner-id</code> - The owner ID of the addresses associated with the network interface.</p> </li> <li> <p> <code>association.association-id</code> - The association ID returned when the network interface was associated with an IPv4 address.</p> </li> <li> <p> <code>association.allocation-id</code> - The allocation ID returned when you allocated the Elastic IP address (IPv4) for your network interface.</p> </li> <li> <p> <code>association.ip-owner-id</code> - The owner of the Elastic IP address (IPv4) associated with the network interface.</p> </li> <li> <p> <code>association.public-ip</code> - The address of the Elastic IP address (IPv4) bound to the network interface.</p> </li> <li> <p> <code>association.public-dns-name</code> - The public DNS name for the network interface (IPv4).</p> </li> <li> <p> <code>attachment.attachment-id</code> - The ID of the interface attachment.</p> </li> <li> <p> <code>attachment.attach.time</code> - The time that the network interface was attached to an instance.</p> </li> <li> <p> <code>attachment.delete-on-termination</code> - Indicates whether the attachment is deleted when an instance is terminated.</p> </li> <li> <p> <code>attachment.device-index</code> - The device index to which the network interface is attached.</p> </li> <li> <p> <code>attachment.instance-id</code> - The ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>attachment.instance-owner-id</code> - The owner ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>attachment.nat-gateway-id</code> - The ID of the NAT gateway to which the network interface is attached.</p> </li> <li> <p> <code>attachment.status</code> - The status of the attachment (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone of the network interface.</p> </li> <li> <p> <code>description</code> - The description of the network interface.</p> </li> <li> <p> <code>group-id</code> - The ID of a security group associated with the network interface.</p> </li> <li> <p> <code>group-name</code> - The name of a security group associated with the network interface.</p> </li> <li> <p> <code>ipv6-addresses.ipv6-address</code> - An IPv6 address associated with the network interface.</p> </li> <li> <p> <code>mac-address</code> - The MAC address of the network interface.</p> </li> <li> <p> <code>network-interface-id</code> - The ID of the network interface.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the network interface owner.</p> </li> <li> <p> <code>private-ip-address</code> - The private IPv4 address or addresses of the network interface.</p> </li> <li> <p> <code>private-dns-name</code> - The private DNS name of the network interface (IPv4).</p> </li> <li> <p> <code>requester-id</code> - The ID of the entity that launched the instance on your behalf (for example, AWS Management Console, Auto Scaling, and so on).</p> </li> <li> <p> <code>requester-managed</code> - Indicates whether the network interface is being managed by an AWS service (for example, AWS Management Console, Auto Scaling, and so on).</p> </li> <li> <p> <code>source-desk-check</code> - Indicates whether the network interface performs source/destination checking. A value of <code>true</code> means checking is enabled, and <code>false</code> means checking is disabled. The value must be <code>false</code> for the network interface to perform network address translation (NAT) in your VPC. </p> </li> <li> <p> <code>status</code> - The status of the network interface. If the network interface is not attached to an instance, the status is <code>available</code>; if a network interface is attached to an instance the status is <code>in-use</code>.</p> </li> <li> <p> <code>subnet-id</code> - The ID of the subnet for the network interface.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC for the network interface.</p> </li> </ul>"]
+    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>addresses.private-ip-address</code> - The private IPv4 addresses associated with the network interface.</p> </li> <li> <p> <code>addresses.primary</code> - Whether the private IPv4 address is the primary IP address associated with the network interface. </p> </li> <li> <p> <code>addresses.association.public-ip</code> - The association ID returned when the network interface was associated with the Elastic IP address (IPv4).</p> </li> <li> <p> <code>addresses.association.owner-id</code> - The owner ID of the addresses associated with the network interface.</p> </li> <li> <p> <code>association.association-id</code> - The association ID returned when the network interface was associated with an IPv4 address.</p> </li> <li> <p> <code>association.allocation-id</code> - The allocation ID returned when you allocated the Elastic IP address (IPv4) for your network interface.</p> </li> <li> <p> <code>association.ip-owner-id</code> - The owner of the Elastic IP address (IPv4) associated with the network interface.</p> </li> <li> <p> <code>association.public-ip</code> - The address of the Elastic IP address (IPv4) bound to the network interface.</p> </li> <li> <p> <code>association.public-dns-name</code> - The public DNS name for the network interface (IPv4).</p> </li> <li> <p> <code>attachment.attachment-id</code> - The ID of the interface attachment.</p> </li> <li> <p> <code>attachment.attach.time</code> - The time that the network interface was attached to an instance.</p> </li> <li> <p> <code>attachment.delete-on-termination</code> - Indicates whether the attachment is deleted when an instance is terminated.</p> </li> <li> <p> <code>attachment.device-index</code> - The device index to which the network interface is attached.</p> </li> <li> <p> <code>attachment.instance-id</code> - The ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>attachment.instance-owner-id</code> - The owner ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>attachment.nat-gateway-id</code> - The ID of the NAT gateway to which the network interface is attached.</p> </li> <li> <p> <code>attachment.status</code> - The status of the attachment (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone of the network interface.</p> </li> <li> <p> <code>description</code> - The description of the network interface.</p> </li> <li> <p> <code>group-id</code> - The ID of a security group associated with the network interface.</p> </li> <li> <p> <code>group-name</code> - The name of a security group associated with the network interface.</p> </li> <li> <p> <code>ipv6-addresses.ipv6-address</code> - An IPv6 address associated with the network interface.</p> </li> <li> <p> <code>mac-address</code> - The MAC address of the network interface.</p> </li> <li> <p> <code>network-interface-id</code> - The ID of the network interface.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the network interface owner.</p> </li> <li> <p> <code>private-ip-address</code> - The private IPv4 address or addresses of the network interface.</p> </li> <li> <p> <code>private-dns-name</code> - The private DNS name of the network interface (IPv4).</p> </li> <li> <p> <code>requester-id</code> - The ID of the entity that launched the instance on your behalf (for example, AWS Management Console, Auto Scaling, and so on).</p> </li> <li> <p> <code>requester-managed</code> - Indicates whether the network interface is being managed by an AWS service (for example, AWS Management Console, Auto Scaling, and so on).</p> </li> <li> <p> <code>source-desk-check</code> - Indicates whether the network interface performs source/destination checking. A value of <code>true</code> means checking is enabled, and <code>false</code> means checking is disabled. The value must be <code>false</code> for the network interface to perform network address translation (NAT) in your VPC. </p> </li> <li> <p> <code>status</code> - The status of the network interface. If the network interface is not attached to an instance, the status is <code>available</code>; if a network interface is attached to an instance the status is <code>in-use</code>.</p> </li> <li> <p> <code>subnet-id</code> - The ID of the subnet for the network interface.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC for the network interface.</p> </li> </ul>"]
     pub filters: Option<FilterList>,
     #[doc="<p>One or more network interface IDs.</p> <p>Default: Describes all your network interfaces.</p>"]
     pub network_interface_ids: Option<NetworkInterfaceIdList>,
@@ -11106,7 +11426,7 @@ pub struct DescribeReservedInstancesOfferingsRequest {
     pub filters: Option<FilterList>,
     #[doc="<p>Include Reserved Instance Marketplace offerings in the response.</p>"]
     pub include_marketplace: Option<Boolean>,
-    #[doc="<p>The tenancy of the instances covered by the reservation. A Reserved Instance with a tenancy of <code>dedicated</code> is applied to instances that run in a VPC on single-tenant hardware (i.e., Dedicated Instances).</p> <p>Default: <code>default</code> </p>"]
+    #[doc="<p>The tenancy of the instances covered by the reservation. A Reserved Instance with a tenancy of <code>dedicated</code> is applied to instances that run in a VPC on single-tenant hardware (i.e., Dedicated Instances).</p> <p> <b>Important:</b> The <code>host</code> value cannot be used with this parameter. Use the <code>default</code> or <code>dedicated</code> values only.</p> <p>Default: <code>default</code> </p>"]
     pub instance_tenancy: Option<Tenancy>,
     #[doc="<p>The instance type that the reservation will cover (for example, <code>m1.small</code>). For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html\">Instance Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
     pub instance_type: Option<InstanceType>,
@@ -11262,7 +11582,7 @@ impl DescribeReservedInstancesOfferingsResultDeserializer {
 pub struct DescribeReservedInstancesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
     pub dry_run: Option<Boolean>,
-    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>availability-zone</code> - The Availability Zone where the Reserved Instance can be used.</p> </li> <li> <p> <code>duration</code> - The duration of the Reserved Instance (one year or three years), in seconds (<code>31536000</code> | <code>94608000</code>).</p> </li> <li> <p> <code>end</code> - The time when the Reserved Instance expires (for example, 2015-08-07T11:54:42.000Z).</p> </li> <li> <p> <code>fixed-price</code> - The purchase price of the Reserved Instance (for example, 9800.0).</p> </li> <li> <p> <code>instance-type</code> - The instance type that is covered by the reservation.</p> </li> <li> <p> <code>scope</code> - The scope of the Reserved Instance (<code>Region</code> or <code>Availability Zone</code>).</p> </li> <li> <p> <code>product-description</code> - The Reserved Instance product platform description. Instances that include <code>(Amazon VPC)</code> in the product platform description will only be displayed to EC2-Classic account holders and are for use with Amazon VPC (<code>Linux/UNIX</code> | <code>Linux/UNIX (Amazon VPC)</code> | <code>SUSE Linux</code> | <code>SUSE Linux (Amazon VPC)</code> | <code>Red Hat Enterprise Linux</code> | <code>Red Hat Enterprise Linux (Amazon VPC)</code> | <code>Windows</code> | <code>Windows (Amazon VPC)</code> | <code>Windows with SQL Server Standard</code> | <code>Windows with SQL Server Standard (Amazon VPC)</code> | <code>Windows with SQL Server Web</code> | <code>Windows with SQL Server Web (Amazon VPC)</code> | <code>Windows with SQL Server Enterprise</code> | <code>Windows with SQL Server Enterprise (Amazon VPC)</code>).</p> </li> <li> <p> <code>reserved-instances-id</code> - The ID of the Reserved Instance.</p> </li> <li> <p> <code>start</code> - The time at which the Reserved Instance purchase request was placed (for example, 2014-08-07T11:54:42.000Z).</p> </li> <li> <p> <code>state</code> - The state of the Reserved Instance (<code>payment-pending</code> | <code>active</code> | <code>payment-failed</code> | <code>retired</code>).</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>usage-price</code> - The usage price of the Reserved Instance, per hour (for example, 0.84).</p> </li> </ul>"]
+    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>availability-zone</code> - The Availability Zone where the Reserved Instance can be used.</p> </li> <li> <p> <code>duration</code> - The duration of the Reserved Instance (one year or three years), in seconds (<code>31536000</code> | <code>94608000</code>).</p> </li> <li> <p> <code>end</code> - The time when the Reserved Instance expires (for example, 2015-08-07T11:54:42.000Z).</p> </li> <li> <p> <code>fixed-price</code> - The purchase price of the Reserved Instance (for example, 9800.0).</p> </li> <li> <p> <code>instance-type</code> - The instance type that is covered by the reservation.</p> </li> <li> <p> <code>scope</code> - The scope of the Reserved Instance (<code>Region</code> or <code>Availability Zone</code>).</p> </li> <li> <p> <code>product-description</code> - The Reserved Instance product platform description. Instances that include <code>(Amazon VPC)</code> in the product platform description will only be displayed to EC2-Classic account holders and are for use with Amazon VPC (<code>Linux/UNIX</code> | <code>Linux/UNIX (Amazon VPC)</code> | <code>SUSE Linux</code> | <code>SUSE Linux (Amazon VPC)</code> | <code>Red Hat Enterprise Linux</code> | <code>Red Hat Enterprise Linux (Amazon VPC)</code> | <code>Windows</code> | <code>Windows (Amazon VPC)</code> | <code>Windows with SQL Server Standard</code> | <code>Windows with SQL Server Standard (Amazon VPC)</code> | <code>Windows with SQL Server Web</code> | <code>Windows with SQL Server Web (Amazon VPC)</code> | <code>Windows with SQL Server Enterprise</code> | <code>Windows with SQL Server Enterprise (Amazon VPC)</code>).</p> </li> <li> <p> <code>reserved-instances-id</code> - The ID of the Reserved Instance.</p> </li> <li> <p> <code>start</code> - The time at which the Reserved Instance purchase request was placed (for example, 2014-08-07T11:54:42.000Z).</p> </li> <li> <p> <code>state</code> - The state of the Reserved Instance (<code>payment-pending</code> | <code>active</code> | <code>payment-failed</code> | <code>retired</code>).</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>usage-price</code> - The usage price of the Reserved Instance, per hour (for example, 0.84).</p> </li> </ul>"]
     pub filters: Option<FilterList>,
     #[doc="<p>Describes whether the Reserved Instance is Standard or Convertible.</p>"]
     pub offering_class: Option<OfferingClassType>,
@@ -11363,7 +11683,7 @@ impl DescribeReservedInstancesResultDeserializer {
 pub struct DescribeRouteTablesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
     pub dry_run: Option<Boolean>,
-    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>association.route-table-association-id</code> - The ID of an association ID for the route table.</p> </li> <li> <p> <code>association.route-table-id</code> - The ID of the route table involved in the association.</p> </li> <li> <p> <code>association.subnet-id</code> - The ID of the subnet involved in the association.</p> </li> <li> <p> <code>association.main</code> - Indicates whether the route table is the main route table for the VPC (<code>true</code> | <code>false</code>).</p> </li> <li> <p> <code>route-table-id</code> - The ID of the route table.</p> </li> <li> <p> <code>route.destination-cidr-block</code> - The IPv4 CIDR range specified in a route in the table.</p> </li> <li> <p> <code>route.destination-ipv6-cidr-block</code> - The IPv6 CIDR range specified in a route in the route table.</p> </li> <li> <p> <code>route.destination-prefix-list-id</code> - The ID (prefix) of the AWS service specified in a route in the table.</p> </li> <li> <p> <code>route.egress-only-internet-gateway-id</code> - The ID of an egress-only Internet gateway specified in a route in the route table.</p> </li> <li> <p> <code>route.gateway-id</code> - The ID of a gateway specified in a route in the table.</p> </li> <li> <p> <code>route.instance-id</code> - The ID of an instance specified in a route in the table.</p> </li> <li> <p> <code>route.nat-gateway-id</code> - The ID of a NAT gateway.</p> </li> <li> <p> <code>route.origin</code> - Describes how the route was created. <code>CreateRouteTable</code> indicates that the route was automatically created when the route table was created; <code>CreateRoute</code> indicates that the route was manually added to the route table; <code>EnableVgwRoutePropagation</code> indicates that the route was propagated by route propagation.</p> </li> <li> <p> <code>route.state</code> - The state of a route in the route table (<code>active</code> | <code>blackhole</code>). The blackhole state indicates that the route's target isn't available (for example, the specified gateway isn't attached to the VPC, the specified NAT instance has been terminated, and so on).</p> </li> <li> <p> <code>route.vpc-peering-connection-id</code> - The ID of a VPC peering connection specified in a route in the table.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC for the route table.</p> </li> </ul>"]
+    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>association.route-table-association-id</code> - The ID of an association ID for the route table.</p> </li> <li> <p> <code>association.route-table-id</code> - The ID of the route table involved in the association.</p> </li> <li> <p> <code>association.subnet-id</code> - The ID of the subnet involved in the association.</p> </li> <li> <p> <code>association.main</code> - Indicates whether the route table is the main route table for the VPC (<code>true</code> | <code>false</code>). Route tables that do not have an association ID are not returned in the response.</p> </li> <li> <p> <code>route-table-id</code> - The ID of the route table.</p> </li> <li> <p> <code>route.destination-cidr-block</code> - The IPv4 CIDR range specified in a route in the table.</p> </li> <li> <p> <code>route.destination-ipv6-cidr-block</code> - The IPv6 CIDR range specified in a route in the route table.</p> </li> <li> <p> <code>route.destination-prefix-list-id</code> - The ID (prefix) of the AWS service specified in a route in the table.</p> </li> <li> <p> <code>route.egress-only-internet-gateway-id</code> - The ID of an egress-only Internet gateway specified in a route in the route table.</p> </li> <li> <p> <code>route.gateway-id</code> - The ID of a gateway specified in a route in the table.</p> </li> <li> <p> <code>route.instance-id</code> - The ID of an instance specified in a route in the table.</p> </li> <li> <p> <code>route.nat-gateway-id</code> - The ID of a NAT gateway.</p> </li> <li> <p> <code>route.origin</code> - Describes how the route was created. <code>CreateRouteTable</code> indicates that the route was automatically created when the route table was created; <code>CreateRoute</code> indicates that the route was manually added to the route table; <code>EnableVgwRoutePropagation</code> indicates that the route was propagated by route propagation.</p> </li> <li> <p> <code>route.state</code> - The state of a route in the route table (<code>active</code> | <code>blackhole</code>). The blackhole state indicates that the route's target isn't available (for example, the specified gateway isn't attached to the VPC, the specified NAT instance has been terminated, and so on).</p> </li> <li> <p> <code>route.vpc-peering-connection-id</code> - The ID of a VPC peering connection specified in a route in the table.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC for the route table.</p> </li> </ul>"]
     pub filters: Option<FilterList>,
     #[doc="<p>One or more route table IDs.</p> <p>Default: Describes all your route tables.</p>"]
     pub route_table_ids: Option<ValueStringList>,
@@ -11956,7 +12276,7 @@ impl DescribeSnapshotAttributeResultDeserializer {
 pub struct DescribeSnapshotsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
     pub dry_run: Option<Boolean>,
-    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>description</code> - A description of the snapshot.</p> </li> <li> <p> <code>owner-alias</code> - Value from an Amazon-maintained list (<code>amazon</code> | <code>aws-marketplace</code> | <code>microsoft</code>) of snapshot owners. Not to be confused with the user-configured AWS account alias, which is set from the IAM consolew.</p> </li> <li> <p> <code>owner-id</code> - The ID of the AWS account that owns the snapshot.</p> </li> <li> <p> <code>progress</code> - The progress of the snapshot, as a percentage (for example, 80%).</p> </li> <li> <p> <code>snapshot-id</code> - The snapshot ID.</p> </li> <li> <p> <code>start-time</code> - The time stamp when the snapshot was initiated.</p> </li> <li> <p> <code>status</code> - The status of the snapshot (<code>pending</code> | <code>completed</code> | <code>error</code>).</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>volume-id</code> - The ID of the volume the snapshot is for.</p> </li> <li> <p> <code>volume-size</code> - The size of the volume, in GiB.</p> </li> </ul>"]
+    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>description</code> - A description of the snapshot.</p> </li> <li> <p> <code>owner-alias</code> - Value from an Amazon-maintained list (<code>amazon</code> | <code>aws-marketplace</code> | <code>microsoft</code>) of snapshot owners. Not to be confused with the user-configured AWS account alias, which is set from the IAM consolew.</p> </li> <li> <p> <code>owner-id</code> - The ID of the AWS account that owns the snapshot.</p> </li> <li> <p> <code>progress</code> - The progress of the snapshot, as a percentage (for example, 80%).</p> </li> <li> <p> <code>snapshot-id</code> - The snapshot ID.</p> </li> <li> <p> <code>start-time</code> - The time stamp when the snapshot was initiated.</p> </li> <li> <p> <code>status</code> - The status of the snapshot (<code>pending</code> | <code>completed</code> | <code>error</code>).</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>volume-id</code> - The ID of the volume the snapshot is for.</p> </li> <li> <p> <code>volume-size</code> - The size of the volume, in GiB.</p> </li> </ul>"]
     pub filters: Option<FilterList>,
     #[doc="<p>The maximum number of snapshot results returned by <code>DescribeSnapshots</code> in paginated output. When this parameter is used, <code>DescribeSnapshots</code> only returns <code>MaxResults</code> results in a single page along with a <code>NextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeSnapshots</code> request with the returned <code>NextToken</code> value. This value can be between 5 and 1000; if <code>MaxResults</code> is given a value larger than 1000, only 1000 results are returned. If this parameter is not used, then <code>DescribeSnapshots</code> returns all results. You cannot specify this parameter and the snapshot IDs parameter in the same request.</p>"]
     pub max_results: Option<Integer>,
@@ -12471,7 +12791,7 @@ impl DescribeSpotFleetRequestsResponseDeserializer {
 pub struct DescribeSpotInstanceRequestsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
     pub dry_run: Option<Boolean>,
-    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>availability-zone-group</code> - The Availability Zone group.</p> </li> <li> <p> <code>create-time</code> - The time stamp when the Spot instance request was created.</p> </li> <li> <p> <code>fault-code</code> - The fault code related to the request.</p> </li> <li> <p> <code>fault-message</code> - The fault message related to the request.</p> </li> <li> <p> <code>instance-id</code> - The ID of the instance that fulfilled the request.</p> </li> <li> <p> <code>launch-group</code> - The Spot instance launch group.</p> </li> <li> <p> <code>launch.block-device-mapping.delete-on-termination</code> - Indicates whether the Amazon EBS volume is deleted on instance termination.</p> </li> <li> <p> <code>launch.block-device-mapping.device-name</code> - The device name for the Amazon EBS volume (for example, <code>/dev/sdh</code>).</p> </li> <li> <p> <code>launch.block-device-mapping.snapshot-id</code> - The ID of the snapshot used for the Amazon EBS volume.</p> </li> <li> <p> <code>launch.block-device-mapping.volume-size</code> - The size of the Amazon EBS volume, in GiB.</p> </li> <li> <p> <code>launch.block-device-mapping.volume-type</code> - The type of the Amazon EBS volume: <code>gp2</code> for General Purpose SSD, <code>io1</code> for Provisioned IOPS SSD, <code>st1</code> for Throughput Optimized HDD, <code>sc1</code>for Cold HDD, or <code>standard</code> for Magnetic.</p> </li> <li> <p> <code>launch.group-id</code> - The security group for the instance.</p> </li> <li> <p> <code>launch.image-id</code> - The ID of the AMI.</p> </li> <li> <p> <code>launch.instance-type</code> - The type of instance (for example, <code>m3.medium</code>).</p> </li> <li> <p> <code>launch.kernel-id</code> - The kernel ID.</p> </li> <li> <p> <code>launch.key-name</code> - The name of the key pair the instance launched with.</p> </li> <li> <p> <code>launch.monitoring-enabled</code> - Whether monitoring is enabled for the Spot instance.</p> </li> <li> <p> <code>launch.ramdisk-id</code> - The RAM disk ID.</p> </li> <li> <p> <code>network-interface.network-interface-id</code> - The ID of the network interface.</p> </li> <li> <p> <code>network-interface.device-index</code> - The index of the device for the network interface attachment on the instance.</p> </li> <li> <p> <code>network-interface.subnet-id</code> - The ID of the subnet for the instance.</p> </li> <li> <p> <code>network-interface.description</code> - A description of the network interface.</p> </li> <li> <p> <code>network-interface.private-ip-address</code> - The primary private IP address of the network interface.</p> </li> <li> <p> <code>network-interface.delete-on-termination</code> - Indicates whether the network interface is deleted when the instance is terminated.</p> </li> <li> <p> <code>network-interface.group-id</code> - The ID of the security group associated with the network interface.</p> </li> <li> <p> <code>network-interface.group-name</code> - The name of the security group associated with the network interface.</p> </li> <li> <p> <code>network-interface.addresses.primary</code> - Indicates whether the IP address is the primary private IP address.</p> </li> <li> <p> <code>product-description</code> - The product description associated with the instance (<code>Linux/UNIX</code> | <code>Windows</code>).</p> </li> <li> <p> <code>spot-instance-request-id</code> - The Spot instance request ID.</p> </li> <li> <p> <code>spot-price</code> - The maximum hourly price for any Spot instance launched to fulfill the request.</p> </li> <li> <p> <code>state</code> - The state of the Spot instance request (<code>open</code> | <code>active</code> | <code>closed</code> | <code>cancelled</code> | <code>failed</code>). Spot bid status information can help you track your Amazon EC2 Spot instance requests. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-bid-status.html\">Spot Bid Status</a> in the Amazon Elastic Compute Cloud User Guide.</p> </li> <li> <p> <code>status-code</code> - The short code describing the most recent evaluation of your Spot instance request.</p> </li> <li> <p> <code>status-message</code> - The message explaining the status of the Spot instance request.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>type</code> - The type of Spot instance request (<code>one-time</code> | <code>persistent</code>).</p> </li> <li> <p> <code>launched-availability-zone</code> - The Availability Zone in which the bid is launched.</p> </li> <li> <p> <code>valid-from</code> - The start date of the request.</p> </li> <li> <p> <code>valid-until</code> - The end date of the request.</p> </li> </ul>"]
+    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>availability-zone-group</code> - The Availability Zone group.</p> </li> <li> <p> <code>create-time</code> - The time stamp when the Spot instance request was created.</p> </li> <li> <p> <code>fault-code</code> - The fault code related to the request.</p> </li> <li> <p> <code>fault-message</code> - The fault message related to the request.</p> </li> <li> <p> <code>instance-id</code> - The ID of the instance that fulfilled the request.</p> </li> <li> <p> <code>launch-group</code> - The Spot instance launch group.</p> </li> <li> <p> <code>launch.block-device-mapping.delete-on-termination</code> - Indicates whether the Amazon EBS volume is deleted on instance termination.</p> </li> <li> <p> <code>launch.block-device-mapping.device-name</code> - The device name for the Amazon EBS volume (for example, <code>/dev/sdh</code>).</p> </li> <li> <p> <code>launch.block-device-mapping.snapshot-id</code> - The ID of the snapshot used for the Amazon EBS volume.</p> </li> <li> <p> <code>launch.block-device-mapping.volume-size</code> - The size of the Amazon EBS volume, in GiB.</p> </li> <li> <p> <code>launch.block-device-mapping.volume-type</code> - The type of the Amazon EBS volume: <code>gp2</code> for General Purpose SSD, <code>io1</code> for Provisioned IOPS SSD, <code>st1</code> for Throughput Optimized HDD, <code>sc1</code>for Cold HDD, or <code>standard</code> for Magnetic.</p> </li> <li> <p> <code>launch.group-id</code> - The security group for the instance.</p> </li> <li> <p> <code>launch.image-id</code> - The ID of the AMI.</p> </li> <li> <p> <code>launch.instance-type</code> - The type of instance (for example, <code>m3.medium</code>).</p> </li> <li> <p> <code>launch.kernel-id</code> - The kernel ID.</p> </li> <li> <p> <code>launch.key-name</code> - The name of the key pair the instance launched with.</p> </li> <li> <p> <code>launch.monitoring-enabled</code> - Whether monitoring is enabled for the Spot instance.</p> </li> <li> <p> <code>launch.ramdisk-id</code> - The RAM disk ID.</p> </li> <li> <p> <code>network-interface.network-interface-id</code> - The ID of the network interface.</p> </li> <li> <p> <code>network-interface.device-index</code> - The index of the device for the network interface attachment on the instance.</p> </li> <li> <p> <code>network-interface.subnet-id</code> - The ID of the subnet for the instance.</p> </li> <li> <p> <code>network-interface.description</code> - A description of the network interface.</p> </li> <li> <p> <code>network-interface.private-ip-address</code> - The primary private IP address of the network interface.</p> </li> <li> <p> <code>network-interface.delete-on-termination</code> - Indicates whether the network interface is deleted when the instance is terminated.</p> </li> <li> <p> <code>network-interface.group-id</code> - The ID of the security group associated with the network interface.</p> </li> <li> <p> <code>network-interface.group-name</code> - The name of the security group associated with the network interface.</p> </li> <li> <p> <code>network-interface.addresses.primary</code> - Indicates whether the IP address is the primary private IP address.</p> </li> <li> <p> <code>product-description</code> - The product description associated with the instance (<code>Linux/UNIX</code> | <code>Windows</code>).</p> </li> <li> <p> <code>spot-instance-request-id</code> - The Spot instance request ID.</p> </li> <li> <p> <code>spot-price</code> - The maximum hourly price for any Spot instance launched to fulfill the request.</p> </li> <li> <p> <code>state</code> - The state of the Spot instance request (<code>open</code> | <code>active</code> | <code>closed</code> | <code>cancelled</code> | <code>failed</code>). Spot bid status information can help you track your Amazon EC2 Spot instance requests. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-bid-status.html\">Spot Bid Status</a> in the Amazon Elastic Compute Cloud User Guide.</p> </li> <li> <p> <code>status-code</code> - The short code describing the most recent evaluation of your Spot instance request.</p> </li> <li> <p> <code>status-message</code> - The message explaining the status of the Spot instance request.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>type</code> - The type of Spot instance request (<code>one-time</code> | <code>persistent</code>).</p> </li> <li> <p> <code>launched-availability-zone</code> - The Availability Zone in which the bid is launched.</p> </li> <li> <p> <code>valid-from</code> - The start date of the request.</p> </li> <li> <p> <code>valid-until</code> - The end date of the request.</p> </li> </ul>"]
     pub filters: Option<FilterList>,
     #[doc="<p>One or more Spot instance request IDs.</p>"]
     pub spot_instance_request_ids: Option<SpotInstanceRequestIdList>,
@@ -12784,7 +13104,7 @@ impl DescribeStaleSecurityGroupsResultDeserializer {
 pub struct DescribeSubnetsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
     pub dry_run: Option<Boolean>,
-    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>availabilityZone</code> - The Availability Zone for the subnet. You can also use <code>availability-zone</code> as the filter name.</p> </li> <li> <p> <code>available-ip-address-count</code> - The number of IPv4 addresses in the subnet that are available.</p> </li> <li> <p> <code>cidrBlock</code> - The IPv4 CIDR block of the subnet. The CIDR block you specify must exactly match the subnet's CIDR block for information to be returned for the subnet. You can also use <code>cidr</code> or <code>cidr-block</code> as the filter names.</p> </li> <li> <p> <code>defaultForAz</code> - Indicates whether this is the default subnet for the Availability Zone. You can also use <code>default-for-az</code> as the filter name.</p> </li> <li> <p> <code>ipv6-cidr-block-association.ipv6-cidr-block</code> - An IPv6 CIDR block associated with the subnet.</p> </li> <li> <p> <code>ipv6-cidr-block-association.association-id</code> - An association ID for an IPv6 CIDR block associated with the subnet.</p> </li> <li> <p> <code>ipv6-cidr-block-association.state</code> - The state of an IPv6 CIDR block associated with the subnet.</p> </li> <li> <p> <code>state</code> - The state of the subnet (<code>pending</code> | <code>available</code>).</p> </li> <li> <p> <code>subnet-id</code> - The ID of the subnet.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC for the subnet.</p> </li> </ul>"]
+    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>availabilityZone</code> - The Availability Zone for the subnet. You can also use <code>availability-zone</code> as the filter name.</p> </li> <li> <p> <code>available-ip-address-count</code> - The number of IPv4 addresses in the subnet that are available.</p> </li> <li> <p> <code>cidrBlock</code> - The IPv4 CIDR block of the subnet. The CIDR block you specify must exactly match the subnet's CIDR block for information to be returned for the subnet. You can also use <code>cidr</code> or <code>cidr-block</code> as the filter names.</p> </li> <li> <p> <code>defaultForAz</code> - Indicates whether this is the default subnet for the Availability Zone. You can also use <code>default-for-az</code> as the filter name.</p> </li> <li> <p> <code>ipv6-cidr-block-association.ipv6-cidr-block</code> - An IPv6 CIDR block associated with the subnet.</p> </li> <li> <p> <code>ipv6-cidr-block-association.association-id</code> - An association ID for an IPv6 CIDR block associated with the subnet.</p> </li> <li> <p> <code>ipv6-cidr-block-association.state</code> - The state of an IPv6 CIDR block associated with the subnet.</p> </li> <li> <p> <code>state</code> - The state of the subnet (<code>pending</code> | <code>available</code>).</p> </li> <li> <p> <code>subnet-id</code> - The ID of the subnet.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC for the subnet.</p> </li> </ul>"]
     pub filters: Option<FilterList>,
     #[doc="<p>One or more subnet IDs.</p> <p>Default: Describes all your subnets.</p>"]
     pub subnet_ids: Option<SubnetIdStringList>,
@@ -12967,7 +13287,7 @@ impl DescribeTagsResultDeserializer {
 #[doc="<p>Contains the parameters for DescribeVolumeAttribute.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct DescribeVolumeAttributeRequest {
-    #[doc="<p>The instance attribute.</p>"]
+    #[doc="<p>The attribute of the volume. This parameter is required.</p>"]
     pub attribute: Option<VolumeAttributeName>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
     pub dry_run: Option<Boolean>,
@@ -13164,14 +13484,118 @@ impl DescribeVolumeStatusResultDeserializer {
 
     }
 }
+#[derive(Default,Debug,Clone)]
+pub struct DescribeVolumesModificationsRequest {
+    #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    pub dry_run: Option<Boolean>,
+    #[doc="<p>One or more filters. Supported filters: <code>volume-id</code>, <code>modification-state</code>, <code>target-size</code>, <code>target-iops</code>, <code>target-volume-type</code>, <code>original-size</code>, <code>original-iops</code>, <code>original-volume-type</code>, <code>start-time</code>. </p>"]
+    pub filters: Option<FilterList>,
+    #[doc="<p>The maximum number of results (up to a limit of 500) to be returned in a paginated request.</p>"]
+    pub max_results: Option<Integer>,
+    #[doc="<p>The <code>nextToken</code> value returned by a previous paginated request.</p>"]
+    pub next_token: Option<String>,
+    #[doc="<p>One or more volume IDs for which in-progress modifications will be described.</p>"]
+    pub volume_ids: Option<VolumeIdStringList>,
+}
+
+
+/// Serialize `DescribeVolumesModificationsRequest` contents to a `SignedRequest`.
+struct DescribeVolumesModificationsRequestSerializer;
+impl DescribeVolumesModificationsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeVolumesModificationsRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+        }
+        if let Some(ref field_value) = obj.filters {
+            FilterListSerializer::serialize(params,
+                                            &format!("{}{}", prefix, "Filter"),
+                                            field_value);
+        }
+        if let Some(ref field_value) = obj.max_results {
+            params.put(&format!("{}{}", prefix, "MaxResults"),
+                       &field_value.to_string());
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+        }
+        if let Some(ref field_value) = obj.volume_ids {
+            VolumeIdStringListSerializer::serialize(params,
+                                                    &format!("{}{}", prefix, "VolumeId"),
+                                                    field_value);
+        }
+
+    }
+}
+
+#[derive(Default,Debug,Clone)]
+pub struct DescribeVolumesModificationsResult {
+    #[doc="<p>Token for pagination, null if there are no more results </p>"]
+    pub next_token: Option<String>,
+    #[doc="<p>A list of returned <a>VolumeModification</a> objects.</p>"]
+    pub volumes_modifications: Option<VolumeModificationList>,
+}
+
+struct DescribeVolumesModificationsResultDeserializer;
+impl DescribeVolumesModificationsResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<DescribeVolumesModificationsResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = DescribeVolumesModificationsResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "nextToken" => {
+                            obj.next_token = Some(try!(StringDeserializer::deserialize("nextToken",
+                                                                                       stack)));
+                        }
+                        "volumeModificationSet" => {
+                            obj.volumes_modifications =
+                                Some(try!(VolumeModificationListDeserializer::deserialize("volumeModificationSet",
+                                                                                          stack)));
+                        }
+                        _ => skip_tree(stack),
+                    }
+                }
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
 #[doc="<p>Contains the parameters for DescribeVolumes.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct DescribeVolumesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
     pub dry_run: Option<Boolean>,
-    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>attachment.attach-time</code> - The time stamp when the attachment initiated.</p> </li> <li> <p> <code>attachment.delete-on-termination</code> - Whether the volume is deleted on instance termination.</p> </li> <li> <p> <code>attachment.device</code> - The device name that is exposed to the instance (for example, <code>/dev/sda1</code>).</p> </li> <li> <p> <code>attachment.instance-id</code> - The ID of the instance the volume is attached to.</p> </li> <li> <p> <code>attachment.status</code> - The attachment state (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone in which the volume was created.</p> </li> <li> <p> <code>create-time</code> - The time stamp when the volume was created.</p> </li> <li> <p> <code>encrypted</code> - The encryption status of the volume.</p> </li> <li> <p> <code>size</code> - The size of the volume, in GiB.</p> </li> <li> <p> <code>snapshot-id</code> - The snapshot from which the volume was created.</p> </li> <li> <p> <code>status</code> - The status of the volume (<code>creating</code> | <code>available</code> | <code>in-use</code> | <code>deleting</code> | <code>deleted</code> | <code>error</code>).</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>volume-id</code> - The volume ID.</p> </li> <li> <p> <code>volume-type</code> - The Amazon EBS volume type. This can be <code>gp2</code> for General Purpose SSD, <code>io1</code> for Provisioned IOPS SSD, <code>st1</code> for Throughput Optimized HDD, <code>sc1</code> for Cold HDD, or <code>standard</code> for Magnetic volumes.</p> </li> </ul>"]
+    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>attachment.attach-time</code> - The time stamp when the attachment initiated.</p> </li> <li> <p> <code>attachment.delete-on-termination</code> - Whether the volume is deleted on instance termination.</p> </li> <li> <p> <code>attachment.device</code> - The device name that is exposed to the instance (for example, <code>/dev/sda1</code>).</p> </li> <li> <p> <code>attachment.instance-id</code> - The ID of the instance the volume is attached to.</p> </li> <li> <p> <code>attachment.status</code> - The attachment state (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone in which the volume was created.</p> </li> <li> <p> <code>create-time</code> - The time stamp when the volume was created.</p> </li> <li> <p> <code>encrypted</code> - The encryption status of the volume.</p> </li> <li> <p> <code>size</code> - The size of the volume, in GiB.</p> </li> <li> <p> <code>snapshot-id</code> - The snapshot from which the volume was created.</p> </li> <li> <p> <code>status</code> - The status of the volume (<code>creating</code> | <code>available</code> | <code>in-use</code> | <code>deleting</code> | <code>deleted</code> | <code>error</code>).</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>volume-id</code> - The volume ID.</p> </li> <li> <p> <code>volume-type</code> - The Amazon EBS volume type. This can be <code>gp2</code> for General Purpose SSD, <code>io1</code> for Provisioned IOPS SSD, <code>st1</code> for Throughput Optimized HDD, <code>sc1</code> for Cold HDD, or <code>standard</code> for Magnetic volumes.</p> </li> </ul>"]
     pub filters: Option<FilterList>,
-    #[doc="<p>The maximum number of volume results returned by <code>DescribeVolumes</code> in paginated output. When this parameter is used, <code>DescribeVolumes</code> only returns <code>MaxResults</code> results in a single page along with a <code>NextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeVolumes</code> request with the returned <code>NextToken</code> value. This value can be between 5 and 1000; if <code>MaxResults</code> is given a value larger than 1000, only 1000 results are returned. If this parameter is not used, then <code>DescribeVolumes</code> returns all results. You cannot specify this parameter and the volume IDs parameter in the same request.</p>"]
+    #[doc="<p>The maximum number of volume results returned by <code>DescribeVolumes</code> in paginated output. When this parameter is used, <code>DescribeVolumes</code> only returns <code>MaxResults</code> results in a single page along with a <code>NextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeVolumes</code> request with the returned <code>NextToken</code> value. This value can be between 5 and 500; if <code>MaxResults</code> is given a value larger than 500, only 500 results are returned. If this parameter is not used, then <code>DescribeVolumes</code> returns all results. You cannot specify this parameter and the volume IDs parameter in the same request.</p>"]
     pub max_results: Option<Integer>,
     #[doc="<p>The <code>NextToken</code> value returned from a previous paginated <code>DescribeVolumes</code> request where <code>MaxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>NextToken</code> value. This value is <code>null</code> when there are no more results to return.</p>"]
     pub next_token: Option<String>,
@@ -13458,7 +13882,7 @@ impl DescribeVpcClassicLinkDnsSupportResultDeserializer {
 pub struct DescribeVpcClassicLinkRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
     pub dry_run: Option<Boolean>,
-    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>is-classic-link-enabled</code> - Whether the VPC is enabled for ClassicLink (<code>true</code> | <code>false</code>).</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> </ul>"]
+    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>is-classic-link-enabled</code> - Whether the VPC is enabled for ClassicLink (<code>true</code> | <code>false</code>).</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> </ul>"]
     pub filters: Option<FilterList>,
     #[doc="<p>One or more VPCs for which you want to describe the ClassicLink status.</p>"]
     pub vpc_ids: Option<VpcClassicLinkIdList>,
@@ -13743,7 +14167,7 @@ impl DescribeVpcEndpointsResultDeserializer {
 pub struct DescribeVpcPeeringConnectionsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
     pub dry_run: Option<Boolean>,
-    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>accepter-vpc-info.cidr-block</code> - The IPv4 CIDR block of the peer VPC.</p> </li> <li> <p> <code>accepter-vpc-info.owner-id</code> - The AWS account ID of the owner of the peer VPC.</p> </li> <li> <p> <code>accepter-vpc-info.vpc-id</code> - The ID of the peer VPC.</p> </li> <li> <p> <code>expiration-time</code> - The expiration date and time for the VPC peering connection.</p> </li> <li> <p> <code>requester-vpc-info.cidr-block</code> - The IPv4 CIDR block of the requester's VPC.</p> </li> <li> <p> <code>requester-vpc-info.owner-id</code> - The AWS account ID of the owner of the requester VPC.</p> </li> <li> <p> <code>requester-vpc-info.vpc-id</code> - The ID of the requester VPC.</p> </li> <li> <p> <code>status-code</code> - The status of the VPC peering connection (<code>pending-acceptance</code> | <code>failed</code> | <code>expired</code> | <code>provisioning</code> | <code>active</code> | <code>deleted</code> | <code>rejected</code>).</p> </li> <li> <p> <code>status-message</code> - A message that provides more information about the status of the VPC peering connection, if applicable.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>vpc-peering-connection-id</code> - The ID of the VPC peering connection.</p> </li> </ul>"]
+    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>accepter-vpc-info.cidr-block</code> - The IPv4 CIDR block of the peer VPC.</p> </li> <li> <p> <code>accepter-vpc-info.owner-id</code> - The AWS account ID of the owner of the peer VPC.</p> </li> <li> <p> <code>accepter-vpc-info.vpc-id</code> - The ID of the peer VPC.</p> </li> <li> <p> <code>expiration-time</code> - The expiration date and time for the VPC peering connection.</p> </li> <li> <p> <code>requester-vpc-info.cidr-block</code> - The IPv4 CIDR block of the requester's VPC.</p> </li> <li> <p> <code>requester-vpc-info.owner-id</code> - The AWS account ID of the owner of the requester VPC.</p> </li> <li> <p> <code>requester-vpc-info.vpc-id</code> - The ID of the requester VPC.</p> </li> <li> <p> <code>status-code</code> - The status of the VPC peering connection (<code>pending-acceptance</code> | <code>failed</code> | <code>expired</code> | <code>provisioning</code> | <code>active</code> | <code>deleted</code> | <code>rejected</code>).</p> </li> <li> <p> <code>status-message</code> - A message that provides more information about the status of the VPC peering connection, if applicable.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>vpc-peering-connection-id</code> - The ID of the VPC peering connection.</p> </li> </ul>"]
     pub filters: Option<FilterList>,
     #[doc="<p>One or more VPC peering connection IDs.</p> <p>Default: Describes all your VPC peering connections.</p>"]
     pub vpc_peering_connection_ids: Option<ValueStringList>,
@@ -13832,7 +14256,7 @@ impl DescribeVpcPeeringConnectionsResultDeserializer {
 pub struct DescribeVpcsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
     pub dry_run: Option<Boolean>,
-    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>cidr</code> - The IPv4 CIDR block of the VPC. The CIDR block you specify must exactly match the VPC's CIDR block for information to be returned for the VPC. Must contain the slash followed by one or two digits (for example, <code>/28</code>).</p> </li> <li> <p> <code>dhcp-options-id</code> - The ID of a set of DHCP options.</p> </li> <li> <p> <code>ipv6-cidr-block-association.ipv6-cidr-block</code> - An IPv6 CIDR block associated with the VPC.</p> </li> <li> <p> <code>ipv6-cidr-block-association.association-id</code> - The association ID for an IPv6 CIDR block associated with the VPC.</p> </li> <li> <p> <code>ipv6-cidr-block-association.state</code> - The state of an IPv6 CIDR block associated with the VPC.</p> </li> <li> <p> <code>isDefault</code> - Indicates whether the VPC is the default VPC.</p> </li> <li> <p> <code>state</code> - The state of the VPC (<code>pending</code> | <code>available</code>).</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC.</p> </li> </ul>"]
+    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>cidr</code> - The IPv4 CIDR block of the VPC. The CIDR block you specify must exactly match the VPC's CIDR block for information to be returned for the VPC. Must contain the slash followed by one or two digits (for example, <code>/28</code>).</p> </li> <li> <p> <code>dhcp-options-id</code> - The ID of a set of DHCP options.</p> </li> <li> <p> <code>ipv6-cidr-block-association.ipv6-cidr-block</code> - An IPv6 CIDR block associated with the VPC.</p> </li> <li> <p> <code>ipv6-cidr-block-association.association-id</code> - The association ID for an IPv6 CIDR block associated with the VPC.</p> </li> <li> <p> <code>ipv6-cidr-block-association.state</code> - The state of an IPv6 CIDR block associated with the VPC.</p> </li> <li> <p> <code>isDefault</code> - Indicates whether the VPC is the default VPC.</p> </li> <li> <p> <code>state</code> - The state of the VPC (<code>pending</code> | <code>available</code>).</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC.</p> </li> </ul>"]
     pub filters: Option<FilterList>,
     #[doc="<p>One or more VPC IDs.</p> <p>Default: Describes all your VPCs.</p>"]
     pub vpc_ids: Option<VpcIdStringList>,
@@ -13919,7 +14343,7 @@ impl DescribeVpcsResultDeserializer {
 pub struct DescribeVpnConnectionsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
     pub dry_run: Option<Boolean>,
-    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>customer-gateway-configuration</code> - The configuration information for the customer gateway.</p> </li> <li> <p> <code>customer-gateway-id</code> - The ID of a customer gateway associated with the VPN connection.</p> </li> <li> <p> <code>state</code> - The state of the VPN connection (<code>pending</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>).</p> </li> <li> <p> <code>option.static-routes-only</code> - Indicates whether the connection has static routes only. Used for devices that do not support Border Gateway Protocol (BGP).</p> </li> <li> <p> <code>route.destination-cidr-block</code> - The destination CIDR block. This corresponds to the subnet used in a customer data center.</p> </li> <li> <p> <code>bgp-asn</code> - The BGP Autonomous System Number (ASN) associated with a BGP device.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>type</code> - The type of VPN connection. Currently the only supported type is <code>ipsec.1</code>.</p> </li> <li> <p> <code>vpn-connection-id</code> - The ID of the VPN connection.</p> </li> <li> <p> <code>vpn-gateway-id</code> - The ID of a virtual private gateway associated with the VPN connection.</p> </li> </ul>"]
+    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>customer-gateway-configuration</code> - The configuration information for the customer gateway.</p> </li> <li> <p> <code>customer-gateway-id</code> - The ID of a customer gateway associated with the VPN connection.</p> </li> <li> <p> <code>state</code> - The state of the VPN connection (<code>pending</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>).</p> </li> <li> <p> <code>option.static-routes-only</code> - Indicates whether the connection has static routes only. Used for devices that do not support Border Gateway Protocol (BGP).</p> </li> <li> <p> <code>route.destination-cidr-block</code> - The destination CIDR block. This corresponds to the subnet used in a customer data center.</p> </li> <li> <p> <code>bgp-asn</code> - The BGP Autonomous System Number (ASN) associated with a BGP device.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>type</code> - The type of VPN connection. Currently the only supported type is <code>ipsec.1</code>.</p> </li> <li> <p> <code>vpn-connection-id</code> - The ID of the VPN connection.</p> </li> <li> <p> <code>vpn-gateway-id</code> - The ID of a virtual private gateway associated with the VPN connection.</p> </li> </ul>"]
     pub filters: Option<FilterList>,
     #[doc="<p>One or more VPN connection IDs.</p> <p>Default: Describes your VPN connections.</p>"]
     pub vpn_connection_ids: Option<VpnConnectionIdStringList>,
@@ -14009,7 +14433,7 @@ impl DescribeVpnConnectionsResultDeserializer {
 pub struct DescribeVpnGatewaysRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
     pub dry_run: Option<Boolean>,
-    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>attachment.state</code> - The current state of the attachment between the gateway and the VPC (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>attachment.vpc-id</code> - The ID of an attached VPC.</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone for the virtual private gateway (if applicable).</p> </li> <li> <p> <code>state</code> - The state of the virtual private gateway (<code>pending</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>).</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>type</code> - The type of virtual private gateway. Currently the only supported type is <code>ipsec.1</code>.</p> </li> <li> <p> <code>vpn-gateway-id</code> - The ID of the virtual private gateway.</p> </li> </ul>"]
+    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>attachment.state</code> - The current state of the attachment between the gateway and the VPC (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>attachment.vpc-id</code> - The ID of an attached VPC.</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone for the virtual private gateway (if applicable).</p> </li> <li> <p> <code>state</code> - The state of the virtual private gateway (<code>pending</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>).</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>type</code> - The type of virtual private gateway. Currently the only supported type is <code>ipsec.1</code>.</p> </li> <li> <p> <code>vpn-gateway-id</code> - The ID of the virtual private gateway.</p> </li> </ul>"]
     pub filters: Option<FilterList>,
     #[doc="<p>One or more virtual private gateway IDs.</p> <p>Default: Describes all your virtual private gateways.</p>"]
     pub vpn_gateway_ids: Option<VpnGatewayIdStringList>,
@@ -14786,6 +15210,76 @@ impl DisassociateAddressRequestSerializer {
     }
 }
 
+#[derive(Default,Debug,Clone)]
+pub struct DisassociateIamInstanceProfileRequest {
+    #[doc="<p>The ID of the IAM instance profile association.</p>"]
+    pub association_id: String,
+}
+
+
+/// Serialize `DisassociateIamInstanceProfileRequest` contents to a `SignedRequest`.
+struct DisassociateIamInstanceProfileRequestSerializer;
+impl DisassociateIamInstanceProfileRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DisassociateIamInstanceProfileRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "AssociationId"),
+                   &obj.association_id);
+
+    }
+}
+
+#[derive(Default,Debug,Clone)]
+pub struct DisassociateIamInstanceProfileResult {
+    #[doc="<p>Information about the IAM instance profile association.</p>"]
+    pub iam_instance_profile_association: Option<IamInstanceProfileAssociation>,
+}
+
+struct DisassociateIamInstanceProfileResultDeserializer;
+impl DisassociateIamInstanceProfileResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<DisassociateIamInstanceProfileResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = DisassociateIamInstanceProfileResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "iamInstanceProfileAssociation" => {
+                            obj.iam_instance_profile_association = Some(try!(IamInstanceProfileAssociationDeserializer::deserialize("iamInstanceProfileAssociation", stack)));
+                        }
+                        _ => skip_tree(stack),
+                    }
+                }
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
 #[doc="<p>Contains the parameters for DisassociateRouteTable.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct DisassociateRouteTableRequest {
@@ -16787,9 +17281,11 @@ pub struct GetReservedInstancesExchangeQuoteResult {
     pub output_reserved_instances_will_expire_at: Option<DateTime>,
     #[doc="<p>The total true upfront charge for the exchange.</p>"]
     pub payment_due: Option<String>,
+    #[doc="<p>The cost associated with the Reserved Instance.</p>"]
     pub reserved_instance_value_rollup: Option<ReservationValue>,
     #[doc="<p>The configuration of your Convertible Reserved Instances.</p>"]
     pub reserved_instance_value_set: Option<ReservedInstanceReservationValueSet>,
+    #[doc="<p>The cost associated with the Reserved Instance.</p>"]
     pub target_configuration_value_rollup: Option<ReservationValue>,
     #[doc="<p>The values of the target Convertible Reserved Instances.</p>"]
     pub target_configuration_value_set: Option<TargetReservationValueSet>,
@@ -17830,6 +18326,138 @@ impl IamInstanceProfileDeserializer {
             }
         }
 
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
+#[doc="<p>Describes an association between an IAM instance profile and an instance.</p>"]
+#[derive(Default,Debug,Clone)]
+pub struct IamInstanceProfileAssociation {
+    #[doc="<p>The ID of the association.</p>"]
+    pub association_id: Option<String>,
+    #[doc="<p>The IAM instance profile.</p>"]
+    pub iam_instance_profile: Option<IamInstanceProfile>,
+    #[doc="<p>The ID of the instance.</p>"]
+    pub instance_id: Option<String>,
+    #[doc="<p>The state of the association.</p>"]
+    pub state: Option<IamInstanceProfileAssociationState>,
+    #[doc="<p>The time the IAM instance profile was associated with the instance.</p>"]
+    pub timestamp: Option<DateTime>,
+}
+
+struct IamInstanceProfileAssociationDeserializer;
+impl IamInstanceProfileAssociationDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<IamInstanceProfileAssociation, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = IamInstanceProfileAssociation::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "associationId" => {
+                            obj.association_id = Some(try!(StringDeserializer::deserialize("associationId",
+                                                                                           stack)));
+                        }
+                        "iamInstanceProfile" => {
+                            obj.iam_instance_profile =
+                                Some(try!(IamInstanceProfileDeserializer::deserialize("iamInstanceProfile",
+                                                                                      stack)));
+                        }
+                        "instanceId" => {
+                            obj.instance_id = Some(try!(StringDeserializer::deserialize("instanceId",
+                                                                                        stack)));
+                        }
+                        "state" => {
+                            obj.state = Some(try!(IamInstanceProfileAssociationStateDeserializer::deserialize("state", stack)));
+                        }
+                        "timestamp" => {
+                            obj.timestamp = Some(try!(DateTimeDeserializer::deserialize("timestamp",
+                                                                                        stack)));
+                        }
+                        _ => skip_tree(stack),
+                    }
+                }
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
+pub type IamInstanceProfileAssociationSet = Vec<IamInstanceProfileAssociation>;
+struct IamInstanceProfileAssociationSetDeserializer;
+impl IamInstanceProfileAssociationSetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<IamInstanceProfileAssociationSet, XmlParseError> {
+
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "item" {
+                        obj.push(try!(IamInstanceProfileAssociationDeserializer::deserialize("item", stack)));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+
+    }
+}
+pub type IamInstanceProfileAssociationState = String;
+struct IamInstanceProfileAssociationStateDeserializer;
+impl IamInstanceProfileAssociationStateDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<IamInstanceProfileAssociationState, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -20528,6 +21156,21 @@ impl InstanceExportDetailsDeserializer {
             }
         }
 
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
+pub type InstanceHealthStatus = String;
+struct InstanceHealthStatusDeserializer;
+impl InstanceHealthStatusDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<InstanceHealthStatus, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -24261,7 +24904,7 @@ impl ModifySpotFleetRequestResponseDeserializer {
 #[doc="<p>Contains the parameters for ModifySubnetAttribute.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct ModifySubnetAttributeRequest {
-    #[doc="<p>Specify <code>true</code> to indicate that network interfaces created in the specified subnet should be assigned an IPv6 address. This includes a network interface that's created when launching an instance into the subnet (the instance therefore receives an IPv6 address).</p>"]
+    #[doc="<p>Specify <code>true</code> to indicate that network interfaces created in the specified subnet should be assigned an IPv6 address. This includes a network interface that's created when launching an instance into the subnet (the instance therefore receives an IPv6 address). </p> <p>If you enable the IPv6 addressing feature for your subnet, your network interface or instance only receives an IPv6 address if it's created using version <code>2016-11-15</code> or later of the Amazon EC2 API.</p>"]
     pub assign_ipv_6_address_on_creation: Option<AttributeBooleanValue>,
     #[doc="<p>Specify <code>true</code> to indicate that network interfaces created in the specified subnet should be assigned a public IPv4 address. This includes a network interface that's created when launching an instance into the subnet (the instance therefore receives a public IPv4 address).</p>"]
     pub map_public_ip_on_launch: Option<AttributeBooleanValue>,
@@ -24332,6 +24975,95 @@ impl ModifyVolumeAttributeRequestSerializer {
     }
 }
 
+#[derive(Default,Debug,Clone)]
+pub struct ModifyVolumeRequest {
+    #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    pub dry_run: Option<Boolean>,
+    #[doc="<p>Target IOPS rate of the volume to be modified.</p> <p>Only valid for Provisioned IOPS SSD (<code>io1</code>) volumes. For more information about <code>io1</code> IOPS configuration, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html#EBSVolumeTypes_piops\">http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html#EBSVolumeTypes_piops</a>.</p> <p>Default: If no IOPS value is specified, the existing value is retained. </p>"]
+    pub iops: Option<Integer>,
+    #[doc="<p>Target size in GiB of the volume to be modified. Target volume size must be greater than or equal to than the existing size of the volume. For information about available EBS volume sizes, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html\">http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html</a>.</p> <p>Default: If no size is specified, the existing size is retained. </p>"]
+    pub size: Option<Integer>,
+    pub volume_id: String,
+    #[doc="<p>Target EBS volume type of the volume to be modified</p> <p> The API does not support modifications for volume type <code>standard</code>. You also cannot change the type of a volume to <code>standard</code>. </p> <p>Default: If no type is specified, the existing type is retained. </p>"]
+    pub volume_type: Option<VolumeType>,
+}
+
+
+/// Serialize `ModifyVolumeRequest` contents to a `SignedRequest`.
+struct ModifyVolumeRequestSerializer;
+impl ModifyVolumeRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyVolumeRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+        }
+        if let Some(ref field_value) = obj.iops {
+            params.put(&format!("{}{}", prefix, "Iops"), &field_value.to_string());
+        }
+        if let Some(ref field_value) = obj.size {
+            params.put(&format!("{}{}", prefix, "Size"), &field_value.to_string());
+        }
+        params.put(&format!("{}{}", prefix, "VolumeId"), &obj.volume_id);
+        if let Some(ref field_value) = obj.volume_type {
+            params.put(&format!("{}{}", prefix, "VolumeType"), &field_value);
+        }
+
+    }
+}
+
+#[derive(Default,Debug,Clone)]
+pub struct ModifyVolumeResult {
+    #[doc="<p>A <a>VolumeModification</a> object.</p>"]
+    pub volume_modification: Option<VolumeModification>,
+}
+
+struct ModifyVolumeResultDeserializer;
+impl ModifyVolumeResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<ModifyVolumeResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ModifyVolumeResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "volumeModification" => {
+                            obj.volume_modification =
+                                Some(try!(VolumeModificationDeserializer::deserialize("volumeModification",
+                                                                                      stack)));
+                        }
+                        _ => skip_tree(stack),
+                    }
+                }
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
 #[doc="<p>Contains the parameters for ModifyVpcAttribute.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct ModifyVpcAttributeRequest {
@@ -26489,7 +27221,7 @@ pub struct Placement {
     pub availability_zone: Option<String>,
     #[doc="<p>The name of the placement group the instance is in (for cluster compute instances).</p>"]
     pub group_name: Option<String>,
-    #[doc="<p>The ID of the Dedicted host on which the instance resides. This parameter is not support for the <a>ImportInstance</a> command.</p>"]
+    #[doc="<p>The ID of the Dedicated Host on which the instance resides. This parameter is not supported for the <a>ImportInstance</a> command.</p>"]
     pub host_id: Option<String>,
     #[doc="<p>The tenancy of the instance (if the instance is running in a VPC). An instance with a tenancy of <code>dedicated</code> runs on single-tenant hardware. The <code>host</code> tenancy is not supported for the <a>ImportInstance</a> command.</p>"]
     pub tenancy: Option<Tenancy>,
@@ -28601,6 +29333,8 @@ impl RegionNameStringListSerializer {
 pub struct RegisterImageRequest {
     #[doc="<p>The architecture of the AMI.</p> <p>Default: For Amazon EBS-backed AMIs, <code>i386</code>. For instance store-backed AMIs, the architecture specified in the manifest file.</p>"]
     pub architecture: Option<ArchitectureValues>,
+    #[doc="<p>The billing product codes. Your account must be authorized to specify billing product codes. Otherwise, you can use the AWS Marketplace to bill for the use of an AMI.</p>"]
+    pub billing_products: Option<BillingProductList>,
     #[doc="<p>One or more block device mapping entries.</p>"]
     pub block_device_mappings: Option<BlockDeviceMappingRequestList>,
     #[doc="<p>A description for your AMI.</p>"]
@@ -28637,6 +29371,11 @@ impl RegisterImageRequestSerializer {
 
         if let Some(ref field_value) = obj.architecture {
             params.put(&format!("{}{}", prefix, "Architecture"), &field_value);
+        }
+        if let Some(ref field_value) = obj.billing_products {
+            BillingProductListSerializer::serialize(params,
+                                                    &format!("{}{}", prefix, "BillingProduct"),
+                                                    field_value);
         }
         if let Some(ref field_value) = obj.block_device_mappings {
             BlockDeviceMappingRequestListSerializer::serialize(params,
@@ -28903,6 +29642,85 @@ impl ReleaseHostsResultDeserializer {
                             obj.unsuccessful =
                                 Some(try!(UnsuccessfulItemListDeserializer::deserialize("unsuccessful",
                                                                                         stack)));
+                        }
+                        _ => skip_tree(stack),
+                    }
+                }
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
+#[derive(Default,Debug,Clone)]
+pub struct ReplaceIamInstanceProfileAssociationRequest {
+    #[doc="<p>The ID of the existing IAM instance profile association.</p>"]
+    pub association_id: String,
+    #[doc="<p>The IAM instance profile.</p>"]
+    pub iam_instance_profile: IamInstanceProfileSpecification,
+}
+
+
+/// Serialize `ReplaceIamInstanceProfileAssociationRequest` contents to a `SignedRequest`.
+struct ReplaceIamInstanceProfileAssociationRequestSerializer;
+impl ReplaceIamInstanceProfileAssociationRequestSerializer {
+    fn serialize(params: &mut Params,
+                 name: &str,
+                 obj: &ReplaceIamInstanceProfileAssociationRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "AssociationId"),
+                   &obj.association_id);
+        IamInstanceProfileSpecificationSerializer::serialize(params,
+                                                             &format!("{}{}",
+                                                                     prefix,
+                                                                     "IamInstanceProfile"),
+                                                             &obj.iam_instance_profile);
+
+    }
+}
+
+#[derive(Default,Debug,Clone)]
+pub struct ReplaceIamInstanceProfileAssociationResult {
+    #[doc="<p>Information about the IAM instance profile association.</p>"]
+    pub iam_instance_profile_association: Option<IamInstanceProfileAssociation>,
+}
+
+struct ReplaceIamInstanceProfileAssociationResultDeserializer;
+impl ReplaceIamInstanceProfileAssociationResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<ReplaceIamInstanceProfileAssociationResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ReplaceIamInstanceProfileAssociationResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "iamInstanceProfileAssociation" => {
+                            obj.iam_instance_profile_association = Some(try!(IamInstanceProfileAssociationDeserializer::deserialize("iamInstanceProfileAssociation", stack)));
                         }
                         _ => skip_tree(stack),
                     }
@@ -32039,6 +32857,8 @@ pub struct RunInstancesRequest {
     pub security_groups: Option<SecurityGroupStringList>,
     #[doc="<p>[EC2-VPC] The ID of the subnet to launch the instance into.</p>"]
     pub subnet_id: Option<String>,
+    #[doc="<p>The tags to apply to the resources during launch. You can tag instances and volumes. The specified tags are applied to all instances or volumes that are created during launch.</p>"]
+    pub tag_specifications: Option<TagSpecificationList>,
     #[doc="<p>The user data to make available to the instance. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html\">Running Commands on Your Linux Instance at Launch</a> (Linux) and <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ec2-instance-metadata.html#instancedata-add-user-data\">Adding User Data</a> (Windows). If you are using an AWS SDK or command line tool, Base64-encoding is performed for you, and you can load the text from a file. Otherwise, you must provide Base64-encoded text.</p>"]
     pub user_data: Option<String>,
 }
@@ -32150,6 +32970,11 @@ impl RunInstancesRequestSerializer {
         }
         if let Some(ref field_value) = obj.subnet_id {
             params.put(&format!("{}{}", prefix, "SubnetId"), &field_value);
+        }
+        if let Some(ref field_value) = obj.tag_specifications {
+            TagSpecificationListSerializer::serialize(params,
+                                                      &format!("{}{}", prefix, "TagSpecification"),
+                                                      field_value);
         }
         if let Some(ref field_value) = obj.user_data {
             params.put(&format!("{}{}", prefix, "UserData"), &field_value);
@@ -34663,6 +35488,8 @@ pub struct SpotFleetRequestConfigData {
     pub iam_fleet_role: String,
     #[doc="<p>Information about the launch specifications for the Spot fleet request.</p>"]
     pub launch_specifications: LaunchSpecsList,
+    #[doc="<p>Indicates whether Spot fleet should replace unhealthy instances.</p>"]
+    pub replace_unhealthy_instances: Option<Boolean>,
     #[doc="<p>The bid price per unit hour.</p>"]
     pub spot_price: String,
     #[doc="<p>The number of units to request. You can choose to set the target capacity in terms of instances or a performance characteristic that is important to your application workload, such as vCPUs, memory, or I/O.</p>"]
@@ -34724,6 +35551,11 @@ impl SpotFleetRequestConfigDataDeserializer {
                             obj.launch_specifications =
                                 try!(LaunchSpecsListDeserializer::deserialize("launchSpecifications",
                                                                               stack));
+                        }
+                        "replaceUnhealthyInstances" => {
+                            obj.replace_unhealthy_instances =
+                                Some(try!(BooleanDeserializer::deserialize("replaceUnhealthyInstances",
+                                                                           stack)));
                         }
                         "spotPrice" => {
                             obj.spot_price = try!(StringDeserializer::deserialize("spotPrice",
@@ -34795,6 +35627,10 @@ impl SpotFleetRequestConfigDataSerializer {
         LaunchSpecsListSerializer::serialize(params,
                                              &format!("{}{}", prefix, "LaunchSpecifications"),
                                              &obj.launch_specifications);
+        if let Some(ref field_value) = obj.replace_unhealthy_instances {
+            params.put(&format!("{}{}", prefix, "ReplaceUnhealthyInstances"),
+                       &field_value.to_string());
+        }
         params.put(&format!("{}{}", prefix, "SpotPrice"), &obj.spot_price);
         params.put(&format!("{}{}", prefix, "TargetCapacity"),
                    &obj.target_capacity.to_string());
@@ -35226,6 +36062,8 @@ pub struct SpotPlacement {
     pub availability_zone: Option<String>,
     #[doc="<p>The name of the placement group (for cluster instances).</p>"]
     pub group_name: Option<String>,
+    #[doc="<p>The tenancy of the instance (if the instance is running in a VPC). An instance with a tenancy of <code>dedicated</code> runs on single-tenant hardware. The <code>host</code> tenancy is not supported for Spot instances.</p>"]
+    pub tenancy: Option<Tenancy>,
 }
 
 struct SpotPlacementDeserializer;
@@ -35259,6 +36097,10 @@ impl SpotPlacementDeserializer {
                             obj.group_name = Some(try!(StringDeserializer::deserialize("groupName",
                                                                                        stack)));
                         }
+                        "tenancy" => {
+                            obj.tenancy = Some(try!(TenancyDeserializer::deserialize("tenancy",
+                                                                                     stack)));
+                        }
                         _ => skip_tree(stack),
                     }
                 }
@@ -35290,6 +36132,9 @@ impl SpotPlacementSerializer {
         }
         if let Some(ref field_value) = obj.group_name {
             params.put(&format!("{}{}", prefix, "GroupName"), &field_value);
+        }
+        if let Some(ref field_value) = obj.tenancy {
+            params.put(&format!("{}{}", prefix, "Tenancy"), &field_value);
         }
 
     }
@@ -35762,7 +36607,7 @@ impl StateDeserializer {
 pub struct StateReason {
     #[doc="<p>The reason code for the state change.</p>"]
     pub code: Option<String>,
-    #[doc="<p>The message for the state change.</p> <ul> <li> <p> <code>Server.SpotInstanceTermination</code>: A Spot instance was terminated due to an increase in the market price.</p> </li> <li> <p> <code>Server.InternalError</code>: An internal error occurred during instance launch, resulting in termination.</p> </li> <li> <p> <code>Server.InsufficientInstanceCapacity</code>: There was insufficient instance capacity to satisfy the launch request.</p> </li> <li> <p> <code>Client.InternalError</code>: A client error caused the instance to terminate on launch.</p> </li> <li> <p> <code>Client.InstanceInitiatedShutdown</code>: The instance was shut down using the <code>shutdown -h</code> command from the instance.</p> </li> <li> <p> <code>Client.UserInitiatedShutdown</code>: The instance was shut down using the Amazon EC2 API.</p> </li> <li> <p> <code>Client.VolumeLimitExceeded</code>: The limit on the number of EBS volumes or total storage was exceeded. Decrease usage or request an increase in your limits.</p> </li> <li> <p> <code>Client.InvalidSnapshot.NotFound</code>: The specified snapshot was not found.</p> </li> </ul>"]
+    #[doc="<p>The message for the state change.</p> <ul> <li> <p> <code>Server.InsufficientInstanceCapacity</code>: There was insufficient instance capacity to satisfy the launch request.</p> </li> <li> <p> <code>Server.InternalError</code>: An internal error occurred during instance launch, resulting in termination.</p> </li> <li> <p> <code>Server.ScheduledStop</code>: The instance was stopped due to a scheduled retirement.</p> </li> <li> <p> <code>Server.SpotInstanceTermination</code>: A Spot instance was terminated due to an increase in the market price.</p> </li> <li> <p> <code>Client.InternalError</code>: A client error caused the instance to terminate on launch.</p> </li> <li> <p> <code>Client.InstanceInitiatedShutdown</code>: The instance was shut down using the <code>shutdown -h</code> command from the instance.</p> </li> <li> <p> <code>Client.UserInitiatedShutdown</code>: The instance was shut down using the Amazon EC2 API.</p> </li> <li> <p> <code>Client.VolumeLimitExceeded</code>: The limit on the number of EBS volumes or total storage was exceeded. Decrease usage or request an increase in your limits.</p> </li> <li> <p> <code>Client.InvalidSnapshot.NotFound</code>: The specified snapshot was not found.</p> </li> </ul>"]
     pub message: Option<String>,
 }
 
@@ -36000,6 +36845,35 @@ impl StorageSerializer {
 
         if let Some(ref field_value) = obj.s3 {
             S3StorageSerializer::serialize(params, &format!("{}{}", prefix, "S3"), field_value);
+        }
+
+    }
+}
+
+#[doc="<p>Describes a storage location in Amazon S3.</p>"]
+#[derive(Default,Debug,Clone)]
+pub struct StorageLocation {
+    #[doc="<p>The name of the S3 bucket.</p>"]
+    pub bucket: Option<String>,
+    #[doc="<p>The key.</p>"]
+    pub key: Option<String>,
+}
+
+
+/// Serialize `StorageLocation` contents to a `SignedRequest`.
+struct StorageLocationSerializer;
+impl StorageLocationSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &StorageLocation) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.bucket {
+            params.put(&format!("{}{}", prefix, "Bucket"), &field_value);
+        }
+        if let Some(ref field_value) = obj.key {
+            params.put(&format!("{}{}", prefix, "Key"), &field_value);
         }
 
     }
@@ -36621,6 +37495,48 @@ impl TagListSerializer {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             TagSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
+#[doc="<p>The tags to apply to a resource when the resource is being created.</p>"]
+#[derive(Default,Debug,Clone)]
+pub struct TagSpecification {
+    #[doc="<p>The type of resource to tag. Currently, the resource types that support tagging on creation are <code>instance</code> and <code>volume</code>. </p>"]
+    pub resource_type: Option<ResourceType>,
+    #[doc="<p>The tags to apply to the resource.</p>"]
+    pub tags: Option<TagList>,
+}
+
+
+/// Serialize `TagSpecification` contents to a `SignedRequest`.
+struct TagSpecificationSerializer;
+impl TagSpecificationSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &TagSpecification) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.resource_type {
+            params.put(&format!("{}{}", prefix, "ResourceType"), &field_value);
+        }
+        if let Some(ref field_value) = obj.tags {
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
+        }
+
+    }
+}
+
+pub type TagSpecificationList = Vec<TagSpecification>;
+
+/// Serialize `TagSpecificationList` contents to a `SignedRequest`.
+struct TagSpecificationListSerializer;
+impl TagSpecificationListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &TagSpecificationList) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            TagSpecificationSerializer::serialize(params, &key, obj);
         }
     }
 }
@@ -38188,6 +39104,181 @@ impl VolumeListDeserializer {
                 }
             }
         }
+
+        Ok(obj)
+
+    }
+}
+#[doc="<p>Describes the modification status of an EBS volume.</p> <p>If the volume has never been modified, some element values will be null.</p>"]
+#[derive(Default,Debug,Clone)]
+pub struct VolumeModification {
+    #[doc="<p>Modification completion or failure time.</p>"]
+    pub end_time: Option<DateTime>,
+    #[doc="<p>Current state of modification. Modification state is null for unmodified volumes. </p>"]
+    pub modification_state: Option<VolumeModificationState>,
+    #[doc="<p>Original IOPS rate of the volume being modified.</p>"]
+    pub original_iops: Option<Integer>,
+    #[doc="<p>Original size of the volume being modified.</p>"]
+    pub original_size: Option<Integer>,
+    #[doc="<p>Original EBS volume type of the volume being modified.</p>"]
+    pub original_volume_type: Option<VolumeType>,
+    #[doc="<p>Modification progress from 0 to 100%.</p>"]
+    pub progress: Option<Long>,
+    #[doc="<p>Modification start time </p>"]
+    pub start_time: Option<DateTime>,
+    #[doc="<p>Generic status message on modification progress or failure.</p>"]
+    pub status_message: Option<String>,
+    #[doc="<p>Target IOPS rate of the volume being modified.</p>"]
+    pub target_iops: Option<Integer>,
+    #[doc="<p>Target size of the volume being modified.</p>"]
+    pub target_size: Option<Integer>,
+    #[doc="<p>Target EBS volume type of the volume being modified.</p>"]
+    pub target_volume_type: Option<VolumeType>,
+    #[doc="<p>ID of the volume being modified.</p>"]
+    pub volume_id: Option<String>,
+}
+
+struct VolumeModificationDeserializer;
+impl VolumeModificationDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<VolumeModification, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = VolumeModification::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "endTime" => {
+                            obj.end_time = Some(try!(DateTimeDeserializer::deserialize("endTime",
+                                                                                       stack)));
+                        }
+                        "modificationState" => {
+                            obj.modification_state =
+                                Some(try!(VolumeModificationStateDeserializer::deserialize("modificationState",
+                                                                                           stack)));
+                        }
+                        "originalIops" => {
+                            obj.original_iops = Some(try!(IntegerDeserializer::deserialize("originalIops",
+                                                                                           stack)));
+                        }
+                        "originalSize" => {
+                            obj.original_size = Some(try!(IntegerDeserializer::deserialize("originalSize",
+                                                                                           stack)));
+                        }
+                        "originalVolumeType" => {
+                            obj.original_volume_type =
+                                Some(try!(VolumeTypeDeserializer::deserialize("originalVolumeType",
+                                                                              stack)));
+                        }
+                        "progress" => {
+                            obj.progress = Some(try!(LongDeserializer::deserialize("progress",
+                                                                                   stack)));
+                        }
+                        "startTime" => {
+                            obj.start_time = Some(try!(DateTimeDeserializer::deserialize("startTime",
+                                                                                         stack)));
+                        }
+                        "statusMessage" => {
+                            obj.status_message = Some(try!(StringDeserializer::deserialize("statusMessage",
+                                                                                           stack)));
+                        }
+                        "targetIops" => {
+                            obj.target_iops = Some(try!(IntegerDeserializer::deserialize("targetIops",
+                                                                                         stack)));
+                        }
+                        "targetSize" => {
+                            obj.target_size = Some(try!(IntegerDeserializer::deserialize("targetSize",
+                                                                                         stack)));
+                        }
+                        "targetVolumeType" => {
+                            obj.target_volume_type =
+                                Some(try!(VolumeTypeDeserializer::deserialize("targetVolumeType",
+                                                                              stack)));
+                        }
+                        "volumeId" => {
+                            obj.volume_id = Some(try!(StringDeserializer::deserialize("volumeId",
+                                                                                      stack)));
+                        }
+                        _ => skip_tree(stack),
+                    }
+                }
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
+pub type VolumeModificationList = Vec<VolumeModification>;
+struct VolumeModificationListDeserializer;
+impl VolumeModificationListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<VolumeModificationList, XmlParseError> {
+
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "item" {
+                        obj.push(try!(VolumeModificationDeserializer::deserialize("item", stack)));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+
+    }
+}
+pub type VolumeModificationState = String;
+struct VolumeModificationStateDeserializer;
+impl VolumeModificationStateDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<VolumeModificationState, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
 
         Ok(obj)
 
@@ -40790,6 +41881,70 @@ impl Error for AssociateDhcpOptionsError {
         }
     }
 }
+/// Errors returned by AssociateIamInstanceProfile
+#[derive(Debug, PartialEq)]
+pub enum AssociateIamInstanceProfileError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl AssociateIamInstanceProfileError {
+    pub fn from_body(body: &str) -> AssociateIamInstanceProfileError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    _ => AssociateIamInstanceProfileError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => AssociateIamInstanceProfileError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for AssociateIamInstanceProfileError {
+    fn from(err: XmlParseError) -> AssociateIamInstanceProfileError {
+        let XmlParseError(message) = err;
+        AssociateIamInstanceProfileError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for AssociateIamInstanceProfileError {
+    fn from(err: CredentialsError) -> AssociateIamInstanceProfileError {
+        AssociateIamInstanceProfileError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AssociateIamInstanceProfileError {
+    fn from(err: HttpDispatchError) -> AssociateIamInstanceProfileError {
+        AssociateIamInstanceProfileError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for AssociateIamInstanceProfileError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AssociateIamInstanceProfileError {
+    fn description(&self) -> &str {
+        match *self {
+            AssociateIamInstanceProfileError::Validation(ref cause) => cause,
+            AssociateIamInstanceProfileError::Credentials(ref err) => err.description(),
+            AssociateIamInstanceProfileError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            AssociateIamInstanceProfileError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by AssociateRouteTable
 #[derive(Debug, PartialEq)]
 pub enum AssociateRouteTableError {
@@ -42369,6 +43524,68 @@ impl Error for CreateFlowLogsError {
             CreateFlowLogsError::Credentials(ref err) => err.description(),
             CreateFlowLogsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             CreateFlowLogsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateFpgaImage
+#[derive(Debug, PartialEq)]
+pub enum CreateFpgaImageError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl CreateFpgaImageError {
+    pub fn from_body(body: &str) -> CreateFpgaImageError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    _ => CreateFpgaImageError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateFpgaImageError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for CreateFpgaImageError {
+    fn from(err: XmlParseError) -> CreateFpgaImageError {
+        let XmlParseError(message) = err;
+        CreateFpgaImageError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for CreateFpgaImageError {
+    fn from(err: CredentialsError) -> CreateFpgaImageError {
+        CreateFpgaImageError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateFpgaImageError {
+    fn from(err: HttpDispatchError) -> CreateFpgaImageError {
+        CreateFpgaImageError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for CreateFpgaImageError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateFpgaImageError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateFpgaImageError::Validation(ref cause) => cause,
+            CreateFpgaImageError::Credentials(ref err) => err.description(),
+            CreateFpgaImageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            CreateFpgaImageError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -46414,6 +47631,70 @@ impl Error for DescribeHostsError {
         }
     }
 }
+/// Errors returned by DescribeIamInstanceProfileAssociations
+#[derive(Debug, PartialEq)]
+pub enum DescribeIamInstanceProfileAssociationsError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl DescribeIamInstanceProfileAssociationsError {
+    pub fn from_body(body: &str) -> DescribeIamInstanceProfileAssociationsError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    _ => DescribeIamInstanceProfileAssociationsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeIamInstanceProfileAssociationsError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for DescribeIamInstanceProfileAssociationsError {
+    fn from(err: XmlParseError) -> DescribeIamInstanceProfileAssociationsError {
+        let XmlParseError(message) = err;
+        DescribeIamInstanceProfileAssociationsError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DescribeIamInstanceProfileAssociationsError {
+    fn from(err: CredentialsError) -> DescribeIamInstanceProfileAssociationsError {
+        DescribeIamInstanceProfileAssociationsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeIamInstanceProfileAssociationsError {
+    fn from(err: HttpDispatchError) -> DescribeIamInstanceProfileAssociationsError {
+        DescribeIamInstanceProfileAssociationsError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for DescribeIamInstanceProfileAssociationsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeIamInstanceProfileAssociationsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeIamInstanceProfileAssociationsError::Validation(ref cause) => cause,
+            DescribeIamInstanceProfileAssociationsError::Credentials(ref err) => err.description(),
+            DescribeIamInstanceProfileAssociationsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeIamInstanceProfileAssociationsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeIdFormat
 #[derive(Debug, PartialEq)]
 pub enum DescribeIdFormatError {
@@ -49088,6 +50369,70 @@ impl Error for DescribeVolumesError {
         }
     }
 }
+/// Errors returned by DescribeVolumesModifications
+#[derive(Debug, PartialEq)]
+pub enum DescribeVolumesModificationsError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl DescribeVolumesModificationsError {
+    pub fn from_body(body: &str) -> DescribeVolumesModificationsError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    _ => DescribeVolumesModificationsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeVolumesModificationsError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for DescribeVolumesModificationsError {
+    fn from(err: XmlParseError) -> DescribeVolumesModificationsError {
+        let XmlParseError(message) = err;
+        DescribeVolumesModificationsError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DescribeVolumesModificationsError {
+    fn from(err: CredentialsError) -> DescribeVolumesModificationsError {
+        DescribeVolumesModificationsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeVolumesModificationsError {
+    fn from(err: HttpDispatchError) -> DescribeVolumesModificationsError {
+        DescribeVolumesModificationsError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for DescribeVolumesModificationsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeVolumesModificationsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeVolumesModificationsError::Validation(ref cause) => cause,
+            DescribeVolumesModificationsError::Credentials(ref err) => err.description(),
+            DescribeVolumesModificationsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeVolumesModificationsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeVpcAttribute
 #[derive(Debug, PartialEq)]
 pub enum DescribeVpcAttributeError {
@@ -50231,6 +51576,70 @@ impl Error for DisassociateAddressError {
                 dispatch_error.description()
             }
             DisassociateAddressError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DisassociateIamInstanceProfile
+#[derive(Debug, PartialEq)]
+pub enum DisassociateIamInstanceProfileError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl DisassociateIamInstanceProfileError {
+    pub fn from_body(body: &str) -> DisassociateIamInstanceProfileError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    _ => DisassociateIamInstanceProfileError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DisassociateIamInstanceProfileError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for DisassociateIamInstanceProfileError {
+    fn from(err: XmlParseError) -> DisassociateIamInstanceProfileError {
+        let XmlParseError(message) = err;
+        DisassociateIamInstanceProfileError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DisassociateIamInstanceProfileError {
+    fn from(err: CredentialsError) -> DisassociateIamInstanceProfileError {
+        DisassociateIamInstanceProfileError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DisassociateIamInstanceProfileError {
+    fn from(err: HttpDispatchError) -> DisassociateIamInstanceProfileError {
+        DisassociateIamInstanceProfileError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for DisassociateIamInstanceProfileError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DisassociateIamInstanceProfileError {
+    fn description(&self) -> &str {
+        match *self {
+            DisassociateIamInstanceProfileError::Validation(ref cause) => cause,
+            DisassociateIamInstanceProfileError::Credentials(ref err) => err.description(),
+            DisassociateIamInstanceProfileError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DisassociateIamInstanceProfileError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -52006,6 +53415,68 @@ impl Error for ModifySubnetAttributeError {
         }
     }
 }
+/// Errors returned by ModifyVolume
+#[derive(Debug, PartialEq)]
+pub enum ModifyVolumeError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl ModifyVolumeError {
+    pub fn from_body(body: &str) -> ModifyVolumeError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    _ => ModifyVolumeError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ModifyVolumeError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for ModifyVolumeError {
+    fn from(err: XmlParseError) -> ModifyVolumeError {
+        let XmlParseError(message) = err;
+        ModifyVolumeError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for ModifyVolumeError {
+    fn from(err: CredentialsError) -> ModifyVolumeError {
+        ModifyVolumeError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ModifyVolumeError {
+    fn from(err: HttpDispatchError) -> ModifyVolumeError {
+        ModifyVolumeError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for ModifyVolumeError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ModifyVolumeError {
+    fn description(&self) -> &str {
+        match *self {
+            ModifyVolumeError::Validation(ref cause) => cause,
+            ModifyVolumeError::Credentials(ref err) => err.description(),
+            ModifyVolumeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            ModifyVolumeError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ModifyVolumeAttribute
 #[derive(Debug, PartialEq)]
 pub enum ModifyVolumeAttributeError {
@@ -52887,6 +54358,70 @@ impl Error for ReleaseHostsError {
             ReleaseHostsError::Credentials(ref err) => err.description(),
             ReleaseHostsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             ReleaseHostsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ReplaceIamInstanceProfileAssociation
+#[derive(Debug, PartialEq)]
+pub enum ReplaceIamInstanceProfileAssociationError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl ReplaceIamInstanceProfileAssociationError {
+    pub fn from_body(body: &str) -> ReplaceIamInstanceProfileAssociationError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    _ => ReplaceIamInstanceProfileAssociationError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ReplaceIamInstanceProfileAssociationError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for ReplaceIamInstanceProfileAssociationError {
+    fn from(err: XmlParseError) -> ReplaceIamInstanceProfileAssociationError {
+        let XmlParseError(message) = err;
+        ReplaceIamInstanceProfileAssociationError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for ReplaceIamInstanceProfileAssociationError {
+    fn from(err: CredentialsError) -> ReplaceIamInstanceProfileAssociationError {
+        ReplaceIamInstanceProfileAssociationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ReplaceIamInstanceProfileAssociationError {
+    fn from(err: HttpDispatchError) -> ReplaceIamInstanceProfileAssociationError {
+        ReplaceIamInstanceProfileAssociationError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for ReplaceIamInstanceProfileAssociationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ReplaceIamInstanceProfileAssociationError {
+    fn description(&self) -> &str {
+        match *self {
+            ReplaceIamInstanceProfileAssociationError::Validation(ref cause) => cause,
+            ReplaceIamInstanceProfileAssociationError::Credentials(ref err) => err.description(),
+            ReplaceIamInstanceProfileAssociationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ReplaceIamInstanceProfileAssociationError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -54298,7 +55833,7 @@ pub trait Ec2 {
                    AcceptReservedInstancesExchangeQuoteError>;
 
 
-    #[doc="<p>Accept a VPC peering connection request. To accept a request, the VPC peering connection must be in the <code>pending-acceptance</code> state, and you must be the owner of the peer VPC. Use the <code>DescribeVpcPeeringConnections</code> request to view your outstanding VPC peering connection requests.</p>"]
+    #[doc="<p>Accept a VPC peering connection request. To accept a request, the VPC peering connection must be in the <code>pending-acceptance</code> state, and you must be the owner of the peer VPC. Use <a>DescribeVpcPeeringConnections</a> to view your outstanding VPC peering connection requests.</p>"]
     fn accept_vpc_peering_connection
         (&self,
          input: &AcceptVpcPeeringConnectionRequest)
@@ -54329,7 +55864,7 @@ pub trait Ec2 {
                                    -> Result<(), AssignPrivateIpAddressesError>;
 
 
-    #[doc="<p>Associates an Elastic IP address with an instance or a network interface.</p> <p>An Elastic IP address is for use in either the EC2-Classic platform or in a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html\">Elastic IP Addresses</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>[EC2-Classic, VPC in an EC2-VPC-only account] If the Elastic IP address is already associated with a different instance, it is disassociated from that instance and associated with the specified instance.</p> <p>[VPC in an EC2-Classic account] If you don't specify a private IP address, the Elastic IP address is associated with the primary IP address. If the Elastic IP address is already associated with a different instance or a network interface, you get an error unless you allow reassociation.</p> <important> <p>This is an idempotent operation. If you perform the operation more than once, Amazon EC2 doesn't return an error, and you may be charged for each time the Elastic IP address is remapped to the same instance. For more information, see the <i>Elastic IP Addresses</i> section of <a href=\"http://aws.amazon.com/ec2/pricing/\">Amazon EC2 Pricing</a>.</p> </important>"]
+    #[doc="<p>Associates an Elastic IP address with an instance or a network interface.</p> <p>An Elastic IP address is for use in either the EC2-Classic platform or in a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html\">Elastic IP Addresses</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>[EC2-Classic, VPC in an EC2-VPC-only account] If the Elastic IP address is already associated with a different instance, it is disassociated from that instance and associated with the specified instance. If you associate an Elastic IP address with an instance that has an existing Elastic IP address, the existing address is disassociated from the instance, but remains allocated to your account.</p> <p>[VPC in an EC2-Classic account] If you don't specify a private IP address, the Elastic IP address is associated with the primary IP address. If the Elastic IP address is already associated with a different instance or a network interface, you get an error unless you allow reassociation. You cannot associate an Elastic IP address with an instance or network interface that has an existing Elastic IP address.</p> <important> <p>This is an idempotent operation. If you perform the operation more than once, Amazon EC2 doesn't return an error, and you may be charged for each time the Elastic IP address is remapped to the same instance. For more information, see the <i>Elastic IP Addresses</i> section of <a href=\"http://aws.amazon.com/ec2/pricing/\">Amazon EC2 Pricing</a>.</p> </important>"]
     fn associate_address(&self,
                          input: &AssociateAddressRequest)
                          -> Result<AssociateAddressResult, AssociateAddressError>;
@@ -54339,6 +55874,13 @@ pub trait Ec2 {
     fn associate_dhcp_options(&self,
                               input: &AssociateDhcpOptionsRequest)
                               -> Result<(), AssociateDhcpOptionsError>;
+
+
+    #[doc="<p>Associates an IAM instance profile with a running or stopped instance. You cannot associate more than one IAM instance profile with an instance.</p>"]
+    fn associate_iam_instance_profile
+        (&self,
+         input: &AssociateIamInstanceProfileRequest)
+         -> Result<AssociateIamInstanceProfileResult, AssociateIamInstanceProfileError>;
 
 
     #[doc="<p>Associates a subnet with a route table. The subnet and route table must be in the same VPC. This association causes traffic originating from the subnet to be routed according to the routes in the route table. The action returns an association ID, which you need in order to disassociate the route table from the subnet later. A route table can be associated with multiple subnets.</p> <p>For more information about route tables, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html\">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
@@ -54386,7 +55928,7 @@ pub trait Ec2 {
                      -> Result<VolumeAttachment, AttachVolumeError>;
 
 
-    #[doc="<p>Attaches a virtual private gateway to a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html\">Adding a Hardware Virtual Private Gateway to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
+    #[doc="<p>Attaches a virtual private gateway to a VPC. You can attach one virtual private gateway to one VPC at a time.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html\">Adding a Hardware Virtual Private Gateway to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
     fn attach_vpn_gateway(&self,
                           input: &AttachVpnGatewayRequest)
                           -> Result<AttachVpnGatewayResult, AttachVpnGatewayError>;
@@ -54479,7 +56021,7 @@ pub trait Ec2 {
          -> Result<CreateCustomerGatewayResult, CreateCustomerGatewayError>;
 
 
-    #[doc="<p>Creates a set of DHCP options for your VPC. After creating the set, you must associate it with the VPC, causing all existing and new instances that you launch in the VPC to use this set of DHCP options. The following are the individual DHCP options you can specify. For more information about the options, see <a href=\"http://www.ietf.org/rfc/rfc2132.txt\">RFC 2132</a>.</p> <ul> <li> <p> <code>domain-name-servers</code> - The IP addresses of up to four domain name servers, or AmazonProvidedDNS. The default DHCP option set specifies AmazonProvidedDNS. If specifying more than one domain name server, specify the IP addresses in a single parameter, separated by commas. If you want your instance to receive a custom DNS hostname as specified in <code>domain-name</code>, you must set <code>domain-name-servers</code> to a custom DNS server.</p> </li> <li> <p> <code>domain-name</code> - If you're using AmazonProvidedDNS in \"us-east-1\", specify \"ec2.internal\". If you're using AmazonProvidedDNS in another region, specify \"region.compute.internal\" (for example, \"ap-northeast-1.compute.internal\"). Otherwise, specify a domain name (for example, \"MyCompany.com\"). This value is used to complete unqualified DNS hostnames. <b>Important</b>: Some Linux operating systems accept multiple domain names separated by spaces. However, Windows and other Linux operating systems treat the value as a single domain, which results in unexpected behavior. If your DHCP options set is associated with a VPC that has instances with multiple operating systems, specify only one domain name.</p> </li> <li> <p> <code>ntp-servers</code> - The IP addresses of up to four Network Time Protocol (NTP) servers.</p> </li> <li> <p> <code>netbios-name-servers</code> - The IP addresses of up to four NetBIOS name servers.</p> </li> <li> <p> <code>netbios-node-type</code> - The NetBIOS node type (1, 2, 4, or 8). We recommend that you specify 2 (broadcast and multicast are not currently supported). For more information about these node types, see <a href=\"http://www.ietf.org/rfc/rfc2132.txt\">RFC 2132</a>.</p> </li> </ul> <p>Your VPC automatically starts out with a set of DHCP options that includes only a DNS server that we provide (AmazonProvidedDNS). If you create a set of options, and if your VPC has an Internet gateway, make sure to set the <code>domain-name-servers</code> option either to <code>AmazonProvidedDNS</code> or to a domain name server of your choice. For more information about DHCP options, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html\">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
+    #[doc="<p>Creates a set of DHCP options for your VPC. After creating the set, you must associate it with the VPC, causing all existing and new instances that you launch in the VPC to use this set of DHCP options. The following are the individual DHCP options you can specify. For more information about the options, see <a href=\"http://www.ietf.org/rfc/rfc2132.txt\">RFC 2132</a>.</p> <ul> <li> <p> <code>domain-name-servers</code> - The IP addresses of up to four domain name servers, or AmazonProvidedDNS. The default DHCP option set specifies AmazonProvidedDNS. If specifying more than one domain name server, specify the IP addresses in a single parameter, separated by commas. If you want your instance to receive a custom DNS hostname as specified in <code>domain-name</code>, you must set <code>domain-name-servers</code> to a custom DNS server.</p> </li> <li> <p> <code>domain-name</code> - If you're using AmazonProvidedDNS in <code>us-east-1</code>, specify <code>ec2.internal</code>. If you're using AmazonProvidedDNS in another region, specify <code>region.compute.internal</code> (for example, <code>ap-northeast-1.compute.internal</code>). Otherwise, specify a domain name (for example, <code>MyCompany.com</code>). This value is used to complete unqualified DNS hostnames. <b>Important</b>: Some Linux operating systems accept multiple domain names separated by spaces. However, Windows and other Linux operating systems treat the value as a single domain, which results in unexpected behavior. If your DHCP options set is associated with a VPC that has instances with multiple operating systems, specify only one domain name.</p> </li> <li> <p> <code>ntp-servers</code> - The IP addresses of up to four Network Time Protocol (NTP) servers.</p> </li> <li> <p> <code>netbios-name-servers</code> - The IP addresses of up to four NetBIOS name servers.</p> </li> <li> <p> <code>netbios-node-type</code> - The NetBIOS node type (1, 2, 4, or 8). We recommend that you specify 2 (broadcast and multicast are not currently supported). For more information about these node types, see <a href=\"http://www.ietf.org/rfc/rfc2132.txt\">RFC 2132</a>.</p> </li> </ul> <p>Your VPC automatically starts out with a set of DHCP options that includes only a DNS server that we provide (AmazonProvidedDNS). If you create a set of options, and if your VPC has an Internet gateway, make sure to set the <code>domain-name-servers</code> option either to <code>AmazonProvidedDNS</code> or to a domain name server of your choice. For more information about DHCP options, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html\">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
     fn create_dhcp_options(&self,
                            input: &CreateDhcpOptionsRequest)
                            -> Result<CreateDhcpOptionsResult, CreateDhcpOptionsError>;
@@ -54496,6 +56038,12 @@ pub trait Ec2 {
     fn create_flow_logs(&self,
                         input: &CreateFlowLogsRequest)
                         -> Result<CreateFlowLogsResult, CreateFlowLogsError>;
+
+
+    #[doc="<p>Creates an Amazon FPGA Image (AFI) from the specified design checkpoint (DCP).</p> <p>The create operation is asynchronous. To verify that the AFI is ready for use, check the output logs.</p> <p>An AFI contains the FPGA bitstream that is ready to download to an FPGA. You can securely deploy an AFI on one or more FPGA-accelerated instances. For more information, see the <a href=\"https://github.com/aws/aws-fpga/\">AWS FPGA Hardware Development Kit</a>.</p>"]
+    fn create_fpga_image(&self,
+                         input: &CreateFpgaImageRequest)
+                         -> Result<CreateFpgaImageResult, CreateFpgaImageError>;
 
 
     #[doc="<p>Creates an Amazon EBS-backed AMI from an Amazon EBS-backed instance that is either running or stopped.</p> <p>If you customized your instance with instance store volumes or EBS volumes in addition to the root device volume, the new AMI contains block device mapping information for those volumes. When you launch an instance from this new AMI, the instance automatically launches with those additional volumes.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/creating-an-ami-ebs.html\">Creating Amazon EBS-Backed Linux AMIs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
@@ -54553,7 +56101,7 @@ pub trait Ec2 {
                               -> Result<(), CreatePlacementGroupError>;
 
 
-    #[doc="<p>Creates a listing for Amazon EC2 Standard Reserved Instances to be sold in the Reserved Instance Marketplace. You can submit one Standard Reserved Instance listing at a time. To get a list of your Standard Reserved Instances, you can use the <a>DescribeReservedInstances</a> operation.</p> <p>The Reserved Instance Marketplace matches sellers who want to resell Standard Reserved Instance capacity that they no longer need with buyers who want to purchase additional capacity. Reserved Instances bought and sold through the Reserved Instance Marketplace work like any other Reserved Instances.</p> <p>To sell your Standard Reserved Instances, you must first register as a seller in the Reserved Instance Marketplace. After completing the registration process, you can create a Reserved Instance Marketplace listing of some or all of your Standard Reserved Instances, and specify the upfront price to receive for them. Your Standard Reserved Instance listings then become available for purchase. To view the details of your Standard Reserved Instance listing, you can use the <a>DescribeReservedInstancesListings</a> operation.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-market-general.html\">Reserved Instance Marketplace</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
+    #[doc="<p>Creates a listing for Amazon EC2 Standard Reserved Instances to be sold in the Reserved Instance Marketplace. You can submit one Standard Reserved Instance listing at a time. To get a list of your Standard Reserved Instances, you can use the <a>DescribeReservedInstances</a> operation.</p> <note> <p>Only Standard Reserved Instances with a capacity reservation can be sold in the Reserved Instance Marketplace. Convertible Reserved Instances and Standard Reserved Instances with a regional benefit cannot be sold.</p> </note> <p>The Reserved Instance Marketplace matches sellers who want to resell Standard Reserved Instance capacity that they no longer need with buyers who want to purchase additional capacity. Reserved Instances bought and sold through the Reserved Instance Marketplace work like any other Reserved Instances.</p> <p>To sell your Standard Reserved Instances, you must first register as a seller in the Reserved Instance Marketplace. After completing the registration process, you can create a Reserved Instance Marketplace listing of some or all of your Standard Reserved Instances, and specify the upfront price to receive for them. Your Standard Reserved Instance listings then become available for purchase. To view the details of your Standard Reserved Instance listing, you can use the <a>DescribeReservedInstancesListings</a> operation.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-market-general.html\">Reserved Instance Marketplace</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
     fn create_reserved_instances_listing
         (&self,
          input: &CreateReservedInstancesListingRequest)
@@ -54591,7 +56139,7 @@ pub trait Ec2 {
          -> Result<CreateSpotDatafeedSubscriptionResult, CreateSpotDatafeedSubscriptionError>;
 
 
-    #[doc="<p>Creates a subnet in an existing VPC.</p> <p>When you create each subnet, you provide the VPC ID and the CIDR block you want for the subnet. After you create a subnet, you can't change its CIDR block. The subnet's IPv4 CIDR block can be the same as the VPC's IPv4 CIDR block (assuming you want only a single subnet in the VPC), or a subset of the VPC's IPv4 CIDR block. If you create more than one subnet in a VPC, the subnets' CIDR blocks must not overlap. The smallest IPv4 subnet (and VPC) you can create uses a /28 netmask (16 IPv4 addresses), and the largest uses a /16 netmask (65,536 IPv4 addresses).</p> <p>If you've associated an IPv6 CIDR block with your VPC, you can create a subnet with an IPv6 CIDR block that uses a /64 prefix length. </p> <important> <p>AWS reserves both the first four and the last IP address in each subnet's CIDR block. They're not available for use.</p> </important> <p>If you add more than one subnet to a VPC, they're set up in a star topology with a logical router in the middle.</p> <p>If you launch an instance in a VPC using an Amazon EBS-backed AMI, the IP address doesn't change if you stop and restart the instance (unlike a similar instance launched outside a VPC, which gets a new IP address when restarted). It's therefore possible to have a subnet with no running instances (they're all stopped), but no remaining IP addresses available.</p> <p>For more information about subnets, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html\">Your VPC and Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
+    #[doc="<p>Creates a subnet in an existing VPC.</p> <p>When you create each subnet, you provide the VPC ID and the CIDR block you want for the subnet. After you create a subnet, you can't change its CIDR block. The subnet's IPv4 CIDR block can be the same as the VPC's IPv4 CIDR block (assuming you want only a single subnet in the VPC), or a subset of the VPC's IPv4 CIDR block. If you create more than one subnet in a VPC, the subnets' CIDR blocks must not overlap. The smallest IPv4 subnet (and VPC) you can create uses a /28 netmask (16 IPv4 addresses), and the largest uses a /16 netmask (65,536 IPv4 addresses).</p> <p>If you've associated an IPv6 CIDR block with your VPC, you can create a subnet with an IPv6 CIDR block that uses a /64 prefix length. </p> <important> <p>AWS reserves both the first four and the last IPv4 address in each subnet's CIDR block. They're not available for use.</p> </important> <p>If you add more than one subnet to a VPC, they're set up in a star topology with a logical router in the middle.</p> <p>If you launch an instance in a VPC using an Amazon EBS-backed AMI, the IP address doesn't change if you stop and restart the instance (unlike a similar instance launched outside a VPC, which gets a new IP address when restarted). It's therefore possible to have a subnet with no running instances (they're all stopped), but no remaining IP addresses available.</p> <p>For more information about subnets, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html\">Your VPC and Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
     fn create_subnet(&self,
                      input: &CreateSubnetRequest)
                      -> Result<CreateSubnetResult, CreateSubnetError>;
@@ -54601,21 +56149,21 @@ pub trait Ec2 {
     fn create_tags(&self, input: &CreateTagsRequest) -> Result<(), CreateTagsError>;
 
 
-    #[doc="<p>Creates an EBS volume that can be attached to an instance in the same Availability Zone. The volume is created in the regional endpoint that you send the HTTP request to. For more information see <a href=\"http://docs.aws.amazon.com/general/latest/gr/rande.html\">Regions and Endpoints</a>.</p> <p>You can create a new empty volume or restore a volume from an EBS snapshot. Any AWS Marketplace product codes from the snapshot are propagated to the volume.</p> <p>You can create encrypted volumes with the <code>Encrypted</code> parameter. Encrypted volumes may only be attached to instances that support Amazon EBS encryption. Volumes that are created from encrypted snapshots are also automatically encrypted. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html\">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-creating-volume.html\">Creating or Restoring an Amazon EBS Volume</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
+    #[doc="<p>Creates an EBS volume that can be attached to an instance in the same Availability Zone. The volume is created in the regional endpoint that you send the HTTP request to. For more information see <a href=\"http://docs.aws.amazon.com/general/latest/gr/rande.html\">Regions and Endpoints</a>.</p> <p>You can create a new empty volume or restore a volume from an EBS snapshot. Any AWS Marketplace product codes from the snapshot are propagated to the volume.</p> <p>You can create encrypted volumes with the <code>Encrypted</code> parameter. Encrypted volumes may only be attached to instances that support Amazon EBS encryption. Volumes that are created from encrypted snapshots are also automatically encrypted. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html\">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>You can tag your volumes during creation. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html\">Tagging Your Amazon EC2 Resources</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-creating-volume.html\">Creating an Amazon EBS Volume</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
     fn create_volume(&self, input: &CreateVolumeRequest) -> Result<Volume, CreateVolumeError>;
 
 
-    #[doc="<p>Creates a VPC with the specified IPv4 CIDR block. The smallest VPC you can create uses a /28 netmask (16 IPv4 addresses), and the largest uses a /16 netmask (65,536 IPv4 addresses). To help you decide how big to make your VPC, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html\">Your VPC and Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>You can optionally request an Amazon-provided IPv6 CIDR block for the VPC. The IPv6 CIDR block uses a /56 prefix length, and is allocated from Amazon's pool of IPv6 addresses. You cannot choose the IPv6 range for your VPC.</p> <p>By default, each instance you launch in the VPC has the default DHCP options, which includes only a default DNS server that we provide (AmazonProvidedDNS). For more information about DHCP options, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html\">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>You can specify the instance tenancy value for the VPC when you create it. You can't change this value for the VPC after you create it. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/dedicated-instance.html.html\">Dedicated Instances</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
+    #[doc="<p>Creates a VPC with the specified IPv4 CIDR block. The smallest VPC you can create uses a /28 netmask (16 IPv4 addresses), and the largest uses a /16 netmask (65,536 IPv4 addresses). To help you decide how big to make your VPC, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html\">Your VPC and Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>You can optionally request an Amazon-provided IPv6 CIDR block for the VPC. The IPv6 CIDR block uses a /56 prefix length, and is allocated from Amazon's pool of IPv6 addresses. You cannot choose the IPv6 range for your VPC.</p> <p>By default, each instance you launch in the VPC has the default DHCP options, which includes only a default DNS server that we provide (AmazonProvidedDNS). For more information about DHCP options, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html\">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>You can specify the instance tenancy value for the VPC when you create it. You can't change this value for the VPC after you create it. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-instance.html\">Dedicated Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
     fn create_vpc(&self, input: &CreateVpcRequest) -> Result<CreateVpcResult, CreateVpcError>;
 
 
-    #[doc="<p>Creates a VPC endpoint for a specified AWS service. An endpoint enables you to create a private connection between your VPC and another AWS service in your account. You can specify an endpoint policy to attach to the endpoint that will control access to the service from your VPC. You can also specify the VPC route tables that use the endpoint.</p> <p>Currently, only endpoints to Amazon S3 are supported.</p>"]
+    #[doc="<p>Creates a VPC endpoint for a specified AWS service. An endpoint enables you to create a private connection between your VPC and another AWS service in your account. You can specify an endpoint policy to attach to the endpoint that will control access to the service from your VPC. You can also specify the VPC route tables that use the endpoint.</p> <p>Use <a>DescribeVpcEndpointServices</a> to get a list of supported AWS services.</p>"]
     fn create_vpc_endpoint(&self,
                            input: &CreateVpcEndpointRequest)
                            -> Result<CreateVpcEndpointResult, CreateVpcEndpointError>;
 
 
-    #[doc="<p>Requests a VPC peering connection between two VPCs: a requester VPC that you own and a peer VPC with which to create the connection. The peer VPC can belong to another AWS account. The requester VPC and peer VPC cannot have overlapping CIDR blocks.</p> <p>The owner of the peer VPC must accept the peering request to activate the peering connection. The VPC peering connection request expires after 7 days, after which it cannot be accepted or rejected.</p> <p>A <code>CreateVpcPeeringConnection</code> request between VPCs with overlapping CIDR blocks results in the VPC peering connection having a status of <code>failed</code>.</p>"]
+    #[doc="<p>Requests a VPC peering connection between two VPCs: a requester VPC that you own and a peer VPC with which to create the connection. The peer VPC can belong to another AWS account. The requester VPC and peer VPC cannot have overlapping CIDR blocks.</p> <p>The owner of the peer VPC must accept the peering request to activate the peering connection. The VPC peering connection request expires after 7 days, after which it cannot be accepted or rejected.</p> <p>If you try to create a VPC peering connection between VPCs that have overlapping CIDR blocks, the VPC peering connection status goes to <code>failed</code>.</p>"]
     fn create_vpc_peering_connection
         (&self,
          input: &CreateVpcPeeringConnectionRequest)
@@ -54873,6 +56421,10 @@ pub trait Ec2 {
     fn describe_hosts(&self,
                       input: &DescribeHostsRequest)
                       -> Result<DescribeHostsResult, DescribeHostsError>;
+
+
+    #[doc="<p>Describes your IAM instance profile associations.</p>"]
+    fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstanceProfileAssociationsRequest) -> Result<DescribeIamInstanceProfileAssociationsResult, DescribeIamInstanceProfileAssociationsError>;
 
 
     #[doc="<p>Describes the ID format settings for your resources on a per-region basis, for example, to view which resource types are enabled for longer IDs. This request only returns information about resource types whose ID formats can be modified; it does not return information about other resource types.</p> <p>The following resource types support longer IDs: <code>instance</code> | <code>reservation</code> | <code>snapshot</code> | <code>volume</code>. </p> <p>These settings apply to the IAM user who makes the request; they do not apply to the entire AWS account. By default, an IAM user defaults to the same settings as the root user, unless they explicitly override the settings by running the <a>ModifyIdFormat</a> command. Resources created with longer IDs are visible to all IAM users, regardless of these settings and provided that they have permission to use the relevant <code>Describe</code> command for the resource type.</p>"]
@@ -55148,6 +56700,13 @@ pub trait Ec2 {
                         -> Result<DescribeVolumesResult, DescribeVolumesError>;
 
 
+    #[doc="<p>Reports the current modification status of EBS volumes.</p> <p>Current-generation EBS volumes support modification of attributes including type, size, and (for <code>io1</code> volumes) IOPS provisioning while either attached to or detached from an instance. Following an action from the API or the console to modify a volume, the status of the modification may be <code>modifying</code>, <code>optimizing</code>, <code>completed</code>, or <code>failed</code>. If a volume has never been modified, then certain elements of the returned <code>VolumeModification</code> objects are null. </p> <p> You can also use CloudWatch Events to check the status of a modification to an EBS volume. For information about CloudWatch Events, see the <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/\">Amazon CloudWatch Events User Guide</a>. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-expand-volume.html#monitoring_mods\">Monitoring Volume Modifications\"</a>. </p>"]
+    fn describe_volumes_modifications
+        (&self,
+         input: &DescribeVolumesModificationsRequest)
+         -> Result<DescribeVolumesModificationsResult, DescribeVolumesModificationsError>;
+
+
     #[doc="<p>Describes the specified attribute of the specified VPC. You can specify only one attribute at a time.</p>"]
     fn describe_vpc_attribute(&self,
                               input: &DescribeVpcAttributeRequest)
@@ -55161,7 +56720,7 @@ pub trait Ec2 {
          -> Result<DescribeVpcClassicLinkResult, DescribeVpcClassicLinkError>;
 
 
-    #[doc="<p>Describes the ClassicLink DNS support status of one or more VPCs. If enabled, the DNS hostname of a linked EC2-Classic instance resolves to its private IP address when addressed from an instance in the VPC to which it's linked. Similarly, the DNS hostname of an instance in a VPC resolves to its private IP address when addressed from a linked EC2-Classic instance. For more information about ClassicLink, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html\">ClassicLink</a> in the Amazon Elastic Compute Cloud User Guide.</p>"]
+    #[doc="<p>Describes the ClassicLink DNS support status of one or more VPCs. If enabled, the DNS hostname of a linked EC2-Classic instance resolves to its private IP address when addressed from an instance in the VPC to which it's linked. Similarly, the DNS hostname of an instance in a VPC resolves to its private IP address when addressed from a linked EC2-Classic instance. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html\">ClassicLink</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
     fn describe_vpc_classic_link_dns_support
         (&self,
          input: &DescribeVpcClassicLinkDnsSupportRequest)
@@ -55213,7 +56772,7 @@ pub trait Ec2 {
                                -> Result<DetachClassicLinkVpcResult, DetachClassicLinkVpcError>;
 
 
-    #[doc="<p>Detaches an Internet gateway from a VPC, disabling connectivity between the Internet and the VPC. The VPC must not contain any running instances with Elastic IP addresses.</p>"]
+    #[doc="<p>Detaches an Internet gateway from a VPC, disabling connectivity between the Internet and the VPC. The VPC must not contain any running instances with Elastic IP addresses or public IPv4 addresses.</p>"]
     fn detach_internet_gateway(&self,
                                input: &DetachInternetGatewayRequest)
                                -> Result<(), DetachInternetGatewayError>;
@@ -55250,7 +56809,7 @@ pub trait Ec2 {
          -> Result<DisableVpcClassicLinkResult, DisableVpcClassicLinkError>;
 
 
-    #[doc="<p>Disables ClassicLink DNS support for a VPC. If disabled, DNS hostnames resolve to public IP addresses when addressed between a linked EC2-Classic instance and instances in the VPC to which it's linked. For more information about ClassicLink, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html\">ClassicLink</a> in the Amazon Elastic Compute Cloud User Guide.</p>"]
+    #[doc="<p>Disables ClassicLink DNS support for a VPC. If disabled, DNS hostnames resolve to public IP addresses when addressed between a linked EC2-Classic instance and instances in the VPC to which it's linked. For more information about ClassicLink, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html\">ClassicLink</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
     fn disable_vpc_classic_link_dns_support
         (&self,
          input: &DisableVpcClassicLinkDnsSupportRequest)
@@ -55261,6 +56820,13 @@ pub trait Ec2 {
     fn disassociate_address(&self,
                             input: &DisassociateAddressRequest)
                             -> Result<(), DisassociateAddressError>;
+
+
+    #[doc="<p>Disassociates an IAM instance profile from a running or stopped instance.</p> <p>Use <a>DescribeIamInstanceProfileAssociations</a> to get the association ID.</p>"]
+    fn disassociate_iam_instance_profile
+        (&self,
+         input: &DisassociateIamInstanceProfileRequest)
+         -> Result<DisassociateIamInstanceProfileResult, DisassociateIamInstanceProfileError>;
 
 
     #[doc="<p>Disassociates a subnet from a route table.</p> <p>After you perform this action, the subnet no longer uses the routes in the route table. Instead, it uses the routes in the VPC's main route table. For more information about route tables, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html\">Route Tables</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
@@ -55293,7 +56859,7 @@ pub trait Ec2 {
     fn enable_volume_io(&self, input: &EnableVolumeIORequest) -> Result<(), EnableVolumeIOError>;
 
 
-    #[doc="<p>Enables a VPC for ClassicLink. You can then link EC2-Classic instances to your ClassicLink-enabled VPC to allow communication over private IP addresses. You cannot enable your VPC for ClassicLink if any of your VPC's route tables have existing routes for address ranges within the <code>10.0.0.0/8</code> IP address range, excluding local routes for VPCs in the <code>10.0.0.0/16</code> and <code>10.1.0.0/16</code> IP address ranges. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html\">ClassicLink</a> in the Amazon Elastic Compute Cloud User Guide.</p>"]
+    #[doc="<p>Enables a VPC for ClassicLink. You can then link EC2-Classic instances to your ClassicLink-enabled VPC to allow communication over private IP addresses. You cannot enable your VPC for ClassicLink if any of your VPC's route tables have existing routes for address ranges within the <code>10.0.0.0/8</code> IP address range, excluding local routes for VPCs in the <code>10.0.0.0/16</code> and <code>10.1.0.0/16</code> IP address ranges. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html\">ClassicLink</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
     fn enable_vpc_classic_link(&self,
                                input: &EnableVpcClassicLinkRequest)
                                -> Result<EnableVpcClassicLinkResult, EnableVpcClassicLinkError>;
@@ -55435,6 +57001,12 @@ pub trait Ec2 {
                                -> Result<(), ModifySubnetAttributeError>;
 
 
+    #[doc="<p>You can modify several parameters of an existing EBS volume, including volume size, volume type, and IOPS capacity. If your EBS volume is attached to a current-generation EC2 instance type, you may be able to apply these changes without stopping the instance or detaching the volume from it. For more information about modifying an EBS volume running Linux, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-expand-volume.html\">Modifying the Size, IOPS, or Type of an EBS Volume on Linux</a>. For more information about modifying an EBS volume running Windows, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-expand-volume.html\">Modifying the Size, IOPS, or Type of an EBS Volume on Windows</a>. </p> <p> When you complete a resize operation on your volume, you need to extend the volume's file-system size to take advantage of the new storage capacity. For information about extending a Linux file system, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-expand-volume.html#recognize-expanded-volume-linux\">Extending a Linux File System</a>. For information about extending a Windows file system, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-expand-volume.html#recognize-expanded-volume-windows\">Extending a Windows File System</a>. </p> <p> You can use CloudWatch Events to check the status of a modification to an EBS volume. For information about CloudWatch Events, see the <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/\">Amazon CloudWatch Events User Guide</a>. You can also track the status of a modification using the <a>DescribeVolumesModifications</a> API. For information about tracking status changes using either method, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-expand-volume.html#monitoring_mods\">Monitoring Volume Modifications</a>. </p> <note> <p>With previous-generation instance types, resizing an EBS volume may require detaching and reattaching the volume or stopping and restarting the instance. For more information about modifying an EBS volume running Linux, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-expand-volume.html\">Modifying the Size, IOPS, or Type of an EBS Volume on Linux</a>. For more information about modifying an EBS volume running Windows, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-expand-volume.html\">Modifying the Size, IOPS, or Type of an EBS Volume on Windows</a>.</p> </note> <note> <p>If you reach the maximum volume modification rate per volume limit, you will need to wait at least six hours before applying further modifications to the affected EBS volume.</p> </note>"]
+    fn modify_volume(&self,
+                     input: &ModifyVolumeRequest)
+                     -> Result<ModifyVolumeResult, ModifyVolumeError>;
+
+
     #[doc="<p>Modifies a volume attribute.</p> <p>By default, all I/O operations for the volume are suspended when the data on the volume is determined to be potentially inconsistent, to prevent undetectable, latent data corruption. The I/O access to the volume can be resumed by first enabling I/O access and then checking the data consistency on your volume.</p> <p>You can change the default behavior to resume I/O operations. We recommend that you change this only for boot volumes or for volumes that are stateless or disposable.</p>"]
     fn modify_volume_attribute(&self,
                                input: &ModifyVolumeAttributeRequest)
@@ -55497,7 +57069,7 @@ pub trait Ec2 {
     fn reboot_instances(&self, input: &RebootInstancesRequest) -> Result<(), RebootInstancesError>;
 
 
-    #[doc="<p>Registers an AMI. When you're creating an AMI, this is the final step you must complete before you can launch an instance from the AMI. For more information about creating AMIs, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/creating-an-ami.html\">Creating Your Own AMIs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <note> <p>For Amazon EBS-backed instances, <a>CreateImage</a> creates and registers the AMI in a single request, so you don't have to register the AMI yourself.</p> </note> <p>You can also use <code>RegisterImage</code> to create an Amazon EBS-backed Linux AMI from a snapshot of a root device volume. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_LaunchingInstanceFromSnapshot.html\">Launching an Instance from a Snapshot</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <important> <p>Some Linux distributions, such as Red Hat Enterprise Linux (RHEL) and SUSE Linux Enterprise Server (SLES), use the EC2 <code>billingProduct</code> code associated with an AMI to verify subscription status for package updates. Creating an AMI from an EBS snapshot does not maintain this billing code, and subsequent instances launched from such an AMI will not be able to connect to package update infrastructure.</p> <p>Similarly, although you can create a Windows AMI from a snapshot, you can't successfully launch an instance from the AMI.</p> <p>To create Windows AMIs or to create AMIs for Linux operating systems that must retain AMI billing codes to work properly, see <a>CreateImage</a>.</p> </important> <p>If needed, you can deregister an AMI at any time. Any modifications you make to an AMI backed by an instance store volume invalidates its registration. If you make changes to an image, deregister the previous image and register the new image.</p> <note> <p>You can't register an image where a secondary (non-root) snapshot has AWS Marketplace product codes.</p> </note>"]
+    #[doc="<p>Registers an AMI. When you're creating an AMI, this is the final step you must complete before you can launch an instance from the AMI. For more information about creating AMIs, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/creating-an-ami.html\">Creating Your Own AMIs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <note> <p>For Amazon EBS-backed instances, <a>CreateImage</a> creates and registers the AMI in a single request, so you don't have to register the AMI yourself.</p> </note> <p>You can also use <code>RegisterImage</code> to create an Amazon EBS-backed Linux AMI from a snapshot of a root device volume. You specify the snapshot using the block device mapping. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-launch-snapshot.html\">Launching a Linux Instance from a Backup</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>You can't register an image where a secondary (non-root) snapshot has AWS Marketplace product codes.</p> <p>Some Linux distributions, such as Red Hat Enterprise Linux (RHEL) and SUSE Linux Enterprise Server (SLES), use the EC2 billing product code associated with an AMI to verify the subscription status for package updates. Creating an AMI from an EBS snapshot does not maintain this billing code, and subsequent instances launched from such an AMI will not be able to connect to package update infrastructure. To create an AMI that must retain billing codes, see <a>CreateImage</a>.</p> <p>If needed, you can deregister an AMI at any time. Any modifications you make to an AMI backed by an instance store volume invalidates its registration. If you make changes to an image, deregister the previous image and register the new image.</p>"]
     fn register_image(&self,
                       input: &RegisterImageRequest)
                       -> Result<RegisterImageResult, RegisterImageError>;
@@ -55518,6 +57090,14 @@ pub trait Ec2 {
     fn release_hosts(&self,
                      input: &ReleaseHostsRequest)
                      -> Result<ReleaseHostsResult, ReleaseHostsError>;
+
+
+    #[doc="<p>Replaces an IAM instance profile for the specified running instance. You can use this action to change the IAM instance profile that's associated with an instance without having to disassociate the existing IAM instance profile first.</p> <p>Use <a>DescribeIamInstanceProfileAssociations</a> to get the association ID.</p>"]
+    fn replace_iam_instance_profile_association
+        (&self,
+         input: &ReplaceIamInstanceProfileAssociationRequest)
+         -> Result<ReplaceIamInstanceProfileAssociationResult,
+                   ReplaceIamInstanceProfileAssociationError>;
 
 
     #[doc="<p>Changes which network ACL a subnet is associated with. By default when you create a subnet, it's automatically associated with the default network ACL. For more information about network ACLs, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_ACLs.html\">Network ACLs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
@@ -55605,7 +57185,7 @@ pub trait Ec2 {
                                      -> Result<(), RevokeSecurityGroupIngressError>;
 
 
-    #[doc="<p>Launches the specified number of instances using an AMI for which you have permissions. </p> <p>You can specify a number of options, or leave the default options. The following rules apply:</p> <ul> <li> <p>[EC2-VPC] If you don't specify a subnet ID, we choose a default subnet from your default VPC for you. If you don't have a default VPC, you must specify a subnet ID in the request.</p> </li> <li> <p>[EC2-Classic] If don't specify an Availability Zone, we choose one for you.</p> </li> <li> <p>Some instance types must be launched into a VPC. If you do not have a default VPC, or if you do not specify a subnet ID, the request fails. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-vpc.html#vpc-only-instance-types\">Instance Types Available Only in a VPC</a>.</p> </li> <li> <p>[EC2-VPC] All instances have a network interface with a primary private IPv4 address. If you don't specify this address, we choose one from the IPv4 range of your subnet.</p> </li> <li> <p>Not all instance types support IPv6 addresses. For more information, see <a href=\"http://aws.amazon.com/ec2/instance-types/\">Amazon EC2 Instance Types</a>.</p> </li> <li> <p>If you don't specify a security group ID, we use the default security group. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html\">Security Groups</a>.</p> </li> <li> <p>If any of the AMIs have a product code attached for which the user has not subscribed, the request fails.</p> </li> </ul> <p>To ensure faster instance launches, break up large requests into smaller batches. For example, create 5 separate launch requests for 100 instances each instead of 1 launch request for 500 instances.</p> <p>An instance is ready for you to use when it's in the <code>running</code> state. You can check the state of your instance using <a>DescribeInstances</a>. After launch, you can apply tags to your running instance (requires a resource ID). For more information, see <a>CreateTags</a> and <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html\">Tagging Your Amazon EC2 Resources</a>.</p> <p>Linux instances have access to the public key of the key pair at boot. You can use this key to provide secure access to the instance. Amazon EC2 public images use this feature to provide secure access without passwords. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html\">Key Pairs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>For troubleshooting, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_InstanceStraightToTerminated.html\">What To Do If An Instance Immediately Terminates</a>, and <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstancesConnecting.html\">Troubleshooting Connecting to Your Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
+    #[doc="<p>Launches the specified number of instances using an AMI for which you have permissions. </p> <p>You can specify a number of options, or leave the default options. The following rules apply:</p> <ul> <li> <p>[EC2-VPC] If you don't specify a subnet ID, we choose a default subnet from your default VPC for you. If you don't have a default VPC, you must specify a subnet ID in the request.</p> </li> <li> <p>[EC2-Classic] If don't specify an Availability Zone, we choose one for you.</p> </li> <li> <p>Some instance types must be launched into a VPC. If you do not have a default VPC, or if you do not specify a subnet ID, the request fails. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-vpc.html#vpc-only-instance-types\">Instance Types Available Only in a VPC</a>.</p> </li> <li> <p>[EC2-VPC] All instances have a network interface with a primary private IPv4 address. If you don't specify this address, we choose one from the IPv4 range of your subnet.</p> </li> <li> <p>Not all instance types support IPv6 addresses. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html\">Instance Types</a>.</p> </li> <li> <p>If you don't specify a security group ID, we use the default security group. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html\">Security Groups</a>.</p> </li> <li> <p>If any of the AMIs have a product code attached for which the user has not subscribed, the request fails.</p> </li> </ul> <p>To ensure faster instance launches, break up large requests into smaller batches. For example, create 5 separate launch requests for 100 instances each instead of 1 launch request for 500 instances.</p> <p>An instance is ready for you to use when it's in the <code>running</code> state. You can check the state of your instance using <a>DescribeInstances</a>. You can tag instances and EBS volumes during launch, after launch, or both. For more information, see <a>CreateTags</a> and <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html\">Tagging Your Amazon EC2 Resources</a>.</p> <p>Linux instances have access to the public key of the key pair at boot. You can use this key to provide secure access to the instance. Amazon EC2 public images use this feature to provide secure access without passwords. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html\">Key Pairs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>For troubleshooting, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_InstanceStraightToTerminated.html\">What To Do If An Instance Immediately Terminates</a>, and <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstancesConnecting.html\">Troubleshooting Connecting to Your Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
     fn run_instances(&self, input: &RunInstancesRequest) -> Result<Reservation, RunInstancesError>;
 
 
@@ -55720,7 +57300,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
     }
 
 
-    #[doc="<p>Accept a VPC peering connection request. To accept a request, the VPC peering connection must be in the <code>pending-acceptance</code> state, and you must be the owner of the peer VPC. Use the <code>DescribeVpcPeeringConnections</code> request to view your outstanding VPC peering connection requests.</p>"]
+    #[doc="<p>Accept a VPC peering connection request. To accept a request, the VPC peering connection must be in the <code>pending-acceptance</code> state, and you must be the owner of the peer VPC. Use <a>DescribeVpcPeeringConnections</a> to view your outstanding VPC peering connection requests.</p>"]
     fn accept_vpc_peering_connection
         (&self,
          input: &AcceptVpcPeeringConnectionRequest)
@@ -55909,7 +57489,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
     }
 
 
-    #[doc="<p>Associates an Elastic IP address with an instance or a network interface.</p> <p>An Elastic IP address is for use in either the EC2-Classic platform or in a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html\">Elastic IP Addresses</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>[EC2-Classic, VPC in an EC2-VPC-only account] If the Elastic IP address is already associated with a different instance, it is disassociated from that instance and associated with the specified instance.</p> <p>[VPC in an EC2-Classic account] If you don't specify a private IP address, the Elastic IP address is associated with the primary IP address. If the Elastic IP address is already associated with a different instance or a network interface, you get an error unless you allow reassociation.</p> <important> <p>This is an idempotent operation. If you perform the operation more than once, Amazon EC2 doesn't return an error, and you may be charged for each time the Elastic IP address is remapped to the same instance. For more information, see the <i>Elastic IP Addresses</i> section of <a href=\"http://aws.amazon.com/ec2/pricing/\">Amazon EC2 Pricing</a>.</p> </important>"]
+    #[doc="<p>Associates an Elastic IP address with an instance or a network interface.</p> <p>An Elastic IP address is for use in either the EC2-Classic platform or in a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html\">Elastic IP Addresses</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>[EC2-Classic, VPC in an EC2-VPC-only account] If the Elastic IP address is already associated with a different instance, it is disassociated from that instance and associated with the specified instance. If you associate an Elastic IP address with an instance that has an existing Elastic IP address, the existing address is disassociated from the instance, but remains allocated to your account.</p> <p>[VPC in an EC2-Classic account] If you don't specify a private IP address, the Elastic IP address is associated with the primary IP address. If the Elastic IP address is already associated with a different instance or a network interface, you get an error unless you allow reassociation. You cannot associate an Elastic IP address with an instance or network interface that has an existing Elastic IP address.</p> <important> <p>This is an idempotent operation. If you perform the operation more than once, Amazon EC2 doesn't return an error, and you may be charged for each time the Elastic IP address is remapped to the same instance. For more information, see the <i>Elastic IP Addresses</i> section of <a href=\"http://aws.amazon.com/ec2/pricing/\">Amazon EC2 Pricing</a>.</p> </important>"]
     fn associate_address(&self,
                          input: &AssociateAddressRequest)
                          -> Result<AssociateAddressResult, AssociateAddressError> {
@@ -55974,6 +57554,46 @@ impl<P, D> Ec2 for Ec2Client<P, D>
                 Err(AssociateDhcpOptionsError::from_body(String::from_utf8_lossy(&response.body)
                                                              .as_ref()))
             }
+        }
+    }
+
+
+    #[doc="<p>Associates an IAM instance profile with a running or stopped instance. You cannot associate more than one IAM instance profile with an instance.</p>"]
+    fn associate_iam_instance_profile
+        (&self,
+         input: &AssociateIamInstanceProfileRequest)
+         -> Result<AssociateIamInstanceProfileResult, AssociateIamInstanceProfileError> {
+        let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "AssociateIamInstanceProfile");
+        params.put("Version", "2016-11-15");
+        AssociateIamInstanceProfileRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = AssociateIamInstanceProfileResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(AssociateIamInstanceProfileResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                            Err(AssociateIamInstanceProfileError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                        }
         }
     }
 
@@ -56251,7 +57871,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
     }
 
 
-    #[doc="<p>Attaches a virtual private gateway to a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html\">Adding a Hardware Virtual Private Gateway to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
+    #[doc="<p>Attaches a virtual private gateway to a VPC. You can attach one virtual private gateway to one VPC at a time.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html\">Adding a Hardware Virtual Private Gateway to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
     fn attach_vpn_gateway(&self,
                           input: &AttachVpnGatewayRequest)
                           -> Result<AttachVpnGatewayResult, AttachVpnGatewayError> {
@@ -56802,7 +58422,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
     }
 
 
-    #[doc="<p>Creates a set of DHCP options for your VPC. After creating the set, you must associate it with the VPC, causing all existing and new instances that you launch in the VPC to use this set of DHCP options. The following are the individual DHCP options you can specify. For more information about the options, see <a href=\"http://www.ietf.org/rfc/rfc2132.txt\">RFC 2132</a>.</p> <ul> <li> <p> <code>domain-name-servers</code> - The IP addresses of up to four domain name servers, or AmazonProvidedDNS. The default DHCP option set specifies AmazonProvidedDNS. If specifying more than one domain name server, specify the IP addresses in a single parameter, separated by commas. If you want your instance to receive a custom DNS hostname as specified in <code>domain-name</code>, you must set <code>domain-name-servers</code> to a custom DNS server.</p> </li> <li> <p> <code>domain-name</code> - If you're using AmazonProvidedDNS in \"us-east-1\", specify \"ec2.internal\". If you're using AmazonProvidedDNS in another region, specify \"region.compute.internal\" (for example, \"ap-northeast-1.compute.internal\"). Otherwise, specify a domain name (for example, \"MyCompany.com\"). This value is used to complete unqualified DNS hostnames. <b>Important</b>: Some Linux operating systems accept multiple domain names separated by spaces. However, Windows and other Linux operating systems treat the value as a single domain, which results in unexpected behavior. If your DHCP options set is associated with a VPC that has instances with multiple operating systems, specify only one domain name.</p> </li> <li> <p> <code>ntp-servers</code> - The IP addresses of up to four Network Time Protocol (NTP) servers.</p> </li> <li> <p> <code>netbios-name-servers</code> - The IP addresses of up to four NetBIOS name servers.</p> </li> <li> <p> <code>netbios-node-type</code> - The NetBIOS node type (1, 2, 4, or 8). We recommend that you specify 2 (broadcast and multicast are not currently supported). For more information about these node types, see <a href=\"http://www.ietf.org/rfc/rfc2132.txt\">RFC 2132</a>.</p> </li> </ul> <p>Your VPC automatically starts out with a set of DHCP options that includes only a DNS server that we provide (AmazonProvidedDNS). If you create a set of options, and if your VPC has an Internet gateway, make sure to set the <code>domain-name-servers</code> option either to <code>AmazonProvidedDNS</code> or to a domain name server of your choice. For more information about DHCP options, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html\">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
+    #[doc="<p>Creates a set of DHCP options for your VPC. After creating the set, you must associate it with the VPC, causing all existing and new instances that you launch in the VPC to use this set of DHCP options. The following are the individual DHCP options you can specify. For more information about the options, see <a href=\"http://www.ietf.org/rfc/rfc2132.txt\">RFC 2132</a>.</p> <ul> <li> <p> <code>domain-name-servers</code> - The IP addresses of up to four domain name servers, or AmazonProvidedDNS. The default DHCP option set specifies AmazonProvidedDNS. If specifying more than one domain name server, specify the IP addresses in a single parameter, separated by commas. If you want your instance to receive a custom DNS hostname as specified in <code>domain-name</code>, you must set <code>domain-name-servers</code> to a custom DNS server.</p> </li> <li> <p> <code>domain-name</code> - If you're using AmazonProvidedDNS in <code>us-east-1</code>, specify <code>ec2.internal</code>. If you're using AmazonProvidedDNS in another region, specify <code>region.compute.internal</code> (for example, <code>ap-northeast-1.compute.internal</code>). Otherwise, specify a domain name (for example, <code>MyCompany.com</code>). This value is used to complete unqualified DNS hostnames. <b>Important</b>: Some Linux operating systems accept multiple domain names separated by spaces. However, Windows and other Linux operating systems treat the value as a single domain, which results in unexpected behavior. If your DHCP options set is associated with a VPC that has instances with multiple operating systems, specify only one domain name.</p> </li> <li> <p> <code>ntp-servers</code> - The IP addresses of up to four Network Time Protocol (NTP) servers.</p> </li> <li> <p> <code>netbios-name-servers</code> - The IP addresses of up to four NetBIOS name servers.</p> </li> <li> <p> <code>netbios-node-type</code> - The NetBIOS node type (1, 2, 4, or 8). We recommend that you specify 2 (broadcast and multicast are not currently supported). For more information about these node types, see <a href=\"http://www.ietf.org/rfc/rfc2132.txt\">RFC 2132</a>.</p> </li> </ul> <p>Your VPC automatically starts out with a set of DHCP options that includes only a DNS server that we provide (AmazonProvidedDNS). If you create a set of options, and if your VPC has an Internet gateway, make sure to set the <code>domain-name-servers</code> option either to <code>AmazonProvidedDNS</code> or to a domain name server of your choice. For more information about DHCP options, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html\">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
     fn create_dhcp_options(&self,
                            input: &CreateDhcpOptionsRequest)
                            -> Result<CreateDhcpOptionsResult, CreateDhcpOptionsError> {
@@ -56920,6 +58540,47 @@ impl<P, D> Ec2 for Ec2Client<P, D>
             _ => {
                 Err(CreateFlowLogsError::from_body(String::from_utf8_lossy(&response.body)
                                                        .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Creates an Amazon FPGA Image (AFI) from the specified design checkpoint (DCP).</p> <p>The create operation is asynchronous. To verify that the AFI is ready for use, check the output logs.</p> <p>An AFI contains the FPGA bitstream that is ready to download to an FPGA. You can securely deploy an AFI on one or more FPGA-accelerated instances. For more information, see the <a href=\"https://github.com/aws/aws-fpga/\">AWS FPGA Hardware Development Kit</a>.</p>"]
+    fn create_fpga_image(&self,
+                         input: &CreateFpgaImageRequest)
+                         -> Result<CreateFpgaImageResult, CreateFpgaImageError> {
+        let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "CreateFpgaImage");
+        params.put("Version", "2016-11-15");
+        CreateFpgaImageRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = CreateFpgaImageResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(CreateFpgaImageResultDeserializer::deserialize(&actual_tag_name,
+                                                                                 &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                Err(CreateFpgaImageError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
             }
         }
     }
@@ -57260,7 +58921,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
     }
 
 
-    #[doc="<p>Creates a listing for Amazon EC2 Standard Reserved Instances to be sold in the Reserved Instance Marketplace. You can submit one Standard Reserved Instance listing at a time. To get a list of your Standard Reserved Instances, you can use the <a>DescribeReservedInstances</a> operation.</p> <p>The Reserved Instance Marketplace matches sellers who want to resell Standard Reserved Instance capacity that they no longer need with buyers who want to purchase additional capacity. Reserved Instances bought and sold through the Reserved Instance Marketplace work like any other Reserved Instances.</p> <p>To sell your Standard Reserved Instances, you must first register as a seller in the Reserved Instance Marketplace. After completing the registration process, you can create a Reserved Instance Marketplace listing of some or all of your Standard Reserved Instances, and specify the upfront price to receive for them. Your Standard Reserved Instance listings then become available for purchase. To view the details of your Standard Reserved Instance listing, you can use the <a>DescribeReservedInstancesListings</a> operation.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-market-general.html\">Reserved Instance Marketplace</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
+    #[doc="<p>Creates a listing for Amazon EC2 Standard Reserved Instances to be sold in the Reserved Instance Marketplace. You can submit one Standard Reserved Instance listing at a time. To get a list of your Standard Reserved Instances, you can use the <a>DescribeReservedInstances</a> operation.</p> <note> <p>Only Standard Reserved Instances with a capacity reservation can be sold in the Reserved Instance Marketplace. Convertible Reserved Instances and Standard Reserved Instances with a regional benefit cannot be sold.</p> </note> <p>The Reserved Instance Marketplace matches sellers who want to resell Standard Reserved Instance capacity that they no longer need with buyers who want to purchase additional capacity. Reserved Instances bought and sold through the Reserved Instance Marketplace work like any other Reserved Instances.</p> <p>To sell your Standard Reserved Instances, you must first register as a seller in the Reserved Instance Marketplace. After completing the registration process, you can create a Reserved Instance Marketplace listing of some or all of your Standard Reserved Instances, and specify the upfront price to receive for them. Your Standard Reserved Instance listings then become available for purchase. To view the details of your Standard Reserved Instance listing, you can use the <a>DescribeReservedInstancesListings</a> operation.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-market-general.html\">Reserved Instance Marketplace</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
     fn create_reserved_instances_listing
         (&self,
          input: &CreateReservedInstancesListingRequest)
@@ -57502,7 +59163,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
     }
 
 
-    #[doc="<p>Creates a subnet in an existing VPC.</p> <p>When you create each subnet, you provide the VPC ID and the CIDR block you want for the subnet. After you create a subnet, you can't change its CIDR block. The subnet's IPv4 CIDR block can be the same as the VPC's IPv4 CIDR block (assuming you want only a single subnet in the VPC), or a subset of the VPC's IPv4 CIDR block. If you create more than one subnet in a VPC, the subnets' CIDR blocks must not overlap. The smallest IPv4 subnet (and VPC) you can create uses a /28 netmask (16 IPv4 addresses), and the largest uses a /16 netmask (65,536 IPv4 addresses).</p> <p>If you've associated an IPv6 CIDR block with your VPC, you can create a subnet with an IPv6 CIDR block that uses a /64 prefix length. </p> <important> <p>AWS reserves both the first four and the last IP address in each subnet's CIDR block. They're not available for use.</p> </important> <p>If you add more than one subnet to a VPC, they're set up in a star topology with a logical router in the middle.</p> <p>If you launch an instance in a VPC using an Amazon EBS-backed AMI, the IP address doesn't change if you stop and restart the instance (unlike a similar instance launched outside a VPC, which gets a new IP address when restarted). It's therefore possible to have a subnet with no running instances (they're all stopped), but no remaining IP addresses available.</p> <p>For more information about subnets, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html\">Your VPC and Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
+    #[doc="<p>Creates a subnet in an existing VPC.</p> <p>When you create each subnet, you provide the VPC ID and the CIDR block you want for the subnet. After you create a subnet, you can't change its CIDR block. The subnet's IPv4 CIDR block can be the same as the VPC's IPv4 CIDR block (assuming you want only a single subnet in the VPC), or a subset of the VPC's IPv4 CIDR block. If you create more than one subnet in a VPC, the subnets' CIDR blocks must not overlap. The smallest IPv4 subnet (and VPC) you can create uses a /28 netmask (16 IPv4 addresses), and the largest uses a /16 netmask (65,536 IPv4 addresses).</p> <p>If you've associated an IPv6 CIDR block with your VPC, you can create a subnet with an IPv6 CIDR block that uses a /64 prefix length. </p> <important> <p>AWS reserves both the first four and the last IPv4 address in each subnet's CIDR block. They're not available for use.</p> </important> <p>If you add more than one subnet to a VPC, they're set up in a star topology with a logical router in the middle.</p> <p>If you launch an instance in a VPC using an Amazon EBS-backed AMI, the IP address doesn't change if you stop and restart the instance (unlike a similar instance launched outside a VPC, which gets a new IP address when restarted). It's therefore possible to have a subnet with no running instances (they're all stopped), but no remaining IP addresses available.</p> <p>For more information about subnets, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html\">Your VPC and Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
     fn create_subnet(&self,
                      input: &CreateSubnetRequest)
                      -> Result<CreateSubnetResult, CreateSubnetError> {
@@ -57564,7 +59225,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
     }
 
 
-    #[doc="<p>Creates an EBS volume that can be attached to an instance in the same Availability Zone. The volume is created in the regional endpoint that you send the HTTP request to. For more information see <a href=\"http://docs.aws.amazon.com/general/latest/gr/rande.html\">Regions and Endpoints</a>.</p> <p>You can create a new empty volume or restore a volume from an EBS snapshot. Any AWS Marketplace product codes from the snapshot are propagated to the volume.</p> <p>You can create encrypted volumes with the <code>Encrypted</code> parameter. Encrypted volumes may only be attached to instances that support Amazon EBS encryption. Volumes that are created from encrypted snapshots are also automatically encrypted. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html\">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-creating-volume.html\">Creating or Restoring an Amazon EBS Volume</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
+    #[doc="<p>Creates an EBS volume that can be attached to an instance in the same Availability Zone. The volume is created in the regional endpoint that you send the HTTP request to. For more information see <a href=\"http://docs.aws.amazon.com/general/latest/gr/rande.html\">Regions and Endpoints</a>.</p> <p>You can create a new empty volume or restore a volume from an EBS snapshot. Any AWS Marketplace product codes from the snapshot are propagated to the volume.</p> <p>You can create encrypted volumes with the <code>Encrypted</code> parameter. Encrypted volumes may only be attached to instances that support Amazon EBS encryption. Volumes that are created from encrypted snapshots are also automatically encrypted. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html\">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>You can tag your volumes during creation. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html\">Tagging Your Amazon EC2 Resources</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-creating-volume.html\">Creating an Amazon EBS Volume</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
     fn create_volume(&self, input: &CreateVolumeRequest) -> Result<Volume, CreateVolumeError> {
         let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
         let mut params = Params::new();
@@ -57601,7 +59262,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
     }
 
 
-    #[doc="<p>Creates a VPC with the specified IPv4 CIDR block. The smallest VPC you can create uses a /28 netmask (16 IPv4 addresses), and the largest uses a /16 netmask (65,536 IPv4 addresses). To help you decide how big to make your VPC, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html\">Your VPC and Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>You can optionally request an Amazon-provided IPv6 CIDR block for the VPC. The IPv6 CIDR block uses a /56 prefix length, and is allocated from Amazon's pool of IPv6 addresses. You cannot choose the IPv6 range for your VPC.</p> <p>By default, each instance you launch in the VPC has the default DHCP options, which includes only a default DNS server that we provide (AmazonProvidedDNS). For more information about DHCP options, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html\">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>You can specify the instance tenancy value for the VPC when you create it. You can't change this value for the VPC after you create it. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/dedicated-instance.html.html\">Dedicated Instances</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
+    #[doc="<p>Creates a VPC with the specified IPv4 CIDR block. The smallest VPC you can create uses a /28 netmask (16 IPv4 addresses), and the largest uses a /16 netmask (65,536 IPv4 addresses). To help you decide how big to make your VPC, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html\">Your VPC and Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>You can optionally request an Amazon-provided IPv6 CIDR block for the VPC. The IPv6 CIDR block uses a /56 prefix length, and is allocated from Amazon's pool of IPv6 addresses. You cannot choose the IPv6 range for your VPC.</p> <p>By default, each instance you launch in the VPC has the default DHCP options, which includes only a default DNS server that we provide (AmazonProvidedDNS). For more information about DHCP options, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html\">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>You can specify the instance tenancy value for the VPC when you create it. You can't change this value for the VPC after you create it. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-instance.html\">Dedicated Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
     fn create_vpc(&self, input: &CreateVpcRequest) -> Result<CreateVpcResult, CreateVpcError> {
         let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
         let mut params = Params::new();
@@ -57637,7 +59298,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
     }
 
 
-    #[doc="<p>Creates a VPC endpoint for a specified AWS service. An endpoint enables you to create a private connection between your VPC and another AWS service in your account. You can specify an endpoint policy to attach to the endpoint that will control access to the service from your VPC. You can also specify the VPC route tables that use the endpoint.</p> <p>Currently, only endpoints to Amazon S3 are supported.</p>"]
+    #[doc="<p>Creates a VPC endpoint for a specified AWS service. An endpoint enables you to create a private connection between your VPC and another AWS service in your account. You can specify an endpoint policy to attach to the endpoint that will control access to the service from your VPC. You can also specify the VPC route tables that use the endpoint.</p> <p>Use <a>DescribeVpcEndpointServices</a> to get a list of supported AWS services.</p>"]
     fn create_vpc_endpoint(&self,
                            input: &CreateVpcEndpointRequest)
                            -> Result<CreateVpcEndpointResult, CreateVpcEndpointError> {
@@ -57679,7 +59340,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
     }
 
 
-    #[doc="<p>Requests a VPC peering connection between two VPCs: a requester VPC that you own and a peer VPC with which to create the connection. The peer VPC can belong to another AWS account. The requester VPC and peer VPC cannot have overlapping CIDR blocks.</p> <p>The owner of the peer VPC must accept the peering request to activate the peering connection. The VPC peering connection request expires after 7 days, after which it cannot be accepted or rejected.</p> <p>A <code>CreateVpcPeeringConnection</code> request between VPCs with overlapping CIDR blocks results in the VPC peering connection having a status of <code>failed</code>.</p>"]
+    #[doc="<p>Requests a VPC peering connection between two VPCs: a requester VPC that you own and a peer VPC with which to create the connection. The peer VPC can belong to another AWS account. The requester VPC and peer VPC cannot have overlapping CIDR blocks.</p> <p>The owner of the peer VPC must accept the peering request to activate the peering connection. The VPC peering connection request expires after 7 days, after which it cannot be accepted or rejected.</p> <p>If you try to create a VPC peering connection between VPCs that have overlapping CIDR blocks, the VPC peering connection status goes to <code>failed</code>.</p>"]
     fn create_vpc_peering_connection
         (&self,
          input: &CreateVpcPeeringConnectionRequest)
@@ -59138,6 +60799,43 @@ impl<P, D> Ec2 for Ec2Client<P, D>
             _ => {
                 Err(DescribeHostsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
             }
+        }
+    }
+
+
+    #[doc="<p>Describes your IAM instance profile associations.</p>"]
+fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstanceProfileAssociationsRequest) -> Result<DescribeIamInstanceProfileAssociationsResult, DescribeIamInstanceProfileAssociationsError>{
+        let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeIamInstanceProfileAssociations");
+        params.put("Version", "2016-11-15");
+        DescribeIamInstanceProfileAssociationsRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = DescribeIamInstanceProfileAssociationsResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(DescribeIamInstanceProfileAssociationsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                            Err(DescribeIamInstanceProfileAssociationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                        }
         }
     }
 
@@ -60842,6 +62540,46 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
     }
 
 
+    #[doc="<p>Reports the current modification status of EBS volumes.</p> <p>Current-generation EBS volumes support modification of attributes including type, size, and (for <code>io1</code> volumes) IOPS provisioning while either attached to or detached from an instance. Following an action from the API or the console to modify a volume, the status of the modification may be <code>modifying</code>, <code>optimizing</code>, <code>completed</code>, or <code>failed</code>. If a volume has never been modified, then certain elements of the returned <code>VolumeModification</code> objects are null. </p> <p> You can also use CloudWatch Events to check the status of a modification to an EBS volume. For information about CloudWatch Events, see the <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/\">Amazon CloudWatch Events User Guide</a>. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-expand-volume.html#monitoring_mods\">Monitoring Volume Modifications\"</a>. </p>"]
+    fn describe_volumes_modifications
+        (&self,
+         input: &DescribeVolumesModificationsRequest)
+         -> Result<DescribeVolumesModificationsResult, DescribeVolumesModificationsError> {
+        let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeVolumesModifications");
+        params.put("Version", "2016-11-15");
+        DescribeVolumesModificationsRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = DescribeVolumesModificationsResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(DescribeVolumesModificationsResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                            Err(DescribeVolumesModificationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                        }
+        }
+    }
+
+
     #[doc="<p>Describes the specified attribute of the specified VPC. You can specify only one attribute at a time.</p>"]
     fn describe_vpc_attribute(&self,
                               input: &DescribeVpcAttributeRequest)
@@ -60925,7 +62663,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
     }
 
 
-    #[doc="<p>Describes the ClassicLink DNS support status of one or more VPCs. If enabled, the DNS hostname of a linked EC2-Classic instance resolves to its private IP address when addressed from an instance in the VPC to which it's linked. Similarly, the DNS hostname of an instance in a VPC resolves to its private IP address when addressed from a linked EC2-Classic instance. For more information about ClassicLink, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html\">ClassicLink</a> in the Amazon Elastic Compute Cloud User Guide.</p>"]
+    #[doc="<p>Describes the ClassicLink DNS support status of one or more VPCs. If enabled, the DNS hostname of a linked EC2-Classic instance resolves to its private IP address when addressed from an instance in the VPC to which it's linked. Similarly, the DNS hostname of an instance in a VPC resolves to its private IP address when addressed from a linked EC2-Classic instance. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html\">ClassicLink</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
     fn describe_vpc_classic_link_dns_support
         (&self,
          input: &DescribeVpcClassicLinkDnsSupportRequest)
@@ -61252,7 +62990,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
     }
 
 
-    #[doc="<p>Detaches an Internet gateway from a VPC, disabling connectivity between the Internet and the VPC. The VPC must not contain any running instances with Elastic IP addresses.</p>"]
+    #[doc="<p>Detaches an Internet gateway from a VPC, disabling connectivity between the Internet and the VPC. The VPC must not contain any running instances with Elastic IP addresses or public IPv4 addresses.</p>"]
     fn detach_internet_gateway(&self,
                                input: &DetachInternetGatewayRequest)
                                -> Result<(), DetachInternetGatewayError> {
@@ -61440,7 +63178,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
     }
 
 
-    #[doc="<p>Disables ClassicLink DNS support for a VPC. If disabled, DNS hostnames resolve to public IP addresses when addressed between a linked EC2-Classic instance and instances in the VPC to which it's linked. For more information about ClassicLink, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html\">ClassicLink</a> in the Amazon Elastic Compute Cloud User Guide.</p>"]
+    #[doc="<p>Disables ClassicLink DNS support for a VPC. If disabled, DNS hostnames resolve to public IP addresses when addressed between a linked EC2-Classic instance and instances in the VPC to which it's linked. For more information about ClassicLink, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html\">ClassicLink</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
     fn disable_vpc_classic_link_dns_support
         (&self,
          input: &DisableVpcClassicLinkDnsSupportRequest)
@@ -61503,6 +63241,46 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
                 Err(DisassociateAddressError::from_body(String::from_utf8_lossy(&response.body)
                                                             .as_ref()))
             }
+        }
+    }
+
+
+    #[doc="<p>Disassociates an IAM instance profile from a running or stopped instance.</p> <p>Use <a>DescribeIamInstanceProfileAssociations</a> to get the association ID.</p>"]
+    fn disassociate_iam_instance_profile
+        (&self,
+         input: &DisassociateIamInstanceProfileRequest)
+         -> Result<DisassociateIamInstanceProfileResult, DisassociateIamInstanceProfileError> {
+        let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DisassociateIamInstanceProfile");
+        params.put("Version", "2016-11-15");
+        DisassociateIamInstanceProfileRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = DisassociateIamInstanceProfileResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(DisassociateIamInstanceProfileResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                            Err(DisassociateIamInstanceProfileError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                        }
         }
     }
 
@@ -61665,7 +63443,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
     }
 
 
-    #[doc="<p>Enables a VPC for ClassicLink. You can then link EC2-Classic instances to your ClassicLink-enabled VPC to allow communication over private IP addresses. You cannot enable your VPC for ClassicLink if any of your VPC's route tables have existing routes for address ranges within the <code>10.0.0.0/8</code> IP address range, excluding local routes for VPCs in the <code>10.0.0.0/16</code> and <code>10.1.0.0/16</code> IP address ranges. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html\">ClassicLink</a> in the Amazon Elastic Compute Cloud User Guide.</p>"]
+    #[doc="<p>Enables a VPC for ClassicLink. You can then link EC2-Classic instances to your ClassicLink-enabled VPC to allow communication over private IP addresses. You cannot enable your VPC for ClassicLink if any of your VPC's route tables have existing routes for address ranges within the <code>10.0.0.0/8</code> IP address range, excluding local routes for VPCs in the <code>10.0.0.0/16</code> and <code>10.1.0.0/16</code> IP address ranges. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html\">ClassicLink</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
     fn enable_vpc_classic_link(&self,
                                input: &EnableVpcClassicLinkRequest)
                                -> Result<EnableVpcClassicLinkResult, EnableVpcClassicLinkError> {
@@ -62495,6 +64273,46 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
     }
 
 
+    #[doc="<p>You can modify several parameters of an existing EBS volume, including volume size, volume type, and IOPS capacity. If your EBS volume is attached to a current-generation EC2 instance type, you may be able to apply these changes without stopping the instance or detaching the volume from it. For more information about modifying an EBS volume running Linux, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-expand-volume.html\">Modifying the Size, IOPS, or Type of an EBS Volume on Linux</a>. For more information about modifying an EBS volume running Windows, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-expand-volume.html\">Modifying the Size, IOPS, or Type of an EBS Volume on Windows</a>. </p> <p> When you complete a resize operation on your volume, you need to extend the volume's file-system size to take advantage of the new storage capacity. For information about extending a Linux file system, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-expand-volume.html#recognize-expanded-volume-linux\">Extending a Linux File System</a>. For information about extending a Windows file system, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-expand-volume.html#recognize-expanded-volume-windows\">Extending a Windows File System</a>. </p> <p> You can use CloudWatch Events to check the status of a modification to an EBS volume. For information about CloudWatch Events, see the <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/\">Amazon CloudWatch Events User Guide</a>. You can also track the status of a modification using the <a>DescribeVolumesModifications</a> API. For information about tracking status changes using either method, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-expand-volume.html#monitoring_mods\">Monitoring Volume Modifications</a>. </p> <note> <p>With previous-generation instance types, resizing an EBS volume may require detaching and reattaching the volume or stopping and restarting the instance. For more information about modifying an EBS volume running Linux, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-expand-volume.html\">Modifying the Size, IOPS, or Type of an EBS Volume on Linux</a>. For more information about modifying an EBS volume running Windows, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-expand-volume.html\">Modifying the Size, IOPS, or Type of an EBS Volume on Windows</a>.</p> </note> <note> <p>If you reach the maximum volume modification rate per volume limit, you will need to wait at least six hours before applying further modifications to the affected EBS volume.</p> </note>"]
+    fn modify_volume(&self,
+                     input: &ModifyVolumeRequest)
+                     -> Result<ModifyVolumeResult, ModifyVolumeError> {
+        let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ModifyVolume");
+        params.put("Version", "2016-11-15");
+        ModifyVolumeRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = ModifyVolumeResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(ModifyVolumeResultDeserializer::deserialize(&actual_tag_name,
+                                                                              &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                Err(ModifyVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+            }
+        }
+    }
+
+
     #[doc="<p>Modifies a volume attribute.</p> <p>By default, all I/O operations for the volume are suspended when the data on the volume is determined to be potentially inconsistent, to prevent undetectable, latent data corruption. The I/O access to the volume can be resumed by first enabling I/O access and then checking the data consistency on your volume.</p> <p>You can change the default behavior to resume I/O operations. We recommend that you change this only for boot volumes or for volumes that are stateless or disposable.</p>"]
     fn modify_volume_attribute(&self,
                                input: &ModifyVolumeAttributeRequest)
@@ -62860,7 +64678,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
     }
 
 
-    #[doc="<p>Registers an AMI. When you're creating an AMI, this is the final step you must complete before you can launch an instance from the AMI. For more information about creating AMIs, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/creating-an-ami.html\">Creating Your Own AMIs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <note> <p>For Amazon EBS-backed instances, <a>CreateImage</a> creates and registers the AMI in a single request, so you don't have to register the AMI yourself.</p> </note> <p>You can also use <code>RegisterImage</code> to create an Amazon EBS-backed Linux AMI from a snapshot of a root device volume. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_LaunchingInstanceFromSnapshot.html\">Launching an Instance from a Snapshot</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <important> <p>Some Linux distributions, such as Red Hat Enterprise Linux (RHEL) and SUSE Linux Enterprise Server (SLES), use the EC2 <code>billingProduct</code> code associated with an AMI to verify subscription status for package updates. Creating an AMI from an EBS snapshot does not maintain this billing code, and subsequent instances launched from such an AMI will not be able to connect to package update infrastructure.</p> <p>Similarly, although you can create a Windows AMI from a snapshot, you can't successfully launch an instance from the AMI.</p> <p>To create Windows AMIs or to create AMIs for Linux operating systems that must retain AMI billing codes to work properly, see <a>CreateImage</a>.</p> </important> <p>If needed, you can deregister an AMI at any time. Any modifications you make to an AMI backed by an instance store volume invalidates its registration. If you make changes to an image, deregister the previous image and register the new image.</p> <note> <p>You can't register an image where a secondary (non-root) snapshot has AWS Marketplace product codes.</p> </note>"]
+    #[doc="<p>Registers an AMI. When you're creating an AMI, this is the final step you must complete before you can launch an instance from the AMI. For more information about creating AMIs, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/creating-an-ami.html\">Creating Your Own AMIs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <note> <p>For Amazon EBS-backed instances, <a>CreateImage</a> creates and registers the AMI in a single request, so you don't have to register the AMI yourself.</p> </note> <p>You can also use <code>RegisterImage</code> to create an Amazon EBS-backed Linux AMI from a snapshot of a root device volume. You specify the snapshot using the block device mapping. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-launch-snapshot.html\">Launching a Linux Instance from a Backup</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>You can't register an image where a secondary (non-root) snapshot has AWS Marketplace product codes.</p> <p>Some Linux distributions, such as Red Hat Enterprise Linux (RHEL) and SUSE Linux Enterprise Server (SLES), use the EC2 billing product code associated with an AMI to verify the subscription status for package updates. Creating an AMI from an EBS snapshot does not maintain this billing code, and subsequent instances launched from such an AMI will not be able to connect to package update infrastructure. To create an AMI that must retain billing codes, see <a>CreateImage</a>.</p> <p>If needed, you can deregister an AMI at any time. Any modifications you make to an AMI backed by an instance store volume invalidates its registration. If you make changes to an image, deregister the previous image and register the new image.</p>"]
     fn register_image(&self,
                       input: &RegisterImageRequest)
                       -> Result<RegisterImageResult, RegisterImageError> {
@@ -63001,6 +64819,47 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
             _ => {
                 Err(ReleaseHostsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
             }
+        }
+    }
+
+
+    #[doc="<p>Replaces an IAM instance profile for the specified running instance. You can use this action to change the IAM instance profile that's associated with an instance without having to disassociate the existing IAM instance profile first.</p> <p>Use <a>DescribeIamInstanceProfileAssociations</a> to get the association ID.</p>"]
+    fn replace_iam_instance_profile_association
+        (&self,
+         input: &ReplaceIamInstanceProfileAssociationRequest)
+         -> Result<ReplaceIamInstanceProfileAssociationResult,
+                   ReplaceIamInstanceProfileAssociationError> {
+        let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ReplaceIamInstanceProfileAssociation");
+        params.put("Version", "2016-11-15");
+        ReplaceIamInstanceProfileAssociationRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = ReplaceIamInstanceProfileAssociationResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(ReplaceIamInstanceProfileAssociationResultDeserializer::deserialize(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                            Err(ReplaceIamInstanceProfileAssociationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                        }
         }
     }
 
@@ -63446,7 +65305,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
     }
 
 
-    #[doc="<p>Launches the specified number of instances using an AMI for which you have permissions. </p> <p>You can specify a number of options, or leave the default options. The following rules apply:</p> <ul> <li> <p>[EC2-VPC] If you don't specify a subnet ID, we choose a default subnet from your default VPC for you. If you don't have a default VPC, you must specify a subnet ID in the request.</p> </li> <li> <p>[EC2-Classic] If don't specify an Availability Zone, we choose one for you.</p> </li> <li> <p>Some instance types must be launched into a VPC. If you do not have a default VPC, or if you do not specify a subnet ID, the request fails. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-vpc.html#vpc-only-instance-types\">Instance Types Available Only in a VPC</a>.</p> </li> <li> <p>[EC2-VPC] All instances have a network interface with a primary private IPv4 address. If you don't specify this address, we choose one from the IPv4 range of your subnet.</p> </li> <li> <p>Not all instance types support IPv6 addresses. For more information, see <a href=\"http://aws.amazon.com/ec2/instance-types/\">Amazon EC2 Instance Types</a>.</p> </li> <li> <p>If you don't specify a security group ID, we use the default security group. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html\">Security Groups</a>.</p> </li> <li> <p>If any of the AMIs have a product code attached for which the user has not subscribed, the request fails.</p> </li> </ul> <p>To ensure faster instance launches, break up large requests into smaller batches. For example, create 5 separate launch requests for 100 instances each instead of 1 launch request for 500 instances.</p> <p>An instance is ready for you to use when it's in the <code>running</code> state. You can check the state of your instance using <a>DescribeInstances</a>. After launch, you can apply tags to your running instance (requires a resource ID). For more information, see <a>CreateTags</a> and <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html\">Tagging Your Amazon EC2 Resources</a>.</p> <p>Linux instances have access to the public key of the key pair at boot. You can use this key to provide secure access to the instance. Amazon EC2 public images use this feature to provide secure access without passwords. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html\">Key Pairs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>For troubleshooting, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_InstanceStraightToTerminated.html\">What To Do If An Instance Immediately Terminates</a>, and <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstancesConnecting.html\">Troubleshooting Connecting to Your Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
+    #[doc="<p>Launches the specified number of instances using an AMI for which you have permissions. </p> <p>You can specify a number of options, or leave the default options. The following rules apply:</p> <ul> <li> <p>[EC2-VPC] If you don't specify a subnet ID, we choose a default subnet from your default VPC for you. If you don't have a default VPC, you must specify a subnet ID in the request.</p> </li> <li> <p>[EC2-Classic] If don't specify an Availability Zone, we choose one for you.</p> </li> <li> <p>Some instance types must be launched into a VPC. If you do not have a default VPC, or if you do not specify a subnet ID, the request fails. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-vpc.html#vpc-only-instance-types\">Instance Types Available Only in a VPC</a>.</p> </li> <li> <p>[EC2-VPC] All instances have a network interface with a primary private IPv4 address. If you don't specify this address, we choose one from the IPv4 range of your subnet.</p> </li> <li> <p>Not all instance types support IPv6 addresses. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html\">Instance Types</a>.</p> </li> <li> <p>If you don't specify a security group ID, we use the default security group. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html\">Security Groups</a>.</p> </li> <li> <p>If any of the AMIs have a product code attached for which the user has not subscribed, the request fails.</p> </li> </ul> <p>To ensure faster instance launches, break up large requests into smaller batches. For example, create 5 separate launch requests for 100 instances each instead of 1 launch request for 500 instances.</p> <p>An instance is ready for you to use when it's in the <code>running</code> state. You can check the state of your instance using <a>DescribeInstances</a>. You can tag instances and EBS volumes during launch, after launch, or both. For more information, see <a>CreateTags</a> and <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html\">Tagging Your Amazon EC2 Resources</a>.</p> <p>Linux instances have access to the public key of the key pair at boot. You can use this key to provide secure access to the instance. Amazon EC2 public images use this feature to provide secure access without passwords. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html\">Key Pairs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>For troubleshooting, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_InstanceStraightToTerminated.html\">What To Do If An Instance Immediately Terminates</a>, and <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstancesConnecting.html\">Troubleshooting Connecting to Your Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
     fn run_instances(&self, input: &RunInstancesRequest) -> Result<Reservation, RunInstancesError> {
         let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
         let mut params = Params::new();

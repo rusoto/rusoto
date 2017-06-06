@@ -28,11 +28,16 @@ pub struct CognitoIdentityProvider {
     #[doc="<p>The provider name for an Amazon Cognito Identity User Pool. For example, <code>cognito-idp.us-east-1.amazonaws.com/us-east-1_123456789</code>.</p>"]
     #[serde(rename="ProviderName")]
     pub provider_name: Option<CognitoIdentityProviderName>,
+    #[doc="<p>TRUE if server-side token validation is enabled for the identity provider’s token.</p>"]
+    #[serde(rename="ServerSideTokenCheck")]
+    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    pub server_side_token_check: Option<CognitoIdentityProviderTokenCheck>,
 }
 
 pub type CognitoIdentityProviderClientId = String;
 pub type CognitoIdentityProviderList = Vec<CognitoIdentityProvider>;
 pub type CognitoIdentityProviderName = String;
+pub type CognitoIdentityProviderTokenCheck = bool;
 #[doc="<p>Input to the CreateIdentityPool action.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateIdentityPoolInput {

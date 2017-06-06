@@ -144,7 +144,7 @@ pub struct ConfigRule {
     #[doc="<p>A string in JSON format that is passed to the AWS Config rule Lambda function.</p>"]
     #[serde(rename="InputParameters")]
     pub input_parameters: Option<StringWithCharLimit1024>,
-    #[doc="<p>The maximum frequency with which AWS Config runs evaluations for a rule. You can specify a value for <code>MaximumExecutionFrequency</code> when:</p> <ul> <li> <p>You are using an AWS managed rule that is triggered at a periodic frequency.</p> </li> <li> <p>Your custom rule is triggered when AWS Config delivers the configuration snapshot.</p> </li> </ul> <p>For more information, see <a>ConfigSnapshotDeliveryProperties</a>.</p>"]
+    #[doc="<p>The maximum frequency with which AWS Config runs evaluations for a rule. You can specify a value for <code>MaximumExecutionFrequency</code> when:</p> <ul> <li> <p>You are using an AWS managed rule that is triggered at a periodic frequency.</p> </li> <li> <p>Your custom rule is triggered when AWS Config delivers the configuration snapshot. For more information, see <a>ConfigSnapshotDeliveryProperties</a>.</p> </li> </ul> <note> <p>By default, rules with a periodic trigger are evaluated every 24 hours. To change the frequency, specify a valid value for the <code>MaximumExecutionFrequency</code> parameter.</p> </note>"]
     #[serde(rename="MaximumExecutionFrequency")]
     pub maximum_execution_frequency: Option<MaximumExecutionFrequency>,
     #[doc="<p>Defines which resources can trigger an evaluation for the rule. The scope can include one or more resource types, a combination of one resource type and one resource ID, or a combination of a tag key and value. Specify a scope to constrain the resources that can trigger an evaluation for the rule. If you do not specify a scope, evaluations are triggered when any resource in the recording group changes.</p>"]
@@ -391,6 +391,7 @@ pub struct DeliverConfigSnapshotResponse {
 #[doc="<p>The channel through which AWS Config delivers notifications and updated configuration states.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeliveryChannel {
+    #[doc="<p>The options for how often AWS Config delivers configuration snapshots to the Amazon S3 bucket.</p>"]
     #[serde(rename="configSnapshotDeliveryProperties")]
     pub config_snapshot_delivery_properties: Option<ConfigSnapshotDeliveryProperties>,
     #[doc="<p>The name of the delivery channel. By default, AWS Config assigns the name \"default\" when creating the delivery channel. To change the delivery channel name, you must use the DeleteDeliveryChannel action to delete your current delivery channel, and then you must use the PutDeliveryChannel command to create a delivery channel that has the desired name.</p>"]
@@ -437,7 +438,7 @@ pub struct DescribeComplianceByConfigRuleRequest {
     #[doc="<p>Specify one or more AWS Config rule names to filter the results by rule.</p>"]
     #[serde(rename="ConfigRuleNames")]
     pub config_rule_names: Option<ConfigRuleNames>,
-    #[doc="<p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>"]
+    #[doc="<p>The <code>NextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>"]
     #[serde(rename="NextToken")]
     pub next_token: Option<String>,
 }
@@ -462,7 +463,7 @@ pub struct DescribeComplianceByResourceRequest {
     #[doc="<p>The maximum number of evaluation results returned on each page. The default is 10. You cannot specify a limit greater than 100. If you specify 0, AWS Config uses the default.</p>"]
     #[serde(rename="Limit")]
     pub limit: Option<Limit>,
-    #[doc="<p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>"]
+    #[doc="<p>The <code>NextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>"]
     #[serde(rename="NextToken")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The ID of the AWS resource for which you want compliance information. You can specify only one resource ID. If you specify a resource ID, you must also specify a type for <code>ResourceType</code>.</p>"]
@@ -515,7 +516,7 @@ pub struct DescribeConfigRulesRequest {
     #[doc="<p>The names of the AWS Config rules for which you want details. If you do not specify any names, AWS Config returns details for all your rules.</p>"]
     #[serde(rename="ConfigRuleNames")]
     pub config_rule_names: Option<ConfigRuleNames>,
-    #[doc="<p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>"]
+    #[doc="<p>The <code>NextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>"]
     #[serde(rename="NextToken")]
     pub next_token: Option<String>,
 }
@@ -680,7 +681,7 @@ pub struct GetComplianceDetailsByConfigRuleRequest {
     #[doc="<p>The maximum number of evaluation results returned on each page. The default is 10. You cannot specify a limit greater than 100. If you specify 0, AWS Config uses the default.</p>"]
     #[serde(rename="Limit")]
     pub limit: Option<Limit>,
-    #[doc="<p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>"]
+    #[doc="<p>The <code>NextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>"]
     #[serde(rename="NextToken")]
     pub next_token: Option<NextToken>,
 }
@@ -702,7 +703,7 @@ pub struct GetComplianceDetailsByResourceRequest {
     #[doc="<p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>NOT_APPLICABLE</code>.</p>"]
     #[serde(rename="ComplianceTypes")]
     pub compliance_types: Option<ComplianceTypes>,
-    #[doc="<p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>"]
+    #[doc="<p>The <code>NextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>"]
     #[serde(rename="NextToken")]
     pub next_token: Option<String>,
     #[doc="<p>The ID of the AWS resource for which you want compliance information.</p>"]
@@ -830,9 +831,9 @@ pub type Name = String;
 pub type NextToken = String;
 pub type OrderingTimestamp = f64;
 pub type Owner = String;
-#[doc="<p/>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct PutConfigRuleRequest {
+    #[doc="<p>The rule that you want to add to your account.</p>"]
     #[serde(rename="ConfigRule")]
     pub config_rule: ConfigRule,
 }
@@ -862,6 +863,10 @@ pub struct PutEvaluationsRequest {
     #[doc="<p>An encrypted token that associates an evaluation with an AWS Config rule. Identifies the rule and the event that triggered the evaluation</p>"]
     #[serde(rename="ResultToken")]
     pub result_token: String,
+    #[doc="<p>Use this parameter to specify a test run for <code>PutEvaluations</code>. You can verify whether your AWS Lambda function will deliver evaluation results to AWS Config. No updates occur to your existing evaluations, and evaluation results are not sent to AWS Config.</p> <note> <p>When <code>TestMode</code> is <code>true</code>, <code>PutEvaluations</code> doesn't require a valid value for the <code>ResultToken</code> parameter, but the value cannot be null.</p> </note>"]
+    #[serde(rename="TestMode")]
+    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    pub test_mode: Option<Boolean>,
 }
 
 #[doc="<p/>"]
@@ -976,7 +981,7 @@ pub struct SourceDetail {
     #[doc="<p>The source of the event, such as an AWS service, that triggers AWS Config to evaluate your AWS resources.</p>"]
     #[serde(rename="EventSource")]
     pub event_source: Option<EventSource>,
-    #[doc="<p>The frequency that you want AWS Config to run evaluations for a rule that is triggered periodically. If you specify a value for <code>MaximumExecutionFrequency</code>, then <code>MessageType</code> must use the <code>ScheduledNotification</code> value.</p>"]
+    #[doc="<p>The frequency that you want AWS Config to run evaluations for a custom rule with a periodic trigger. If you specify a value for <code>MaximumExecutionFrequency</code>, then <code>MessageType</code> must use the <code>ScheduledNotification</code> value.</p> <note> <p>By default, rules with a periodic trigger are evaluated every 24 hours. To change the frequency, specify a valid value for the <code>MaximumExecutionFrequency</code> parameter.</p> </note>"]
     #[serde(rename="MaximumExecutionFrequency")]
     pub maximum_execution_frequency: Option<MaximumExecutionFrequency>,
     #[doc="<p>The type of notification that triggers AWS Config to run an evaluation for a rule. You can specify the following notification types:</p> <ul> <li> <p> <code>ConfigurationItemChangeNotification</code> - Triggers an evaluation when AWS Config delivers a configuration item as a result of a resource change.</p> </li> <li> <p> <code>OversizedConfigurationItemChangeNotification</code> - Triggers an evaluation when AWS Config delivers an oversized configuration item. AWS Config may generate this notification type when a resource changes and the notification exceeds the maximum size allowed by Amazon SNS.</p> </li> <li> <p> <code>ScheduledNotification</code> - Triggers a periodic evaluation at the frequency specified for <code>MaximumExecutionFrequency</code>.</p> </li> <li> <p> <code>ConfigurationSnapshotDeliveryCompleted</code> - Triggers a periodic evaluation when AWS Config delivers a configuration snapshot.</p> </li> </ul> <p>If you want your custom rule to be triggered by configuration changes, specify both <code>ConfigurationItemChangeNotification</code> and <code>OversizedConfigurationItemChangeNotification</code>. </p>"]
@@ -1423,6 +1428,8 @@ impl Error for DeliverConfigSnapshotError {
 /// Errors returned by DescribeComplianceByConfigRule
 #[derive(Debug, PartialEq)]
 pub enum DescribeComplianceByConfigRuleError {
+    ///<p>The specified next token is invalid. Specify the <code>NextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    InvalidNextToken(String),
     ///<p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
     InvalidParameterValue(String),
     ///<p>One or more AWS Config rules in the request are invalid. Verify that the rule names are correct and try again.</p>
@@ -1451,6 +1458,7 @@ impl DescribeComplianceByConfigRuleError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
+                    "InvalidNextTokenException" => DescribeComplianceByConfigRuleError::InvalidNextToken(String::from(error_message)),
                     "InvalidParameterValueException" => DescribeComplianceByConfigRuleError::InvalidParameterValue(String::from(error_message)),
                     "NoSuchConfigRuleException" => DescribeComplianceByConfigRuleError::NoSuchConfigRule(String::from(error_message)),
                     "ValidationException" => {
@@ -1487,6 +1495,7 @@ impl fmt::Display for DescribeComplianceByConfigRuleError {
 impl Error for DescribeComplianceByConfigRuleError {
     fn description(&self) -> &str {
         match *self {
+            DescribeComplianceByConfigRuleError::InvalidNextToken(ref cause) => cause,
             DescribeComplianceByConfigRuleError::InvalidParameterValue(ref cause) => cause,
             DescribeComplianceByConfigRuleError::NoSuchConfigRule(ref cause) => cause,
             DescribeComplianceByConfigRuleError::Validation(ref cause) => cause,
@@ -1501,7 +1510,7 @@ impl Error for DescribeComplianceByConfigRuleError {
 /// Errors returned by DescribeComplianceByResource
 #[derive(Debug, PartialEq)]
 pub enum DescribeComplianceByResourceError {
-    ///<p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    ///<p>The specified next token is invalid. Specify the <code>NextToken</code> string that was returned in the previous response to get the next page of results.</p>
     InvalidNextToken(String),
     ///<p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
     InvalidParameterValue(String),
@@ -1579,6 +1588,8 @@ impl Error for DescribeComplianceByResourceError {
 /// Errors returned by DescribeConfigRuleEvaluationStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeConfigRuleEvaluationStatusError {
+    ///<p>The specified next token is invalid. Specify the <code>NextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    InvalidNextToken(String),
     ///<p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
     InvalidParameterValue(String),
     ///<p>One or more AWS Config rules in the request are invalid. Verify that the rule names are correct and try again.</p>
@@ -1607,6 +1618,7 @@ impl DescribeConfigRuleEvaluationStatusError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
+                    "InvalidNextTokenException" => DescribeConfigRuleEvaluationStatusError::InvalidNextToken(String::from(error_message)),
                     "InvalidParameterValueException" => DescribeConfigRuleEvaluationStatusError::InvalidParameterValue(String::from(error_message)),
                     "NoSuchConfigRuleException" => DescribeConfigRuleEvaluationStatusError::NoSuchConfigRule(String::from(error_message)),
                     "ValidationException" => {
@@ -1644,6 +1656,7 @@ impl fmt::Display for DescribeConfigRuleEvaluationStatusError {
 impl Error for DescribeConfigRuleEvaluationStatusError {
     fn description(&self) -> &str {
         match *self {
+            DescribeConfigRuleEvaluationStatusError::InvalidNextToken(ref cause) => cause,
             DescribeConfigRuleEvaluationStatusError::InvalidParameterValue(ref cause) => cause,
             DescribeConfigRuleEvaluationStatusError::NoSuchConfigRule(ref cause) => cause,
             DescribeConfigRuleEvaluationStatusError::Validation(ref cause) => cause,
@@ -1658,6 +1671,8 @@ impl Error for DescribeConfigRuleEvaluationStatusError {
 /// Errors returned by DescribeConfigRules
 #[derive(Debug, PartialEq)]
 pub enum DescribeConfigRulesError {
+    ///<p>The specified next token is invalid. Specify the <code>NextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    InvalidNextToken(String),
     ///<p>One or more AWS Config rules in the request are invalid. Verify that the rule names are correct and try again.</p>
     NoSuchConfigRule(String),
     /// An error occurred dispatching the HTTP request
@@ -1684,6 +1699,9 @@ impl DescribeConfigRulesError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
+                    "InvalidNextTokenException" => {
+                        DescribeConfigRulesError::InvalidNextToken(String::from(error_message))
+                    }
                     "NoSuchConfigRuleException" => {
                         DescribeConfigRulesError::NoSuchConfigRule(String::from(error_message))
                     }
@@ -1721,6 +1739,7 @@ impl fmt::Display for DescribeConfigRulesError {
 impl Error for DescribeConfigRulesError {
     fn description(&self) -> &str {
         match *self {
+            DescribeConfigRulesError::InvalidNextToken(ref cause) => cause,
             DescribeConfigRulesError::NoSuchConfigRule(ref cause) => cause,
             DescribeConfigRulesError::Validation(ref cause) => cause,
             DescribeConfigRulesError::Credentials(ref err) => err.description(),
@@ -2033,7 +2052,7 @@ impl Error for DescribeDeliveryChannelsError {
 /// Errors returned by GetComplianceDetailsByConfigRule
 #[derive(Debug, PartialEq)]
 pub enum GetComplianceDetailsByConfigRuleError {
-    ///<p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    ///<p>The specified next token is invalid. Specify the <code>NextToken</code> string that was returned in the previous response to get the next page of results.</p>
     InvalidNextToken(String),
     ///<p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
     InvalidParameterValue(String),
@@ -2336,7 +2355,7 @@ impl Error for GetComplianceSummaryByResourceTypeError {
 pub enum GetResourceConfigHistoryError {
     ///<p>The specified limit is outside the allowable range.</p>
     InvalidLimit(String),
-    ///<p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    ///<p>The specified next token is invalid. Specify the <code>NextToken</code> string that was returned in the previous response to get the next page of results.</p>
     InvalidNextToken(String),
     ///<p>The specified time range is not valid. The earlier time is not chronologically before the later time.</p>
     InvalidTimeRange(String),
@@ -2432,7 +2451,7 @@ impl Error for GetResourceConfigHistoryError {
 pub enum ListDiscoveredResourcesError {
     ///<p>The specified limit is outside the allowable range.</p>
     InvalidLimit(String),
-    ///<p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    ///<p>The specified next token is invalid. Specify the <code>NextToken</code> string that was returned in the previous response to get the next page of results.</p>
     InvalidNextToken(String),
     ///<p>There are no configuration recorders available to provide the role needed to describe your resources. Create a configuration recorder.</p>
     NoAvailableConfigurationRecorder(String),
@@ -2806,7 +2825,7 @@ impl Error for PutDeliveryChannelError {
 pub enum PutEvaluationsError {
     ///<p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
     InvalidParameterValue(String),
-    ///<p>The speNexcified token is invalid.</p>
+    ///<p>The specified <code>ResultToken</code> is invalid.</p>
     InvalidResultToken(String),
     ///<p>One or more AWS Config rules in the request are invalid. Verify that the rule names are correct and try again.</p>
     NoSuchConfigRule(String),
@@ -3262,7 +3281,7 @@ pub trait ConfigService {
          -> Result<ListDiscoveredResourcesResponse, ListDiscoveredResourcesError>;
 
 
-    #[doc="<p>Adds or updates an AWS Config rule for evaluating whether your AWS resources comply with your desired configurations.</p> <p>You can use this action for custom Config rules and AWS managed Config rules. A custom Config rule is a rule that you develop and maintain. An AWS managed Config rule is a customizable, predefined rule that AWS Config provides.</p> <p>If you are adding a new custom Config rule, you must first create the AWS Lambda function that the rule invokes to evaluate your resources. When you use the <code>PutConfigRule</code> action to add the rule to AWS Config, you must specify the Amazon Resource Name (ARN) that AWS Lambda assigns to the function. Specify the ARN for the <code>SourceIdentifier</code> key. This key is part of the <code>Source</code> object, which is part of the <code>ConfigRule</code> object. </p> <p>If you are adding a new AWS managed Config rule, specify the rule's identifier for the <code>SourceIdentifier</code> key. To reference AWS managed Config rule identifiers, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html\">Using AWS Managed Config Rules</a>.</p> <p>For any new rule that you add, specify the <code>ConfigRuleName</code> in the <code>ConfigRule</code> object. Do not specify the <code>ConfigRuleArn</code> or the <code>ConfigRuleId</code>. These values are generated by AWS Config for new rules.</p> <p>If you are updating a rule that you added previously, you can specify the rule by <code>ConfigRuleName</code>, <code>ConfigRuleId</code>, or <code>ConfigRuleArn</code> in the <code>ConfigRule</code> data type that you use in this request.</p> <p>The maximum number of rules that AWS Config supports is 50.</p> <p>For more information about requesting a rule limit increase, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_config\">AWS Config Limits</a> in the <i>AWS General Reference Guide</i>.</p> <p>For more information about developing and using AWS Config rules, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config.html\">Evaluating AWS Resource Configurations with AWS Config</a> in the <i>AWS Config Developer Guide</i>.</p>"]
+    #[doc="<p>Adds or updates an AWS Config rule for evaluating whether your AWS resources comply with your desired configurations.</p> <p>You can use this action for custom Config rules and AWS managed Config rules. A custom Config rule is a rule that you develop and maintain. An AWS managed Config rule is a customizable, predefined rule that AWS Config provides.</p> <p>If you are adding a new custom Config rule, you must first create the AWS Lambda function that the rule invokes to evaluate your resources. When you use the <code>PutConfigRule</code> action to add the rule to AWS Config, you must specify the Amazon Resource Name (ARN) that AWS Lambda assigns to the function. Specify the ARN for the <code>SourceIdentifier</code> key. This key is part of the <code>Source</code> object, which is part of the <code>ConfigRule</code> object. </p> <p>If you are adding an AWS managed Config rule, specify the rule's identifier for the <code>SourceIdentifier</code> key. To reference AWS managed Config rule identifiers, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html\">About AWS Managed Config Rules</a>.</p> <p>For any new rule that you add, specify the <code>ConfigRuleName</code> in the <code>ConfigRule</code> object. Do not specify the <code>ConfigRuleArn</code> or the <code>ConfigRuleId</code>. These values are generated by AWS Config for new rules.</p> <p>If you are updating a rule that you added previously, you can specify the rule by <code>ConfigRuleName</code>, <code>ConfigRuleId</code>, or <code>ConfigRuleArn</code> in the <code>ConfigRule</code> data type that you use in this request.</p> <p>The maximum number of rules that AWS Config supports is 50.</p> <p>For more information about requesting a rule limit increase, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_config\">AWS Config Limits</a> in the <i>AWS General Reference Guide</i>.</p> <p>For more information about developing and using AWS Config rules, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config.html\">Evaluating AWS Resource Configurations with AWS Config</a> in the <i>AWS Config Developer Guide</i>.</p>"]
     fn put_config_rule(&self, input: &PutConfigRuleRequest) -> Result<(), PutConfigRuleError>;
 
 
@@ -3821,7 +3840,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
     }
 
 
-    #[doc="<p>Adds or updates an AWS Config rule for evaluating whether your AWS resources comply with your desired configurations.</p> <p>You can use this action for custom Config rules and AWS managed Config rules. A custom Config rule is a rule that you develop and maintain. An AWS managed Config rule is a customizable, predefined rule that AWS Config provides.</p> <p>If you are adding a new custom Config rule, you must first create the AWS Lambda function that the rule invokes to evaluate your resources. When you use the <code>PutConfigRule</code> action to add the rule to AWS Config, you must specify the Amazon Resource Name (ARN) that AWS Lambda assigns to the function. Specify the ARN for the <code>SourceIdentifier</code> key. This key is part of the <code>Source</code> object, which is part of the <code>ConfigRule</code> object. </p> <p>If you are adding a new AWS managed Config rule, specify the rule's identifier for the <code>SourceIdentifier</code> key. To reference AWS managed Config rule identifiers, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html\">Using AWS Managed Config Rules</a>.</p> <p>For any new rule that you add, specify the <code>ConfigRuleName</code> in the <code>ConfigRule</code> object. Do not specify the <code>ConfigRuleArn</code> or the <code>ConfigRuleId</code>. These values are generated by AWS Config for new rules.</p> <p>If you are updating a rule that you added previously, you can specify the rule by <code>ConfigRuleName</code>, <code>ConfigRuleId</code>, or <code>ConfigRuleArn</code> in the <code>ConfigRule</code> data type that you use in this request.</p> <p>The maximum number of rules that AWS Config supports is 50.</p> <p>For more information about requesting a rule limit increase, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_config\">AWS Config Limits</a> in the <i>AWS General Reference Guide</i>.</p> <p>For more information about developing and using AWS Config rules, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config.html\">Evaluating AWS Resource Configurations with AWS Config</a> in the <i>AWS Config Developer Guide</i>.</p>"]
+    #[doc="<p>Adds or updates an AWS Config rule for evaluating whether your AWS resources comply with your desired configurations.</p> <p>You can use this action for custom Config rules and AWS managed Config rules. A custom Config rule is a rule that you develop and maintain. An AWS managed Config rule is a customizable, predefined rule that AWS Config provides.</p> <p>If you are adding a new custom Config rule, you must first create the AWS Lambda function that the rule invokes to evaluate your resources. When you use the <code>PutConfigRule</code> action to add the rule to AWS Config, you must specify the Amazon Resource Name (ARN) that AWS Lambda assigns to the function. Specify the ARN for the <code>SourceIdentifier</code> key. This key is part of the <code>Source</code> object, which is part of the <code>ConfigRule</code> object. </p> <p>If you are adding an AWS managed Config rule, specify the rule's identifier for the <code>SourceIdentifier</code> key. To reference AWS managed Config rule identifiers, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html\">About AWS Managed Config Rules</a>.</p> <p>For any new rule that you add, specify the <code>ConfigRuleName</code> in the <code>ConfigRule</code> object. Do not specify the <code>ConfigRuleArn</code> or the <code>ConfigRuleId</code>. These values are generated by AWS Config for new rules.</p> <p>If you are updating a rule that you added previously, you can specify the rule by <code>ConfigRuleName</code>, <code>ConfigRuleId</code>, or <code>ConfigRuleArn</code> in the <code>ConfigRule</code> data type that you use in this request.</p> <p>The maximum number of rules that AWS Config supports is 50.</p> <p>For more information about requesting a rule limit increase, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_config\">AWS Config Limits</a> in the <i>AWS General Reference Guide</i>.</p> <p>For more information about developing and using AWS Config rules, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config.html\">Evaluating AWS Resource Configurations with AWS Config</a> in the <i>AWS Config Developer Guide</i>.</p>"]
     fn put_config_rule(&self, input: &PutConfigRuleRequest) -> Result<(), PutConfigRuleError> {
         let mut request = SignedRequest::new("POST", "config", self.region, "/");
 

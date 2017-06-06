@@ -984,6 +984,22 @@ impl EnableAlarmActionsInputSerializer {
 }
 
 pub type ErrorMessage = String;
+pub type EvaluateLowSampleCountPercentile = String;
+struct EvaluateLowSampleCountPercentileDeserializer;
+impl EvaluateLowSampleCountPercentileDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<EvaluateLowSampleCountPercentile, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
 pub type EvaluationPeriods = i64;
 struct EvaluationPeriodsDeserializer;
 impl EvaluationPeriodsDeserializer {
@@ -1030,7 +1046,7 @@ impl ExtendedStatisticsSerializer {
 pub type FaultDescription = String;
 #[derive(Default,Debug,Clone)]
 pub struct GetMetricStatisticsInput {
-    #[doc="<p>The dimensions. CloudWatch treats each unique combination of dimensions as a separate metric. You can't retrieve statistics using combinations of dimensions that were not specially published. You must specify the same dimensions that were used when the metrics were created. For an example, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html#dimension-combinations\">Dimension Combinations</a> in the <i>Amazon CloudWatch User Guide</i>.</p>"]
+    #[doc="<p>The dimensions. If the metric contains multiple dimensions, you must include a value for each dimension. CloudWatch treats each unique combination of dimensions as a separate metric. You can't retrieve statistics using combinations of dimensions that were not specially published. You must specify the same dimensions that were used when the metrics were created. For an example, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html#dimension-combinations\">Dimension Combinations</a> in the <i>Amazon CloudWatch User Guide</i>. For more information on specifying dimensions, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html\">Publishing Metrics</a> in the <i>Amazon CloudWatch User Guide</i>.</p>"]
     pub dimensions: Option<Dimensions>,
     #[doc="<p>The time stamp that determines the last data point to return.</p> <p>The value specified is exclusive; results will include data points up to the specified time stamp. The time stamp must be in ISO 8601 UTC format (for example, 2016-10-10T23:00:00Z).</p>"]
     pub end_time: Timestamp,
@@ -1362,6 +1378,7 @@ pub struct MetricAlarm {
     pub comparison_operator: Option<ComparisonOperator>,
     #[doc="<p>The dimensions for the metric associated with the alarm.</p>"]
     pub dimensions: Option<Dimensions>,
+    pub evaluate_low_sample_count_percentile: Option<EvaluateLowSampleCountPercentile>,
     #[doc="<p>The number of periods over which data is compared to the specified threshold.</p>"]
     pub evaluation_periods: Option<EvaluationPeriods>,
     #[doc="<p>The percentile statistic for the metric associated with the alarm. Specify a value between p0.0 and p100.</p>"]
@@ -1388,6 +1405,7 @@ pub struct MetricAlarm {
     pub statistic: Option<Statistic>,
     #[doc="<p>The value to compare with the specified statistic.</p>"]
     pub threshold: Option<Threshold>,
+    pub treat_missing_data: Option<TreatMissingData>,
     #[doc="<p>The unit of the metric associated with the alarm.</p>"]
     pub unit: Option<StandardUnit>,
 }
@@ -1451,6 +1469,9 @@ impl MetricAlarmDeserializer {
                             obj.dimensions = Some(try!(DimensionsDeserializer::deserialize("Dimensions",
                                                                                            stack)));
                         }
+                        "EvaluateLowSampleCountPercentile" => {
+                            obj.evaluate_low_sample_count_percentile = Some(try!(EvaluateLowSampleCountPercentileDeserializer::deserialize("EvaluateLowSampleCountPercentile", stack)));
+                        }
                         "EvaluationPeriods" => {
                             obj.evaluation_periods =
                                 Some(try!(EvaluationPeriodsDeserializer::deserialize("EvaluationPeriods",
@@ -1511,6 +1532,11 @@ impl MetricAlarmDeserializer {
                         "Threshold" => {
                             obj.threshold = Some(try!(ThresholdDeserializer::deserialize("Threshold",
                                                                                          stack)));
+                        }
+                        "TreatMissingData" => {
+                            obj.treat_missing_data =
+                                Some(try!(TreatMissingDataDeserializer::deserialize("TreatMissingData",
+                                                                                    stack)));
                         }
                         "Unit" => {
                             obj.unit = Some(try!(StandardUnitDeserializer::deserialize("Unit",
@@ -1769,6 +1795,8 @@ pub struct PutMetricAlarmInput {
     pub comparison_operator: ComparisonOperator,
     #[doc="<p>The dimensions for the metric associated with the alarm.</p>"]
     pub dimensions: Option<Dimensions>,
+    #[doc="<p> Used only for alarms based on percentiles. If you specify <code>ignore</code>, the alarm state will not change during periods with too few data points to be statistically significant. If you specify <code>evaluate</code> or omit this parameter, the alarm will always be evaluated and possibly change state no matter how many data points are available. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html#percentiles-with-low-samples\">Percentile-Based CloudWatch Alarms and Low Data Samples</a>.</p> <p>Valid Values: <code>evaluate | ignore</code> </p>"]
+    pub evaluate_low_sample_count_percentile: Option<EvaluateLowSampleCountPercentile>,
     #[doc="<p>The number of periods over which data is compared to the specified threshold.</p>"]
     pub evaluation_periods: EvaluationPeriods,
     #[doc="<p>The percentile statistic for the metric associated with the alarm. Specify a value between p0.0 and p100.</p>"]
@@ -1787,6 +1815,8 @@ pub struct PutMetricAlarmInput {
     pub statistic: Option<Statistic>,
     #[doc="<p>The value against which the specified statistic is compared.</p>"]
     pub threshold: Threshold,
+    #[doc="<p> Sets how this alarm is to handle missing data points. If <code>TreatMissingData</code> is omitted, the default behavior of <code>missing</code> is used. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html#alarms-and-missing-data\">Configuring How CloudWatch Alarms Treats Missing Data</a>.</p> <p>Valid Values: <code>breaching | notBreaching | ignore | missing</code> </p>"]
+    pub treat_missing_data: Option<TreatMissingData>,
     #[doc="<p>The unit of measure for the statistic. For example, the units for the Amazon EC2 NetworkIn metric are Bytes because NetworkIn tracks the number of bytes that an instance receives on all network interfaces. You can also specify a unit when you create a custom metric. Units help provide conceptual meaning to your data. Metric data points that specify a unit of measure, such as Percent, are aggregated separately.</p> <p>If you specify a unit, you must use a unit that is appropriate for the metric. Otherwise, the Amazon CloudWatch alarm can get stuck in the <code>INSUFFICIENT DATA</code> state. </p>"]
     pub unit: Option<StandardUnit>,
 }
@@ -1821,6 +1851,10 @@ impl PutMetricAlarmInputSerializer {
                                             &format!("{}{}", prefix, "Dimensions"),
                                             field_value);
         }
+        if let Some(ref field_value) = obj.evaluate_low_sample_count_percentile {
+            params.put(&format!("{}{}", prefix, "EvaluateLowSampleCountPercentile"),
+                       &field_value);
+        }
         params.put(&format!("{}{}", prefix, "EvaluationPeriods"),
                    &obj.evaluation_periods.to_string());
         if let Some(ref field_value) = obj.extended_statistic {
@@ -1844,6 +1878,9 @@ impl PutMetricAlarmInputSerializer {
         }
         params.put(&format!("{}{}", prefix, "Threshold"),
                    &obj.threshold.to_string());
+        if let Some(ref field_value) = obj.treat_missing_data {
+            params.put(&format!("{}{}", prefix, "TreatMissingData"), &field_value);
+        }
         if let Some(ref field_value) = obj.unit {
             params.put(&format!("{}{}", prefix, "Unit"), &field_value);
         }
@@ -2122,6 +2159,21 @@ impl TimestampDeserializer {
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
                                        -> Result<Timestamp, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
+pub type TreatMissingData = String;
+struct TreatMissingDataDeserializer;
+impl TreatMissingDataDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<TreatMissingData, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2939,7 +2991,7 @@ pub trait CloudWatch {
                             -> Result<(), EnableAlarmActionsError>;
 
 
-    #[doc="<p>Gets statistics for the specified metric.</p> <p>Amazon CloudWatch retains metric data as follows:</p> <ul> <li> <p>Data points with a period of 60 seconds (1 minute) are available for 15 days</p> </li> <li> <p>Data points with a period of 300 seconds (5 minute) are available for 63 days</p> </li> <li> <p>Data points with a period of 3600 seconds (1 hour) are available for 455 days (15 months)</p> </li> </ul> <p>Note that CloudWatch started retaining 5-minute and 1-hour metric data as of 9 July 2016.</p> <p>The maximum number of data points returned from a single call is 1,440. If you request more than 1,440 data points, Amazon CloudWatch returns an error. To reduce the number of data points, you can narrow the specified time range and make multiple requests across adjacent time ranges, or you can increase the specified period. A period can be as short as one minute (60 seconds). Note that data points are not returned in chronological order.</p> <p>Amazon CloudWatch aggregates data points based on the length of the period that you specify. For example, if you request statistics with a one-hour period, Amazon CloudWatch aggregates all data points with time stamps that fall within each one-hour period. Therefore, the number of values aggregated by CloudWatch is larger than the number of data points returned.</p> <p>For a list of metrics and dimensions supported by AWS services, see the <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CW_Support_For_AWS.html\">Amazon CloudWatch Metrics and Dimensions Reference</a> in the <i>Amazon CloudWatch User Guide</i>.</p>"]
+    #[doc="<p>Gets statistics for the specified metric.</p> <p>Amazon CloudWatch retains metric data as follows:</p> <ul> <li> <p>Data points with a period of 60 seconds (1 minute) are available for 15 days</p> </li> <li> <p>Data points with a period of 300 seconds (5 minute) are available for 63 days</p> </li> <li> <p>Data points with a period of 3600 seconds (1 hour) are available for 455 days (15 months)</p> </li> </ul> <p>Note that CloudWatch started retaining 5-minute and 1-hour metric data as of 9 July 2016.</p> <p>The maximum number of data points returned from a single call is 1,440. If you request more than 1,440 data points, Amazon CloudWatch returns an error. To reduce the number of data points, you can narrow the specified time range and make multiple requests across adjacent time ranges, or you can increase the specified period. A period can be as short as one minute (60 seconds). Note that data points are not returned in chronological order.</p> <p>Amazon CloudWatch aggregates data points based on the length of the period that you specify. For example, if you request statistics with a one-hour period, Amazon CloudWatch aggregates all data points with time stamps that fall within each one-hour period. Therefore, the number of values aggregated by CloudWatch is larger than the number of data points returned.</p> <p>CloudWatch needs raw data points to calculate percentile statistics. If you publish data using a statistic set instead, you cannot retrieve percentile statistics for this data unless one of the following conditions is true:</p> <ul> <li> <p>The SampleCount of the statistic set is 1</p> </li> <li> <p>The Min and the Max of the statistic set are equal</p> </li> </ul> <p>For a list of metrics and dimensions supported by AWS services, see the <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CW_Support_For_AWS.html\">Amazon CloudWatch Metrics and Dimensions Reference</a> in the <i>Amazon CloudWatch User Guide</i>.</p>"]
     fn get_metric_statistics(&self,
                              input: &GetMetricStatisticsInput)
                              -> Result<GetMetricStatisticsOutput, GetMetricStatisticsError>;
@@ -2955,7 +3007,7 @@ pub trait CloudWatch {
     fn put_metric_alarm(&self, input: &PutMetricAlarmInput) -> Result<(), PutMetricAlarmError>;
 
 
-    #[doc="<p>Publishes metric data points to Amazon CloudWatch. Amazon CloudWatch associates the data points with the specified metric. If the specified metric does not exist, Amazon CloudWatch creates the metric. When Amazon CloudWatch creates a metric, it can take up to fifteen minutes for the metric to appear in calls to <a>ListMetrics</a>.</p> <p>Each <code>PutMetricData</code> request is limited to 8 KB in size for HTTP GET requests and is limited to 40 KB in size for HTTP POST requests.</p> <p>Although the <code>Value</code> parameter accepts numbers of type <code>Double</code>, Amazon CloudWatch rejects values that are either too small or too large. Values must be in the range of 8.515920e-109 to 1.174271e+108 (Base 10) or 2e-360 to 2e360 (Base 2). In addition, special values (e.g., NaN, +Infinity, -Infinity) are not supported.</p> <p>Data points with time stamps from 24 hours ago or longer can take at least 48 hours to become available for <a>GetMetricStatistics</a> from the time they are submitted.</p>"]
+    #[doc="<p>Publishes metric data points to Amazon CloudWatch. Amazon CloudWatch associates the data points with the specified metric. If the specified metric does not exist, Amazon CloudWatch creates the metric. When Amazon CloudWatch creates a metric, it can take up to fifteen minutes for the metric to appear in calls to <a>ListMetrics</a>.</p> <p>Each <code>PutMetricData</code> request is limited to 40 KB in size for HTTP POST requests.</p> <p>Although the <code>Value</code> parameter accepts numbers of type <code>Double</code>, Amazon CloudWatch rejects values that are either too small or too large. Values must be in the range of 8.515920e-109 to 1.174271e+108 (Base 10) or 2e-360 to 2e360 (Base 2). In addition, special values (e.g., NaN, +Infinity, -Infinity) are not supported.</p> <p>You can use up to 10 dimensions per metric to further clarify what data the metric collects. For more information on specifying dimensions, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html\">Publishing Metrics</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Data points with time stamps from 24 hours ago or longer can take at least 48 hours to become available for <a>GetMetricStatistics</a> from the time they are submitted.</p> <p>CloudWatch needs raw data points to calculate percentile statistics. If you publish data using a statistic set instead, you cannot retrieve percentile statistics for this data unless one of the following conditions is true:</p> <ul> <li> <p>The SampleCount of the statistic set is 1</p> </li> <li> <p>The Min and the Max of the statistic set are equal</p> </li> </ul>"]
     fn put_metric_data(&self, input: &PutMetricDataInput) -> Result<(), PutMetricDataError>;
 
 
@@ -3200,7 +3252,7 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
     }
 
 
-    #[doc="<p>Gets statistics for the specified metric.</p> <p>Amazon CloudWatch retains metric data as follows:</p> <ul> <li> <p>Data points with a period of 60 seconds (1 minute) are available for 15 days</p> </li> <li> <p>Data points with a period of 300 seconds (5 minute) are available for 63 days</p> </li> <li> <p>Data points with a period of 3600 seconds (1 hour) are available for 455 days (15 months)</p> </li> </ul> <p>Note that CloudWatch started retaining 5-minute and 1-hour metric data as of 9 July 2016.</p> <p>The maximum number of data points returned from a single call is 1,440. If you request more than 1,440 data points, Amazon CloudWatch returns an error. To reduce the number of data points, you can narrow the specified time range and make multiple requests across adjacent time ranges, or you can increase the specified period. A period can be as short as one minute (60 seconds). Note that data points are not returned in chronological order.</p> <p>Amazon CloudWatch aggregates data points based on the length of the period that you specify. For example, if you request statistics with a one-hour period, Amazon CloudWatch aggregates all data points with time stamps that fall within each one-hour period. Therefore, the number of values aggregated by CloudWatch is larger than the number of data points returned.</p> <p>For a list of metrics and dimensions supported by AWS services, see the <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CW_Support_For_AWS.html\">Amazon CloudWatch Metrics and Dimensions Reference</a> in the <i>Amazon CloudWatch User Guide</i>.</p>"]
+    #[doc="<p>Gets statistics for the specified metric.</p> <p>Amazon CloudWatch retains metric data as follows:</p> <ul> <li> <p>Data points with a period of 60 seconds (1 minute) are available for 15 days</p> </li> <li> <p>Data points with a period of 300 seconds (5 minute) are available for 63 days</p> </li> <li> <p>Data points with a period of 3600 seconds (1 hour) are available for 455 days (15 months)</p> </li> </ul> <p>Note that CloudWatch started retaining 5-minute and 1-hour metric data as of 9 July 2016.</p> <p>The maximum number of data points returned from a single call is 1,440. If you request more than 1,440 data points, Amazon CloudWatch returns an error. To reduce the number of data points, you can narrow the specified time range and make multiple requests across adjacent time ranges, or you can increase the specified period. A period can be as short as one minute (60 seconds). Note that data points are not returned in chronological order.</p> <p>Amazon CloudWatch aggregates data points based on the length of the period that you specify. For example, if you request statistics with a one-hour period, Amazon CloudWatch aggregates all data points with time stamps that fall within each one-hour period. Therefore, the number of values aggregated by CloudWatch is larger than the number of data points returned.</p> <p>CloudWatch needs raw data points to calculate percentile statistics. If you publish data using a statistic set instead, you cannot retrieve percentile statistics for this data unless one of the following conditions is true:</p> <ul> <li> <p>The SampleCount of the statistic set is 1</p> </li> <li> <p>The Min and the Max of the statistic set are equal</p> </li> </ul> <p>For a list of metrics and dimensions supported by AWS services, see the <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CW_Support_For_AWS.html\">Amazon CloudWatch Metrics and Dimensions Reference</a> in the <i>Amazon CloudWatch User Guide</i>.</p>"]
     fn get_metric_statistics(&self,
                              input: &GetMetricStatisticsInput)
                              -> Result<GetMetricStatisticsOutput, GetMetricStatisticsError> {
@@ -3310,7 +3362,7 @@ impl<P, D> CloudWatch for CloudWatchClient<P, D>
     }
 
 
-    #[doc="<p>Publishes metric data points to Amazon CloudWatch. Amazon CloudWatch associates the data points with the specified metric. If the specified metric does not exist, Amazon CloudWatch creates the metric. When Amazon CloudWatch creates a metric, it can take up to fifteen minutes for the metric to appear in calls to <a>ListMetrics</a>.</p> <p>Each <code>PutMetricData</code> request is limited to 8 KB in size for HTTP GET requests and is limited to 40 KB in size for HTTP POST requests.</p> <p>Although the <code>Value</code> parameter accepts numbers of type <code>Double</code>, Amazon CloudWatch rejects values that are either too small or too large. Values must be in the range of 8.515920e-109 to 1.174271e+108 (Base 10) or 2e-360 to 2e360 (Base 2). In addition, special values (e.g., NaN, +Infinity, -Infinity) are not supported.</p> <p>Data points with time stamps from 24 hours ago or longer can take at least 48 hours to become available for <a>GetMetricStatistics</a> from the time they are submitted.</p>"]
+    #[doc="<p>Publishes metric data points to Amazon CloudWatch. Amazon CloudWatch associates the data points with the specified metric. If the specified metric does not exist, Amazon CloudWatch creates the metric. When Amazon CloudWatch creates a metric, it can take up to fifteen minutes for the metric to appear in calls to <a>ListMetrics</a>.</p> <p>Each <code>PutMetricData</code> request is limited to 40 KB in size for HTTP POST requests.</p> <p>Although the <code>Value</code> parameter accepts numbers of type <code>Double</code>, Amazon CloudWatch rejects values that are either too small or too large. Values must be in the range of 8.515920e-109 to 1.174271e+108 (Base 10) or 2e-360 to 2e360 (Base 2). In addition, special values (e.g., NaN, +Infinity, -Infinity) are not supported.</p> <p>You can use up to 10 dimensions per metric to further clarify what data the metric collects. For more information on specifying dimensions, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html\">Publishing Metrics</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Data points with time stamps from 24 hours ago or longer can take at least 48 hours to become available for <a>GetMetricStatistics</a> from the time they are submitted.</p> <p>CloudWatch needs raw data points to calculate percentile statistics. If you publish data using a statistic set instead, you cannot retrieve percentile statistics for this data unless one of the following conditions is true:</p> <ul> <li> <p>The SampleCount of the statistic set is 1</p> </li> <li> <p>The Min and the Max of the statistic set are equal</p> </li> </ul>"]
     fn put_metric_data(&self, input: &PutMetricDataInput) -> Result<(), PutMetricDataError> {
         let mut request = SignedRequest::new("POST", "monitoring", self.region, "/");
         let mut params = Params::new();

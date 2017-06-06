@@ -10956,11 +10956,11 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
 
         if let Some(ref marker) = input.marker {
-            params.put("Marker", &marker.to_string());
+            params.put("Marker", marker);
         }
 
         if let Some(ref max_items) = input.max_items {
-            params.put("MaxItems", &max_items.to_string());
+            params.put("MaxItems", max_items);
         }
 
 
@@ -11010,11 +11010,11 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
 
         if let Some(ref marker) = input.marker {
-            params.put("Marker", &marker.to_string());
+            params.put("Marker", marker);
         }
 
         if let Some(ref max_items) = input.max_items {
-            params.put("MaxItems", &max_items.to_string());
+            params.put("MaxItems", max_items);
         }
 
 
@@ -11070,11 +11070,11 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
 
         if let Some(ref marker) = input.marker {
-            params.put("Marker", &marker.to_string());
+            params.put("Marker", marker);
         }
 
         if let Some(ref max_items) = input.max_items {
-            params.put("MaxItems", &max_items.to_string());
+            params.put("MaxItems", max_items);
         }
 
 
@@ -11124,11 +11124,11 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
 
         if let Some(ref marker) = input.marker {
-            params.put("Marker", &marker.to_string());
+            params.put("Marker", marker);
         }
 
         if let Some(ref max_items) = input.max_items {
-            params.put("MaxItems", &max_items.to_string());
+            params.put("MaxItems", max_items);
         }
 
 
@@ -11184,11 +11184,11 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
 
         if let Some(ref marker) = input.marker {
-            params.put("Marker", &marker.to_string());
+            params.put("Marker", marker);
         }
 
         if let Some(ref max_items) = input.max_items {
-            params.put("MaxItems", &max_items.to_string());
+            params.put("MaxItems", max_items);
         }
 
 
@@ -11236,7 +11236,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
 
 
-        params.put("Resource", &input.resource.to_string());
+        params.put("Resource", &input.resource);
 
 
         request.set_params(params);
@@ -11286,7 +11286,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         let mut request = SignedRequest::new("POST", "cloudfront", self.region, &request_uri);
 
 
-        params.put("Resource", &input.resource.to_string());
+        params.put("Resource", &input.resource);
         let mut payload: Vec<u8>;
         payload = TagsSerializer::serialize("Tags", &input.tags).into_bytes();
 
@@ -11321,7 +11321,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         let mut request = SignedRequest::new("POST", "cloudfront", self.region, &request_uri);
 
 
-        params.put("Resource", &input.resource.to_string());
+        params.put("Resource", &input.resource);
         let mut payload: Vec<u8>;
         payload = TagKeysSerializer::serialize("TagKeys", &input.tag_keys).into_bytes();
 

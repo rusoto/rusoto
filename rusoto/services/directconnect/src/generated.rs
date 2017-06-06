@@ -13,14 +13,14 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[doc="<p>Autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p> <p>Example: 65000</p>"]
+#[doc="<p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p> <p>Example: 65000</p>"]
 pub type ASN = i64;
 #[doc="<p>Indicates the address family for the BGP peer.</p> <ul> <li> <p> <b>ipv4</b>: IPv4 address family</p> </li> <li> <p> <b>ipv6</b>: IPv6 address family</p> </li> </ul>"]
 pub type AddressFamily = String;
 #[doc="<p>Container for the parameters to the AllocateConnectionOnInterconnect operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct AllocateConnectionOnInterconnectRequest {
-    #[doc="<p>Bandwidth of the connection.</p> <p>Example: \"<i>500Mbps</i>\"</p> <p>Default: None</p> <p>Values: 50M, 100M, 200M, 300M, 400M, or 500M</p>"]
+    #[doc="<p>Bandwidth of the connection.</p> <p>Example: \"<i>500Mbps</i>\"</p> <p>Default: None</p> <p>Values: 50Mbps, 100Mbps, 200Mbps, 300Mbps, 400Mbps, or 500Mbps</p>"]
     #[serde(rename="bandwidth")]
     pub bandwidth: Bandwidth,
     #[doc="<p>Name of the provisioned connection.</p> <p>Example: \"<i>500M Connection to AWS</i>\"</p> <p>Default: None</p>"]
@@ -33,6 +33,26 @@ pub struct AllocateConnectionOnInterconnectRequest {
     #[serde(rename="ownerAccount")]
     pub owner_account: OwnerAccount,
     #[doc="<p>The dedicated VLAN provisioned to the connection.</p> <p>Example: 101</p> <p>Default: None</p>"]
+    #[serde(rename="vlan")]
+    pub vlan: VLAN,
+}
+
+#[doc="<p>Container for the parameters to theHostedConnection operation.</p>"]
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct AllocateHostedConnectionRequest {
+    #[doc="<p>The bandwidth of the connection.</p> <p>Example: <code>500Mbps</code> </p> <p>Default: None</p> <p>Values: 50Mbps, 100Mbps, 200Mbps, 300Mbps, 400Mbps, or 500Mbps</p>"]
+    #[serde(rename="bandwidth")]
+    pub bandwidth: Bandwidth,
+    #[doc="<p>The ID of the interconnect or LAG on which the connection will be provisioned.</p> <p>Example: dxcon-456abc78 or dxlag-abc123</p> <p>Default: None</p>"]
+    #[serde(rename="connectionId")]
+    pub connection_id: ConnectionId,
+    #[doc="<p>The name of the provisioned connection.</p> <p>Example: \"<code>500M Connection to AWS</code>\"</p> <p>Default: None</p>"]
+    #[serde(rename="connectionName")]
+    pub connection_name: ConnectionName,
+    #[doc="<p>The numeric account ID of the customer for whom the connection will be provisioned.</p> <p>Example: 123443215678</p> <p>Default: None</p>"]
+    #[serde(rename="ownerAccount")]
+    pub owner_account: OwnerAccount,
+    #[doc="<p>The dedicated VLAN provisioned to the hosted connection.</p> <p>Example: 101</p> <p>Default: None</p>"]
     #[serde(rename="vlan")]
     pub vlan: VLAN,
 }
@@ -67,7 +87,42 @@ pub struct AllocatePublicVirtualInterfaceRequest {
 
 #[doc="<p>IP address assigned to the Amazon interface.</p> <p>Example: 192.168.1.1/30 or 2001:db8::1/125</p>"]
 pub type AmazonAddress = String;
-#[doc="<p>Authentication key for BGP configuration.</p> <p>Example: asdf34example</p>"]
+#[doc="<p>Container for the parameters to the AssociateConnectionWithLag operation.</p>"]
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct AssociateConnectionWithLagRequest {
+    #[doc="<p>The ID of the connection.</p> <p>Example: dxcon-abc123</p> <p>Default: None</p>"]
+    #[serde(rename="connectionId")]
+    pub connection_id: ConnectionId,
+    #[doc="<p>The ID of the LAG with which to associate the connection.</p> <p>Example: dxlag-abc123</p> <p>Default: None</p>"]
+    #[serde(rename="lagId")]
+    pub lag_id: LagId,
+}
+
+#[doc="<p>Container for the parameters to the AssociateHostedConnection operation.</p>"]
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct AssociateHostedConnectionRequest {
+    #[doc="<p>The ID of the hosted connection.</p> <p>Example: dxcon-abc123</p> <p>Default: None</p>"]
+    #[serde(rename="connectionId")]
+    pub connection_id: ConnectionId,
+    #[doc="<p>The ID of the interconnect or the LAG.</p> <p>Example: dxcon-abc123 or dxlag-abc123</p> <p>Default: None</p>"]
+    #[serde(rename="parentConnectionId")]
+    pub parent_connection_id: ConnectionId,
+}
+
+#[doc="<p>Container for the parameters to the AssociateVirtualInterface operation.</p>"]
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct AssociateVirtualInterfaceRequest {
+    #[doc="<p>The ID of the LAG or connection with which to associate the virtual interface.</p> <p>Example: dxlag-abc123 or dxcon-abc123</p> <p>Default: None</p>"]
+    #[serde(rename="connectionId")]
+    pub connection_id: ConnectionId,
+    #[doc="<p>The ID of the virtual interface.</p> <p>Example: dxvif-123dfg56</p> <p>Default: None</p>"]
+    #[serde(rename="virtualInterfaceId")]
+    pub virtual_interface_id: VirtualInterfaceId,
+}
+
+#[doc="<p>An abstract ID for the physical Direct Connect endpoint.</p> <p>Example: EQC50-abcdef123456</p>"]
+pub type AwsDevice = String;
+#[doc="<p>The authentication key for BGP configuration.</p> <p>Example: asdf34example</p>"]
 pub type BGPAuthKey = String;
 #[doc="<p>A structure containing information about a BGP peer.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -96,6 +151,7 @@ pub type BGPPeerState = String;
 pub type BGPStatus = String;
 #[doc="<p>Bandwidth of the connection.</p> <p>Example: 1Gbps</p> <p>Default: None</p>"]
 pub type Bandwidth = String;
+pub type BooleanFlag = bool;
 pub type CIDR = String;
 #[doc="<p>Container for the parameters to the ConfirmConnection operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
@@ -145,6 +201,9 @@ pub struct ConfirmPublicVirtualInterfaceResponse {
 #[doc="<p>A connection represents the physical network connection between the AWS Direct Connect location and the customer.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Connection {
+    #[doc="<p>The Direct Connection endpoint which the physical connection terminates on.</p>"]
+    #[serde(rename="awsDevice")]
+    pub aws_device: Option<AwsDevice>,
     #[doc="<p>Bandwidth of the connection.</p> <p>Example: 1Gbps (for regular connections), or 500Mbps (for hosted connections)</p> <p>Default: None</p>"]
     #[serde(rename="bandwidth")]
     pub bandwidth: Option<Bandwidth>,
@@ -154,7 +213,9 @@ pub struct Connection {
     pub connection_name: Option<ConnectionName>,
     #[serde(rename="connectionState")]
     pub connection_state: Option<ConnectionState>,
-    #[doc="<p>The time of the most recent call to DescribeConnectionLoa for this Connection.</p>"]
+    #[serde(rename="lagId")]
+    pub lag_id: Option<LagId>,
+    #[doc="<p>The time of the most recent call to <a>DescribeLoa</a> for this connection.</p>"]
     #[serde(rename="loaIssueTime")]
     pub loa_issue_time: Option<LoaIssueTime>,
     #[serde(rename="location")]
@@ -171,7 +232,7 @@ pub struct Connection {
     pub vlan: Option<VLAN>,
 }
 
-#[doc="<p>ID of the connection.</p> <p>Example: dxcon-fg5678gh</p> <p>Default: None</p>"]
+#[doc="<p>The ID of the connection. This field is also used as the ID type for operations that use multiple connection types (LAG, interconnect, and/or connection).</p> <p>Example: dxcon-fg5678gh</p> <p>Default: None</p>"]
 pub type ConnectionId = String;
 #[doc="<p>A list of connections.</p>"]
 pub type ConnectionList = Vec<Connection>;
@@ -187,6 +248,7 @@ pub struct Connections {
     pub connections: Option<ConnectionList>,
 }
 
+pub type Count = i64;
 #[doc="<p>Container for the parameters to the CreateBGPPeer operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateBGPPeerRequest {
@@ -212,6 +274,8 @@ pub struct CreateConnectionRequest {
     pub bandwidth: Bandwidth,
     #[serde(rename="connectionName")]
     pub connection_name: ConnectionName,
+    #[serde(rename="lagId")]
+    pub lag_id: Option<LagId>,
     #[serde(rename="location")]
     pub location: LocationCode,
 }
@@ -225,9 +289,31 @@ pub struct CreateInterconnectRequest {
     #[doc="<p>The name of the interconnect.</p> <p>Example: \"<i>1G Interconnect to AWS</i>\"</p> <p>Default: None</p>"]
     #[serde(rename="interconnectName")]
     pub interconnect_name: InterconnectName,
+    #[serde(rename="lagId")]
+    pub lag_id: Option<LagId>,
     #[doc="<p>Where the interconnect is located</p> <p>Example: EqSV5</p> <p>Default: None</p>"]
     #[serde(rename="location")]
     pub location: LocationCode,
+}
+
+#[doc="<p>Container for the parameters to the CreateLag operation.</p>"]
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct CreateLagRequest {
+    #[doc="<p>The ID of an existing connection to migrate to the LAG.</p> <p>Default: None</p>"]
+    #[serde(rename="connectionId")]
+    pub connection_id: Option<ConnectionId>,
+    #[doc="<p>The bandwidth of the individual physical connections bundled by the LAG.</p> <p>Default: None</p> <p>Available values: 1Gbps, 10Gbps</p>"]
+    #[serde(rename="connectionsBandwidth")]
+    pub connections_bandwidth: Bandwidth,
+    #[doc="<p>The name of the LAG.</p> <p>Example: \"<code>3x10G LAG to AWS</code>\"</p> <p>Default: None</p>"]
+    #[serde(rename="lagName")]
+    pub lag_name: LagName,
+    #[doc="<p>The AWS Direct Connect location in which the LAG should be allocated.</p> <p>Example: EqSV5</p> <p>Default: None</p>"]
+    #[serde(rename="location")]
+    pub location: LocationCode,
+    #[doc="<p>The number of physical connections initially provisioned and bundled by the LAG.</p> <p>Default: None</p>"]
+    #[serde(rename="numberOfConnections")]
+    pub number_of_connections: Count,
 }
 
 #[doc="<p>Container for the parameters to the CreatePrivateVirtualInterface operation.</p>"]
@@ -292,6 +378,14 @@ pub struct DeleteInterconnectResponse {
     pub interconnect_state: Option<InterconnectState>,
 }
 
+#[doc="<p>Container for the parameters to the DeleteLag operation.</p>"]
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct DeleteLagRequest {
+    #[doc="<p>The ID of the LAG to delete.</p> <p>Example: dxlag-abc123</p> <p>Default: None</p>"]
+    #[serde(rename="lagId")]
+    pub lag_id: LagId,
+}
+
 #[doc="<p>Container for the parameters to the DeleteVirtualInterface operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteVirtualInterfaceRequest {
@@ -340,6 +434,14 @@ pub struct DescribeConnectionsRequest {
     pub connection_id: Option<ConnectionId>,
 }
 
+#[doc="<p>Container for the parameters to the DescribeHostedConnections operation.</p>"]
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct DescribeHostedConnectionsRequest {
+    #[doc="<p>The ID of the interconnect or LAG on which the hosted connections are provisioned.</p> <p>Example: dxcon-abc123 or dxlag-abc123</p> <p>Default: None</p>"]
+    #[serde(rename="connectionId")]
+    pub connection_id: ConnectionId,
+}
+
 #[doc="<p>Container for the parameters to the DescribeInterconnectLoa operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DescribeInterconnectLoaRequest {
@@ -364,6 +466,28 @@ pub struct DescribeInterconnectLoaResponse {
 pub struct DescribeInterconnectsRequest {
     #[serde(rename="interconnectId")]
     pub interconnect_id: Option<InterconnectId>,
+}
+
+#[doc="<p>Container for the parameters to the DescribeLags operation.</p>"]
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct DescribeLagsRequest {
+    #[doc="<p>The ID of the LAG.</p> <p>Example: dxlag-abc123</p> <p>Default: None</p>"]
+    #[serde(rename="lagId")]
+    pub lag_id: Option<LagId>,
+}
+
+#[doc="<p>Container for the parameters to the DescribeLoa operation.</p>"]
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct DescribeLoaRequest {
+    #[doc="<p>The ID of a connection, LAG, or interconnect for which to get the LOA-CFA information.</p> <p>Example: dxcon-abc123 or dxlag-abc123</p> <p>Default: None</p>"]
+    #[serde(rename="connectionId")]
+    pub connection_id: ConnectionId,
+    #[doc="<p>A standard media type indicating the content type of the LOA-CFA document. Currently, the only supported value is \"application/pdf\".</p> <p>Default: application/pdf</p>"]
+    #[serde(rename="loaContentType")]
+    pub loa_content_type: Option<LoaContentType>,
+    #[doc="<p>The name of the service provider who establishes connectivity on your behalf. If you supply this parameter, the LOA-CFA lists the provider name alongside your company name as the requester of the cross connect.</p> <p>Default: None</p>"]
+    #[serde(rename="providerName")]
+    pub provider_name: Option<ProviderName>,
 }
 
 #[doc="<p>Container for the parameters to the DescribeTags operation.</p>"]
@@ -391,10 +515,24 @@ pub struct DescribeVirtualInterfacesRequest {
     pub virtual_interface_id: Option<VirtualInterfaceId>,
 }
 
+#[doc="<p>Container for the parameters to the DisassociateConnectionFromLag operation.</p>"]
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct DisassociateConnectionFromLagRequest {
+    #[doc="<p>The ID of the connection to disassociate from the LAG.</p> <p>Example: dxcon-abc123</p> <p>Default: None</p>"]
+    #[serde(rename="connectionId")]
+    pub connection_id: ConnectionId,
+    #[doc="<p>The ID of the LAG.</p> <p>Example: dxlag-abc123</p> <p>Default: None</p>"]
+    #[serde(rename="lagId")]
+    pub lag_id: LagId,
+}
+
 pub type ErrorMessage = String;
 #[doc="<p>An interconnect is a connection that can host other connections.</p> <p>Like a standard AWS Direct Connect connection, an interconnect represents the physical connection between an AWS Direct Connect partner's network and a specific Direct Connect location. An AWS Direct Connect partner who owns an interconnect can provision hosted connections on the interconnect for their end customers, thereby providing the end customers with connectivity to AWS services.</p> <p>The resources of the interconnect, including bandwidth and VLAN numbers, are shared by all of the hosted connections on the interconnect, and the owner of the interconnect determines how these resources are assigned.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Interconnect {
+    #[doc="<p>The Direct Connection endpoint which the physical connection terminates on.</p>"]
+    #[serde(rename="awsDevice")]
+    pub aws_device: Option<AwsDevice>,
     #[serde(rename="bandwidth")]
     pub bandwidth: Option<Bandwidth>,
     #[serde(rename="interconnectId")]
@@ -403,6 +541,8 @@ pub struct Interconnect {
     pub interconnect_name: Option<InterconnectName>,
     #[serde(rename="interconnectState")]
     pub interconnect_state: Option<InterconnectState>,
+    #[serde(rename="lagId")]
+    pub lag_id: Option<LagId>,
     #[doc="<p>The time of the most recent call to DescribeInterconnectLoa for this Interconnect.</p>"]
     #[serde(rename="loaIssueTime")]
     pub loa_issue_time: Option<LoaIssueTime>,
@@ -418,7 +558,7 @@ pub type InterconnectId = String;
 pub type InterconnectList = Vec<Interconnect>;
 #[doc="<p>The name of the interconnect.</p> <p>Example: \"<i>1G Interconnect to AWS</i>\"</p>"]
 pub type InterconnectName = String;
-#[doc="<p>State of the interconnect.</p> <ul> <li> <p> <b>Requested</b>: The initial state of an interconnect. The interconnect stays in the requested state until the Letter of Authorization (LOA) is sent to the customer.</p> </li> <li> <p> <b>Pending</b>&gt;: The interconnect has been approved, and is being initialized.</p> </li> <li> <p> <b>Available</b>: The network link is up, and the interconnect is ready for use.</p> </li> <li> <p> <b>Down</b>: The network link is down.</p> </li> <li> <p> <b>Deleting</b>: The interconnect is in the process of being deleted.</p> </li> <li> <p> <b>Deleted</b>: The interconnect has been deleted.</p> </li> </ul>"]
+#[doc="<p>State of the interconnect.</p> <ul> <li> <p> <b>Requested</b>: The initial state of an interconnect. The interconnect stays in the requested state until the Letter of Authorization (LOA) is sent to the customer.</p> </li> <li> <p> <b>Pending</b>: The interconnect has been approved, and is being initialized.</p> </li> <li> <p> <b>Available</b>: The network link is up, and the interconnect is ready for use.</p> </li> <li> <p> <b>Down</b>: The network link is down.</p> </li> <li> <p> <b>Deleting</b>: The interconnect is in the process of being deleted.</p> </li> <li> <p> <b>Deleted</b>: The interconnect has been deleted.</p> </li> </ul>"]
 pub type InterconnectState = String;
 #[doc="<p>A structure containing a list of interconnects.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -426,6 +566,59 @@ pub struct Interconnects {
     #[doc="<p>A list of interconnects.</p>"]
     #[serde(rename="interconnects")]
     pub interconnects: Option<InterconnectList>,
+}
+
+#[doc="<p>Describes a link aggregation group (LAG). A LAG is a connection that uses the Link Aggregation Control Protocol (LACP) to logically aggregate a bundle of physical connections. Like an interconnect, it can host other connections. All connections in a LAG must terminate on the same physical AWS Direct Connect endpoint, and must be the same bandwidth.</p>"]
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct Lag {
+    #[doc="<p>Indicates whether the LAG can host other connections.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
+    #[serde(rename="allowsHostedConnections")]
+    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    pub allows_hosted_connections: Option<BooleanFlag>,
+    #[doc="<p>The AWS Direct Connection endpoint that hosts the LAG.</p>"]
+    #[serde(rename="awsDevice")]
+    pub aws_device: Option<AwsDevice>,
+    #[doc="<p>A list of connections bundled by this LAG.</p>"]
+    #[serde(rename="connections")]
+    pub connections: Option<ConnectionList>,
+    #[doc="<p>The individual bandwidth of the physical connections bundled by the LAG.</p> <p>Available values: 1Gbps, 10Gbps</p>"]
+    #[serde(rename="connectionsBandwidth")]
+    pub connections_bandwidth: Option<Bandwidth>,
+    #[serde(rename="lagId")]
+    pub lag_id: Option<LagId>,
+    #[doc="<p>The name of the LAG.</p>"]
+    #[serde(rename="lagName")]
+    pub lag_name: Option<LagName>,
+    #[serde(rename="lagState")]
+    pub lag_state: Option<LagState>,
+    #[serde(rename="location")]
+    pub location: Option<LocationCode>,
+    #[doc="<p>The minimum number of physical connections that must be operational for the LAG itself to be operational. If the number of operational connections drops below this setting, the LAG state changes to <code>down</code>. This value can help to ensure that a LAG is not overutilized if a significant number of its bundled connections go down.</p>"]
+    #[serde(rename="minimumLinks")]
+    pub minimum_links: Option<Count>,
+    #[doc="<p>The number of physical connections bundled by the LAG, up to a maximum of 10.</p>"]
+    #[serde(rename="numberOfConnections")]
+    pub number_of_connections: Option<Count>,
+    #[doc="<p>The owner of the LAG.</p>"]
+    #[serde(rename="ownerAccount")]
+    pub owner_account: Option<OwnerAccount>,
+    #[serde(rename="region")]
+    pub region: Option<Region>,
+}
+
+#[doc="<p>The ID of the LAG.</p> <p>Example: dxlag-fg5678gh</p>"]
+pub type LagId = String;
+#[doc="<p>A list of LAGs.</p>"]
+pub type LagList = Vec<Lag>;
+pub type LagName = String;
+#[doc="<p>The state of the LAG.</p> <ul> <li> <p> <b>Requested</b>: The initial state of a LAG. The LAG stays in the requested state until the Letter of Authorization (LOA) is available.</p> </li> <li> <p> <b>Pending</b>: The LAG has been approved, and is being initialized.</p> </li> <li> <p> <b>Available</b>: The network link is established, and the LAG is ready for use.</p> </li> <li> <p> <b>Down</b>: The network link is down.</p> </li> <li> <p> <b>Deleting</b>: The LAG is in the process of being deleted.</p> </li> <li> <p> <b>Deleted</b>: The LAG has been deleted.</p> </li> </ul>"]
+pub type LagState = String;
+#[doc="<p>A structure containing a list of LAGs.</p>"]
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct Lags {
+    #[doc="<p>A list of LAGs.</p>"]
+    #[serde(rename="lags")]
+    pub lags: Option<LagList>,
 }
 
 #[doc="<p>A structure containing the Letter of Authorization - Connecting Facility Assignment (LOA-CFA) for a connection.</p>"]
@@ -642,6 +835,20 @@ pub struct UntagResourceRequest {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct UntagResourceResponse;
 
+#[doc="<p>Container for the parameters to the UpdateLag operation.</p>"]
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct UpdateLagRequest {
+    #[doc="<p>The ID of the LAG to update.</p> <p>Example: dxlag-abc123</p> <p>Default: None</p>"]
+    #[serde(rename="lagId")]
+    pub lag_id: LagId,
+    #[doc="<p>The name for the LAG.</p> <p>Example: \"<code>3x10G LAG to AWS</code>\"</p> <p>Default: None</p>"]
+    #[serde(rename="lagName")]
+    pub lag_name: Option<LagName>,
+    #[doc="<p>The minimum number of physical connections that must be operational for the LAG itself to be operational.</p> <p>Default: None</p>"]
+    #[serde(rename="minimumLinks")]
+    pub minimum_links: Option<Count>,
+}
+
 #[doc="<p>The VLAN ID.</p> <p>Example: 101</p>"]
 pub type VLAN = i64;
 #[doc="<p>You can create one or more AWS Direct Connect private virtual interfaces linking to your virtual private gateway.</p> <p>Virtual private gateways can be managed using the Amazon Virtual Private Cloud (Amazon VPC) console or the <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-CreateVpnGateway.html\">Amazon EC2 CreateVpnGateway action</a>.</p>"]
@@ -708,13 +915,13 @@ pub struct VirtualInterface {
     pub vlan: Option<VLAN>,
 }
 
-#[doc="<p>ID of the virtual interface.</p> <p>Example: dxvif-123dfg56</p> <p>Default: None</p>"]
+#[doc="<p>The ID of the virtual interface.</p> <p>Example: dxvif-123dfg56</p> <p>Default: None</p>"]
 pub type VirtualInterfaceId = String;
 #[doc="<p>A list of virtual interfaces.</p>"]
 pub type VirtualInterfaceList = Vec<VirtualInterface>;
 #[doc="<p>The name of the virtual interface assigned by the customer.</p> <p>Example: \"My VPC\"</p>"]
 pub type VirtualInterfaceName = String;
-#[doc="<p>State of the virtual interface.</p> <ul> <li> <p> <b>Confirming</b>: The creation of the virtual interface is pending confirmation from the virtual interface owner. If the owner of the virtual interface is different from the owner of the connection on which it is provisioned, then the virtual interface will remain in this state until it is confirmed by the virtual interface owner.</p> </li> <li> <p> <b>Verifying</b>: This state only applies to public virtual interfaces. Each public virtual interface needs validation before the virtual interface can be created.</p> </li> <li> <p> <b>Pending</b>: A virtual interface is in this state from the time that it is created until the virtual interface is ready to forward traffic.</p> </li> <li> <p> <b>Available</b>: A virtual interface that is able to forward traffic.</p> </li> <li> <p> <b>Down</b>: A virtual interface that is BGP down.</p> </li> <li> <p> <b>Deleting</b>: A virtual interface is in this state immediately after calling <i>DeleteVirtualInterface</i> until it can no longer forward traffic.</p> </li> <li> <p> <b>Deleted</b>: A virtual interface that cannot forward traffic.</p> </li> <li> <p> <b>Rejected</b>: The virtual interface owner has declined creation of the virtual interface. If a virtual interface in the 'Confirming' state is deleted by the virtual interface owner, the virtual interface will enter the 'Rejected' state.</p> </li> </ul>"]
+#[doc="<p>State of the virtual interface.</p> <ul> <li> <p> <b>Confirming</b>: The creation of the virtual interface is pending confirmation from the virtual interface owner. If the owner of the virtual interface is different from the owner of the connection on which it is provisioned, then the virtual interface will remain in this state until it is confirmed by the virtual interface owner.</p> </li> <li> <p> <b>Verifying</b>: This state only applies to public virtual interfaces. Each public virtual interface needs validation before the virtual interface can be created.</p> </li> <li> <p> <b>Pending</b>: A virtual interface is in this state from the time that it is created until the virtual interface is ready to forward traffic.</p> </li> <li> <p> <b>Available</b>: A virtual interface that is able to forward traffic.</p> </li> <li> <p> <b>Down</b>: A virtual interface that is BGP down.</p> </li> <li> <p> <b>Deleting</b>: A virtual interface is in this state immediately after calling <a>DeleteVirtualInterface</a> until it can no longer forward traffic.</p> </li> <li> <p> <b>Deleted</b>: A virtual interface that cannot forward traffic.</p> </li> <li> <p> <b>Rejected</b>: The virtual interface owner has declined creation of the virtual interface. If a virtual interface in the 'Confirming' state is deleted by the virtual interface owner, the virtual interface will enter the 'Rejected' state.</p> </li> </ul>"]
 pub type VirtualInterfaceState = String;
 #[doc="<p>The type of virtual interface.</p> <p>Example: private (Amazon VPC) or public (Amazon S3, Amazon DynamoDB, and so on.)</p>"]
 pub type VirtualInterfaceType = String;
@@ -801,6 +1008,84 @@ impl Error for AllocateConnectionOnInterconnectError {
                 dispatch_error.description()
             }
             AllocateConnectionOnInterconnectError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by AllocateHostedConnection
+#[derive(Debug, PartialEq)]
+pub enum AllocateHostedConnectionError {
+    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    DirectConnectClient(String),
+    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    DirectConnectServer(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl AllocateHostedConnectionError {
+    pub fn from_body(body: &str) -> AllocateHostedConnectionError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "DirectConnectClientException" => AllocateHostedConnectionError::DirectConnectClient(String::from(error_message)),
+                    "DirectConnectServerException" => AllocateHostedConnectionError::DirectConnectServer(String::from(error_message)),
+                    "ValidationException" => {
+                        AllocateHostedConnectionError::Validation(error_message.to_string())
+                    }
+                    _ => AllocateHostedConnectionError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => AllocateHostedConnectionError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for AllocateHostedConnectionError {
+    fn from(err: serde_json::error::Error) -> AllocateHostedConnectionError {
+        AllocateHostedConnectionError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for AllocateHostedConnectionError {
+    fn from(err: CredentialsError) -> AllocateHostedConnectionError {
+        AllocateHostedConnectionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AllocateHostedConnectionError {
+    fn from(err: HttpDispatchError) -> AllocateHostedConnectionError {
+        AllocateHostedConnectionError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for AllocateHostedConnectionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AllocateHostedConnectionError {
+    fn description(&self) -> &str {
+        match *self {
+            AllocateHostedConnectionError::DirectConnectClient(ref cause) => cause,
+            AllocateHostedConnectionError::DirectConnectServer(ref cause) => cause,
+            AllocateHostedConnectionError::Validation(ref cause) => cause,
+            AllocateHostedConnectionError::Credentials(ref err) => err.description(),
+            AllocateHostedConnectionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            AllocateHostedConnectionError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -957,6 +1242,240 @@ impl Error for AllocatePublicVirtualInterfaceError {
                 dispatch_error.description()
             }
             AllocatePublicVirtualInterfaceError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by AssociateConnectionWithLag
+#[derive(Debug, PartialEq)]
+pub enum AssociateConnectionWithLagError {
+    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    DirectConnectClient(String),
+    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    DirectConnectServer(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl AssociateConnectionWithLagError {
+    pub fn from_body(body: &str) -> AssociateConnectionWithLagError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "DirectConnectClientException" => AssociateConnectionWithLagError::DirectConnectClient(String::from(error_message)),
+                    "DirectConnectServerException" => AssociateConnectionWithLagError::DirectConnectServer(String::from(error_message)),
+                    "ValidationException" => {
+                        AssociateConnectionWithLagError::Validation(error_message.to_string())
+                    }
+                    _ => AssociateConnectionWithLagError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => AssociateConnectionWithLagError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for AssociateConnectionWithLagError {
+    fn from(err: serde_json::error::Error) -> AssociateConnectionWithLagError {
+        AssociateConnectionWithLagError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for AssociateConnectionWithLagError {
+    fn from(err: CredentialsError) -> AssociateConnectionWithLagError {
+        AssociateConnectionWithLagError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AssociateConnectionWithLagError {
+    fn from(err: HttpDispatchError) -> AssociateConnectionWithLagError {
+        AssociateConnectionWithLagError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for AssociateConnectionWithLagError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AssociateConnectionWithLagError {
+    fn description(&self) -> &str {
+        match *self {
+            AssociateConnectionWithLagError::DirectConnectClient(ref cause) => cause,
+            AssociateConnectionWithLagError::DirectConnectServer(ref cause) => cause,
+            AssociateConnectionWithLagError::Validation(ref cause) => cause,
+            AssociateConnectionWithLagError::Credentials(ref err) => err.description(),
+            AssociateConnectionWithLagError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            AssociateConnectionWithLagError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by AssociateHostedConnection
+#[derive(Debug, PartialEq)]
+pub enum AssociateHostedConnectionError {
+    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    DirectConnectClient(String),
+    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    DirectConnectServer(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl AssociateHostedConnectionError {
+    pub fn from_body(body: &str) -> AssociateHostedConnectionError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "DirectConnectClientException" => AssociateHostedConnectionError::DirectConnectClient(String::from(error_message)),
+                    "DirectConnectServerException" => AssociateHostedConnectionError::DirectConnectServer(String::from(error_message)),
+                    "ValidationException" => {
+                        AssociateHostedConnectionError::Validation(error_message.to_string())
+                    }
+                    _ => AssociateHostedConnectionError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => AssociateHostedConnectionError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for AssociateHostedConnectionError {
+    fn from(err: serde_json::error::Error) -> AssociateHostedConnectionError {
+        AssociateHostedConnectionError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for AssociateHostedConnectionError {
+    fn from(err: CredentialsError) -> AssociateHostedConnectionError {
+        AssociateHostedConnectionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AssociateHostedConnectionError {
+    fn from(err: HttpDispatchError) -> AssociateHostedConnectionError {
+        AssociateHostedConnectionError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for AssociateHostedConnectionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AssociateHostedConnectionError {
+    fn description(&self) -> &str {
+        match *self {
+            AssociateHostedConnectionError::DirectConnectClient(ref cause) => cause,
+            AssociateHostedConnectionError::DirectConnectServer(ref cause) => cause,
+            AssociateHostedConnectionError::Validation(ref cause) => cause,
+            AssociateHostedConnectionError::Credentials(ref err) => err.description(),
+            AssociateHostedConnectionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            AssociateHostedConnectionError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by AssociateVirtualInterface
+#[derive(Debug, PartialEq)]
+pub enum AssociateVirtualInterfaceError {
+    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    DirectConnectClient(String),
+    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    DirectConnectServer(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl AssociateVirtualInterfaceError {
+    pub fn from_body(body: &str) -> AssociateVirtualInterfaceError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "DirectConnectClientException" => AssociateVirtualInterfaceError::DirectConnectClient(String::from(error_message)),
+                    "DirectConnectServerException" => AssociateVirtualInterfaceError::DirectConnectServer(String::from(error_message)),
+                    "ValidationException" => {
+                        AssociateVirtualInterfaceError::Validation(error_message.to_string())
+                    }
+                    _ => AssociateVirtualInterfaceError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => AssociateVirtualInterfaceError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for AssociateVirtualInterfaceError {
+    fn from(err: serde_json::error::Error) -> AssociateVirtualInterfaceError {
+        AssociateVirtualInterfaceError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for AssociateVirtualInterfaceError {
+    fn from(err: CredentialsError) -> AssociateVirtualInterfaceError {
+        AssociateVirtualInterfaceError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AssociateVirtualInterfaceError {
+    fn from(err: HttpDispatchError) -> AssociateVirtualInterfaceError {
+        AssociateVirtualInterfaceError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for AssociateVirtualInterfaceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AssociateVirtualInterfaceError {
+    fn description(&self) -> &str {
+        match *self {
+            AssociateVirtualInterfaceError::DirectConnectClient(ref cause) => cause,
+            AssociateVirtualInterfaceError::DirectConnectServer(ref cause) => cause,
+            AssociateVirtualInterfaceError::Validation(ref cause) => cause,
+            AssociateVirtualInterfaceError::Credentials(ref err) => err.description(),
+            AssociateVirtualInterfaceError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            AssociateVirtualInterfaceError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -1440,6 +1959,84 @@ impl Error for CreateInterconnectError {
         }
     }
 }
+/// Errors returned by CreateLag
+#[derive(Debug, PartialEq)]
+pub enum CreateLagError {
+    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    DirectConnectClient(String),
+    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    DirectConnectServer(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl CreateLagError {
+    pub fn from_body(body: &str) -> CreateLagError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "DirectConnectClientException" => {
+                        CreateLagError::DirectConnectClient(String::from(error_message))
+                    }
+                    "DirectConnectServerException" => {
+                        CreateLagError::DirectConnectServer(String::from(error_message))
+                    }
+                    "ValidationException" => CreateLagError::Validation(error_message.to_string()),
+                    _ => CreateLagError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateLagError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateLagError {
+    fn from(err: serde_json::error::Error) -> CreateLagError {
+        CreateLagError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateLagError {
+    fn from(err: CredentialsError) -> CreateLagError {
+        CreateLagError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateLagError {
+    fn from(err: HttpDispatchError) -> CreateLagError {
+        CreateLagError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for CreateLagError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateLagError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateLagError::DirectConnectClient(ref cause) => cause,
+            CreateLagError::DirectConnectServer(ref cause) => cause,
+            CreateLagError::Validation(ref cause) => cause,
+            CreateLagError::Credentials(ref err) => err.description(),
+            CreateLagError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            CreateLagError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreatePrivateVirtualInterface
 #[derive(Debug, PartialEq)]
 pub enum CreatePrivateVirtualInterfaceError {
@@ -1838,6 +2435,84 @@ impl Error for DeleteInterconnectError {
         }
     }
 }
+/// Errors returned by DeleteLag
+#[derive(Debug, PartialEq)]
+pub enum DeleteLagError {
+    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    DirectConnectClient(String),
+    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    DirectConnectServer(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl DeleteLagError {
+    pub fn from_body(body: &str) -> DeleteLagError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "DirectConnectClientException" => {
+                        DeleteLagError::DirectConnectClient(String::from(error_message))
+                    }
+                    "DirectConnectServerException" => {
+                        DeleteLagError::DirectConnectServer(String::from(error_message))
+                    }
+                    "ValidationException" => DeleteLagError::Validation(error_message.to_string()),
+                    _ => DeleteLagError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteLagError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteLagError {
+    fn from(err: serde_json::error::Error) -> DeleteLagError {
+        DeleteLagError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteLagError {
+    fn from(err: CredentialsError) -> DeleteLagError {
+        DeleteLagError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteLagError {
+    fn from(err: HttpDispatchError) -> DeleteLagError {
+        DeleteLagError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for DeleteLagError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteLagError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteLagError::DirectConnectClient(ref cause) => cause,
+            DeleteLagError::DirectConnectServer(ref cause) => cause,
+            DeleteLagError::Validation(ref cause) => cause,
+            DeleteLagError::Credentials(ref err) => err.description(),
+            DeleteLagError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DeleteLagError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteVirtualInterface
 #[derive(Debug, PartialEq)]
 pub enum DeleteVirtualInterfaceError {
@@ -2159,6 +2834,84 @@ impl Error for DescribeConnectionsOnInterconnectError {
         }
     }
 }
+/// Errors returned by DescribeHostedConnections
+#[derive(Debug, PartialEq)]
+pub enum DescribeHostedConnectionsError {
+    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    DirectConnectClient(String),
+    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    DirectConnectServer(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl DescribeHostedConnectionsError {
+    pub fn from_body(body: &str) -> DescribeHostedConnectionsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "DirectConnectClientException" => DescribeHostedConnectionsError::DirectConnectClient(String::from(error_message)),
+                    "DirectConnectServerException" => DescribeHostedConnectionsError::DirectConnectServer(String::from(error_message)),
+                    "ValidationException" => {
+                        DescribeHostedConnectionsError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeHostedConnectionsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeHostedConnectionsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeHostedConnectionsError {
+    fn from(err: serde_json::error::Error) -> DescribeHostedConnectionsError {
+        DescribeHostedConnectionsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeHostedConnectionsError {
+    fn from(err: CredentialsError) -> DescribeHostedConnectionsError {
+        DescribeHostedConnectionsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeHostedConnectionsError {
+    fn from(err: HttpDispatchError) -> DescribeHostedConnectionsError {
+        DescribeHostedConnectionsError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for DescribeHostedConnectionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeHostedConnectionsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeHostedConnectionsError::DirectConnectClient(ref cause) => cause,
+            DescribeHostedConnectionsError::DirectConnectServer(ref cause) => cause,
+            DescribeHostedConnectionsError::Validation(ref cause) => cause,
+            DescribeHostedConnectionsError::Credentials(ref err) => err.description(),
+            DescribeHostedConnectionsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeHostedConnectionsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeInterconnectLoa
 #[derive(Debug, PartialEq)]
 pub enum DescribeInterconnectLoaError {
@@ -2316,6 +3069,166 @@ impl Error for DescribeInterconnectsError {
                 dispatch_error.description()
             }
             DescribeInterconnectsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeLags
+#[derive(Debug, PartialEq)]
+pub enum DescribeLagsError {
+    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    DirectConnectClient(String),
+    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    DirectConnectServer(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl DescribeLagsError {
+    pub fn from_body(body: &str) -> DescribeLagsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "DirectConnectClientException" => {
+                        DescribeLagsError::DirectConnectClient(String::from(error_message))
+                    }
+                    "DirectConnectServerException" => {
+                        DescribeLagsError::DirectConnectServer(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DescribeLagsError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeLagsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeLagsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeLagsError {
+    fn from(err: serde_json::error::Error) -> DescribeLagsError {
+        DescribeLagsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeLagsError {
+    fn from(err: CredentialsError) -> DescribeLagsError {
+        DescribeLagsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeLagsError {
+    fn from(err: HttpDispatchError) -> DescribeLagsError {
+        DescribeLagsError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for DescribeLagsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeLagsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeLagsError::DirectConnectClient(ref cause) => cause,
+            DescribeLagsError::DirectConnectServer(ref cause) => cause,
+            DescribeLagsError::Validation(ref cause) => cause,
+            DescribeLagsError::Credentials(ref err) => err.description(),
+            DescribeLagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DescribeLagsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeLoa
+#[derive(Debug, PartialEq)]
+pub enum DescribeLoaError {
+    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    DirectConnectClient(String),
+    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    DirectConnectServer(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl DescribeLoaError {
+    pub fn from_body(body: &str) -> DescribeLoaError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "DirectConnectClientException" => {
+                        DescribeLoaError::DirectConnectClient(String::from(error_message))
+                    }
+                    "DirectConnectServerException" => {
+                        DescribeLoaError::DirectConnectServer(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DescribeLoaError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeLoaError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeLoaError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeLoaError {
+    fn from(err: serde_json::error::Error) -> DescribeLoaError {
+        DescribeLoaError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeLoaError {
+    fn from(err: CredentialsError) -> DescribeLoaError {
+        DescribeLoaError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeLoaError {
+    fn from(err: HttpDispatchError) -> DescribeLoaError {
+        DescribeLoaError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for DescribeLoaError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeLoaError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeLoaError::DirectConnectClient(ref cause) => cause,
+            DescribeLoaError::DirectConnectServer(ref cause) => cause,
+            DescribeLoaError::Validation(ref cause) => cause,
+            DescribeLoaError::Credentials(ref err) => err.description(),
+            DescribeLoaError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DescribeLoaError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -2637,6 +3550,84 @@ impl Error for DescribeVirtualInterfacesError {
         }
     }
 }
+/// Errors returned by DisassociateConnectionFromLag
+#[derive(Debug, PartialEq)]
+pub enum DisassociateConnectionFromLagError {
+    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    DirectConnectClient(String),
+    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    DirectConnectServer(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl DisassociateConnectionFromLagError {
+    pub fn from_body(body: &str) -> DisassociateConnectionFromLagError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "DirectConnectClientException" => DisassociateConnectionFromLagError::DirectConnectClient(String::from(error_message)),
+                    "DirectConnectServerException" => DisassociateConnectionFromLagError::DirectConnectServer(String::from(error_message)),
+                    "ValidationException" => {
+                        DisassociateConnectionFromLagError::Validation(error_message.to_string())
+                    }
+                    _ => DisassociateConnectionFromLagError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DisassociateConnectionFromLagError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DisassociateConnectionFromLagError {
+    fn from(err: serde_json::error::Error) -> DisassociateConnectionFromLagError {
+        DisassociateConnectionFromLagError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DisassociateConnectionFromLagError {
+    fn from(err: CredentialsError) -> DisassociateConnectionFromLagError {
+        DisassociateConnectionFromLagError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DisassociateConnectionFromLagError {
+    fn from(err: HttpDispatchError) -> DisassociateConnectionFromLagError {
+        DisassociateConnectionFromLagError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for DisassociateConnectionFromLagError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DisassociateConnectionFromLagError {
+    fn description(&self) -> &str {
+        match *self {
+            DisassociateConnectionFromLagError::DirectConnectClient(ref cause) => cause,
+            DisassociateConnectionFromLagError::DirectConnectServer(ref cause) => cause,
+            DisassociateConnectionFromLagError::Validation(ref cause) => cause,
+            DisassociateConnectionFromLagError::Credentials(ref err) => err.description(),
+            DisassociateConnectionFromLagError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DisassociateConnectionFromLagError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -2809,16 +3800,100 @@ impl Error for UntagResourceError {
         }
     }
 }
+/// Errors returned by UpdateLag
+#[derive(Debug, PartialEq)]
+pub enum UpdateLagError {
+    ///<p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    DirectConnectClient(String),
+    ///<p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    DirectConnectServer(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl UpdateLagError {
+    pub fn from_body(body: &str) -> UpdateLagError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "DirectConnectClientException" => {
+                        UpdateLagError::DirectConnectClient(String::from(error_message))
+                    }
+                    "DirectConnectServerException" => {
+                        UpdateLagError::DirectConnectServer(String::from(error_message))
+                    }
+                    "ValidationException" => UpdateLagError::Validation(error_message.to_string()),
+                    _ => UpdateLagError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateLagError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateLagError {
+    fn from(err: serde_json::error::Error) -> UpdateLagError {
+        UpdateLagError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateLagError {
+    fn from(err: CredentialsError) -> UpdateLagError {
+        UpdateLagError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateLagError {
+    fn from(err: HttpDispatchError) -> UpdateLagError {
+        UpdateLagError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for UpdateLagError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateLagError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateLagError::DirectConnectClient(ref cause) => cause,
+            UpdateLagError::DirectConnectServer(ref cause) => cause,
+            UpdateLagError::Validation(ref cause) => cause,
+            UpdateLagError::Credentials(ref err) => err.description(),
+            UpdateLagError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            UpdateLagError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Trait representing the capabilities of the AWS Direct Connect API. AWS Direct Connect clients implement this trait.
 pub trait DirectConnect {
-    #[doc="<p>Creates a hosted connection on an interconnect.</p> <p>Allocates a VLAN number and a specified amount of bandwidth for use by a hosted connection on the given interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
+    #[doc="<p>Deprecated in favor of <a>AllocateHostedConnection</a>.</p> <p>Creates a hosted connection on an interconnect.</p> <p>Allocates a VLAN number and a specified amount of bandwidth for use by a hosted connection on the given interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
     fn allocate_connection_on_interconnect
         (&self,
          input: &AllocateConnectionOnInterconnectRequest)
          -> Result<Connection, AllocateConnectionOnInterconnectError>;
 
 
-    #[doc="<p>Provisions a private virtual interface to be owned by a different customer.</p> <p>The owner of a connection calls this function to provision a private virtual interface which will be owned by another AWS customer.</p> <p>Virtual interfaces created using this function must be confirmed by the virtual interface owner by calling ConfirmPrivateVirtualInterface. Until this step has been completed, the virtual interface will be in 'Confirming' state, and will not be available for handling traffic.</p>"]
+    #[doc="<p>Creates a hosted connection on an interconnect or a link aggregation group (LAG).</p> <p>Allocates a VLAN number and a specified amount of bandwidth for use by a hosted connection on the given interconnect or LAG.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
+    fn allocate_hosted_connection(&self,
+                                  input: &AllocateHostedConnectionRequest)
+                                  -> Result<Connection, AllocateHostedConnectionError>;
+
+
+    #[doc="<p>Provisions a private virtual interface to be owned by another AWS customer.</p> <p>Virtual interfaces created using this action must be confirmed by the virtual interface owner by using the <a>ConfirmPrivateVirtualInterface</a> action. Until then, the virtual interface will be in 'Confirming' state, and will not be available for handling traffic.</p>"]
     fn allocate_private_virtual_interface
         (&self,
          input: &AllocatePrivateVirtualInterfaceRequest)
@@ -2830,6 +3905,24 @@ pub trait DirectConnect {
         (&self,
          input: &AllocatePublicVirtualInterfaceRequest)
          -> Result<VirtualInterface, AllocatePublicVirtualInterfaceError>;
+
+
+    #[doc="<p>Associates an existing connection with a link aggregation group (LAG). The connection is interrupted and re-established as a member of the LAG (connectivity to AWS will be interrupted). The connection must be hosted on the same AWS Direct Connect endpoint as the LAG, and its bandwidth must match the bandwidth for the LAG. You can reassociate a connection that's currently associated with a different LAG; however, if removing the connection will cause the original LAG to fall below its setting for minimum number of operational connections, the request fails.</p> <p>Any virtual interfaces that are directly associated with the connection are automatically re-associated with the LAG. If the connection was originally associated with a different LAG, the virtual interfaces remain associated with the original LAG.</p> <p>For interconnects, any hosted connections are automatically re-associated with the LAG. If the interconnect was originally associated with a different LAG, the hosted connections remain associated with the original LAG.</p>"]
+    fn associate_connection_with_lag(&self,
+                                     input: &AssociateConnectionWithLagRequest)
+                                     -> Result<Connection, AssociateConnectionWithLagError>;
+
+
+    #[doc="<p>Associates a hosted connection and its virtual interfaces with a link aggregation group (LAG) or interconnect. If the target interconnect or LAG has an existing hosted connection with a conflicting VLAN number or IP address, the operation fails. This action temporarily interrupts the hosted connection's connectivity to AWS as it is being migrated.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
+    fn associate_hosted_connection(&self,
+                                   input: &AssociateHostedConnectionRequest)
+                                   -> Result<Connection, AssociateHostedConnectionError>;
+
+
+    #[doc="<p>Associates a virtual interface with a specified link aggregation group (LAG) or connection. Connectivity to AWS is temporarily interrupted as the virtual interface is being migrated. If the target connection or LAG has an associated virtual interface with a conflicting VLAN number or a conflicting IP address, the operation fails. </p> <p>Virtual interfaces associated with a hosted connection cannot be associated with a LAG; hosted connections must be migrated along with their virtual interfaces using <a>AssociateHostedConnection</a>.</p> <p>Hosted virtual interfaces (an interface for which the owner of the connection is not the owner of physical connection) can only be reassociated by the owner of the physical connection.</p>"]
+    fn associate_virtual_interface(&self,
+                                   input: &AssociateVirtualInterfaceRequest)
+                                   -> Result<VirtualInterface, AssociateVirtualInterfaceError>;
 
 
     #[doc="<p>Confirm the creation of a hosted connection on an interconnect.</p> <p>Upon creation, the hosted connection is initially in the 'Ordering' state, and will remain in this state until the owner calls ConfirmConnection to confirm creation of the hosted connection.</p>"]
@@ -2858,16 +3951,20 @@ pub trait DirectConnect {
                        -> Result<CreateBGPPeerResponse, CreateBGPPeerError>;
 
 
-    #[doc="<p>Creates a new connection between the customer network and a specific AWS Direct Connect location.</p> <p>A connection links your internal network to an AWS Direct Connect location over a standard 1 gigabit or 10 gigabit Ethernet fiber-optic cable. One end of the cable is connected to your router, the other to an AWS Direct Connect router. An AWS Direct Connect location provides access to Amazon Web Services in the region it is associated with. You can establish connections with AWS Direct Connect locations in multiple regions, but a connection in one region does not provide connectivity to other regions.</p>"]
+    #[doc="<p>Creates a new connection between the customer network and a specific AWS Direct Connect location.</p> <p>A connection links your internal network to an AWS Direct Connect location over a standard 1 gigabit or 10 gigabit Ethernet fiber-optic cable. One end of the cable is connected to your router, the other to an AWS Direct Connect router. An AWS Direct Connect location provides access to Amazon Web Services in the region it is associated with. You can establish connections with AWS Direct Connect locations in multiple regions, but a connection in one region does not provide connectivity to other regions.</p> <p>You can automatically add the new connection to a link aggregation group (LAG) by specifying a LAG ID in the request. This ensures that the new connection is allocated on the same AWS Direct Connect endpoint that hosts the specified LAG. If there are no available ports on the endpoint, the request fails and no connection will be created.</p>"]
     fn create_connection(&self,
                          input: &CreateConnectionRequest)
                          -> Result<Connection, CreateConnectionError>;
 
 
-    #[doc="<p>Creates a new interconnect between a AWS Direct Connect partner's network and a specific AWS Direct Connect location.</p> <p>An interconnect is a connection which is capable of hosting other connections. The AWS Direct Connect partner can use an interconnect to provide sub-1Gbps AWS Direct Connect service to tier 2 customers who do not have their own connections. Like a standard connection, an interconnect links the AWS Direct Connect partner's network to an AWS Direct Connect location over a standard 1 Gbps or 10 Gbps Ethernet fiber-optic cable. One end is connected to the partner's router, the other to an AWS Direct Connect router.</p> <p>For each end customer, the AWS Direct Connect partner provisions a connection on their interconnect by calling AllocateConnectionOnInterconnect. The end customer can then connect to AWS resources by creating a virtual interface on their connection, using the VLAN assigned to them by the AWS Direct Connect partner.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
+    #[doc="<p>Creates a new interconnect between a AWS Direct Connect partner's network and a specific AWS Direct Connect location.</p> <p>An interconnect is a connection which is capable of hosting other connections. The AWS Direct Connect partner can use an interconnect to provide sub-1Gbps AWS Direct Connect service to tier 2 customers who do not have their own connections. Like a standard connection, an interconnect links the AWS Direct Connect partner's network to an AWS Direct Connect location over a standard 1 Gbps or 10 Gbps Ethernet fiber-optic cable. One end is connected to the partner's router, the other to an AWS Direct Connect router.</p> <p>You can automatically add the new interconnect to a link aggregation group (LAG) by specifying a LAG ID in the request. This ensures that the new interconnect is allocated on the same AWS Direct Connect endpoint that hosts the specified LAG. If there are no available ports on the endpoint, the request fails and no interconnect will be created.</p> <p>For each end customer, the AWS Direct Connect partner provisions a connection on their interconnect by calling AllocateConnectionOnInterconnect. The end customer can then connect to AWS resources by creating a virtual interface on their connection, using the VLAN assigned to them by the AWS Direct Connect partner.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
     fn create_interconnect(&self,
                            input: &CreateInterconnectRequest)
                            -> Result<Interconnect, CreateInterconnectError>;
+
+
+    #[doc="<p>Creates a new link aggregation group (LAG) with the specified number of bundled physical connections between the customer network and a specific AWS Direct Connect location. A LAG is a logical interface that uses the Link Aggregation Control Protocol (LACP) to aggregate multiple 1 gigabit or 10 gigabit interfaces, allowing you to treat them as a single interface.</p> <p>All connections in a LAG must use the same bandwidth (for example, 10 Gbps), and must terminate at the same AWS Direct Connect endpoint.</p> <p>You can have up to 10 connections per LAG. Regardless of this limit, if you request more connections for the LAG than AWS Direct Connect can allocate on a single endpoint, no LAG is created.</p> <p>You can specify an existing physical connection or interconnect to include in the LAG (which counts towards the total number of connections). Doing so interrupts the current physical connection or hosted connections, and re-establishes them as a member of the LAG. The LAG will be created on the same AWS Direct Connect endpoint to which the connection terminates. Any virtual interfaces associated with the connection are automatically disassociated and re-associated with the LAG. The connection ID does not change.</p> <p>If the AWS account used to create a LAG is a registered AWS Direct Connect partner, the LAG is automatically enabled to host sub-connections. For a LAG owned by a partner, any associated virtual interfaces cannot be directly configured.</p>"]
+    fn create_lag(&self, input: &CreateLagRequest) -> Result<Lag, CreateLagError>;
 
 
     #[doc="<p>Creates a new private virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A private virtual interface supports sending traffic to a single virtual private cloud (VPC).</p>"]
@@ -2902,6 +3999,10 @@ pub trait DirectConnect {
                            -> Result<DeleteInterconnectResponse, DeleteInterconnectError>;
 
 
+    #[doc="<p>Deletes a link aggregation group (LAG). You cannot delete a LAG if it has active virtual interfaces or hosted connections.</p>"]
+    fn delete_lag(&self, input: &DeleteLagRequest) -> Result<Lag, DeleteLagError>;
+
+
     #[doc="<p>Deletes a virtual interface.</p>"]
     fn delete_virtual_interface
         (&self,
@@ -2909,7 +4010,7 @@ pub trait DirectConnect {
          -> Result<DeleteVirtualInterfaceResponse, DeleteVirtualInterfaceError>;
 
 
-    #[doc="<p>Returns the LOA-CFA for a Connection.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that your APN partner or service provider uses when establishing your cross connect to AWS at the colocation facility. For more information, see <a href=\"http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html\">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>"]
+    #[doc="<p>Deprecated in favor of <a>DescribeLoa</a>.</p> <p>Returns the LOA-CFA for a Connection.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that your APN partner or service provider uses when establishing your cross connect to AWS at the colocation facility. For more information, see <a href=\"http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html\">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>"]
     fn describe_connection_loa
         (&self,
          input: &DescribeConnectionLoaRequest)
@@ -2922,14 +4023,20 @@ pub trait DirectConnect {
                             -> Result<Connections, DescribeConnectionsError>;
 
 
-    #[doc="<p>Return a list of connections that have been provisioned on the given interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
+    #[doc="<p>Deprecated in favor of <a>DescribeHostedConnections</a>.</p> <p>Returns a list of connections that have been provisioned on the given interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
     fn describe_connections_on_interconnect
         (&self,
          input: &DescribeConnectionsOnInterconnectRequest)
          -> Result<Connections, DescribeConnectionsOnInterconnectError>;
 
 
-    #[doc="<p>Returns the LOA-CFA for an Interconnect.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that is used when establishing your cross connect to AWS at the colocation facility. For more information, see <a href=\"http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html\">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>"]
+    #[doc="<p>Returns a list of hosted connections that have been provisioned on the given interconnect or link aggregation group (LAG).</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
+    fn describe_hosted_connections(&self,
+                                   input: &DescribeHostedConnectionsRequest)
+                                   -> Result<Connections, DescribeHostedConnectionsError>;
+
+
+    #[doc="<p>Deprecated in favor of <a>DescribeLoa</a>.</p> <p>Returns the LOA-CFA for an Interconnect.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that is used when establishing your cross connect to AWS at the colocation facility. For more information, see <a href=\"http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html\">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>"]
     fn describe_interconnect_loa
         (&self,
          input: &DescribeInterconnectLoaRequest)
@@ -2940,6 +4047,14 @@ pub trait DirectConnect {
     fn describe_interconnects(&self,
                               input: &DescribeInterconnectsRequest)
                               -> Result<Interconnects, DescribeInterconnectsError>;
+
+
+    #[doc="<p>Describes the link aggregation groups (LAGs) in your account. </p> <p>If a LAG ID is provided, only information about the specified LAG is returned.</p>"]
+    fn describe_lags(&self, input: &DescribeLagsRequest) -> Result<Lags, DescribeLagsError>;
+
+
+    #[doc="<p>Returns the LOA-CFA for a connection, interconnect, or link aggregation group (LAG).</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that is used when establishing your cross connect to AWS at the colocation facility. For more information, see <a href=\"http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html\">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>"]
+    fn describe_loa(&self, input: &DescribeLoaRequest) -> Result<Loa, DescribeLoaError>;
 
 
     #[doc="<p>Returns the list of AWS Direct Connect locations in the current AWS region. These are the locations that may be selected when calling CreateConnection or CreateInterconnect.</p>"]
@@ -2956,10 +4071,17 @@ pub trait DirectConnect {
     fn describe_virtual_gateways(&self) -> Result<VirtualGateways, DescribeVirtualGatewaysError>;
 
 
-    #[doc="<p>Displays all virtual interfaces for an AWS account. Virtual interfaces deleted fewer than 15 minutes before DescribeVirtualInterfaces is called are also returned. If a connection ID is included then only virtual interfaces associated with this connection will be returned. If a virtual interface ID is included then only a single virtual interface will be returned.</p> <p>A virtual interface (VLAN) transmits the traffic between the AWS Direct Connect location and the customer.</p> <p>If a connection ID is provided, only virtual interfaces provisioned on the specified connection will be returned. If a virtual interface ID is provided, only this particular virtual interface will be returned.</p>"]
+    #[doc="<p>Displays all virtual interfaces for an AWS account. Virtual interfaces deleted fewer than 15 minutes before you make the request are also returned. If you specify a connection ID, only the virtual interfaces associated with the connection are returned. If you specify a virtual interface ID, then only a single virtual interface is returned.</p> <p>A virtual interface (VLAN) transmits the traffic between the AWS Direct Connect location and the customer.</p>"]
     fn describe_virtual_interfaces(&self,
                                    input: &DescribeVirtualInterfacesRequest)
                                    -> Result<VirtualInterfaces, DescribeVirtualInterfacesError>;
+
+
+    #[doc="<p>Disassociates a connection from a link aggregation group (LAG). The connection is interrupted and re-established as a standalone connection (the connection is not deleted; to delete the connection, use the <a>DeleteConnection</a> request). If the LAG has associated virtual interfaces or hosted connections, they remain associated with the LAG. A disassociated connection owned by an AWS Direct Connect partner is automatically converted to an interconnect.</p> <p>If disassociating the connection will cause the LAG to fall below its setting for minimum number of operational connections, the request fails, except when it's the last member of the LAG. If all connections are disassociated, the LAG continues to exist as an empty LAG with no physical connections. </p>"]
+    fn disassociate_connection_from_lag
+        (&self,
+         input: &DisassociateConnectionFromLagRequest)
+         -> Result<Connection, DisassociateConnectionFromLagError>;
 
 
     #[doc="<p>Adds the specified tags to the specified Direct Connect resource. Each Direct Connect resource can have a maximum of 50 tags.</p> <p>Each tag consists of a key and an optional value. If a tag with the same key is already associated with the Direct Connect resource, this action updates its value.</p>"]
@@ -2972,6 +4094,10 @@ pub trait DirectConnect {
     fn untag_resource(&self,
                       input: &UntagResourceRequest)
                       -> Result<UntagResourceResponse, UntagResourceError>;
+
+
+    #[doc="<p>Updates the attributes of a link aggregation group (LAG). </p> <p>You can update the following attributes: </p> <ul> <li> <p>The name of the LAG.</p> </li> <li> <p>The value for the minimum number of connections that must be operational for the LAG itself to be operational. </p> </li> </ul> <p>When you create a LAG, the default value for the minimum number of operational connections is zero (0). If you update this value, and the number of operational connections falls below the specified value, the LAG will automatically go down to avoid overutilization of the remaining connections. Adjusting this value should be done with care as it could force the LAG down if the value is set higher than the current number of operational connections.</p>"]
+    fn update_lag(&self, input: &UpdateLagRequest) -> Result<Lag, UpdateLagError>;
 }
 /// A client for the AWS Direct Connect API.
 pub struct DirectConnectClient<P, D>
@@ -3000,7 +4126,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
     where P: ProvideAwsCredentials,
           D: DispatchSignedRequest
 {
-    #[doc="<p>Creates a hosted connection on an interconnect.</p> <p>Allocates a VLAN number and a specified amount of bandwidth for use by a hosted connection on the given interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
+    #[doc="<p>Deprecated in favor of <a>AllocateHostedConnection</a>.</p> <p>Creates a hosted connection on an interconnect.</p> <p>Allocates a VLAN number and a specified amount of bandwidth for use by a hosted connection on the given interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
     fn allocate_connection_on_interconnect
         (&self,
          input: &AllocateConnectionOnInterconnectRequest)
@@ -3028,7 +4154,33 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
     }
 
 
-    #[doc="<p>Provisions a private virtual interface to be owned by a different customer.</p> <p>The owner of a connection calls this function to provision a private virtual interface which will be owned by another AWS customer.</p> <p>Virtual interfaces created using this function must be confirmed by the virtual interface owner by calling ConfirmPrivateVirtualInterface. Until this step has been completed, the virtual interface will be in 'Confirming' state, and will not be available for handling traffic.</p>"]
+    #[doc="<p>Creates a hosted connection on an interconnect or a link aggregation group (LAG).</p> <p>Allocates a VLAN number and a specified amount of bandwidth for use by a hosted connection on the given interconnect or LAG.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
+    fn allocate_hosted_connection(&self,
+                                  input: &AllocateHostedConnectionRequest)
+                                  -> Result<Connection, AllocateHostedConnectionError> {
+        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "OvertureService.AllocateHostedConnection");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&response.body)
+                                                          .as_ref())
+                           .unwrap())
+            }
+            _ => Err(AllocateHostedConnectionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        }
+    }
+
+
+    #[doc="<p>Provisions a private virtual interface to be owned by another AWS customer.</p> <p>Virtual interfaces created using this action must be confirmed by the virtual interface owner by using the <a>ConfirmPrivateVirtualInterface</a> action. Until then, the virtual interface will be in 'Confirming' state, and will not be available for handling traffic.</p>"]
     fn allocate_private_virtual_interface
         (&self,
          input: &AllocatePrivateVirtualInterfaceRequest)
@@ -3076,6 +4228,82 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
                             Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(AllocatePublicVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        }
+    }
+
+
+    #[doc="<p>Associates an existing connection with a link aggregation group (LAG). The connection is interrupted and re-established as a member of the LAG (connectivity to AWS will be interrupted). The connection must be hosted on the same AWS Direct Connect endpoint as the LAG, and its bandwidth must match the bandwidth for the LAG. You can reassociate a connection that's currently associated with a different LAG; however, if removing the connection will cause the original LAG to fall below its setting for minimum number of operational connections, the request fails.</p> <p>Any virtual interfaces that are directly associated with the connection are automatically re-associated with the LAG. If the connection was originally associated with a different LAG, the virtual interfaces remain associated with the original LAG.</p> <p>For interconnects, any hosted connections are automatically re-associated with the LAG. If the interconnect was originally associated with a different LAG, the hosted connections remain associated with the original LAG.</p>"]
+    fn associate_connection_with_lag(&self,
+                                     input: &AssociateConnectionWithLagRequest)
+                                     -> Result<Connection, AssociateConnectionWithLagError> {
+        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "OvertureService.AssociateConnectionWithLag");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&response.body)
+                                                          .as_ref())
+                           .unwrap())
+            }
+            _ => Err(AssociateConnectionWithLagError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        }
+    }
+
+
+    #[doc="<p>Associates a hosted connection and its virtual interfaces with a link aggregation group (LAG) or interconnect. If the target interconnect or LAG has an existing hosted connection with a conflicting VLAN number or IP address, the operation fails. This action temporarily interrupts the hosted connection's connectivity to AWS as it is being migrated.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
+    fn associate_hosted_connection(&self,
+                                   input: &AssociateHostedConnectionRequest)
+                                   -> Result<Connection, AssociateHostedConnectionError> {
+        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "OvertureService.AssociateHostedConnection");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&response.body)
+                                                          .as_ref())
+                           .unwrap())
+            }
+            _ => Err(AssociateHostedConnectionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        }
+    }
+
+
+    #[doc="<p>Associates a virtual interface with a specified link aggregation group (LAG) or connection. Connectivity to AWS is temporarily interrupted as the virtual interface is being migrated. If the target connection or LAG has an associated virtual interface with a conflicting VLAN number or a conflicting IP address, the operation fails. </p> <p>Virtual interfaces associated with a hosted connection cannot be associated with a LAG; hosted connections must be migrated along with their virtual interfaces using <a>AssociateHostedConnection</a>.</p> <p>Hosted virtual interfaces (an interface for which the owner of the connection is not the owner of physical connection) can only be reassociated by the owner of the physical connection.</p>"]
+    fn associate_virtual_interface(&self,
+                                   input: &AssociateVirtualInterfaceRequest)
+                                   -> Result<VirtualInterface, AssociateVirtualInterfaceError> {
+        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "OvertureService.AssociateVirtualInterface");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                            Ok(serde_json::from_str::<VirtualInterface>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                        }
+            _ => Err(AssociateVirtualInterfaceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
 
@@ -3185,7 +4413,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
     }
 
 
-    #[doc="<p>Creates a new connection between the customer network and a specific AWS Direct Connect location.</p> <p>A connection links your internal network to an AWS Direct Connect location over a standard 1 gigabit or 10 gigabit Ethernet fiber-optic cable. One end of the cable is connected to your router, the other to an AWS Direct Connect router. An AWS Direct Connect location provides access to Amazon Web Services in the region it is associated with. You can establish connections with AWS Direct Connect locations in multiple regions, but a connection in one region does not provide connectivity to other regions.</p>"]
+    #[doc="<p>Creates a new connection between the customer network and a specific AWS Direct Connect location.</p> <p>A connection links your internal network to an AWS Direct Connect location over a standard 1 gigabit or 10 gigabit Ethernet fiber-optic cable. One end of the cable is connected to your router, the other to an AWS Direct Connect router. An AWS Direct Connect location provides access to Amazon Web Services in the region it is associated with. You can establish connections with AWS Direct Connect locations in multiple regions, but a connection in one region does not provide connectivity to other regions.</p> <p>You can automatically add the new connection to a link aggregation group (LAG) by specifying a LAG ID in the request. This ensures that the new connection is allocated on the same AWS Direct Connect endpoint that hosts the specified LAG. If there are no available ports on the endpoint, the request fails and no connection will be created.</p>"]
     fn create_connection(&self,
                          input: &CreateConnectionRequest)
                          -> Result<Connection, CreateConnectionError> {
@@ -3214,7 +4442,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
     }
 
 
-    #[doc="<p>Creates a new interconnect between a AWS Direct Connect partner's network and a specific AWS Direct Connect location.</p> <p>An interconnect is a connection which is capable of hosting other connections. The AWS Direct Connect partner can use an interconnect to provide sub-1Gbps AWS Direct Connect service to tier 2 customers who do not have their own connections. Like a standard connection, an interconnect links the AWS Direct Connect partner's network to an AWS Direct Connect location over a standard 1 Gbps or 10 Gbps Ethernet fiber-optic cable. One end is connected to the partner's router, the other to an AWS Direct Connect router.</p> <p>For each end customer, the AWS Direct Connect partner provisions a connection on their interconnect by calling AllocateConnectionOnInterconnect. The end customer can then connect to AWS resources by creating a virtual interface on their connection, using the VLAN assigned to them by the AWS Direct Connect partner.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
+    #[doc="<p>Creates a new interconnect between a AWS Direct Connect partner's network and a specific AWS Direct Connect location.</p> <p>An interconnect is a connection which is capable of hosting other connections. The AWS Direct Connect partner can use an interconnect to provide sub-1Gbps AWS Direct Connect service to tier 2 customers who do not have their own connections. Like a standard connection, an interconnect links the AWS Direct Connect partner's network to an AWS Direct Connect location over a standard 1 Gbps or 10 Gbps Ethernet fiber-optic cable. One end is connected to the partner's router, the other to an AWS Direct Connect router.</p> <p>You can automatically add the new interconnect to a link aggregation group (LAG) by specifying a LAG ID in the request. This ensures that the new interconnect is allocated on the same AWS Direct Connect endpoint that hosts the specified LAG. If there are no available ports on the endpoint, the request fails and no interconnect will be created.</p> <p>For each end customer, the AWS Direct Connect partner provisions a connection on their interconnect by calling AllocateConnectionOnInterconnect. The end customer can then connect to AWS resources by creating a virtual interface on their connection, using the VLAN assigned to them by the AWS Direct Connect partner.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
     fn create_interconnect(&self,
                            input: &CreateInterconnectRequest)
                            -> Result<Interconnect, CreateInterconnectError> {
@@ -3239,6 +4467,29 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
                 Err(CreateInterconnectError::from_body(String::from_utf8_lossy(&response.body)
                                                            .as_ref()))
             }
+        }
+    }
+
+
+    #[doc="<p>Creates a new link aggregation group (LAG) with the specified number of bundled physical connections between the customer network and a specific AWS Direct Connect location. A LAG is a logical interface that uses the Link Aggregation Control Protocol (LACP) to aggregate multiple 1 gigabit or 10 gigabit interfaces, allowing you to treat them as a single interface.</p> <p>All connections in a LAG must use the same bandwidth (for example, 10 Gbps), and must terminate at the same AWS Direct Connect endpoint.</p> <p>You can have up to 10 connections per LAG. Regardless of this limit, if you request more connections for the LAG than AWS Direct Connect can allocate on a single endpoint, no LAG is created.</p> <p>You can specify an existing physical connection or interconnect to include in the LAG (which counts towards the total number of connections). Doing so interrupts the current physical connection or hosted connections, and re-establishes them as a member of the LAG. The LAG will be created on the same AWS Direct Connect endpoint to which the connection terminates. Any virtual interfaces associated with the connection are automatically disassociated and re-associated with the LAG. The connection ID does not change.</p> <p>If the AWS account used to create a LAG is a registered AWS Direct Connect partner, the LAG is automatically enabled to host sub-connections. For a LAG owned by a partner, any associated virtual interfaces cannot be directly configured.</p>"]
+    fn create_lag(&self, input: &CreateLagRequest) -> Result<Lag, CreateLagError> {
+        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "OvertureService.CreateLag");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                Ok(serde_json::from_str::<Lag>(String::from_utf8_lossy(&response.body).as_ref())
+                       .unwrap())
+            }
+            _ => Err(CreateLagError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
 
@@ -3377,6 +4628,29 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
     }
 
 
+    #[doc="<p>Deletes a link aggregation group (LAG). You cannot delete a LAG if it has active virtual interfaces or hosted connections.</p>"]
+    fn delete_lag(&self, input: &DeleteLagRequest) -> Result<Lag, DeleteLagError> {
+        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "OvertureService.DeleteLag");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                Ok(serde_json::from_str::<Lag>(String::from_utf8_lossy(&response.body).as_ref())
+                       .unwrap())
+            }
+            _ => Err(DeleteLagError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        }
+    }
+
+
     #[doc="<p>Deletes a virtual interface.</p>"]
     fn delete_virtual_interface
         (&self,
@@ -3405,7 +4679,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
     }
 
 
-    #[doc="<p>Returns the LOA-CFA for a Connection.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that your APN partner or service provider uses when establishing your cross connect to AWS at the colocation facility. For more information, see <a href=\"http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html\">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>"]
+    #[doc="<p>Deprecated in favor of <a>DescribeLoa</a>.</p> <p>Returns the LOA-CFA for a Connection.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that your APN partner or service provider uses when establishing your cross connect to AWS at the colocation facility. For more information, see <a href=\"http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html\">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>"]
     fn describe_connection_loa
         (&self,
          input: &DescribeConnectionLoaRequest)
@@ -3462,7 +4736,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
     }
 
 
-    #[doc="<p>Return a list of connections that have been provisioned on the given interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
+    #[doc="<p>Deprecated in favor of <a>DescribeHostedConnections</a>.</p> <p>Returns a list of connections that have been provisioned on the given interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
     fn describe_connections_on_interconnect
         (&self,
          input: &DescribeConnectionsOnInterconnectRequest)
@@ -3490,7 +4764,33 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
     }
 
 
-    #[doc="<p>Returns the LOA-CFA for an Interconnect.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that is used when establishing your cross connect to AWS at the colocation facility. For more information, see <a href=\"http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html\">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>"]
+    #[doc="<p>Returns a list of hosted connections that have been provisioned on the given interconnect or link aggregation group (LAG).</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
+    fn describe_hosted_connections(&self,
+                                   input: &DescribeHostedConnectionsRequest)
+                                   -> Result<Connections, DescribeHostedConnectionsError> {
+        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "OvertureService.DescribeHostedConnections");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                Ok(serde_json::from_str::<Connections>(String::from_utf8_lossy(&response.body)
+                                                           .as_ref())
+                           .unwrap())
+            }
+            _ => Err(DescribeHostedConnectionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        }
+    }
+
+
+    #[doc="<p>Deprecated in favor of <a>DescribeLoa</a>.</p> <p>Returns the LOA-CFA for an Interconnect.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that is used when establishing your cross connect to AWS at the colocation facility. For more information, see <a href=\"http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html\">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>"]
     fn describe_interconnect_loa
         (&self,
          input: &DescribeInterconnectLoaRequest)
@@ -3540,6 +4840,54 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
                 Err(DescribeInterconnectsError::from_body(String::from_utf8_lossy(&response.body)
                                                               .as_ref()))
             }
+        }
+    }
+
+
+    #[doc="<p>Describes the link aggregation groups (LAGs) in your account. </p> <p>If a LAG ID is provided, only information about the specified LAG is returned.</p>"]
+    fn describe_lags(&self, input: &DescribeLagsRequest) -> Result<Lags, DescribeLagsError> {
+        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "OvertureService.DescribeLags");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                Ok(serde_json::from_str::<Lags>(String::from_utf8_lossy(&response.body).as_ref())
+                       .unwrap())
+            }
+            _ => {
+                Err(DescribeLagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Returns the LOA-CFA for a connection, interconnect, or link aggregation group (LAG).</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that is used when establishing your cross connect to AWS at the colocation facility. For more information, see <a href=\"http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html\">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>"]
+    fn describe_loa(&self, input: &DescribeLoaRequest) -> Result<Loa, DescribeLoaError> {
+        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "OvertureService.DescribeLoa");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                Ok(serde_json::from_str::<Loa>(String::from_utf8_lossy(&response.body).as_ref())
+                       .unwrap())
+            }
+            _ => Err(DescribeLoaError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
 
@@ -3617,7 +4965,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
     }
 
 
-    #[doc="<p>Displays all virtual interfaces for an AWS account. Virtual interfaces deleted fewer than 15 minutes before DescribeVirtualInterfaces is called are also returned. If a connection ID is included then only virtual interfaces associated with this connection will be returned. If a virtual interface ID is included then only a single virtual interface will be returned.</p> <p>A virtual interface (VLAN) transmits the traffic between the AWS Direct Connect location and the customer.</p> <p>If a connection ID is provided, only virtual interfaces provisioned on the specified connection will be returned. If a virtual interface ID is provided, only this particular virtual interface will be returned.</p>"]
+    #[doc="<p>Displays all virtual interfaces for an AWS account. Virtual interfaces deleted fewer than 15 minutes before you make the request are also returned. If you specify a connection ID, only the virtual interfaces associated with the connection are returned. If you specify a virtual interface ID, then only a single virtual interface is returned.</p> <p>A virtual interface (VLAN) transmits the traffic between the AWS Direct Connect location and the customer.</p>"]
     fn describe_virtual_interfaces(&self,
                                    input: &DescribeVirtualInterfacesRequest)
                                    -> Result<VirtualInterfaces, DescribeVirtualInterfacesError> {
@@ -3637,6 +4985,34 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
                             Ok(serde_json::from_str::<VirtualInterfaces>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeVirtualInterfacesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        }
+    }
+
+
+    #[doc="<p>Disassociates a connection from a link aggregation group (LAG). The connection is interrupted and re-established as a standalone connection (the connection is not deleted; to delete the connection, use the <a>DeleteConnection</a> request). If the LAG has associated virtual interfaces or hosted connections, they remain associated with the LAG. A disassociated connection owned by an AWS Direct Connect partner is automatically converted to an interconnect.</p> <p>If disassociating the connection will cause the LAG to fall below its setting for minimum number of operational connections, the request fails, except when it's the last member of the LAG. If all connections are disassociated, the LAG continues to exist as an empty LAG with no physical connections. </p>"]
+    fn disassociate_connection_from_lag
+        (&self,
+         input: &DisassociateConnectionFromLagRequest)
+         -> Result<Connection, DisassociateConnectionFromLagError> {
+        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target",
+                           "OvertureService.DisassociateConnectionFromLag");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                Ok(serde_json::from_str::<Connection>(String::from_utf8_lossy(&response.body)
+                                                          .as_ref())
+                           .unwrap())
+            }
+            _ => Err(DisassociateConnectionFromLagError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
 
@@ -3687,6 +5063,29 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
             _ => {
                 Err(UntagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
             }
+        }
+    }
+
+
+    #[doc="<p>Updates the attributes of a link aggregation group (LAG). </p> <p>You can update the following attributes: </p> <ul> <li> <p>The name of the LAG.</p> </li> <li> <p>The value for the minimum number of connections that must be operational for the LAG itself to be operational. </p> </li> </ul> <p>When you create a LAG, the default value for the minimum number of operational connections is zero (0). If you update this value, and the number of operational connections falls below the specified value, the LAG will automatically go down to avoid overutilization of the remaining connections. Adjusting this value should be done with care as it could force the LAG down if the value is set higher than the current number of operational connections.</p>"]
+    fn update_lag(&self, input: &UpdateLagRequest) -> Result<Lag, UpdateLagError> {
+        let mut request = SignedRequest::new("POST", "directconnect", self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "OvertureService.UpdateLag");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                Ok(serde_json::from_str::<Lag>(String::from_utf8_lossy(&response.body).as_ref())
+                       .unwrap())
+            }
+            _ => Err(UpdateLagError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
 }

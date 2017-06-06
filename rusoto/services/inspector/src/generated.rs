@@ -95,6 +95,9 @@ pub struct AssessmentRun {
     #[doc="<p>The duration of the assessment run.</p>"]
     #[serde(rename="durationInSeconds")]
     pub duration_in_seconds: AssessmentRunDuration,
+    #[doc="<p>Provides a total count of generated findings per severity.</p>"]
+    #[serde(rename="findingCounts")]
+    pub finding_counts: AssessmentRunFindingCounts,
     #[doc="<p>The auto-generated name for the assessment run.</p>"]
     #[serde(rename="name")]
     pub name: AssessmentRunName,
@@ -175,6 +178,7 @@ pub struct AssessmentRunFilter {
     pub states: Option<AssessmentRunStateList>,
 }
 
+pub type AssessmentRunFindingCounts = ::std::collections::HashMap<Severity, FindingCount>;
 pub type AssessmentRunInProgressArnList = Vec<Arn>;
 pub type AssessmentRunList = Vec<AssessmentRun>;
 pub type AssessmentRunName = String;
@@ -190,6 +194,7 @@ pub struct AssessmentRunNotification {
     #[doc="<p>The event for which a notification is sent.</p>"]
     #[serde(rename="event")]
     pub event: InspectorEvent,
+    #[doc="<p>The message included in the notification.</p>"]
     #[serde(rename="message")]
     pub message: Option<Message>,
     #[doc="<p>The status code of the SNS notification.</p>"]
@@ -610,6 +615,7 @@ pub struct Finding {
     #[doc="<p>The data element is set to \"Inspector\".</p>"]
     #[serde(rename="service")]
     pub service: Option<ServiceName>,
+    #[doc="<p>This data type is used in the <a>Finding</a> data type.</p>"]
     #[serde(rename="serviceAttributes")]
     pub service_attributes: Option<InspectorServiceAttributes>,
     #[doc="<p>The finding severity. Values can be set to High, Medium, Low, and Informational.</p>"]
@@ -626,6 +632,7 @@ pub struct Finding {
     pub user_attributes: UserAttributeList,
 }
 
+pub type FindingCount = i64;
 #[doc="<p>This data type is used as a request parameter in the <a>ListFindings</a> action.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct FindingFilter {
@@ -657,6 +664,29 @@ pub struct FindingFilter {
 
 pub type FindingId = String;
 pub type FindingList = Vec<Finding>;
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct GetAssessmentReportRequest {
+    #[doc="<p>The ARN that specifies the assessment run for which you want to generate a report.</p>"]
+    #[serde(rename="assessmentRunArn")]
+    pub assessment_run_arn: Arn,
+    #[doc="<p>Specifies the file format (html or pdf) of the assessment report that you want to generate.</p>"]
+    #[serde(rename="reportFileFormat")]
+    pub report_file_format: ReportFileFormat,
+    #[doc="<p>Specifies the type of the assessment report that you want to generate. There are two types of assessment reports: a finding report and a full report. For more information, see <a href=\"http://docs.aws.amazon.com/inspector/latest/userguide/inspector_reports.html\">Assessment Reports</a>. </p>"]
+    #[serde(rename="reportType")]
+    pub report_type: ReportType,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct GetAssessmentReportResponse {
+    #[doc="<p>Specifies the status of the request to generate an assessment report. </p>"]
+    #[serde(rename="status")]
+    pub status: ReportStatus,
+    #[doc="<p>Specifies the URL where you can find the generated assessment report. This parameter is only returned if the report is successfully generated.</p>"]
+    #[serde(rename="url")]
+    pub url: Option<Url>,
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetTelemetryMetadataRequest {
     #[doc="<p>The ARN that specifies the assessment run that has the telemetry data that you want to obtain.</p>"]
@@ -939,6 +969,9 @@ pub struct RemoveAttributesFromFindingsResponse {
     pub failed_items: FailedItems,
 }
 
+pub type ReportFileFormat = String;
+pub type ReportStatus = String;
+pub type ReportType = String;
 #[doc="<p>Contains information about a resource group. The resource group defines a set of tags that, when queried, identify the AWS resources that make up the assessment target. This data type is used as the response element in the <a>DescribeResourceGroups</a> action.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ResourceGroup {
@@ -1123,6 +1156,7 @@ pub struct UpdateAssessmentTargetRequest {
     pub resource_group_arn: Arn,
 }
 
+pub type Url = String;
 pub type UserAttributeKeyList = Vec<AttributeKey>;
 pub type UserAttributeList = Vec<Attribute>;
 pub type Version = String;
@@ -2371,6 +2405,110 @@ impl Error for DescribeRulesPackagesError {
                 dispatch_error.description()
             }
             DescribeRulesPackagesError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetAssessmentReport
+#[derive(Debug, PartialEq)]
+pub enum GetAssessmentReportError {
+    ///<p>You do not have required permissions to access the requested resource.</p>
+    AccessDenied(String),
+    ///<p>You cannot perform a specified action if an assessment run is currently in progress.</p>
+    AssessmentRunInProgress(String),
+    ///<p>Internal server error.</p>
+    Internal(String),
+    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    InvalidInput(String),
+    ///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+    NoSuchEntity(String),
+    ///<p>Used by the <a>GetAssessmentReport</a> API. The request was rejected because you tried to generate a report for an assessment run that existed before reporting was supported in Amazon Inspector. You can only generate reports for assessment runs that took place or will take place after generating reports in Amazon Inspector became available.</p>
+    UnsupportedFeature(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl GetAssessmentReportError {
+    pub fn from_body(body: &str) -> GetAssessmentReportError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        GetAssessmentReportError::AccessDenied(String::from(error_message))
+                    }
+                    "AssessmentRunInProgressException" => GetAssessmentReportError::AssessmentRunInProgress(String::from(error_message)),
+                    "InternalException" => {
+                        GetAssessmentReportError::Internal(String::from(error_message))
+                    }
+                    "InvalidInputException" => {
+                        GetAssessmentReportError::InvalidInput(String::from(error_message))
+                    }
+                    "NoSuchEntityException" => {
+                        GetAssessmentReportError::NoSuchEntity(String::from(error_message))
+                    }
+                    "UnsupportedFeatureException" => {
+                        GetAssessmentReportError::UnsupportedFeature(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetAssessmentReportError::Validation(error_message.to_string())
+                    }
+                    _ => GetAssessmentReportError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetAssessmentReportError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetAssessmentReportError {
+    fn from(err: serde_json::error::Error) -> GetAssessmentReportError {
+        GetAssessmentReportError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetAssessmentReportError {
+    fn from(err: CredentialsError) -> GetAssessmentReportError {
+        GetAssessmentReportError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetAssessmentReportError {
+    fn from(err: HttpDispatchError) -> GetAssessmentReportError {
+        GetAssessmentReportError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for GetAssessmentReportError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetAssessmentReportError {
+    fn description(&self) -> &str {
+        match *self {
+            GetAssessmentReportError::AccessDenied(ref cause) => cause,
+            GetAssessmentReportError::AssessmentRunInProgress(ref cause) => cause,
+            GetAssessmentReportError::Internal(ref cause) => cause,
+            GetAssessmentReportError::InvalidInput(ref cause) => cause,
+            GetAssessmentReportError::NoSuchEntity(ref cause) => cause,
+            GetAssessmentReportError::UnsupportedFeature(ref cause) => cause,
+            GetAssessmentReportError::Validation(ref cause) => cause,
+            GetAssessmentReportError::Credentials(ref err) => err.description(),
+            GetAssessmentReportError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetAssessmentReportError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -4160,6 +4298,12 @@ pub trait Inspector {
          -> Result<DescribeRulesPackagesResponse, DescribeRulesPackagesError>;
 
 
+    #[doc="<p>Produces an assessment report that includes detailed and comprehensive results of a specified assessment run. </p>"]
+    fn get_assessment_report(&self,
+                             input: &GetAssessmentReportRequest)
+                             -> Result<GetAssessmentReportResponse, GetAssessmentReportError>;
+
+
     #[doc="<p>Information about the data that is collected for the specified assessment run.</p>"]
     fn get_telemetry_metadata
         (&self,
@@ -4657,6 +4801,33 @@ impl<P, D> Inspector for InspectorClient<P, D>
             _ => {
                 Err(DescribeRulesPackagesError::from_body(String::from_utf8_lossy(&response.body)
                                                               .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Produces an assessment report that includes detailed and comprehensive results of a specified assessment run. </p>"]
+    fn get_assessment_report(&self,
+                             input: &GetAssessmentReportRequest)
+                             -> Result<GetAssessmentReportResponse, GetAssessmentReportError> {
+        let mut request = SignedRequest::new("POST", "inspector", self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "InspectorService.GetAssessmentReport");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                            Ok(serde_json::from_str::<GetAssessmentReportResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                        }
+            _ => {
+                Err(GetAssessmentReportError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
             }
         }
     }
