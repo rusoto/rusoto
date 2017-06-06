@@ -16,6 +16,10 @@ If not specified, the profile "default" is used.
 
 It's also possible to implement your own credentials sourcing mechanism by creating a type that implements `rusoto::ProvideAwsCredentials`.
 
+#### sts:AssumeRole
+
+If your aws account belongs to an organization and you need to use sts:AssumeRole, you're probably looking for `rusoto_sts::StsAssumeRoleSessionCredentialsProvider`. An example can be found on [docs.rs](https://docs.rs/rusoto_sts/) and in [rusoto/services/sts/src/lib.rs](rusoto/services/sts/src/lib.rs).
+
 #### Credential refreshing
 
 Credentials obtained from environment variables and credential files expire ten minutes after being acquired and are refreshed on subsequent calls to `credentials()` (a method from the `ProvideAwsCredentials` trait).
