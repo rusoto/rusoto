@@ -5,15 +5,15 @@ use rustc_serialize::base64::{FromBase64, STANDARD, ToBase64};
 use serde::{Deserializer, Serializer};
 use serde::de::{Error as SerdeError, Visitor};
 
-pub trait SerdeBlob<'de>: Sized {
-    fn deserialize_blob<D>(deserializer: D) -> Result<Self, D::Error> where D: Deserializer<'de>;
+pub trait SerdeBlob: Sized {
+    fn deserialize_blob<'de, D>(deserializer: D) -> Result<Self, D::Error> where D: Deserializer<'de>;
 
     fn serialize_blob<S>(&self, serializer: S) -> Result<S::Ok, S::Error> where S: Serializer;
 }
 
 struct BlobVisitor;
 
-impl <'de> Visitor<'de> for BlobVisitor {
+impl<'de> Visitor<'de> for BlobVisitor {
     type Value = Vec<u8>;
 
     fn expecting(&self, formatter: &mut Formatter) -> FmtResult {
@@ -26,8 +26,8 @@ impl <'de> Visitor<'de> for BlobVisitor {
     }
 }
 
-impl <'de> SerdeBlob<'de> for Vec<u8> {
-    fn deserialize_blob<D>(deserializer: D) -> Result<Vec<u8>, D::Error>
+impl SerdeBlob for Vec<u8> {
+    fn deserialize_blob<'de, D>(deserializer: D) -> Result<Vec<u8>, D::Error>
         where D: Deserializer<'de> {
         deserializer.deserialize_any(BlobVisitor)
     }
@@ -40,7 +40,7 @@ impl <'de> SerdeBlob<'de> for Vec<u8> {
 
 struct OptionalBlobVisitor;
 
-impl <'de> Visitor<'de> for OptionalBlobVisitor {
+impl<'de> Visitor<'de> for OptionalBlobVisitor {
     type Value = Option<Vec<u8>>;
 
     fn expecting(&self, formatter: &mut Formatter) -> FmtResult {
@@ -58,8 +58,8 @@ impl <'de> Visitor<'de> for OptionalBlobVisitor {
     }
 }
 
-impl <'de> SerdeBlob<'de> for Option<Vec<u8>> {
-    fn deserialize_blob<D>(deserializer: D) -> Result<Option<Vec<u8>>, D::Error>
+impl SerdeBlob for Option<Vec<u8>> {
+    fn deserialize_blob<'de, D>(deserializer: D) -> Result<Option<Vec<u8>>, D::Error>
         where D: Deserializer<'de> {
         deserializer.deserialize_option(OptionalBlobVisitor)
     }
@@ -70,5 +70,110 @@ impl <'de> SerdeBlob<'de> for Option<Vec<u8>> {
             Some(ref vec) => SerdeBlob::serialize_blob(vec, serializer),
             None => serializer.serialize_none(),
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    extern crate serde;
+    extern crate serde_json;
+
+    use super::SerdeBlob;
+
+    #[test]
+    fn serialize_optional_blob_when_none() {
+        let blob: Option<Vec<u8>> = None;
+        let serialized = serialize_blob_helper(blob);
+
+        assert_eq!("null", serialized);
+    }
+
+    #[test]
+    fn serialize_optional_blob_when_empty() {
+        let blob = Some(vec![]);
+        let serialized = serialize_blob_helper(blob);
+
+        assert_eq!("\"\"", serialized);
+    }
+
+    #[test]
+    fn serialize_optional_blob_when_has_content() {
+        let blob = Some("hello world!".as_bytes().to_vec());
+        let serialized = serialize_blob_helper(blob);
+
+        assert_eq!("\"aGVsbG8gd29ybGQh\"", serialized);
+    }
+
+    #[test]
+    fn deserialize_optional_blob_when_null() {
+        let deserialized: Option<Vec<u8>> = deserialize_blob_helper("null").unwrap();
+
+        assert!(deserialized.is_none());
+    }
+
+    #[test]
+    fn deserialize_optional_blob_when_empty() {
+        let deserialized: Option<Vec<u8>> = deserialize_blob_helper("\"\"").unwrap();
+
+        assert_eq!(Some(vec![]), deserialized);
+    }
+
+    #[test]
+    fn deserialize_optional_blob_when_has_content() {
+        let deserialized: Option<Vec<u8>> = deserialize_blob_helper("\"aGVsbG8gd29ybGQh\"").unwrap();
+
+        assert_eq!(Some("hello world!".as_bytes().to_vec()), deserialized);
+    }
+
+    #[test]
+    fn serialize_blob_when_empty() {
+        let blob = vec![];
+        let serialized = serialize_blob_helper(blob);
+
+        assert_eq!("\"\"", serialized);
+    }
+
+    #[test]
+    fn serialize_blob_when_has_content() {
+        let blob = "hello world!".as_bytes().to_vec();
+        let serialized = serialize_blob_helper(blob);
+
+        assert_eq!("\"aGVsbG8gd29ybGQh\"", serialized);
+    }
+
+    #[test]
+    fn deserialize_blob_when_null() {
+        let deserialized: Result<Vec<u8>, _> = deserialize_blob_helper("null");
+
+        assert!(deserialized.is_err());
+    }
+
+    #[test]
+    fn deserialize_blob_when_empty() {
+        let deserialized: Vec<u8> = deserialize_blob_helper("\"\"").unwrap();
+
+        assert_eq!(Vec::<u8>::new(), deserialized);
+    }
+
+    #[test]
+    fn deserialize_blob_when_has_content() {
+        let deserialized: Vec<u8> = deserialize_blob_helper("\"aGVsbG8gd29ybGQh\"").unwrap();
+
+        assert_eq!("hello world!".as_bytes().to_vec(), deserialized);
+    }
+
+    fn serialize_blob_helper<B: SerdeBlob>(blob: B) -> String {
+        let mut serialized_data = Vec::new();
+        {
+            let mut json_serializer = serde_json::Serializer::new(&mut serialized_data);
+            blob.serialize_blob(&mut json_serializer).unwrap();
+        }
+        String::from_utf8_lossy(&serialized_data).into_owned()
+    }
+
+    fn deserialize_blob_helper<B: SerdeBlob>(s: &str) -> Result<B, <&mut serde_json::de::Deserializer<serde_json::de::StrRead> as serde::Deserializer>::Error> {
+        let reader = serde_json::de::StrRead::new(s);
+        let mut deserializer = serde_json::de::Deserializer::new(reader);
+        B::deserialize_blob(&mut deserializer)
     }
 }
