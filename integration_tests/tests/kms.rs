@@ -1,10 +1,11 @@
 #![cfg(feature = "kms")]
 
-extern crate rusoto;
+extern crate rusoto_core;
+extern crate rusoto_kms;
 
-use rusoto::kms::{Kms, KmsClient, ListKeysRequest};
-use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::default_tls_client;
+use rusoto_kms::{Kms, KmsClient, ListKeysRequest};
+use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_core::default_tls_client;
 
 #[test]
 fn should_list_keys() {

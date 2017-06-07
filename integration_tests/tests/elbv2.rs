@@ -1,10 +1,11 @@
 #![cfg(feature = "elbv2")]
 extern crate env_logger;
-extern crate rusoto;
+extern crate rusoto_core;
+extern crate rusoto_elbv2;
 
-use rusoto::elbv2::{Elb, ElbClient, DescribeLoadBalancersInput};
-use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::default_tls_client;
+use rusoto_elbv2::{Elb, ElbClient, DescribeLoadBalancersInput};
+use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_core::default_tls_client;
 
 #[test]
 fn should_describe_load_balancers() {

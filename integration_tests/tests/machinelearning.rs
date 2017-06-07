@@ -1,12 +1,13 @@
 #![cfg(feature = "machinelearning")]
 
-extern crate rusoto;
+extern crate rusoto_core;
+extern crate rusoto_machinelearning;
 
-use rusoto::machinelearning::{MachineLearning, MachineLearningClient,
+use rusoto_machinelearning::{MachineLearning, MachineLearningClient,
                               DescribeDataSourcesInput, DescribeBatchPredictionsInput,
                               DescribeEvaluationsInput};
-use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::default_tls_client;
+use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_core::default_tls_client;
 
 #[test]
 fn should_describe_batch_predictions() {

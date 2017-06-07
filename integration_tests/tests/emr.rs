@@ -1,10 +1,11 @@
 #![cfg(feature = "emr")]
 
-extern crate rusoto;
+extern crate rusoto_core;
+extern crate rusoto_emr;
 
-use rusoto::emr::{Emr, EmrClient, ListClustersInput, DescribeJobFlowsInput, DescribeJobFlowsError};
-use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::default_tls_client;
+use rusoto_emr::{Emr, EmrClient, ListClustersInput, DescribeJobFlowsInput, DescribeJobFlowsError};
+use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_core::default_tls_client;
 
 #[test]
 fn should_list_clusters() {

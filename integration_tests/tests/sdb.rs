@@ -1,8 +1,9 @@
 #![cfg(feature = "sdb")]
-extern crate rusoto;
+extern crate rusoto_core;
+extern crate rusoto_sdb;
 
-use rusoto::sdb::{SimpleDb, SimpleDbClient, ListDomainsRequest};
-use rusoto::{DefaultCredentialsProvider, Region, default_tls_client};
+use rusoto_sdb::{SimpleDb, SimpleDbClient, ListDomainsRequest};
+use rusoto_core::{DefaultCredentialsProvider, Region, default_tls_client};
 
 #[test]
 fn should_list_domains() {

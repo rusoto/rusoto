@@ -1,14 +1,15 @@
 #![cfg(feature = "sqs")]
 
-extern crate rusoto;
+extern crate rusoto_core;
+extern crate rusoto_sqs;
 extern crate time;
 extern crate env_logger;
 
-use rusoto::sqs::{Sqs, SqsClient};
-use rusoto::sqs::{ListQueuesRequest, CreateQueueRequest, GetQueueUrlRequest, SendMessageRequest};
-use rusoto::sqs::{ReceiveMessageRequest, DeleteMessageRequest, DeleteQueueRequest, GetQueueAttributesRequest};
-use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::default_tls_client;
+use rusoto_sqs::{Sqs, SqsClient};
+use rusoto_sqs::{ListQueuesRequest, CreateQueueRequest, GetQueueUrlRequest, SendMessageRequest};
+use rusoto_sqs::{ReceiveMessageRequest, DeleteMessageRequest, DeleteQueueRequest, GetQueueAttributesRequest};
+use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_core::default_tls_client;
 
 #[test]
 fn list_queues() {

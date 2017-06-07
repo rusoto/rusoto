@@ -5,17 +5,19 @@ extern crate hyper;
 #[macro_use]
 extern crate log;
 extern crate rand;
-extern crate rusoto;
+extern crate rusoto_core;
+extern crate rusoto_elastictranscoder;
+extern crate rusoto_s3;
 
 use std::clone::Clone;
 use std::ops::{Deref, DerefMut};
 
 use hyper::Client;
 use rand::Rng;
-use rusoto::{ChainProvider, ProvideAwsCredentials, Region};
-use rusoto::elastictranscoder::{Ets, EtsClient};
-use rusoto::s3::{BucketName, S3, S3Client, CreateBucketRequest, DeleteBucketRequest};
-use rusoto::default_tls_client;
+use rusoto_core::{ChainProvider, ProvideAwsCredentials, Region};
+use rusoto_elastictranscoder::{Ets, EtsClient};
+use rusoto_s3::{BucketName, S3, S3Client, CreateBucketRequest, DeleteBucketRequest};
+use rusoto_core::default_tls_client;
 
 const AWS_ETS_WEB_PRESET_ID: &'static str = "1351620000001-100070";
 const AWS_ETS_WEB_PRESET_NAME: &'static str = "System preset: Web";
@@ -144,7 +146,7 @@ fn generate_unique_name(prefix: &str) -> String {
 #[test]
 #[should_panic(expected = "arn cannot be null")]
 fn create_pipeline_without_arn() {
-    use rusoto::elastictranscoder::CreatePipelineRequest;
+    use rusoto_elastictranscoder::CreatePipelineRequest;
 
     initialize();
 
@@ -165,7 +167,7 @@ fn create_pipeline_without_arn() {
 
 #[test]
 fn create_preset() {
-    use rusoto::elastictranscoder::{AudioCodecOptions, AudioParameters, CreatePresetRequest,
+    use rusoto_elastictranscoder::{AudioCodecOptions, AudioParameters, CreatePresetRequest,
                                     DeletePresetRequest};
 
     initialize();
@@ -217,7 +219,7 @@ fn create_preset() {
 
 #[test]
 fn delete_preset() {
-    use rusoto::elastictranscoder::{AudioCodecOptions, AudioParameters, CreatePresetRequest,
+    use rusoto_elastictranscoder::{AudioCodecOptions, AudioParameters, CreatePresetRequest,
                                     DeletePresetRequest};
 
     initialize();
@@ -254,7 +256,7 @@ fn delete_preset() {
 
 #[test]
 fn list_jobs_by_status() {
-    use rusoto::elastictranscoder::ListJobsByStatusRequest;
+    use rusoto_elastictranscoder::ListJobsByStatusRequest;
 
     initialize();
 
@@ -276,7 +278,7 @@ fn list_jobs_by_status() {
 
 #[test]
 fn list_pipelines() {
-    use rusoto::elastictranscoder::ListPipelinesRequest;
+    use rusoto_elastictranscoder::ListPipelinesRequest;
 
     initialize();
 
@@ -294,7 +296,7 @@ fn list_pipelines() {
 
 #[test]
 fn list_presets() {
-    use rusoto::elastictranscoder::ListPresetsRequest;
+    use rusoto_elastictranscoder::ListPresetsRequest;
 
     initialize();
 
@@ -329,7 +331,7 @@ fn list_presets() {
 
 #[test]
 fn read_preset() {
-    use rusoto::elastictranscoder::ReadPresetRequest;
+    use rusoto_elastictranscoder::ReadPresetRequest;
 
     initialize();
 

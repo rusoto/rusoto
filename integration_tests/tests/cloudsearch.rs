@@ -1,10 +1,11 @@
 #![cfg(feature = "cloudsearch")]
 
-extern crate rusoto;
+extern crate rusoto_core;
+extern crate rusoto_cloudsearch;
 
-use rusoto::cloudsearch::{CloudSearch, CloudSearchClient, DescribeDomainsRequest};
-use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::default_tls_client;
+use rusoto_cloudsearch::{CloudSearch, CloudSearchClient, DescribeDomainsRequest};
+use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_core::default_tls_client;
 
 #[test]
 fn should_describe_domains() {

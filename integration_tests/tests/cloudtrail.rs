@@ -1,10 +1,11 @@
 #![cfg(feature = "cloudtrail")]
 
-extern crate rusoto;
+extern crate rusoto_core;
+extern crate rusoto_cloudtrail;
 
-use rusoto::cloudtrail::{CloudTrail, CloudTrailClient, DescribeTrailsRequest};
-use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::default_tls_client;
+use rusoto_cloudtrail::{CloudTrail, CloudTrailClient, DescribeTrailsRequest};
+use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_core::default_tls_client;
 
 #[test]
 fn should_describe_trails() {

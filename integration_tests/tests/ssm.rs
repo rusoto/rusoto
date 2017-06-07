@@ -1,11 +1,12 @@
 #![cfg(feature = "ssm")]
 
-extern crate rusoto;
+extern crate rusoto_core;
+extern crate rusoto_ssm;
 
-use rusoto::ssm::{Ssm, SsmClient, ListDocumentsRequest, ListCommandsRequest,
+use rusoto_ssm::{Ssm, SsmClient, ListDocumentsRequest, ListCommandsRequest,
                   ListCommandInvocationsRequest};
-use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::default_tls_client;
+use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_core::default_tls_client;
 
 #[test]
 fn should_list_documents() {

@@ -1,8 +1,9 @@
 #![cfg(feature = "redshift")]
-extern crate rusoto;
+extern crate rusoto_core;
+extern crate rusoto_redshift;
 
-use rusoto::redshift::{Redshift, RedshiftClient, DescribeClustersMessage};
-use rusoto::{DefaultCredentialsProvider, Region, default_tls_client};
+use rusoto_redshift::{Redshift, RedshiftClient, DescribeClustersMessage};
+use rusoto_core::{DefaultCredentialsProvider, Region, default_tls_client};
 
 #[test]
 fn should_describe_clusters() {

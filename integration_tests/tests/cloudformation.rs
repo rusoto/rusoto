@@ -1,10 +1,11 @@
 #![cfg(feature = "cloudformation")]
 
-extern crate rusoto;
+extern crate rusoto_core;
+extern crate rusoto_cloudformation;
 
-use rusoto::cloudformation::{CloudFormation, CloudFormationClient, ListStacksInput};
-use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::default_tls_client;
+use rusoto_cloudformation::{CloudFormation, CloudFormationClient, ListStacksInput};
+use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_core::default_tls_client;
 
 #[test]
 fn should_list_stacks() {

@@ -1,11 +1,12 @@
 #![cfg(feature = "config")]
 
-extern crate rusoto;
+extern crate rusoto_core;
+extern crate rusoto_config;
 
-use rusoto::config::{ConfigService, ConfigServiceClient, DescribeConfigRulesRequest,
+use rusoto_config::{ConfigService, ConfigServiceClient, DescribeConfigRulesRequest,
                      DescribeDeliveryChannelsRequest};
-use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::default_tls_client;
+use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_core::default_tls_client;
 
 #[test]
 fn should_describe_config_rules() {

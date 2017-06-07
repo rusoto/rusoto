@@ -1,11 +1,12 @@
 #![cfg(feature = "elasticbeanstalk")]
 
-extern crate rusoto;
+extern crate rusoto_core;
+extern crate rusoto_elasticbeanstalk;
 
-use rusoto::elasticbeanstalk::{ElasticBeanstalk, ElasticBeanstalkClient,
+use rusoto_elasticbeanstalk::{ElasticBeanstalk, ElasticBeanstalkClient,
                                DescribeApplicationsMessage};
-use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::default_tls_client;
+use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_core::default_tls_client;
 
 #[test]
 fn should_describe_applications() {

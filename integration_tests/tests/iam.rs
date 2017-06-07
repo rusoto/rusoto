@@ -1,11 +1,12 @@
 #![cfg(feature = "iam")]
 
-extern crate rusoto;
+extern crate rusoto_core;
+extern crate rusoto_iam;
 
-use rusoto::iam::{Iam, IamClient};
-use rusoto::iam::{GetUserRequest, ListUsersRequest};
-use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::default_tls_client;
+use rusoto_iam::{Iam, IamClient};
+use rusoto_iam::{GetUserRequest, ListUsersRequest};
+use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_core::default_tls_client;
 
 #[test]
 fn get_user() {

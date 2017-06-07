@@ -1,10 +1,11 @@
 #![cfg(feature = "devicefarm")]
 
-extern crate rusoto;
+extern crate rusoto_core;
+extern crate rusoto_devicefarm;
 
-use rusoto::devicefarm::{DeviceFarm, DeviceFarmClient, ListDevicesRequest};
-use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::default_tls_client;
+use rusoto_devicefarm::{DeviceFarm, DeviceFarmClient, ListDevicesRequest};
+use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_core::default_tls_client;
 
 #[test]
 pub fn should_list_devices() {

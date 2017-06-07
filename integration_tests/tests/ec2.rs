@@ -1,11 +1,12 @@
 #![cfg(feature = "ec2")]
 
-extern crate rusoto;
+extern crate rusoto_core;
+extern crate rusoto_ec2;
 
-use rusoto::ec2::{Ec2, Ec2Client, CreateSnapshotRequest, DescribeInstancesRequest};
-use rusoto::ec2::{CreateTagsRequest, Tag};
-use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::default_tls_client;
+use rusoto_ec2::{Ec2, Ec2Client, CreateSnapshotRequest, DescribeInstancesRequest};
+use rusoto_ec2::{CreateTagsRequest, Tag};
+use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_core::default_tls_client;
 use std::error::Error;
 
 #[test]

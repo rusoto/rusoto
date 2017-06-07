@@ -1,5 +1,6 @@
 #![cfg(feature = "s3")]
-extern crate rusoto;
+extern crate rusoto_core;
+extern crate rusoto_s3;
 extern crate time;
 extern crate hyper;
 extern crate env_logger;
@@ -10,13 +11,13 @@ use std::fs::File;
 use std::io::Read;
 use time::get_time;
 
-use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::s3::{S3, S3Client, HeadObjectRequest, CopyObjectRequest, GetObjectRequest,
+use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_s3::{S3, S3Client, HeadObjectRequest, CopyObjectRequest, GetObjectRequest,
                  PutObjectRequest, DeleteObjectRequest, PutBucketCorsRequest, CORSConfiguration,
                  CORSRule, CreateBucketRequest, DeleteBucketRequest, CreateMultipartUploadRequest,
                  UploadPartRequest, CompleteMultipartUploadRequest, CompletedMultipartUpload,
                  CompletedPart, CompletedPartList, ListObjectsV2Request};
-use rusoto::default_tls_client;
+use rusoto_core::default_tls_client;
 
 type TestClient = S3Client<DefaultCredentialsProvider, Client>;
 

@@ -1,10 +1,11 @@
 #![cfg(feature = "codepipeline")]
 
-extern crate rusoto;
+extern crate rusoto_core;
+extern crate rusoto_codepipeline;
 
-use rusoto::codepipeline::{CodePipeline, CodePipelineClient, ListPipelinesInput};
-use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::default_tls_client;
+use rusoto_codepipeline::{CodePipeline, CodePipelineClient, ListPipelinesInput};
+use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_core::default_tls_client;
 
 #[test]
 fn should_list_pipelines() {

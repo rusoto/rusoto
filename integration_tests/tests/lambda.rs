@@ -1,10 +1,11 @@
 #![cfg(feature = "lambda")]
 
-extern crate rusoto;
+extern crate rusoto_core;
+extern crate rusoto_lambda;
 
-use rusoto::lambda::{Lambda, LambdaClient, ListFunctionsRequest};
-use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::default_tls_client;
+use rusoto_lambda::{Lambda, LambdaClient, ListFunctionsRequest};
+use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_core::default_tls_client;
 
 #[test]
 fn should_list_functions() {

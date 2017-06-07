@@ -1,10 +1,11 @@
 #![cfg(feature = "acm")]
 
-extern crate rusoto;
+extern crate rusoto_core;
+extern crate rusoto_acm;
 
-use rusoto::acm::{Acm, AcmClient, ListCertificatesRequest};
-use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::default_tls_client;
+use rusoto_acm::{Acm, AcmClient, ListCertificatesRequest};
+use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_core::default_tls_client;
 
 #[test]
 fn should_list_certificates() {

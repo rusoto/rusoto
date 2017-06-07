@@ -1,10 +1,11 @@
 #![cfg(feature = "dynamodbstreams")]
 
-extern crate rusoto;
+extern crate rusoto_core;
+extern crate rusoto_dynamodbstreams;
 
-use rusoto::dynamodbstreams::{DynamoDbStreams, DynamoDbStreamsClient, ListStreamsInput};
-use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::default_tls_client;
+use rusoto_dynamodbstreams::{DynamoDbStreams, DynamoDbStreamsClient, ListStreamsInput};
+use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_core::default_tls_client;
 
 #[test]
 fn should_list_streams() {

@@ -1,10 +1,11 @@
 #![cfg(feature = "cloudhsm")]
 
-extern crate rusoto;
+extern crate rusoto_core;
+extern crate rusoto_cloudhsm;
 
-use rusoto::cloudhsm::{CloudHsm, CloudHsmClient, ListHapgsRequest, ListHsmsRequest, ListLunaClientsRequest};
-use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::default_tls_client;
+use rusoto_cloudhsm::{CloudHsm, CloudHsmClient, ListHapgsRequest, ListHsmsRequest, ListLunaClientsRequest};
+use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_core::default_tls_client;
 
 #[test]
 fn should_list_hapgs() {

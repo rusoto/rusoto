@@ -1,10 +1,11 @@
 #![cfg(feature = "dynamodb")]
 
-extern crate rusoto;
+extern crate rusoto_core;
+extern crate rusoto_dynamodb;
 
-use rusoto::dynamodb::{DynamoDb, DynamoDbClient, ListTablesInput, ListTablesError};
-use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::default_tls_client;
+use rusoto_dynamodb::{DynamoDb, DynamoDbClient, ListTablesInput, ListTablesError};
+use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_core::default_tls_client;
 
 #[test]
 fn should_parse_error_type() {

@@ -1,13 +1,14 @@
 #![cfg(feature = "sts")]
 
-extern crate rusoto;
+extern crate rusoto_core;
+extern crate rusoto_sts;
 
-use rusoto::default_tls_client;
-use rusoto::sts::{Sts, StsClient};
-use rusoto::sts::{AssumeRoleRequest, AssumeRoleError};
-use rusoto::sts::{GetSessionTokenRequest, GetSessionTokenError};
-use rusoto::sts::StsSessionCredentialsProvider;
-use rusoto::{DefaultCredentialsProvider, Region, ProvideAwsCredentials};
+use rusoto_core::default_tls_client;
+use rusoto_sts::{Sts, StsClient};
+use rusoto_sts::{AssumeRoleRequest, AssumeRoleError};
+use rusoto_sts::{GetSessionTokenRequest, GetSessionTokenError};
+use rusoto_sts::StsSessionCredentialsProvider;
+use rusoto_core::{DefaultCredentialsProvider, Region, ProvideAwsCredentials};
 
 #[test]
 fn main() {

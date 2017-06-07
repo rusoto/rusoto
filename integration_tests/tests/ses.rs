@@ -1,10 +1,11 @@
 #![cfg(feature = "ses")]
 
-extern crate rusoto;
+extern crate rusoto_core;
+extern crate rusoto_ses;
 
-use rusoto::ses::{Ses, SesClient};
-use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::default_tls_client;
+use rusoto_ses::{Ses, SesClient};
+use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_core::default_tls_client;
 
 #[test]
 fn should_list_verified_email_addresses() {

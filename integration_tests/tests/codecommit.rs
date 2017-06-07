@@ -1,10 +1,11 @@
 #![cfg(feature = "codecommit")]
 
-extern crate rusoto;
+extern crate rusoto_core;
+extern crate rusoto_codecommit;
 
-use rusoto::codecommit::{CodeCommit, CodeCommitClient, ListRepositoriesInput};
-use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::default_tls_client;
+use rusoto_codecommit::{CodeCommit, CodeCommitClient, ListRepositoriesInput};
+use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_core::default_tls_client;
 
 #[test]
 fn should_list_repositories() {

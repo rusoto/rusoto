@@ -1,10 +1,11 @@
 #![cfg(feature = "logs")]
 
-extern crate rusoto;
+extern crate rusoto_core;
+extern crate rusoto_logs;
 
-use rusoto::logs::{CloudWatchLogs, CloudWatchLogsClient, DescribeLogGroupsRequest};
-use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::default_tls_client;
+use rusoto_logs::{CloudWatchLogs, CloudWatchLogsClient, DescribeLogGroupsRequest};
+use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_core::default_tls_client;
 
 #[test]
 fn should_describe_log_groups() {

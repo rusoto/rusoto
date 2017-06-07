@@ -1,10 +1,11 @@
 #![cfg(feature = "storagegateway")]
 
-extern crate rusoto;
+extern crate rusoto_core;
+extern crate rusoto_storagegateway;
 
-use rusoto::storagegateway::{StorageGateway, StorageGatewayClient, ListGatewaysInput};
-use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::default_tls_client;
+use rusoto_storagegateway::{StorageGateway, StorageGatewayClient, ListGatewaysInput};
+use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_core::default_tls_client;
 
 #[test]
 fn should_list_gateways() {

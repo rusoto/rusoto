@@ -1,11 +1,12 @@
 #![cfg(feature = "cognito-identity")]
 
-extern crate rusoto;
+extern crate rusoto_core;
+extern crate rusoto_cognito_identity;
 
-use rusoto::cognitoidentity::{CognitoIdentity, CognitoIdentityClient, ListIdentitiesInput,
+use rusoto_cognito_identity::{CognitoIdentity, CognitoIdentityClient, ListIdentitiesInput,
                               ListIdentitiesError, ListIdentityPoolsInput};
-use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::default_tls_client;
+use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_core::default_tls_client;
 
 #[test]
 fn should_list_identity_pools() {

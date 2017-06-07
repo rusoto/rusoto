@@ -1,10 +1,11 @@
 #![cfg(feature = "ecs")]
 
-extern crate rusoto;
+extern crate rusoto_core;
+extern crate rusoto_ecs;
 
-use rusoto::ecs::{Ecs, EcsClient, ListClustersRequest, ListClustersError};
-use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::default_tls_client;
+use rusoto_ecs::{Ecs, EcsClient, ListClustersRequest, ListClustersError};
+use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_core::default_tls_client;
 
 #[test]
 fn main() {

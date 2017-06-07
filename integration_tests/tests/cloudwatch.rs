@@ -1,10 +1,11 @@
 #![cfg(feature = "cloudwatch")]
 
-extern crate rusoto;
+extern crate rusoto_core;
+extern crate rusoto_cloudwatch;
 
-use rusoto::cloudwatch::{CloudWatch, CloudWatchClient, PutMetricDataInput, Dimension, MetricDatum};
-use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::default_tls_client;
+use rusoto_cloudwatch::{CloudWatch, CloudWatchClient, PutMetricDataInput, Dimension, MetricDatum};
+use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_core::default_tls_client;
 
 #[test]
 fn should_put_metric_data() {

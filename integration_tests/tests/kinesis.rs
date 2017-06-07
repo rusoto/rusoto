@@ -1,10 +1,11 @@
 #![cfg(feature = "kinesis")]
 
-extern crate rusoto;
+extern crate rusoto_core;
+extern crate rusoto_kinesis;
 
-use rusoto::kinesis::{Kinesis, KinesisClient, ListStreamsInput};
-use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::default_tls_client;
+use rusoto_kinesis::{Kinesis, KinesisClient, ListStreamsInput};
+use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_core::default_tls_client;
 
 #[test]
 fn should_list_streams() {
