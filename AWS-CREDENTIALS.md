@@ -18,7 +18,44 @@ It's also possible to implement your own credentials sourcing mechanism by creat
 
 #### sts:AssumeRole
 
-If your aws account belongs to an organization and you need to use sts:AssumeRole, you're probably looking for `rusoto_sts::StsAssumeRoleSessionCredentialsProvider`. An example can be found on [docs.rs](https://docs.rs/rusoto_sts/) and in [rusoto/services/sts/src/lib.rs](rusoto/services/sts/src/lib.rs).
+If your aws account belongs to an organization and you need to use sts:AssumeRole, you're probably looking for `rusoto_sts::StsAssumeRoleSessionCredentialsProvider`. A simple program that uses sts:AssumeRole looks like this:
+
+```rust
+extern crate env_logger;
+extern crate rusoto_core;
+extern crate rusoto_ec2;
+extern crate rusoto_sts;
+
+use std::default::Default;
+
+use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_core::default_tls_client;
+
+use rusoto_ec2::{Ec2Client, Ec2};
+use rusoto_sts::{StsClient, StsAssumeRoleSessionCredentialsProvider};
+
+fn main() {
+    env_logger::init().unwrap();
+
+    let credentials = DefaultCredentialsProvider::new().unwrap();
+    let sts = StsClient::new(default_tls_client().unwrap(), credentials, Region::EuWest1);
+
+    let provider = StsAssumeRoleSessionCredentialsProvider::new(
+        sts,
+        "arn:aws:iam::something:role/something".to_owned(),
+        "default".to_owned(),
+        None, None, None, None
+    );
+
+    let client = Ec2Client::new(default_tls_client().unwrap(), provider, Region::UsEast1);
+
+    let sir_input = Default::default();
+    println!("[*] requesting...");
+    let x = client.describe_spot_instance_requests(&sir_input);
+
+    println!("{:?}", x);
+}
+```
 
 #### Credential refreshing
 
