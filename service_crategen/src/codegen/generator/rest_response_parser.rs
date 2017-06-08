@@ -11,7 +11,7 @@ pub fn generate_response_headers_parser(service: &Service,
         return None;
     }
 
-    let shape = &service.shapes[&operation.output.as_ref().unwrap().shape];
+    let shape = service.get_shape(&operation.output.as_ref().unwrap().shape).unwrap();
     let members = shape.members.as_ref().unwrap();
 
     let parser_pieces = members.iter()
@@ -38,7 +38,7 @@ fn parse_multiple_headers(service: &Service,
                           member_name: &str,
                           member: &Member)
                           -> String {
-    let member_shape = &service.shapes[&member.shape];
+    let member_shape = service.get_shape(&member.shape).unwrap();
     let required = shape.required(member_name);
     match member_shape.shape_type {
         ShapeType::Map => parse_headers_map(member_name, member, required),
@@ -92,7 +92,7 @@ fn parse_single_header(service: &Service,
                        member_name: &str,
                        member: &Member)
                        -> String {
-    let member_shape = &service.shapes[&member.shape];
+    let member_shape = service.get_shape(&member.shape).unwrap();
     if shape.required(member_name) {
         format!("let value = response.headers.get(\"{location_name}\").unwrap().to_owned();
                  result.{field_name} = {primitive_parser};",

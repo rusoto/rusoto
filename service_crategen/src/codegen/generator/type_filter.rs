@@ -7,11 +7,10 @@ use super::mutate_type_name;
 pub fn filter_types(service: &Service) -> (BTreeSet<String>, BTreeSet<String>) {
     let mut deserialized_types: BTreeSet<String> = BTreeSet::new();
     let mut serialized_types: BTreeSet<String> = BTreeSet::new();
-    for operation in service.operations.values() {
+    for operation in service.operations().values() {
         if let Some(ref output) = operation.output {
 
-            let output_shape = service.shapes
-                .get(&output.shape)
+            let output_shape = service.get_shape(&output.shape)
                 .expect("Shape type missing from service definition");
 
             if !can_skip_deserializer(service, output_shape) {
@@ -28,7 +27,7 @@ pub fn filter_types(service: &Service) -> (BTreeSet<String>, BTreeSet<String>) {
 
 fn recurse_find_shapes(service: &Service, types: &mut BTreeSet<String>, shape_name: &str) {
     types.insert(mutate_type_name(shape_name).to_owned());
-    let shape = service.shapes.get(shape_name).expect("Shape type missing from service definition");
+    let shape = service.get_shape(shape_name).expect("Shape type missing from service definition");
     match shape.shape_type {
         ShapeType::Structure => {
             if let Some(ref members) = shape.members {
@@ -60,7 +59,7 @@ fn can_skip_deserializer(service: &Service, output_shape: &Shape) -> bool {
         None => false,
         Some(ref payload_member) => {
             let payload_shape_type = &output_shape.members.as_ref().unwrap()[payload_member].shape;
-            let payload_shape = &service.shapes[payload_shape_type];
+            let payload_shape = service.get_shape(payload_shape_type).unwrap();
 
             let has_streaming_payload = payload_shape.shape_type == ShapeType::Blob ||
                                         payload_shape.shape_type == ShapeType::String;

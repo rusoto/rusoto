@@ -75,7 +75,7 @@
     "version": "0.25.0",
     "coreVersion": "0.25.0",
     "protocolVersion": "2014-11-12",
-    "baseTypeName": "Config"
+    "baseTypeName": "ConfigService"
   },
   "datapipeline": {
     "version": "0.25.0",
@@ -135,7 +135,7 @@
     "version": "0.25.0",
     "coreVersion": "0.25.0",
     "protocolVersion": "2015-02-02",
-    "baseTypeName": "Elasticache"
+    "baseTypeName": "ElastiCache"
   },
   "elasticbeanstalk": {
     "version": "0.25.0",
@@ -147,7 +147,7 @@
     "version": "0.25.0",
     "coreVersion": "0.25.0",
     "protocolVersion": "2012-09-25",
-    "baseTypeName": "ElasticTranscoder"
+    "baseTypeName": "Ets"
   },
   "elb": {
     "version": "0.25.0",
@@ -201,7 +201,7 @@
     "version": "0.25.0",
     "coreVersion": "0.25.0",
     "protocolVersion": "2015-05-28",
-    "baseTypeName": "IoT"
+    "baseTypeName": "Iot"
   },
   "kinesis": {
     "version": "0.25.0",
@@ -260,7 +260,7 @@
     "version": "0.25.0",
     "coreVersion": "0.25.0",
     "protocolVersion": "2012-12-01",
-    "baseTypeName": "RedShift"
+    "baseTypeName": "Redshift"
   },
   "route53": {
     "version": "0.25.0",

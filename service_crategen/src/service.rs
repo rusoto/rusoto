@@ -1,5 +1,6 @@
 use std::collections::BTreeMap;
 
+use cargo;
 use config::ServiceConfig;
 use codegen::botocore::{ServiceDefinition, Value, Member, Shape, ShapeType, Operation};
 
@@ -24,6 +25,10 @@ impl Service {
         }
     }
 
+    pub fn full_name(&self) -> &str {
+        &self.definition.metadata.service_full_name
+    }
+
     pub fn protocol(&self) -> &str {
         &self.definition.metadata.protocol
     }
@@ -36,8 +41,28 @@ impl Service {
         &self.config.base_type_name
     }
 
+    pub fn endpoint_prefix(&self) -> &str {
+        &self.definition.metadata.endpoint_prefix
+    }
+
+    pub fn api_version(&self) -> &str {
+        &self.definition.metadata.api_version
+    }
+
+    pub fn target_prefix(&self) -> Option<&String> {
+        self.definition.metadata.target_prefix.as_ref()
+    }
+
+    pub fn json_version(&self) -> Option<&String> {
+        self.definition.metadata.json_version.as_ref()
+    }
+
     pub fn shapes(&self) -> &BTreeMap<String, Shape> {
         &self.definition.shapes
+    }
+
+    pub fn get_shape(&self, name: &str) -> Option<&Shape> {
+        self.definition.shapes.get(name)
     }
 
     pub fn operations(&self) -> &BTreeMap<String, Operation> {
@@ -61,5 +86,45 @@ impl Service {
             Some(ref signing_name) => signing_name.to_string(),
             None => self.definition.metadata.endpoint_prefix.to_string(),
         }
+    }
+
+    pub fn get_dependencies(&self) -> BTreeMap<String, cargo::Dependency> {
+        let mut dependencies = BTreeMap::new();
+
+        dependencies.insert("hyper".to_owned(), cargo::Dependency::Simple("0.10.0".into()));
+        dependencies.insert("rusoto_core".to_owned(), cargo::Dependency::Extended {
+            path: Some("../../core".into()),
+            version: Some(self.config.core_version.clone()),
+            optional: None,
+            default_features: None,
+            features: None
+        });
+
+        match self.protocol() {
+            "json" => {
+                dependencies.insert("serde".to_owned(), cargo::Dependency::Simple("1.0.2".into()));
+                dependencies.insert("serde_derive".to_owned(), cargo::Dependency::Simple("1.0.2".into()));
+                dependencies.insert("serde_json".to_owned(), cargo::Dependency::Simple("1.0.1".into()));
+            },
+            "query" | "ec2" => {
+                dependencies.insert("xml-rs".to_owned(), cargo::Dependency::Simple("0.6".into()));
+            },
+            "rest-json" => {
+                dependencies.insert("log".to_owned(), cargo::Dependency::Simple("0.3.6".into()));
+                dependencies.insert("serde".to_owned(), cargo::Dependency::Simple("1.0.2".into()));
+                dependencies.insert("serde_derive".to_owned(), cargo::Dependency::Simple("1.0.2".into()));
+                dependencies.insert("serde_json".to_owned(), cargo::Dependency::Simple("1.0.1".into()));
+            },
+            "rest-xml" => {
+                dependencies.insert("xml-rs".to_owned(), cargo::Dependency::Simple("0.6".into()));
+            },
+            protocol => panic!("Unknown protocol {}", protocol),
+        }
+
+        if let Some(ref custom_dependencies) = self.config.custom_dependencies {
+            dependencies.extend(custom_dependencies.clone());
+        }
+
+        dependencies
     }
 }

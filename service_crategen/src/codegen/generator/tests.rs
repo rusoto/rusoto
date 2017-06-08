@@ -85,7 +85,7 @@ fn generate_response_parse_test(
     status_code: i32,
     is_ok: bool,
 ) -> Option<String> {
-    let maybe_operation = case_insensitive_btreemap_get(&service.operations, &response.action);
+    let maybe_operation = case_insensitive_btreemap_get(service.operations(), &response.action);
 
     if maybe_operation.is_none() {
         return None;

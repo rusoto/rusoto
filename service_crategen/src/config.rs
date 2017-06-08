@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 use std::error::Error;
-use std::io;
+use std::io::{self, Read};
 use std::fmt;
 use std::fs::File;
 use std::path::Path;
@@ -30,7 +30,7 @@ impl ServiceConfig {
         })?;
 
         let parsed: BTreeMap<String, ServiceConfig> = serde_json::from_str(&contents).expect("Unable to parse services configuration file.");
-        parsed.iter().map(|(k, v)| (k.clone(), v.clone())).collect()
+        Ok(parsed.iter().map(|(k, v)| (k.clone(), v.clone())).collect())
     }
 }
 

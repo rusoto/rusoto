@@ -51,11 +51,11 @@ impl GenerateProtocol for QueryGenerator {
                     }}
                 }}
                 ",
-                     api_version = &service.metadata.api_version,
+                     api_version = service.api_version(),
                      documentation = generate_documentation(operation),
                      error_type = error_type_name(operation_name),
                      http_method = &operation.http.method,
-                     endpoint_prefix = &service.metadata.endpoint_prefix,
+                     endpoint_prefix = service.endpoint_prefix(),
                      parse_payload =
                          xml_payload_parser::generate_response_parser(service, operation, false),
                      method_signature = generate_method_signature(operation_name, operation),

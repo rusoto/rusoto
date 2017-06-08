@@ -4,7 +4,7 @@ use std::io::{Write, BufWriter};
 use inflector::Inflector;
 
 use ::Service;
-use codegen::botocore::{ServiceDefinition, Shape, ShapeType};
+use codegen::botocore::{Shape, ShapeType};
 use self::json::JsonGenerator;
 use self::query::QueryGenerator;
 use self::rest_json::RestJsonGenerator;

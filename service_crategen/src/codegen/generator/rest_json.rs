@@ -16,7 +16,7 @@ impl GenerateProtocol for RestJsonGenerator {
             let output_type = operation.output_shape_or("()");
 
             // Retrieve the `Shape` for the input for this operation.
-            let input_shape = &service.shapes()[input_type];
+            let input_shape = &service.get_shape(input_type).unwrap();
 
             writeln!(writer,"
                 {documentation}
@@ -37,7 +37,7 @@ impl GenerateProtocol for RestJsonGenerator {
             let output_type = operation.output_shape_or("()");
 
             // Retrieve the `Shape` for the input for this operation.
-            let input_shape = &service.shapes()[input_type];
+            let input_shape = &service.get_shape(input_type).unwrap();
 
             // Construct a list of format strings which will be used to format
             // the request URI, mapping the input struct to the URI arguments.
@@ -172,11 +172,11 @@ fn http_code_to_status_code(code: Option<i32>) -> String {
 
 // IoT has an endpoint_prefix and a signing_name that differ
 fn generate_endpoint_modification(service: &Service) -> Option<String> {
-    if service.signing_name() == service.metadata.endpoint_prefix {
+    if service.signing_name() == service.endpoint_prefix() {
         None
     } else {
         Some(format!("request.set_endpoint_prefix(\"{}\".to_string());",
-                     service.metadata.endpoint_prefix))
+                     service.endpoint_prefix()))
     }
 }
 

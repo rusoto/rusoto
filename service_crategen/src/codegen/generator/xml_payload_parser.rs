@@ -32,14 +32,14 @@ pub fn generate_response_parser(service: &Service,
 
     let shape_name = &operation.output.as_ref().unwrap().shape;
     let result_wrapper = &operation.output.as_ref().unwrap().result_wrapper;
-    let output_shape = &service.shapes[shape_name];
+    let output_shape = service.get_shape(shape_name).unwrap();
 
     // if the 'payload' field on the output shape is a blob or string, it indicates that
     // the entire payload is set as one of the struct members, and not parsed
     match output_shape.payload {
         None => xml_body_parser(shape_name, result_wrapper, mutable_result),
         Some(ref payload_member) => {
-            let payload_shape = &service.shapes[payload_member];
+            let payload_shape = service.get_shape(payload_member).unwrap();
             match payload_shape.shape_type {
                 payload_type if payload_type == ShapeType::Blob ||
                                 payload_type == ShapeType::String => {
@@ -116,7 +116,7 @@ fn xml_body_parser(output_shape: &str,
 
 
 fn generate_deserializer_body(name: &str, shape: &Shape, service: &Service) -> String {
-    match (&service.metadata.endpoint_prefix[..], name) {
+    match (service.endpoint_prefix(), name) {
         ("s3", "GetBucketLocationOutput") => {
             // override custom deserializer
             let struct_field_deserializers = shape.members
@@ -360,7 +360,7 @@ fn generate_struct_field_deserializers(service: &Service, shape: &Shape) -> Stri
                 return None;
             }
 
-            let member_shape = &service.shapes[&member.shape];
+            let member_shape = service.get_shape(&member.shape).unwrap();
 
             // flattened lists have no surrounding tag, so match on the list member's tag
             if member_shape.shape_type == ShapeType::List && member_shape.flattened == Some(true) {
