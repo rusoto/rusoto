@@ -1,0 +1,364 @@
+[package]
+name = "rusoto_tests"
+description = "AWS SDK for Rust - Integration Tests"
+version = "0.25.0"
+authors = [
+    "Anthony DiMarco <ocramida@gmail.com>",
+    "Jimmy Cuadra <jimmy@jimmycuadra.com>",
+    "Matthew Mayer <matthewkmayer@gmail.com>",
+    "Nikita Pekin <contact@nikitapek.in>"
+]
+license = "MIT"
+repository = "https://github.com/rusoto/rusoto"
+homepage = "https://www.rusoto.org/"
+
+[dependencies.rusoto_core]
+path = "../rusoto/core"
+
+[dependencies.rusoto_acm]
+optional = true
+path = "../rusoto/services/acm"
+
+[dependencies.rusoto_autoscaling]
+optional = true
+path = "../rusoto/services/autoscaling"
+
+[dependencies.rusoto_cloudformation]
+optional = true
+path = "../rusoto/services/cloudformation"
+
+[dependencies.rusoto_cloudfront]
+optional = true
+path = "../rusoto/services/cloudfront"
+
+[dependencies.rusoto_cloudhsm]
+optional = true
+path = "../rusoto/services/cloudhsm"
+
+[dependencies.rusoto_cloudsearch]
+optional = true
+path = "../rusoto/services/cloudsearch"
+
+[dependencies.rusoto_cloudtrail]
+optional = true
+path = "../rusoto/services/cloudtrail"
+
+[dependencies.rusoto_cloudwatch]
+optional = true
+path = "../rusoto/services/cloudwatch"
+
+[dependencies.rusoto_codecommit]
+optional = true
+path = "../rusoto/services/codecommit"
+
+[dependencies.rusoto_codedeploy]
+optional = true
+path = "../rusoto/services/codedeploy"
+
+[dependencies.rusoto_codepipeline]
+optional = true
+path = "../rusoto/services/codepipeline"
+
+[dependencies.rusoto_cognito_identity]
+optional = true
+path = "../rusoto/services/cognito-identity"
+
+[dependencies.rusoto_config]
+optional = true
+path = "../rusoto/services/config"
+
+[dependencies.rusoto_datapipeline]
+optional = true
+path = "../rusoto/services/datapipeline"
+
+[dependencies.rusoto_devicefarm]
+optional = true
+path = "../rusoto/services/devicefarm"
+
+[dependencies.rusoto_directconnect]
+optional = true
+path = "../rusoto/services/directconnect"
+
+[dependencies.rusoto_ds]
+optional = true
+path = "../rusoto/services/ds"
+
+[dependencies.rusoto_dynamodb]
+optional = true
+path = "../rusoto/services/dynamodb"
+
+[dependencies.rusoto_dynamodbstreams]
+optional = true
+path = "../rusoto/services/dynamodbstreams"
+
+[dependencies.rusoto_ec2]
+optional = true
+path = "../rusoto/services/ec2"
+
+[dependencies.rusoto_ecr]
+optional = true
+path = "../rusoto/services/ecr"
+
+[dependencies.rusoto_ecs]
+optional = true
+path = "../rusoto/services/ecs"
+
+[dependencies.rusoto_elasticache]
+optional = true
+path = "../rusoto/services/elasticache"
+
+[dependencies.rusoto_elasticbeanstalk]
+optional = true
+path = "../rusoto/services/elasticbeanstalk"
+
+[dependencies.rusoto_elastictranscoder]
+optional = true
+path = "../rusoto/services/elastictranscoder"
+
+[dependencies.rusoto_elb]
+optional = true
+path = "../rusoto/services/elb"
+
+[dependencies.rusoto_elbv2]
+optional = true
+path = "../rusoto/services/elbv2"
+
+[dependencies.rusoto_emr]
+optional = true
+path = "../rusoto/services/emr"
+
+[dependencies.rusoto_events]
+optional = true
+path = "../rusoto/services/events"
+
+[dependencies.rusoto_firehose]
+optional = true
+path = "../rusoto/services/firehose"
+
+[dependencies.rusoto_iam]
+optional = true
+path = "../rusoto/services/iam"
+
+[dependencies.rusoto_importexport]
+optional = true
+path = "../rusoto/services/importexport"
+
+[dependencies.rusoto_inspector]
+optional = true
+path = "../rusoto/services/inspector"
+
+[dependencies.rusoto_iot]
+optional = true
+path = "../rusoto/services/iot"
+
+[dependencies.rusoto_kinesis]
+optional = true
+path = "../rusoto/services/kinesis"
+
+[dependencies.rusoto_kms]
+optional = true
+path = "../rusoto/services/kms"
+
+[dependencies.rusoto_lambda]
+optional = true
+path = "../rusoto/services/lambda"
+
+[dependencies.rusoto_logs]
+optional = true
+path = "../rusoto/services/logs"
+
+[dependencies.rusoto_machinelearning]
+optional = true
+path = "../rusoto/services/machinelearning"
+
+[dependencies.rusoto_marketplacecommerceanalytics]
+optional = true
+path = "../rusoto/services/marketplacecommerceanalytics"
+
+[dependencies.rusoto_opsworks]
+optional = true
+path = "../rusoto/services/opsworks"
+
+[dependencies.rusoto_redshift]
+optional = true
+path = "../rusoto/services/redshift"
+
+[dependencies.rusoto_rds]
+optional = true
+path = "../rusoto/services/rds"
+
+[dependencies.rusoto_route53]
+optional = true
+path = "../rusoto/services/route53"
+
+[dependencies.rusoto_route53domains]
+optional = true
+path = "../rusoto/services/route53domains"
+
+[dependencies.rusoto_s3]
+optional = true
+path = "../rusoto/services/s3"
+
+[dependencies.rusoto_sdb]
+optional = true
+path = "../rusoto/services/sdb"
+
+[dependencies.rusoto_ses]
+optional = true
+path = "../rusoto/services/ses"
+
+[dependencies.rusoto_sns]
+optional = true
+path = "../rusoto/services/sns"
+
+[dependencies.rusoto_sqs]
+optional = true
+path = "../rusoto/services/sqs"
+
+[dependencies.rusoto_ssm]
+optional = true
+path = "../rusoto/services/ssm"
+
+[dependencies.rusoto_storagegateway]
+optional = true
+path = "../rusoto/services/storagegateway"
+
+[dependencies.rusoto_sts]
+optional = true
+path = "../rusoto/services/sts"
+
+[dependencies.rusoto_swf]
+optional = true
+path = "../rusoto/services/swf"
+
+[dependencies.rusoto_waf]
+optional = true
+path = "../rusoto/services/waf"
+
+[dependencies.rusoto_workspaces]
+optional = true
+path = "../rusoto/services/workspaces"
+
+[dev-dependencies]
+env_logger = "0.4.0"
+hyper = "0.10.0"
+log = "0.3.6"
+rand = "^0.3.14"
+time = "0.1.37"
+
+[features]
+all = [
+		"acm",
+	   	"autoscaling",
+	   	"cloudformation",
+	   	"cloudfront",
+	   	"cloudhsm",
+	   	"cloudsearch",
+	   	"cloudtrail",
+	   	"cloudwatch",
+	   	"codecommit",
+	   	"codedeploy",
+	   	"codepipeline",
+	   	"cognito-identity",
+	   	"config",
+	   	"datapipeline",
+	   	"devicefarm",
+	   	"directconnect",
+	   	"ds",
+	   	"dynamodb",
+	   	"dynamodbstreams",
+	   	"ec2",
+	   	"ecr",
+	   	"ecs",
+	   	"elasticache",
+	   	"elasticbeanstalk",
+	   	"elastictranscoder",
+	   	"elb",
+	   	"elbv2",
+	   	"emr",
+	   	"events",
+	   	"firehose",
+	   	"iam",
+	   	"importexport",
+	   	"inspector",
+	   	"iot",
+	   	"kinesis",
+	   	"kms",
+	   	"lambda",
+	   	"logs",
+	   	"machinelearning",
+	   	"marketplacecommerceanalytics",
+	   	"opsworks",
+	   	"redshift",
+	   	"rds",
+	   	"route53",
+	   	"route53domains",
+	   	"s3",
+	   	"sdb",
+	   	"ses",
+	   	"sns",
+	   	"sqs",
+	   	"ssm",
+	   	"storagegateway",
+        "sts",
+	   	"swf",
+	   	"waf",
+	   	"workspaces"
+	]
+acm = ["rusoto_acm"]
+autoscaling = ["rusoto_autoscaling"]
+cloudformation = ["rusoto_cloudformation"]
+cloudfront = ["rusoto_cloudfront"]
+cloudhsm = ["rusoto_cloudhsm"]
+cloudsearch = ["rusoto_cloudsearch"]
+cloudtrail = ["rusoto_cloudtrail"]
+cloudwatch = ["rusoto_cloudwatch"]
+codecommit = ["rusoto_codecommit"]
+codedeploy = ["rusoto_codedeploy"]
+codepipeline = ["rusoto_codepipeline"]
+cognito-identity = ["rusoto_cognito_identity"]
+config = ["rusoto_config"]
+datapipeline = ["rusoto_datapipeline"]
+devicefarm = ["rusoto_devicefarm"]
+directconnect = ["rusoto_directconnect"]
+ds = ["rusoto_ds"]
+dynamodb = ["rusoto_dynamodb"]
+dynamodbstreams = ["rusoto_dynamodbstreams"]
+ec2 = ["rusoto_ec2"]
+ecr = ["rusoto_ecr"]
+ecs = ["rusoto_ecs"]
+elasticache = ["rusoto_elasticache"]
+elasticbeanstalk = ["rusoto_elasticbeanstalk"]
+elastictranscoder = ["rusoto_elastictranscoder"]
+elb = ["rusoto_elb"]
+elbv2 = ["rusoto_elbv2"]
+emr = ["rusoto_emr"]
+events = ["rusoto_events"]
+firehose = ["rusoto_firehose"]
+iam = ["rusoto_iam"]
+importexport = ["rusoto_importexport"]
+inspector = ["rusoto_inspector"]
+iot = ["rusoto_iot"]
+kinesis = ["rusoto_kinesis"]
+kms = ["rusoto_kms"]
+lambda = ["rusoto_lambda"]
+logs = ["rusoto_logs"]
+machinelearning = ["rusoto_machinelearning"]
+marketplacecommerceanalytics = ["rusoto_marketplacecommerceanalytics"]
+opsworks = ["rusoto_opsworks"]
+redshift = ["rusoto_redshift"]
+rds = ["rusoto_rds"]
+route53 = ["rusoto_route53"]
+route53domains = ["rusoto_route53domains"]
+s3 = ["rusoto_s3"]
+sdb = ["rusoto_sdb"]
+ses = ["rusoto_ses"]
+sns = ["rusoto_sns"]
+sqs = ["rusoto_sqs"]
+ssm = ["rusoto_ssm"]
+storagegateway = ["rusoto_storagegateway"]
+sts = ["rusoto_sts"]
+swf = ["rusoto_swf"]
+waf = ["rusoto_waf"]
+workspaces = ["rusoto_workspaces"]
+nightly-testing = ["rusoto_core/nightly-testing"]
