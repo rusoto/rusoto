@@ -28,9 +28,6 @@ build_script:
   - cd service_crategen
   - cargo run -- -c ./services.json -o ../rusoto/services
   - cd ..
-  - cd rusoto
-  - cargo build --all -v
-  - cd ..
 test_script:
   - cd rusoto
   - cargo test --all --lib -v
