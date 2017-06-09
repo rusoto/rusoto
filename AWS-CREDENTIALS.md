@@ -16,6 +16,47 @@ If not specified, the profile "default" is used.
 
 It's also possible to implement your own credentials sourcing mechanism by creating a type that implements `rusoto::ProvideAwsCredentials`.
 
+#### sts:AssumeRole
+
+If your aws account belongs to an organization and you need to use sts:AssumeRole, you're probably looking for `rusoto_sts::StsAssumeRoleSessionCredentialsProvider`. A simple program that uses sts:AssumeRole looks like this:
+
+```rust
+extern crate env_logger;
+extern crate rusoto_core;
+extern crate rusoto_ec2;
+extern crate rusoto_sts;
+
+use std::default::Default;
+
+use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_core::default_tls_client;
+
+use rusoto_ec2::{Ec2Client, Ec2};
+use rusoto_sts::{StsClient, StsAssumeRoleSessionCredentialsProvider};
+
+fn main() {
+    env_logger::init().unwrap();
+
+    let credentials = DefaultCredentialsProvider::new().unwrap();
+    let sts = StsClient::new(default_tls_client().unwrap(), credentials, Region::EuWest1);
+
+    let provider = StsAssumeRoleSessionCredentialsProvider::new(
+        sts,
+        "arn:aws:iam::something:role/something".to_owned(),
+        "default".to_owned(),
+        None, None, None, None
+    );
+
+    let client = Ec2Client::new(default_tls_client().unwrap(), provider, Region::UsEast1);
+
+    let sir_input = Default::default();
+    println!("[*] requesting...");
+    let x = client.describe_spot_instance_requests(&sir_input);
+
+    println!("{:?}", x);
+}
+```
+
 #### Credential refreshing
 
 Credentials obtained from environment variables and credential files expire ten minutes after being acquired and are refreshed on subsequent calls to `credentials()` (a method from the `ProvideAwsCredentials` trait).
