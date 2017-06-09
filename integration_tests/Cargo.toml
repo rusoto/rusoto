@@ -179,6 +179,10 @@ path = "../rusoto/services/marketplacecommerceanalytics"
 optional = true
 path = "../rusoto/services/opsworks"
 
+[dependencies.rusoto_organizations]
+optional = true
+path = "../rusoto/services/organizations"
+
 [dependencies.rusoto_redshift]
 optional = true
 path = "../rusoto/services/redshift"
@@ -289,6 +293,7 @@ all = [
 	   	"machinelearning",
 	   	"marketplacecommerceanalytics",
 	   	"opsworks",
+      "organizations",
 	   	"redshift",
 	   	"rds",
 	   	"route53",
@@ -346,6 +351,7 @@ logs = ["rusoto_logs"]
 machinelearning = ["rusoto_machinelearning"]
 marketplacecommerceanalytics = ["rusoto_marketplacecommerceanalytics"]
 opsworks = ["rusoto_opsworks"]
+organizations = ["rusoto_organizations"]
 redshift = ["rusoto_redshift"]
 rds = ["rusoto_rds"]
 route53 = ["rusoto_route53"]
