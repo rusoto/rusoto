@@ -16,7 +16,6 @@ homepage = "https://www.rusoto.org/"
 
 [dependencies]
 chrono = "0.2.21"
-hyper = "0.10.0"
 
 [dependencies.clippy]
 optional = true

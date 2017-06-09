@@ -100,8 +100,6 @@ fn generate<P, E>(writer: &mut FileWriter, service: &Service, protocol_generator
           E: GenerateErrorTypes {
 
     writeln!(writer, "#[allow(warnings)]
-        use hyper::Client;
-        use hyper::status::StatusCode;
         use rusoto_core::request::DispatchSignedRequest;
         use rusoto_core::region;
 

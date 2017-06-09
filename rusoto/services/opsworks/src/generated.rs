@@ -1,6 +1,4 @@
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
 
@@ -8255,12 +8253,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(AssignInstanceError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(AssignInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8278,11 +8274,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(AssignVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(AssignVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8302,12 +8297,11 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(AssociateElasticIpError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(AssociateElasticIpError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -8328,9 +8322,11 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(AttachElasticLoadBalancerError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(AttachElasticLoadBalancerError::from_body(String::from_utf8_lossy(&response.body)
+                                                              .as_ref()))
         }
     }
 
@@ -8348,11 +8344,12 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CloneStackResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CloneStackError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CloneStackResult>(String::from_utf8_lossy(&response.body)
+                                                            .as_ref())
+                       .unwrap())
+        } else {
+            Err(CloneStackError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8370,13 +8367,12 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<CreateAppResult>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
-            }
-            _ => Err(CreateAppError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateAppResult>(String::from_utf8_lossy(&response.body)
+                                                           .as_ref())
+                       .unwrap())
+        } else {
+            Err(CreateAppError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8396,14 +8392,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateDeploymentResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CreateDeploymentError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateDeploymentResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateDeploymentError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8423,14 +8415,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateInstanceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CreateInstanceError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateInstanceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8450,11 +8438,12 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateLayerResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateLayerError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateLayerResult>(String::from_utf8_lossy(&response.body)
+                                                             .as_ref())
+                       .unwrap())
+        } else {
+            Err(CreateLayerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8474,11 +8463,12 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateStackResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateStackError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateStackResult>(String::from_utf8_lossy(&response.body)
+                                                             .as_ref())
+                       .unwrap())
+        } else {
+            Err(CreateStackError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8498,14 +8488,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateUserProfileResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CreateUserProfileError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateUserProfileResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateUserProfileError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8523,9 +8509,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(DeleteAppError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(DeleteAppError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8543,12 +8530,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(DeleteInstanceError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(DeleteInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8566,9 +8551,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(DeleteLayerError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(DeleteLayerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8586,9 +8572,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(DeleteStackError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(DeleteStackError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8608,12 +8595,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(DeleteUserProfileError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(DeleteUserProfileError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8633,12 +8618,11 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(DeregisterEcsClusterError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(DeregisterEcsClusterError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -8658,12 +8642,11 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(DeregisterElasticIpError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(DeregisterElasticIpError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -8683,12 +8666,11 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(DeregisterInstanceError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(DeregisterInstanceError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -8708,9 +8690,11 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(DeregisterRdsDbInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(DeregisterRdsDbInstanceError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -8730,12 +8714,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(DeregisterVolumeError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(DeregisterVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8756,14 +8738,11 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeAgentVersionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeAgentVersionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeAgentVersionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeAgentVersionsError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -8783,13 +8762,12 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeAppsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeAppsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeAppsResult>(String::from_utf8_lossy(&response.body)
+                                                              .as_ref())
+                       .unwrap())
+        } else {
+            Err(DescribeAppsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8809,14 +8787,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeCommandsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeCommandsError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeCommandsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeCommandsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8836,14 +8810,11 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeDeploymentsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeDeploymentsError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeDeploymentsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeDeploymentsError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -8863,14 +8834,11 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeEcsClustersResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeEcsClustersError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeEcsClustersResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeEcsClustersError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -8890,14 +8858,11 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeElasticIpsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeElasticIpsError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeElasticIpsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeElasticIpsError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -8919,11 +8884,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeElasticLoadBalancersResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeElasticLoadBalancersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeElasticLoadBalancersResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeElasticLoadBalancersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8943,14 +8907,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeInstancesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeInstancesError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeInstancesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8970,14 +8930,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeLayersResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeLayersError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeLayersResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeLayersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8999,11 +8955,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeLoadBasedAutoScalingResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeLoadBasedAutoScalingError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeLoadBasedAutoScalingResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeLoadBasedAutoScalingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -9021,14 +8976,11 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeMyUserProfileResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeMyUserProfileError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeMyUserProfileResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeMyUserProfileError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -9048,14 +9000,11 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribePermissionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribePermissionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribePermissionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribePermissionsError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -9075,14 +9024,11 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeRaidArraysResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeRaidArraysError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeRaidArraysResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeRaidArraysError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -9103,14 +9049,11 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeRdsDbInstancesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeRdsDbInstancesError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeRdsDbInstancesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeRdsDbInstancesError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
         }
     }
 
@@ -9131,14 +9074,11 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeServiceErrorsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeServiceErrorsError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeServiceErrorsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeServiceErrorsError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -9161,11 +9101,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeStackProvisioningParametersResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeStackProvisioningParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeStackProvisioningParametersResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeStackProvisioningParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -9185,14 +9124,11 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeStackSummaryResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeStackSummaryError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeStackSummaryResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeStackSummaryError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -9212,14 +9148,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeStacksResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeStacksError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeStacksResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeStacksError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -9241,11 +9173,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeTimeBasedAutoScalingResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeTimeBasedAutoScalingError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeTimeBasedAutoScalingResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeTimeBasedAutoScalingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -9265,14 +9196,11 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeUserProfilesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeUserProfilesError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeUserProfilesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeUserProfilesError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -9292,14 +9220,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeVolumesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeVolumesError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeVolumesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeVolumesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -9320,9 +9244,11 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(DetachElasticLoadBalancerError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(DetachElasticLoadBalancerError::from_body(String::from_utf8_lossy(&response.body)
+                                                              .as_ref()))
         }
     }
 
@@ -9342,12 +9268,11 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(DisassociateElasticIpError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(DisassociateElasticIpError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -9368,14 +9293,11 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetHostnameSuggestionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetHostnameSuggestionError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetHostnameSuggestionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetHostnameSuggestionError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -9395,11 +9317,12 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GrantAccessResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GrantAccessError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GrantAccessResult>(String::from_utf8_lossy(&response.body)
+                                                             .as_ref())
+                       .unwrap())
+        } else {
+            Err(GrantAccessError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -9417,12 +9340,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(RebootInstanceError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(RebootInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -9442,14 +9363,11 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RegisterEcsClusterResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(RegisterEcsClusterError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<RegisterEcsClusterResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(RegisterEcsClusterError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -9469,14 +9387,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RegisterElasticIpResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(RegisterElasticIpError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<RegisterElasticIpResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(RegisterElasticIpError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -9496,14 +9410,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RegisterInstanceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(RegisterInstanceError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<RegisterInstanceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(RegisterInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -9523,12 +9433,11 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(RegisterRdsDbInstanceError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(RegisterRdsDbInstanceError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -9548,14 +9457,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RegisterVolumeResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(RegisterVolumeError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<RegisterVolumeResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(RegisterVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -9575,9 +9480,11 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(SetLoadBasedAutoScalingError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(SetLoadBasedAutoScalingError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -9595,11 +9502,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(SetPermissionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(SetPermissionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -9619,9 +9525,11 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(SetTimeBasedAutoScalingError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(SetTimeBasedAutoScalingError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -9639,11 +9547,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(StartInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(StartInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -9661,9 +9568,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(StartStackError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(StartStackError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -9681,11 +9589,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(StopInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(StopInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -9703,9 +9610,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(StopStackError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(StopStackError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -9725,12 +9633,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(UnassignInstanceError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(UnassignInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -9748,12 +9654,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(UnassignVolumeError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(UnassignVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -9771,9 +9675,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(UpdateAppError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(UpdateAppError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -9793,12 +9698,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(UpdateElasticIpError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(UpdateElasticIpError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -9816,12 +9719,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(UpdateInstanceError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(UpdateInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -9839,9 +9740,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(UpdateLayerError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(UpdateLayerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -9861,12 +9763,11 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(UpdateMyUserProfileError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(UpdateMyUserProfileError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -9886,12 +9787,11 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(UpdateRdsDbInstanceError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(UpdateRdsDbInstanceError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -9909,9 +9809,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(UpdateStackError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(UpdateStackError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -9931,12 +9832,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(UpdateUserProfileError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(UpdateUserProfileError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -9954,11 +9853,10 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(UpdateVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(UpdateVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 }

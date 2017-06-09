@@ -1,6 +1,4 @@
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
 
@@ -2317,12 +2315,10 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(AddTagsToStreamError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(AddTagsToStreamError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2340,11 +2336,10 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(CreateStreamError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(CreateStreamError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2365,9 +2360,10 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(DecreaseStreamRetentionPeriodError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(DecreaseStreamRetentionPeriodError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2385,11 +2381,10 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(DeleteStreamError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(DeleteStreamError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2409,14 +2404,10 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeLimitsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeLimitsError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeLimitsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeLimitsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2436,14 +2427,10 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeStreamOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeStreamError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeStreamOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeStreamError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2464,11 +2451,11 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<EnhancedMonitoringOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DisableEnhancedMonitoringError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<EnhancedMonitoringOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DisableEnhancedMonitoringError::from_body(String::from_utf8_lossy(&response.body)
+                                                              .as_ref()))
         }
     }
 
@@ -2489,11 +2476,11 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<EnhancedMonitoringOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(EnableEnhancedMonitoringError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<EnhancedMonitoringOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(EnableEnhancedMonitoringError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -2511,11 +2498,12 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetRecordsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetRecordsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetRecordsOutput>(String::from_utf8_lossy(&response.body)
+                                                            .as_ref())
+                       .unwrap())
+        } else {
+            Err(GetRecordsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2535,14 +2523,10 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetShardIteratorOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetShardIteratorError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetShardIteratorOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetShardIteratorError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2563,9 +2547,10 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(IncreaseStreamRetentionPeriodError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(IncreaseStreamRetentionPeriodError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2585,11 +2570,12 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListStreamsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListStreamsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListStreamsOutput>(String::from_utf8_lossy(&response.body)
+                                                             .as_ref())
+                       .unwrap())
+        } else {
+            Err(ListStreamsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2609,14 +2595,10 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListTagsForStreamOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListTagsForStreamError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListTagsForStreamOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListTagsForStreamError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2634,9 +2616,10 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(MergeShardsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(MergeShardsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2654,13 +2637,12 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<PutRecordOutput>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
-            }
-            _ => Err(PutRecordError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<PutRecordOutput>(String::from_utf8_lossy(&response.body)
+                                                           .as_ref())
+                       .unwrap())
+        } else {
+            Err(PutRecordError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2678,11 +2660,12 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutRecordsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(PutRecordsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<PutRecordsOutput>(String::from_utf8_lossy(&response.body)
+                                                            .as_ref())
+                       .unwrap())
+        } else {
+            Err(PutRecordsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2702,12 +2685,11 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(RemoveTagsFromStreamError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(RemoveTagsFromStreamError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -2725,9 +2707,10 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(SplitShardError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(SplitShardError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2747,14 +2730,10 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateShardCountOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(UpdateShardCountError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateShardCountOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(UpdateShardCountError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 }

@@ -1,6 +1,4 @@
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
 
@@ -3555,12 +3553,10 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(CancelExportTaskError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(CancelExportTaskError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3580,14 +3576,10 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateExportTaskResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CreateExportTaskError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateExportTaskResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateExportTaskError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3605,12 +3597,10 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(CreateLogGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(CreateLogGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3630,12 +3620,10 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(CreateLogStreamError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(CreateLogStreamError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3655,12 +3643,10 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(DeleteDestinationError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(DeleteDestinationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3678,12 +3664,10 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(DeleteLogGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(DeleteLogGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3703,12 +3687,10 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(DeleteLogStreamError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(DeleteLogStreamError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3728,12 +3710,11 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(DeleteMetricFilterError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(DeleteMetricFilterError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -3753,12 +3734,11 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(DeleteRetentionPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(DeleteRetentionPolicyError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -3778,9 +3758,11 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(DeleteSubscriptionFilterError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(DeleteSubscriptionFilterError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -3800,14 +3782,11 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeDestinationsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeDestinationsError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeDestinationsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeDestinationsError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -3827,14 +3806,11 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeExportTasksResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeExportTasksError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeExportTasksResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeExportTasksError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -3854,14 +3830,10 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeLogGroupsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeLogGroupsError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeLogGroupsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeLogGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3881,14 +3853,11 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeLogStreamsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeLogStreamsError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeLogStreamsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeLogStreamsError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -3909,14 +3878,11 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeMetricFiltersResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeMetricFiltersError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeMetricFiltersResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeMetricFiltersError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -3937,11 +3903,10 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeSubscriptionFiltersResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeSubscriptionFiltersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeSubscriptionFiltersResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeSubscriptionFiltersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3961,14 +3926,10 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<FilterLogEventsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(FilterLogEventsError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<FilterLogEventsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(FilterLogEventsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3988,13 +3949,10 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetLogEventsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetLogEventsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetLogEventsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetLogEventsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4014,14 +3972,10 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListTagsLogGroupResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListTagsLogGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListTagsLogGroupResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListTagsLogGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4041,14 +3995,10 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutDestinationResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(PutDestinationError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<PutDestinationResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(PutDestinationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4068,12 +4018,11 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(PutDestinationPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(PutDestinationPolicyError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -4093,13 +4042,10 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutLogEventsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(PutLogEventsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<PutLogEventsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(PutLogEventsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4119,12 +4065,10 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(PutMetricFilterError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(PutMetricFilterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4144,12 +4088,11 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(PutRetentionPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(PutRetentionPolicyError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -4169,12 +4112,11 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(PutSubscriptionFilterError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(PutSubscriptionFilterError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -4192,9 +4134,10 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(TagLogGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(TagLogGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4214,14 +4157,10 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<TestMetricFilterResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(TestMetricFilterError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<TestMetricFilterResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(TestMetricFilterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4239,11 +4178,10 @@ impl<P, D> CloudWatchLogs for CloudWatchLogsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(UntagLogGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(UntagLogGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 }

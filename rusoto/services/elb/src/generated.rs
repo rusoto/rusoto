@@ -1,6 +1,4 @@
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
 
@@ -7915,29 +7913,28 @@ impl<P, D> Elb for ElbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = AddTagsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(AddTagsOutputDeserializer::deserialize("AddTagsResult",
-                                                                         &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = AddTagsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(AddTagsOutputDeserializer::deserialize("AddTagsResult", &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => Err(AddTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(AddTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7957,30 +7954,28 @@ impl<P, D> Elb for ElbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ApplySecurityGroupsToLoadBalancerOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ApplySecurityGroupsToLoadBalancerOutputDeserializer::deserialize("ApplySecurityGroupsToLoadBalancerResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ApplySecurityGroupsToLoadBalancerOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ApplySecurityGroupsToLoadBalancerOutputDeserializer::deserialize("ApplySecurityGroupsToLoadBalancerResult", &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(ApplySecurityGroupsToLoadBalancerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(ApplySecurityGroupsToLoadBalancerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8000,30 +7995,30 @@ impl<P, D> Elb for ElbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = AttachLoadBalancerToSubnetsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(AttachLoadBalancerToSubnetsOutputDeserializer::deserialize("AttachLoadBalancerToSubnetsResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = AttachLoadBalancerToSubnetsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result =
+                    try!(AttachLoadBalancerToSubnetsOutputDeserializer::deserialize("AttachLoadBalancerToSubnetsResult",
+                                                                                    &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(AttachLoadBalancerToSubnetsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(AttachLoadBalancerToSubnetsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8042,32 +8037,30 @@ impl<P, D> Elb for ElbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ConfigureHealthCheckOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ConfigureHealthCheckOutputDeserializer::deserialize("ConfigureHealthCheckResult",
-                                                                                      &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ConfigureHealthCheckOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ConfigureHealthCheckOutputDeserializer::deserialize("ConfigureHealthCheckResult",
+                                                                                  &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(ConfigureHealthCheckError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(ConfigureHealthCheckError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -8087,30 +8080,28 @@ impl<P, D> Elb for ElbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = CreateAppCookieStickinessPolicyOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateAppCookieStickinessPolicyOutputDeserializer::deserialize("CreateAppCookieStickinessPolicyResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = CreateAppCookieStickinessPolicyOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(CreateAppCookieStickinessPolicyOutputDeserializer::deserialize("CreateAppCookieStickinessPolicyResult", &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(CreateAppCookieStickinessPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(CreateAppCookieStickinessPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8130,30 +8121,30 @@ impl<P, D> Elb for ElbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = CreateLBCookieStickinessPolicyOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateLBCookieStickinessPolicyOutputDeserializer::deserialize("CreateLBCookieStickinessPolicyResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = CreateLBCookieStickinessPolicyOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result =
+                    try!(CreateLBCookieStickinessPolicyOutputDeserializer::deserialize("CreateLBCookieStickinessPolicyResult",
+                                                                                       &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(CreateLBCookieStickinessPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(CreateLBCookieStickinessPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8172,32 +8163,30 @@ impl<P, D> Elb for ElbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = CreateAccessPointOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateAccessPointOutputDeserializer::deserialize("CreateLoadBalancerResult",
-                                                                                   &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = CreateAccessPointOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(CreateAccessPointOutputDeserializer::deserialize("CreateLoadBalancerResult",
+                                                                               &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(CreateLoadBalancerError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(CreateLoadBalancerError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -8217,32 +8206,30 @@ impl<P, D> Elb for ElbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = CreateLoadBalancerListenerOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(CreateLoadBalancerListenerOutputDeserializer::deserialize("CreateLoadBalancerListenersResult",
-                                                                                       &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = CreateLoadBalancerListenerOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result =
+                    try!(CreateLoadBalancerListenerOutputDeserializer::deserialize("CreateLoadBalancerListenersResult",
+                                                                                   &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(CreateLoadBalancerListenersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(CreateLoadBalancerListenersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8262,32 +8249,30 @@ impl<P, D> Elb for ElbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = CreateLoadBalancerPolicyOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(CreateLoadBalancerPolicyOutputDeserializer::deserialize("CreateLoadBalancerPolicyResult",
-                                                                                     &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = CreateLoadBalancerPolicyOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(CreateLoadBalancerPolicyOutputDeserializer::deserialize("CreateLoadBalancerPolicyResult",
+                                                                                      &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(CreateLoadBalancerPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(CreateLoadBalancerPolicyError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -8306,32 +8291,30 @@ impl<P, D> Elb for ElbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = DeleteAccessPointOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DeleteAccessPointOutputDeserializer::deserialize("DeleteLoadBalancerResult",
-                                                                                   &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = DeleteAccessPointOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(DeleteAccessPointOutputDeserializer::deserialize("DeleteLoadBalancerResult",
+                                                                               &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(DeleteLoadBalancerError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(DeleteLoadBalancerError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -8351,32 +8334,30 @@ impl<P, D> Elb for ElbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = DeleteLoadBalancerListenerOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(DeleteLoadBalancerListenerOutputDeserializer::deserialize("DeleteLoadBalancerListenersResult",
-                                                                                       &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = DeleteLoadBalancerListenerOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result =
+                    try!(DeleteLoadBalancerListenerOutputDeserializer::deserialize("DeleteLoadBalancerListenersResult",
+                                                                                   &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(DeleteLoadBalancerListenersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(DeleteLoadBalancerListenersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8396,32 +8377,30 @@ impl<P, D> Elb for ElbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = DeleteLoadBalancerPolicyOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(DeleteLoadBalancerPolicyOutputDeserializer::deserialize("DeleteLoadBalancerPolicyResult",
-                                                                                     &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = DeleteLoadBalancerPolicyOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(DeleteLoadBalancerPolicyOutputDeserializer::deserialize("DeleteLoadBalancerPolicyResult",
+                                                                                      &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(DeleteLoadBalancerPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(DeleteLoadBalancerPolicyError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -8441,31 +8420,29 @@ impl<P, D> Elb for ElbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = DeregisterEndPointsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DeregisterEndPointsOutputDeserializer::deserialize("DeregisterInstancesFromLoadBalancerResult",
-                                                                                     &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = DeregisterEndPointsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(DeregisterEndPointsOutputDeserializer::deserialize("DeregisterInstancesFromLoadBalancerResult",
+                                                                                 &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(DeregisterInstancesFromLoadBalancerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(DeregisterInstancesFromLoadBalancerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8485,32 +8462,30 @@ impl<P, D> Elb for ElbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = DescribeAccountLimitsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeAccountLimitsOutputDeserializer::deserialize("DescribeAccountLimitsResult",
-                                                                                       &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = DescribeAccountLimitsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(DescribeAccountLimitsOutputDeserializer::deserialize("DescribeAccountLimitsResult",
+                                                                                   &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(DescribeAccountLimitsError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(DescribeAccountLimitsError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -8530,32 +8505,30 @@ impl<P, D> Elb for ElbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = DescribeEndPointStateOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeEndPointStateOutputDeserializer::deserialize("DescribeInstanceHealthResult",
-                                                                                       &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = DescribeEndPointStateOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(DescribeEndPointStateOutputDeserializer::deserialize("DescribeInstanceHealthResult",
+                                                                                   &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(DescribeInstanceHealthError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(DescribeInstanceHealthError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
         }
     }
 
@@ -8575,30 +8548,30 @@ impl<P, D> Elb for ElbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = DescribeLoadBalancerAttributesOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeLoadBalancerAttributesOutputDeserializer::deserialize("DescribeLoadBalancerAttributesResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = DescribeLoadBalancerAttributesOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result =
+                    try!(DescribeLoadBalancerAttributesOutputDeserializer::deserialize("DescribeLoadBalancerAttributesResult",
+                                                                                       &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(DescribeLoadBalancerAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(DescribeLoadBalancerAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8618,30 +8591,30 @@ impl<P, D> Elb for ElbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = DescribeLoadBalancerPoliciesOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeLoadBalancerPoliciesOutputDeserializer::deserialize("DescribeLoadBalancerPoliciesResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = DescribeLoadBalancerPoliciesOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result =
+                    try!(DescribeLoadBalancerPoliciesOutputDeserializer::deserialize("DescribeLoadBalancerPoliciesResult",
+                                                                                     &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(DescribeLoadBalancerPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(DescribeLoadBalancerPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8661,30 +8634,28 @@ impl<P, D> Elb for ElbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = DescribeLoadBalancerPolicyTypesOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeLoadBalancerPolicyTypesOutputDeserializer::deserialize("DescribeLoadBalancerPolicyTypesResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = DescribeLoadBalancerPolicyTypesOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(DescribeLoadBalancerPolicyTypesOutputDeserializer::deserialize("DescribeLoadBalancerPolicyTypesResult", &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(DescribeLoadBalancerPolicyTypesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(DescribeLoadBalancerPolicyTypesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8704,32 +8675,30 @@ impl<P, D> Elb for ElbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = DescribeAccessPointsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeAccessPointsOutputDeserializer::deserialize("DescribeLoadBalancersResult",
-                                                                                      &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = DescribeAccessPointsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(DescribeAccessPointsOutputDeserializer::deserialize("DescribeLoadBalancersResult",
+                                                                                  &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(DescribeLoadBalancersError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(DescribeLoadBalancersError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -8748,31 +8717,29 @@ impl<P, D> Elb for ElbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = DescribeTagsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeTagsOutputDeserializer::deserialize("DescribeTagsResult",
-                                                                              &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = DescribeTagsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(DescribeTagsOutputDeserializer::deserialize("DescribeTagsResult",
+                                                                          &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(DescribeTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(DescribeTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8792,30 +8759,30 @@ impl<P, D> Elb for ElbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = DetachLoadBalancerFromSubnetsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DetachLoadBalancerFromSubnetsOutputDeserializer::deserialize("DetachLoadBalancerFromSubnetsResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = DetachLoadBalancerFromSubnetsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result =
+                    try!(DetachLoadBalancerFromSubnetsOutputDeserializer::deserialize("DetachLoadBalancerFromSubnetsResult",
+                                                                                      &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(DetachLoadBalancerFromSubnetsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(DetachLoadBalancerFromSubnetsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8835,32 +8802,29 @@ impl<P, D> Elb for ElbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = RemoveAvailabilityZonesOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(RemoveAvailabilityZonesOutputDeserializer::deserialize("DisableAvailabilityZonesForLoadBalancerResult",
-                                                                                    &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = RemoveAvailabilityZonesOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(RemoveAvailabilityZonesOutputDeserializer::deserialize("DisableAvailabilityZonesForLoadBalancerResult",
+                                                                                     &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(DisableAvailabilityZonesForLoadBalancerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(DisableAvailabilityZonesForLoadBalancerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8880,31 +8844,29 @@ impl<P, D> Elb for ElbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = AddAvailabilityZonesOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(AddAvailabilityZonesOutputDeserializer::deserialize("EnableAvailabilityZonesForLoadBalancerResult",
-                                                                                      &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = AddAvailabilityZonesOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(AddAvailabilityZonesOutputDeserializer::deserialize("EnableAvailabilityZonesForLoadBalancerResult",
+                                                                                  &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(EnableAvailabilityZonesForLoadBalancerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(EnableAvailabilityZonesForLoadBalancerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8924,30 +8886,30 @@ impl<P, D> Elb for ElbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ModifyLoadBalancerAttributesOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ModifyLoadBalancerAttributesOutputDeserializer::deserialize("ModifyLoadBalancerAttributesResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ModifyLoadBalancerAttributesOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result =
+                    try!(ModifyLoadBalancerAttributesOutputDeserializer::deserialize("ModifyLoadBalancerAttributesResult",
+                                                                                     &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(ModifyLoadBalancerAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(ModifyLoadBalancerAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8967,31 +8929,29 @@ impl<P, D> Elb for ElbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = RegisterEndPointsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(RegisterEndPointsOutputDeserializer::deserialize("RegisterInstancesWithLoadBalancerResult",
-                                                                                   &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = RegisterEndPointsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(RegisterEndPointsOutputDeserializer::deserialize("RegisterInstancesWithLoadBalancerResult",
+                                                                               &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(RegisterInstancesWithLoadBalancerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(RegisterInstancesWithLoadBalancerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -9008,29 +8968,29 @@ impl<P, D> Elb for ElbClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = RemoveTagsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(RemoveTagsOutputDeserializer::deserialize("RemoveTagsResult",
-                                                                            &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = RemoveTagsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(RemoveTagsOutputDeserializer::deserialize("RemoveTagsResult",
+                                                                        &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => Err(RemoveTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(RemoveTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -9047,30 +9007,28 @@ fn set_load_balancer_listener_ssl_certificate(&self, input: &SetLoadBalancerList
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = SetLoadBalancerListenerSSLCertificateOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(SetLoadBalancerListenerSSLCertificateOutputDeserializer::deserialize("SetLoadBalancerListenerSSLCertificateResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = SetLoadBalancerListenerSSLCertificateOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(SetLoadBalancerListenerSSLCertificateOutputDeserializer::deserialize("SetLoadBalancerListenerSSLCertificateResult", &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(SetLoadBalancerListenerSSLCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(SetLoadBalancerListenerSSLCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -9087,30 +9045,28 @@ fn set_load_balancer_policies_for_backend_server(&self, input: &SetLoadBalancerP
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = SetLoadBalancerPoliciesForBackendServerOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(SetLoadBalancerPoliciesForBackendServerOutputDeserializer::deserialize("SetLoadBalancerPoliciesForBackendServerResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = SetLoadBalancerPoliciesForBackendServerOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(SetLoadBalancerPoliciesForBackendServerOutputDeserializer::deserialize("SetLoadBalancerPoliciesForBackendServerResult", &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(SetLoadBalancerPoliciesForBackendServerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(SetLoadBalancerPoliciesForBackendServerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -9130,30 +9086,28 @@ fn set_load_balancer_policies_for_backend_server(&self, input: &SetLoadBalancerP
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = SetLoadBalancerPoliciesOfListenerOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(SetLoadBalancerPoliciesOfListenerOutputDeserializer::deserialize("SetLoadBalancerPoliciesOfListenerResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = SetLoadBalancerPoliciesOfListenerOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(SetLoadBalancerPoliciesOfListenerOutputDeserializer::deserialize("SetLoadBalancerPoliciesOfListenerResult", &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(SetLoadBalancerPoliciesOfListenerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(SetLoadBalancerPoliciesOfListenerError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 }

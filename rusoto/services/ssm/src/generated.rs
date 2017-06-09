@@ -1,6 +1,4 @@
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
 
@@ -11250,14 +11248,10 @@ impl<P, D> Ssm for SsmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddTagsToResourceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(AddTagsToResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<AddTagsToResourceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(AddTagsToResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -11277,13 +11271,12 @@ impl<P, D> Ssm for SsmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CancelCommandResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CancelCommandError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CancelCommandResult>(String::from_utf8_lossy(&response.body)
+                                                               .as_ref())
+                       .unwrap())
+        } else {
+            Err(CancelCommandError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -11303,14 +11296,10 @@ impl<P, D> Ssm for SsmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateActivationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CreateActivationError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateActivationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateActivationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -11330,14 +11319,10 @@ impl<P, D> Ssm for SsmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateAssociationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CreateAssociationError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateAssociationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateAssociationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -11358,14 +11343,11 @@ impl<P, D> Ssm for SsmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateAssociationBatchResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CreateAssociationBatchError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateAssociationBatchResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateAssociationBatchError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
         }
     }
 
@@ -11385,14 +11367,10 @@ impl<P, D> Ssm for SsmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateDocumentResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CreateDocumentError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateDocumentResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateDocumentError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -11413,11 +11391,11 @@ impl<P, D> Ssm for SsmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -11437,14 +11415,11 @@ impl<P, D> Ssm for SsmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreatePatchBaselineResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CreatePatchBaselineError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreatePatchBaselineResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreatePatchBaselineError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -11464,14 +11439,10 @@ impl<P, D> Ssm for SsmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteActivationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DeleteActivationError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteActivationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DeleteActivationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -11491,14 +11462,10 @@ impl<P, D> Ssm for SsmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteAssociationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DeleteAssociationError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteAssociationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DeleteAssociationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -11518,14 +11485,10 @@ impl<P, D> Ssm for SsmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteDocumentResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DeleteDocumentError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteDocumentResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DeleteDocumentError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -11546,11 +11509,11 @@ impl<P, D> Ssm for SsmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DeleteMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -11570,14 +11533,10 @@ impl<P, D> Ssm for SsmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteParameterResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DeleteParameterError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteParameterResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DeleteParameterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -11597,14 +11556,11 @@ impl<P, D> Ssm for SsmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeletePatchBaselineResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DeletePatchBaselineError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeletePatchBaselineResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DeletePatchBaselineError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -11625,11 +11581,11 @@ impl<P, D> Ssm for SsmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeregisterManagedInstanceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeregisterManagedInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeregisterManagedInstanceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DeregisterManagedInstanceError::from_body(String::from_utf8_lossy(&response.body)
+                                                              .as_ref()))
         }
     }
 
@@ -11652,11 +11608,10 @@ impl<P, D> Ssm for SsmClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeregisterPatchBaselineForPatchGroupResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeregisterPatchBaselineForPatchGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeregisterPatchBaselineForPatchGroupResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DeregisterPatchBaselineForPatchGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -11675,11 +11630,10 @@ fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFrom
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeregisterTargetFromMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeregisterTargetFromMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeregisterTargetFromMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DeregisterTargetFromMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -11702,11 +11656,10 @@ fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFrom
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeregisterTaskFromMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeregisterTaskFromMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeregisterTaskFromMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DeregisterTaskFromMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -11726,14 +11679,11 @@ fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFrom
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeActivationsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeActivationsError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeActivationsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeActivationsError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -11753,14 +11703,11 @@ fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFrom
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeAssociationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeAssociationError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeAssociationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeAssociationError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -11781,11 +11728,10 @@ fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFrom
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeAutomationExecutionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeAutomationExecutionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeAutomationExecutionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeAutomationExecutionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -11806,11 +11752,11 @@ fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFrom
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeAvailablePatchesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeAvailablePatchesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeAvailablePatchesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeAvailablePatchesError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -11830,14 +11776,10 @@ fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFrom
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeDocumentResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeDocumentError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeDocumentResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeDocumentError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -11858,11 +11800,11 @@ fn deregister_target_from_maintenance_window(&self, input: &DeregisterTargetFrom
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeDocumentPermissionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeDocumentPermissionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeDocumentPermissionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeDocumentPermissionError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 
@@ -11881,11 +11823,10 @@ fn describe_effective_instance_associations(&self, input: &DescribeEffectiveInst
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeEffectiveInstanceAssociationsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeEffectiveInstanceAssociationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeEffectiveInstanceAssociationsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeEffectiveInstanceAssociationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -11904,11 +11845,10 @@ fn describe_effective_patches_for_patch_baseline(&self, input: &DescribeEffectiv
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeEffectivePatchesForPatchBaselineResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeEffectivePatchesForPatchBaselineError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeEffectivePatchesForPatchBaselineResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeEffectivePatchesForPatchBaselineError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -11931,11 +11871,10 @@ fn describe_effective_patches_for_patch_baseline(&self, input: &DescribeEffectiv
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeInstanceAssociationsStatusResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeInstanceAssociationsStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeInstanceAssociationsStatusResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeInstanceAssociationsStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -11956,11 +11895,10 @@ fn describe_effective_patches_for_patch_baseline(&self, input: &DescribeEffectiv
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeInstanceInformationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeInstanceInformationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeInstanceInformationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeInstanceInformationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -11981,11 +11919,10 @@ fn describe_effective_patches_for_patch_baseline(&self, input: &DescribeEffectiv
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeInstancePatchStatesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeInstancePatchStatesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeInstancePatchStatesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeInstancePatchStatesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12004,11 +11941,10 @@ fn describe_instance_patch_states_for_patch_group(&self, input: &DescribeInstanc
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeInstancePatchStatesForPatchGroupResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeInstancePatchStatesForPatchGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeInstancePatchStatesForPatchGroupResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeInstancePatchStatesForPatchGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12029,11 +11965,11 @@ fn describe_instance_patch_states_for_patch_group(&self, input: &DescribeInstanc
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeInstancePatchesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeInstancePatchesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeInstancePatchesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeInstancePatchesError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -12052,11 +11988,10 @@ fn describe_maintenance_window_execution_task_invocations(&self, input: &Describ
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeMaintenanceWindowExecutionTaskInvocationsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeMaintenanceWindowExecutionTaskInvocationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeMaintenanceWindowExecutionTaskInvocationsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeMaintenanceWindowExecutionTaskInvocationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12075,11 +12010,10 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeMaintenanceWindowExecutionTasksResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeMaintenanceWindowExecutionTasksError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeMaintenanceWindowExecutionTasksResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeMaintenanceWindowExecutionTasksError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12102,11 +12036,10 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeMaintenanceWindowExecutionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeMaintenanceWindowExecutionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeMaintenanceWindowExecutionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeMaintenanceWindowExecutionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12127,11 +12060,10 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeMaintenanceWindowTargetsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeMaintenanceWindowTargetsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeMaintenanceWindowTargetsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeMaintenanceWindowTargetsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12152,11 +12084,10 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeMaintenanceWindowTasksResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeMaintenanceWindowTasksError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeMaintenanceWindowTasksResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeMaintenanceWindowTasksError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12177,11 +12108,11 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeMaintenanceWindowsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeMaintenanceWindowsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeMaintenanceWindowsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeMaintenanceWindowsError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 
@@ -12201,14 +12132,11 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeParametersResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeParametersError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeParametersResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeParametersError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -12229,14 +12157,11 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribePatchBaselinesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribePatchBaselinesError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribePatchBaselinesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribePatchBaselinesError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
         }
     }
 
@@ -12257,11 +12182,11 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribePatchGroupStateResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribePatchGroupStateError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribePatchGroupStateResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribePatchGroupStateError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -12281,14 +12206,11 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribePatchGroupsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribePatchGroupsError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribePatchGroupsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribePatchGroupsError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -12309,14 +12231,11 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetAutomationExecutionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetAutomationExecutionError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetAutomationExecutionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetAutomationExecutionError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
         }
     }
 
@@ -12336,14 +12255,11 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetCommandInvocationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetCommandInvocationError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetCommandInvocationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetCommandInvocationError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -12364,11 +12280,11 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDefaultPatchBaselineResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetDefaultPatchBaselineError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetDefaultPatchBaselineResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetDefaultPatchBaselineError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -12387,11 +12303,10 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDeployablePatchSnapshotForInstanceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetDeployablePatchSnapshotForInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetDeployablePatchSnapshotForInstanceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetDeployablePatchSnapshotForInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12411,11 +12326,12 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDocumentResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetDocumentError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetDocumentResult>(String::from_utf8_lossy(&response.body)
+                                                             .as_ref())
+                       .unwrap())
+        } else {
+            Err(GetDocumentError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12435,13 +12351,12 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetInventoryResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetInventoryError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetInventoryResult>(String::from_utf8_lossy(&response.body)
+                                                              .as_ref())
+                       .unwrap())
+        } else {
+            Err(GetInventoryError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12461,14 +12376,11 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetInventorySchemaResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetInventorySchemaError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetInventorySchemaResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetInventorySchemaError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -12488,14 +12400,11 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -12516,11 +12425,10 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetMaintenanceWindowExecutionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetMaintenanceWindowExecutionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetMaintenanceWindowExecutionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetMaintenanceWindowExecutionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12542,11 +12450,10 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetMaintenanceWindowExecutionTaskResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetMaintenanceWindowExecutionTaskError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetMaintenanceWindowExecutionTaskResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetMaintenanceWindowExecutionTaskError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12566,14 +12473,11 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetParameterHistoryResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetParameterHistoryError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetParameterHistoryResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetParameterHistoryError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -12593,13 +12497,12 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetParametersResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetParametersResult>(String::from_utf8_lossy(&response.body)
+                                                               .as_ref())
+                       .unwrap())
+        } else {
+            Err(GetParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12619,14 +12522,10 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetPatchBaselineResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetPatchBaselineError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetPatchBaselineResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetPatchBaselineError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12647,11 +12546,10 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetPatchBaselineForPatchGroupResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetPatchBaselineForPatchGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetPatchBaselineForPatchGroupResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetPatchBaselineForPatchGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12671,14 +12569,10 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListAssociationsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListAssociationsError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListAssociationsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListAssociationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12699,14 +12593,11 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListCommandInvocationsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListCommandInvocationsError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListCommandInvocationsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListCommandInvocationsError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
         }
     }
 
@@ -12726,13 +12617,12 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListCommandsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListCommandsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListCommandsResult>(String::from_utf8_lossy(&response.body)
+                                                              .as_ref())
+                       .unwrap())
+        } else {
+            Err(ListCommandsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12752,14 +12642,11 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListDocumentVersionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListDocumentVersionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListDocumentVersionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListDocumentVersionsError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -12779,13 +12666,12 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListDocumentsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListDocumentsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListDocumentsResult>(String::from_utf8_lossy(&response.body)
+                                                               .as_ref())
+                       .unwrap())
+        } else {
+            Err(ListDocumentsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12805,14 +12691,11 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListInventoryEntriesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListInventoryEntriesError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListInventoryEntriesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListInventoryEntriesError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -12832,14 +12715,11 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListTagsForResourceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListTagsForResourceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -12860,11 +12740,11 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ModifyDocumentPermissionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ModifyDocumentPermissionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ModifyDocumentPermissionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ModifyDocumentPermissionError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -12884,13 +12764,12 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutInventoryResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(PutInventoryError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<PutInventoryResult>(String::from_utf8_lossy(&response.body)
+                                                              .as_ref())
+                       .unwrap())
+        } else {
+            Err(PutInventoryError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12910,13 +12789,12 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutParameterResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(PutParameterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<PutParameterResult>(String::from_utf8_lossy(&response.body)
+                                                              .as_ref())
+                       .unwrap())
+        } else {
+            Err(PutParameterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12937,11 +12815,10 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RegisterDefaultPatchBaselineResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(RegisterDefaultPatchBaselineError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<RegisterDefaultPatchBaselineResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(RegisterDefaultPatchBaselineError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12964,11 +12841,10 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RegisterPatchBaselineForPatchGroupResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(RegisterPatchBaselineForPatchGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<RegisterPatchBaselineForPatchGroupResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(RegisterPatchBaselineForPatchGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -12991,11 +12867,10 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RegisterTargetWithMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(RegisterTargetWithMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<RegisterTargetWithMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(RegisterTargetWithMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -13017,11 +12892,10 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RegisterTaskWithMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(RegisterTaskWithMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<RegisterTaskWithMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(RegisterTaskWithMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -13042,14 +12916,11 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RemoveTagsFromResourceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(RemoveTagsFromResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<RemoveTagsFromResourceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(RemoveTagsFromResourceError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
         }
     }
 
@@ -13069,11 +12940,12 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<SendCommandResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(SendCommandError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<SendCommandResult>(String::from_utf8_lossy(&response.body)
+                                                             .as_ref())
+                       .unwrap())
+        } else {
+            Err(SendCommandError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -13094,11 +12966,11 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StartAutomationExecutionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(StartAutomationExecutionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<StartAutomationExecutionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(StartAutomationExecutionError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -13119,11 +12991,11 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StopAutomationExecutionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(StopAutomationExecutionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<StopAutomationExecutionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(StopAutomationExecutionError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -13143,14 +13015,10 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateAssociationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(UpdateAssociationError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateAssociationResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(UpdateAssociationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -13171,11 +13039,11 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateAssociationStatusResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateAssociationStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateAssociationStatusResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(UpdateAssociationStatusError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -13195,14 +13063,10 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateDocumentResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(UpdateDocumentError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateDocumentResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(UpdateDocumentError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -13223,11 +13087,10 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateDocumentDefaultVersionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateDocumentDefaultVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateDocumentDefaultVersionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(UpdateDocumentDefaultVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -13248,11 +13111,11 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateMaintenanceWindowResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(UpdateMaintenanceWindowError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -13273,11 +13136,11 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateManagedInstanceRoleResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateManagedInstanceRoleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateManagedInstanceRoleResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(UpdateManagedInstanceRoleError::from_body(String::from_utf8_lossy(&response.body)
+                                                              .as_ref()))
         }
     }
 
@@ -13297,14 +13160,11 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdatePatchBaselineResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(UpdatePatchBaselineError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdatePatchBaselineResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(UpdatePatchBaselineError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 }

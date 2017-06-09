@@ -1,6 +1,4 @@
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
 
@@ -17258,36 +17256,31 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = AbortMultipartUploadOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(AbortMultipartUploadOutputDeserializer::deserialize(&actual_tag_name,
-                                                                                 &mut stack));
-                }
-                if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                    let value = request_charged.to_owned();
-                    result.request_charged = Some(value)
-                };
-                Ok(result)
+            if response.body.is_empty() {
+                result = AbortMultipartUploadOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result =
+                    try!(AbortMultipartUploadOutputDeserializer::deserialize(&actual_tag_name,
+                                                                             &mut stack));
             }
-            _ => {
-                Err(AbortMultipartUploadError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+            if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+                let value = request_charged.to_owned();
+                result.request_charged = Some(value)
+            };
+            Ok(result)
+        } else {
+            Err(AbortMultipartUploadError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -17330,51 +17323,51 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = CompleteMultipartUploadOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(CompleteMultipartUploadOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-                if let Some(expiration) = response.headers.get("x-amz-expiration") {
-                    let value = expiration.to_owned();
-                    result.expiration = Some(value)
-                };
-                if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                    let value = request_charged.to_owned();
-                    result.request_charged = Some(value)
-                };
-                if let Some(ssekms_key_id) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-aws-kms-key-id") {
-                    let value = ssekms_key_id.to_owned();
-                    result.ssekms_key_id = Some(value)
-                };
-                if let Some(server_side_encryption) =
-                    response.headers.get("x-amz-server-side-encryption") {
-                    let value = server_side_encryption.to_owned();
-                    result.server_side_encryption = Some(value)
-                };
-                if let Some(version_id) = response.headers.get("x-amz-version-id") {
-                    let value = version_id.to_owned();
-                    result.version_id = Some(value)
-                };
-                Ok(result)
+            if response.body.is_empty() {
+                result = CompleteMultipartUploadOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result =
+                    try!(CompleteMultipartUploadOutputDeserializer::deserialize(&actual_tag_name,
+                                                                                &mut stack));
             }
-            _ => Err(CompleteMultipartUploadError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            if let Some(expiration) = response.headers.get("x-amz-expiration") {
+                let value = expiration.to_owned();
+                result.expiration = Some(value)
+            };
+            if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+                let value = request_charged.to_owned();
+                result.request_charged = Some(value)
+            };
+            if let Some(ssekms_key_id) =
+                response
+                    .headers
+                    .get("x-amz-server-side-encryption-aws-kms-key-id") {
+                let value = ssekms_key_id.to_owned();
+                result.ssekms_key_id = Some(value)
+            };
+            if let Some(server_side_encryption) =
+                response.headers.get("x-amz-server-side-encryption") {
+                let value = server_side_encryption.to_owned();
+                result.server_side_encryption = Some(value)
+            };
+            if let Some(version_id) = response.headers.get("x-amz-version-id") {
+                let value = version_id.to_owned();
+                result.version_id = Some(value)
+            };
+            Ok(result)
+        } else {
+            Err(CompleteMultipartUploadError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -17529,71 +17522,68 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = CopyObjectOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(CopyObjectOutputDeserializer::deserialize(&actual_tag_name,
-                                                                            &mut stack));
-                }
-                if let Some(copy_source_version_id) =
-                    response.headers.get("x-amz-copy-source-version-id") {
-                    let value = copy_source_version_id.to_owned();
-                    result.copy_source_version_id = Some(value)
-                };
-                if let Some(expiration) = response.headers.get("x-amz-expiration") {
-                    let value = expiration.to_owned();
-                    result.expiration = Some(value)
-                };
-                if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                    let value = request_charged.to_owned();
-                    result.request_charged = Some(value)
-                };
-                if let Some(sse_customer_algorithm) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-algorithm") {
-                    let value = sse_customer_algorithm.to_owned();
-                    result.sse_customer_algorithm = Some(value)
-                };
-                if let Some(sse_customer_key_md5) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-key-MD5") {
-                    let value = sse_customer_key_md5.to_owned();
-                    result.sse_customer_key_md5 = Some(value)
-                };
-                if let Some(ssekms_key_id) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-aws-kms-key-id") {
-                    let value = ssekms_key_id.to_owned();
-                    result.ssekms_key_id = Some(value)
-                };
-                if let Some(server_side_encryption) =
-                    response.headers.get("x-amz-server-side-encryption") {
-                    let value = server_side_encryption.to_owned();
-                    result.server_side_encryption = Some(value)
-                };
-                if let Some(version_id) = response.headers.get("x-amz-version-id") {
-                    let value = version_id.to_owned();
-                    result.version_id = Some(value)
-                };
-                Ok(result)
+            if response.body.is_empty() {
+                result = CopyObjectOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(CopyObjectOutputDeserializer::deserialize(&actual_tag_name,
+                                                                        &mut stack));
             }
-            _ => Err(CopyObjectError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            if let Some(copy_source_version_id) =
+                response.headers.get("x-amz-copy-source-version-id") {
+                let value = copy_source_version_id.to_owned();
+                result.copy_source_version_id = Some(value)
+            };
+            if let Some(expiration) = response.headers.get("x-amz-expiration") {
+                let value = expiration.to_owned();
+                result.expiration = Some(value)
+            };
+            if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+                let value = request_charged.to_owned();
+                result.request_charged = Some(value)
+            };
+            if let Some(sse_customer_algorithm) =
+                response
+                    .headers
+                    .get("x-amz-server-side-encryption-customer-algorithm") {
+                let value = sse_customer_algorithm.to_owned();
+                result.sse_customer_algorithm = Some(value)
+            };
+            if let Some(sse_customer_key_md5) =
+                response
+                    .headers
+                    .get("x-amz-server-side-encryption-customer-key-MD5") {
+                let value = sse_customer_key_md5.to_owned();
+                result.sse_customer_key_md5 = Some(value)
+            };
+            if let Some(ssekms_key_id) =
+                response
+                    .headers
+                    .get("x-amz-server-side-encryption-aws-kms-key-id") {
+                let value = ssekms_key_id.to_owned();
+                result.ssekms_key_id = Some(value)
+            };
+            if let Some(server_side_encryption) =
+                response.headers.get("x-amz-server-side-encryption") {
+                let value = server_side_encryption.to_owned();
+                result.server_side_encryption = Some(value)
+            };
+            if let Some(version_id) = response.headers.get("x-amz-version-id") {
+                let value = version_id.to_owned();
+                result.version_id = Some(value)
+            };
+            Ok(result)
+        } else {
+            Err(CopyObjectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -17649,34 +17639,29 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateBucketOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(CreateBucketOutputDeserializer::deserialize(&actual_tag_name,
-                                                                              &mut stack));
-                }
-                if let Some(location) = response.headers.get("Location") {
-                    let value = location.to_owned();
-                    result.location = Some(value)
-                };
-                Ok(result)
+            if response.body.is_empty() {
+                result = CreateBucketOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(CreateBucketOutputDeserializer::deserialize(&actual_tag_name,
+                                                                          &mut stack));
             }
-            _ => {
-                Err(CreateBucketError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+            if let Some(location) = response.headers.get("Location") {
+                let value = location.to_owned();
+                result.location = Some(value)
+            };
+            Ok(result)
+        } else {
+            Err(CreateBucketError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -17785,68 +17770,65 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateMultipartUploadOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(CreateMultipartUploadOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-                if let Some(abort_date) = response.headers.get("x-amz-abort-date") {
-                    let value = abort_date.to_owned();
-                    result.abort_date = Some(value)
-                };
-                if let Some(abort_rule_id) = response.headers.get("x-amz-abort-rule-id") {
-                    let value = abort_rule_id.to_owned();
-                    result.abort_rule_id = Some(value)
-                };
-                if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                    let value = request_charged.to_owned();
-                    result.request_charged = Some(value)
-                };
-                if let Some(sse_customer_algorithm) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-algorithm") {
-                    let value = sse_customer_algorithm.to_owned();
-                    result.sse_customer_algorithm = Some(value)
-                };
-                if let Some(sse_customer_key_md5) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-key-MD5") {
-                    let value = sse_customer_key_md5.to_owned();
-                    result.sse_customer_key_md5 = Some(value)
-                };
-                if let Some(ssekms_key_id) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-aws-kms-key-id") {
-                    let value = ssekms_key_id.to_owned();
-                    result.ssekms_key_id = Some(value)
-                };
-                if let Some(server_side_encryption) =
-                    response.headers.get("x-amz-server-side-encryption") {
-                    let value = server_side_encryption.to_owned();
-                    result.server_side_encryption = Some(value)
-                };
-                Ok(result)
+            if response.body.is_empty() {
+                result = CreateMultipartUploadOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result =
+                    try!(CreateMultipartUploadOutputDeserializer::deserialize(&actual_tag_name,
+                                                                              &mut stack));
             }
-            _ => {
-                Err(CreateMultipartUploadError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+            if let Some(abort_date) = response.headers.get("x-amz-abort-date") {
+                let value = abort_date.to_owned();
+                result.abort_date = Some(value)
+            };
+            if let Some(abort_rule_id) = response.headers.get("x-amz-abort-rule-id") {
+                let value = abort_rule_id.to_owned();
+                result.abort_rule_id = Some(value)
+            };
+            if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+                let value = request_charged.to_owned();
+                result.request_charged = Some(value)
+            };
+            if let Some(sse_customer_algorithm) =
+                response
+                    .headers
+                    .get("x-amz-server-side-encryption-customer-algorithm") {
+                let value = sse_customer_algorithm.to_owned();
+                result.sse_customer_algorithm = Some(value)
+            };
+            if let Some(sse_customer_key_md5) =
+                response
+                    .headers
+                    .get("x-amz-server-side-encryption-customer-key-MD5") {
+                let value = sse_customer_key_md5.to_owned();
+                result.sse_customer_key_md5 = Some(value)
+            };
+            if let Some(ssekms_key_id) =
+                response
+                    .headers
+                    .get("x-amz-server-side-encryption-aws-kms-key-id") {
+                let value = ssekms_key_id.to_owned();
+                result.ssekms_key_id = Some(value)
+            };
+            if let Some(server_side_encryption) =
+                response.headers.get("x-amz-server-side-encryption") {
+                let value = server_side_encryption.to_owned();
+                result.server_side_encryption = Some(value)
+            };
+            Ok(result)
+        } else {
+            Err(CreateMultipartUploadError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -17870,17 +17852,12 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
+            let result = ();
 
-                Ok(result)
-            }
-            _ => {
-                Err(DeleteBucketError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(DeleteBucketError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -17907,15 +17884,12 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
+            let result = ();
 
-                Ok(result)
-            }
-            _ => Err(DeleteBucketAnalyticsConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(DeleteBucketAnalyticsConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -17941,18 +17915,12 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
+            let result = ();
 
-                Ok(result)
-            }
-            _ => {
-                Err(DeleteBucketCorsError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(DeleteBucketCorsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -17979,15 +17947,12 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
+            let result = ();
 
-                Ok(result)
-            }
-            _ => Err(DeleteBucketInventoryConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(DeleteBucketInventoryConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -18013,18 +17978,13 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
+            let result = ();
 
-                Ok(result)
-            }
-            _ => {
-                Err(DeleteBucketLifecycleError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(DeleteBucketLifecycleError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -18050,15 +18010,12 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
+            let result = ();
 
-                Ok(result)
-            }
-            _ => Err(DeleteBucketMetricsConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(DeleteBucketMetricsConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -18084,18 +18041,13 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
+            let result = ();
 
-                Ok(result)
-            }
-            _ => {
-                Err(DeleteBucketPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(DeleteBucketPolicyError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -18121,15 +18073,13 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
+            let result = ();
 
-                Ok(result)
-            }
-            _ => Err(DeleteBucketReplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(DeleteBucketReplicationError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -18155,18 +18105,13 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
+            let result = ();
 
-                Ok(result)
-            }
-            _ => {
-                Err(DeleteBucketTaggingError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(DeleteBucketTaggingError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -18192,18 +18137,13 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
+            let result = ();
 
-                Ok(result)
-            }
-            _ => {
-                Err(DeleteBucketWebsiteError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(DeleteBucketWebsiteError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -18240,42 +18180,37 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = DeleteObjectOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(DeleteObjectOutputDeserializer::deserialize(&actual_tag_name,
-                                                                              &mut stack));
-                }
-                if let Some(delete_marker) = response.headers.get("x-amz-delete-marker") {
-                    let value = delete_marker.to_owned();
-                    result.delete_marker = Some(bool::from_str(&value).unwrap())
-                };
-                if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                    let value = request_charged.to_owned();
-                    result.request_charged = Some(value)
-                };
-                if let Some(version_id) = response.headers.get("x-amz-version-id") {
-                    let value = version_id.to_owned();
-                    result.version_id = Some(value)
-                };
-                Ok(result)
+            if response.body.is_empty() {
+                result = DeleteObjectOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(DeleteObjectOutputDeserializer::deserialize(&actual_tag_name,
+                                                                          &mut stack));
             }
-            _ => {
-                Err(DeleteObjectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+            if let Some(delete_marker) = response.headers.get("x-amz-delete-marker") {
+                let value = delete_marker.to_owned();
+                result.delete_marker = Some(bool::from_str(&value).unwrap())
+            };
+            if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+                let value = request_charged.to_owned();
+                result.request_charged = Some(value)
+            };
+            if let Some(version_id) = response.headers.get("x-amz-version-id") {
+                let value = version_id.to_owned();
+                result.version_id = Some(value)
+            };
+            Ok(result)
+        } else {
+            Err(DeleteObjectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -18305,36 +18240,30 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = DeleteObjectTaggingOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(DeleteObjectTaggingOutputDeserializer::deserialize(&actual_tag_name,
-                                                                                &mut stack));
-                }
-                if let Some(version_id) = response.headers.get("x-amz-version-id") {
-                    let value = version_id.to_owned();
-                    result.version_id = Some(value)
-                };
-                Ok(result)
+            if response.body.is_empty() {
+                result = DeleteObjectTaggingOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(DeleteObjectTaggingOutputDeserializer::deserialize(&actual_tag_name,
+                                                                                 &mut stack));
             }
-            _ => {
-                Err(DeleteObjectTaggingError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+            if let Some(version_id) = response.headers.get("x-amz-version-id") {
+                let value = version_id.to_owned();
+                result.version_id = Some(value)
+            };
+            Ok(result)
+        } else {
+            Err(DeleteObjectTaggingError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -18377,34 +18306,29 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = DeleteObjectsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(DeleteObjectsOutputDeserializer::deserialize(&actual_tag_name,
-                                                                               &mut stack));
-                }
-                if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                    let value = request_charged.to_owned();
-                    result.request_charged = Some(value)
-                };
-                Ok(result)
+            if response.body.is_empty() {
+                result = DeleteObjectsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(DeleteObjectsOutputDeserializer::deserialize(&actual_tag_name,
+                                                                           &mut stack));
             }
-            _ => {
-                Err(DeleteObjectsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+            if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+                let value = request_charged.to_owned();
+                result.request_charged = Some(value)
+            };
+            Ok(result)
+        } else {
+            Err(DeleteObjectsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -18431,28 +18355,25 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetBucketAccelerateConfigurationOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetBucketAccelerateConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetBucketAccelerateConfigurationOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetBucketAccelerateConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(GetBucketAccelerateConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(GetBucketAccelerateConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -18478,31 +18399,26 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetBucketAclOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetBucketAclOutputDeserializer::deserialize(&actual_tag_name,
-                                                                              &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetBucketAclOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetBucketAclOutputDeserializer::deserialize(&actual_tag_name,
+                                                                          &mut stack));
             }
-            _ => {
-                Err(GetBucketAclError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(GetBucketAclError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -18529,28 +18445,25 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetBucketAnalyticsConfigurationOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetBucketAnalyticsConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetBucketAnalyticsConfigurationOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetBucketAnalyticsConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(GetBucketAnalyticsConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(GetBucketAnalyticsConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -18576,31 +18489,26 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetBucketCorsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetBucketCorsOutputDeserializer::deserialize(&actual_tag_name,
-                                                                               &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetBucketCorsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetBucketCorsOutputDeserializer::deserialize(&actual_tag_name,
+                                                                           &mut stack));
             }
-            _ => {
-                Err(GetBucketCorsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(GetBucketCorsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -18627,28 +18535,25 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetBucketInventoryConfigurationOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetBucketInventoryConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetBucketInventoryConfigurationOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetBucketInventoryConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(GetBucketInventoryConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(GetBucketInventoryConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -18674,33 +18579,27 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetBucketLifecycleOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(GetBucketLifecycleOutputDeserializer::deserialize(&actual_tag_name,
-                                                                               &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetBucketLifecycleOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetBucketLifecycleOutputDeserializer::deserialize(&actual_tag_name,
+                                                                                &mut stack));
             }
-            _ => {
-                Err(GetBucketLifecycleError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(GetBucketLifecycleError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -18727,28 +18626,25 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetBucketLifecycleConfigurationOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetBucketLifecycleConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetBucketLifecycleConfigurationOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetBucketLifecycleConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(GetBucketLifecycleConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(GetBucketLifecycleConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -18774,33 +18670,26 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetBucketLocationOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(GetBucketLocationOutputDeserializer::deserialize(&actual_tag_name,
-                                                                              &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetBucketLocationOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetBucketLocationOutputDeserializer::deserialize(&actual_tag_name,
+                                                                               &mut stack));
             }
-            _ => {
-                Err(GetBucketLocationError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(GetBucketLocationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -18826,33 +18715,26 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetBucketLoggingOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(GetBucketLoggingOutputDeserializer::deserialize(&actual_tag_name,
-                                                                             &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetBucketLoggingOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetBucketLoggingOutputDeserializer::deserialize(&actual_tag_name,
+                                                                              &mut stack));
             }
-            _ => {
-                Err(GetBucketLoggingError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(GetBucketLoggingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -18879,28 +18761,25 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetBucketMetricsConfigurationOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetBucketMetricsConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetBucketMetricsConfigurationOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetBucketMetricsConfigurationOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(GetBucketMetricsConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(GetBucketMetricsConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -18927,31 +18806,26 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = NotificationConfigurationDeprecated::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(NotificationConfigurationDeprecatedDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = NotificationConfigurationDeprecated::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(NotificationConfigurationDeprecatedDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(GetBucketNotificationError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(GetBucketNotificationError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -18978,30 +18852,26 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = NotificationConfiguration::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(NotificationConfigurationDeserializer::deserialize(&actual_tag_name,
-                                                                                &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = NotificationConfiguration::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(NotificationConfigurationDeserializer::deserialize(&actual_tag_name,
+                                                                                 &mut stack));
             }
-            _ => Err(GetBucketNotificationConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(GetBucketNotificationConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -19027,21 +18897,15 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result = GetBucketPolicyOutput::default();
-                result.policy = Some(String::from_utf8_lossy(&response.body).into_owned());
+            let mut result = GetBucketPolicyOutput::default();
+            result.policy = Some(String::from_utf8_lossy(&response.body).into_owned());
 
 
-                Ok(result)
-            }
-            _ => {
-                Err(GetBucketPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(GetBucketPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -19067,33 +18931,28 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetBucketReplicationOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(GetBucketReplicationOutputDeserializer::deserialize(&actual_tag_name,
-                                                                                 &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetBucketReplicationOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result =
+                    try!(GetBucketReplicationOutputDeserializer::deserialize(&actual_tag_name,
+                                                                             &mut stack));
             }
-            _ => {
-                Err(GetBucketReplicationError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(GetBucketReplicationError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -19120,28 +18979,28 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetBucketRequestPaymentOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetBucketRequestPaymentOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetBucketRequestPaymentOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result =
+                    try!(GetBucketRequestPaymentOutputDeserializer::deserialize(&actual_tag_name,
+                                                                                &mut stack));
             }
-            _ => Err(GetBucketRequestPaymentError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(GetBucketRequestPaymentError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -19167,33 +19026,26 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetBucketTaggingOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(GetBucketTaggingOutputDeserializer::deserialize(&actual_tag_name,
-                                                                             &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetBucketTaggingOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetBucketTaggingOutputDeserializer::deserialize(&actual_tag_name,
+                                                                              &mut stack));
             }
-            _ => {
-                Err(GetBucketTaggingError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(GetBucketTaggingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -19219,33 +19071,27 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetBucketVersioningOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(GetBucketVersioningOutputDeserializer::deserialize(&actual_tag_name,
-                                                                                &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetBucketVersioningOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetBucketVersioningOutputDeserializer::deserialize(&actual_tag_name,
+                                                                                 &mut stack));
             }
-            _ => {
-                Err(GetBucketVersioningError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(GetBucketVersioningError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -19271,33 +19117,26 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetBucketWebsiteOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(GetBucketWebsiteOutputDeserializer::deserialize(&actual_tag_name,
-                                                                             &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetBucketWebsiteOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetBucketWebsiteOutputDeserializer::deserialize(&actual_tag_name,
+                                                                              &mut stack));
             }
-            _ => {
-                Err(GetBucketWebsiteError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(GetBucketWebsiteError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -19391,140 +19230,136 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result = GetObjectOutput::default();
-                result.body = Some(response.body);
+            let mut result = GetObjectOutput::default();
+            result.body = Some(response.body);
 
-                if let Some(accept_ranges) = response.headers.get("accept-ranges") {
-                    let value = accept_ranges.to_owned();
-                    result.accept_ranges = Some(value)
-                };
-                if let Some(cache_control) = response.headers.get("Cache-Control") {
-                    let value = cache_control.to_owned();
-                    result.cache_control = Some(value)
-                };
-                if let Some(content_disposition) = response.headers.get("Content-Disposition") {
-                    let value = content_disposition.to_owned();
-                    result.content_disposition = Some(value)
-                };
-                if let Some(content_encoding) = response.headers.get("Content-Encoding") {
-                    let value = content_encoding.to_owned();
-                    result.content_encoding = Some(value)
-                };
-                if let Some(content_language) = response.headers.get("Content-Language") {
-                    let value = content_language.to_owned();
-                    result.content_language = Some(value)
-                };
-                if let Some(content_length) = response.headers.get("Content-Length") {
-                    let value = content_length.to_owned();
-                    result.content_length = Some(i64::from_str(&value).unwrap())
-                };
-                if let Some(content_range) = response.headers.get("Content-Range") {
-                    let value = content_range.to_owned();
-                    result.content_range = Some(value)
-                };
-                if let Some(content_type) = response.headers.get("Content-Type") {
-                    let value = content_type.to_owned();
-                    result.content_type = Some(value)
-                };
-                if let Some(delete_marker) = response.headers.get("x-amz-delete-marker") {
-                    let value = delete_marker.to_owned();
-                    result.delete_marker = Some(bool::from_str(&value).unwrap())
-                };
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                };
-                if let Some(expiration) = response.headers.get("x-amz-expiration") {
-                    let value = expiration.to_owned();
-                    result.expiration = Some(value)
-                };
-                if let Some(expires) = response.headers.get("Expires") {
-                    let value = expires.to_owned();
-                    result.expires = Some(value)
-                };
-                if let Some(last_modified) = response.headers.get("Last-Modified") {
-                    let value = last_modified.to_owned();
-                    result.last_modified = Some(value)
-                };
-                let mut values = ::std::collections::HashMap::new();
-                for (key, value) in response.headers.iter() {
-                    if key.starts_with("x-amz-meta-") {
-                        values.insert(key.replace("x-amz-meta-", ""), value.to_owned());
-                    }
+            if let Some(accept_ranges) = response.headers.get("accept-ranges") {
+                let value = accept_ranges.to_owned();
+                result.accept_ranges = Some(value)
+            };
+            if let Some(cache_control) = response.headers.get("Cache-Control") {
+                let value = cache_control.to_owned();
+                result.cache_control = Some(value)
+            };
+            if let Some(content_disposition) = response.headers.get("Content-Disposition") {
+                let value = content_disposition.to_owned();
+                result.content_disposition = Some(value)
+            };
+            if let Some(content_encoding) = response.headers.get("Content-Encoding") {
+                let value = content_encoding.to_owned();
+                result.content_encoding = Some(value)
+            };
+            if let Some(content_language) = response.headers.get("Content-Language") {
+                let value = content_language.to_owned();
+                result.content_language = Some(value)
+            };
+            if let Some(content_length) = response.headers.get("Content-Length") {
+                let value = content_length.to_owned();
+                result.content_length = Some(i64::from_str(&value).unwrap())
+            };
+            if let Some(content_range) = response.headers.get("Content-Range") {
+                let value = content_range.to_owned();
+                result.content_range = Some(value)
+            };
+            if let Some(content_type) = response.headers.get("Content-Type") {
+                let value = content_type.to_owned();
+                result.content_type = Some(value)
+            };
+            if let Some(delete_marker) = response.headers.get("x-amz-delete-marker") {
+                let value = delete_marker.to_owned();
+                result.delete_marker = Some(bool::from_str(&value).unwrap())
+            };
+            if let Some(e_tag) = response.headers.get("ETag") {
+                let value = e_tag.to_owned();
+                result.e_tag = Some(value)
+            };
+            if let Some(expiration) = response.headers.get("x-amz-expiration") {
+                let value = expiration.to_owned();
+                result.expiration = Some(value)
+            };
+            if let Some(expires) = response.headers.get("Expires") {
+                let value = expires.to_owned();
+                result.expires = Some(value)
+            };
+            if let Some(last_modified) = response.headers.get("Last-Modified") {
+                let value = last_modified.to_owned();
+                result.last_modified = Some(value)
+            };
+            let mut values = ::std::collections::HashMap::new();
+            for (key, value) in response.headers.iter() {
+                if key.starts_with("x-amz-meta-") {
+                    values.insert(key.replace("x-amz-meta-", ""), value.to_owned());
                 }
-                result.metadata = Some(values);
-                if let Some(missing_meta) = response.headers.get("x-amz-missing-meta") {
-                    let value = missing_meta.to_owned();
-                    result.missing_meta = Some(i64::from_str(&value).unwrap())
-                };
-                if let Some(parts_count) = response.headers.get("x-amz-mp-parts-count") {
-                    let value = parts_count.to_owned();
-                    result.parts_count = Some(i64::from_str(&value).unwrap())
-                };
-                if let Some(replication_status) =
-                    response.headers.get("x-amz-replication-status") {
-                    let value = replication_status.to_owned();
-                    result.replication_status = Some(value)
-                };
-                if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                    let value = request_charged.to_owned();
-                    result.request_charged = Some(value)
-                };
-                if let Some(restore) = response.headers.get("x-amz-restore") {
-                    let value = restore.to_owned();
-                    result.restore = Some(value)
-                };
-                if let Some(sse_customer_algorithm) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-algorithm") {
-                    let value = sse_customer_algorithm.to_owned();
-                    result.sse_customer_algorithm = Some(value)
-                };
-                if let Some(sse_customer_key_md5) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-key-MD5") {
-                    let value = sse_customer_key_md5.to_owned();
-                    result.sse_customer_key_md5 = Some(value)
-                };
-                if let Some(ssekms_key_id) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-aws-kms-key-id") {
-                    let value = ssekms_key_id.to_owned();
-                    result.ssekms_key_id = Some(value)
-                };
-                if let Some(server_side_encryption) =
-                    response.headers.get("x-amz-server-side-encryption") {
-                    let value = server_side_encryption.to_owned();
-                    result.server_side_encryption = Some(value)
-                };
-                if let Some(storage_class) = response.headers.get("x-amz-storage-class") {
-                    let value = storage_class.to_owned();
-                    result.storage_class = Some(value)
-                };
-                if let Some(tag_count) = response.headers.get("x-amz-tagging-count") {
-                    let value = tag_count.to_owned();
-                    result.tag_count = Some(i64::from_str(&value).unwrap())
-                };
-                if let Some(version_id) = response.headers.get("x-amz-version-id") {
-                    let value = version_id.to_owned();
-                    result.version_id = Some(value)
-                };
-                if let Some(website_redirect_location) =
-                    response.headers.get("x-amz-website-redirect-location") {
-                    let value = website_redirect_location.to_owned();
-                    result.website_redirect_location = Some(value)
-                };
-                Ok(result)
             }
-            _ => Err(GetObjectError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            result.metadata = Some(values);
+            if let Some(missing_meta) = response.headers.get("x-amz-missing-meta") {
+                let value = missing_meta.to_owned();
+                result.missing_meta = Some(i64::from_str(&value).unwrap())
+            };
+            if let Some(parts_count) = response.headers.get("x-amz-mp-parts-count") {
+                let value = parts_count.to_owned();
+                result.parts_count = Some(i64::from_str(&value).unwrap())
+            };
+            if let Some(replication_status) = response.headers.get("x-amz-replication-status") {
+                let value = replication_status.to_owned();
+                result.replication_status = Some(value)
+            };
+            if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+                let value = request_charged.to_owned();
+                result.request_charged = Some(value)
+            };
+            if let Some(restore) = response.headers.get("x-amz-restore") {
+                let value = restore.to_owned();
+                result.restore = Some(value)
+            };
+            if let Some(sse_customer_algorithm) =
+                response
+                    .headers
+                    .get("x-amz-server-side-encryption-customer-algorithm") {
+                let value = sse_customer_algorithm.to_owned();
+                result.sse_customer_algorithm = Some(value)
+            };
+            if let Some(sse_customer_key_md5) =
+                response
+                    .headers
+                    .get("x-amz-server-side-encryption-customer-key-MD5") {
+                let value = sse_customer_key_md5.to_owned();
+                result.sse_customer_key_md5 = Some(value)
+            };
+            if let Some(ssekms_key_id) =
+                response
+                    .headers
+                    .get("x-amz-server-side-encryption-aws-kms-key-id") {
+                let value = ssekms_key_id.to_owned();
+                result.ssekms_key_id = Some(value)
+            };
+            if let Some(server_side_encryption) =
+                response.headers.get("x-amz-server-side-encryption") {
+                let value = server_side_encryption.to_owned();
+                result.server_side_encryption = Some(value)
+            };
+            if let Some(storage_class) = response.headers.get("x-amz-storage-class") {
+                let value = storage_class.to_owned();
+                result.storage_class = Some(value)
+            };
+            if let Some(tag_count) = response.headers.get("x-amz-tagging-count") {
+                let value = tag_count.to_owned();
+                result.tag_count = Some(i64::from_str(&value).unwrap())
+            };
+            if let Some(version_id) = response.headers.get("x-amz-version-id") {
+                let value = version_id.to_owned();
+                result.version_id = Some(value)
+            };
+            if let Some(website_redirect_location) =
+                response.headers.get("x-amz-website-redirect-location") {
+                let value = website_redirect_location.to_owned();
+                result.website_redirect_location = Some(value)
+            };
+            Ok(result)
+        } else {
+            Err(GetObjectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -19557,34 +19392,29 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetObjectAclOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(GetObjectAclOutputDeserializer::deserialize(&actual_tag_name,
-                                                                              &mut stack));
-                }
-                if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                    let value = request_charged.to_owned();
-                    result.request_charged = Some(value)
-                };
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetObjectAclOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetObjectAclOutputDeserializer::deserialize(&actual_tag_name,
+                                                                          &mut stack));
             }
-            _ => {
-                Err(GetObjectAclError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+            if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+                let value = request_charged.to_owned();
+                result.request_charged = Some(value)
+            };
+            Ok(result)
+        } else {
+            Err(GetObjectAclError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -19614,36 +19444,29 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = GetObjectTaggingOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(GetObjectTaggingOutputDeserializer::deserialize(&actual_tag_name,
-                                                                             &mut stack));
-                }
-                if let Some(version_id) = response.headers.get("x-amz-version-id") {
-                    let value = version_id.to_owned();
-                    result.version_id = Some(value)
-                };
-                Ok(result)
+            if response.body.is_empty() {
+                result = GetObjectTaggingOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(GetObjectTaggingOutputDeserializer::deserialize(&actual_tag_name,
+                                                                              &mut stack));
             }
-            _ => {
-                Err(GetObjectTaggingError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+            if let Some(version_id) = response.headers.get("x-amz-version-id") {
+                let value = version_id.to_owned();
+                result.version_id = Some(value)
+            };
+            Ok(result)
+        } else {
+            Err(GetObjectTaggingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -19673,24 +19496,18 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result = GetObjectTorrentOutput::default();
-                result.body = Some(response.body);
+            let mut result = GetObjectTorrentOutput::default();
+            result.body = Some(response.body);
 
-                if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                    let value = request_charged.to_owned();
-                    result.request_charged = Some(value)
-                };
-                Ok(result)
-            }
-            _ => {
-                Err(GetObjectTorrentError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+            if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+                let value = request_charged.to_owned();
+                result.request_charged = Some(value)
+            };
+            Ok(result)
+        } else {
+            Err(GetObjectTorrentError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -19714,15 +19531,12 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
+            let result = ();
 
-                Ok(result)
-            }
-            _ => Err(HeadBucketError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(HeadBucketError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -19792,143 +19606,139 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = HeadObjectOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(HeadObjectOutputDeserializer::deserialize(&actual_tag_name,
-                                                                            &mut stack));
-                }
-                if let Some(accept_ranges) = response.headers.get("accept-ranges") {
-                    let value = accept_ranges.to_owned();
-                    result.accept_ranges = Some(value)
-                };
-                if let Some(cache_control) = response.headers.get("Cache-Control") {
-                    let value = cache_control.to_owned();
-                    result.cache_control = Some(value)
-                };
-                if let Some(content_disposition) = response.headers.get("Content-Disposition") {
-                    let value = content_disposition.to_owned();
-                    result.content_disposition = Some(value)
-                };
-                if let Some(content_encoding) = response.headers.get("Content-Encoding") {
-                    let value = content_encoding.to_owned();
-                    result.content_encoding = Some(value)
-                };
-                if let Some(content_language) = response.headers.get("Content-Language") {
-                    let value = content_language.to_owned();
-                    result.content_language = Some(value)
-                };
-                if let Some(content_length) = response.headers.get("Content-Length") {
-                    let value = content_length.to_owned();
-                    result.content_length = Some(i64::from_str(&value).unwrap())
-                };
-                if let Some(content_type) = response.headers.get("Content-Type") {
-                    let value = content_type.to_owned();
-                    result.content_type = Some(value)
-                };
-                if let Some(delete_marker) = response.headers.get("x-amz-delete-marker") {
-                    let value = delete_marker.to_owned();
-                    result.delete_marker = Some(bool::from_str(&value).unwrap())
-                };
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                };
-                if let Some(expiration) = response.headers.get("x-amz-expiration") {
-                    let value = expiration.to_owned();
-                    result.expiration = Some(value)
-                };
-                if let Some(expires) = response.headers.get("Expires") {
-                    let value = expires.to_owned();
-                    result.expires = Some(value)
-                };
-                if let Some(last_modified) = response.headers.get("Last-Modified") {
-                    let value = last_modified.to_owned();
-                    result.last_modified = Some(value)
-                };
-                let mut values = ::std::collections::HashMap::new();
-                for (key, value) in response.headers.iter() {
-                    if key.starts_with("x-amz-meta-") {
-                        values.insert(key.replace("x-amz-meta-", ""), value.to_owned());
-                    }
-                }
-                result.metadata = Some(values);
-                if let Some(missing_meta) = response.headers.get("x-amz-missing-meta") {
-                    let value = missing_meta.to_owned();
-                    result.missing_meta = Some(i64::from_str(&value).unwrap())
-                };
-                if let Some(parts_count) = response.headers.get("x-amz-mp-parts-count") {
-                    let value = parts_count.to_owned();
-                    result.parts_count = Some(i64::from_str(&value).unwrap())
-                };
-                if let Some(replication_status) =
-                    response.headers.get("x-amz-replication-status") {
-                    let value = replication_status.to_owned();
-                    result.replication_status = Some(value)
-                };
-                if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                    let value = request_charged.to_owned();
-                    result.request_charged = Some(value)
-                };
-                if let Some(restore) = response.headers.get("x-amz-restore") {
-                    let value = restore.to_owned();
-                    result.restore = Some(value)
-                };
-                if let Some(sse_customer_algorithm) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-algorithm") {
-                    let value = sse_customer_algorithm.to_owned();
-                    result.sse_customer_algorithm = Some(value)
-                };
-                if let Some(sse_customer_key_md5) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-key-MD5") {
-                    let value = sse_customer_key_md5.to_owned();
-                    result.sse_customer_key_md5 = Some(value)
-                };
-                if let Some(ssekms_key_id) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-aws-kms-key-id") {
-                    let value = ssekms_key_id.to_owned();
-                    result.ssekms_key_id = Some(value)
-                };
-                if let Some(server_side_encryption) =
-                    response.headers.get("x-amz-server-side-encryption") {
-                    let value = server_side_encryption.to_owned();
-                    result.server_side_encryption = Some(value)
-                };
-                if let Some(storage_class) = response.headers.get("x-amz-storage-class") {
-                    let value = storage_class.to_owned();
-                    result.storage_class = Some(value)
-                };
-                if let Some(version_id) = response.headers.get("x-amz-version-id") {
-                    let value = version_id.to_owned();
-                    result.version_id = Some(value)
-                };
-                if let Some(website_redirect_location) =
-                    response.headers.get("x-amz-website-redirect-location") {
-                    let value = website_redirect_location.to_owned();
-                    result.website_redirect_location = Some(value)
-                };
-                Ok(result)
+            if response.body.is_empty() {
+                result = HeadObjectOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(HeadObjectOutputDeserializer::deserialize(&actual_tag_name,
+                                                                        &mut stack));
             }
-            _ => Err(HeadObjectError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            if let Some(accept_ranges) = response.headers.get("accept-ranges") {
+                let value = accept_ranges.to_owned();
+                result.accept_ranges = Some(value)
+            };
+            if let Some(cache_control) = response.headers.get("Cache-Control") {
+                let value = cache_control.to_owned();
+                result.cache_control = Some(value)
+            };
+            if let Some(content_disposition) = response.headers.get("Content-Disposition") {
+                let value = content_disposition.to_owned();
+                result.content_disposition = Some(value)
+            };
+            if let Some(content_encoding) = response.headers.get("Content-Encoding") {
+                let value = content_encoding.to_owned();
+                result.content_encoding = Some(value)
+            };
+            if let Some(content_language) = response.headers.get("Content-Language") {
+                let value = content_language.to_owned();
+                result.content_language = Some(value)
+            };
+            if let Some(content_length) = response.headers.get("Content-Length") {
+                let value = content_length.to_owned();
+                result.content_length = Some(i64::from_str(&value).unwrap())
+            };
+            if let Some(content_type) = response.headers.get("Content-Type") {
+                let value = content_type.to_owned();
+                result.content_type = Some(value)
+            };
+            if let Some(delete_marker) = response.headers.get("x-amz-delete-marker") {
+                let value = delete_marker.to_owned();
+                result.delete_marker = Some(bool::from_str(&value).unwrap())
+            };
+            if let Some(e_tag) = response.headers.get("ETag") {
+                let value = e_tag.to_owned();
+                result.e_tag = Some(value)
+            };
+            if let Some(expiration) = response.headers.get("x-amz-expiration") {
+                let value = expiration.to_owned();
+                result.expiration = Some(value)
+            };
+            if let Some(expires) = response.headers.get("Expires") {
+                let value = expires.to_owned();
+                result.expires = Some(value)
+            };
+            if let Some(last_modified) = response.headers.get("Last-Modified") {
+                let value = last_modified.to_owned();
+                result.last_modified = Some(value)
+            };
+            let mut values = ::std::collections::HashMap::new();
+            for (key, value) in response.headers.iter() {
+                if key.starts_with("x-amz-meta-") {
+                    values.insert(key.replace("x-amz-meta-", ""), value.to_owned());
+                }
+            }
+            result.metadata = Some(values);
+            if let Some(missing_meta) = response.headers.get("x-amz-missing-meta") {
+                let value = missing_meta.to_owned();
+                result.missing_meta = Some(i64::from_str(&value).unwrap())
+            };
+            if let Some(parts_count) = response.headers.get("x-amz-mp-parts-count") {
+                let value = parts_count.to_owned();
+                result.parts_count = Some(i64::from_str(&value).unwrap())
+            };
+            if let Some(replication_status) = response.headers.get("x-amz-replication-status") {
+                let value = replication_status.to_owned();
+                result.replication_status = Some(value)
+            };
+            if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+                let value = request_charged.to_owned();
+                result.request_charged = Some(value)
+            };
+            if let Some(restore) = response.headers.get("x-amz-restore") {
+                let value = restore.to_owned();
+                result.restore = Some(value)
+            };
+            if let Some(sse_customer_algorithm) =
+                response
+                    .headers
+                    .get("x-amz-server-side-encryption-customer-algorithm") {
+                let value = sse_customer_algorithm.to_owned();
+                result.sse_customer_algorithm = Some(value)
+            };
+            if let Some(sse_customer_key_md5) =
+                response
+                    .headers
+                    .get("x-amz-server-side-encryption-customer-key-MD5") {
+                let value = sse_customer_key_md5.to_owned();
+                result.sse_customer_key_md5 = Some(value)
+            };
+            if let Some(ssekms_key_id) =
+                response
+                    .headers
+                    .get("x-amz-server-side-encryption-aws-kms-key-id") {
+                let value = ssekms_key_id.to_owned();
+                result.ssekms_key_id = Some(value)
+            };
+            if let Some(server_side_encryption) =
+                response.headers.get("x-amz-server-side-encryption") {
+                let value = server_side_encryption.to_owned();
+                result.server_side_encryption = Some(value)
+            };
+            if let Some(storage_class) = response.headers.get("x-amz-storage-class") {
+                let value = storage_class.to_owned();
+                result.storage_class = Some(value)
+            };
+            if let Some(version_id) = response.headers.get("x-amz-version-id") {
+                let value = version_id.to_owned();
+                result.version_id = Some(value)
+            };
+            if let Some(website_redirect_location) =
+                response.headers.get("x-amz-website-redirect-location") {
+                let value = website_redirect_location.to_owned();
+                result.website_redirect_location = Some(value)
+            };
+            Ok(result)
+        } else {
+            Err(HeadObjectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -19958,28 +19768,25 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = ListBucketAnalyticsConfigurationsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListBucketAnalyticsConfigurationsOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = ListBucketAnalyticsConfigurationsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListBucketAnalyticsConfigurationsOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(ListBucketAnalyticsConfigurationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(ListBucketAnalyticsConfigurationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -20009,28 +19816,25 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = ListBucketInventoryConfigurationsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListBucketInventoryConfigurationsOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = ListBucketInventoryConfigurationsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListBucketInventoryConfigurationsOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(ListBucketInventoryConfigurationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(ListBucketInventoryConfigurationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -20060,28 +19864,25 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = ListBucketMetricsConfigurationsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListBucketMetricsConfigurationsOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = ListBucketMetricsConfigurationsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListBucketMetricsConfigurationsOutputDeserializer::deserialize(&actual_tag_name, &mut stack));
             }
-            _ => Err(ListBucketMetricsConfigurationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(ListBucketMetricsConfigurationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -20105,29 +19906,26 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = ListBucketsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListBucketsOutputDeserializer::deserialize(&actual_tag_name,
-                                                                             &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = ListBucketsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListBucketsOutputDeserializer::deserialize(&actual_tag_name,
+                                                                         &mut stack));
             }
-            _ => Err(ListBucketsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(ListBucketsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -20176,33 +19974,28 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = ListMultipartUploadsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(ListMultipartUploadsOutputDeserializer::deserialize(&actual_tag_name,
-                                                                                 &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = ListMultipartUploadsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result =
+                    try!(ListMultipartUploadsOutputDeserializer::deserialize(&actual_tag_name,
+                                                                             &mut stack));
             }
-            _ => {
-                Err(ListMultipartUploadsError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(ListMultipartUploadsError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -20251,33 +20044,27 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = ListObjectVersionsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(ListObjectVersionsOutputDeserializer::deserialize(&actual_tag_name,
-                                                                               &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = ListObjectVersionsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListObjectVersionsOutputDeserializer::deserialize(&actual_tag_name,
+                                                                                &mut stack));
             }
-            _ => {
-                Err(ListObjectVersionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(ListObjectVersionsError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -20325,29 +20112,26 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = ListObjectsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListObjectsOutputDeserializer::deserialize(&actual_tag_name,
-                                                                             &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = ListObjectsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListObjectsOutputDeserializer::deserialize(&actual_tag_name,
+                                                                         &mut stack));
             }
-            _ => Err(ListObjectsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+            Ok(result)
+        } else {
+            Err(ListObjectsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -20403,31 +20187,26 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = ListObjectsV2Output::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListObjectsV2OutputDeserializer::deserialize(&actual_tag_name,
-                                                                               &mut stack));
-                }
-
-                Ok(result)
+            if response.body.is_empty() {
+                result = ListObjectsV2Output::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListObjectsV2OutputDeserializer::deserialize(&actual_tag_name,
+                                                                           &mut stack));
             }
-            _ => {
-                Err(ListObjectsV2Error::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+
+            Ok(result)
+        } else {
+            Err(ListObjectsV2Error::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -20463,40 +20242,37 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = ListPartsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(ListPartsOutputDeserializer::deserialize(&actual_tag_name,
-                                                                           &mut stack));
-                }
-                if let Some(abort_date) = response.headers.get("x-amz-abort-date") {
-                    let value = abort_date.to_owned();
-                    result.abort_date = Some(value)
-                };
-                if let Some(abort_rule_id) = response.headers.get("x-amz-abort-rule-id") {
-                    let value = abort_rule_id.to_owned();
-                    result.abort_rule_id = Some(value)
-                };
-                if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                    let value = request_charged.to_owned();
-                    result.request_charged = Some(value)
-                };
-                Ok(result)
+            if response.body.is_empty() {
+                result = ListPartsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(ListPartsOutputDeserializer::deserialize(&actual_tag_name,
+                                                                       &mut stack));
             }
-            _ => Err(ListPartsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            if let Some(abort_date) = response.headers.get("x-amz-abort-date") {
+                let value = abort_date.to_owned();
+                result.abort_date = Some(value)
+            };
+            if let Some(abort_rule_id) = response.headers.get("x-amz-abort-rule-id") {
+                let value = abort_rule_id.to_owned();
+                result.abort_rule_id = Some(value)
+            };
+            if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+                let value = request_charged.to_owned();
+                result.request_charged = Some(value)
+            };
+            Ok(result)
+        } else {
+            Err(ListPartsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -20527,15 +20303,12 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
+            let result = ();
 
-                Ok(result)
-            }
-            _ => Err(PutBucketAccelerateConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(PutBucketAccelerateConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -20598,17 +20371,12 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
+            let result = ();
 
-                Ok(result)
-            }
-            _ => {
-                Err(PutBucketAclError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(PutBucketAclError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -20639,15 +20407,12 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
+            let result = ();
 
-                Ok(result)
-            }
-            _ => Err(PutBucketAnalyticsConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(PutBucketAnalyticsConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -20686,17 +20451,12 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
+            let result = ();
 
-                Ok(result)
-            }
-            _ => {
-                Err(PutBucketCorsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(PutBucketCorsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -20727,15 +20487,12 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
+            let result = ();
 
-                Ok(result)
-            }
-            _ => Err(PutBucketInventoryConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(PutBucketInventoryConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -20783,18 +20540,13 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
+            let result = ();
 
-                Ok(result)
-            }
-            _ => {
-                Err(PutBucketLifecycleError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(PutBucketLifecycleError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -20840,15 +20592,12 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
+            let result = ();
 
-                Ok(result)
-            }
-            _ => Err(PutBucketLifecycleConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(PutBucketLifecycleConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -20882,18 +20631,12 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
+            let result = ();
 
-                Ok(result)
-            }
-            _ => {
-                Err(PutBucketLoggingError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(PutBucketLoggingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -20924,15 +20667,12 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
+            let result = ();
 
-                Ok(result)
-            }
-            _ => Err(PutBucketMetricsConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(PutBucketMetricsConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -20964,18 +20704,13 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
+            let result = ();
 
-                Ok(result)
-            }
-            _ => {
-                Err(PutBucketNotificationError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(PutBucketNotificationError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -21008,15 +20743,12 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
+            let result = ();
 
-                Ok(result)
-            }
-            _ => Err(PutBucketNotificationConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(PutBucketNotificationConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -21048,18 +20780,12 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
+            let result = ();
 
-                Ok(result)
-            }
-            _ => {
-                Err(PutBucketPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(PutBucketPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -21101,18 +20827,13 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
+            let result = ();
 
-                Ok(result)
-            }
-            _ => {
-                Err(PutBucketReplicationError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(PutBucketReplicationError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -21144,15 +20865,13 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
+            let result = ();
 
-                Ok(result)
-            }
-            _ => Err(PutBucketRequestPaymentError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(PutBucketRequestPaymentError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -21191,18 +20910,12 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
+            let result = ();
 
-                Ok(result)
-            }
-            _ => {
-                Err(PutBucketTaggingError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(PutBucketTaggingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -21240,18 +20953,13 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
+            let result = ();
 
-                Ok(result)
-            }
-            _ => {
-                Err(PutBucketVersioningError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(PutBucketVersioningError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -21285,18 +20993,12 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
-                let result = ();
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
+            let result = ();
 
-                Ok(result)
-            }
-            _ => {
-                Err(PutBucketWebsiteError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(PutBucketWebsiteError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -21417,70 +21119,67 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = PutObjectOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(PutObjectOutputDeserializer::deserialize(&actual_tag_name,
-                                                                           &mut stack));
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                };
-                if let Some(expiration) = response.headers.get("x-amz-expiration") {
-                    let value = expiration.to_owned();
-                    result.expiration = Some(value)
-                };
-                if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                    let value = request_charged.to_owned();
-                    result.request_charged = Some(value)
-                };
-                if let Some(sse_customer_algorithm) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-algorithm") {
-                    let value = sse_customer_algorithm.to_owned();
-                    result.sse_customer_algorithm = Some(value)
-                };
-                if let Some(sse_customer_key_md5) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-key-MD5") {
-                    let value = sse_customer_key_md5.to_owned();
-                    result.sse_customer_key_md5 = Some(value)
-                };
-                if let Some(ssekms_key_id) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-aws-kms-key-id") {
-                    let value = ssekms_key_id.to_owned();
-                    result.ssekms_key_id = Some(value)
-                };
-                if let Some(server_side_encryption) =
-                    response.headers.get("x-amz-server-side-encryption") {
-                    let value = server_side_encryption.to_owned();
-                    result.server_side_encryption = Some(value)
-                };
-                if let Some(version_id) = response.headers.get("x-amz-version-id") {
-                    let value = version_id.to_owned();
-                    result.version_id = Some(value)
-                };
-                Ok(result)
+            if response.body.is_empty() {
+                result = PutObjectOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(PutObjectOutputDeserializer::deserialize(&actual_tag_name,
+                                                                       &mut stack));
             }
-            _ => Err(PutObjectError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            if let Some(e_tag) = response.headers.get("ETag") {
+                let value = e_tag.to_owned();
+                result.e_tag = Some(value)
+            };
+            if let Some(expiration) = response.headers.get("x-amz-expiration") {
+                let value = expiration.to_owned();
+                result.expiration = Some(value)
+            };
+            if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+                let value = request_charged.to_owned();
+                result.request_charged = Some(value)
+            };
+            if let Some(sse_customer_algorithm) =
+                response
+                    .headers
+                    .get("x-amz-server-side-encryption-customer-algorithm") {
+                let value = sse_customer_algorithm.to_owned();
+                result.sse_customer_algorithm = Some(value)
+            };
+            if let Some(sse_customer_key_md5) =
+                response
+                    .headers
+                    .get("x-amz-server-side-encryption-customer-key-MD5") {
+                let value = sse_customer_key_md5.to_owned();
+                result.sse_customer_key_md5 = Some(value)
+            };
+            if let Some(ssekms_key_id) =
+                response
+                    .headers
+                    .get("x-amz-server-side-encryption-aws-kms-key-id") {
+                let value = ssekms_key_id.to_owned();
+                result.ssekms_key_id = Some(value)
+            };
+            if let Some(server_side_encryption) =
+                response.headers.get("x-amz-server-side-encryption") {
+                let value = server_side_encryption.to_owned();
+                result.server_side_encryption = Some(value)
+            };
+            if let Some(version_id) = response.headers.get("x-amz-version-id") {
+                let value = version_id.to_owned();
+                result.version_id = Some(value)
+            };
+            Ok(result)
+        } else {
+            Err(PutObjectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -21553,34 +21252,29 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = PutObjectAclOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(PutObjectAclOutputDeserializer::deserialize(&actual_tag_name,
-                                                                              &mut stack));
-                }
-                if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                    let value = request_charged.to_owned();
-                    result.request_charged = Some(value)
-                };
-                Ok(result)
+            if response.body.is_empty() {
+                result = PutObjectAclOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(PutObjectAclOutputDeserializer::deserialize(&actual_tag_name,
+                                                                          &mut stack));
             }
-            _ => {
-                Err(PutObjectAclError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+            if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+                let value = request_charged.to_owned();
+                result.request_charged = Some(value)
+            };
+            Ok(result)
+        } else {
+            Err(PutObjectAclError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -21616,36 +21310,29 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = PutObjectTaggingOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result =
-                        try!(PutObjectTaggingOutputDeserializer::deserialize(&actual_tag_name,
-                                                                             &mut stack));
-                }
-                if let Some(version_id) = response.headers.get("x-amz-version-id") {
-                    let value = version_id.to_owned();
-                    result.version_id = Some(value)
-                };
-                Ok(result)
+            if response.body.is_empty() {
+                result = PutObjectTaggingOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(PutObjectTaggingOutputDeserializer::deserialize(&actual_tag_name,
+                                                                              &mut stack));
             }
-            _ => {
-                Err(PutObjectTaggingError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+            if let Some(version_id) = response.headers.get("x-amz-version-id") {
+                let value = version_id.to_owned();
+                result.version_id = Some(value)
+            };
+            Ok(result)
+        } else {
+            Err(PutObjectTaggingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -21687,34 +21374,29 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = RestoreObjectOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(RestoreObjectOutputDeserializer::deserialize(&actual_tag_name,
-                                                                               &mut stack));
-                }
-                if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                    let value = request_charged.to_owned();
-                    result.request_charged = Some(value)
-                };
-                Ok(result)
+            if response.body.is_empty() {
+                result = RestoreObjectOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(RestoreObjectOutputDeserializer::deserialize(&actual_tag_name,
+                                                                           &mut stack));
             }
-            _ => {
-                Err(RestoreObjectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+            if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+                let value = request_charged.to_owned();
+                result.request_charged = Some(value)
+            };
+            Ok(result)
+        } else {
+            Err(RestoreObjectError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -21769,62 +21451,59 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = UploadPartOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(UploadPartOutputDeserializer::deserialize(&actual_tag_name,
-                                                                            &mut stack));
-                }
-                if let Some(e_tag) = response.headers.get("ETag") {
-                    let value = e_tag.to_owned();
-                    result.e_tag = Some(value)
-                };
-                if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                    let value = request_charged.to_owned();
-                    result.request_charged = Some(value)
-                };
-                if let Some(sse_customer_algorithm) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-algorithm") {
-                    let value = sse_customer_algorithm.to_owned();
-                    result.sse_customer_algorithm = Some(value)
-                };
-                if let Some(sse_customer_key_md5) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-key-MD5") {
-                    let value = sse_customer_key_md5.to_owned();
-                    result.sse_customer_key_md5 = Some(value)
-                };
-                if let Some(ssekms_key_id) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-aws-kms-key-id") {
-                    let value = ssekms_key_id.to_owned();
-                    result.ssekms_key_id = Some(value)
-                };
-                if let Some(server_side_encryption) =
-                    response.headers.get("x-amz-server-side-encryption") {
-                    let value = server_side_encryption.to_owned();
-                    result.server_side_encryption = Some(value)
-                };
-                Ok(result)
+            if response.body.is_empty() {
+                result = UploadPartOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(UploadPartOutputDeserializer::deserialize(&actual_tag_name,
+                                                                        &mut stack));
             }
-            _ => Err(UploadPartError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            if let Some(e_tag) = response.headers.get("ETag") {
+                let value = e_tag.to_owned();
+                result.e_tag = Some(value)
+            };
+            if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+                let value = request_charged.to_owned();
+                result.request_charged = Some(value)
+            };
+            if let Some(sse_customer_algorithm) =
+                response
+                    .headers
+                    .get("x-amz-server-side-encryption-customer-algorithm") {
+                let value = sse_customer_algorithm.to_owned();
+                result.sse_customer_algorithm = Some(value)
+            };
+            if let Some(sse_customer_key_md5) =
+                response
+                    .headers
+                    .get("x-amz-server-side-encryption-customer-key-MD5") {
+                let value = sse_customer_key_md5.to_owned();
+                result.sse_customer_key_md5 = Some(value)
+            };
+            if let Some(ssekms_key_id) =
+                response
+                    .headers
+                    .get("x-amz-server-side-encryption-aws-kms-key-id") {
+                let value = ssekms_key_id.to_owned();
+                result.ssekms_key_id = Some(value)
+            };
+            if let Some(server_side_encryption) =
+                response.headers.get("x-amz-server-side-encryption") {
+                let value = server_side_encryption.to_owned();
+                result.server_side_encryption = Some(value)
+            };
+            Ok(result)
+        } else {
+            Err(UploadPartError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -21911,66 +21590,60 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
-                let mut result;
+            let mut result;
 
-                if response.body.is_empty() {
-                    result = UploadPartCopyOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(UploadPartCopyOutputDeserializer::deserialize(&actual_tag_name,
-                                                                                &mut stack));
-                }
-                if let Some(copy_source_version_id) =
-                    response.headers.get("x-amz-copy-source-version-id") {
-                    let value = copy_source_version_id.to_owned();
-                    result.copy_source_version_id = Some(value)
-                };
-                if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-                    let value = request_charged.to_owned();
-                    result.request_charged = Some(value)
-                };
-                if let Some(sse_customer_algorithm) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-algorithm") {
-                    let value = sse_customer_algorithm.to_owned();
-                    result.sse_customer_algorithm = Some(value)
-                };
-                if let Some(sse_customer_key_md5) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-customer-key-MD5") {
-                    let value = sse_customer_key_md5.to_owned();
-                    result.sse_customer_key_md5 = Some(value)
-                };
-                if let Some(ssekms_key_id) =
-                    response
-                        .headers
-                        .get("x-amz-server-side-encryption-aws-kms-key-id") {
-                    let value = ssekms_key_id.to_owned();
-                    result.ssekms_key_id = Some(value)
-                };
-                if let Some(server_side_encryption) =
-                    response.headers.get("x-amz-server-side-encryption") {
-                    let value = server_side_encryption.to_owned();
-                    result.server_side_encryption = Some(value)
-                };
-                Ok(result)
+            if response.body.is_empty() {
+                result = UploadPartCopyOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                result = try!(UploadPartCopyOutputDeserializer::deserialize(&actual_tag_name,
+                                                                            &mut stack));
             }
-            _ => {
-                Err(UploadPartCopyError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+            if let Some(copy_source_version_id) =
+                response.headers.get("x-amz-copy-source-version-id") {
+                let value = copy_source_version_id.to_owned();
+                result.copy_source_version_id = Some(value)
+            };
+            if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+                let value = request_charged.to_owned();
+                result.request_charged = Some(value)
+            };
+            if let Some(sse_customer_algorithm) =
+                response
+                    .headers
+                    .get("x-amz-server-side-encryption-customer-algorithm") {
+                let value = sse_customer_algorithm.to_owned();
+                result.sse_customer_algorithm = Some(value)
+            };
+            if let Some(sse_customer_key_md5) =
+                response
+                    .headers
+                    .get("x-amz-server-side-encryption-customer-key-MD5") {
+                let value = sse_customer_key_md5.to_owned();
+                result.sse_customer_key_md5 = Some(value)
+            };
+            if let Some(ssekms_key_id) =
+                response
+                    .headers
+                    .get("x-amz-server-side-encryption-aws-kms-key-id") {
+                let value = ssekms_key_id.to_owned();
+                result.ssekms_key_id = Some(value)
+            };
+            if let Some(server_side_encryption) =
+                response.headers.get("x-amz-server-side-encryption") {
+                let value = server_side_encryption.to_owned();
+                result.server_side_encryption = Some(value)
+            };
+            Ok(result)
+        } else {
+            Err(UploadPartCopyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 }

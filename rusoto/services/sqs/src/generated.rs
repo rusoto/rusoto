@@ -1,6 +1,4 @@
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
 
@@ -3501,14 +3499,12 @@ impl<P, D> Sqs for SqsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(AddPermissionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(AddPermissionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3527,14 +3523,13 @@ impl<P, D> Sqs for SqsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                            Err(ChangeMessageVisibilityError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(ChangeMessageVisibilityError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -3554,30 +3549,30 @@ impl<P, D> Sqs for SqsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ChangeMessageVisibilityBatchResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ChangeMessageVisibilityBatchResultDeserializer::deserialize("ChangeMessageVisibilityBatchResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ChangeMessageVisibilityBatchResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result =
+                    try!(ChangeMessageVisibilityBatchResultDeserializer::deserialize("ChangeMessageVisibilityBatchResult",
+                                                                                     &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(ChangeMessageVisibilityBatchError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(ChangeMessageVisibilityBatchError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3596,29 +3591,29 @@ impl<P, D> Sqs for SqsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = CreateQueueResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateQueueResultDeserializer::deserialize("CreateQueueResult",
-                                                                             &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = CreateQueueResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(CreateQueueResultDeserializer::deserialize("CreateQueueResult",
+                                                                         &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => Err(CreateQueueError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(CreateQueueError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3635,14 +3630,12 @@ impl<P, D> Sqs for SqsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(DeleteMessageError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(DeleteMessageError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3661,32 +3654,30 @@ impl<P, D> Sqs for SqsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = DeleteMessageBatchResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DeleteMessageBatchResultDeserializer::deserialize("DeleteMessageBatchResult",
-                                                                                    &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = DeleteMessageBatchResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(DeleteMessageBatchResultDeserializer::deserialize("DeleteMessageBatchResult",
+                                                                                &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(DeleteMessageBatchError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(DeleteMessageBatchError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -3703,12 +3694,12 @@ impl<P, D> Sqs for SqsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => Err(DeleteQueueError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(DeleteQueueError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3727,32 +3718,30 @@ impl<P, D> Sqs for SqsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = GetQueueAttributesResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetQueueAttributesResultDeserializer::deserialize("GetQueueAttributesResult",
-                                                                                    &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = GetQueueAttributesResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(GetQueueAttributesResultDeserializer::deserialize("GetQueueAttributesResult",
+                                                                                &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(GetQueueAttributesError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(GetQueueAttributesError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -3771,29 +3760,29 @@ impl<P, D> Sqs for SqsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = GetQueueUrlResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetQueueUrlResultDeserializer::deserialize("GetQueueUrlResult",
-                                                                             &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = GetQueueUrlResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(GetQueueUrlResultDeserializer::deserialize("GetQueueUrlResult",
+                                                                         &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => Err(GetQueueUrlError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(GetQueueUrlError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3813,32 +3802,31 @@ impl<P, D> Sqs for SqsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ListDeadLetterSourceQueuesResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(ListDeadLetterSourceQueuesResultDeserializer::deserialize("ListDeadLetterSourceQueuesResult",
-                                                                                       &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ListDeadLetterSourceQueuesResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result =
+                    try!(ListDeadLetterSourceQueuesResultDeserializer::deserialize("ListDeadLetterSourceQueuesResult",
+                                                                                   &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(ListDeadLetterSourceQueuesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(ListDeadLetterSourceQueuesError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 
@@ -3855,29 +3843,29 @@ impl<P, D> Sqs for SqsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ListQueuesResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListQueuesResultDeserializer::deserialize("ListQueuesResult",
-                                                                            &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ListQueuesResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ListQueuesResultDeserializer::deserialize("ListQueuesResult",
+                                                                        &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => Err(ListQueuesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(ListQueuesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3894,12 +3882,12 @@ impl<P, D> Sqs for SqsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => Err(PurgeQueueError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(PurgeQueueError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3918,32 +3906,29 @@ impl<P, D> Sqs for SqsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ReceiveMessageResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ReceiveMessageResultDeserializer::deserialize("ReceiveMessageResult",
-                                                                                &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ReceiveMessageResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ReceiveMessageResultDeserializer::deserialize("ReceiveMessageResult",
+                                                                            &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(ReceiveMessageError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(ReceiveMessageError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3962,15 +3947,12 @@ impl<P, D> Sqs for SqsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(RemovePermissionError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(RemovePermissionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3989,29 +3971,29 @@ impl<P, D> Sqs for SqsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = SendMessageResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(SendMessageResultDeserializer::deserialize("SendMessageResult",
-                                                                             &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = SendMessageResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(SendMessageResultDeserializer::deserialize("SendMessageResult",
+                                                                         &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => Err(SendMessageError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(SendMessageError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4030,32 +4012,29 @@ impl<P, D> Sqs for SqsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = SendMessageBatchResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(SendMessageBatchResultDeserializer::deserialize("SendMessageBatchResult",
-                                                                                  &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = SendMessageBatchResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(SendMessageBatchResultDeserializer::deserialize("SendMessageBatchResult",
+                                                                              &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(SendMessageBatchError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(SendMessageBatchError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4074,15 +4053,13 @@ impl<P, D> Sqs for SqsClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(SetQueueAttributesError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(SetQueueAttributesError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 }

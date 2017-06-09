@@ -1,6 +1,4 @@
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
 
@@ -7722,15 +7720,12 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(CancelUpdateStackError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(CancelUpdateStackError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7750,33 +7745,30 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ContinueUpdateRollbackOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(ContinueUpdateRollbackOutputDeserializer::deserialize("ContinueUpdateRollbackResult",
-                                                                                   &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ContinueUpdateRollbackOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ContinueUpdateRollbackOutputDeserializer::deserialize("ContinueUpdateRollbackResult",
+                                                                                    &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(ContinueUpdateRollbackError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(ContinueUpdateRollbackError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
         }
     }
 
@@ -7795,32 +7787,29 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = CreateChangeSetOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateChangeSetOutputDeserializer::deserialize("CreateChangeSetResult",
-                                                                                 &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = CreateChangeSetOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(CreateChangeSetOutputDeserializer::deserialize("CreateChangeSetResult",
+                                                                             &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(CreateChangeSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(CreateChangeSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7839,29 +7828,29 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = CreateStackOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateStackOutputDeserializer::deserialize("CreateStackResult",
-                                                                             &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = CreateStackOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(CreateStackOutputDeserializer::deserialize("CreateStackResult",
+                                                                         &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => Err(CreateStackError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(CreateStackError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7880,32 +7869,29 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = DeleteChangeSetOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DeleteChangeSetOutputDeserializer::deserialize("DeleteChangeSetResult",
-                                                                                 &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = DeleteChangeSetOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(DeleteChangeSetOutputDeserializer::deserialize("DeleteChangeSetResult",
+                                                                             &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(DeleteChangeSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(DeleteChangeSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7922,12 +7908,12 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => Err(DeleteStackError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(DeleteStackError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7947,32 +7933,30 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = DescribeAccountLimitsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeAccountLimitsOutputDeserializer::deserialize("DescribeAccountLimitsResult",
-                                                                                       &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = DescribeAccountLimitsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(DescribeAccountLimitsOutputDeserializer::deserialize("DescribeAccountLimitsResult",
+                                                                                   &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(DescribeAccountLimitsError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(DescribeAccountLimitsError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -7991,32 +7975,29 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = DescribeChangeSetOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeChangeSetOutputDeserializer::deserialize("DescribeChangeSetResult",
-                                                                                   &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = DescribeChangeSetOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(DescribeChangeSetOutputDeserializer::deserialize("DescribeChangeSetResult",
+                                                                               &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(DescribeChangeSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(DescribeChangeSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8035,32 +8016,30 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = DescribeStackEventsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeStackEventsOutputDeserializer::deserialize("DescribeStackEventsResult",
-                                                                                     &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = DescribeStackEventsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(DescribeStackEventsOutputDeserializer::deserialize("DescribeStackEventsResult",
+                                                                                 &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(DescribeStackEventsError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(DescribeStackEventsError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -8080,32 +8059,30 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = DescribeStackResourceOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeStackResourceOutputDeserializer::deserialize("DescribeStackResourceResult",
-                                                                                       &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = DescribeStackResourceOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(DescribeStackResourceOutputDeserializer::deserialize("DescribeStackResourceResult",
+                                                                                   &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(DescribeStackResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(DescribeStackResourceError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -8125,33 +8102,30 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = DescribeStackResourcesOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(DescribeStackResourcesOutputDeserializer::deserialize("DescribeStackResourcesResult",
-                                                                                   &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = DescribeStackResourcesOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(DescribeStackResourcesOutputDeserializer::deserialize("DescribeStackResourcesResult",
+                                                                                    &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(DescribeStackResourcesError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(DescribeStackResourcesError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
         }
     }
 
@@ -8170,32 +8144,29 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = DescribeStacksOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeStacksOutputDeserializer::deserialize("DescribeStacksResult",
-                                                                                &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = DescribeStacksOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(DescribeStacksOutputDeserializer::deserialize("DescribeStacksResult",
+                                                                            &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(DescribeStacksError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(DescribeStacksError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8214,32 +8185,30 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = EstimateTemplateCostOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(EstimateTemplateCostOutputDeserializer::deserialize("EstimateTemplateCostResult",
-                                                                                      &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = EstimateTemplateCostOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(EstimateTemplateCostOutputDeserializer::deserialize("EstimateTemplateCostResult",
+                                                                                  &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(EstimateTemplateCostError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(EstimateTemplateCostError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -8258,32 +8227,29 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ExecuteChangeSetOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ExecuteChangeSetOutputDeserializer::deserialize("ExecuteChangeSetResult",
-                                                                                  &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ExecuteChangeSetOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ExecuteChangeSetOutputDeserializer::deserialize("ExecuteChangeSetResult",
+                                                                              &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(ExecuteChangeSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(ExecuteChangeSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8302,32 +8268,29 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = GetStackPolicyOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetStackPolicyOutputDeserializer::deserialize("GetStackPolicyResult",
-                                                                                &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = GetStackPolicyOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(GetStackPolicyOutputDeserializer::deserialize("GetStackPolicyResult",
+                                                                            &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(GetStackPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(GetStackPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8346,29 +8309,29 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = GetTemplateOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetTemplateOutputDeserializer::deserialize("GetTemplateResult",
-                                                                             &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = GetTemplateOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(GetTemplateOutputDeserializer::deserialize("GetTemplateResult",
+                                                                         &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => Err(GetTemplateError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(GetTemplateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8387,32 +8350,30 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = GetTemplateSummaryOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetTemplateSummaryOutputDeserializer::deserialize("GetTemplateSummaryResult",
-                                                                                    &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = GetTemplateSummaryOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(GetTemplateSummaryOutputDeserializer::deserialize("GetTemplateSummaryResult",
+                                                                                &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(GetTemplateSummaryError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(GetTemplateSummaryError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -8431,32 +8392,29 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ListChangeSetsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListChangeSetsOutputDeserializer::deserialize("ListChangeSetsResult",
-                                                                                &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ListChangeSetsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ListChangeSetsOutputDeserializer::deserialize("ListChangeSetsResult",
+                                                                            &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(ListChangeSetsError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(ListChangeSetsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8475,29 +8433,29 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ListExportsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListExportsOutputDeserializer::deserialize("ListExportsResult",
-                                                                             &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ListExportsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ListExportsOutputDeserializer::deserialize("ListExportsResult",
+                                                                         &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => Err(ListExportsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(ListExportsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8516,29 +8474,29 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ListImportsOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListImportsOutputDeserializer::deserialize("ListImportsResult",
-                                                                             &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ListImportsOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ListImportsOutputDeserializer::deserialize("ListImportsResult",
+                                                                         &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => Err(ListImportsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(ListImportsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8557,32 +8515,30 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ListStackResourcesOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListStackResourcesOutputDeserializer::deserialize("ListStackResourcesResult",
-                                                                                    &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ListStackResourcesOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ListStackResourcesOutputDeserializer::deserialize("ListStackResourcesResult",
+                                                                                &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(ListStackResourcesError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(ListStackResourcesError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -8599,29 +8555,29 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ListStacksOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListStacksOutputDeserializer::deserialize("ListStacksResult",
-                                                                            &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ListStacksOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ListStacksOutputDeserializer::deserialize("ListStacksResult",
+                                                                        &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => Err(ListStacksError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(ListStacksError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8638,15 +8594,12 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(SetStackPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(SetStackPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8663,15 +8616,12 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(SignalResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(SignalResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8690,29 +8640,29 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = UpdateStackOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(UpdateStackOutputDeserializer::deserialize("UpdateStackResult",
-                                                                             &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = UpdateStackOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(UpdateStackOutputDeserializer::deserialize("UpdateStackResult",
+                                                                         &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => Err(UpdateStackError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(UpdateStackError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8731,32 +8681,29 @@ impl<P, D> CloudFormation for CloudFormationClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ValidateTemplateOutput::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ValidateTemplateOutputDeserializer::deserialize("ValidateTemplateResult",
-                                                                                  &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ValidateTemplateOutput::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ValidateTemplateOutputDeserializer::deserialize("ValidateTemplateResult",
+                                                                              &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(ValidateTemplateError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(ValidateTemplateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 }

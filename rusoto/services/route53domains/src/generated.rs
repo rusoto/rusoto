@@ -1,6 +1,4 @@
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
 
@@ -2973,11 +2971,11 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CheckDomainAvailabilityResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CheckDomainAvailabilityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CheckDomainAvailabilityResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CheckDomainAvailabilityError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -2998,14 +2996,11 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteTagsForDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DeleteTagsForDomainError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteTagsForDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DeleteTagsForDomainError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -3027,14 +3022,11 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DisableDomainAutoRenewResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DisableDomainAutoRenewError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DisableDomainAutoRenewResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DisableDomainAutoRenewError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
         }
     }
 
@@ -3056,11 +3048,11 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DisableDomainTransferLockResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DisableDomainTransferLockError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DisableDomainTransferLockResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DisableDomainTransferLockError::from_body(String::from_utf8_lossy(&response.body)
+                                                              .as_ref()))
         }
     }
 
@@ -3082,14 +3074,11 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<EnableDomainAutoRenewResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(EnableDomainAutoRenewError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<EnableDomainAutoRenewResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(EnableDomainAutoRenewError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -3111,11 +3100,11 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<EnableDomainTransferLockResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(EnableDomainTransferLockError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<EnableDomainTransferLockResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(EnableDomainTransferLockError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -3137,11 +3126,10 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetContactReachabilityStatusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetContactReachabilityStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetContactReachabilityStatusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetContactReachabilityStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3161,14 +3149,10 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDomainDetailResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetDomainDetailError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetDomainDetailResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetDomainDetailError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3190,14 +3174,11 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDomainSuggestionsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetDomainSuggestionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetDomainSuggestionsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetDomainSuggestionsError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -3218,14 +3199,11 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetOperationDetailResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetOperationDetailError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetOperationDetailResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetOperationDetailError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -3245,11 +3223,12 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListDomainsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListDomainsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListDomainsResponse>(String::from_utf8_lossy(&response.body)
+                                                               .as_ref())
+                       .unwrap())
+        } else {
+            Err(ListDomainsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3269,14 +3248,10 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListOperationsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListOperationsError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListOperationsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListOperationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3296,14 +3271,10 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListTagsForDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListTagsForDomainError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListTagsForDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListTagsForDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3323,14 +3294,10 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RegisterDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(RegisterDomainError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<RegisterDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(RegisterDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3350,11 +3317,12 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RenewDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(RenewDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<RenewDomainResponse>(String::from_utf8_lossy(&response.body)
+                                                               .as_ref())
+                       .unwrap())
+        } else {
+            Err(RenewDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3376,11 +3344,10 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ResendContactReachabilityEmailResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ResendContactReachabilityEmailError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ResendContactReachabilityEmailResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ResendContactReachabilityEmailError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3402,14 +3369,11 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RetrieveDomainAuthCodeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(RetrieveDomainAuthCodeError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<RetrieveDomainAuthCodeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(RetrieveDomainAuthCodeError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
         }
     }
 
@@ -3429,14 +3393,10 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<TransferDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(TransferDomainError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<TransferDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(TransferDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3457,14 +3417,11 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateDomainContactResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(UpdateDomainContactError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateDomainContactResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(UpdateDomainContactError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -3486,11 +3443,11 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateDomainContactPrivacyResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateDomainContactPrivacyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateDomainContactPrivacyResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(UpdateDomainContactPrivacyError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 
@@ -3512,11 +3469,11 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateDomainNameserversResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateDomainNameserversError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateDomainNameserversResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(UpdateDomainNameserversError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -3537,14 +3494,11 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateTagsForDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(UpdateTagsForDomainError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateTagsForDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(UpdateTagsForDomainError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -3564,11 +3518,12 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ViewBillingResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ViewBillingError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ViewBillingResponse>(String::from_utf8_lossy(&response.body)
+                                                               .as_ref())
+                       .unwrap())
+        } else {
+            Err(ViewBillingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 }

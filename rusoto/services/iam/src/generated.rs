@@ -1,6 +1,4 @@
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
 
@@ -22434,14 +22432,12 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                            Err(AddClientIDToOpenIDConnectProviderError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(AddClientIDToOpenIDConnectProviderError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -22460,14 +22456,13 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                            Err(AddRoleToInstanceProfileError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(AddRoleToInstanceProfileError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -22484,15 +22479,12 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(AddUserToGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(AddUserToGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -22511,15 +22503,12 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(AttachGroupPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(AttachGroupPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -22538,15 +22527,12 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(AttachRolePolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(AttachRolePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -22565,15 +22551,12 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(AttachUserPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(AttachUserPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -22590,15 +22573,12 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(ChangePasswordError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(ChangePasswordError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -22617,32 +22597,29 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = CreateAccessKeyResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateAccessKeyResponseDeserializer::deserialize("CreateAccessKeyResult",
-                                                                                   &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = CreateAccessKeyResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(CreateAccessKeyResponseDeserializer::deserialize("CreateAccessKeyResult",
+                                                                               &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(CreateAccessKeyError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(CreateAccessKeyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -22661,15 +22638,13 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(CreateAccountAliasError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(CreateAccountAliasError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -22688,29 +22663,29 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = CreateGroupResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateGroupResponseDeserializer::deserialize("CreateGroupResult",
-                                                                               &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = CreateGroupResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(CreateGroupResponseDeserializer::deserialize("CreateGroupResult",
+                                                                           &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => Err(CreateGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(CreateGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -22730,33 +22705,30 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = CreateInstanceProfileResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(CreateInstanceProfileResponseDeserializer::deserialize("CreateInstanceProfileResult",
-                                                                                    &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = CreateInstanceProfileResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(CreateInstanceProfileResponseDeserializer::deserialize("CreateInstanceProfileResult",
+                                                                                     &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(CreateInstanceProfileError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(CreateInstanceProfileError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -22775,32 +22747,30 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = CreateLoginProfileResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateLoginProfileResponseDeserializer::deserialize("CreateLoginProfileResult",
-                                                                                      &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = CreateLoginProfileResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(CreateLoginProfileResponseDeserializer::deserialize("CreateLoginProfileResult",
+                                                                                  &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(CreateLoginProfileError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(CreateLoginProfileError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -22820,30 +22790,30 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = CreateOpenIDConnectProviderResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateOpenIDConnectProviderResponseDeserializer::deserialize("CreateOpenIDConnectProviderResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = CreateOpenIDConnectProviderResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result =
+                    try!(CreateOpenIDConnectProviderResponseDeserializer::deserialize("CreateOpenIDConnectProviderResult",
+                                                                                      &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(CreateOpenIDConnectProviderError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(CreateOpenIDConnectProviderError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -22862,31 +22832,29 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = CreatePolicyResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreatePolicyResponseDeserializer::deserialize("CreatePolicyResult",
-                                                                                &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = CreatePolicyResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(CreatePolicyResponseDeserializer::deserialize("CreatePolicyResult",
+                                                                            &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(CreatePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(CreatePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -22905,32 +22873,30 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = CreatePolicyVersionResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreatePolicyVersionResponseDeserializer::deserialize("CreatePolicyVersionResult",
-                                                                                       &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = CreatePolicyVersionResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(CreatePolicyVersionResponseDeserializer::deserialize("CreatePolicyVersionResult",
+                                                                                   &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(CreatePolicyVersionError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(CreatePolicyVersionError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -22949,29 +22915,29 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = CreateRoleResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateRoleResponseDeserializer::deserialize("CreateRoleResult",
-                                                                              &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = CreateRoleResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(CreateRoleResponseDeserializer::deserialize("CreateRoleResult",
+                                                                          &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => Err(CreateRoleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(CreateRoleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -22990,32 +22956,30 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = CreateSAMLProviderResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateSAMLProviderResponseDeserializer::deserialize("CreateSAMLProviderResult",
-                                                                                      &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = CreateSAMLProviderResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(CreateSAMLProviderResponseDeserializer::deserialize("CreateSAMLProviderResult",
+                                                                                  &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(CreateSAMLProviderError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(CreateSAMLProviderError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -23035,32 +22999,30 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = CreateServiceLinkedRoleResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(CreateServiceLinkedRoleResponseDeserializer::deserialize("CreateServiceLinkedRoleResult",
-                                                                                      &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = CreateServiceLinkedRoleResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(CreateServiceLinkedRoleResponseDeserializer::deserialize("CreateServiceLinkedRoleResult",
+                                                                                       &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(CreateServiceLinkedRoleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(CreateServiceLinkedRoleError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -23080,30 +23042,28 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = CreateServiceSpecificCredentialResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateServiceSpecificCredentialResponseDeserializer::deserialize("CreateServiceSpecificCredentialResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = CreateServiceSpecificCredentialResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(CreateServiceSpecificCredentialResponseDeserializer::deserialize("CreateServiceSpecificCredentialResult", &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(CreateServiceSpecificCredentialError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(CreateServiceSpecificCredentialError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -23122,29 +23082,29 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = CreateUserResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateUserResponseDeserializer::deserialize("CreateUserResult",
-                                                                              &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = CreateUserResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(CreateUserResponseDeserializer::deserialize("CreateUserResult",
+                                                                          &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => Err(CreateUserError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(CreateUserError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -23164,33 +23124,30 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = CreateVirtualMFADeviceResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(CreateVirtualMFADeviceResponseDeserializer::deserialize("CreateVirtualMFADeviceResult",
-                                                                                     &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = CreateVirtualMFADeviceResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(CreateVirtualMFADeviceResponseDeserializer::deserialize("CreateVirtualMFADeviceResult",
+                                                                                      &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(CreateVirtualMFADeviceError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(CreateVirtualMFADeviceError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
         }
     }
 
@@ -23209,15 +23166,13 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(DeactivateMFADeviceError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(DeactivateMFADeviceError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -23236,15 +23191,12 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(DeleteAccessKeyError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(DeleteAccessKeyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -23263,15 +23215,13 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(DeleteAccountAliasError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(DeleteAccountAliasError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -23288,14 +23238,12 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                            Err(DeleteAccountPasswordPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(DeleteAccountPasswordPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -23312,12 +23260,12 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => Err(DeleteGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(DeleteGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -23336,15 +23284,12 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(DeleteGroupPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(DeleteGroupPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -23363,15 +23308,13 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(DeleteInstanceProfileError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(DeleteInstanceProfileError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -23390,15 +23333,13 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(DeleteLoginProfileError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(DeleteLoginProfileError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -23417,14 +23358,12 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                            Err(DeleteOpenIDConnectProviderError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(DeleteOpenIDConnectProviderError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -23441,14 +23380,12 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(DeletePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(DeletePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -23467,15 +23404,13 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(DeletePolicyVersionError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(DeletePolicyVersionError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -23492,12 +23427,12 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => Err(DeleteRoleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(DeleteRoleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -23516,15 +23451,12 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(DeleteRolePolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(DeleteRolePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -23543,15 +23475,13 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(DeleteSAMLProviderError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(DeleteSAMLProviderError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -23570,15 +23500,13 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(DeleteSSHPublicKeyError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(DeleteSSHPublicKeyError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -23597,14 +23525,13 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                            Err(DeleteServerCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(DeleteServerCertificateError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -23623,14 +23550,12 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                            Err(DeleteServiceSpecificCredentialError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(DeleteServiceSpecificCredentialError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -23649,14 +23574,13 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                            Err(DeleteSigningCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(DeleteSigningCertificateError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -23673,12 +23597,12 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => Err(DeleteUserError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(DeleteUserError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -23697,15 +23621,12 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(DeleteUserPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(DeleteUserPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -23724,15 +23645,13 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(DeleteVirtualMFADeviceError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(DeleteVirtualMFADeviceError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
         }
     }
 
@@ -23751,15 +23670,12 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(DetachGroupPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(DetachGroupPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -23778,15 +23694,12 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(DetachRolePolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(DetachRolePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -23805,15 +23718,12 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(DetachUserPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(DetachUserPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -23832,15 +23742,12 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(EnableMFADeviceError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(EnableMFADeviceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -23859,32 +23766,31 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = GenerateCredentialReportResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(GenerateCredentialReportResponseDeserializer::deserialize("GenerateCredentialReportResult",
-                                                                                       &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = GenerateCredentialReportResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result =
+                    try!(GenerateCredentialReportResponseDeserializer::deserialize("GenerateCredentialReportResult",
+                                                                                   &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(GenerateCredentialReportError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(GenerateCredentialReportError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -23904,33 +23810,30 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = GetAccessKeyLastUsedResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(GetAccessKeyLastUsedResponseDeserializer::deserialize("GetAccessKeyLastUsedResult",
-                                                                                   &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = GetAccessKeyLastUsedResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(GetAccessKeyLastUsedResponseDeserializer::deserialize("GetAccessKeyLastUsedResult",
+                                                                                    &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(GetAccessKeyLastUsedError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(GetAccessKeyLastUsedError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -23950,30 +23853,28 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = GetAccountAuthorizationDetailsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetAccountAuthorizationDetailsResponseDeserializer::deserialize("GetAccountAuthorizationDetailsResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = GetAccountAuthorizationDetailsResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(GetAccountAuthorizationDetailsResponseDeserializer::deserialize("GetAccountAuthorizationDetailsResult", &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(GetAccountAuthorizationDetailsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(GetAccountAuthorizationDetailsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -23992,32 +23893,31 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = GetAccountPasswordPolicyResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(GetAccountPasswordPolicyResponseDeserializer::deserialize("GetAccountPasswordPolicyResult",
-                                                                                       &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = GetAccountPasswordPolicyResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result =
+                    try!(GetAccountPasswordPolicyResponseDeserializer::deserialize("GetAccountPasswordPolicyResult",
+                                                                                   &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(GetAccountPasswordPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(GetAccountPasswordPolicyError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -24034,32 +23934,29 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = GetAccountSummaryResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetAccountSummaryResponseDeserializer::deserialize("GetAccountSummaryResult",
-                                                                                     &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = GetAccountSummaryResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(GetAccountSummaryResponseDeserializer::deserialize("GetAccountSummaryResult",
+                                                                                 &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(GetAccountSummaryError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(GetAccountSummaryError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -24079,32 +23976,29 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = GetContextKeysForPolicyResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(GetContextKeysForPolicyResponseDeserializer::deserialize("GetContextKeysForCustomPolicyResult",
-                                                                                      &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = GetContextKeysForPolicyResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(GetContextKeysForPolicyResponseDeserializer::deserialize("GetContextKeysForCustomPolicyResult",
+                                                                                       &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(GetContextKeysForCustomPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(GetContextKeysForCustomPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -24124,32 +24018,29 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = GetContextKeysForPolicyResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(GetContextKeysForPolicyResponseDeserializer::deserialize("GetContextKeysForPrincipalPolicyResult",
-                                                                                      &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = GetContextKeysForPolicyResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(GetContextKeysForPolicyResponseDeserializer::deserialize("GetContextKeysForPrincipalPolicyResult",
+                                                                                       &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(GetContextKeysForPrincipalPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(GetContextKeysForPrincipalPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -24167,32 +24058,30 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = GetCredentialReportResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetCredentialReportResponseDeserializer::deserialize("GetCredentialReportResult",
-                                                                                       &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = GetCredentialReportResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(GetCredentialReportResponseDeserializer::deserialize("GetCredentialReportResult",
+                                                                                   &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(GetCredentialReportError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(GetCredentialReportError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -24209,29 +24098,29 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = GetGroupResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetGroupResponseDeserializer::deserialize("GetGroupResult",
-                                                                            &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = GetGroupResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(GetGroupResponseDeserializer::deserialize("GetGroupResult",
+                                                                        &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => Err(GetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(GetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -24250,32 +24139,29 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = GetGroupPolicyResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetGroupPolicyResponseDeserializer::deserialize("GetGroupPolicyResult",
-                                                                                  &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = GetGroupPolicyResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(GetGroupPolicyResponseDeserializer::deserialize("GetGroupPolicyResult",
+                                                                              &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(GetGroupPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(GetGroupPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -24294,32 +24180,30 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = GetInstanceProfileResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetInstanceProfileResponseDeserializer::deserialize("GetInstanceProfileResult",
-                                                                                      &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = GetInstanceProfileResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(GetInstanceProfileResponseDeserializer::deserialize("GetInstanceProfileResult",
+                                                                                  &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(GetInstanceProfileError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(GetInstanceProfileError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -24338,32 +24222,29 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = GetLoginProfileResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetLoginProfileResponseDeserializer::deserialize("GetLoginProfileResult",
-                                                                                   &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = GetLoginProfileResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(GetLoginProfileResponseDeserializer::deserialize("GetLoginProfileResult",
+                                                                               &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(GetLoginProfileError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(GetLoginProfileError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -24383,32 +24264,31 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = GetOpenIDConnectProviderResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(GetOpenIDConnectProviderResponseDeserializer::deserialize("GetOpenIDConnectProviderResult",
-                                                                                       &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = GetOpenIDConnectProviderResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result =
+                    try!(GetOpenIDConnectProviderResponseDeserializer::deserialize("GetOpenIDConnectProviderResult",
+                                                                                   &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(GetOpenIDConnectProviderError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(GetOpenIDConnectProviderError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -24425,29 +24305,29 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = GetPolicyResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetPolicyResponseDeserializer::deserialize("GetPolicyResult",
-                                                                             &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = GetPolicyResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(GetPolicyResponseDeserializer::deserialize("GetPolicyResult",
+                                                                         &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => Err(GetPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(GetPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -24466,32 +24346,29 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = GetPolicyVersionResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetPolicyVersionResponseDeserializer::deserialize("GetPolicyVersionResult",
-                                                                                    &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = GetPolicyVersionResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(GetPolicyVersionResponseDeserializer::deserialize("GetPolicyVersionResult",
+                                                                                &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(GetPolicyVersionError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(GetPolicyVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -24508,29 +24385,29 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = GetRoleResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetRoleResponseDeserializer::deserialize("GetRoleResult",
-                                                                           &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = GetRoleResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(GetRoleResponseDeserializer::deserialize("GetRoleResult",
+                                                                       &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => Err(GetRoleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(GetRoleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -24549,31 +24426,29 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = GetRolePolicyResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetRolePolicyResponseDeserializer::deserialize("GetRolePolicyResult",
-                                                                                 &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = GetRolePolicyResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(GetRolePolicyResponseDeserializer::deserialize("GetRolePolicyResult",
+                                                                             &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(GetRolePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(GetRolePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -24592,32 +24467,29 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = GetSAMLProviderResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetSAMLProviderResponseDeserializer::deserialize("GetSAMLProviderResult",
-                                                                                   &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = GetSAMLProviderResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(GetSAMLProviderResponseDeserializer::deserialize("GetSAMLProviderResult",
+                                                                               &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(GetSAMLProviderError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(GetSAMLProviderError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -24636,32 +24508,29 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = GetSSHPublicKeyResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetSSHPublicKeyResponseDeserializer::deserialize("GetSSHPublicKeyResult",
-                                                                                   &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = GetSSHPublicKeyResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(GetSSHPublicKeyResponseDeserializer::deserialize("GetSSHPublicKeyResult",
+                                                                               &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(GetSSHPublicKeyError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(GetSSHPublicKeyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -24681,33 +24550,30 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = GetServerCertificateResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(GetServerCertificateResponseDeserializer::deserialize("GetServerCertificateResult",
-                                                                                   &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = GetServerCertificateResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(GetServerCertificateResponseDeserializer::deserialize("GetServerCertificateResult",
+                                                                                    &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(GetServerCertificateError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(GetServerCertificateError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -24724,29 +24590,29 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = GetUserResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetUserResponseDeserializer::deserialize("GetUserResult",
-                                                                           &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = GetUserResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(GetUserResponseDeserializer::deserialize("GetUserResult",
+                                                                       &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => Err(GetUserError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(GetUserError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -24765,31 +24631,29 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = GetUserPolicyResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetUserPolicyResponseDeserializer::deserialize("GetUserPolicyResult",
-                                                                                 &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = GetUserPolicyResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(GetUserPolicyResponseDeserializer::deserialize("GetUserPolicyResult",
+                                                                             &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(GetUserPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(GetUserPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -24808,32 +24672,29 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ListAccessKeysResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListAccessKeysResponseDeserializer::deserialize("ListAccessKeysResult",
-                                                                                  &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ListAccessKeysResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ListAccessKeysResponseDeserializer::deserialize("ListAccessKeysResult",
+                                                                              &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(ListAccessKeysError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(ListAccessKeysError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -24852,32 +24713,30 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ListAccountAliasesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListAccountAliasesResponseDeserializer::deserialize("ListAccountAliasesResult",
-                                                                                      &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ListAccountAliasesResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ListAccountAliasesResponseDeserializer::deserialize("ListAccountAliasesResult",
+                                                                                  &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(ListAccountAliasesError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(ListAccountAliasesError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -24897,30 +24756,31 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ListAttachedGroupPoliciesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListAttachedGroupPoliciesResponseDeserializer::deserialize("ListAttachedGroupPoliciesResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ListAttachedGroupPoliciesResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result =
+                    try!(ListAttachedGroupPoliciesResponseDeserializer::deserialize("ListAttachedGroupPoliciesResult",
+                                                                                    &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(ListAttachedGroupPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(ListAttachedGroupPoliciesError::from_body(String::from_utf8_lossy(&response.body)
+                                                              .as_ref()))
         }
     }
 
@@ -24940,32 +24800,31 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ListAttachedRolePoliciesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(ListAttachedRolePoliciesResponseDeserializer::deserialize("ListAttachedRolePoliciesResult",
-                                                                                       &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ListAttachedRolePoliciesResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result =
+                    try!(ListAttachedRolePoliciesResponseDeserializer::deserialize("ListAttachedRolePoliciesResult",
+                                                                                   &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(ListAttachedRolePoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(ListAttachedRolePoliciesError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -24985,32 +24844,31 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ListAttachedUserPoliciesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(ListAttachedUserPoliciesResponseDeserializer::deserialize("ListAttachedUserPoliciesResult",
-                                                                                       &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ListAttachedUserPoliciesResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result =
+                    try!(ListAttachedUserPoliciesResponseDeserializer::deserialize("ListAttachedUserPoliciesResult",
+                                                                                   &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(ListAttachedUserPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(ListAttachedUserPoliciesError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -25030,33 +24888,30 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ListEntitiesForPolicyResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(ListEntitiesForPolicyResponseDeserializer::deserialize("ListEntitiesForPolicyResult",
-                                                                                    &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ListEntitiesForPolicyResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ListEntitiesForPolicyResponseDeserializer::deserialize("ListEntitiesForPolicyResult",
+                                                                                     &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(ListEntitiesForPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(ListEntitiesForPolicyError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -25075,32 +24930,29 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ListGroupPoliciesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListGroupPoliciesResponseDeserializer::deserialize("ListGroupPoliciesResult",
-                                                                                     &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ListGroupPoliciesResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ListGroupPoliciesResponseDeserializer::deserialize("ListGroupPoliciesResult",
+                                                                                 &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(ListGroupPoliciesError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(ListGroupPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -25119,29 +24971,29 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ListGroupsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListGroupsResponseDeserializer::deserialize("ListGroupsResult",
-                                                                              &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ListGroupsResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ListGroupsResponseDeserializer::deserialize("ListGroupsResult",
+                                                                          &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => Err(ListGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(ListGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -25160,32 +25012,29 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ListGroupsForUserResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListGroupsForUserResponseDeserializer::deserialize("ListGroupsForUserResult",
-                                                                                     &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ListGroupsForUserResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ListGroupsForUserResponseDeserializer::deserialize("ListGroupsForUserResult",
+                                                                                 &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(ListGroupsForUserError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(ListGroupsForUserError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -25205,33 +25054,30 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ListInstanceProfilesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(ListInstanceProfilesResponseDeserializer::deserialize("ListInstanceProfilesResult",
-                                                                                   &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ListInstanceProfilesResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ListInstanceProfilesResponseDeserializer::deserialize("ListInstanceProfilesResult",
+                                                                                    &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(ListInstanceProfilesError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(ListInstanceProfilesError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -25251,30 +25097,30 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ListInstanceProfilesForRoleResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListInstanceProfilesForRoleResponseDeserializer::deserialize("ListInstanceProfilesForRoleResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ListInstanceProfilesForRoleResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result =
+                    try!(ListInstanceProfilesForRoleResponseDeserializer::deserialize("ListInstanceProfilesForRoleResult",
+                                                                                      &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(ListInstanceProfilesForRoleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(ListInstanceProfilesForRoleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -25293,32 +25139,29 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ListMFADevicesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListMFADevicesResponseDeserializer::deserialize("ListMFADevicesResult",
-                                                                                  &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ListMFADevicesResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ListMFADevicesResponseDeserializer::deserialize("ListMFADevicesResult",
+                                                                              &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(ListMFADevicesError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(ListMFADevicesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -25338,30 +25181,31 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ListOpenIDConnectProvidersResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListOpenIDConnectProvidersResponseDeserializer::deserialize("ListOpenIDConnectProvidersResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ListOpenIDConnectProvidersResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result =
+                    try!(ListOpenIDConnectProvidersResponseDeserializer::deserialize("ListOpenIDConnectProvidersResult",
+                                                                                     &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(ListOpenIDConnectProvidersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(ListOpenIDConnectProvidersError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 
@@ -25380,31 +25224,29 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ListPoliciesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListPoliciesResponseDeserializer::deserialize("ListPoliciesResult",
-                                                                                &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ListPoliciesResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ListPoliciesResponseDeserializer::deserialize("ListPoliciesResult",
+                                                                            &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(ListPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(ListPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -25423,32 +25265,30 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ListPolicyVersionsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListPolicyVersionsResponseDeserializer::deserialize("ListPolicyVersionsResult",
-                                                                                      &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ListPolicyVersionsResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ListPolicyVersionsResponseDeserializer::deserialize("ListPolicyVersionsResult",
+                                                                                  &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(ListPolicyVersionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(ListPolicyVersionsError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -25467,32 +25307,29 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ListRolePoliciesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListRolePoliciesResponseDeserializer::deserialize("ListRolePoliciesResult",
-                                                                                    &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ListRolePoliciesResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ListRolePoliciesResponseDeserializer::deserialize("ListRolePoliciesResult",
+                                                                                &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(ListRolePoliciesError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(ListRolePoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -25509,29 +25346,29 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ListRolesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListRolesResponseDeserializer::deserialize("ListRolesResult",
-                                                                             &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ListRolesResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ListRolesResponseDeserializer::deserialize("ListRolesResult",
+                                                                         &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => Err(ListRolesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(ListRolesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -25550,32 +25387,29 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ListSAMLProvidersResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListSAMLProvidersResponseDeserializer::deserialize("ListSAMLProvidersResult",
-                                                                                     &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ListSAMLProvidersResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ListSAMLProvidersResponseDeserializer::deserialize("ListSAMLProvidersResult",
+                                                                                 &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(ListSAMLProvidersError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(ListSAMLProvidersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -25594,32 +25428,29 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ListSSHPublicKeysResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListSSHPublicKeysResponseDeserializer::deserialize("ListSSHPublicKeysResult",
-                                                                                     &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ListSSHPublicKeysResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ListSSHPublicKeysResponseDeserializer::deserialize("ListSSHPublicKeysResult",
+                                                                                 &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(ListSSHPublicKeysError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(ListSSHPublicKeysError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -25639,33 +25470,30 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ListServerCertificatesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(ListServerCertificatesResponseDeserializer::deserialize("ListServerCertificatesResult",
-                                                                                     &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ListServerCertificatesResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ListServerCertificatesResponseDeserializer::deserialize("ListServerCertificatesResult",
+                                                                                      &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(ListServerCertificatesError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(ListServerCertificatesError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
         }
     }
 
@@ -25685,30 +25513,28 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ListServiceSpecificCredentialsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListServiceSpecificCredentialsResponseDeserializer::deserialize("ListServiceSpecificCredentialsResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ListServiceSpecificCredentialsResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ListServiceSpecificCredentialsResponseDeserializer::deserialize("ListServiceSpecificCredentialsResult", &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(ListServiceSpecificCredentialsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(ListServiceSpecificCredentialsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -25728,32 +25554,30 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ListSigningCertificatesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(ListSigningCertificatesResponseDeserializer::deserialize("ListSigningCertificatesResult",
-                                                                                      &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ListSigningCertificatesResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ListSigningCertificatesResponseDeserializer::deserialize("ListSigningCertificatesResult",
+                                                                                       &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(ListSigningCertificatesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(ListSigningCertificatesError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -25772,32 +25596,29 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ListUserPoliciesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListUserPoliciesResponseDeserializer::deserialize("ListUserPoliciesResult",
-                                                                                    &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ListUserPoliciesResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ListUserPoliciesResponseDeserializer::deserialize("ListUserPoliciesResult",
+                                                                                &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(ListUserPoliciesError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(ListUserPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -25814,29 +25635,29 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ListUsersResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListUsersResponseDeserializer::deserialize("ListUsersResult",
-                                                                             &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ListUsersResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ListUsersResponseDeserializer::deserialize("ListUsersResult",
+                                                                         &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => Err(ListUsersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+            Ok(result)
+        } else {
+            Err(ListUsersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -25856,33 +25677,30 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ListVirtualMFADevicesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(ListVirtualMFADevicesResponseDeserializer::deserialize("ListVirtualMFADevicesResult",
-                                                                                    &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ListVirtualMFADevicesResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ListVirtualMFADevicesResponseDeserializer::deserialize("ListVirtualMFADevicesResult",
+                                                                                     &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(ListVirtualMFADevicesError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(ListVirtualMFADevicesError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -25899,15 +25717,12 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(PutGroupPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(PutGroupPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -25924,14 +25739,12 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(PutRolePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(PutRolePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -25948,14 +25761,12 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(PutUserPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(PutUserPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -25977,14 +25788,12 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                            Err(RemoveClientIDFromOpenIDConnectProviderError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(RemoveClientIDFromOpenIDConnectProviderError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -26003,14 +25812,12 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                            Err(RemoveRoleFromInstanceProfileError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(RemoveRoleFromInstanceProfileError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -26029,15 +25836,13 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(RemoveUserFromGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(RemoveUserFromGroupError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -26057,30 +25862,28 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ResetServiceSpecificCredentialResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ResetServiceSpecificCredentialResponseDeserializer::deserialize("ResetServiceSpecificCredentialResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ResetServiceSpecificCredentialResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ResetServiceSpecificCredentialResponseDeserializer::deserialize("ResetServiceSpecificCredentialResult", &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(ResetServiceSpecificCredentialError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(ResetServiceSpecificCredentialError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -26099,15 +25902,12 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(ResyncMFADeviceError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(ResyncMFADeviceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -26126,14 +25926,13 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                            Err(SetDefaultPolicyVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(SetDefaultPolicyVersionError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -26152,32 +25951,30 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = SimulatePolicyResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(SimulatePolicyResponseDeserializer::deserialize("SimulateCustomPolicyResult",
-                                                                                  &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = SimulatePolicyResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(SimulatePolicyResponseDeserializer::deserialize("SimulateCustomPolicyResult",
+                                                                              &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(SimulateCustomPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(SimulateCustomPolicyError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -26197,31 +25994,30 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = SimulatePolicyResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(SimulatePolicyResponseDeserializer::deserialize("SimulatePrincipalPolicyResult",
-                                                                                  &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = SimulatePolicyResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(SimulatePolicyResponseDeserializer::deserialize("SimulatePrincipalPolicyResult",
+                                                                              &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(SimulatePrincipalPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(SimulatePrincipalPolicyError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -26240,15 +26036,12 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(UpdateAccessKeyError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(UpdateAccessKeyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -26267,14 +26060,12 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                            Err(UpdateAccountPasswordPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(UpdateAccountPasswordPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -26293,15 +26084,13 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(UpdateAssumeRolePolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(UpdateAssumeRolePolicyError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
         }
     }
 
@@ -26318,12 +26107,12 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => Err(UpdateGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(UpdateGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -26342,15 +26131,13 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(UpdateLoginProfileError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(UpdateLoginProfileError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -26370,14 +26157,12 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                            Err(UpdateOpenIDConnectProviderThumbprintError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(UpdateOpenIDConnectProviderThumbprintError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -26397,33 +26182,30 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = UpdateRoleDescriptionResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(UpdateRoleDescriptionResponseDeserializer::deserialize("UpdateRoleDescriptionResult",
-                                                                                    &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = UpdateRoleDescriptionResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(UpdateRoleDescriptionResponseDeserializer::deserialize("UpdateRoleDescriptionResult",
+                                                                                     &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(UpdateRoleDescriptionError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(UpdateRoleDescriptionError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -26442,32 +26224,30 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = UpdateSAMLProviderResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(UpdateSAMLProviderResponseDeserializer::deserialize("UpdateSAMLProviderResult",
-                                                                                      &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = UpdateSAMLProviderResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(UpdateSAMLProviderResponseDeserializer::deserialize("UpdateSAMLProviderResult",
+                                                                                  &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(UpdateSAMLProviderError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(UpdateSAMLProviderError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -26486,15 +26266,13 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(UpdateSSHPublicKeyError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(UpdateSSHPublicKeyError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -26513,14 +26291,13 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                            Err(UpdateServerCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(UpdateServerCertificateError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -26539,14 +26316,12 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                            Err(UpdateServiceSpecificCredentialError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(UpdateServiceSpecificCredentialError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -26565,14 +26340,13 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                            Err(UpdateSigningCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(UpdateSigningCertificateError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -26589,12 +26363,12 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => Err(UpdateUserError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(UpdateUserError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -26613,32 +26387,30 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = UploadSSHPublicKeyResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(UploadSSHPublicKeyResponseDeserializer::deserialize("UploadSSHPublicKeyResult",
-                                                                                      &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = UploadSSHPublicKeyResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(UploadSSHPublicKeyResponseDeserializer::deserialize("UploadSSHPublicKeyResult",
+                                                                                  &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(UploadSSHPublicKeyError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(UploadSSHPublicKeyError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -26658,32 +26430,30 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = UploadServerCertificateResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(UploadServerCertificateResponseDeserializer::deserialize("UploadServerCertificateResult",
-                                                                                      &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = UploadServerCertificateResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(UploadServerCertificateResponseDeserializer::deserialize("UploadServerCertificateResult",
+                                                                                       &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(UploadServerCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(UploadServerCertificateError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -26703,32 +26473,31 @@ impl<P, D> Iam for IamClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = UploadSigningCertificateResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(UploadSigningCertificateResponseDeserializer::deserialize("UploadSigningCertificateResult",
-                                                                                       &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = UploadSigningCertificateResponse::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result =
+                    try!(UploadSigningCertificateResponseDeserializer::deserialize("UploadSigningCertificateResult",
+                                                                                   &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(UploadSigningCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(UploadSigningCertificateError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 }

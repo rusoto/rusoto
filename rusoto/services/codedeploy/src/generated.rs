@@ -1,6 +1,4 @@
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
 
@@ -5488,9 +5486,10 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(AddTagsToOnPremisesInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(AddTagsToOnPremisesInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5512,11 +5511,10 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<BatchGetApplicationRevisionsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(BatchGetApplicationRevisionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<BatchGetApplicationRevisionsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(BatchGetApplicationRevisionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5536,14 +5534,11 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<BatchGetApplicationsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(BatchGetApplicationsError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<BatchGetApplicationsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(BatchGetApplicationsError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -5565,11 +5560,11 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<BatchGetDeploymentGroupsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(BatchGetDeploymentGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<BatchGetDeploymentGroupsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(BatchGetDeploymentGroupsError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -5591,11 +5586,10 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<BatchGetDeploymentInstancesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(BatchGetDeploymentInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<BatchGetDeploymentInstancesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(BatchGetDeploymentInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5615,14 +5609,11 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<BatchGetDeploymentsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(BatchGetDeploymentsError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<BatchGetDeploymentsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(BatchGetDeploymentsError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -5644,11 +5635,10 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<BatchGetOnPremisesInstancesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(BatchGetOnPremisesInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<BatchGetOnPremisesInstancesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(BatchGetOnPremisesInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5668,12 +5658,11 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(ContinueDeploymentError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(ContinueDeploymentError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -5693,14 +5682,10 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateApplicationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CreateApplicationError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateApplicationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateApplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5720,14 +5705,10 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateDeploymentOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CreateDeploymentError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateDeploymentOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateDeploymentError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5748,14 +5729,11 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateDeploymentConfigOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CreateDeploymentConfigError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateDeploymentConfigOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateDeploymentConfigError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
         }
     }
 
@@ -5776,14 +5754,11 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateDeploymentGroupOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CreateDeploymentGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateDeploymentGroupOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateDeploymentGroupError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -5803,12 +5778,10 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(DeleteApplicationError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(DeleteApplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5828,12 +5801,11 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(DeleteDeploymentConfigError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(DeleteDeploymentConfigError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
         }
     }
 
@@ -5854,14 +5826,11 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteDeploymentGroupOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DeleteDeploymentGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteDeploymentGroupOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DeleteDeploymentGroupError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -5882,9 +5851,10 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(DeregisterOnPremisesInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(DeregisterOnPremisesInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5904,14 +5874,10 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetApplicationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetApplicationError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetApplicationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetApplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5932,14 +5898,11 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetApplicationRevisionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetApplicationRevisionError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetApplicationRevisionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetApplicationRevisionError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
         }
     }
 
@@ -5959,13 +5922,12 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDeploymentOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetDeploymentError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetDeploymentOutput>(String::from_utf8_lossy(&response.body)
+                                                               .as_ref())
+                       .unwrap())
+        } else {
+            Err(GetDeploymentError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5985,14 +5947,11 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDeploymentConfigOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetDeploymentConfigError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetDeploymentConfigOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetDeploymentConfigError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -6012,14 +5971,11 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDeploymentGroupOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetDeploymentGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetDeploymentGroupOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetDeploymentGroupError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -6040,14 +5996,11 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDeploymentInstanceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetDeploymentInstanceError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetDeploymentInstanceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetDeploymentInstanceError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -6068,14 +6021,11 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetOnPremisesInstanceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetOnPremisesInstanceError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetOnPremisesInstanceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetOnPremisesInstanceError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -6097,11 +6047,11 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListApplicationRevisionsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListApplicationRevisionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListApplicationRevisionsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListApplicationRevisionsError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -6121,14 +6071,10 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListApplicationsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListApplicationsError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListApplicationsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListApplicationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -6149,14 +6095,11 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListDeploymentConfigsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListDeploymentConfigsError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListDeploymentConfigsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListDeploymentConfigsError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -6176,14 +6119,11 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListDeploymentGroupsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListDeploymentGroupsError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListDeploymentGroupsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListDeploymentGroupsError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -6205,11 +6145,11 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListDeploymentInstancesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListDeploymentInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListDeploymentInstancesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListDeploymentInstancesError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -6229,14 +6169,10 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListDeploymentsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListDeploymentsError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListDeploymentsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListDeploymentsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -6258,11 +6194,10 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListGitHubAccountTokenNamesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListGitHubAccountTokenNamesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListGitHubAccountTokenNamesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListGitHubAccountTokenNamesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -6284,11 +6219,11 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListOnPremisesInstancesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListOnPremisesInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListOnPremisesInstancesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListOnPremisesInstancesError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -6309,9 +6244,10 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(RegisterApplicationRevisionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(RegisterApplicationRevisionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -6332,9 +6268,11 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(RegisterOnPremisesInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(RegisterOnPremisesInstanceError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 
@@ -6356,9 +6294,10 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(RemoveTagsFromOnPremisesInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(RemoveTagsFromOnPremisesInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -6380,9 +6319,10 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(SkipWaitTimeForInstanceTerminationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(SkipWaitTimeForInstanceTerminationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -6402,14 +6342,10 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StopDeploymentOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(StopDeploymentError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<StopDeploymentOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(StopDeploymentError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -6429,12 +6365,10 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(UpdateApplicationError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(UpdateApplicationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -6455,14 +6389,11 @@ impl<P, D> CodeDeploy for CodeDeployClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateDeploymentGroupOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(UpdateDeploymentGroupError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateDeploymentGroupOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(UpdateDeploymentGroupError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 }

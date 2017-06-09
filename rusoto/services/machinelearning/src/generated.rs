@@ -1,6 +1,4 @@
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
 
@@ -4039,13 +4037,12 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<AddTagsOutput>(String::from_utf8_lossy(&response.body)
-                                                             .as_ref())
-                           .unwrap())
-            }
-            _ => Err(AddTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<AddTagsOutput>(String::from_utf8_lossy(&response.body)
+                                                         .as_ref())
+                       .unwrap())
+        } else {
+            Err(AddTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4066,14 +4063,11 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateBatchPredictionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CreateBatchPredictionError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateBatchPredictionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateBatchPredictionError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -4094,11 +4088,11 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateDataSourceFromRDSOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateDataSourceFromRDSError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateDataSourceFromRDSOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateDataSourceFromRDSError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -4120,11 +4114,10 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateDataSourceFromRedshiftOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateDataSourceFromRedshiftError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateDataSourceFromRedshiftOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateDataSourceFromRedshiftError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4145,14 +4138,11 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateDataSourceFromS3Output>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CreateDataSourceFromS3Error::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateDataSourceFromS3Output>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateDataSourceFromS3Error::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
         }
     }
 
@@ -4172,14 +4162,10 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateEvaluationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CreateEvaluationError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateEvaluationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateEvaluationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4199,13 +4185,12 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateMLModelOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CreateMLModelError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateMLModelOutput>(String::from_utf8_lossy(&response.body)
+                                                               .as_ref())
+                       .unwrap())
+        } else {
+            Err(CreateMLModelError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4226,14 +4211,11 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateRealtimeEndpointOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CreateRealtimeEndpointError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateRealtimeEndpointOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateRealtimeEndpointError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
         }
     }
 
@@ -4254,14 +4236,11 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteBatchPredictionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DeleteBatchPredictionError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteBatchPredictionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DeleteBatchPredictionError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -4281,14 +4260,10 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteDataSourceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DeleteDataSourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteDataSourceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DeleteDataSourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4308,14 +4283,10 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteEvaluationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DeleteEvaluationError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteEvaluationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DeleteEvaluationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4335,13 +4306,12 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteMLModelOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DeleteMLModelError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteMLModelOutput>(String::from_utf8_lossy(&response.body)
+                                                               .as_ref())
+                       .unwrap())
+        } else {
+            Err(DeleteMLModelError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4362,14 +4332,11 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteRealtimeEndpointOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DeleteRealtimeEndpointError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteRealtimeEndpointOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DeleteRealtimeEndpointError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
         }
     }
 
@@ -4387,11 +4354,12 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteTagsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteTagsOutput>(String::from_utf8_lossy(&response.body)
+                                                            .as_ref())
+                       .unwrap())
+        } else {
+            Err(DeleteTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4412,11 +4380,11 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeBatchPredictionsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeBatchPredictionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeBatchPredictionsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeBatchPredictionsError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -4436,14 +4404,11 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeDataSourcesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeDataSourcesError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeDataSourcesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeDataSourcesError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -4463,14 +4428,11 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeEvaluationsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeEvaluationsError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeEvaluationsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeEvaluationsError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -4490,14 +4452,10 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeMLModelsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeMLModelsError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeMLModelsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeMLModelsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4517,13 +4475,12 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeTagsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeTagsOutput>(String::from_utf8_lossy(&response.body)
+                                                              .as_ref())
+                       .unwrap())
+        } else {
+            Err(DescribeTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4543,14 +4500,11 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetBatchPredictionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetBatchPredictionError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetBatchPredictionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetBatchPredictionError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -4570,13 +4524,12 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDataSourceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetDataSourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetDataSourceOutput>(String::from_utf8_lossy(&response.body)
+                                                               .as_ref())
+                       .unwrap())
+        } else {
+            Err(GetDataSourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4596,13 +4549,12 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetEvaluationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetEvaluationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetEvaluationOutput>(String::from_utf8_lossy(&response.body)
+                                                               .as_ref())
+                       .unwrap())
+        } else {
+            Err(GetEvaluationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4620,11 +4572,12 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetMLModelOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetMLModelError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetMLModelOutput>(String::from_utf8_lossy(&response.body)
+                                                            .as_ref())
+                       .unwrap())
+        } else {
+            Err(GetMLModelError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4642,13 +4595,12 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<PredictOutput>(String::from_utf8_lossy(&response.body)
-                                                             .as_ref())
-                           .unwrap())
-            }
-            _ => Err(PredictError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<PredictOutput>(String::from_utf8_lossy(&response.body)
+                                                         .as_ref())
+                       .unwrap())
+        } else {
+            Err(PredictError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4669,14 +4621,11 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateBatchPredictionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(UpdateBatchPredictionError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateBatchPredictionOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(UpdateBatchPredictionError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -4696,14 +4645,10 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateDataSourceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(UpdateDataSourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateDataSourceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(UpdateDataSourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4723,14 +4668,10 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateEvaluationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(UpdateEvaluationError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateEvaluationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(UpdateEvaluationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4750,13 +4691,12 @@ impl<P, D> MachineLearning for MachineLearningClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateMLModelOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(UpdateMLModelError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateMLModelOutput>(String::from_utf8_lossy(&response.body)
+                                                               .as_ref())
+                       .unwrap())
+        } else {
+            Err(UpdateMLModelError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 }

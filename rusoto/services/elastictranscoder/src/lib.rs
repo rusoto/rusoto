@@ -3,9 +3,6 @@
 //!
 //! If you're using the service, you're probably looking for [EtsClient](struct.EtsClient.html) and [Ets](trait.Ets.html).
 
-extern crate hyper;
-#[macro_use]
-extern crate log;
 extern crate rusoto_core;
 extern crate serde;
 #[macro_use]

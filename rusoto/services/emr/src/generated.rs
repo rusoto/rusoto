@@ -1,6 +1,4 @@
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
 
@@ -4296,14 +4294,10 @@ impl<P, D> Emr for EmrClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddInstanceFleetOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(AddInstanceFleetError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<AddInstanceFleetOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(AddInstanceFleetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4323,14 +4317,10 @@ impl<P, D> Emr for EmrClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddInstanceGroupsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(AddInstanceGroupsError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<AddInstanceGroupsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(AddInstanceGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4350,14 +4340,10 @@ impl<P, D> Emr for EmrClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddJobFlowStepsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(AddJobFlowStepsError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<AddJobFlowStepsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(AddJobFlowStepsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4375,13 +4361,12 @@ impl<P, D> Emr for EmrClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<AddTagsOutput>(String::from_utf8_lossy(&response.body)
-                                                             .as_ref())
-                           .unwrap())
-            }
-            _ => Err(AddTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<AddTagsOutput>(String::from_utf8_lossy(&response.body)
+                                                         .as_ref())
+                       .unwrap())
+        } else {
+            Err(AddTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4401,11 +4386,12 @@ impl<P, D> Emr for EmrClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CancelStepsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CancelStepsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CancelStepsOutput>(String::from_utf8_lossy(&response.body)
+                                                             .as_ref())
+                       .unwrap())
+        } else {
+            Err(CancelStepsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4427,11 +4413,10 @@ impl<P, D> Emr for EmrClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateSecurityConfigurationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateSecurityConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateSecurityConfigurationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateSecurityConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4453,11 +4438,10 @@ impl<P, D> Emr for EmrClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteSecurityConfigurationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteSecurityConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteSecurityConfigurationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DeleteSecurityConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4477,14 +4461,10 @@ impl<P, D> Emr for EmrClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeClusterOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeClusterError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeClusterOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4504,14 +4484,10 @@ impl<P, D> Emr for EmrClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeJobFlowsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeJobFlowsError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeJobFlowsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeJobFlowsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4533,11 +4509,10 @@ impl<P, D> Emr for EmrClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeSecurityConfigurationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeSecurityConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeSecurityConfigurationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeSecurityConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4557,13 +4532,12 @@ impl<P, D> Emr for EmrClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeStepOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeStepError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeStepOutput>(String::from_utf8_lossy(&response.body)
+                                                              .as_ref())
+                       .unwrap())
+        } else {
+            Err(DescribeStepError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4583,14 +4557,11 @@ impl<P, D> Emr for EmrClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListBootstrapActionsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListBootstrapActionsError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListBootstrapActionsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListBootstrapActionsError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -4610,13 +4581,12 @@ impl<P, D> Emr for EmrClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListClustersOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListClustersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListClustersOutput>(String::from_utf8_lossy(&response.body)
+                                                              .as_ref())
+                       .unwrap())
+        } else {
+            Err(ListClustersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4636,14 +4606,11 @@ impl<P, D> Emr for EmrClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListInstanceFleetsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListInstanceFleetsError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListInstanceFleetsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListInstanceFleetsError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -4663,14 +4630,11 @@ impl<P, D> Emr for EmrClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListInstanceGroupsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListInstanceGroupsError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListInstanceGroupsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListInstanceGroupsError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -4690,13 +4654,12 @@ impl<P, D> Emr for EmrClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListInstancesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListInstancesOutput>(String::from_utf8_lossy(&response.body)
+                                                               .as_ref())
+                       .unwrap())
+        } else {
+            Err(ListInstancesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4718,11 +4681,11 @@ impl<P, D> Emr for EmrClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListSecurityConfigurationsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListSecurityConfigurationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListSecurityConfigurationsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListSecurityConfigurationsError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 
@@ -4740,13 +4703,12 @@ impl<P, D> Emr for EmrClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<ListStepsOutput>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
-            }
-            _ => Err(ListStepsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListStepsOutput>(String::from_utf8_lossy(&response.body)
+                                                           .as_ref())
+                       .unwrap())
+        } else {
+            Err(ListStepsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4766,12 +4728,11 @@ impl<P, D> Emr for EmrClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(ModifyInstanceFleetError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(ModifyInstanceFleetError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -4791,12 +4752,11 @@ impl<P, D> Emr for EmrClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(ModifyInstanceGroupsError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(ModifyInstanceGroupsError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -4816,14 +4776,11 @@ impl<P, D> Emr for EmrClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutAutoScalingPolicyOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(PutAutoScalingPolicyError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<PutAutoScalingPolicyOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(PutAutoScalingPolicyError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -4844,11 +4801,11 @@ impl<P, D> Emr for EmrClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RemoveAutoScalingPolicyOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(RemoveAutoScalingPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<RemoveAutoScalingPolicyOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(RemoveAutoScalingPolicyError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -4866,11 +4823,12 @@ impl<P, D> Emr for EmrClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RemoveTagsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(RemoveTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<RemoveTagsOutput>(String::from_utf8_lossy(&response.body)
+                                                            .as_ref())
+                       .unwrap())
+        } else {
+            Err(RemoveTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4888,11 +4846,12 @@ impl<P, D> Emr for EmrClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RunJobFlowOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(RunJobFlowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<RunJobFlowOutput>(String::from_utf8_lossy(&response.body)
+                                                            .as_ref())
+                       .unwrap())
+        } else {
+            Err(RunJobFlowError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -4912,9 +4871,11 @@ impl<P, D> Emr for EmrClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(SetTerminationProtectionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(SetTerminationProtectionError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -4934,12 +4895,11 @@ impl<P, D> Emr for EmrClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(SetVisibleToAllUsersError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(SetVisibleToAllUsersError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -4959,12 +4919,10 @@ impl<P, D> Emr for EmrClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(TerminateJobFlowsError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(TerminateJobFlowsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 }

@@ -1,6 +1,4 @@
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
 
@@ -2767,14 +2765,11 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<BatchGetRepositoriesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(BatchGetRepositoriesError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<BatchGetRepositoriesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(BatchGetRepositoriesError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -2792,11 +2787,10 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(CreateBranchError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(CreateBranchError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2816,14 +2810,10 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateRepositoryOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CreateRepositoryError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateRepositoryOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateRepositoryError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2843,14 +2833,10 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteRepositoryOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DeleteRepositoryError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteRepositoryOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DeleteRepositoryError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2868,13 +2854,12 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<GetBlobOutput>(String::from_utf8_lossy(&response.body)
-                                                             .as_ref())
-                           .unwrap())
-            }
-            _ => Err(GetBlobError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetBlobOutput>(String::from_utf8_lossy(&response.body)
+                                                         .as_ref())
+                       .unwrap())
+        } else {
+            Err(GetBlobError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2892,13 +2877,12 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<GetBranchOutput>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
-            }
-            _ => Err(GetBranchError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetBranchOutput>(String::from_utf8_lossy(&response.body)
+                                                           .as_ref())
+                       .unwrap())
+        } else {
+            Err(GetBranchError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2916,13 +2900,12 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<GetCommitOutput>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
-            }
-            _ => Err(GetCommitError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetCommitOutput>(String::from_utf8_lossy(&response.body)
+                                                           .as_ref())
+                       .unwrap())
+        } else {
+            Err(GetCommitError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2942,14 +2925,10 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetDifferencesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetDifferencesError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetDifferencesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetDifferencesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2969,13 +2948,12 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetRepositoryOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetRepositoryError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetRepositoryOutput>(String::from_utf8_lossy(&response.body)
+                                                               .as_ref())
+                       .unwrap())
+        } else {
+            Err(GetRepositoryError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2996,14 +2974,11 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetRepositoryTriggersOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetRepositoryTriggersError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetRepositoryTriggersOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetRepositoryTriggersError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -3023,13 +2998,12 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListBranchesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListBranchesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListBranchesOutput>(String::from_utf8_lossy(&response.body)
+                                                              .as_ref())
+                       .unwrap())
+        } else {
+            Err(ListBranchesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3049,14 +3023,10 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListRepositoriesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListRepositoriesError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListRepositoriesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListRepositoriesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3077,14 +3047,11 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<PutRepositoryTriggersOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(PutRepositoryTriggersError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<PutRepositoryTriggersOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(PutRepositoryTriggersError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -3105,14 +3072,11 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<TestRepositoryTriggersOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(TestRepositoryTriggersError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<TestRepositoryTriggersOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(TestRepositoryTriggersError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
         }
     }
 
@@ -3132,12 +3096,11 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(UpdateDefaultBranchError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(UpdateDefaultBranchError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -3158,9 +3121,10 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(UpdateRepositoryDescriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(UpdateRepositoryDescriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3180,12 +3144,11 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(UpdateRepositoryNameError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(UpdateRepositoryNameError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 }

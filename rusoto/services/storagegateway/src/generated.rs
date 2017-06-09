@@ -1,6 +1,4 @@
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
 
@@ -7194,14 +7192,10 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ActivateGatewayOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ActivateGatewayError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ActivateGatewayOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ActivateGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7219,13 +7213,12 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<AddCacheOutput>(String::from_utf8_lossy(&response.body)
-                                                              .as_ref())
-                           .unwrap())
-            }
-            _ => Err(AddCacheError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<AddCacheOutput>(String::from_utf8_lossy(&response.body)
+                                                          .as_ref())
+                       .unwrap())
+        } else {
+            Err(AddCacheError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7245,14 +7238,10 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddTagsToResourceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(AddTagsToResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<AddTagsToResourceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(AddTagsToResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7272,14 +7261,10 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddUploadBufferOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(AddUploadBufferError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<AddUploadBufferOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(AddUploadBufferError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7299,14 +7284,10 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AddWorkingStorageOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(AddWorkingStorageError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<AddWorkingStorageOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(AddWorkingStorageError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7326,14 +7307,10 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CancelArchivalOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CancelArchivalError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CancelArchivalOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CancelArchivalError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7353,14 +7330,10 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CancelRetrievalOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CancelRetrievalError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CancelRetrievalOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CancelRetrievalError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7382,11 +7355,11 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateCachediSCSIVolumeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateCachediSCSIVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateCachediSCSIVolumeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateCachediSCSIVolumeError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -7406,14 +7379,11 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateNFSFileShareOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CreateNFSFileShareError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateNFSFileShareOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateNFSFileShareError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -7433,14 +7403,10 @@ impl<P, D> StorageGateway for StorageGatewayClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateSnapshotOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CreateSnapshotError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateSnapshotOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7459,11 +7425,10 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateSnapshotFromVolumeRecoveryPointOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateSnapshotFromVolumeRecoveryPointError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateSnapshotFromVolumeRecoveryPointOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateSnapshotFromVolumeRecoveryPointError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7485,11 +7450,11 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateStorediSCSIVolumeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateStorediSCSIVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateStorediSCSIVolumeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateStorediSCSIVolumeError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -7511,14 +7476,11 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateTapeWithBarcodeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CreateTapeWithBarcodeError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateTapeWithBarcodeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateTapeWithBarcodeError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -7538,11 +7500,12 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateTapesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateTapesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateTapesOutput>(String::from_utf8_lossy(&response.body)
+                                                             .as_ref())
+                       .unwrap())
+        } else {
+            Err(CreateTapesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7564,11 +7527,11 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteBandwidthRateLimitOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteBandwidthRateLimitError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteBandwidthRateLimitOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DeleteBandwidthRateLimitError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -7590,14 +7553,11 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteChapCredentialsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DeleteChapCredentialsError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteChapCredentialsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DeleteChapCredentialsError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -7617,14 +7577,10 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteFileShareOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DeleteFileShareError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteFileShareOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DeleteFileShareError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7644,13 +7600,12 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteGatewayOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DeleteGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteGatewayOutput>(String::from_utf8_lossy(&response.body)
+                                                               .as_ref())
+                       .unwrap())
+        } else {
+            Err(DeleteGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7672,14 +7627,11 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteSnapshotScheduleOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DeleteSnapshotScheduleError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteSnapshotScheduleOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DeleteSnapshotScheduleError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
         }
     }
 
@@ -7697,11 +7649,12 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteTapeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteTapeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteTapeOutput>(String::from_utf8_lossy(&response.body)
+                                                            .as_ref())
+                       .unwrap())
+        } else {
+            Err(DeleteTapeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7721,14 +7674,10 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteTapeArchiveOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DeleteTapeArchiveError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteTapeArchiveOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DeleteTapeArchiveError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7748,13 +7697,12 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteVolumeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DeleteVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteVolumeOutput>(String::from_utf8_lossy(&response.body)
+                                                              .as_ref())
+                       .unwrap())
+        } else {
+            Err(DeleteVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7776,11 +7724,11 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeBandwidthRateLimitOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeBandwidthRateLimitError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeBandwidthRateLimitOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeBandwidthRateLimitError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 
@@ -7800,13 +7748,12 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeCacheOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeCacheError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeCacheOutput>(String::from_utf8_lossy(&response.body)
+                                                               .as_ref())
+                       .unwrap())
+        } else {
+            Err(DescribeCacheError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7828,11 +7775,11 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeCachediSCSIVolumesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeCachediSCSIVolumesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeCachediSCSIVolumesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeCachediSCSIVolumesError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 
@@ -7854,11 +7801,11 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeChapCredentialsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeChapCredentialsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeChapCredentialsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeChapCredentialsError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -7880,11 +7827,11 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeGatewayInformationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeGatewayInformationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeGatewayInformationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeGatewayInformationError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 
@@ -7906,11 +7853,10 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeMaintenanceStartTimeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeMaintenanceStartTimeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeMaintenanceStartTimeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeMaintenanceStartTimeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -7932,14 +7878,11 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeNFSFileSharesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeNFSFileSharesError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeNFSFileSharesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeNFSFileSharesError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -7961,11 +7904,11 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeSnapshotScheduleOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeSnapshotScheduleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeSnapshotScheduleOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeSnapshotScheduleError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -7987,11 +7930,11 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeStorediSCSIVolumesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeStorediSCSIVolumesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeStorediSCSIVolumesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeStorediSCSIVolumesError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 
@@ -8012,14 +7955,11 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeTapeArchivesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeTapeArchivesError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeTapeArchivesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeTapeArchivesError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -8041,11 +7981,11 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeTapeRecoveryPointsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeTapeRecoveryPointsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeTapeRecoveryPointsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeTapeRecoveryPointsError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 
@@ -8065,13 +8005,12 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeTapesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeTapesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeTapesOutput>(String::from_utf8_lossy(&response.body)
+                                                               .as_ref())
+                       .unwrap())
+        } else {
+            Err(DescribeTapesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8092,14 +8031,11 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeUploadBufferOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeUploadBufferError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeUploadBufferOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeUploadBufferError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -8119,14 +8055,11 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeVTLDevicesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeVTLDevicesError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeVTLDevicesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeVTLDevicesError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -8148,14 +8081,11 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeWorkingStorageOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeWorkingStorageError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeWorkingStorageOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeWorkingStorageError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
         }
     }
 
@@ -8175,14 +8105,10 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DisableGatewayOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DisableGatewayError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DisableGatewayOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DisableGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8202,14 +8128,10 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListFileSharesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListFileSharesError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListFileSharesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListFileSharesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8229,13 +8151,12 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListGatewaysOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListGatewaysError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListGatewaysOutput>(String::from_utf8_lossy(&response.body)
+                                                              .as_ref())
+                       .unwrap())
+        } else {
+            Err(ListGatewaysError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8255,14 +8176,10 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListLocalDisksOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListLocalDisksError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListLocalDisksOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListLocalDisksError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8283,14 +8200,11 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListTagsForResourceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListTagsForResourceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListTagsForResourceError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -8308,13 +8222,12 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<ListTapesOutput>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
-            }
-            _ => Err(ListTapesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListTapesOutput>(String::from_utf8_lossy(&response.body)
+                                                           .as_ref())
+                       .unwrap())
+        } else {
+            Err(ListTapesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8335,14 +8248,11 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListVolumeInitiatorsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListVolumeInitiatorsError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListVolumeInitiatorsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListVolumeInitiatorsError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -8364,11 +8274,11 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListVolumeRecoveryPointsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListVolumeRecoveryPointsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListVolumeRecoveryPointsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListVolumeRecoveryPointsError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -8388,11 +8298,12 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListVolumesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListVolumesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListVolumesOutput>(String::from_utf8_lossy(&response.body)
+                                                             .as_ref())
+                       .unwrap())
+        } else {
+            Err(ListVolumesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8412,13 +8323,12 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RefreshCacheOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(RefreshCacheError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<RefreshCacheOutput>(String::from_utf8_lossy(&response.body)
+                                                              .as_ref())
+                       .unwrap())
+        } else {
+            Err(RefreshCacheError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8440,14 +8350,11 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RemoveTagsFromResourceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(RemoveTagsFromResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<RemoveTagsFromResourceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(RemoveTagsFromResourceError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
         }
     }
 
@@ -8465,11 +8372,12 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ResetCacheOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ResetCacheError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ResetCacheOutput>(String::from_utf8_lossy(&response.body)
+                                                            .as_ref())
+                       .unwrap())
+        } else {
+            Err(ResetCacheError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8490,14 +8398,11 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RetrieveTapeArchiveOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(RetrieveTapeArchiveError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<RetrieveTapeArchiveOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(RetrieveTapeArchiveError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -8519,11 +8424,11 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RetrieveTapeRecoveryPointOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(RetrieveTapeRecoveryPointError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<RetrieveTapeRecoveryPointOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(RetrieveTapeRecoveryPointError::from_body(String::from_utf8_lossy(&response.body)
+                                                              .as_ref()))
         }
     }
 
@@ -8545,11 +8450,11 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<SetLocalConsolePasswordOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(SetLocalConsolePasswordError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<SetLocalConsolePasswordOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(SetLocalConsolePasswordError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -8569,14 +8474,10 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ShutdownGatewayOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ShutdownGatewayError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ShutdownGatewayOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ShutdownGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8596,13 +8497,12 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StartGatewayOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(StartGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<StartGatewayOutput>(String::from_utf8_lossy(&response.body)
+                                                              .as_ref())
+                       .unwrap())
+        } else {
+            Err(StartGatewayError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -8624,11 +8524,11 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateBandwidthRateLimitOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateBandwidthRateLimitError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateBandwidthRateLimitOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(UpdateBandwidthRateLimitError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -8650,14 +8550,11 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateChapCredentialsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(UpdateChapCredentialsError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateChapCredentialsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(UpdateChapCredentialsError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -8679,11 +8576,11 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateGatewayInformationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateGatewayInformationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateGatewayInformationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(UpdateGatewayInformationError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -8705,11 +8602,11 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateGatewaySoftwareNowOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateGatewaySoftwareNowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateGatewaySoftwareNowOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(UpdateGatewaySoftwareNowError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -8731,11 +8628,11 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateMaintenanceStartTimeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateMaintenanceStartTimeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateMaintenanceStartTimeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(UpdateMaintenanceStartTimeError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 
@@ -8755,14 +8652,11 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateNFSFileShareOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(UpdateNFSFileShareError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateNFSFileShareOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(UpdateNFSFileShareError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -8784,14 +8678,11 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateSnapshotScheduleOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(UpdateSnapshotScheduleError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateSnapshotScheduleOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(UpdateSnapshotScheduleError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
         }
     }
 
@@ -8812,14 +8703,11 @@ fn create_snapshot_from_volume_recovery_point(&self, input: &CreateSnapshotFromV
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateVTLDeviceTypeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(UpdateVTLDeviceTypeError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateVTLDeviceTypeOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(UpdateVTLDeviceTypeError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 }

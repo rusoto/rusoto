@@ -1,6 +1,4 @@
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
 
@@ -5161,14 +5159,11 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateByteMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CreateByteMatchSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateByteMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateByteMatchSetError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -5188,11 +5183,12 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateIPSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateIPSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateIPSetResponse>(String::from_utf8_lossy(&response.body)
+                                                               .as_ref())
+                       .unwrap())
+        } else {
+            Err(CreateIPSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5212,11 +5208,12 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateRuleResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateRuleResponse>(String::from_utf8_lossy(&response.body)
+                                                              .as_ref())
+                       .unwrap())
+        } else {
+            Err(CreateRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5237,11 +5234,11 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateSizeConstraintSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateSizeConstraintSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateSizeConstraintSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateSizeConstraintSetError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -5262,11 +5259,11 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateSqlInjectionMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateSqlInjectionMatchSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateSqlInjectionMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateSqlInjectionMatchSetError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 
@@ -5286,13 +5283,10 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateWebACLResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CreateWebACLError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateWebACLResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateWebACLError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5312,14 +5306,10 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateXssMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CreateXssMatchSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateXssMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateXssMatchSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5339,14 +5329,11 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteByteMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DeleteByteMatchSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteByteMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DeleteByteMatchSetError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -5366,11 +5353,12 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteIPSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteIPSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteIPSetResponse>(String::from_utf8_lossy(&response.body)
+                                                               .as_ref())
+                       .unwrap())
+        } else {
+            Err(DeleteIPSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5390,11 +5378,12 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteRuleResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteRuleResponse>(String::from_utf8_lossy(&response.body)
+                                                              .as_ref())
+                       .unwrap())
+        } else {
+            Err(DeleteRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5415,11 +5404,11 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteSizeConstraintSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteSizeConstraintSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteSizeConstraintSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DeleteSizeConstraintSetError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -5440,11 +5429,11 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteSqlInjectionMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteSqlInjectionMatchSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteSqlInjectionMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DeleteSqlInjectionMatchSetError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 
@@ -5464,13 +5453,10 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteWebACLResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DeleteWebACLError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteWebACLResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DeleteWebACLError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5490,14 +5476,10 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteXssMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DeleteXssMatchSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteXssMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DeleteXssMatchSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5517,14 +5499,10 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetByteMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetByteMatchSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetByteMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetByteMatchSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5544,14 +5522,10 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetChangeTokenResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetChangeTokenError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetChangeTokenResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetChangeTokenError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5572,14 +5546,11 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetChangeTokenStatusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetChangeTokenStatusError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetChangeTokenStatusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetChangeTokenStatusError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -5597,11 +5568,12 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetIPSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetIPSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetIPSetResponse>(String::from_utf8_lossy(&response.body)
+                                                            .as_ref())
+                       .unwrap())
+        } else {
+            Err(GetIPSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5619,13 +5591,12 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<GetRuleResponse>(String::from_utf8_lossy(&response.body)
-                                                               .as_ref())
-                           .unwrap())
-            }
-            _ => Err(GetRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetRuleResponse>(String::from_utf8_lossy(&response.body)
+                                                           .as_ref())
+                       .unwrap())
+        } else {
+            Err(GetRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5645,14 +5616,11 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetSampledRequestsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetSampledRequestsError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetSampledRequestsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetSampledRequestsError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -5673,14 +5641,11 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetSizeConstraintSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetSizeConstraintSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetSizeConstraintSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetSizeConstraintSetError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -5701,11 +5666,11 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetSqlInjectionMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetSqlInjectionMatchSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetSqlInjectionMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetSqlInjectionMatchSetError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -5723,11 +5688,12 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetWebACLResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetWebACLError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetWebACLResponse>(String::from_utf8_lossy(&response.body)
+                                                             .as_ref())
+                       .unwrap())
+        } else {
+            Err(GetWebACLError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5747,14 +5713,10 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetXssMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetXssMatchSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetXssMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetXssMatchSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5774,14 +5736,10 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListByteMatchSetsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListByteMatchSetsError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListByteMatchSetsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListByteMatchSetsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5801,11 +5759,12 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListIPSetsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListIPSetsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListIPSetsResponse>(String::from_utf8_lossy(&response.body)
+                                                              .as_ref())
+                       .unwrap())
+        } else {
+            Err(ListIPSetsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5823,11 +5782,12 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListRulesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListRulesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListRulesResponse>(String::from_utf8_lossy(&response.body)
+                                                             .as_ref())
+                       .unwrap())
+        } else {
+            Err(ListRulesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5848,14 +5808,11 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListSizeConstraintSetsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListSizeConstraintSetsError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListSizeConstraintSetsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListSizeConstraintSetsError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
         }
     }
 
@@ -5876,11 +5833,11 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListSqlInjectionMatchSetsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListSqlInjectionMatchSetsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListSqlInjectionMatchSetsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListSqlInjectionMatchSetsError::from_body(String::from_utf8_lossy(&response.body)
+                                                              .as_ref()))
         }
     }
 
@@ -5900,11 +5857,12 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListWebACLsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListWebACLsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListWebACLsResponse>(String::from_utf8_lossy(&response.body)
+                                                               .as_ref())
+                       .unwrap())
+        } else {
+            Err(ListWebACLsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5924,14 +5882,10 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListXssMatchSetsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListXssMatchSetsError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListXssMatchSetsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListXssMatchSetsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -5951,14 +5905,11 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateByteMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(UpdateByteMatchSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateByteMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(UpdateByteMatchSetError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -5978,11 +5929,12 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateIPSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateIPSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateIPSetResponse>(String::from_utf8_lossy(&response.body)
+                                                               .as_ref())
+                       .unwrap())
+        } else {
+            Err(UpdateIPSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -6002,11 +5954,12 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateRuleResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateRuleResponse>(String::from_utf8_lossy(&response.body)
+                                                              .as_ref())
+                       .unwrap())
+        } else {
+            Err(UpdateRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -6027,11 +5980,11 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateSizeConstraintSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateSizeConstraintSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateSizeConstraintSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(UpdateSizeConstraintSetError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -6052,11 +6005,11 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateSqlInjectionMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateSqlInjectionMatchSetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateSqlInjectionMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(UpdateSqlInjectionMatchSetError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 
@@ -6076,13 +6029,10 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateWebACLResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(UpdateWebACLError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateWebACLResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(UpdateWebACLError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -6102,14 +6052,10 @@ impl<P, D> Waf for WafClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateXssMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(UpdateXssMatchSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateXssMatchSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(UpdateXssMatchSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 }

@@ -1,6 +1,4 @@
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
 
@@ -1803,11 +1801,12 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateTagsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateTagsResult>(String::from_utf8_lossy(&response.body)
+                                                            .as_ref())
+                       .unwrap())
+        } else {
+            Err(CreateTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -1827,14 +1826,10 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateWorkspacesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CreateWorkspacesError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateWorkspacesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(CreateWorkspacesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -1852,11 +1847,12 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteTagsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteTagsResult>(String::from_utf8_lossy(&response.body)
+                                                            .as_ref())
+                       .unwrap())
+        } else {
+            Err(DeleteTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -1876,13 +1872,12 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeTagsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeTagsResult>(String::from_utf8_lossy(&response.body)
+                                                              .as_ref())
+                       .unwrap())
+        } else {
+            Err(DescribeTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -1903,11 +1898,11 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeWorkspaceBundlesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeWorkspaceBundlesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeWorkspaceBundlesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeWorkspaceBundlesError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -1929,11 +1924,10 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeWorkspaceDirectoriesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeWorkspaceDirectoriesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeWorkspaceDirectoriesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeWorkspaceDirectoriesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -1953,14 +1947,11 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeWorkspacesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeWorkspacesError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeWorkspacesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeWorkspacesError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -1983,11 +1974,10 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeWorkspacesConnectionStatusResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeWorkspacesConnectionStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeWorkspacesConnectionStatusResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeWorkspacesConnectionStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2009,11 +1999,11 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ModifyWorkspacePropertiesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ModifyWorkspacePropertiesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ModifyWorkspacePropertiesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ModifyWorkspacePropertiesError::from_body(String::from_utf8_lossy(&response.body)
+                                                              .as_ref()))
         }
     }
 
@@ -2033,14 +2023,10 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RebootWorkspacesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(RebootWorkspacesError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<RebootWorkspacesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(RebootWorkspacesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2060,14 +2046,10 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RebuildWorkspacesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(RebuildWorkspacesError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<RebuildWorkspacesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(RebuildWorkspacesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2087,14 +2069,10 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StartWorkspacesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(StartWorkspacesError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<StartWorkspacesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(StartWorkspacesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2114,14 +2092,10 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StopWorkspacesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(StopWorkspacesError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<StopWorkspacesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(StopWorkspacesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2141,14 +2115,11 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<TerminateWorkspacesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(TerminateWorkspacesError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<TerminateWorkspacesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(TerminateWorkspacesError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 }

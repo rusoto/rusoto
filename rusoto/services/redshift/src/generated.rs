@@ -1,6 +1,4 @@
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
 
@@ -15999,30 +15997,28 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = AuthorizeClusterSecurityGroupIngressResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(AuthorizeClusterSecurityGroupIngressResultDeserializer::deserialize("AuthorizeClusterSecurityGroupIngressResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = AuthorizeClusterSecurityGroupIngressResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(AuthorizeClusterSecurityGroupIngressResultDeserializer::deserialize("AuthorizeClusterSecurityGroupIngressResult", &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(AuthorizeClusterSecurityGroupIngressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(AuthorizeClusterSecurityGroupIngressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -16042,32 +16038,30 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = AuthorizeSnapshotAccessResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(AuthorizeSnapshotAccessResultDeserializer::deserialize("AuthorizeSnapshotAccessResult",
-                                                                                    &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = AuthorizeSnapshotAccessResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(AuthorizeSnapshotAccessResultDeserializer::deserialize("AuthorizeSnapshotAccessResult",
+                                                                                     &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(AuthorizeSnapshotAccessError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(AuthorizeSnapshotAccessError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -16086,32 +16080,30 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = CopyClusterSnapshotResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CopyClusterSnapshotResultDeserializer::deserialize("CopyClusterSnapshotResult",
-                                                                                     &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = CopyClusterSnapshotResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(CopyClusterSnapshotResultDeserializer::deserialize("CopyClusterSnapshotResult",
+                                                                                 &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(CopyClusterSnapshotError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(CopyClusterSnapshotError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -16130,31 +16122,29 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = CreateClusterResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateClusterResultDeserializer::deserialize("CreateClusterResult",
-                                                                               &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = CreateClusterResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(CreateClusterResultDeserializer::deserialize("CreateClusterResult",
+                                                                           &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(CreateClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(CreateClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -16174,30 +16164,30 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = CreateClusterParameterGroupResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateClusterParameterGroupResultDeserializer::deserialize("CreateClusterParameterGroupResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = CreateClusterParameterGroupResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result =
+                    try!(CreateClusterParameterGroupResultDeserializer::deserialize("CreateClusterParameterGroupResult",
+                                                                                    &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(CreateClusterParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(CreateClusterParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -16217,32 +16207,31 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = CreateClusterSecurityGroupResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(CreateClusterSecurityGroupResultDeserializer::deserialize("CreateClusterSecurityGroupResult",
-                                                                                       &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = CreateClusterSecurityGroupResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result =
+                    try!(CreateClusterSecurityGroupResultDeserializer::deserialize("CreateClusterSecurityGroupResult",
+                                                                                   &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(CreateClusterSecurityGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(CreateClusterSecurityGroupError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 
@@ -16262,32 +16251,30 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = CreateClusterSnapshotResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateClusterSnapshotResultDeserializer::deserialize("CreateClusterSnapshotResult",
-                                                                                       &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = CreateClusterSnapshotResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(CreateClusterSnapshotResultDeserializer::deserialize("CreateClusterSnapshotResult",
+                                                                                   &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(CreateClusterSnapshotError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(CreateClusterSnapshotError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -16307,32 +16294,30 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = CreateClusterSubnetGroupResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(CreateClusterSubnetGroupResultDeserializer::deserialize("CreateClusterSubnetGroupResult",
-                                                                                     &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = CreateClusterSubnetGroupResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(CreateClusterSubnetGroupResultDeserializer::deserialize("CreateClusterSubnetGroupResult",
+                                                                                      &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(CreateClusterSubnetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(CreateClusterSubnetGroupError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -16352,32 +16337,30 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = CreateEventSubscriptionResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(CreateEventSubscriptionResultDeserializer::deserialize("CreateEventSubscriptionResult",
-                                                                                    &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = CreateEventSubscriptionResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(CreateEventSubscriptionResultDeserializer::deserialize("CreateEventSubscriptionResult",
+                                                                                     &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(CreateEventSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(CreateEventSubscriptionError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -16397,32 +16380,31 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = CreateHsmClientCertificateResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(CreateHsmClientCertificateResultDeserializer::deserialize("CreateHsmClientCertificateResult",
-                                                                                       &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = CreateHsmClientCertificateResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result =
+                    try!(CreateHsmClientCertificateResultDeserializer::deserialize("CreateHsmClientCertificateResult",
+                                                                                   &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(CreateHsmClientCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(CreateHsmClientCertificateError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 
@@ -16442,33 +16424,30 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = CreateHsmConfigurationResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(CreateHsmConfigurationResultDeserializer::deserialize("CreateHsmConfigurationResult",
-                                                                                   &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = CreateHsmConfigurationResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(CreateHsmConfigurationResultDeserializer::deserialize("CreateHsmConfigurationResult",
+                                                                                    &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(CreateHsmConfigurationError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(CreateHsmConfigurationError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
         }
     }
 
@@ -16488,32 +16467,30 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = CreateSnapshotCopyGrantResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(CreateSnapshotCopyGrantResultDeserializer::deserialize("CreateSnapshotCopyGrantResult",
-                                                                                    &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = CreateSnapshotCopyGrantResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(CreateSnapshotCopyGrantResultDeserializer::deserialize("CreateSnapshotCopyGrantResult",
+                                                                                     &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(CreateSnapshotCopyGrantError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(CreateSnapshotCopyGrantError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -16530,12 +16507,12 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => Err(CreateTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(CreateTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -16554,31 +16531,29 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = DeleteClusterResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DeleteClusterResultDeserializer::deserialize("DeleteClusterResult",
-                                                                               &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = DeleteClusterResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(DeleteClusterResultDeserializer::deserialize("DeleteClusterResult",
+                                                                           &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(DeleteClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(DeleteClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -16597,14 +16572,12 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                            Err(DeleteClusterParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(DeleteClusterParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -16623,14 +16596,13 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                            Err(DeleteClusterSecurityGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(DeleteClusterSecurityGroupError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 
@@ -16650,32 +16622,30 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = DeleteClusterSnapshotResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DeleteClusterSnapshotResultDeserializer::deserialize("DeleteClusterSnapshotResult",
-                                                                                       &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = DeleteClusterSnapshotResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(DeleteClusterSnapshotResultDeserializer::deserialize("DeleteClusterSnapshotResult",
+                                                                                   &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(DeleteClusterSnapshotError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(DeleteClusterSnapshotError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -16694,14 +16664,13 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                            Err(DeleteClusterSubnetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(DeleteClusterSubnetGroupError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -16720,14 +16689,13 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                            Err(DeleteEventSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(DeleteEventSubscriptionError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -16746,14 +16714,13 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                            Err(DeleteHsmClientCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(DeleteHsmClientCertificateError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 
@@ -16772,15 +16739,13 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                Err(DeleteHsmConfigurationError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
-            }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(DeleteHsmConfigurationError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
         }
     }
 
@@ -16799,14 +16764,13 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => {
-                            Err(DeleteSnapshotCopyGrantError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(DeleteSnapshotCopyGrantError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -16823,12 +16787,12 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
-            }
-            _ => Err(DeleteTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+
+        if response.check_status(200) {
+            let result = ();
+            Ok(result)
+        } else {
+            Err(DeleteTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -16848,32 +16812,29 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ClusterParameterGroupsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(ClusterParameterGroupsMessageDeserializer::deserialize("DescribeClusterParameterGroupsResult",
-                                                                                    &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ClusterParameterGroupsMessage::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ClusterParameterGroupsMessageDeserializer::deserialize("DescribeClusterParameterGroupsResult",
+                                                                                     &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(DescribeClusterParameterGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(DescribeClusterParameterGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -16893,32 +16854,30 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ClusterParameterGroupDetails::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(ClusterParameterGroupDetailsDeserializer::deserialize("DescribeClusterParametersResult",
-                                                                                   &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ClusterParameterGroupDetails::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ClusterParameterGroupDetailsDeserializer::deserialize("DescribeClusterParametersResult",
+                                                                                    &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(DescribeClusterParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(DescribeClusterParametersError::from_body(String::from_utf8_lossy(&response.body)
+                                                              .as_ref()))
         }
     }
 
@@ -16938,31 +16897,29 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ClusterSecurityGroupMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ClusterSecurityGroupMessageDeserializer::deserialize("DescribeClusterSecurityGroupsResult",
-                                                                                       &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ClusterSecurityGroupMessage::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ClusterSecurityGroupMessageDeserializer::deserialize("DescribeClusterSecurityGroupsResult",
+                                                                                   &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(DescribeClusterSecurityGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(DescribeClusterSecurityGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -16981,31 +16938,30 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = SnapshotMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(SnapshotMessageDeserializer::deserialize("DescribeClusterSnapshotsResult",
-                                                                           &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = SnapshotMessage::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(SnapshotMessageDeserializer::deserialize("DescribeClusterSnapshotsResult",
+                                                                       &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(DescribeClusterSnapshotsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(DescribeClusterSnapshotsError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -17025,31 +16981,29 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ClusterSubnetGroupMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ClusterSubnetGroupMessageDeserializer::deserialize("DescribeClusterSubnetGroupsResult",
-                                                                                     &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ClusterSubnetGroupMessage::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ClusterSubnetGroupMessageDeserializer::deserialize("DescribeClusterSubnetGroupsResult",
+                                                                                 &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(DescribeClusterSubnetGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(DescribeClusterSubnetGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -17069,31 +17023,30 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ClusterVersionsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ClusterVersionsMessageDeserializer::deserialize("DescribeClusterVersionsResult",
-                                                                                  &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ClusterVersionsMessage::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ClusterVersionsMessageDeserializer::deserialize("DescribeClusterVersionsResult",
+                                                                              &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(DescribeClusterVersionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(DescribeClusterVersionsError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -17112,32 +17065,29 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ClustersMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ClustersMessageDeserializer::deserialize("DescribeClustersResult",
-                                                                           &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ClustersMessage::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ClustersMessageDeserializer::deserialize("DescribeClustersResult",
+                                                                       &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(DescribeClustersError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(DescribeClustersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -17157,30 +17107,28 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = DescribeDefaultClusterParametersResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeDefaultClusterParametersResultDeserializer::deserialize("DescribeDefaultClusterParametersResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = DescribeDefaultClusterParametersResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(DescribeDefaultClusterParametersResultDeserializer::deserialize("DescribeDefaultClusterParametersResult", &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(DescribeDefaultClusterParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(DescribeDefaultClusterParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -17200,31 +17148,30 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = EventCategoriesMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(EventCategoriesMessageDeserializer::deserialize("DescribeEventCategoriesResult",
-                                                                                  &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = EventCategoriesMessage::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(EventCategoriesMessageDeserializer::deserialize("DescribeEventCategoriesResult",
+                                                                              &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(DescribeEventCategoriesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(DescribeEventCategoriesError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -17244,31 +17191,30 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = EventSubscriptionsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(EventSubscriptionsMessageDeserializer::deserialize("DescribeEventSubscriptionsResult",
-                                                                                     &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = EventSubscriptionsMessage::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(EventSubscriptionsMessageDeserializer::deserialize("DescribeEventSubscriptionsResult",
+                                                                                 &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(DescribeEventSubscriptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(DescribeEventSubscriptionsError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 
@@ -17287,32 +17233,29 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = EventsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(EventsMessageDeserializer::deserialize("DescribeEventsResult",
-                                                                         &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = EventsMessage::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(EventsMessageDeserializer::deserialize("DescribeEventsResult",
+                                                                     &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(DescribeEventsError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(DescribeEventsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -17332,31 +17275,29 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = HsmClientCertificateMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(HsmClientCertificateMessageDeserializer::deserialize("DescribeHsmClientCertificatesResult",
-                                                                                       &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = HsmClientCertificateMessage::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(HsmClientCertificateMessageDeserializer::deserialize("DescribeHsmClientCertificatesResult",
+                                                                                   &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(DescribeHsmClientCertificatesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(DescribeHsmClientCertificatesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -17376,31 +17317,30 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = HsmConfigurationMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(HsmConfigurationMessageDeserializer::deserialize("DescribeHsmConfigurationsResult",
-                                                                                   &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = HsmConfigurationMessage::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(HsmConfigurationMessageDeserializer::deserialize("DescribeHsmConfigurationsResult",
+                                                                               &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(DescribeHsmConfigurationsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(DescribeHsmConfigurationsError::from_body(String::from_utf8_lossy(&response.body)
+                                                              .as_ref()))
         }
     }
 
@@ -17419,32 +17359,30 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = LoggingStatus::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(LoggingStatusDeserializer::deserialize("DescribeLoggingStatusResult",
-                                                                         &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = LoggingStatus::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(LoggingStatusDeserializer::deserialize("DescribeLoggingStatusResult",
+                                                                     &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(DescribeLoggingStatusError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(DescribeLoggingStatusError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -17464,32 +17402,29 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = OrderableClusterOptionsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(OrderableClusterOptionsMessageDeserializer::deserialize("DescribeOrderableClusterOptionsResult",
-                                                                                     &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = OrderableClusterOptionsMessage::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(OrderableClusterOptionsMessageDeserializer::deserialize("DescribeOrderableClusterOptionsResult",
+                                                                                      &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(DescribeOrderableClusterOptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(DescribeOrderableClusterOptionsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -17509,32 +17444,29 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ReservedNodeOfferingsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(ReservedNodeOfferingsMessageDeserializer::deserialize("DescribeReservedNodeOfferingsResult",
-                                                                                   &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ReservedNodeOfferingsMessage::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ReservedNodeOfferingsMessageDeserializer::deserialize("DescribeReservedNodeOfferingsResult",
+                                                                                    &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(DescribeReservedNodeOfferingsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(DescribeReservedNodeOfferingsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -17553,32 +17485,30 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ReservedNodesMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ReservedNodesMessageDeserializer::deserialize("DescribeReservedNodesResult",
-                                                                                &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ReservedNodesMessage::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ReservedNodesMessageDeserializer::deserialize("DescribeReservedNodesResult",
+                                                                            &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(DescribeReservedNodesError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(DescribeReservedNodesError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -17597,32 +17527,29 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ResizeProgressMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ResizeProgressMessageDeserializer::deserialize("DescribeResizeResult",
-                                                                                 &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ResizeProgressMessage::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ResizeProgressMessageDeserializer::deserialize("DescribeResizeResult",
+                                                                             &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(DescribeResizeError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(DescribeResizeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -17642,31 +17569,30 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = SnapshotCopyGrantMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(SnapshotCopyGrantMessageDeserializer::deserialize("DescribeSnapshotCopyGrantsResult",
-                                                                                    &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = SnapshotCopyGrantMessage::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(SnapshotCopyGrantMessageDeserializer::deserialize("DescribeSnapshotCopyGrantsResult",
+                                                                                &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(DescribeSnapshotCopyGrantsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(DescribeSnapshotCopyGrantsError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 
@@ -17686,31 +17612,30 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = TableRestoreStatusMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(TableRestoreStatusMessageDeserializer::deserialize("DescribeTableRestoreStatusResult",
-                                                                                     &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = TableRestoreStatusMessage::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(TableRestoreStatusMessageDeserializer::deserialize("DescribeTableRestoreStatusResult",
+                                                                                 &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(DescribeTableRestoreStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(DescribeTableRestoreStatusError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 
@@ -17729,31 +17654,29 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = TaggedResourceListMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(TaggedResourceListMessageDeserializer::deserialize("DescribeTagsResult",
-                                                                                     &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = TaggedResourceListMessage::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(TaggedResourceListMessageDeserializer::deserialize("DescribeTagsResult",
+                                                                                 &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(DescribeTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(DescribeTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -17772,32 +17695,29 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = LoggingStatus::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(LoggingStatusDeserializer::deserialize("DisableLoggingResult",
-                                                                         &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = LoggingStatus::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(LoggingStatusDeserializer::deserialize("DisableLoggingResult",
+                                                                     &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(DisableLoggingError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(DisableLoggingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -17816,32 +17736,30 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = DisableSnapshotCopyResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DisableSnapshotCopyResultDeserializer::deserialize("DisableSnapshotCopyResult",
-                                                                                     &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = DisableSnapshotCopyResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(DisableSnapshotCopyResultDeserializer::deserialize("DisableSnapshotCopyResult",
+                                                                                 &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(DisableSnapshotCopyError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(DisableSnapshotCopyError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 
@@ -17860,31 +17778,29 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = LoggingStatus::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(LoggingStatusDeserializer::deserialize("EnableLoggingResult",
-                                                                         &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = LoggingStatus::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(LoggingStatusDeserializer::deserialize("EnableLoggingResult",
+                                                                     &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(EnableLoggingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(EnableLoggingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -17903,32 +17819,30 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = EnableSnapshotCopyResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(EnableSnapshotCopyResultDeserializer::deserialize("EnableSnapshotCopyResult",
-                                                                                    &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = EnableSnapshotCopyResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(EnableSnapshotCopyResultDeserializer::deserialize("EnableSnapshotCopyResult",
+                                                                                &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(EnableSnapshotCopyError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(EnableSnapshotCopyError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -17947,32 +17861,30 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ClusterCredentials::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ClusterCredentialsDeserializer::deserialize("GetClusterCredentialsResult",
-                                                                              &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ClusterCredentials::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ClusterCredentialsDeserializer::deserialize("GetClusterCredentialsResult",
+                                                                          &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(GetClusterCredentialsError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(GetClusterCredentialsError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -17991,31 +17903,29 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ModifyClusterResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ModifyClusterResultDeserializer::deserialize("ModifyClusterResult",
-                                                                               &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ModifyClusterResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ModifyClusterResultDeserializer::deserialize("ModifyClusterResult",
+                                                                           &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(ModifyClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(ModifyClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -18035,32 +17945,30 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ModifyClusterIamRolesResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ModifyClusterIamRolesResultDeserializer::deserialize("ModifyClusterIamRolesResult",
-                                                                                       &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ModifyClusterIamRolesResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ModifyClusterIamRolesResultDeserializer::deserialize("ModifyClusterIamRolesResult",
+                                                                                   &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(ModifyClusterIamRolesError::from_body(String::from_utf8_lossy(&response.body)
-                                                              .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(ModifyClusterIamRolesError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
         }
     }
 
@@ -18080,32 +17988,30 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ClusterParameterGroupNameMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(ClusterParameterGroupNameMessageDeserializer::deserialize("ModifyClusterParameterGroupResult",
-                                                                                       &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ClusterParameterGroupNameMessage::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result =
+                    try!(ClusterParameterGroupNameMessageDeserializer::deserialize("ModifyClusterParameterGroupResult",
+                                                                                   &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(ModifyClusterParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(ModifyClusterParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -18125,32 +18031,30 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ModifyClusterSubnetGroupResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(ModifyClusterSubnetGroupResultDeserializer::deserialize("ModifyClusterSubnetGroupResult",
-                                                                                     &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ModifyClusterSubnetGroupResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ModifyClusterSubnetGroupResultDeserializer::deserialize("ModifyClusterSubnetGroupResult",
+                                                                                      &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(ModifyClusterSubnetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(ModifyClusterSubnetGroupError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -18170,32 +18074,30 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ModifyEventSubscriptionResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(ModifyEventSubscriptionResultDeserializer::deserialize("ModifyEventSubscriptionResult",
-                                                                                    &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ModifyEventSubscriptionResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ModifyEventSubscriptionResultDeserializer::deserialize("ModifyEventSubscriptionResult",
+                                                                                     &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(ModifyEventSubscriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(ModifyEventSubscriptionError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -18215,30 +18117,28 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ModifySnapshotCopyRetentionPeriodResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ModifySnapshotCopyRetentionPeriodResultDeserializer::deserialize("ModifySnapshotCopyRetentionPeriodResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ModifySnapshotCopyRetentionPeriodResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(ModifySnapshotCopyRetentionPeriodResultDeserializer::deserialize("ModifySnapshotCopyRetentionPeriodResult", &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(ModifySnapshotCopyRetentionPeriodError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(ModifySnapshotCopyRetentionPeriodError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -18258,30 +18158,30 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = PurchaseReservedNodeOfferingResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(PurchaseReservedNodeOfferingResultDeserializer::deserialize("PurchaseReservedNodeOfferingResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = PurchaseReservedNodeOfferingResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result =
+                    try!(PurchaseReservedNodeOfferingResultDeserializer::deserialize("PurchaseReservedNodeOfferingResult",
+                                                                                     &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(PurchaseReservedNodeOfferingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(PurchaseReservedNodeOfferingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -18300,31 +18200,29 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = RebootClusterResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(RebootClusterResultDeserializer::deserialize("RebootClusterResult",
-                                                                               &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = RebootClusterResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(RebootClusterResultDeserializer::deserialize("RebootClusterResult",
+                                                                           &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(RebootClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(RebootClusterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -18344,32 +18242,31 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = ClusterParameterGroupNameMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(ClusterParameterGroupNameMessageDeserializer::deserialize("ResetClusterParameterGroupResult",
-                                                                                       &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = ClusterParameterGroupNameMessage::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result =
+                    try!(ClusterParameterGroupNameMessageDeserializer::deserialize("ResetClusterParameterGroupResult",
+                                                                                   &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(ResetClusterParameterGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(ResetClusterParameterGroupError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 
@@ -18389,32 +18286,31 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = RestoreFromClusterSnapshotResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result =
-                        try!(RestoreFromClusterSnapshotResultDeserializer::deserialize("RestoreFromClusterSnapshotResult",
-                                                                                       &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = RestoreFromClusterSnapshotResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result =
+                    try!(RestoreFromClusterSnapshotResultDeserializer::deserialize("RestoreFromClusterSnapshotResult",
+                                                                                   &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(RestoreFromClusterSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(RestoreFromClusterSnapshotError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
         }
     }
 
@@ -18434,30 +18330,28 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = RestoreTableFromClusterSnapshotResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(RestoreTableFromClusterSnapshotResultDeserializer::deserialize("RestoreTableFromClusterSnapshotResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = RestoreTableFromClusterSnapshotResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(RestoreTableFromClusterSnapshotResultDeserializer::deserialize("RestoreTableFromClusterSnapshotResult", &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(RestoreTableFromClusterSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(RestoreTableFromClusterSnapshotError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -18477,30 +18371,28 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = RevokeClusterSecurityGroupIngressResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(RevokeClusterSecurityGroupIngressResultDeserializer::deserialize("RevokeClusterSecurityGroupIngressResult", &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = RevokeClusterSecurityGroupIngressResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(RevokeClusterSecurityGroupIngressResultDeserializer::deserialize("RevokeClusterSecurityGroupIngressResult", &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                            Err(RevokeClusterSecurityGroupIngressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-                        }
+            Ok(result)
+        } else {
+            Err(RevokeClusterSecurityGroupIngressError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -18519,32 +18411,30 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = RevokeSnapshotAccessResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(RevokeSnapshotAccessResultDeserializer::deserialize("RevokeSnapshotAccessResult",
-                                                                                      &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = RevokeSnapshotAccessResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(RevokeSnapshotAccessResultDeserializer::deserialize("RevokeSnapshotAccessResult",
+                                                                                  &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(RevokeSnapshotAccessError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(RevokeSnapshotAccessError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -18563,32 +18453,30 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
 
-                let result;
+        if response.check_status(200) {
 
-                if response.body.is_empty() {
-                    result = RotateEncryptionKeyResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(response.body.as_slice(),
-                                                              ParserConfig::new()
-                                                                  .trim_whitespace(true));
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(RotateEncryptionKeyResultDeserializer::deserialize("RotateEncryptionKeyResult",
-                                                                                     &mut stack));
-                    skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
-                }
-                Ok(result)
+            let result;
+
+            if response.body.is_empty() {
+                result = RotateEncryptionKeyResult::default();
+            } else {
+                let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                          ParserConfig::new()
+                                                              .trim_whitespace(true));
+                let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                let _start_document = stack.next();
+                let actual_tag_name = try!(peek_at_name(&mut stack));
+                try!(start_element(&actual_tag_name, &mut stack));
+                result = try!(RotateEncryptionKeyResultDeserializer::deserialize("RotateEncryptionKeyResult",
+                                                                                 &mut stack));
+                skip_tree(&mut stack);
+                try!(end_element(&actual_tag_name, &mut stack));
             }
-            _ => {
-                Err(RotateEncryptionKeyError::from_body(String::from_utf8_lossy(&response.body)
-                                                            .as_ref()))
-            }
+            Ok(result)
+        } else {
+            Err(RotateEncryptionKeyError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
         }
     }
 }

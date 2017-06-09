@@ -1,6 +1,4 @@
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
 
@@ -2572,16 +2570,13 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<IdentityPool>(String::from_utf8_lossy(&response.body)
-                                                            .as_ref())
-                           .unwrap())
-            }
-            _ => {
-                Err(CreateIdentityPoolError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<IdentityPool>(String::from_utf8_lossy(&response.body)
+                                                        .as_ref())
+                       .unwrap())
+        } else {
+            Err(CreateIdentityPoolError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -2601,14 +2596,10 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteIdentitiesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DeleteIdentitiesError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteIdentitiesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DeleteIdentitiesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2629,12 +2620,11 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(DeleteIdentityPoolError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(DeleteIdentityPoolError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -2654,14 +2644,12 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<IdentityDescription>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeIdentityError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<IdentityDescription>(String::from_utf8_lossy(&response.body)
+                                                               .as_ref())
+                       .unwrap())
+        } else {
+            Err(DescribeIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2682,16 +2670,13 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<IdentityPool>(String::from_utf8_lossy(&response.body)
-                                                            .as_ref())
-                           .unwrap())
-            }
-            _ => {
-                Err(DescribeIdentityPoolError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<IdentityPool>(String::from_utf8_lossy(&response.body)
+                                                        .as_ref())
+                       .unwrap())
+        } else {
+            Err(DescribeIdentityPoolError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -2713,11 +2698,11 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetCredentialsForIdentityResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetCredentialsForIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetCredentialsForIdentityResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetCredentialsForIdentityError::from_body(String::from_utf8_lossy(&response.body)
+                                                              .as_ref()))
         }
     }
 
@@ -2735,13 +2720,12 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<GetIdResponse>(String::from_utf8_lossy(&response.body)
-                                                             .as_ref())
-                           .unwrap())
-            }
-            _ => Err(GetIdError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetIdResponse>(String::from_utf8_lossy(&response.body)
+                                                         .as_ref())
+                       .unwrap())
+        } else {
+            Err(GetIdError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2763,14 +2747,11 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetIdentityPoolRolesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetIdentityPoolRolesError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetIdentityPoolRolesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetIdentityPoolRolesError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -2790,14 +2771,10 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetOpenIdTokenResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GetOpenIdTokenError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetOpenIdTokenResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetOpenIdTokenError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2820,11 +2797,10 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetOpenIdTokenForDeveloperIdentityResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(GetOpenIdTokenForDeveloperIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetOpenIdTokenForDeveloperIdentityResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GetOpenIdTokenForDeveloperIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2844,14 +2820,10 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListIdentitiesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListIdentitiesError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListIdentitiesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListIdentitiesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2872,14 +2844,10 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListIdentityPoolsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListIdentityPoolsError::from_body(String::from_utf8_lossy(&response.body)
-                                                          .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListIdentityPoolsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListIdentityPoolsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2901,11 +2869,11 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<LookupDeveloperIdentityResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(LookupDeveloperIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<LookupDeveloperIdentityResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(LookupDeveloperIdentityError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -2927,11 +2895,11 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<MergeDeveloperIdentitiesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(MergeDeveloperIdentitiesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<MergeDeveloperIdentitiesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(MergeDeveloperIdentitiesError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
         }
     }
 
@@ -2952,12 +2920,11 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(SetIdentityPoolRolesError::from_body(String::from_utf8_lossy(&response.body)
-                                                             .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(SetIdentityPoolRolesError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
         }
     }
 
@@ -2978,9 +2945,11 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(UnlinkDeveloperIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(UnlinkDeveloperIdentityError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
         }
     }
 
@@ -2998,12 +2967,10 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(UnlinkIdentityError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(UnlinkIdentityError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3024,16 +2991,13 @@ impl<P, D> CognitoIdentity for CognitoIdentityClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<IdentityPool>(String::from_utf8_lossy(&response.body)
-                                                            .as_ref())
-                           .unwrap())
-            }
-            _ => {
-                Err(UpdateIdentityPoolError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<IdentityPool>(String::from_utf8_lossy(&response.body)
+                                                        .as_ref())
+                       .unwrap())
+        } else {
+            Err(UpdateIdentityPoolError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 }

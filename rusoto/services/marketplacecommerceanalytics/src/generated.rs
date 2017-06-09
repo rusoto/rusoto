@@ -1,6 +1,4 @@
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
 
@@ -298,14 +296,10 @@ impl<P, D> MarketplaceCommerceAnalytics for MarketplaceCommerceAnalyticsClient<P
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GenerateDataSetResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(GenerateDataSetError::from_body(String::from_utf8_lossy(&response.body)
-                                                        .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GenerateDataSetResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(GenerateDataSetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -328,14 +322,11 @@ impl<P, D> MarketplaceCommerceAnalytics for MarketplaceCommerceAnalyticsClient<P
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<StartSupportDataExportResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(StartSupportDataExportError::from_body(String::from_utf8_lossy(&response.body)
-                                                               .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<StartSupportDataExportResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(StartSupportDataExportError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
         }
     }
 }

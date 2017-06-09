@@ -13,7 +13,6 @@ homepage = "https://www.rusoto.org/"
 [build-dependencies]
 
 [dependencies]
-hyper = "0.10.0"
 md5 = "0.3.2"
 rustc-serialize = "0.3.19"
 xml-rs = "0.6"

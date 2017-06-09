@@ -36,7 +36,6 @@ struct ServiceConfig {
 fn get_dependencies(service: &Service, config: &ServiceConfig) -> BTreeMap<String, cargo::Dependency> {
     let mut dependencies = BTreeMap::new();
 
-    dependencies.insert("hyper".to_owned(), cargo::Dependency::Simple("0.10.0".into()));
     dependencies.insert("rusoto_core".to_owned(), cargo::Dependency::Extended {
         path: Some("../../core".into()),
         version: Some(config.core_version.clone()),
@@ -55,7 +54,6 @@ fn get_dependencies(service: &Service, config: &ServiceConfig) -> BTreeMap<Strin
             dependencies.insert("xml-rs".to_owned(), cargo::Dependency::Simple("0.6".into()));
         },
         "rest-json" => {
-            dependencies.insert("log".to_owned(), cargo::Dependency::Simple("0.3.6".into()));
             dependencies.insert("serde".to_owned(), cargo::Dependency::Simple("1.0.2".into()));
             dependencies.insert("serde_derive".to_owned(), cargo::Dependency::Simple("1.0.2".into()));
             dependencies.insert("serde_json".to_owned(), cargo::Dependency::Simple("1.0.1".into()));

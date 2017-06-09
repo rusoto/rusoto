@@ -1,6 +1,4 @@
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
 
@@ -2950,13 +2948,12 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<BatchGetItemOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(BatchGetItemError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<BatchGetItemOutput>(String::from_utf8_lossy(&response.body)
+                                                              .as_ref())
+                       .unwrap())
+        } else {
+            Err(BatchGetItemError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -2976,14 +2973,10 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<BatchWriteItemOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(BatchWriteItemError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<BatchWriteItemOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(BatchWriteItemError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3003,11 +2996,12 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateTableOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(CreateTableError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<CreateTableOutput>(String::from_utf8_lossy(&response.body)
+                                                             .as_ref())
+                       .unwrap())
+        } else {
+            Err(CreateTableError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3025,11 +3019,12 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteItemOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteItemError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteItemOutput>(String::from_utf8_lossy(&response.body)
+                                                            .as_ref())
+                       .unwrap())
+        } else {
+            Err(DeleteItemError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3049,11 +3044,12 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteTableOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteTableError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DeleteTableOutput>(String::from_utf8_lossy(&response.body)
+                                                             .as_ref())
+                       .unwrap())
+        } else {
+            Err(DeleteTableError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3073,14 +3069,10 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeLimitsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeLimitsError::from_body(String::from_utf8_lossy(&response.body)
-                                                       .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeLimitsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeLimitsError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3100,13 +3092,12 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeTableOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeTableError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeTableOutput>(String::from_utf8_lossy(&response.body)
+                                                               .as_ref())
+                       .unwrap())
+        } else {
+            Err(DescribeTableError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3126,14 +3117,11 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeTimeToLiveOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(DescribeTimeToLiveError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<DescribeTimeToLiveOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(DescribeTimeToLiveError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -3151,13 +3139,12 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<GetItemOutput>(String::from_utf8_lossy(&response.body)
-                                                             .as_ref())
-                           .unwrap())
-            }
-            _ => Err(GetItemError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<GetItemOutput>(String::from_utf8_lossy(&response.body)
+                                                         .as_ref())
+                       .unwrap())
+        } else {
+            Err(GetItemError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3175,11 +3162,12 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListTablesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(ListTablesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListTablesOutput>(String::from_utf8_lossy(&response.body)
+                                                            .as_ref())
+                       .unwrap())
+        } else {
+            Err(ListTablesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3199,14 +3187,11 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListTagsOfResourceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListTagsOfResourceError::from_body(String::from_utf8_lossy(&response.body)
-                                                           .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ListTagsOfResourceOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(ListTagsOfResourceError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
         }
     }
 
@@ -3224,13 +3209,12 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<PutItemOutput>(String::from_utf8_lossy(&response.body)
-                                                             .as_ref())
-                           .unwrap())
-            }
-            _ => Err(PutItemError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<PutItemOutput>(String::from_utf8_lossy(&response.body)
+                                                         .as_ref())
+                       .unwrap())
+        } else {
+            Err(PutItemError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3248,13 +3232,12 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<QueryOutput>(String::from_utf8_lossy(&response.body)
-                                                           .as_ref())
-                           .unwrap())
-            }
-            _ => Err(QueryError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<QueryOutput>(String::from_utf8_lossy(&response.body)
+                                                       .as_ref())
+                       .unwrap())
+        } else {
+            Err(QueryError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3272,13 +3255,11 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                Ok(serde_json::from_str::<ScanOutput>(String::from_utf8_lossy(&response.body)
-                                                          .as_ref())
-                           .unwrap())
-            }
-            _ => Err(ScanError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<ScanOutput>(String::from_utf8_lossy(&response.body).as_ref())
+                   .unwrap())
+        } else {
+            Err(ScanError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3296,9 +3277,10 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(TagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(TagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3316,11 +3298,10 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(UntagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(())
+        } else {
+            Err(UntagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3338,11 +3319,12 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateItemOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateItemError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateItemOutput>(String::from_utf8_lossy(&response.body)
+                                                            .as_ref())
+                       .unwrap())
+        } else {
+            Err(UpdateItemError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3362,11 +3344,12 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateTableOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdateTableError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateTableOutput>(String::from_utf8_lossy(&response.body)
+                                                             .as_ref())
+                       .unwrap())
+        } else {
+            Err(UpdateTableError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 
@@ -3386,14 +3369,10 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        match response.status {
-            StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdateTimeToLiveOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(UpdateTimeToLiveError::from_body(String::from_utf8_lossy(&response.body)
-                                                         .as_ref()))
-            }
+        if response.check_status(200) {
+            Ok(serde_json::from_str::<UpdateTimeToLiveOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+        } else {
+            Err(UpdateTimeToLiveError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
         }
     }
 }
