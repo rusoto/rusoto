@@ -3,7 +3,7 @@ extern crate env_logger;
 extern crate rusoto_core;
 extern crate rusoto_organizations;
 
-use rusoto_organizations::{Organizations, OrganizationsClient, DescribeOrganizations};
+use rusoto_organizations::{Organizations, OrganizationsClient };
 use rusoto_core::{DefaultCredentialsProvider, Region};
 use rusoto_core::default_tls_client;
 
