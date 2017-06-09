@@ -23,7 +23,7 @@ install:
   - cargo -V
   - git submodule update --init --recursive
 
-# Equivalent to Travis' `script` phase
+build: off
 test_script:
   - cd rusoto
   - cargo test --all --lib -v
