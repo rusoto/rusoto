@@ -64,7 +64,7 @@ impl GenerateProtocol for RestXmlGenerator {
 
                     let response = try!(self.dispatcher.dispatch(&request));
 
-                    if response.check_status(200) || response.check_status(204) || response.check_status(209) {{
+                    if response.check_status(200) || response.check_status(204) || response.check_status(206) {{
                         {parse_response_body}
                         {parse_non_payload}
                         Ok(result)
