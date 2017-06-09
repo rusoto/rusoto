@@ -248,7 +248,8 @@
   "organizations": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
-    "protocolVersion": "2016-11-28"
+    "protocolVersion": "2016-11-28",
+    "baseTypeName": "Organizations"
   },
   "rds": {
     "version": "0.25.0",
