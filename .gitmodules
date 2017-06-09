@@ -1,6 +1,3 @@
-[submodule "service_crategen/--force"]
-	path = service_crategen/--force
-	url = https://github.com/boto/botocore.git
 [submodule "service_crategen/botocore"]
 	path = service_crategen/botocore
 	url = https://github.com/boto/botocore.git
