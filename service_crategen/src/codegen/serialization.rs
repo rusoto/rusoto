@@ -13,7 +13,7 @@ use std::fmt::{Formatter, Result as FmtResult};
 use serde::{Deserialize, Deserializer};
 use serde::de::{Error as SerdeError, Visitor, MapAccess};
 
-use generator::capitalize_first;
+use codegen::generator::capitalize_first;
 
 pub trait ShapeName<'de>: Sized {
     fn deserialize_shape_name<D>(deserializer: D) -> Result<Self, D::Error>

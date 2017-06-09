@@ -1,14 +1,22 @@
+#![cfg_attr(feature = "nightly-testing", feature(plugin))]
+#![cfg_attr(feature = "nightly-testing", plugin(clippy))]
+
 #[macro_use]
 extern crate clap;
 extern crate rayon;
-extern crate rusoto_codegen;
 extern crate rustfmt;
 extern crate serde;
 #[macro_use]
 extern crate serde_derive;
 extern crate serde_json;
 extern crate toml;
+extern crate inflector;
+#[macro_use]
+extern crate lazy_static;
+extern crate regex;
+extern crate hyper;
 
+mod codegen;
 mod cargo;
 
 use std::collections::BTreeMap;
@@ -20,7 +28,7 @@ use rayon::prelude::*;
 
 use clap::{Arg, App};
 
-use rusoto_codegen::botocore::Service;
+use codegen::botocore::Service;
 
 #[derive(Clone, Deserialize)]
 struct ServiceConfig {
@@ -288,7 +296,7 @@ pub use custom::*;
 
             let mut gen_writer = BufWriter::new(gen_file);
 
-            rusoto_codegen::generator::generate_source(&service, &mut gen_writer).unwrap();
+            codegen::generator::generate_source(&service, &mut gen_writer).unwrap();
 
             let custom_dir_path = src_dir.join("custom");
 
@@ -331,7 +339,7 @@ pub use custom::*;
                 fs::create_dir(&generated_test_resources_dir).expect(&format!("Unable to create directory at {}", generated_test_resources_dir.display()));
             }
 
-            let test_valid_resources = rusoto_codegen::generator::tests::find_valid_responses_for_service(&service);
+            let test_valid_resources = codegen::generator::tests::find_valid_responses_for_service(&service);
             if !test_valid_resources.is_empty() {
                 let test_valid_resources_dir = generated_test_resources_dir.join("valid");
 
@@ -344,7 +352,7 @@ pub use custom::*;
                 }
             }
 
-            let test_error_resources = rusoto_codegen::generator::tests::find_error_responses_for_service(&service);
+            let test_error_resources = codegen::generator::tests::find_error_responses_for_service(&service);
             if !test_error_resources.is_empty() {
                 let test_error_resources_dir = generated_test_resources_dir.join("error");
 

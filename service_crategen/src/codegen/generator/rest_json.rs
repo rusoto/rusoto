@@ -2,7 +2,7 @@ use std::io::Write;
 use inflector::Inflector;
 use regex::{Captures, Regex};
 use hyper::status::StatusCode;
-use botocore::{Member, Operation, Service, Shape, ShapeType};
+use codegen::botocore::{Member, Operation, Service, Shape, ShapeType};
 use super::{GenerateProtocol, error_type_name, FileWriter, IoResult};
 
 pub struct RestJsonGenerator;

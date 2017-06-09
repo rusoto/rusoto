@@ -3,7 +3,7 @@ use std::io::{Write, BufWriter};
 
 use inflector::Inflector;
 
-use botocore::{Service, Shape, ShapeType};
+use codegen::botocore::{Service, Shape, ShapeType};
 use self::json::JsonGenerator;
 use self::query::QueryGenerator;
 use self::rest_json::RestJsonGenerator;
