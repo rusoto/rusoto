@@ -23,11 +23,7 @@ install:
   - cargo -V
   - git submodule update --init --recursive
 
-# Equivalent to Travis' `script` phase
-build_script:
-  - cd service_crategen
-  - cargo run -- -c ./services.json -o ../rusoto/services
-  - cd ..
+build: off
 test_script:
   - cd rusoto
   - cargo test --all --lib -v
