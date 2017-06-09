@@ -6,7 +6,7 @@ use std::path::Path;
 
 use serde_json;
 
-use codegen::serialization::{ShapesMap, ShapeName};
+use super::serialization::{ShapesMap, ShapeName};
 
 const BOTOCORE_DIR: &'static str = concat!(env!("CARGO_MANIFEST_DIR"), "/botocore/botocore/data/");
 

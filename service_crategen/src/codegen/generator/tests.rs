@@ -4,7 +4,7 @@ use std::path::{Path, PathBuf};
 
 use super::{capitalize_first, FileWriter, IoResult};
 use ::Service;
-use codegen::util::case_insensitive_btreemap_get;
+use super::super::util::case_insensitive_btreemap_get;
 use inflector::Inflector;
 
 const BOTOCORE_ERROR_RESPONSE_TESTS_DIR: &'static str = concat!(env!("CARGO_MANIFEST_DIR"),
