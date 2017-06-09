@@ -376,7 +376,8 @@ impl EncodeSet for StrictPathEncodeSet {
 }
 
 #[inline]
-fn encode_uri_path(uri: &str) -> String {
+#[doc(hidden)]
+pub fn encode_uri_path(uri: &str) -> String {
     utf8_percent_encode(uri, StrictPathEncodeSet).collect::<String>()
 }
 
