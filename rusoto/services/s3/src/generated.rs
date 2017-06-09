@@ -17256,7 +17256,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -17323,7 +17323,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -17522,7 +17522,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -17639,7 +17639,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -17770,7 +17770,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -17852,7 +17852,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
             let result = ();
 
             Ok(result)
@@ -17884,7 +17884,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
             let result = ();
 
             Ok(result)
@@ -17915,7 +17915,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
             let result = ();
 
             Ok(result)
@@ -17947,7 +17947,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
             let result = ();
 
             Ok(result)
@@ -17978,7 +17978,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
             let result = ();
 
             Ok(result)
@@ -18010,7 +18010,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
             let result = ();
 
             Ok(result)
@@ -18041,7 +18041,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
             let result = ();
 
             Ok(result)
@@ -18073,7 +18073,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
             let result = ();
 
             Ok(result)
@@ -18105,7 +18105,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
             let result = ();
 
             Ok(result)
@@ -18137,7 +18137,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
             let result = ();
 
             Ok(result)
@@ -18180,7 +18180,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -18240,7 +18240,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -18306,7 +18306,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -18355,7 +18355,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -18399,7 +18399,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -18445,7 +18445,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -18489,7 +18489,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -18535,7 +18535,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -18579,7 +18579,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -18626,7 +18626,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -18670,7 +18670,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -18715,7 +18715,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -18761,7 +18761,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -18806,7 +18806,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -18852,7 +18852,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -18897,7 +18897,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result = GetBucketPolicyOutput::default();
             result.policy = Some(String::from_utf8_lossy(&response.body).into_owned());
@@ -18931,7 +18931,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -18979,7 +18979,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -19026,7 +19026,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -19071,7 +19071,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -19117,7 +19117,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -19230,7 +19230,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result = GetObjectOutput::default();
             result.body = Some(response.body);
@@ -19392,7 +19392,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -19444,7 +19444,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -19496,7 +19496,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result = GetObjectTorrentOutput::default();
             result.body = Some(response.body);
@@ -19531,7 +19531,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
             let result = ();
 
             Ok(result)
@@ -19606,7 +19606,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -19768,7 +19768,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -19816,7 +19816,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -19864,7 +19864,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -19906,7 +19906,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -19974,7 +19974,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -20044,7 +20044,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -20112,7 +20112,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -20187,7 +20187,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -20242,7 +20242,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -20303,7 +20303,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
             let result = ();
 
             Ok(result)
@@ -20371,7 +20371,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
             let result = ();
 
             Ok(result)
@@ -20407,7 +20407,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
             let result = ();
 
             Ok(result)
@@ -20451,7 +20451,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
             let result = ();
 
             Ok(result)
@@ -20487,7 +20487,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
             let result = ();
 
             Ok(result)
@@ -20540,7 +20540,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
             let result = ();
 
             Ok(result)
@@ -20592,7 +20592,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
             let result = ();
 
             Ok(result)
@@ -20631,7 +20631,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
             let result = ();
 
             Ok(result)
@@ -20667,7 +20667,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
             let result = ();
 
             Ok(result)
@@ -20704,7 +20704,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
             let result = ();
 
             Ok(result)
@@ -20743,7 +20743,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
             let result = ();
 
             Ok(result)
@@ -20780,7 +20780,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
             let result = ();
 
             Ok(result)
@@ -20827,7 +20827,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
             let result = ();
 
             Ok(result)
@@ -20865,7 +20865,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
             let result = ();
 
             Ok(result)
@@ -20910,7 +20910,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
             let result = ();
 
             Ok(result)
@@ -20953,7 +20953,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
             let result = ();
 
             Ok(result)
@@ -20993,7 +20993,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
             let result = ();
 
             Ok(result)
@@ -21119,7 +21119,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -21252,7 +21252,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -21310,7 +21310,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -21374,7 +21374,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -21451,7 +21451,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -21590,7 +21590,7 @@ impl<P, D> S3 for S3Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 

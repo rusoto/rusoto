@@ -10127,7 +10127,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -10183,7 +10183,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -10240,7 +10240,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -10297,7 +10297,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -10350,7 +10350,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -10406,7 +10406,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -10461,7 +10461,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
             let result = ();
 
             Ok(result)
@@ -10495,7 +10495,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
             let result = ();
 
             Ok(result)
@@ -10530,7 +10530,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
             let result = ();
 
             Ok(result)
@@ -10562,7 +10562,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -10608,7 +10608,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -10655,7 +10655,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -10704,7 +10704,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -10756,7 +10756,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -10802,7 +10802,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -10853,7 +10853,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -10909,7 +10909,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -10960,7 +10960,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -11013,7 +11013,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -11064,7 +11064,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -11117,7 +11117,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -11162,7 +11162,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -11209,7 +11209,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
             let result = ();
 
             Ok(result)
@@ -11241,7 +11241,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
             let result = ();
 
             Ok(result)
@@ -11281,7 +11281,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -11336,7 +11336,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -11392,7 +11392,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 

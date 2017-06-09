@@ -11894,7 +11894,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -11940,7 +11940,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -11987,7 +11987,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -12034,7 +12034,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -12080,7 +12080,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -12127,7 +12127,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -12172,7 +12172,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -12221,7 +12221,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -12267,7 +12267,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -12315,7 +12315,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -12359,7 +12359,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -12404,7 +12404,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -12450,7 +12450,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -12495,7 +12495,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -12543,7 +12543,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -12589,7 +12589,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -12634,7 +12634,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -12676,7 +12676,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -12721,7 +12721,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -12779,7 +12779,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -12824,7 +12824,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -12869,7 +12869,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -12918,7 +12918,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -12963,7 +12963,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -13010,7 +13010,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -13055,7 +13055,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -13103,7 +13103,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -13149,7 +13149,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -13195,7 +13195,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -13241,7 +13241,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -13300,7 +13300,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -13352,7 +13352,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -13408,7 +13408,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -13465,7 +13465,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -13528,7 +13528,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -13583,7 +13583,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -13629,7 +13629,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -13677,7 +13677,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -13731,7 +13731,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -13798,7 +13798,7 @@ impl<P, D> Route53 for Route53Client<P, D>
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -13857,7 +13857,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -13924,7 +13924,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -13976,7 +13976,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -14029,7 +14029,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -14087,7 +14087,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -14132,7 +14132,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -14178,7 +14178,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -14225,7 +14225,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
@@ -14271,7 +14271,7 @@ fn list_traffic_policy_instances_by_hosted_zone(&self, input: &ListTrafficPolicy
 
         let response = try!(self.dispatcher.dispatch(&request));
 
-        if response.check_status(200) || response.check_status(204) || response.check_status(209) {
+        if response.check_status(200) || response.check_status(204) || response.check_status(206) {
 
             let mut result;
 
