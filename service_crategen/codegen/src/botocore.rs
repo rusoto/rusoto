@@ -59,6 +59,7 @@ impl Service {
             "AWS Lambda" => "Lambda",
             "AWS Marketplace Commerce Analytics" => "MarketplaceCommerceAnalytics",
             "AWS OpsWorks" => "OpsWorks",
+            "AWS Organizations" => "Organizations",
             "AWS Security Token Service" => "Sts",
             "AWS Storage Gateway" => "StorageGateway",
             "AWS Support" => "Support",
