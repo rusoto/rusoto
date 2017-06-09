@@ -342,6 +342,12 @@
     "protocolVersion": "2015-08-24",
     "baseTypeName": "Waf"
   },
+  "waf-regional": {
+    "version": "0.25.0",
+    "coreVersion": "0.25.0",
+    "protocolVersion": "2016-11-28",
+    "baseTypeName": "WAFRegional"
+  },
   "workspaces": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",

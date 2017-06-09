@@ -58,5 +58,6 @@ members = [
     "services/sts",
     "services/swf",
     "services/waf",
+    "services/waf-regional",
     "services/workspaces"
 ]
