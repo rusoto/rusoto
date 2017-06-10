@@ -56,6 +56,7 @@ members = [
     "services/ssm",
     "services/storagegateway",
     "services/sts",
+    "services/support",
     "services/swf",
     "services/waf",
     "services/workspaces"
