@@ -211,6 +211,10 @@ path = "../rusoto/services/sdb"
 optional = true
 path = "../rusoto/services/ses"
 
+[dependencies.rusoto_snowball]
+optional = true
+path = "../rusoto/services/snowball"
+
 [dependencies.rusoto_sns]
 optional = true
 path = "../rusoto/services/sns"
@@ -301,6 +305,7 @@ all = [
 	   	"s3",
 	   	"sdb",
 	   	"ses",
+		"snowball",
 	   	"sns",
 	   	"sqs",
 	   	"ssm",
@@ -359,6 +364,7 @@ route53domains = ["rusoto_route53domains"]
 s3 = ["rusoto_s3"]
 sdb = ["rusoto_sdb"]
 ses = ["rusoto_ses"]
+snowball = ["rusoto_snowball"]
 sns = ["rusoto_sns"]
 sqs = ["rusoto_sqs"]
 ssm = ["rusoto_ssm"]
