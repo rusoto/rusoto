@@ -34,6 +34,7 @@ fn test_all_the_things() {
 
     let test_bucket = format!("rusoto_test_bucket_{}", get_time().sec);
     let filename = format!("test_file_{}", get_time().sec);
+    let utf8_filename = format!("test[über]file@{}", get_time().sec);
     let binary_filename = format!("test_file_b{}", get_time().sec);
     let multipart_filename = format!("test_multipart_file_{}", get_time().sec);
 
@@ -66,6 +67,16 @@ fn test_all_the_things() {
     test_get_object_range(&client, &test_bucket, &filename);
     // copy the object to change its settings
     test_copy_object(&client, &test_bucket, &filename);
+
+    // UTF8 filenames
+    test_put_object_with_filename(&client,
+                                  &test_bucket,
+                                  &utf8_filename,
+                                  &"tests/sample-data/no_credentials");
+
+    test_copy_object_utf8(&client, &test_bucket, &utf8_filename);
+
+    test_delete_object(&client, &test_bucket, &utf8_filename);
 
     // Binary objects:
     test_put_object_with_filename(&client,
@@ -228,6 +239,21 @@ fn test_copy_object(client: &TestClient, bucket: &str, filename: &str) {
         bucket: bucket.to_owned(),
         key: filename.to_owned(),
         copy_source: format!("{}/{}", bucket, filename),
+        cache_control: Some("max-age=123".to_owned()),
+        content_type: Some("application/json".to_owned()),
+        metadata_directive: Some("REPLACE".to_owned()),
+        ..Default::default()
+    };
+
+    let result = client.copy_object(&req).unwrap();
+    println!("{:#?}", result);
+}
+
+fn test_copy_object_utf8(client: &TestClient, bucket: &str, filename: &str) {
+    let req = CopyObjectRequest {
+        bucket: bucket.to_owned(),
+        key: format!("{}", filename.to_owned()),
+        copy_source: rusoto_s3::util::encode_key(format!("{}/{}", bucket, filename)),
         cache_control: Some("max-age=123".to_owned()),
         content_type: Some("application/json".to_owned()),
         metadata_directive: Some("REPLACE".to_owned()),
