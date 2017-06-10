@@ -297,6 +297,12 @@
     "protocolVersion": "2010-12-01",
     "baseTypeName": "Ses"
   },
+  "snowball": {
+    "version": "0.25.0",
+    "coreVersion": "0.25.0",
+    "protocolVersion": "2016-06-30",
+    "baseTypeName": "Snowball"
+  },
   "sns": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
