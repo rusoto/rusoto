@@ -47,6 +47,10 @@ path = "../rusoto/services/cloudtrail"
 optional = true
 path = "../rusoto/services/cloudwatch"
 
+[dependencies.rusoto_codebuild]
+optional = true
+path = "../rusoto/services/codebuild"
+
 [dependencies.rusoto_codecommit]
 optional = true
 path = "../rusoto/services/codecommit"
@@ -260,6 +264,7 @@ all = [
 	   	"cloudsearch",
 	   	"cloudtrail",
 	   	"cloudwatch",
+		"codebuild",
 	   	"codecommit",
 	   	"codedeploy",
 	   	"codepipeline",
@@ -318,6 +323,7 @@ cloudhsm = ["rusoto_cloudhsm"]
 cloudsearch = ["rusoto_cloudsearch"]
 cloudtrail = ["rusoto_cloudtrail"]
 cloudwatch = ["rusoto_cloudwatch"]
+codebuild = ["rusoto_codebuild"]
 codecommit = ["rusoto_codecommit"]
 codedeploy = ["rusoto_codedeploy"]
 codepipeline = ["rusoto_codepipeline"]
