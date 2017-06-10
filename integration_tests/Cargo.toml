@@ -231,6 +231,10 @@ path = "../rusoto/services/storagegateway"
 optional = true
 path = "../rusoto/services/sts"
 
+[dependencies.rusoto_support]
+optional = true
+path = "../rusoto/services/support"
+
 [dependencies.rusoto_swf]
 optional = true
 path = "../rusoto/services/swf"
@@ -306,6 +310,7 @@ all = [
 	   	"ssm",
 	   	"storagegateway",
         "sts",
+		"support",
 	   	"swf",
 	   	"waf",
 	   	"workspaces"
@@ -364,6 +369,7 @@ sqs = ["rusoto_sqs"]
 ssm = ["rusoto_ssm"]
 storagegateway = ["rusoto_storagegateway"]
 sts = ["rusoto_sts"]
+support = ["rusoto_support"]
 swf = ["rusoto_swf"]
 waf = ["rusoto_waf"]
 workspaces = ["rusoto_workspaces"]
