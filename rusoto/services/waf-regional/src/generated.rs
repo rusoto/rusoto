@@ -5521,9 +5521,7 @@ pub trait WAFRegional {
 
 
     #[doc="<p>When you want to create, update, or delete AWS WAF objects, get a change token and include the change token in the create, update, or delete request. Change tokens ensure that your application doesn't submit conflicting requests to AWS WAF.</p> <p>Each create, update, or delete request must use a unique change token. If your application submits a <code>GetChangeToken</code> request and then submits a second <code>GetChangeToken</code> request before submitting a create, update, or delete request, the second <code>GetChangeToken</code> request returns the same value as the first <code>GetChangeToken</code> request.</p> <p>When you use a change token in a create, update, or delete request, the status of the change token changes to <code>PENDING</code>, which indicates that AWS WAF is propagating the change to all AWS WAF servers. Use <code>GetChangeTokenStatus</code> to determine the status of your change token.</p>"]
-    fn get_change_token(&self,
-                        input: &GetChangeTokenRequest)
-                        -> Result<GetChangeTokenResponse, GetChangeTokenError>;
+    fn get_change_token(&self) -> Result<GetChangeTokenResponse, GetChangeTokenError>;
 
 
     #[doc="<p>Returns the status of a <code>ChangeToken</code> that you got by calling <a>GetChangeToken</a>. <code>ChangeTokenStatus</code> is one of the following values:</p> <ul> <li> <p> <code>PROVISIONED</code>: You requested the change token by calling <code>GetChangeToken</code>, but you haven't used it yet in a call to create, update, or delete an AWS WAF object.</p> </li> <li> <p> <code>PENDING</code>: AWS WAF is propagating the create, update, or delete request to all AWS WAF servers.</p> </li> <li> <p> <code>IN_SYNC</code>: Propagation is complete.</p> </li> </ul>"]
@@ -6142,15 +6140,12 @@ impl<P, D> WAFRegional for WAFRegionalClient<P, D>
 
 
     #[doc="<p>When you want to create, update, or delete AWS WAF objects, get a change token and include the change token in the create, update, or delete request. Change tokens ensure that your application doesn't submit conflicting requests to AWS WAF.</p> <p>Each create, update, or delete request must use a unique change token. If your application submits a <code>GetChangeToken</code> request and then submits a second <code>GetChangeToken</code> request before submitting a create, update, or delete request, the second <code>GetChangeToken</code> request returns the same value as the first <code>GetChangeToken</code> request.</p> <p>When you use a change token in a create, update, or delete request, the status of the change token changes to <code>PENDING</code>, which indicates that AWS WAF is propagating the change to all AWS WAF servers. Use <code>GetChangeTokenStatus</code> to determine the status of your change token.</p>"]
-    fn get_change_token(&self,
-                        input: &GetChangeTokenRequest)
-                        -> Result<GetChangeTokenResponse, GetChangeTokenError> {
+    fn get_change_token(&self) -> Result<GetChangeTokenResponse, GetChangeTokenError> {
         let mut request = SignedRequest::new("POST", "waf-regional", self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.GetChangeToken");
-        let encoded = serde_json::to_string(input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(b"{}".to_vec()));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 

@@ -5165,9 +5165,7 @@ pub trait DirectoryService {
 
 
     #[doc="<p>Obtains directory limit information for the current region.</p>"]
-    fn get_directory_limits(&self,
-                            input: &GetDirectoryLimitsRequest)
-                            -> Result<GetDirectoryLimitsResult, GetDirectoryLimitsError>;
+    fn get_directory_limits(&self) -> Result<GetDirectoryLimitsResult, GetDirectoryLimitsError>;
 
 
     #[doc="<p>Obtains the manual snapshot limits for a directory.</p>"]
@@ -5929,16 +5927,13 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
 
 
     #[doc="<p>Obtains directory limit information for the current region.</p>"]
-    fn get_directory_limits(&self,
-                            input: &GetDirectoryLimitsRequest)
-                            -> Result<GetDirectoryLimitsResult, GetDirectoryLimitsError> {
+    fn get_directory_limits(&self) -> Result<GetDirectoryLimitsResult, GetDirectoryLimitsError> {
         let mut request = SignedRequest::new("POST", "ds", self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
                            "DirectoryService_20150416.GetDirectoryLimits");
-        let encoded = serde_json::to_string(input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(b"{}".to_vec()));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 

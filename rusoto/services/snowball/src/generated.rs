@@ -2282,9 +2282,7 @@ pub trait Snowball {
 
 
     #[doc="<p>Returns information about the Snowball service limit for your account, and also the number of Snowballs your account has in use.</p> <p>The default service limit for the number of Snowballs that you can have at one time is 1. If you want to increase your service limit, contact AWS Support.</p>"]
-    fn get_snowball_usage(&self,
-                          input: &GetSnowballUsageRequest)
-                          -> Result<GetSnowballUsageResult, GetSnowballUsageError>;
+    fn get_snowball_usage(&self) -> Result<GetSnowballUsageResult, GetSnowballUsageError>;
 
 
     #[doc="<p>Returns an array of <code>JobListEntry</code> objects of the specified length. Each <code>JobListEntry</code> object is for a job in the specified cluster and contains a job's state, a job's ID, and other information.</p>"]
@@ -2636,16 +2634,13 @@ impl<P, D> Snowball for SnowballClient<P, D>
 
 
     #[doc="<p>Returns information about the Snowball service limit for your account, and also the number of Snowballs your account has in use.</p> <p>The default service limit for the number of Snowballs that you can have at one time is 1. If you want to increase your service limit, contact AWS Support.</p>"]
-    fn get_snowball_usage(&self,
-                          input: &GetSnowballUsageRequest)
-                          -> Result<GetSnowballUsageResult, GetSnowballUsageError> {
+    fn get_snowball_usage(&self) -> Result<GetSnowballUsageResult, GetSnowballUsageError> {
         let mut request = SignedRequest::new("POST", "snowball", self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
                            "AWSIESnowballJobManagementService.GetSnowballUsage");
-        let encoded = serde_json::to_string(input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(b"{}".to_vec()));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 

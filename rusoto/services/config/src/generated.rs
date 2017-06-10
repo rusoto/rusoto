@@ -3913,6 +3913,7 @@ impl<P, D> ConfigService for ConfigServiceClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
                            "StarlingDoveService.GetComplianceSummaryByConfigRule");
+        request.set_payload(Some(b"{}".to_vec()));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 

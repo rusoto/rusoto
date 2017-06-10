@@ -5023,6 +5023,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DescribeLocations");
+        request.set_payload(Some(b"{}".to_vec()));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
@@ -5074,6 +5075,7 @@ impl<P, D> DirectConnect for DirectConnectClient<P, D>
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DescribeVirtualGateways");
+        request.set_payload(Some(b"{}".to_vec()));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 

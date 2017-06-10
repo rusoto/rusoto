@@ -1551,8 +1551,7 @@ pub trait CodeBuild {
 
     #[doc="<p>Gets information about Docker images that are managed by AWS CodeBuild.</p>"]
     fn list_curated_environment_images
-        (&self,
-         input: &ListCuratedEnvironmentImagesInput)
+        (&self)
          -> Result<ListCuratedEnvironmentImagesOutput, ListCuratedEnvironmentImagesError>;
 
 
@@ -1759,16 +1758,14 @@ impl<P, D> CodeBuild for CodeBuildClient<P, D>
 
     #[doc="<p>Gets information about Docker images that are managed by AWS CodeBuild.</p>"]
     fn list_curated_environment_images
-        (&self,
-         input: &ListCuratedEnvironmentImagesInput)
+        (&self)
          -> Result<ListCuratedEnvironmentImagesOutput, ListCuratedEnvironmentImagesError> {
         let mut request = SignedRequest::new("POST", "codebuild", self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
                            "CodeBuild_20161006.ListCuratedEnvironmentImages");
-        let encoded = serde_json::to_string(input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(b"{}".to_vec()));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 

@@ -6730,9 +6730,7 @@ pub trait DeviceFarm {
 
 
     #[doc="<p>Returns the number of unmetered iOS and/or unmetered Android devices that have been purchased by the account.</p>"]
-    fn get_account_settings(&self,
-                            input: &GetAccountSettingsRequest)
-                            -> Result<GetAccountSettingsResult, GetAccountSettingsError>;
+    fn get_account_settings(&self) -> Result<GetAccountSettingsResult, GetAccountSettingsError>;
 
 
     #[doc="<p>Gets information about a unique device type.</p>"]
@@ -7255,15 +7253,12 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
 
     #[doc="<p>Returns the number of unmetered iOS and/or unmetered Android devices that have been purchased by the account.</p>"]
-    fn get_account_settings(&self,
-                            input: &GetAccountSettingsRequest)
-                            -> Result<GetAccountSettingsResult, GetAccountSettingsError> {
+    fn get_account_settings(&self) -> Result<GetAccountSettingsResult, GetAccountSettingsError> {
         let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetAccountSettings");
-        let encoded = serde_json::to_string(input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(b"{}".to_vec()));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
