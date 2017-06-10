@@ -163,6 +163,10 @@ path = "../rusoto/services/kms"
 optional = true
 path = "../rusoto/services/lambda"
 
+[dependencies.rusoto_lightsail]
+optional = true
+path = "../rusoto/services/lightsail"
+
 [dependencies.rusoto_logs]
 optional = true
 path = "../rusoto/services/logs"
@@ -289,6 +293,7 @@ all = [
 	   	"kinesis",
 	   	"kms",
 	   	"lambda",
+		"lightsail",
 	   	"logs",
 	   	"machinelearning",
 	   	"marketplacecommerceanalytics",
@@ -347,6 +352,7 @@ iot = ["rusoto_iot"]
 kinesis = ["rusoto_kinesis"]
 kms = ["rusoto_kms"]
 lambda = ["rusoto_lambda"]
+lightsail = ["rusoto_lightsail"]
 logs = ["rusoto_logs"]
 machinelearning = ["rusoto_machinelearning"]
 marketplacecommerceanalytics = ["rusoto_marketplacecommerceanalytics"]
