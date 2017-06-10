@@ -50,6 +50,7 @@ members = [
     "services/route53domains",
     "services/s3",
     "services/sdb",
+    "services/servicecatalog",
     "services/ses",
     "services/sns",
     "services/sqs",
