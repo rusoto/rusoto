@@ -207,6 +207,10 @@ path = "../rusoto/services/s3"
 optional = true
 path = "../rusoto/services/sdb"
 
+[dependencies.rusoto_servicecatalog]
+optional = true
+path = "../rusoto/services/servicecatalog"
+
 [dependencies.rusoto_ses]
 optional = true
 path = "../rusoto/services/ses"
@@ -300,6 +304,7 @@ all = [
 	   	"route53domains",
 	   	"s3",
 	   	"sdb",
+		"servicecatalog",
 	   	"ses",
 	   	"sns",
 	   	"sqs",
@@ -358,6 +363,7 @@ route53 = ["rusoto_route53"]
 route53domains = ["rusoto_route53domains"]
 s3 = ["rusoto_s3"]
 sdb = ["rusoto_sdb"]
+servicecatalog = ["rusoto_servicecatalog"]
 ses = ["rusoto_ses"]
 sns = ["rusoto_sns"]
 sqs = ["rusoto_sqs"]
