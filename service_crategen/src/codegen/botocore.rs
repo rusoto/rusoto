@@ -1,6 +1,6 @@
 use std::collections::{BTreeSet, BTreeMap};
 use std::error;
-use std::fs::File;
+use std::fs::{self, File};
 use std::io::BufReader;
 use std::path::Path;
 
@@ -31,6 +31,41 @@ impl ServiceDefinition {
         let service: ServiceDefinition = serde_json::from_reader(input_file)?;
 
         Ok(service)
+    }
+
+    pub fn load_all() -> Result<BTreeMap<String, Self>, Box<error::Error>> {
+        fs::read_dir(BOTOCORE_DIR)?
+            .filter_map(|e| e.ok())
+            .map(|e| e.path())
+            .filter(|p| p.is_dir())
+            .filter_map(|path| {
+                // Just load the latest version
+                let service_entries = fs::read_dir(&path);
+                if service_entries.is_err() {
+                    return None;
+                }
+                let service_entries = service_entries.unwrap();
+
+                let mut version_dirs: Vec<_> = service_entries
+                    .filter_map(|e| e.ok())
+                    .map(|e| e.path())
+                    .filter(|p| p.is_dir())
+                    .collect();
+                
+                version_dirs.sort();
+
+                version_dirs.last().cloned().map(|version_path| {
+                    (path.file_name().unwrap().to_string_lossy().into_owned(), version_path.clone())
+                })
+            })
+            .map(|(service_name, path)| {
+                let input_file = BufReader::new(File::open(&format!("{}/service-2.json", path.display()))?);
+
+                let service: ServiceDefinition = serde_json::from_reader(input_file)?;
+
+                Ok((service_name, service))
+            })
+            .collect()
     }
 }
 
