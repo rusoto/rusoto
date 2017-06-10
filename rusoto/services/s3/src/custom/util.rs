@@ -14,6 +14,7 @@ use rusoto_core::signature;
 ///     copy_source: rusoto_s3::util::encode_key("other-buckét/key-to-cöpy"),
 ///     ..Default::default()
 /// };
+/// ```
 pub fn encode_key<T: AsRef<str>>(key: T) -> String {
     signature::encode_uri_path(key.as_ref())
 }
