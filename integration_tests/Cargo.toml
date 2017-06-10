@@ -135,6 +135,10 @@ path = "../rusoto/services/events"
 optional = true
 path = "../rusoto/services/firehose"
 
+[dependencies.rusoto_gamelift]
+optional = true
+path = "../rusoto/services/gamelift"
+
 [dependencies.rusoto_iam]
 optional = true
 path = "../rusoto/services/iam"
@@ -282,6 +286,7 @@ all = [
 	   	"emr",
 	   	"events",
 	   	"firehose",
+		"gamelift",
 	   	"iam",
 	   	"importexport",
 	   	"inspector",
@@ -340,6 +345,7 @@ elbv2 = ["rusoto_elbv2"]
 emr = ["rusoto_emr"]
 events = ["rusoto_events"]
 firehose = ["rusoto_firehose"]
+gamelift = ["rusoto_gamelift"]
 iam = ["rusoto_iam"]
 importexport = ["rusoto_importexport"]
 inspector = ["rusoto_inspector"]
