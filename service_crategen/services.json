@@ -245,6 +245,12 @@
     "protocolVersion": "2013-02-18",
     "baseTypeName": "OpsWorks"
   },
+  "opsworkscm": {
+    "version": "0.25.0",
+    "coreVersion": "0.25.0",
+    "protocolVersion": "2016-11-01",
+    "baseTypeName": "OpsWorksCM"
+  },
   "organizations": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
