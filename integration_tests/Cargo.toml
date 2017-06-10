@@ -67,6 +67,10 @@ path = "../rusoto/services/cognito-identity"
 optional = true
 path = "../rusoto/services/config"
 
+[dependencies.rusoto_cur]
+optional = true
+path = "../rusoto/services/cur"
+
 [dependencies.rusoto_datapipeline]
 optional = true
 path = "../rusoto/services/datapipeline"
@@ -265,6 +269,7 @@ all = [
 	   	"codepipeline",
 	   	"cognito-identity",
 	   	"config",
+		"cur",
 	   	"datapipeline",
 	   	"devicefarm",
 	   	"directconnect",
@@ -323,6 +328,7 @@ codedeploy = ["rusoto_codedeploy"]
 codepipeline = ["rusoto_codepipeline"]
 cognito-identity = ["rusoto_cognito_identity"]
 config = ["rusoto_config"]
+cur = ["rusoto_cur"]
 datapipeline = ["rusoto_datapipeline"]
 devicefarm = ["rusoto_devicefarm"]
 directconnect = ["rusoto_directconnect"]
