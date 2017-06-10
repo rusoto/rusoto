@@ -263,6 +263,12 @@
     "protocolVersion": "2012-12-01",
     "baseTypeName": "Redshift"
   },
+  "rekognition": {
+    "version": "0.25.0",
+    "coreVersion": "0.25.0",
+    "protocolVersion": "2016-06-27",
+    "baseTypeName": "Rekognition"
+  },
   "route53": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
