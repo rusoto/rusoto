@@ -71,6 +71,12 @@
     "protocolVersion": "2014-06-30",
     "baseTypeName": "CognitoIdentity"
   },
+  "cognito-idp": {
+    "version": "0.25.0",
+    "coreVersion": "0.25.0",
+    "protocolVersion": "2016-04-18",
+    "baseTypeName": "CognitoIdentityProvider"
+  },
   "config": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
