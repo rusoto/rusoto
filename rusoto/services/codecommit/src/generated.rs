@@ -29,9 +29,11 @@ pub struct BatchGetRepositoriesInput {
 pub struct BatchGetRepositoriesOutput {
     #[doc="<p>A list of repositories returned by the batch get repositories operation.</p>"]
     #[serde(rename="repositories")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub repositories: Option<RepositoryMetadataList>,
     #[doc="<p>Returns a list of repository names for which information could not be found.</p>"]
     #[serde(rename="repositoriesNotFound")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub repositories_not_found: Option<RepositoryNotFoundList>,
 }
 
@@ -41,12 +43,15 @@ pub type Blob = Vec<u8>;
 pub struct BlobMetadata {
     #[doc="<p>The full ID of the blob.</p>"]
     #[serde(rename="blobId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub blob_id: Option<ObjectId>,
     #[doc="<p>The file mode permissions of the blob. File mode permission codes include:</p> <ul> <li> <p> <code>100644</code> indicates read/write</p> </li> <li> <p> <code>100755</code> indicates read/write/execute</p> </li> <li> <p> <code>160000</code> indicates a submodule</p> </li> <li> <p> <code>120000</code> indicates a symlink</p> </li> </ul>"]
     #[serde(rename="mode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub mode: Option<Mode>,
     #[doc="<p>The path to the blob and any associated file name, if any.</p>"]
     #[serde(rename="path")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub path: Option<Path>,
 }
 
@@ -55,9 +60,11 @@ pub struct BlobMetadata {
 pub struct BranchInfo {
     #[doc="<p>The name of the branch.</p>"]
     #[serde(rename="branchName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub branch_name: Option<BranchName>,
     #[doc="<p>The ID of the last commit made to the branch.</p>"]
     #[serde(rename="commitId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub commit_id: Option<CommitId>,
 }
 
@@ -71,21 +78,27 @@ pub type CloneUrlSsh = String;
 pub struct Commit {
     #[doc="<p>Any additional data associated with the specified commit.</p>"]
     #[serde(rename="additionalData")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub additional_data: Option<AdditionalData>,
     #[doc="<p>Information about the author of the specified commit. Information includes the date in timestamp format with GMT offset, the name of the author, and the email address for the author, as configured in Git.</p>"]
     #[serde(rename="author")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub author: Option<UserInfo>,
     #[doc="<p>Information about the person who committed the specified commit, also known as the committer. Information includes the date in timestamp format with GMT offset, the name of the committer, and the email address for the committer, as configured in Git.</p> <p>For more information about the difference between an author and a committer in Git, see <a href=\"http://git-scm.com/book/ch2-3.html\">Viewing the Commit History</a> in Pro Git by Scott Chacon and Ben Straub.</p>"]
     #[serde(rename="committer")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub committer: Option<UserInfo>,
     #[doc="<p>The commit message associated with the specified commit.</p>"]
     #[serde(rename="message")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<Message>,
     #[doc="<p>The parent list for the specified commit.</p>"]
     #[serde(rename="parents")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parents: Option<ParentList>,
     #[doc="<p>Tree information for the specified commit.</p>"]
     #[serde(rename="treeId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tree_id: Option<ObjectId>,
 }
 
@@ -110,6 +123,7 @@ pub struct CreateBranchInput {
 pub struct CreateRepositoryInput {
     #[doc="<p>A comment or description about the new repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note>"]
     #[serde(rename="repositoryDescription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub repository_description: Option<RepositoryDescription>,
     #[doc="<p>The name of the new repository to be created.</p> <note> <p>The repository name must be unique across the calling AWS account. In addition, repository names are limited to 100 alphanumeric, dash, and underscore characters, and cannot include certain characters. For a full description of the limits on repository names, see <a href=\"http://docs.aws.amazon.com/codecommit/latest/userguide/limits.html\">Limits</a> in the AWS CodeCommit User Guide. The suffix \".git\" is prohibited.</p> </note>"]
     #[serde(rename="repositoryName")]
@@ -121,6 +135,7 @@ pub struct CreateRepositoryInput {
 pub struct CreateRepositoryOutput {
     #[doc="<p>Information about the newly created repository.</p>"]
     #[serde(rename="repositoryMetadata")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub repository_metadata: Option<RepositoryMetadata>,
 }
 
@@ -139,6 +154,7 @@ pub struct DeleteRepositoryInput {
 pub struct DeleteRepositoryOutput {
     #[doc="<p>The ID of the repository that was deleted.</p>"]
     #[serde(rename="repositoryId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub repository_id: Option<RepositoryId>,
 }
 
@@ -147,12 +163,15 @@ pub struct DeleteRepositoryOutput {
 pub struct Difference {
     #[doc="<p>Information about an <code>afterBlob</code> data type object, including the ID, the file mode permission code, and the path.</p>"]
     #[serde(rename="afterBlob")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub after_blob: Option<BlobMetadata>,
     #[doc="<p>Information about a <code>beforeBlob</code> data type object, including the ID, the file mode permission code, and the path.</p>"]
     #[serde(rename="beforeBlob")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub before_blob: Option<BlobMetadata>,
     #[doc="<p>Whether the change type of the difference is an addition (A), deletion (D), or modification (M).</p>"]
     #[serde(rename="changeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub change_type: Option<ChangeTypeEnum>,
 }
 
@@ -187,9 +206,11 @@ pub struct GetBlobOutput {
 pub struct GetBranchInput {
     #[doc="<p>The name of the branch for which you want to retrieve information.</p>"]
     #[serde(rename="branchName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub branch_name: Option<BranchName>,
     #[doc="<p>The name of the repository that contains the branch for which you want to retrieve information.</p>"]
     #[serde(rename="repositoryName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub repository_name: Option<RepositoryName>,
 }
 
@@ -198,6 +219,7 @@ pub struct GetBranchInput {
 pub struct GetBranchOutput {
     #[doc="<p>The name of the branch.</p>"]
     #[serde(rename="branch")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub branch: Option<BranchInfo>,
 }
 
@@ -224,21 +246,26 @@ pub struct GetCommitOutput {
 pub struct GetDifferencesInput {
     #[doc="<p>A non-negative integer used to limit the number of returned results.</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<Limit>,
     #[doc="<p>An enumeration token that when provided in a request, returns the next batch of the results.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The branch, tag, HEAD, or other fully qualified reference used to identify a commit.</p>"]
     #[serde(rename="afterCommitSpecifier")]
     pub after_commit_specifier: CommitName,
     #[doc="<p>The file path in which to check differences. Limits the results to this path. Can also be used to specify the changed name of a directory or folder, if it has changed. If not specified, differences will be shown for all paths.</p>"]
     #[serde(rename="afterPath")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub after_path: Option<Path>,
     #[doc="<p>The branch, tag, HEAD, or other fully qualified reference used to identify a commit. For example, the full commit ID. Optional. If not specified, all changes prior to the <code>afterCommitSpecifier</code> value will be shown. If you do not use <code>beforeCommitSpecifier</code> in your request, consider limiting the results with <code>maxResults</code>.</p>"]
     #[serde(rename="beforeCommitSpecifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub before_commit_specifier: Option<CommitName>,
     #[doc="<p>The file path in which to check for differences. Limits the results to this path. Can also be used to specify the previous name of a directory or folder. If <code>beforePath</code> and <code>afterPath</code> are not specified, differences will be shown for all paths.</p>"]
     #[serde(rename="beforePath")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub before_path: Option<Path>,
     #[doc="<p>The name of the repository where you want to get differences.</p>"]
     #[serde(rename="repositoryName")]
@@ -249,9 +276,11 @@ pub struct GetDifferencesInput {
 pub struct GetDifferencesOutput {
     #[doc="<p>An enumeration token that can be used in a request to return the next batch of the results.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>A differences data type object that contains information about the differences, including whether the difference is added, modified, or deleted (A, D, M).</p>"]
     #[serde(rename="differences")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub differences: Option<DifferenceList>,
 }
 
@@ -268,6 +297,7 @@ pub struct GetRepositoryInput {
 pub struct GetRepositoryOutput {
     #[doc="<p>Information about the repository.</p>"]
     #[serde(rename="repositoryMetadata")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub repository_metadata: Option<RepositoryMetadata>,
 }
 
@@ -284,9 +314,11 @@ pub struct GetRepositoryTriggersInput {
 pub struct GetRepositoryTriggersOutput {
     #[doc="<p>The system-generated unique ID for the trigger.</p>"]
     #[serde(rename="configurationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub configuration_id: Option<RepositoryTriggersConfigurationId>,
     #[doc="<p>The JSON block of configuration information for each trigger.</p>"]
     #[serde(rename="triggers")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub triggers: Option<RepositoryTriggersList>,
 }
 
@@ -297,6 +329,7 @@ pub type Limit = i64;
 pub struct ListBranchesInput {
     #[doc="<p>An enumeration token that allows the operation to batch the results.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The name of the repository that contains the branches.</p>"]
     #[serde(rename="repositoryName")]
@@ -308,9 +341,11 @@ pub struct ListBranchesInput {
 pub struct ListBranchesOutput {
     #[doc="<p>The list of branch names.</p>"]
     #[serde(rename="branches")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub branches: Option<BranchNameList>,
     #[doc="<p>An enumeration token that returns the batch of the results.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -319,12 +354,15 @@ pub struct ListBranchesOutput {
 pub struct ListRepositoriesInput {
     #[doc="<p>An enumeration token that allows the operation to batch the results of the operation. Batch sizes are 1,000 for list repository operations. When the client sends the token back to AWS CodeCommit, another page of 1,000 records is retrieved.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The order in which to sort the results of a list repositories operation.</p>"]
     #[serde(rename="order")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub order: Option<OrderEnum>,
     #[doc="<p>The criteria used to sort the results of a list repositories operation.</p>"]
     #[serde(rename="sortBy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sort_by: Option<SortByEnum>,
 }
 
@@ -333,9 +371,11 @@ pub struct ListRepositoriesInput {
 pub struct ListRepositoriesOutput {
     #[doc="<p>An enumeration token that allows the operation to batch the results of the operation. Batch sizes are 1,000 for list repository operations. When the client sends the token back to AWS CodeCommit, another page of 1,000 records is retrieved.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>Lists the repositories called by the list repositories operation.</p>"]
     #[serde(rename="repositories")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub repositories: Option<RepositoryNameIdPairList>,
 }
 
@@ -363,6 +403,7 @@ pub struct PutRepositoryTriggersInput {
 pub struct PutRepositoryTriggersOutput {
     #[doc="<p>The system-generated unique ID for the create or update operation.</p>"]
     #[serde(rename="configurationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub configuration_id: Option<RepositoryTriggersConfigurationId>,
 }
 
@@ -373,33 +414,43 @@ pub type RepositoryId = String;
 pub struct RepositoryMetadata {
     #[doc="<p>The Amazon Resource Name (ARN) of the repository.</p>"]
     #[serde(rename="Arn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub arn: Option<Arn>,
     #[doc="<p>The ID of the AWS account associated with the repository.</p>"]
     #[serde(rename="accountId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub account_id: Option<AccountId>,
     #[doc="<p>The URL to use for cloning the repository over HTTPS.</p>"]
     #[serde(rename="cloneUrlHttp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub clone_url_http: Option<CloneUrlHttp>,
     #[doc="<p>The URL to use for cloning the repository over SSH.</p>"]
     #[serde(rename="cloneUrlSsh")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub clone_url_ssh: Option<CloneUrlSsh>,
     #[doc="<p>The date and time the repository was created, in timestamp format.</p>"]
     #[serde(rename="creationDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub creation_date: Option<CreationDate>,
     #[doc="<p>The repository's default branch name.</p>"]
     #[serde(rename="defaultBranch")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_branch: Option<BranchName>,
     #[doc="<p>The date and time the repository was last modified, in timestamp format.</p>"]
     #[serde(rename="lastModifiedDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_modified_date: Option<LastModifiedDate>,
     #[doc="<p>A comment or description about the repository.</p>"]
     #[serde(rename="repositoryDescription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub repository_description: Option<RepositoryDescription>,
     #[doc="<p>The ID of the repository.</p>"]
     #[serde(rename="repositoryId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub repository_id: Option<RepositoryId>,
     #[doc="<p>The repository's name.</p>"]
     #[serde(rename="repositoryName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub repository_name: Option<RepositoryName>,
 }
 
@@ -410,9 +461,11 @@ pub type RepositoryName = String;
 pub struct RepositoryNameIdPair {
     #[doc="<p>The ID associated with the repository.</p>"]
     #[serde(rename="repositoryId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub repository_id: Option<RepositoryId>,
     #[doc="<p>The name associated with the repository.</p>"]
     #[serde(rename="repositoryName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub repository_name: Option<RepositoryName>,
 }
 
@@ -424,9 +477,11 @@ pub type RepositoryNotFoundList = Vec<RepositoryName>;
 pub struct RepositoryTrigger {
     #[doc="<p>The branches that will be included in the trigger configuration. If no branches are specified, the trigger will apply to all branches.</p>"]
     #[serde(rename="branches")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub branches: Option<BranchNameList>,
     #[doc="<p>Any custom data associated with the trigger that will be included in the information sent to the target of the trigger.</p>"]
     #[serde(rename="customData")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub custom_data: Option<RepositoryTriggerCustomData>,
     #[doc="<p>The ARN of the resource that is the target for a trigger. For example, the ARN of a topic in Amazon Simple Notification Service (SNS).</p>"]
     #[serde(rename="destinationArn")]
@@ -447,9 +502,11 @@ pub type RepositoryTriggerEventList = Vec<RepositoryTriggerEventEnum>;
 pub struct RepositoryTriggerExecutionFailure {
     #[doc="<p>Additional message information about the trigger that did not run.</p>"]
     #[serde(rename="failureMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub failure_message: Option<RepositoryTriggerExecutionFailureMessage>,
     #[doc="<p>The name of the trigger that did not run.</p>"]
     #[serde(rename="trigger")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub trigger: Option<RepositoryTriggerName>,
 }
 
@@ -476,9 +533,11 @@ pub struct TestRepositoryTriggersInput {
 pub struct TestRepositoryTriggersOutput {
     #[doc="<p>The list of triggers that were not able to be tested. This list provides the names of the triggers that could not be tested, separated by commas.</p>"]
     #[serde(rename="failedExecutions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub failed_executions: Option<RepositoryTriggerExecutionFailureList>,
     #[doc="<p>The list of triggers that were successfully tested. This list provides the names of the triggers that were successfully tested, separated by commas.</p>"]
     #[serde(rename="successfulExecutions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub successful_executions: Option<RepositoryTriggerNameList>,
 }
 
@@ -498,6 +557,7 @@ pub struct UpdateDefaultBranchInput {
 pub struct UpdateRepositoryDescriptionInput {
     #[doc="<p>The new comment or description for the specified repository. Repository descriptions are limited to 1,000 characters.</p>"]
     #[serde(rename="repositoryDescription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub repository_description: Option<RepositoryDescription>,
     #[doc="<p>The name of the repository to set or change the comment or description for.</p>"]
     #[serde(rename="repositoryName")]
@@ -520,12 +580,15 @@ pub struct UpdateRepositoryNameInput {
 pub struct UserInfo {
     #[doc="<p>The date when the specified commit was pushed to the repository.</p>"]
     #[serde(rename="date")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub date: Option<Date>,
     #[doc="<p>The email address associated with the user who made the commit, if any.</p>"]
     #[serde(rename="email")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub email: Option<Email>,
     #[doc="<p>The name of the user who made the specified commit.</p>"]
     #[serde(rename="name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<Name>,
 }
 

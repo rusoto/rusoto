@@ -24,6 +24,7 @@ pub struct AcceptHandshakeRequest {
 pub struct AcceptHandshakeResponse {
     #[doc="<p>A structure that contains details about the accepted handshake.</p>"]
     #[serde(rename="Handshake")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub handshake: Option<Handshake>,
 }
 
@@ -32,24 +33,31 @@ pub struct AcceptHandshakeResponse {
 pub struct Account {
     #[doc="<p>The Amazon Resource Name (ARN) of the account.</p> <p>For more information about ARNs in Organizations, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns\">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>"]
     #[serde(rename="Arn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub arn: Option<AccountArn>,
     #[doc="<p>The email address associated with the AWS account.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for this parameter is a string of characters that represents a standard Internet email address.</p>"]
     #[serde(rename="Email")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub email: Option<Email>,
     #[doc="<p>The unique identifier (ID) of the account.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for an account ID string requires exactly 12 digits.</p>"]
     #[serde(rename="Id")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<AccountId>,
     #[doc="<p>The method by which the account joined the organization.</p>"]
     #[serde(rename="JoinedMethod")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub joined_method: Option<AccountJoinedMethod>,
     #[doc="<p>The date the account became a part of the organization.</p>"]
     #[serde(rename="JoinedTimestamp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub joined_timestamp: Option<Timestamp>,
     #[doc="<p>The friendly name of the account.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> that is used to validate this parameter is a string of any of the characters in the ASCII character range.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<AccountName>,
     #[doc="<p>The status of the account in the organization.</p>"]
     #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<AccountStatus>,
 }
 
@@ -82,6 +90,7 @@ pub struct CancelHandshakeRequest {
 pub struct CancelHandshakeResponse {
     #[doc="<p>A structure that contains details about the handshake that you canceled.</p>"]
     #[serde(rename="Handshake")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub handshake: Option<Handshake>,
 }
 
@@ -90,9 +99,11 @@ pub struct CancelHandshakeResponse {
 pub struct Child {
     #[doc="<p>The unique identifier (ID) of this child entity.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for a child ID string requires one of the following:</p> <ul> <li> <p>Account: a string that consists of exactly 12 digits.</p> </li> <li> <p>Organizational unit (OU): a string that begins with \"ou-\" followed by from 4 to 32 lower-case letters or digits (the ID of the root that contains the OU) followed by a second \"-\" dash and from 8 to 32 additional lower-case letters or digits.</p> </li> </ul>"]
     #[serde(rename="Id")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<ChildId>,
     #[doc="<p>The type of this child entity.</p>"]
     #[serde(rename="Type")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<ChildType>,
 }
 
@@ -111,9 +122,11 @@ pub struct CreateAccountRequest {
     pub email: Email,
     #[doc="<p>If set to <code>ALLOW</code>, the new account enables IAM users to access account billing information <i>if</i> they have the required permissions. If set to <code>DENY</code>, then only the root user of the new account can access account billing information. For more information, see <a href=\"http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/grantaccess.html#ControllingAccessWebsite-Activate\">Activating Access to the Billing and Cost Management Console</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p> <p>If you do not specify this parameter, the value defaults to ALLOW, and IAM users and roles with the required permissions can access billing information for the new account.</p>"]
     #[serde(rename="IamUserAccessToBilling")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub iam_user_access_to_billing: Option<IAMUserAccessToBilling>,
     #[doc="<p>(Optional)</p> <p>The name of an IAM role that Organizations automatically preconfigures in the new member account. This role trusts the master account, allowing users in the master account to assume the role, as permitted by the master account administrator. The role has administrator permissions in the new member account.</p> <p>If you do not specify this parameter, the role name defaults to <code>OrganizationAccountAccessRole</code>.</p> <p>For more information about how to use this role to access the member account, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html#orgs_manage_accounts_create-cross-account-role\">Accessing and Administering the Member Accounts in Your Organization</a> in the <i>AWS Organizations User Guide</i>, and steps 2 and 3 in <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html\">Tutorial: Delegate Access Across AWS Accounts Using IAM Roles</a> in the <i>IAM User Guide</i>.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> that is used to validate this parameter is a string of characters that can consist of uppercase letters, lowercase letters, digits with no spaces, and any of the following characters: =,.@-</p>"]
     #[serde(rename="RoleName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub role_name: Option<RoleName>,
 }
 
@@ -122,6 +135,7 @@ pub type CreateAccountRequestId = String;
 pub struct CreateAccountResponse {
     #[doc="<p>A structure that contains details about the request to create an account. This response structure might not be fully populated when you first receive it because account creation is an asynchronous process. You can pass the returned CreateAccountStatus ID as a parameter to <code> <a>DescribeCreateAccountStatus</a> </code> to get status about the progress of the request at later times. </p>"]
     #[serde(rename="CreateAccountStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub create_account_status: Option<CreateAccountStatus>,
 }
 
@@ -132,24 +146,31 @@ pub type CreateAccountStates = Vec<CreateAccountState>;
 pub struct CreateAccountStatus {
     #[doc="<p>If the account was created successfully, the unique identifier (ID) of the new account.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for an account ID string requires exactly 12 digits.</p>"]
     #[serde(rename="AccountId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub account_id: Option<AccountId>,
     #[doc="<p>The account name given to the account when it was created.</p>"]
     #[serde(rename="AccountName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub account_name: Option<AccountName>,
     #[doc="<p>The date and time that the account was created and the request completed.</p>"]
     #[serde(rename="CompletedTimestamp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub completed_timestamp: Option<Timestamp>,
     #[doc="<p>If the request failed, a description of the reason for the failure.</p> <ul> <li> <p>ACCOUNT_LIMIT_EXCEEDED: The account could not be created because you have reached the limit on the number of accounts in your organization.</p> </li> <li> <p>EMAIL_ALREADY_EXISTS: The account could not be created because another AWS account with that email address already exists.</p> </li> <li> <p>INVALID_ADDRESS: The account could not be created because the address you provided is not valid.</p> </li> <li> <p>INVALID_EMAIL: The account could not be created because the email address you provided is not valid.</p> </li> <li> <p>INTERNAL_FAILURE: The account could not be created because of an internal failure. Try again later. If the problem persists, contact Customer Support.</p> </li> </ul>"]
     #[serde(rename="FailureReason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub failure_reason: Option<CreateAccountFailureReason>,
     #[doc="<p>The unique identifier (ID) that references this request. You get this value from the response of the initial <a>CreateAccount</a> request to create the account.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for an create account request ID string requires \"car-\" followed by from 8 to 32 lower-case letters or digits.</p>"]
     #[serde(rename="Id")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<CreateAccountRequestId>,
     #[doc="<p>The date and time that the request was made for the account creation.</p>"]
     #[serde(rename="RequestedTimestamp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub requested_timestamp: Option<Timestamp>,
     #[doc="<p>The status of the request.</p>"]
     #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<CreateAccountState>,
 }
 
@@ -158,6 +179,7 @@ pub type CreateAccountStatuses = Vec<CreateAccountStatus>;
 pub struct CreateOrganizationRequest {
     #[doc="<p>Specifies the feature set supported by the new organization. Each feature set supports different levels of functionality.</p> <ul> <li> <p> <i>CONSOLIDATED_BILLING</i>: All member accounts have their bills consolidated to and paid by the master account. For more information, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_getting-started_concepts.html#feature-set-cb-only\">Consolidated Billing</a> in the <i>AWS Organizations User Guide</i>.</p> </li> <li> <p> <i>ALL</i>: In addition to all the features supported by the consolidated billing feature set, the master account can also apply any type of policy to any member account in the organization. For more information, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_getting-started_concepts.html#feature-set-all\">All features</a> in the <i>AWS Organizations User Guide</i>.</p> </li> </ul>"]
     #[serde(rename="FeatureSet")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub feature_set: Option<OrganizationFeatureSet>,
 }
 
@@ -165,6 +187,7 @@ pub struct CreateOrganizationRequest {
 pub struct CreateOrganizationResponse {
     #[doc="<p>A structure that contains details about the newly created organization.</p>"]
     #[serde(rename="Organization")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub organization: Option<Organization>,
 }
 
@@ -182,6 +205,7 @@ pub struct CreateOrganizationalUnitRequest {
 pub struct CreateOrganizationalUnitResponse {
     #[doc="<p>A structure that contains details about the newly created OU.</p>"]
     #[serde(rename="OrganizationalUnit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub organizational_unit: Option<OrganizationalUnit>,
 }
 
@@ -205,6 +229,7 @@ pub struct CreatePolicyRequest {
 pub struct CreatePolicyResponse {
     #[doc="<p>A structure that contains details about the newly created policy.</p>"]
     #[serde(rename="Policy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy: Option<Policy>,
 }
 
@@ -219,6 +244,7 @@ pub struct DeclineHandshakeRequest {
 pub struct DeclineHandshakeResponse {
     #[doc="<p>A structure that contains details about the declined handshake. The state is updated to show the value <code>DECLINED</code>.</p>"]
     #[serde(rename="Handshake")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub handshake: Option<Handshake>,
 }
 
@@ -247,6 +273,7 @@ pub struct DescribeAccountRequest {
 pub struct DescribeAccountResponse {
     #[doc="<p>A structure that contains information about the requested account.</p>"]
     #[serde(rename="Account")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub account: Option<Account>,
 }
 
@@ -261,6 +288,7 @@ pub struct DescribeCreateAccountStatusRequest {
 pub struct DescribeCreateAccountStatusResponse {
     #[doc="<p>A structure that contains the current status of an account creation request.</p>"]
     #[serde(rename="CreateAccountStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub create_account_status: Option<CreateAccountStatus>,
 }
 
@@ -275,6 +303,7 @@ pub struct DescribeHandshakeRequest {
 pub struct DescribeHandshakeResponse {
     #[doc="<p>A structure that contains information about the specified handshake.</p>"]
     #[serde(rename="Handshake")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub handshake: Option<Handshake>,
 }
 
@@ -282,6 +311,7 @@ pub struct DescribeHandshakeResponse {
 pub struct DescribeOrganizationResponse {
     #[doc="<p>A structure that contains information about the organization.</p>"]
     #[serde(rename="Organization")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub organization: Option<Organization>,
 }
 
@@ -296,6 +326,7 @@ pub struct DescribeOrganizationalUnitRequest {
 pub struct DescribeOrganizationalUnitResponse {
     #[doc="<p>A structure that contains details about the specified OU.</p>"]
     #[serde(rename="OrganizationalUnit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub organizational_unit: Option<OrganizationalUnit>,
 }
 
@@ -310,6 +341,7 @@ pub struct DescribePolicyRequest {
 pub struct DescribePolicyResponse {
     #[doc="<p>A structure that contains details about the specified policy.</p>"]
     #[serde(rename="Policy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy: Option<Policy>,
 }
 
@@ -337,6 +369,7 @@ pub struct DisablePolicyTypeRequest {
 pub struct DisablePolicyTypeResponse {
     #[doc="<p>A structure that shows the root with the updated list of enabled policy types.</p>"]
     #[serde(rename="Root")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub root: Option<Root>,
 }
 
@@ -348,6 +381,7 @@ pub struct EnableAllFeaturesRequest;
 pub struct EnableAllFeaturesResponse {
     #[doc="<p>A structure that contains details about the handshake created to support this request to enable all features in the organization.</p>"]
     #[serde(rename="Handshake")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub handshake: Option<Handshake>,
 }
 
@@ -365,6 +399,7 @@ pub struct EnablePolicyTypeRequest {
 pub struct EnablePolicyTypeResponse {
     #[doc="<p>A structure that shows the root with the updated list of enabled policy types.</p>"]
     #[serde(rename="Root")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub root: Option<Root>,
 }
 
@@ -376,27 +411,35 @@ pub type GenericArn = String;
 pub struct Handshake {
     #[doc="<p>The type of handshake, indicating what action occurs when the recipient accepts the handshake.</p>"]
     #[serde(rename="Action")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub action: Option<ActionType>,
     #[doc="<p>The Amazon Resource Name (ARN) of a handshake.</p> <p>For more information about ARNs in Organizations, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns\">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>"]
     #[serde(rename="Arn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub arn: Option<HandshakeArn>,
     #[doc="<p>The date and time that the handshake expires. If the recipient of the handshake request fails to respond before the specified date and time, the handshake becomes inactive and is no longer valid.</p>"]
     #[serde(rename="ExpirationTimestamp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub expiration_timestamp: Option<Timestamp>,
     #[doc="<p>The unique identifier (ID) of a handshake. The originating account creates the ID when it initiates the handshake.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for handshake ID string requires \"h-\" followed by from 8 to 32 lower-case letters or digits.</p>"]
     #[serde(rename="Id")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<HandshakeId>,
     #[doc="<p>Information about the two accounts that are participating in the handshake.</p>"]
     #[serde(rename="Parties")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parties: Option<HandshakeParties>,
     #[doc="<p>The date and time that the handshake request was made.</p>"]
     #[serde(rename="RequestedTimestamp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub requested_timestamp: Option<Timestamp>,
     #[doc="<p>Additional information that is needed to process the handshake.</p>"]
     #[serde(rename="Resources")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resources: Option<HandshakeResources>,
     #[doc="<p>The current state of the handshake. Use the state to trace the flow of the handshake through the process from its creation to its acceptance. The meaning of each of the valid values is as follows:</p> <ul> <li> <p> <b>REQUESTED</b>: This handshake was sent to multiple recipients (applicable to only some handshake types) and not all recipients have responded yet. The request stays in this state until all recipients respond.</p> </li> <li> <p> <b>OPEN</b>: This handshake was sent to multiple recipients (applicable to only some policy types) and all recipients have responded, allowing the originator to complete the handshake action.</p> </li> <li> <p> <b>CANCELED</b>: This handshake is no longer active because it was canceled by the originating account.</p> </li> <li> <p> <b>ACCEPTED</b>: This handshake is complete because it has been accepted by the recipient.</p> </li> <li> <p> <b>DECLINED</b>: This handshake is no longer active because it was declined by the recipient account.</p> </li> <li> <p> <b>EXPIRED</b>: This handshake is no longer active because the originator did not receive a response of any kind from the recipient before the expiration time (15 days).</p> </li> </ul>"]
     #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<HandshakeState>,
 }
 
@@ -407,9 +450,11 @@ pub type HandshakeConstraintViolationExceptionReason = String;
 pub struct HandshakeFilter {
     #[doc="<p>Specifies the type of handshake action.</p> <p>If you specify <code>ActionType</code>, you cannot also specify <code>ParentHandshakeId</code>.</p>"]
     #[serde(rename="ActionType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub action_type: Option<ActionType>,
     #[doc="<p>Specifies the parent handshake. Only used for handshake types that are a child of another type.</p> <p>If you specify <code>ParentHandshakeId</code>, you cannot also specify <code>ActionType</code>.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for handshake ID string requires \"h-\" followed by from 8 to 32 lower-case letters or digits.</p>"]
     #[serde(rename="ParentHandshakeId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parent_handshake_id: Option<HandshakeId>,
 }
 
@@ -421,9 +466,11 @@ pub type HandshakeParties = Vec<HandshakeParty>;
 pub struct HandshakeParty {
     #[doc="<p>The unique identifier (ID) for the party.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for handshake ID string requires \"h-\" followed by from 8 to 32 lower-case letters or digits.</p>"]
     #[serde(rename="Id")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<HandshakePartyId>,
     #[doc="<p>The type of party.</p>"]
     #[serde(rename="Type")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<HandshakePartyType>,
 }
 
@@ -434,12 +481,15 @@ pub type HandshakePartyType = String;
 pub struct HandshakeResource {
     #[doc="<p>When needed, contains an additional array of <code>HandshakeResource</code> objects.</p>"]
     #[serde(rename="Resources")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resources: Option<HandshakeResources>,
     #[doc="<p>The type of information being passed, specifying how the value is to be interpreted by the other party:</p> <ul> <li> <p> <code>ACCOUNT</code> - Specifies an AWS account ID number.</p> </li> <li> <p> <code>ORGANIZATION</code> - Specifies an organization ID number.</p> </li> <li> <p> <code>EMAIL</code> - Specifies the email address that is associated with the account that receives the handshake. </p> </li> <li> <p> <code>OWNER_EMAIL</code> - Specifies the email address associated with the master account. Included as information about an organization. </p> </li> <li> <p> <code>OWNER_NAME</code> - Specifies the name associated with the master account. Included as information about an organization. </p> </li> <li> <p> <code>NOTES</code> - Additional text provided by the handshake initiator and intended for the recipient to read.</p> </li> </ul>"]
     #[serde(rename="Type")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<HandshakeResourceType>,
     #[doc="<p>The information that is passed to the other party in the handshake. The format of the value string must match the requirements of the specified type.</p>"]
     #[serde(rename="Value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<HandshakeResourceValue>,
 }
 
@@ -454,6 +504,7 @@ pub type InvalidInputExceptionReason = String;
 pub struct InviteAccountToOrganizationRequest {
     #[doc="<p>Additional information that you want to include in the generated email to the recipient account owner.</p>"]
     #[serde(rename="Notes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub notes: Option<HandshakeNotes>,
     #[doc="<p>The identifier (ID) of the AWS account that you want to invite to join your organization. This is a JSON object that contains the following elements: </p> <p> <code>{ \"Type\": \"ACCOUNT\", \"Id\": \"&lt;<i> <b>account id number</b> </i>&gt;\" }</code> </p> <p>If you use the AWS CLI, you can submit this as a single string, similar to the following example:</p> <p> <code>--target id=123456789012,type=ACCOUNT</code> </p> <p>If you specify <code>\"Type\": \"ACCOUNT\"</code>, then you must provide the AWS account ID number as the <code>Id</code>. If you specify <code>\"Type\": \"EMAIL\"</code>, then you must specify the email address that is associated with the account.</p> <p> <code>--target id=bill@example.com,type=EMAIL</code> </p>"]
     #[serde(rename="Target")]
@@ -464,6 +515,7 @@ pub struct InviteAccountToOrganizationRequest {
 pub struct InviteAccountToOrganizationResponse {
     #[doc="<p>A structure that contains details about the handshake that is created to support this invitation request.</p>"]
     #[serde(rename="Handshake")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub handshake: Option<Handshake>,
 }
 
@@ -471,9 +523,11 @@ pub struct InviteAccountToOrganizationResponse {
 pub struct ListAccountsForParentRequest {
     #[doc="<p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<MaxResults>,
     #[doc="<p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The unique identifier (ID) for the parent root or organization unit (OU) whose accounts you want to list.</p>"]
     #[serde(rename="ParentId")]
@@ -484,9 +538,11 @@ pub struct ListAccountsForParentRequest {
 pub struct ListAccountsForParentResponse {
     #[doc="<p>A list of the accounts in the specified root or OU.</p>"]
     #[serde(rename="Accounts")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub accounts: Option<Accounts>,
     #[doc="<p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -494,9 +550,11 @@ pub struct ListAccountsForParentResponse {
 pub struct ListAccountsRequest {
     #[doc="<p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<MaxResults>,
     #[doc="<p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -504,9 +562,11 @@ pub struct ListAccountsRequest {
 pub struct ListAccountsResponse {
     #[doc="<p>A list of objects in the organization.</p>"]
     #[serde(rename="Accounts")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub accounts: Option<Accounts>,
     #[doc="<p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -517,9 +577,11 @@ pub struct ListChildrenRequest {
     pub child_type: ChildType,
     #[doc="<p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<MaxResults>,
     #[doc="<p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The unique identifier (ID) for the parent root or OU whose children you want to list.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for a parent ID string requires one of the following:</p> <ul> <li> <p>Root: a string that begins with \"r-\" followed by from 4 to 32 lower-case letters or digits.</p> </li> <li> <p>Organizational unit (OU): a string that begins with \"ou-\" followed by from 4 to 32 lower-case letters or digits (the ID of the root that the OU is in) followed by a second \"-\" dash and from 8 to 32 additional lower-case letters or digits.</p> </li> </ul>"]
     #[serde(rename="ParentId")]
@@ -530,9 +592,11 @@ pub struct ListChildrenRequest {
 pub struct ListChildrenResponse {
     #[doc="<p>The list of children of the specified parent container.</p>"]
     #[serde(rename="Children")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub children: Option<Children>,
     #[doc="<p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -540,12 +604,15 @@ pub struct ListChildrenResponse {
 pub struct ListCreateAccountStatusRequest {
     #[doc="<p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<MaxResults>,
     #[doc="<p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>A list of one or more states that you want included in the response. If this parameter is not present, then all requests are included in the response.</p>"]
     #[serde(rename="States")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub states: Option<CreateAccountStates>,
 }
 
@@ -553,9 +620,11 @@ pub struct ListCreateAccountStatusRequest {
 pub struct ListCreateAccountStatusResponse {
     #[doc="<p>A list of objects with details about the requests. Certain elements, such as the accountId number, are present in the output only after the account has been successfully created.</p>"]
     #[serde(rename="CreateAccountStatuses")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub create_account_statuses: Option<CreateAccountStatuses>,
     #[doc="<p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -563,12 +632,15 @@ pub struct ListCreateAccountStatusResponse {
 pub struct ListHandshakesForAccountRequest {
     #[doc="<p>Filters the handshakes that you want included in the response. The default is all types. Use the <code>ActionType</code> element to limit the output to only a specified type, such as <code>INVITE</code>, <code>ENABLE-FULL-CONTROL</code>, or <code>APPROVE-FULL-CONTROL</code>. Alternatively, for the <code>ENABLE-FULL-CONTROL</code> handshake that generates a separate child handshake for each member account, you can specify <code>ParentHandshakeId</code> to see only the handshakes that were generated by that parent request.</p>"]
     #[serde(rename="Filter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filter: Option<HandshakeFilter>,
     #[doc="<p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<MaxResults>,
     #[doc="<p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -576,9 +648,11 @@ pub struct ListHandshakesForAccountRequest {
 pub struct ListHandshakesForAccountResponse {
     #[doc="<p>A list of <a>Handshake</a> objects with details about each of the handshakes that is associated with the specified account.</p>"]
     #[serde(rename="Handshakes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub handshakes: Option<Handshakes>,
     #[doc="<p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -586,12 +660,15 @@ pub struct ListHandshakesForAccountResponse {
 pub struct ListHandshakesForOrganizationRequest {
     #[doc="<p>A filter of the handshakes that you want included in the response. The default is all types. Use the <code>ActionType</code> element to limit the output to only a specified type, such as <code>INVITE</code>, <code>ENABLE-ALL-FEATURES</code>, or <code>APPROVE-ALL-FEATURES</code>. Alternatively, for the <code>ENABLE-ALL-FEATURES</code> handshake that generates a separate child handshake for each member account, you can specify the <code>ParentHandshakeId</code> to see only the handshakes that were generated by that parent request.</p>"]
     #[serde(rename="Filter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filter: Option<HandshakeFilter>,
     #[doc="<p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<MaxResults>,
     #[doc="<p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -599,9 +676,11 @@ pub struct ListHandshakesForOrganizationRequest {
 pub struct ListHandshakesForOrganizationResponse {
     #[doc="<p>A list of <a>Handshake</a> objects with details about each of the handshakes that are associated with an organization.</p>"]
     #[serde(rename="Handshakes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub handshakes: Option<Handshakes>,
     #[doc="<p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -609,9 +688,11 @@ pub struct ListHandshakesForOrganizationResponse {
 pub struct ListOrganizationalUnitsForParentRequest {
     #[doc="<p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<MaxResults>,
     #[doc="<p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The unique identifier (ID) of the root or OU whose child OUs you want to list.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for a parent ID string requires one of the following:</p> <ul> <li> <p>Root: a string that begins with \"r-\" followed by from 4 to 32 lower-case letters or digits.</p> </li> <li> <p>Organizational unit (OU): a string that begins with \"ou-\" followed by from 4 to 32 lower-case letters or digits (the ID of the root that the OU is in) followed by a second \"-\" dash and from 8 to 32 additional lower-case letters or digits.</p> </li> </ul>"]
     #[serde(rename="ParentId")]
@@ -622,9 +703,11 @@ pub struct ListOrganizationalUnitsForParentRequest {
 pub struct ListOrganizationalUnitsForParentResponse {
     #[doc="<p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>A list of the OUs in the specified root or parent OU.</p>"]
     #[serde(rename="OrganizationalUnits")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub organizational_units: Option<OrganizationalUnits>,
 }
 
@@ -635,9 +718,11 @@ pub struct ListParentsRequest {
     pub child_id: ChildId,
     #[doc="<p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<MaxResults>,
     #[doc="<p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -645,9 +730,11 @@ pub struct ListParentsRequest {
 pub struct ListParentsResponse {
     #[doc="<p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>A list of parents for the specified child account or OU.</p>"]
     #[serde(rename="Parents")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parents: Option<Parents>,
 }
 
@@ -658,9 +745,11 @@ pub struct ListPoliciesForTargetRequest {
     pub filter: PolicyType,
     #[doc="<p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<MaxResults>,
     #[doc="<p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The unique identifier (ID) of the root, organizational unit, or account whose policies you want to list.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for a target ID string requires one of the following:</p> <ul> <li> <p>Root: a string that begins with \"r-\" followed by from 4 to 32 lower-case letters or digits.</p> </li> <li> <p>Account: a string that consists of exactly 12 digits.</p> </li> <li> <p>Organizational unit (OU): a string that begins with \"ou-\" followed by from 4 to 32 lower-case letters or digits (the ID of the root that the OU is in) followed by a second \"-\" dash and from 8 to 32 additional lower-case letters or digits.</p> </li> </ul>"]
     #[serde(rename="TargetId")]
@@ -671,9 +760,11 @@ pub struct ListPoliciesForTargetRequest {
 pub struct ListPoliciesForTargetResponse {
     #[doc="<p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The list of policies that match the criteria in the request.</p>"]
     #[serde(rename="Policies")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policies: Option<Policies>,
 }
 
@@ -684,9 +775,11 @@ pub struct ListPoliciesRequest {
     pub filter: PolicyType,
     #[doc="<p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<MaxResults>,
     #[doc="<p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -694,9 +787,11 @@ pub struct ListPoliciesRequest {
 pub struct ListPoliciesResponse {
     #[doc="<p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>A list of policies that match the filter criteria in the request. The output list does not include the policy contents. To see the content for a policy, see <a>DescribePolicy</a>.</p>"]
     #[serde(rename="Policies")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policies: Option<Policies>,
 }
 
@@ -704,9 +799,11 @@ pub struct ListPoliciesResponse {
 pub struct ListRootsRequest {
     #[doc="<p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<MaxResults>,
     #[doc="<p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -714,9 +811,11 @@ pub struct ListRootsRequest {
 pub struct ListRootsResponse {
     #[doc="<p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>A list of roots that are defined in an organization.</p>"]
     #[serde(rename="Roots")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub roots: Option<Roots>,
 }
 
@@ -724,9 +823,11 @@ pub struct ListRootsResponse {
 pub struct ListTargetsForPolicyRequest {
     #[doc="<p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<MaxResults>,
     #[doc="<p>Use this parameter if you receive a <code>NextToken</code> response in a previous request that indicates that there is more output available. Set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The unique identifier (ID) of the policy for which you want to know its attachments.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for a policy ID string requires \"p-\" followed by from 8 to 128 lower-case letters or digits.</p>"]
     #[serde(rename="PolicyId")]
@@ -737,9 +838,11 @@ pub struct ListTargetsForPolicyRequest {
 pub struct ListTargetsForPolicyResponse {
     #[doc="<p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>A list of structures, each of which contains details about one of the entities to which the specified policy is attached.</p>"]
     #[serde(rename="Targets")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub targets: Option<PolicyTargets>,
 }
 
@@ -763,24 +866,31 @@ pub type NextToken = String;
 pub struct Organization {
     #[doc="<p>The Amazon Resource Name (ARN) of an organization.</p> <p>For more information about ARNs in Organizations, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns\">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>"]
     #[serde(rename="Arn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub arn: Option<OrganizationArn>,
     #[doc="<p>A list of policy types that are enabled for this organization. For example, if your organization has all features enabled, then service control policies (SCPs) are included in the list.</p>"]
     #[serde(rename="AvailablePolicyTypes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub available_policy_types: Option<PolicyTypes>,
     #[doc="<p>Specifies the functionality that currently is available to the organization. If set to \"ALL\", then all features are enabled and policies can be applied to accounts in the organization. If set to \"CONSOLIDATED_BILLING\", then only consolidated billing functionality is available. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/orgs_manage_org_support-all-features.html\">Enabling All Features in Your Organization</a> in the <i>AWS Organizations User Guide</i>.</p>"]
     #[serde(rename="FeatureSet")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub feature_set: Option<OrganizationFeatureSet>,
     #[doc="<p>The unique identifier (ID) of an organization.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for an organization ID string requires \"o-\" followed by from 10 to 32 lower-case letters or digits.</p>"]
     #[serde(rename="Id")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<OrganizationId>,
     #[doc="<p>The Amazon Resource Name (ARN) of the account that is designated as the master account for the organization.</p> <p>For more information about ARNs in Organizations, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns\">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>"]
     #[serde(rename="MasterAccountArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub master_account_arn: Option<AccountArn>,
     #[doc="<p>The email address that is associated with the AWS account that is designated as the master account for the organization.</p>"]
     #[serde(rename="MasterAccountEmail")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub master_account_email: Option<Email>,
     #[doc="<p>The unique identifier (ID) of the master account of an organization.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for an account ID string requires exactly 12 digits.</p>"]
     #[serde(rename="MasterAccountId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub master_account_id: Option<AccountId>,
 }
 
@@ -792,12 +902,15 @@ pub type OrganizationId = String;
 pub struct OrganizationalUnit {
     #[doc="<p>The Amazon Resource Name (ARN) of this OU.</p> <p>For more information about ARNs in Organizations, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns\">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>"]
     #[serde(rename="Arn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub arn: Option<OrganizationalUnitArn>,
     #[doc="<p>The unique identifier (ID) associated with this OU.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for an organizational unit ID string requires \"ou-\" followed by from 4 to 32 lower-case letters or digits (the ID of the root that contains the OU) followed by a second \"-\" dash and from 8 to 32 additional lower-case letters or digits.</p>"]
     #[serde(rename="Id")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<OrganizationalUnitId>,
     #[doc="<p>The friendly name of this OU.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> that is used to validate this parameter is a string of any of the characters in the ASCII character range.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<OrganizationalUnitName>,
 }
 
@@ -810,9 +923,11 @@ pub type OrganizationalUnits = Vec<OrganizationalUnit>;
 pub struct Parent {
     #[doc="<p>The unique identifier (ID) of the parent entity.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for a parent ID string requires one of the following:</p> <ul> <li> <p>Root: a string that begins with \"r-\" followed by from 4 to 32 lower-case letters or digits.</p> </li> <li> <p>Organizational unit (OU): a string that begins with \"ou-\" followed by from 4 to 32 lower-case letters or digits (the ID of the root that the OU is in) followed by a second \"-\" dash and from 8 to 32 additional lower-case letters or digits.</p> </li> </ul>"]
     #[serde(rename="Id")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<ParentId>,
     #[doc="<p>The type of the parent entity.</p>"]
     #[serde(rename="Type")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<ParentType>,
 }
 
@@ -825,9 +940,11 @@ pub type Policies = Vec<PolicySummary>;
 pub struct Policy {
     #[doc="<p>The text content of the policy.</p>"]
     #[serde(rename="Content")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content: Option<PolicyContent>,
     #[doc="<p>A structure that contains additional details about the policy.</p>"]
     #[serde(rename="PolicySummary")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_summary: Option<PolicySummary>,
 }
 
@@ -841,22 +958,27 @@ pub type PolicyName = String;
 pub struct PolicySummary {
     #[doc="<p>The Amazon Resource Name (ARN) of the policy.</p> <p>For more information about ARNs in Organizations, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns\">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>"]
     #[serde(rename="Arn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub arn: Option<PolicyArn>,
     #[doc="<p>A boolean value that indicates whether the specified policy is an AWS managed policy. If true, then you can attach the policy to roots, OUs, or accounts, but you cannot edit it.</p>"]
     #[serde(rename="AwsManaged")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub aws_managed: Option<AwsManagedPolicy>,
     #[doc="<p>The description of the policy.</p>"]
     #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<PolicyDescription>,
     #[doc="<p>The unique identifier (ID) of the policy.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for a policy ID string requires \"p-\" followed by from 8 to 128 lower-case letters or digits.</p>"]
     #[serde(rename="Id")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<PolicyId>,
     #[doc="<p>The friendly name of the policy.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> that is used to validate this parameter is a string of any of the characters in the ASCII character range.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<PolicyName>,
     #[doc="<p>The type of policy.</p>"]
     #[serde(rename="Type")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<PolicyType>,
 }
 
@@ -866,15 +988,19 @@ pub type PolicyTargetId = String;
 pub struct PolicyTargetSummary {
     #[doc="<p>The Amazon Resource Name (ARN) of the policy target.</p> <p>For more information about ARNs in Organizations, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns\">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>"]
     #[serde(rename="Arn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub arn: Option<GenericArn>,
     #[doc="<p>The friendly name of the policy target.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> that is used to validate this parameter is a string of any of the characters in the ASCII character range.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<TargetName>,
     #[doc="<p>The unique identifier (ID) of the policy target.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for a target ID string requires one of the following:</p> <ul> <li> <p>Root: a string that begins with \"r-\" followed by from 4 to 32 lower-case letters or digits.</p> </li> <li> <p>Account: a string that consists of exactly 12 digits.</p> </li> <li> <p>Organizational unit (OU): a string that begins with \"ou-\" followed by from 4 to 32 lower-case letters or digits (the ID of the root that the OU is in) followed by a second \"-\" dash and from 8 to 32 additional lower-case letters or digits.</p> </li> </ul>"]
     #[serde(rename="TargetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_id: Option<PolicyTargetId>,
     #[doc="<p>The type of the policy target.</p>"]
     #[serde(rename="Type")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<TargetType>,
 }
 
@@ -886,9 +1012,11 @@ pub type PolicyTypeStatus = String;
 pub struct PolicyTypeSummary {
     #[doc="<p>The status of the policy type as it relates to the associated root. To attach a policy of the specified type to a root or to an OU or account in that root, it must be available in the organization and enabled for that root.</p>"]
     #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<PolicyTypeStatus>,
     #[doc="<p>The name of the policy type.</p>"]
     #[serde(rename="Type")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<PolicyType>,
 }
 
@@ -906,15 +1034,19 @@ pub type RoleName = String;
 pub struct Root {
     #[doc="<p>The Amazon Resource Name (ARN) of the root.</p> <p>For more information about ARNs in Organizations, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns\">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>"]
     #[serde(rename="Arn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub arn: Option<RootArn>,
     #[doc="<p>The unique identifier (ID) for the root.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for a root ID string requires \"r-\" followed by from 4 to 32 lower-case letters or digits.</p>"]
     #[serde(rename="Id")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<RootId>,
     #[doc="<p>The friendly name of the root.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> that is used to validate this parameter is a string of any of the characters in the ASCII character range.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<RootName>,
     #[doc="<p>The types of policies that are currently enabled for the root and therefore can be attached to the root or to its OUs or accounts.</p>"]
     #[serde(rename="PolicyTypes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_types: Option<PolicyTypes>,
 }
 
@@ -929,6 +1061,7 @@ pub type Timestamp = f64;
 pub struct UpdateOrganizationalUnitRequest {
     #[doc="<p>The new name that you want to assign to the OU.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> that is used to validate this parameter is a string of any of the characters in the ASCII character range.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<OrganizationalUnitName>,
     #[doc="<p>The unique identifier (ID) of the OU that you want to rename. You can get the ID from the <a>ListOrganizationalUnitsForParent</a> operation.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for an organizational unit ID string requires \"ou-\" followed by from 4 to 32 lower-case letters or digits (the ID of the root that contains the OU) followed by a second \"-\" dash and from 8 to 32 additional lower-case letters or digits.</p>"]
     #[serde(rename="OrganizationalUnitId")]
@@ -939,6 +1072,7 @@ pub struct UpdateOrganizationalUnitRequest {
 pub struct UpdateOrganizationalUnitResponse {
     #[doc="<p>A structure that contains the details about the specified OU, including its new name.</p>"]
     #[serde(rename="OrganizationalUnit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub organizational_unit: Option<OrganizationalUnit>,
 }
 
@@ -946,12 +1080,15 @@ pub struct UpdateOrganizationalUnitResponse {
 pub struct UpdatePolicyRequest {
     #[doc="<p>If provided, the new content for the policy. The text must be correctly formatted JSON that complies with the syntax for the policy's type. For more information, see <a href=\"http://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_scp-syntax.html\">Service Control Policy Syntax</a> in the <i>AWS Organizations User Guide</i>.</p>"]
     #[serde(rename="Content")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content: Option<PolicyContent>,
     #[doc="<p>If provided, the new description for the policy.</p>"]
     #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<PolicyDescription>,
     #[doc="<p>If provided, the new name for the policy.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> that is used to validate this parameter is a string of any of the characters in the ASCII character range.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<PolicyName>,
     #[doc="<p>The unique identifier (ID) of the policy that you want to update.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for a policy ID string requires \"p-\" followed by from 8 to 128 lower-case letters or digits.</p>"]
     #[serde(rename="PolicyId")]
@@ -962,6 +1099,7 @@ pub struct UpdatePolicyRequest {
 pub struct UpdatePolicyResponse {
     #[doc="<p>A structure that contains details about the updated policy, showing the requested changes.</p>"]
     #[serde(rename="Policy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy: Option<Policy>,
 }
 

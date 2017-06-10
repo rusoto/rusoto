@@ -26,6 +26,7 @@ pub type Compute = String;
 pub struct ComputeType {
     #[doc="<p>The name of the compute type for the bundle.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<Compute>,
 }
 
@@ -59,9 +60,11 @@ pub struct CreateWorkspacesRequest {
 pub struct CreateWorkspacesResult {
     #[doc="<p>An array of structures that represent the WorkSpaces that could not be created.</p>"]
     #[serde(rename="FailedRequests")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub failed_requests: Option<FailedCreateWorkspaceRequests>,
     #[doc="<p>An array of structures that represent the WorkSpaces that were created.</p> <p>Because this operation is asynchronous, the identifier in <code>WorkspaceId</code> is not immediately available. If you immediately call <a>DescribeWorkspaces</a> with this identifier, no information will be returned.</p>"]
     #[serde(rename="PendingRequests")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub pending_requests: Option<WorkspaceList>,
 }
 
@@ -71,21 +74,23 @@ pub type DefaultOu = String;
 pub struct DefaultWorkspaceCreationProperties {
     #[doc="<p>The identifier of any custom security groups that are applied to the WorkSpaces when they are created.</p>"]
     #[serde(rename="CustomSecurityGroupId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub custom_security_group_id: Option<SecurityGroupId>,
     #[doc="<p>The organizational unit (OU) in the directory that the WorkSpace machine accounts are placed in.</p>"]
     #[serde(rename="DefaultOu")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_ou: Option<DefaultOu>,
     #[doc="<p>A public IP address will be attached to all WorkSpaces that are created or rebuilt.</p>"]
     #[serde(rename="EnableInternetAccess")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub enable_internet_access: Option<BooleanObject>,
     #[doc="<p>Specifies if the directory is enabled for Amazon WorkDocs.</p>"]
     #[serde(rename="EnableWorkDocs")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub enable_work_docs: Option<BooleanObject>,
     #[doc="<p>The WorkSpace user is an administrator on the WorkSpace.</p>"]
     #[serde(rename="UserEnabledAsLocalAdministrator")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_enabled_as_local_administrator: Option<BooleanObject>,
 }
 
@@ -117,6 +122,7 @@ pub struct DescribeTagsRequest {
 pub struct DescribeTagsResult {
     #[doc="<p>The list of tags.</p>"]
     #[serde(rename="TagList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_list: Option<TagList>,
 }
 
@@ -125,12 +131,15 @@ pub struct DescribeTagsResult {
 pub struct DescribeWorkspaceBundlesRequest {
     #[doc="<p>An array of strings that contains the identifiers of the bundles to retrieve. This parameter cannot be combined with any other filter parameter.</p>"]
     #[serde(rename="BundleIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bundle_ids: Option<BundleIdList>,
     #[doc="<p>The <code>NextToken</code> value from a previous call to this operation. Pass null if this is the first call.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<PaginationToken>,
     #[doc="<p>The owner of the bundles to retrieve. This parameter cannot be combined with any other filter parameter.</p> <p>This contains one of the following values:</p> <ul> <li> <p>null- Retrieves the bundles that belong to the account making the call.</p> </li> <li> <p> <code>AMAZON</code>- Retrieves the bundles that are provided by AWS.</p> </li> </ul>"]
     #[serde(rename="Owner")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner: Option<BundleOwner>,
 }
 
@@ -139,9 +148,11 @@ pub struct DescribeWorkspaceBundlesRequest {
 pub struct DescribeWorkspaceBundlesResult {
     #[doc="<p>An array of structures that contain information about the bundles.</p>"]
     #[serde(rename="Bundles")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bundles: Option<BundleList>,
     #[doc="<p>If not null, more results are available. Pass this value for the <code>NextToken</code> parameter in a subsequent call to this operation to retrieve the next set of items. This token is valid for one day and must be used within that time frame.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<PaginationToken>,
 }
 
@@ -150,9 +161,11 @@ pub struct DescribeWorkspaceBundlesResult {
 pub struct DescribeWorkspaceDirectoriesRequest {
     #[doc="<p>An array of strings that contains the directory identifiers to retrieve information for. If this member is null, all directories are retrieved.</p>"]
     #[serde(rename="DirectoryIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub directory_ids: Option<DirectoryIdList>,
     #[doc="<p>The <code>NextToken</code> value from a previous call to this operation. Pass null if this is the first call.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<PaginationToken>,
 }
 
@@ -161,9 +174,11 @@ pub struct DescribeWorkspaceDirectoriesRequest {
 pub struct DescribeWorkspaceDirectoriesResult {
     #[doc="<p>An array of structures that contain information about the directories.</p>"]
     #[serde(rename="Directories")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub directories: Option<DirectoryList>,
     #[doc="<p>If not null, more results are available. Pass this value for the <code>NextToken</code> parameter in a subsequent call to this operation to retrieve the next set of items. This token is valid for one day and must be used within that time frame.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<PaginationToken>,
 }
 
@@ -171,9 +186,11 @@ pub struct DescribeWorkspaceDirectoriesResult {
 pub struct DescribeWorkspacesConnectionStatusRequest {
     #[doc="<p>The next token of the request.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<PaginationToken>,
     #[doc="<p>An array of strings that contain the identifiers of the WorkSpaces.</p>"]
     #[serde(rename="WorkspaceIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub workspace_ids: Option<WorkspaceIdList>,
 }
 
@@ -181,9 +198,11 @@ pub struct DescribeWorkspacesConnectionStatusRequest {
 pub struct DescribeWorkspacesConnectionStatusResult {
     #[doc="<p>The next token of the result.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<PaginationToken>,
     #[doc="<p>The connection status of the WorkSpace.</p>"]
     #[serde(rename="WorkspacesConnectionStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub workspaces_connection_status: Option<WorkspaceConnectionStatusList>,
 }
 
@@ -192,21 +211,27 @@ pub struct DescribeWorkspacesConnectionStatusResult {
 pub struct DescribeWorkspacesRequest {
     #[doc="<p>The identifier of a bundle to obtain the WorkSpaces for. All WorkSpaces that are created from this bundle will be retrieved. This parameter cannot be combined with any other filter parameter.</p>"]
     #[serde(rename="BundleId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bundle_id: Option<BundleId>,
     #[doc="<p>Specifies the directory identifier to which to limit the WorkSpaces. Optionally, you can specify a specific directory user with the <code>UserName</code> parameter. This parameter cannot be combined with any other filter parameter.</p>"]
     #[serde(rename="DirectoryId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub directory_id: Option<DirectoryId>,
     #[doc="<p>The maximum number of items to return.</p>"]
     #[serde(rename="Limit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub limit: Option<Limit>,
     #[doc="<p>The <code>NextToken</code> value from a previous call to this operation. Pass null if this is the first call.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<PaginationToken>,
     #[doc="<p>Used with the <code>DirectoryId</code> parameter to specify the directory user for whom to obtain the WorkSpace.</p>"]
     #[serde(rename="UserName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_name: Option<UserName>,
     #[doc="<p>An array of strings that contain the identifiers of the WorkSpaces for which to retrieve information. This parameter cannot be combined with any other filter parameter.</p> <p>Because the <a>CreateWorkspaces</a> operation is asynchronous, the identifier it returns is not immediately available. If you immediately call <a>DescribeWorkspaces</a> with this identifier, no information is returned.</p>"]
     #[serde(rename="WorkspaceIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub workspace_ids: Option<WorkspaceIdList>,
 }
 
@@ -215,9 +240,11 @@ pub struct DescribeWorkspacesRequest {
 pub struct DescribeWorkspacesResult {
     #[doc="<p>If not null, more results are available. Pass this value for the <code>NextToken</code> parameter in a subsequent call to this operation to retrieve the next set of items. This token is valid for one day and must be used within that time frame.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<PaginationToken>,
     #[doc="<p>An array of structures that contain the information about the WorkSpaces.</p> <p>Because the <a>CreateWorkspaces</a> operation is asynchronous, some of this information may be incomplete for a newly-created WorkSpace.</p>"]
     #[serde(rename="Workspaces")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub workspaces: Option<WorkspaceList>,
 }
 
@@ -234,12 +261,15 @@ pub type ExceptionMessage = String;
 pub struct FailedCreateWorkspaceRequest {
     #[doc="<p>The error code.</p>"]
     #[serde(rename="ErrorCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub error_code: Option<ErrorType>,
     #[doc="<p>The textual error message.</p>"]
     #[serde(rename="ErrorMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub error_message: Option<Description>,
     #[doc="<p>A <a>FailedCreateWorkspaceRequest$WorkspaceRequest</a> object that contains the information about the WorkSpace that could not be created.</p>"]
     #[serde(rename="WorkspaceRequest")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub workspace_request: Option<WorkspaceRequest>,
 }
 
@@ -254,12 +284,15 @@ pub type FailedTerminateWorkspaceRequests = Vec<FailedWorkspaceChangeRequest>;
 pub struct FailedWorkspaceChangeRequest {
     #[doc="<p>The error code.</p>"]
     #[serde(rename="ErrorCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub error_code: Option<ErrorType>,
     #[doc="<p>The textual error message.</p>"]
     #[serde(rename="ErrorMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub error_message: Option<Description>,
     #[doc="<p>The identifier of the WorkSpace.</p>"]
     #[serde(rename="WorkspaceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub workspace_id: Option<WorkspaceId>,
 }
 
@@ -302,6 +335,7 @@ pub struct RebootWorkspacesRequest {
 pub struct RebootWorkspacesResult {
     #[doc="<p>An array of structures representing any WorkSpaces that could not be rebooted.</p>"]
     #[serde(rename="FailedRequests")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub failed_requests: Option<FailedRebootWorkspaceRequests>,
 }
 
@@ -327,6 +361,7 @@ pub struct RebuildWorkspacesRequest {
 pub struct RebuildWorkspacesResult {
     #[doc="<p>An array of structures representing any WorkSpaces that could not be rebuilt.</p>"]
     #[serde(rename="FailedRequests")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub failed_requests: Option<FailedRebuildWorkspaceRequests>,
 }
 
@@ -339,6 +374,7 @@ pub type SecurityGroupId = String;
 pub struct StartRequest {
     #[doc="<p>The ID of the WorkSpace.</p>"]
     #[serde(rename="WorkspaceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub workspace_id: Option<WorkspaceId>,
 }
 
@@ -354,6 +390,7 @@ pub struct StartWorkspacesRequest {
 pub struct StartWorkspacesResult {
     #[doc="<p>The failed requests.</p>"]
     #[serde(rename="FailedRequests")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub failed_requests: Option<FailedStartWorkspaceRequests>,
 }
 
@@ -362,6 +399,7 @@ pub struct StartWorkspacesResult {
 pub struct StopRequest {
     #[doc="<p>The ID of the WorkSpace.</p>"]
     #[serde(rename="WorkspaceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub workspace_id: Option<WorkspaceId>,
 }
 
@@ -377,6 +415,7 @@ pub struct StopWorkspacesRequest {
 pub struct StopWorkspacesResult {
     #[doc="<p>The failed requests.</p>"]
     #[serde(rename="FailedRequests")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub failed_requests: Option<FailedStopWorkspaceRequests>,
 }
 
@@ -390,6 +429,7 @@ pub struct Tag {
     pub key: TagKey,
     #[doc="<p>The value of the tag.</p>"]
     #[serde(rename="Value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<TagValue>,
 }
 
@@ -419,6 +459,7 @@ pub struct TerminateWorkspacesRequest {
 pub struct TerminateWorkspacesResult {
     #[doc="<p>An array of structures representing any WorkSpaces that could not be terminated.</p>"]
     #[serde(rename="FailedRequests")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub failed_requests: Option<FailedTerminateWorkspaceRequests>,
 }
 
@@ -429,6 +470,7 @@ pub type UserName = String;
 pub struct UserStorage {
     #[doc="<p>The amount of user storage for the bundle.</p>"]
     #[serde(rename="Capacity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub capacity: Option<NonEmptyString>,
 }
 
@@ -438,46 +480,58 @@ pub type VolumeEncryptionKey = String;
 pub struct Workspace {
     #[doc="<p>The identifier of the bundle that the WorkSpace was created from.</p>"]
     #[serde(rename="BundleId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bundle_id: Option<BundleId>,
     #[doc="<p>The name of the WorkSpace as seen by the operating system.</p>"]
     #[serde(rename="ComputerName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub computer_name: Option<ComputerName>,
     #[doc="<p>The identifier of the AWS Directory Service directory that the WorkSpace belongs to.</p>"]
     #[serde(rename="DirectoryId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub directory_id: Option<DirectoryId>,
     #[doc="<p>If the WorkSpace could not be created, this contains the error code.</p>"]
     #[serde(rename="ErrorCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub error_code: Option<WorkspaceErrorCode>,
     #[doc="<p>If the WorkSpace could not be created, this contains a textual error message that describes the failure.</p>"]
     #[serde(rename="ErrorMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub error_message: Option<Description>,
     #[doc="<p>The IP address of the WorkSpace.</p>"]
     #[serde(rename="IpAddress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ip_address: Option<IpAddress>,
     #[doc="<p>Specifies whether the data stored on the root volume, or C: drive, is encrypted.</p>"]
     #[serde(rename="RootVolumeEncryptionEnabled")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub root_volume_encryption_enabled: Option<BooleanObject>,
     #[doc="<p>The operational state of the WorkSpace.</p>"]
     #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<WorkspaceState>,
     #[doc="<p>The identifier of the subnet that the WorkSpace is in.</p>"]
     #[serde(rename="SubnetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subnet_id: Option<SubnetId>,
     #[doc="<p>The user that the WorkSpace is assigned to.</p>"]
     #[serde(rename="UserName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_name: Option<UserName>,
     #[doc="<p>Specifies whether the data stored on the user volume, or D: drive, is encrypted.</p>"]
     #[serde(rename="UserVolumeEncryptionEnabled")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_volume_encryption_enabled: Option<BooleanObject>,
     #[doc="<p>The KMS key used to encrypt data stored on your WorkSpace.</p>"]
     #[serde(rename="VolumeEncryptionKey")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_encryption_key: Option<VolumeEncryptionKey>,
     #[doc="<p>The identifier of the WorkSpace.</p>"]
     #[serde(rename="WorkspaceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub workspace_id: Option<WorkspaceId>,
     #[serde(rename="WorkspaceProperties")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub workspace_properties: Option<WorkspaceProperties>,
 }
 
@@ -486,21 +540,27 @@ pub struct Workspace {
 pub struct WorkspaceBundle {
     #[doc="<p>The bundle identifier.</p>"]
     #[serde(rename="BundleId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bundle_id: Option<BundleId>,
     #[doc="<p>A <a>ComputeType</a> object that specifies the compute type for the bundle.</p>"]
     #[serde(rename="ComputeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub compute_type: Option<ComputeType>,
     #[doc="<p>The bundle description.</p>"]
     #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<Description>,
     #[doc="<p>The name of the bundle.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<NonEmptyString>,
     #[doc="<p>The owner of the bundle. This contains the owner's account identifier, or <code>AMAZON</code> if the bundle is provided by AWS.</p>"]
     #[serde(rename="Owner")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner: Option<BundleOwner>,
     #[doc="<p>A <a>UserStorage</a> object that specifies the amount of user storage that the bundle contains.</p>"]
     #[serde(rename="UserStorage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_storage: Option<UserStorage>,
 }
 
@@ -509,15 +569,19 @@ pub struct WorkspaceBundle {
 pub struct WorkspaceConnectionStatus {
     #[doc="<p>The connection state of the WorkSpace. Returns UNKOWN if the WorkSpace is in a Stopped state.</p>"]
     #[serde(rename="ConnectionState")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub connection_state: Option<ConnectionState>,
     #[doc="<p>The timestamp of the connection state check.</p>"]
     #[serde(rename="ConnectionStateCheckTimestamp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub connection_state_check_timestamp: Option<Timestamp>,
     #[doc="<p>The timestamp of the last known user connection.</p>"]
     #[serde(rename="LastKnownUserConnectionTimestamp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_known_user_connection_timestamp: Option<Timestamp>,
     #[doc="<p>The ID of the WorkSpace.</p>"]
     #[serde(rename="WorkspaceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub workspace_id: Option<WorkspaceId>,
 }
 
@@ -527,39 +591,51 @@ pub type WorkspaceConnectionStatusList = Vec<WorkspaceConnectionStatus>;
 pub struct WorkspaceDirectory {
     #[doc="<p>The directory alias.</p>"]
     #[serde(rename="Alias")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub alias: Option<Alias>,
     #[doc="<p>The user name for the service account.</p>"]
     #[serde(rename="CustomerUserName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub customer_user_name: Option<UserName>,
     #[doc="<p>The directory identifier.</p>"]
     #[serde(rename="DirectoryId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub directory_id: Option<DirectoryId>,
     #[doc="<p>The name of the directory.</p>"]
     #[serde(rename="DirectoryName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub directory_name: Option<DirectoryName>,
     #[doc="<p>The directory type.</p>"]
     #[serde(rename="DirectoryType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub directory_type: Option<WorkspaceDirectoryType>,
     #[doc="<p>An array of strings that contains the IP addresses of the DNS servers for the directory.</p>"]
     #[serde(rename="DnsIpAddresses")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dns_ip_addresses: Option<DnsIpAddresses>,
     #[doc="<p>The identifier of the IAM role. This is the role that allows Amazon WorkSpaces to make calls to other services, such as Amazon EC2, on your behalf.</p>"]
     #[serde(rename="IamRoleId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub iam_role_id: Option<ARN>,
     #[doc="<p>The registration code for the directory. This is the code that users enter in their Amazon WorkSpaces client application to connect to the directory.</p>"]
     #[serde(rename="RegistrationCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub registration_code: Option<RegistrationCode>,
     #[doc="<p>The state of the directory's registration with Amazon WorkSpaces</p>"]
     #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<WorkspaceDirectoryState>,
     #[doc="<p>An array of strings that contains the identifiers of the subnets used with the directory.</p>"]
     #[serde(rename="SubnetIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subnet_ids: Option<SubnetIds>,
     #[doc="<p>A structure that specifies the default creation properties for all WorkSpaces in the directory.</p>"]
     #[serde(rename="WorkspaceCreationProperties")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub workspace_creation_properties: Option<DefaultWorkspaceCreationProperties>,
     #[doc="<p>The identifier of the security group that is assigned to new WorkSpaces.</p>"]
     #[serde(rename="WorkspaceSecurityGroupId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub workspace_security_group_id: Option<SecurityGroupId>,
 }
 
@@ -574,9 +650,11 @@ pub type WorkspaceList = Vec<Workspace>;
 pub struct WorkspaceProperties {
     #[doc="<p>The running mode of the WorkSpace. AlwaysOn WorkSpaces are billed monthly. AutoStop WorkSpaces are billed by the hour and stopped when no longer being used in order to save on costs.</p>"]
     #[serde(rename="RunningMode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub running_mode: Option<RunningMode>,
     #[doc="<p>The time after a user logs off when WorkSpaces are automatically stopped. Configured in 60 minute intervals.</p>"]
     #[serde(rename="RunningModeAutoStopTimeoutInMinutes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub running_mode_auto_stop_timeout_in_minutes: Option<RunningModeAutoStopTimeoutInMinutes>,
 }
 
@@ -591,22 +669,25 @@ pub struct WorkspaceRequest {
     pub directory_id: DirectoryId,
     #[doc="<p>Specifies whether the data stored on the root volume, or C: drive, is encrypted.</p>"]
     #[serde(rename="RootVolumeEncryptionEnabled")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub root_volume_encryption_enabled: Option<BooleanObject>,
     #[doc="<p>The tags of the WorkSpace request.</p>"]
     #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<TagList>,
     #[doc="<p>The username that the WorkSpace is assigned to. This username must exist in the AWS Directory Service directory specified by the <code>DirectoryId</code> member.</p>"]
     #[serde(rename="UserName")]
     pub user_name: UserName,
     #[doc="<p>Specifies whether the data stored on the user volume, or D: drive, is encrypted.</p>"]
     #[serde(rename="UserVolumeEncryptionEnabled")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_volume_encryption_enabled: Option<BooleanObject>,
     #[doc="<p>The KMS key used to encrypt data stored on your WorkSpace.</p>"]
     #[serde(rename="VolumeEncryptionKey")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_encryption_key: Option<VolumeEncryptionKey>,
     #[serde(rename="WorkspaceProperties")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub workspace_properties: Option<WorkspaceProperties>,
 }
 

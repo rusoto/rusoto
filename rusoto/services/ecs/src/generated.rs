@@ -22,12 +22,15 @@ pub struct Attribute {
     pub name: String,
     #[doc="<p>The ID of the target. You can specify the short form ID for a resource or the full Amazon Resource Name (ARN).</p>"]
     #[serde(rename="targetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_id: Option<String>,
     #[doc="<p>The type of the target with which to attach the attribute. This parameter is required if you use the short form ID for a resource instead of the full Amazon Resource Name (ARN).</p>"]
     #[serde(rename="targetType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_type: Option<TargetType>,
     #[doc="<p>The value of the attribute. Up to 128 letters (uppercase and lowercase), numbers, hyphens, underscores, periods, at signs (@), forward slashes, colons, and spaces are allowed.</p>"]
     #[serde(rename="value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<String>,
 }
 
@@ -40,24 +43,31 @@ pub type BoxedInteger = i64;
 pub struct Cluster {
     #[doc="<p>The number of services that are running on the cluster in an <code>ACTIVE</code> state. You can view these services with <a>ListServices</a>.</p>"]
     #[serde(rename="activeServicesCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub active_services_count: Option<Integer>,
     #[doc="<p>The Amazon Resource Name (ARN) that identifies the cluster. The ARN contains the <code>arn:aws:ecs</code> namespace, followed by the region of the cluster, the AWS account ID of the cluster owner, the <code>cluster</code> namespace, and then the cluster name. For example, <code>arn:aws:ecs:<i>region</i>:<i>012345678910</i>:cluster/<i>test</i> </code>..</p>"]
     #[serde(rename="clusterArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_arn: Option<String>,
     #[doc="<p>A user-generated string that you use to identify your cluster.</p>"]
     #[serde(rename="clusterName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_name: Option<String>,
     #[doc="<p>The number of tasks in the cluster that are in the <code>PENDING</code> state.</p>"]
     #[serde(rename="pendingTasksCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub pending_tasks_count: Option<Integer>,
     #[doc="<p>The number of container instances registered into the cluster.</p>"]
     #[serde(rename="registeredContainerInstancesCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub registered_container_instances_count: Option<Integer>,
     #[doc="<p>The number of tasks in the cluster that are in the <code>RUNNING</code> state.</p>"]
     #[serde(rename="runningTasksCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub running_tasks_count: Option<Integer>,
     #[doc="<p>The status of the cluster. The valid values are <code>ACTIVE</code> or <code>INACTIVE</code>. <code>ACTIVE</code> indicates that you can register container instances with the cluster and the associated instances can accept tasks.</p>"]
     #[serde(rename="status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
 }
 
@@ -67,24 +77,31 @@ pub type Clusters = Vec<Cluster>;
 pub struct Container {
     #[doc="<p>The Amazon Resource Name (ARN) of the container.</p>"]
     #[serde(rename="containerArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub container_arn: Option<String>,
     #[doc="<p>The exit code returned from the container.</p>"]
     #[serde(rename="exitCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub exit_code: Option<BoxedInteger>,
     #[doc="<p>The last known status of the container.</p>"]
     #[serde(rename="lastStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_status: Option<String>,
     #[doc="<p>The name of the container.</p>"]
     #[serde(rename="name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
     #[doc="<p>The network bindings associated with the container.</p>"]
     #[serde(rename="networkBindings")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_bindings: Option<NetworkBindings>,
     #[doc="<p>A short (255 max characters) human-readable string to provide additional details about a running or stopped container.</p>"]
     #[serde(rename="reason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reason: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the task.</p>"]
     #[serde(rename="taskArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_arn: Option<String>,
 }
 
@@ -93,85 +110,107 @@ pub struct Container {
 pub struct ContainerDefinition {
     #[doc="<p>The command that is passed to the container. This parameter maps to <code>Cmd</code> in the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container\">Create a container</a> section of the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/\">Docker Remote API</a> and the <code>COMMAND</code> parameter to <a href=\"https://docs.docker.com/engine/reference/run/\">docker run</a>. For more information, see <a href=\"https://docs.docker.com/engine/reference/builder/#cmd\">https://docs.docker.com/engine/reference/builder/#cmd</a>.</p>"]
     #[serde(rename="command")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub command: Option<StringList>,
     #[doc="<p>The number of <code>cpu</code> units reserved for the container. A container instance has 1,024 <code>cpu</code> units for every CPU core. This parameter specifies the minimum amount of CPU to reserve for a container, and containers share unallocated CPU units with other containers on the instance with the same ratio as their allocated amount. This parameter maps to <code>CpuShares</code> in the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container\">Create a container</a> section of the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/\">Docker Remote API</a> and the <code>--cpu-shares</code> option to <a href=\"https://docs.docker.com/engine/reference/run/\">docker run</a>.</p> <note> <p>You can determine the number of CPU units that are available per EC2 instance type by multiplying the vCPUs listed for that instance type on the <a href=\"http://aws.amazon.com/ec2/instance-types/\">Amazon EC2 Instances</a> detail page by 1,024.</p> </note> <p>For example, if you run a single-container task on a single-core instance type with 512 CPU units specified for that container, and that is the only task running on the container instance, that container could use the full 1,024 CPU unit share at any given time. However, if you launched another copy of the same task on that container instance, each task would be guaranteed a minimum of 512 CPU units when needed, and each container could float to higher CPU usage if the other container was not using it, but if both tasks were 100% active all of the time, they would be limited to 512 CPU units.</p> <p>The Docker daemon on the container instance uses the CPU value to calculate the relative CPU share ratios for running containers. For more information, see <a href=\"https://docs.docker.com/engine/reference/run/#cpu-share-constraint\">CPU share constraint</a> in the Docker documentation. The minimum valid CPU share value that the Linux kernel allows is 2; however, the CPU parameter is not required, and you can use CPU values below 2 in your container definitions. For CPU values below 2 (including null), the behavior varies based on your Amazon ECS container agent version:</p> <ul> <li> <p> <b>Agent versions less than or equal to 1.1.0:</b> Null and zero CPU values are passed to Docker as 0, which Docker then converts to 1,024 CPU shares. CPU values of 1 are passed to Docker as 1, which the Linux kernel converts to 2 CPU shares.</p> </li> <li> <p> <b>Agent versions greater than or equal to 1.2.0:</b> Null, zero, and CPU values of 1 are passed to Docker as 2.</p> </li> </ul>"]
     #[serde(rename="cpu")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cpu: Option<Integer>,
     #[doc="<p>When this parameter is true, networking is disabled within the container. This parameter maps to <code>NetworkDisabled</code> in the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container\">Create a container</a> section of the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/\">Docker Remote API</a>.</p>"]
     #[serde(rename="disableNetworking")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub disable_networking: Option<BoxedBoolean>,
     #[doc="<p>A list of DNS search domains that are presented to the container. This parameter maps to <code>DnsSearch</code> in the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container\">Create a container</a> section of the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/\">Docker Remote API</a> and the <code>--dns-search</code> option to <a href=\"https://docs.docker.com/engine/reference/run/\">docker run</a>.</p>"]
     #[serde(rename="dnsSearchDomains")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dns_search_domains: Option<StringList>,
     #[doc="<p>A list of DNS servers that are presented to the container. This parameter maps to <code>Dns</code> in the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container\">Create a container</a> section of the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/\">Docker Remote API</a> and the <code>--dns</code> option to <a href=\"https://docs.docker.com/engine/reference/run/\">docker run</a>.</p>"]
     #[serde(rename="dnsServers")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dns_servers: Option<StringList>,
     #[doc="<p>A key/value map of labels to add to the container. This parameter maps to <code>Labels</code> in the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container\">Create a container</a> section of the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/\">Docker Remote API</a> and the <code>--label</code> option to <a href=\"https://docs.docker.com/engine/reference/run/\">docker run</a>. This parameter requires version 1.18 of the Docker Remote API or greater on your container instance. To check the Docker Remote API version on your container instance, log into your container instance and run the following command: <code>sudo docker version | grep \"Server API version\"</code> </p>"]
     #[serde(rename="dockerLabels")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub docker_labels: Option<DockerLabelsMap>,
     #[doc="<p>A list of strings to provide custom labels for SELinux and AppArmor multi-level security systems. This parameter maps to <code>SecurityOpt</code> in the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container\">Create a container</a> section of the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/\">Docker Remote API</a> and the <code>--security-opt</code> option to <a href=\"https://docs.docker.com/engine/reference/run/\">docker run</a>.</p> <note> <p>The Amazon ECS container agent running on a container instance must register with the <code>ECS_SELINUX_CAPABLE=true</code> or <code>ECS_APPARMOR_CAPABLE=true</code> environment variables before containers placed on that instance can use these security options. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-config.html\">Amazon ECS Container Agent Configuration</a> in the <i>Amazon EC2 Container Service Developer Guide</i>.</p> </note>"]
     #[serde(rename="dockerSecurityOptions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub docker_security_options: Option<StringList>,
     #[doc="<important> <p>Early versions of the Amazon ECS container agent do not properly handle <code>entryPoint</code> parameters. If you have problems using <code>entryPoint</code>, update your container agent or enter your commands and arguments as <code>command</code> array items instead.</p> </important> <p>The entry point that is passed to the container. This parameter maps to <code>Entrypoint</code> in the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container\">Create a container</a> section of the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/\">Docker Remote API</a> and the <code>--entrypoint</code> option to <a href=\"https://docs.docker.com/engine/reference/run/\">docker run</a>. For more information, see <a href=\"https://docs.docker.com/engine/reference/builder/#entrypoint\">https://docs.docker.com/engine/reference/builder/#entrypoint</a>.</p>"]
     #[serde(rename="entryPoint")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub entry_point: Option<StringList>,
     #[doc="<p>The environment variables to pass to a container. This parameter maps to <code>Env</code> in the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container\">Create a container</a> section of the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/\">Docker Remote API</a> and the <code>--env</code> option to <a href=\"https://docs.docker.com/engine/reference/run/\">docker run</a>.</p> <important> <p>We do not recommend using plain text environment variables for sensitive information, such as credential data.</p> </important>"]
     #[serde(rename="environment")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub environment: Option<EnvironmentVariables>,
     #[doc="<p>If the <code>essential</code> parameter of a container is marked as <code>true</code>, and that container fails or stops for any reason, all other containers that are part of the task are stopped. If the <code>essential</code> parameter of a container is marked as <code>false</code>, then its failure does not affect the rest of the containers in a task. If this parameter is omitted, a container is assumed to be essential.</p> <p>All tasks must have at least one essential container. If you have an application that is composed of multiple containers, you should group containers that are used for a common purpose into components, and separate the different components into multiple task definitions. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonECS/latest/developerguide/application_architecture.html\">Application Architecture</a> in the <i>Amazon EC2 Container Service Developer Guide</i>.</p>"]
     #[serde(rename="essential")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub essential: Option<BoxedBoolean>,
     #[doc="<p>A list of hostnames and IP address mappings to append to the <code>/etc/hosts</code> file on the container. This parameter maps to <code>ExtraHosts</code> in the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container\">Create a container</a> section of the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/\">Docker Remote API</a> and the <code>--add-host</code> option to <a href=\"https://docs.docker.com/engine/reference/run/\">docker run</a>.</p>"]
     #[serde(rename="extraHosts")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub extra_hosts: Option<HostEntryList>,
     #[doc="<p>The hostname to use for your container. This parameter maps to <code>Hostname</code> in the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container\">Create a container</a> section of the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/\">Docker Remote API</a> and the <code>--hostname</code> option to <a href=\"https://docs.docker.com/engine/reference/run/\">docker run</a>.</p>"]
     #[serde(rename="hostname")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hostname: Option<String>,
     #[doc="<p>The image used to start a container. This string is passed directly to the Docker daemon. Images in the Docker Hub registry are available by default. Other repositories are specified with <code> <i>repository-url</i>/<i>image</i>:<i>tag</i> </code>. Up to 255 letters (uppercase and lowercase), numbers, hyphens, underscores, colons, periods, forward slashes, and number signs are allowed. This parameter maps to <code>Image</code> in the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container\">Create a container</a> section of the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/\">Docker Remote API</a> and the <code>IMAGE</code> parameter of <a href=\"https://docs.docker.com/engine/reference/run/\">docker run</a>.</p> <note> <p>Amazon ECS task definitions currently only support tags as image identifiers within a specified repository (and not <code>sha256</code> digests).</p> </note> <ul> <li> <p>Images in Amazon ECR repositories use the full registry and repository URI (for example, <code>012345678910.dkr.ecr.&lt;region-name&gt;.amazonaws.com/&lt;repository-name&gt;</code>). </p> </li> <li> <p>Images in official repositories on Docker Hub use a single name (for example, <code>ubuntu</code> or <code>mongo</code>).</p> </li> <li> <p>Images in other repositories on Docker Hub are qualified with an organization name (for example, <code>amazon/amazon-ecs-agent</code>).</p> </li> <li> <p>Images in other online repositories are qualified further by a domain name (for example, <code>quay.io/assemblyline/ubuntu</code>).</p> </li> </ul>"]
     #[serde(rename="image")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub image: Option<String>,
     #[doc="<p>The <code>link</code> parameter allows containers to communicate with each other without the need for port mappings, using the <code>name</code> parameter and optionally, an <code>alias</code> for the link. This construct is analogous to <code>name:alias</code> in Docker links. Up to 255 letters (uppercase and lowercase), numbers, hyphens, and underscores are allowed for each <code>name</code> and <code>alias</code>. For more information on linking Docker containers, see <a href=\"https://docs.docker.com/engine/userguide/networking/default_network/dockerlinks/\">https://docs.docker.com/engine/userguide/networking/default_network/dockerlinks/</a>. This parameter maps to <code>Links</code> in the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container\">Create a container</a> section of the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/\">Docker Remote API</a> and the <code>--link</code> option to <a href=\"https://docs.docker.com/engine/reference/run/\">docker run</a>.</p> <important> <p>Containers that are collocated on a single container instance may be able to communicate with each other without requiring links or host port mappings. Network isolation is achieved on the container instance using security groups and VPC settings.</p> </important>"]
     #[serde(rename="links")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub links: Option<StringList>,
     #[doc="<p>The log configuration specification for the container. This parameter maps to <code>LogConfig</code> in the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container\">Create a container</a> section of the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/\">Docker Remote API</a> and the <code>--log-driver</code> option to <a href=\"https://docs.docker.com/engine/reference/run/\">docker run</a>. By default, containers use the same logging driver that the Docker daemon uses; however the container may use a different logging driver than the Docker daemon by specifying a log driver with this parameter in the container definition. To use a different logging driver for a container, the log system must be configured properly on the container instance (or on a different log server for remote logging options). For more information on the options for different supported log drivers, see <a href=\"https://docs.docker.com/engine/admin/logging/overview/\">Configure logging drivers</a> in the Docker documentation.</p> <note> <p>Amazon ECS currently supports a subset of the logging drivers available to the Docker daemon (shown in the <a>LogConfiguration</a> data type). Additional log drivers may be available in future releases of the Amazon ECS container agent.</p> </note> <p>This parameter requires version 1.18 of the Docker Remote API or greater on your container instance. To check the Docker Remote API version on your container instance, log into your container instance and run the following command: <code>sudo docker version | grep \"Server API version\"</code> </p> <note> <p>The Amazon ECS container agent running on a container instance must register the logging drivers available on that instance with the <code>ECS_AVAILABLE_LOGGING_DRIVERS</code> environment variable before containers placed on that instance can use these log configuration options. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-config.html\">Amazon ECS Container Agent Configuration</a> in the <i>Amazon EC2 Container Service Developer Guide</i>.</p> </note>"]
     #[serde(rename="logConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub log_configuration: Option<LogConfiguration>,
     #[doc="<p>The hard limit (in MiB) of memory to present to the container. If your container attempts to exceed the memory specified here, the container is killed. This parameter maps to <code>Memory</code> in the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container\">Create a container</a> section of the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/\">Docker Remote API</a> and the <code>--memory</code> option to <a href=\"https://docs.docker.com/engine/reference/run/\">docker run</a>.</p> <p>You must specify a non-zero integer for one or both of <code>memory</code> or <code>memoryReservation</code> in container definitions. If you specify both, <code>memory</code> must be greater than <code>memoryReservation</code>. If you specify <code>memoryReservation</code>, then that value is subtracted from the available memory resources for the container instance on which the container is placed; otherwise, the value of <code>memory</code> is used.</p> <p>The Docker daemon reserves a minimum of 4 MiB of memory for a container, so you should not specify fewer than 4 MiB of memory for your containers. </p>"]
     #[serde(rename="memory")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub memory: Option<BoxedInteger>,
     #[doc="<p>The soft limit (in MiB) of memory to reserve for the container. When system memory is under heavy contention, Docker attempts to keep the container memory to this soft limit; however, your container can consume more memory when it needs to, up to either the hard limit specified with the <code>memory</code> parameter (if applicable), or all of the available memory on the container instance, whichever comes first. This parameter maps to <code>MemoryReservation</code> in the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container\">Create a container</a> section of the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/\">Docker Remote API</a> and the <code>--memory-reservation</code> option to <a href=\"https://docs.docker.com/engine/reference/run/\">docker run</a>.</p> <p>You must specify a non-zero integer for one or both of <code>memory</code> or <code>memoryReservation</code> in container definitions. If you specify both, <code>memory</code> must be greater than <code>memoryReservation</code>. If you specify <code>memoryReservation</code>, then that value is subtracted from the available memory resources for the container instance on which the container is placed; otherwise, the value of <code>memory</code> is used.</p> <p>For example, if your container normally uses 128 MiB of memory, but occasionally bursts to 256 MiB of memory for short periods of time, you can set a <code>memoryReservation</code> of 128 MiB, and a <code>memory</code> hard limit of 300 MiB. This configuration would allow the container to only reserve 128 MiB of memory from the remaining resources on the container instance, but also allow the container to consume more memory resources when needed.</p>"]
     #[serde(rename="memoryReservation")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub memory_reservation: Option<BoxedInteger>,
     #[doc="<p>The mount points for data volumes in your container. This parameter maps to <code>Volumes</code> in the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container\">Create a container</a> section of the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/\">Docker Remote API</a> and the <code>--volume</code> option to <a href=\"https://docs.docker.com/engine/reference/run/\">docker run</a>.</p>"]
     #[serde(rename="mountPoints")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub mount_points: Option<MountPointList>,
     #[doc="<p>The name of a container. If you are linking multiple containers together in a task definition, the <code>name</code> of one container can be entered in the <code>links</code> of another container to connect the containers. Up to 255 letters (uppercase and lowercase), numbers, hyphens, and underscores are allowed. This parameter maps to <code>name</code> in the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container\">Create a container</a> section of the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/\">Docker Remote API</a> and the <code>--name</code> option to <a href=\"https://docs.docker.com/engine/reference/run/\">docker run</a>. </p>"]
     #[serde(rename="name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
     #[doc="<p>The list of port mappings for the container. Port mappings allow containers to access ports on the host container instance to send or receive traffic. This parameter maps to <code>PortBindings</code> in the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container\">Create a container</a> section of the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/\">Docker Remote API</a> and the <code>--publish</code> option to <a href=\"https://docs.docker.com/engine/reference/run/\">docker run</a>. If the network mode of a task definition is set to <code>none</code>, then you cannot specify port mappings. If the network mode of a task definition is set to <code>host</code>, then host ports must either be undefined or they must match the container port in the port mapping.</p> <note> <p>After a task reaches the <code>RUNNING</code> status, manual and automatic host and container port assignments are visible in the <b>Network Bindings</b> section of a container description of a selected task in the Amazon ECS console, or the <code>networkBindings</code> section <a>DescribeTasks</a> responses.</p> </note>"]
     #[serde(rename="portMappings")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub port_mappings: Option<PortMappingList>,
     #[doc="<p>When this parameter is true, the container is given elevated privileges on the host container instance (similar to the <code>root</code> user). This parameter maps to <code>Privileged</code> in the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container\">Create a container</a> section of the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/\">Docker Remote API</a> and the <code>--privileged</code> option to <a href=\"https://docs.docker.com/engine/reference/run/\">docker run</a>.</p>"]
     #[serde(rename="privileged")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub privileged: Option<BoxedBoolean>,
     #[doc="<p>When this parameter is true, the container is given read-only access to its root file system. This parameter maps to <code>ReadonlyRootfs</code> in the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container\">Create a container</a> section of the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/\">Docker Remote API</a> and the <code>--read-only</code> option to <code>docker run</code>.</p>"]
     #[serde(rename="readonlyRootFilesystem")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub readonly_root_filesystem: Option<BoxedBoolean>,
     #[doc="<p>A list of <code>ulimits</code> to set in the container. This parameter maps to <code>Ulimits</code> in the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container\">Create a container</a> section of the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/\">Docker Remote API</a> and the <code>--ulimit</code> option to <a href=\"https://docs.docker.com/engine/reference/run/\">docker run</a>. Valid naming values are displayed in the <a>Ulimit</a> data type. This parameter requires version 1.18 of the Docker Remote API or greater on your container instance. To check the Docker Remote API version on your container instance, log into your container instance and run the following command: <code>sudo docker version | grep \"Server API version\"</code> </p>"]
     #[serde(rename="ulimits")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ulimits: Option<UlimitList>,
     #[doc="<p>The user name to use inside the container. This parameter maps to <code>User</code> in the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container\">Create a container</a> section of the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/\">Docker Remote API</a> and the <code>--user</code> option to <a href=\"https://docs.docker.com/engine/reference/run/\">docker run</a>.</p>"]
     #[serde(rename="user")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user: Option<String>,
     #[doc="<p>Data volumes to mount from another container. This parameter maps to <code>VolumesFrom</code> in the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container\">Create a container</a> section of the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/\">Docker Remote API</a> and the <code>--volumes-from</code> option to <a href=\"https://docs.docker.com/engine/reference/run/\">docker run</a>.</p>"]
     #[serde(rename="volumesFrom")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volumes_from: Option<VolumeFromList>,
     #[doc="<p>The working directory in which to run commands inside the container. This parameter maps to <code>WorkingDir</code> in the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container\">Create a container</a> section of the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/\">Docker Remote API</a> and the <code>--workdir</code> option to <a href=\"https://docs.docker.com/engine/reference/run/\">docker run</a>.</p>"]
     #[serde(rename="workingDirectory")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub working_directory: Option<String>,
 }
 
@@ -181,43 +220,55 @@ pub type ContainerDefinitions = Vec<ContainerDefinition>;
 pub struct ContainerInstance {
     #[doc="<p>This parameter returns <code>true</code> if the agent is actually connected to Amazon ECS. Registered instances with an agent that may be unhealthy or stopped return <code>false</code>, and instances without a connected agent cannot accept placement requests.</p>"]
     #[serde(rename="agentConnected")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub agent_connected: Option<Boolean>,
     #[doc="<p>The status of the most recent agent update. If an update has never been requested, this value is <code>NULL</code>.</p>"]
     #[serde(rename="agentUpdateStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub agent_update_status: Option<AgentUpdateStatus>,
     #[doc="<p>The attributes set for the container instance, either by the Amazon ECS container agent at instance registration or manually with the <a>PutAttributes</a> operation.</p>"]
     #[serde(rename="attributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attributes: Option<Attributes>,
     #[doc="<p>The Amazon Resource Name (ARN) of the container instance. The ARN contains the <code>arn:aws:ecs</code> namespace, followed by the region of the container instance, the AWS account ID of the container instance owner, the <code>container-instance</code> namespace, and then the container instance ID. For example, <code>arn:aws:ecs:<i>region</i>:<i>aws_account_id</i>:container-instance/<i>container_instance_ID</i> </code>.</p>"]
     #[serde(rename="containerInstanceArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub container_instance_arn: Option<String>,
     #[doc="<p>The EC2 instance ID of the container instance.</p>"]
     #[serde(rename="ec2InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ec_2_instance_id: Option<String>,
     #[doc="<p>The number of tasks on the container instance that are in the <code>PENDING</code> status.</p>"]
     #[serde(rename="pendingTasksCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub pending_tasks_count: Option<Integer>,
     #[doc="<p>The Unix timestamp for when the container instance was registered.</p>"]
     #[serde(rename="registeredAt")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub registered_at: Option<Timestamp>,
     #[doc="<p>For most resource types, this parameter describes the registered resources on the container instance that are in use by current tasks. For port resource types, this parameter describes the ports that were reserved by the Amazon ECS container agent when it registered the container instance with Amazon ECS.</p>"]
     #[serde(rename="registeredResources")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub registered_resources: Option<Resources>,
     #[doc="<p>For most resource types, this parameter describes the remaining resources of the container instance that are available for new tasks. For port resource types, this parameter describes the ports that are reserved by the Amazon ECS container agent and any containers that have reserved port mappings; any port that is not specified here is available for new tasks.</p>"]
     #[serde(rename="remainingResources")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub remaining_resources: Option<Resources>,
     #[doc="<p>The number of tasks on the container instance that are in the <code>RUNNING</code> status.</p>"]
     #[serde(rename="runningTasksCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub running_tasks_count: Option<Integer>,
     #[doc="<p>The status of the container instance. The valid values are <code>ACTIVE</code>, <code>INACTIVE</code>, or <code>DRAINING</code>. <code>ACTIVE</code> indicates that the container instance can accept tasks. <code>DRAINING</code> indicates that new tasks are not placed on the container instance and any service tasks running on the container instance are removed if possible. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonECS/latest/developerguide/container-instance-draining.html\">Container Instance Draining</a> in the <i>Amazon EC2 Container Service Developer Guide</i>.</p>"]
     #[serde(rename="status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
     #[doc="<p>The version counter for the container instance. Every time a container instance experiences a change that triggers a CloudWatch event, the version counter is incremented. If you are replicating your Amazon ECS container instance state with CloudWatch events, you can compare the version of a container instance reported by the Amazon ECS APIs with the version reported in CloudWatch events for the container instance (inside the <code>detail</code> object) to verify that the version in your event stream is current.</p>"]
     #[serde(rename="version")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version: Option<Long>,
     #[doc="<p>The version information for the Amazon ECS container agent and Docker daemon running on the container instance.</p>"]
     #[serde(rename="versionInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version_info: Option<VersionInfo>,
 }
 
@@ -228,12 +279,15 @@ pub type ContainerInstances = Vec<ContainerInstance>;
 pub struct ContainerOverride {
     #[doc="<p>The command to send to the container that overrides the default command from the Docker image or the task definition. You must also specify a container name.</p>"]
     #[serde(rename="command")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub command: Option<StringList>,
     #[doc="<p>The environment variables to send to the container. You can add new environment variables, which are added to the container at launch, or you can override the existing environment variables from the Docker image or the task definition. You must also specify a container name.</p>"]
     #[serde(rename="environment")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub environment: Option<EnvironmentVariables>,
     #[doc="<p>The name of the container that receives the override. This parameter is required if a command or environment variable is specified.</p>"]
     #[serde(rename="name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
 }
 
@@ -243,6 +297,7 @@ pub type Containers = Vec<Container>;
 pub struct CreateClusterRequest {
     #[doc="<p>The name of your cluster. If you do not specify a name for your cluster, you create a cluster named <code>default</code>. Up to 255 letters (uppercase and lowercase), numbers, hyphens, and underscores are allowed.</p>"]
     #[serde(rename="clusterName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_name: Option<String>,
 }
 
@@ -250,6 +305,7 @@ pub struct CreateClusterRequest {
 pub struct CreateClusterResponse {
     #[doc="<p>The full description of your new cluster.</p>"]
     #[serde(rename="cluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster: Option<Cluster>,
 }
 
@@ -257,27 +313,34 @@ pub struct CreateClusterResponse {
 pub struct CreateServiceRequest {
     #[doc="<p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request. Up to 32 ASCII characters are allowed.</p>"]
     #[serde(rename="clientToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_token: Option<String>,
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster on which to run your service. If you do not specify a cluster, the default cluster is assumed.</p>"]
     #[serde(rename="cluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster: Option<String>,
     #[doc="<p>Optional deployment parameters that control how many tasks run during the deployment and the ordering of stopping and starting tasks.</p>"]
     #[serde(rename="deploymentConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_configuration: Option<DeploymentConfiguration>,
     #[doc="<p>The number of instantiations of the specified task definition to place and keep running on your cluster.</p>"]
     #[serde(rename="desiredCount")]
     pub desired_count: BoxedInteger,
     #[doc="<p>A load balancer object representing the load balancer to use with your service. Currently, you are limited to one load balancer or target group per service. After you create a service, the load balancer name or target group ARN, container name, and container port specified in the service definition are immutable.</p> <p>For Elastic Load Balancing Classic load balancers, this object must contain the load balancer name, the container name (as it appears in a container definition), and the container port to access from the load balancer. When a task from this service is placed on a container instance, the container instance is registered with the load balancer specified here.</p> <p>For Elastic Load Balancing Application load balancers, this object must contain the load balancer target group ARN, the container name (as it appears in a container definition), and the container port to access from the load balancer. When a task from this service is placed on a container instance, the container instance and port combination is registered as a target in the target group specified here.</p>"]
     #[serde(rename="loadBalancers")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub load_balancers: Option<LoadBalancers>,
     #[doc="<p>An array of placement constraint objects to use for tasks in your service. You can specify a maximum of 10 constraints per task (this limit includes constraints in the task definition and those specified at run time). </p>"]
     #[serde(rename="placementConstraints")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub placement_constraints: Option<PlacementConstraints>,
     #[doc="<p>The placement strategy objects to use for tasks in your service. You can specify a maximum of 5 strategy rules per service.</p>"]
     #[serde(rename="placementStrategy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub placement_strategy: Option<PlacementStrategies>,
     #[doc="<p>The name or full Amazon Resource Name (ARN) of the IAM role that allows Amazon ECS to make calls to your load balancer on your behalf. This parameter is required if you are using a load balancer with your service. If you specify the <code>role</code> parameter, you must also specify a load balancer object with the <code>loadBalancers</code> parameter.</p> <p>If your specified role has a path other than <code>/</code>, then you must either specify the full role ARN (this is recommended) or prefix the role name with the path. For example, if a role with the name <code>bar</code> has a path of <code>/foo/</code> then you would specify <code>/foo/bar</code> as the role name. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html#identifiers-friendly-names\">Friendly Names and Paths</a> in the <i>IAM User Guide</i>.</p>"]
     #[serde(rename="role")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub role: Option<String>,
     #[doc="<p>The name of your service. Up to 255 letters (uppercase and lowercase), numbers, hyphens, and underscores are allowed. Service names must be unique within a cluster, but you can have similarly named services in multiple clusters within a region or across multiple regions.</p>"]
     #[serde(rename="serviceName")]
@@ -291,6 +354,7 @@ pub struct CreateServiceRequest {
 pub struct CreateServiceResponse {
     #[doc="<p>The full description of your service following the create call.</p>"]
     #[serde(rename="service")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub service: Option<Service>,
 }
 
@@ -301,6 +365,7 @@ pub struct DeleteAttributesRequest {
     pub attributes: Attributes,
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster that contains the resource to delete attributes. If you do not specify a cluster, the default cluster is assumed.</p>"]
     #[serde(rename="cluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster: Option<String>,
 }
 
@@ -308,6 +373,7 @@ pub struct DeleteAttributesRequest {
 pub struct DeleteAttributesResponse {
     #[doc="<p>A list of attribute objects that were successfully deleted from your resource.</p>"]
     #[serde(rename="attributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attributes: Option<Attributes>,
 }
 
@@ -322,6 +388,7 @@ pub struct DeleteClusterRequest {
 pub struct DeleteClusterResponse {
     #[doc="<p>The full description of the deleted cluster.</p>"]
     #[serde(rename="cluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster: Option<Cluster>,
 }
 
@@ -329,6 +396,7 @@ pub struct DeleteClusterResponse {
 pub struct DeleteServiceRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the service to delete. If you do not specify a cluster, the default cluster is assumed.</p>"]
     #[serde(rename="cluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster: Option<String>,
     #[doc="<p>The name of the service to delete.</p>"]
     #[serde(rename="service")]
@@ -339,6 +407,7 @@ pub struct DeleteServiceRequest {
 pub struct DeleteServiceResponse {
     #[doc="<p>The full description of the deleted service.</p>"]
     #[serde(rename="service")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub service: Option<Service>,
 }
 
@@ -347,27 +416,35 @@ pub struct DeleteServiceResponse {
 pub struct Deployment {
     #[doc="<p>The Unix timestamp for when the service was created.</p>"]
     #[serde(rename="createdAt")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub created_at: Option<Timestamp>,
     #[doc="<p>The most recent desired count of tasks that was specified for the service to deploy or maintain.</p>"]
     #[serde(rename="desiredCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub desired_count: Option<Integer>,
     #[doc="<p>The ID of the deployment.</p>"]
     #[serde(rename="id")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
     #[doc="<p>The number of tasks in the deployment that are in the <code>PENDING</code> status.</p>"]
     #[serde(rename="pendingCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub pending_count: Option<Integer>,
     #[doc="<p>The number of tasks in the deployment that are in the <code>RUNNING</code> status.</p>"]
     #[serde(rename="runningCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub running_count: Option<Integer>,
     #[doc="<p>The status of the deployment. Valid values are <code>PRIMARY</code> (for the most recent deployment), <code>ACTIVE</code> (for previous deployments that still have tasks running, but are being replaced with the <code>PRIMARY</code> deployment), and <code>INACTIVE</code> (for deployments that have been completely replaced).</p>"]
     #[serde(rename="status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
     #[doc="<p>The most recent task definition that was specified for the service to use.</p>"]
     #[serde(rename="taskDefinition")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_definition: Option<String>,
     #[doc="<p>The Unix timestamp for when the service was last updated.</p>"]
     #[serde(rename="updatedAt")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub updated_at: Option<Timestamp>,
 }
 
@@ -376,9 +453,11 @@ pub struct Deployment {
 pub struct DeploymentConfiguration {
     #[doc="<p>The upper limit (as a percentage of the service's <code>desiredCount</code>) of the number of tasks that are allowed in the <code>RUNNING</code> or <code>PENDING</code> state in a service during a deployment. The maximum number of tasks during a deployment is the <code>desiredCount</code> multiplied by <code>maximumPercent</code>/100, rounded down to the nearest integer value.</p>"]
     #[serde(rename="maximumPercent")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub maximum_percent: Option<BoxedInteger>,
     #[doc="<p>The lower limit (as a percentage of the service's <code>desiredCount</code>) of the number of running tasks that must remain in the <code>RUNNING</code> state in a service during a deployment. The minimum healthy tasks during a deployment is the <code>desiredCount</code> multiplied by <code>minimumHealthyPercent</code>/100, rounded up to the nearest integer value.</p>"]
     #[serde(rename="minimumHealthyPercent")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub minimum_healthy_percent: Option<BoxedInteger>,
 }
 
@@ -387,13 +466,14 @@ pub type Deployments = Vec<Deployment>;
 pub struct DeregisterContainerInstanceRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the container instance to deregister. If you do not specify a cluster, the default cluster is assumed.</p>"]
     #[serde(rename="cluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster: Option<String>,
     #[doc="<p>The container instance ID or full Amazon Resource Name (ARN) of the container instance to deregister. The ARN contains the <code>arn:aws:ecs</code> namespace, followed by the region of the container instance, the AWS account ID of the container instance owner, the <code>container-instance</code> namespace, and then the container instance ID. For example, <code>arn:aws:ecs:<i>region</i>:<i>aws_account_id</i>:container-instance/<i>container_instance_ID</i> </code>.</p>"]
     #[serde(rename="containerInstance")]
     pub container_instance: String,
     #[doc="<p>Forces the deregistration of the container instance. If you have tasks running on the container instance when you deregister it with the <code>force</code> option, these tasks remain running until you terminate the instance or the tasks stop through some other means, but they are orphaned (no longer monitored or accounted for by Amazon ECS). If an orphaned task on your container instance is part of an Amazon ECS service, then the service scheduler starts another copy of that task, on a different container instance if possible. </p> <p>Any containers in orphaned service tasks that are registered with a Classic load balancer or an Application load balancer target group are deregistered, and they will begin connection draining according to the settings on the load balancer or target group.</p>"]
     #[serde(rename="force")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub force: Option<BoxedBoolean>,
 }
 
@@ -401,6 +481,7 @@ pub struct DeregisterContainerInstanceRequest {
 pub struct DeregisterContainerInstanceResponse {
     #[doc="<p>The container instance that was deregistered.</p>"]
     #[serde(rename="containerInstance")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub container_instance: Option<ContainerInstance>,
 }
 
@@ -415,6 +496,7 @@ pub struct DeregisterTaskDefinitionRequest {
 pub struct DeregisterTaskDefinitionResponse {
     #[doc="<p>The full description of the deregistered task.</p>"]
     #[serde(rename="taskDefinition")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_definition: Option<TaskDefinition>,
 }
 
@@ -422,6 +504,7 @@ pub struct DeregisterTaskDefinitionResponse {
 pub struct DescribeClustersRequest {
     #[doc="<p>A list of up to 100 cluster names or full cluster Amazon Resource Name (ARN) entries. If you do not specify a cluster, the default cluster is assumed.</p>"]
     #[serde(rename="clusters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub clusters: Option<StringList>,
 }
 
@@ -429,9 +512,11 @@ pub struct DescribeClustersRequest {
 pub struct DescribeClustersResponse {
     #[doc="<p>The list of clusters.</p>"]
     #[serde(rename="clusters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub clusters: Option<Clusters>,
     #[doc="<p>Any failures associated with the call.</p>"]
     #[serde(rename="failures")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub failures: Option<Failures>,
 }
 
@@ -439,6 +524,7 @@ pub struct DescribeClustersResponse {
 pub struct DescribeContainerInstancesRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the container instances to describe. If you do not specify a cluster, the default cluster is assumed.</p>"]
     #[serde(rename="cluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster: Option<String>,
     #[doc="<p>A list of container instance IDs or full Amazon Resource Name (ARN) entries.</p>"]
     #[serde(rename="containerInstances")]
@@ -449,9 +535,11 @@ pub struct DescribeContainerInstancesRequest {
 pub struct DescribeContainerInstancesResponse {
     #[doc="<p>The list of container instances.</p>"]
     #[serde(rename="containerInstances")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub container_instances: Option<ContainerInstances>,
     #[doc="<p>Any failures associated with the call.</p>"]
     #[serde(rename="failures")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub failures: Option<Failures>,
 }
 
@@ -459,6 +547,7 @@ pub struct DescribeContainerInstancesResponse {
 pub struct DescribeServicesRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN)the cluster that hosts the service to describe. If you do not specify a cluster, the default cluster is assumed.</p>"]
     #[serde(rename="cluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster: Option<String>,
     #[doc="<p>A list of services to describe. You may specify up to 10 services to describe in a single operation.</p>"]
     #[serde(rename="services")]
@@ -469,9 +558,11 @@ pub struct DescribeServicesRequest {
 pub struct DescribeServicesResponse {
     #[doc="<p>Any failures associated with the call.</p>"]
     #[serde(rename="failures")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub failures: Option<Failures>,
     #[doc="<p>The list of services described.</p>"]
     #[serde(rename="services")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub services: Option<Services>,
 }
 
@@ -486,6 +577,7 @@ pub struct DescribeTaskDefinitionRequest {
 pub struct DescribeTaskDefinitionResponse {
     #[doc="<p>The full task definition description.</p>"]
     #[serde(rename="taskDefinition")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_definition: Option<TaskDefinition>,
 }
 
@@ -493,6 +585,7 @@ pub struct DescribeTaskDefinitionResponse {
 pub struct DescribeTasksRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the task to describe. If you do not specify a cluster, the default cluster is assumed.</p>"]
     #[serde(rename="cluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster: Option<String>,
     #[doc="<p>A list of up to 100 task IDs or full Amazon Resource Name (ARN) entries.</p>"]
     #[serde(rename="tasks")]
@@ -503,9 +596,11 @@ pub struct DescribeTasksRequest {
 pub struct DescribeTasksResponse {
     #[doc="<p>Any failures associated with the call.</p>"]
     #[serde(rename="failures")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub failures: Option<Failures>,
     #[doc="<p>The list of tasks.</p>"]
     #[serde(rename="tasks")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tasks: Option<Tasks>,
 }
 
@@ -514,9 +609,11 @@ pub type DesiredStatus = String;
 pub struct DiscoverPollEndpointRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster that the container instance belongs to.</p>"]
     #[serde(rename="cluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster: Option<String>,
     #[doc="<p>The container instance ID or full Amazon Resource Name (ARN) of the container instance. The ARN contains the <code>arn:aws:ecs</code> namespace, followed by the region of the container instance, the AWS account ID of the container instance owner, the <code>container-instance</code> namespace, and then the container instance ID. For example, <code>arn:aws:ecs:<i>region</i>:<i>aws_account_id</i>:container-instance/<i>container_instance_ID</i> </code>.</p>"]
     #[serde(rename="containerInstance")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub container_instance: Option<String>,
 }
 
@@ -524,9 +621,11 @@ pub struct DiscoverPollEndpointRequest {
 pub struct DiscoverPollEndpointResponse {
     #[doc="<p>The endpoint for the Amazon ECS agent to poll.</p>"]
     #[serde(rename="endpoint")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub endpoint: Option<String>,
     #[doc="<p>The telemetry endpoint for the Amazon ECS agent.</p>"]
     #[serde(rename="telemetryEndpoint")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub telemetry_endpoint: Option<String>,
 }
 
@@ -538,9 +637,11 @@ pub type EnvironmentVariables = Vec<KeyValuePair>;
 pub struct Failure {
     #[doc="<p>The Amazon Resource Name (ARN) of the failed resource.</p>"]
     #[serde(rename="arn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub arn: Option<String>,
     #[doc="<p>The reason for the failure.</p>"]
     #[serde(rename="reason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reason: Option<String>,
 }
 
@@ -562,6 +663,7 @@ pub type HostEntryList = Vec<HostEntry>;
 pub struct HostVolumeProperties {
     #[doc="<p>The path on the host container instance that is presented to the container. If this parameter is empty, then the Docker daemon has assigned a host path for you. If the <code>host</code> parameter contains a <code>sourcePath</code> file location, then the data volume persists at the specified location on the host container instance until you delete it manually. If the <code>sourcePath</code> value does not exist on the host container instance, the Docker daemon creates it. If the location does exist, the contents of the source path folder are exported.</p>"]
     #[serde(rename="sourcePath")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_path: Option<String>,
 }
 
@@ -571,9 +673,11 @@ pub type Integer = i64;
 pub struct KeyValuePair {
     #[doc="<p>The name of the key value pair. For environment variables, this is the name of the environment variable.</p>"]
     #[serde(rename="name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
     #[doc="<p>The value of the key value pair. For environment variables, this is the value of the environment variable.</p>"]
     #[serde(rename="value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<String>,
 }
 
@@ -581,18 +685,23 @@ pub struct KeyValuePair {
 pub struct ListAttributesRequest {
     #[doc="<p>The name of the attribute with which to filter the results. </p>"]
     #[serde(rename="attributeName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attribute_name: Option<String>,
     #[doc="<p>The value of the attribute with which to filter results. You must also specify an attribute name to use this parameter.</p>"]
     #[serde(rename="attributeValue")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attribute_value: Option<String>,
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster to list attributes. If you do not specify a cluster, the default cluster is assumed.</p>"]
     #[serde(rename="cluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster: Option<String>,
     #[doc="<p>The maximum number of cluster results returned by <code>ListAttributes</code> in paginated output. When this parameter is used, <code>ListAttributes</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListAttributes</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>ListAttributes</code> returns up to 100 results and a <code>nextToken</code> value if applicable.</p>"]
     #[serde(rename="maxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<BoxedInteger>,
     #[doc="<p>The <code>nextToken</code> value returned from a previous paginated <code>ListAttributes</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. This value is <code>null</code> when there are no more results to return.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>The type of the target with which to list attributes.</p>"]
     #[serde(rename="targetType")]
@@ -603,9 +712,11 @@ pub struct ListAttributesRequest {
 pub struct ListAttributesResponse {
     #[doc="<p>A list of attribute objects that meet the criteria of the request.</p>"]
     #[serde(rename="attributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attributes: Option<Attributes>,
     #[doc="<p>The <code>nextToken</code> value to include in a future <code>ListAttributes</code> request. When the results of a <code>ListAttributes</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -613,9 +724,11 @@ pub struct ListAttributesResponse {
 pub struct ListClustersRequest {
     #[doc="<p>The maximum number of cluster results returned by <code>ListClusters</code> in paginated output. When this parameter is used, <code>ListClusters</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListClusters</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>ListClusters</code> returns up to 100 results and a <code>nextToken</code> value if applicable.</p>"]
     #[serde(rename="maxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<BoxedInteger>,
     #[doc="<p>The <code>nextToken</code> value returned from a previous paginated <code>ListClusters</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. This value is <code>null</code> when there are no more results to return.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -623,9 +736,11 @@ pub struct ListClustersRequest {
 pub struct ListClustersResponse {
     #[doc="<p>The list of full Amazon Resource Name (ARN) entries for each cluster associated with your account.</p>"]
     #[serde(rename="clusterArns")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_arns: Option<StringList>,
     #[doc="<p>The <code>nextToken</code> value to include in a future <code>ListClusters</code> request. When the results of a <code>ListClusters</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -633,18 +748,23 @@ pub struct ListClustersResponse {
 pub struct ListContainerInstancesRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the container instances to list. If you do not specify a cluster, the default cluster is assumed.</p>"]
     #[serde(rename="cluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster: Option<String>,
     #[doc="<p>You can filter the results of a <code>ListContainerInstances</code> operation with cluster query language statements. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonECS/latest/developerguide/cluster-query-language.html\">Cluster Query Language</a> in the <i>Amazon EC2 Container Service Developer Guide</i>.</p>"]
     #[serde(rename="filter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filter: Option<String>,
     #[doc="<p>The maximum number of container instance results returned by <code>ListContainerInstances</code> in paginated output. When this parameter is used, <code>ListContainerInstances</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListContainerInstances</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>ListContainerInstances</code> returns up to 100 results and a <code>nextToken</code> value if applicable.</p>"]
     #[serde(rename="maxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<BoxedInteger>,
     #[doc="<p>The <code>nextToken</code> value returned from a previous paginated <code>ListContainerInstances</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. This value is <code>null</code> when there are no more results to return.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>Filters the container instances by status. For example, if you specify the <code>DRAINING</code> status, the results include only container instances that have been set to <code>DRAINING</code> using <a>UpdateContainerInstancesState</a>. If you do not specify this parameter, the default is to include container instances set to <code>ACTIVE</code> and <code>DRAINING</code>.</p>"]
     #[serde(rename="status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<ContainerInstanceStatus>,
 }
 
@@ -652,9 +772,11 @@ pub struct ListContainerInstancesRequest {
 pub struct ListContainerInstancesResponse {
     #[doc="<p>The list of container instances with full Amazon Resource Name (ARN) entries for each container instance associated with the specified cluster.</p>"]
     #[serde(rename="containerInstanceArns")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub container_instance_arns: Option<StringList>,
     #[doc="<p>The <code>nextToken</code> value to include in a future <code>ListContainerInstances</code> request. When the results of a <code>ListContainerInstances</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -662,12 +784,15 @@ pub struct ListContainerInstancesResponse {
 pub struct ListServicesRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the services to list. If you do not specify a cluster, the default cluster is assumed.</p>"]
     #[serde(rename="cluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster: Option<String>,
     #[doc="<p>The maximum number of container instance results returned by <code>ListServices</code> in paginated output. When this parameter is used, <code>ListServices</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListServices</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 10. If this parameter is not used, then <code>ListServices</code> returns up to 10 results and a <code>nextToken</code> value if applicable.</p>"]
     #[serde(rename="maxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<BoxedInteger>,
     #[doc="<p>The <code>nextToken</code> value returned from a previous paginated <code>ListServices</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. This value is <code>null</code> when there are no more results to return.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -675,9 +800,11 @@ pub struct ListServicesRequest {
 pub struct ListServicesResponse {
     #[doc="<p>The <code>nextToken</code> value to include in a future <code>ListServices</code> request. When the results of a <code>ListServices</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>The list of full Amazon Resource Name (ARN) entries for each service associated with the specified cluster.</p>"]
     #[serde(rename="serviceArns")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub service_arns: Option<StringList>,
 }
 
@@ -685,15 +812,19 @@ pub struct ListServicesResponse {
 pub struct ListTaskDefinitionFamiliesRequest {
     #[doc="<p>The <code>familyPrefix</code> is a string that is used to filter the results of <code>ListTaskDefinitionFamilies</code>. If you specify a <code>familyPrefix</code>, only task definition family names that begin with the <code>familyPrefix</code> string are returned.</p>"]
     #[serde(rename="familyPrefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub family_prefix: Option<String>,
     #[doc="<p>The maximum number of task definition family results returned by <code>ListTaskDefinitionFamilies</code> in paginated output. When this parameter is used, <code>ListTaskDefinitions</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListTaskDefinitionFamilies</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>ListTaskDefinitionFamilies</code> returns up to 100 results and a <code>nextToken</code> value if applicable.</p>"]
     #[serde(rename="maxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<BoxedInteger>,
     #[doc="<p>The <code>nextToken</code> value returned from a previous paginated <code>ListTaskDefinitionFamilies</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. This value is <code>null</code> when there are no more results to return.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>The task definition family status with which to filter the <code>ListTaskDefinitionFamilies</code> results. By default, both <code>ACTIVE</code> and <code>INACTIVE</code> task definition families are listed. If this parameter is set to <code>ACTIVE</code>, only task definition families that have an <code>ACTIVE</code> task definition revision are returned. If this parameter is set to <code>INACTIVE</code>, only task definition families that do not have any <code>ACTIVE</code> task definition revisions are returned. If you paginate the resulting output, be sure to keep the <code>status</code> value constant in each subsequent request.</p>"]
     #[serde(rename="status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<TaskDefinitionFamilyStatus>,
 }
 
@@ -701,9 +832,11 @@ pub struct ListTaskDefinitionFamiliesRequest {
 pub struct ListTaskDefinitionFamiliesResponse {
     #[doc="<p>The list of task definition family names that match the <code>ListTaskDefinitionFamilies</code> request.</p>"]
     #[serde(rename="families")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub families: Option<StringList>,
     #[doc="<p>The <code>nextToken</code> value to include in a future <code>ListTaskDefinitionFamilies</code> request. When the results of a <code>ListTaskDefinitionFamilies</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
@@ -711,18 +844,23 @@ pub struct ListTaskDefinitionFamiliesResponse {
 pub struct ListTaskDefinitionsRequest {
     #[doc="<p>The full family name with which to filter the <code>ListTaskDefinitions</code> results. Specifying a <code>familyPrefix</code> limits the listed task definitions to task definition revisions that belong to that family.</p>"]
     #[serde(rename="familyPrefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub family_prefix: Option<String>,
     #[doc="<p>The maximum number of task definition results returned by <code>ListTaskDefinitions</code> in paginated output. When this parameter is used, <code>ListTaskDefinitions</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListTaskDefinitions</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>ListTaskDefinitions</code> returns up to 100 results and a <code>nextToken</code> value if applicable.</p>"]
     #[serde(rename="maxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<BoxedInteger>,
     #[doc="<p>The <code>nextToken</code> value returned from a previous paginated <code>ListTaskDefinitions</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. This value is <code>null</code> when there are no more results to return.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>The order in which to sort the results. Valid values are <code>ASC</code> and <code>DESC</code>. By default (<code>ASC</code>), task definitions are listed lexicographically by family name and in ascending numerical order by revision so that the newest task definitions in a family are listed last. Setting this parameter to <code>DESC</code> reverses the sort order on family name and revision so that the newest task definitions in a family are listed first.</p>"]
     #[serde(rename="sort")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sort: Option<SortOrder>,
     #[doc="<p>The task definition status with which to filter the <code>ListTaskDefinitions</code> results. By default, only <code>ACTIVE</code> task definitions are listed. By setting this parameter to <code>INACTIVE</code>, you can view task definitions that are <code>INACTIVE</code> as long as an active task or service still references them. If you paginate the resulting output, be sure to keep the <code>status</code> value constant in each subsequent request.</p>"]
     #[serde(rename="status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<TaskDefinitionStatus>,
 }
 
@@ -730,9 +868,11 @@ pub struct ListTaskDefinitionsRequest {
 pub struct ListTaskDefinitionsResponse {
     #[doc="<p>The <code>nextToken</code> value to include in a future <code>ListTaskDefinitions</code> request. When the results of a <code>ListTaskDefinitions</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>The list of task definition Amazon Resource Name (ARN) entries for the <code>ListTaskDefinitions</code> request.</p>"]
     #[serde(rename="taskDefinitionArns")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_definition_arns: Option<StringList>,
 }
 
@@ -740,27 +880,35 @@ pub struct ListTaskDefinitionsResponse {
 pub struct ListTasksRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the tasks to list. If you do not specify a cluster, the default cluster is assumed.</p>"]
     #[serde(rename="cluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster: Option<String>,
     #[doc="<p>The container instance ID or full Amazon Resource Name (ARN) of the container instance with which to filter the <code>ListTasks</code> results. Specifying a <code>containerInstance</code> limits the results to tasks that belong to that container instance.</p>"]
     #[serde(rename="containerInstance")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub container_instance: Option<String>,
     #[doc="<p>The task desired status with which to filter the <code>ListTasks</code> results. Specifying a <code>desiredStatus</code> of <code>STOPPED</code> limits the results to tasks that ECS has set the desired status to <code>STOPPED</code>, which can be useful for debugging tasks that are not starting properly or have died or finished. The default status filter is <code>RUNNING</code>, which shows tasks that ECS has set the desired status to <code>RUNNING</code>.</p> <note> <p>Although you can filter results based on a desired status of <code>PENDING</code>, this will not return any results because ECS never sets the desired status of a task to that value (only a task's <code>lastStatus</code> may have a value of <code>PENDING</code>).</p> </note>"]
     #[serde(rename="desiredStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub desired_status: Option<DesiredStatus>,
     #[doc="<p>The name of the family with which to filter the <code>ListTasks</code> results. Specifying a <code>family</code> limits the results to tasks that belong to that family.</p>"]
     #[serde(rename="family")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub family: Option<String>,
     #[doc="<p>The maximum number of task results returned by <code>ListTasks</code> in paginated output. When this parameter is used, <code>ListTasks</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListTasks</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>ListTasks</code> returns up to 100 results and a <code>nextToken</code> value if applicable.</p>"]
     #[serde(rename="maxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<BoxedInteger>,
     #[doc="<p>The <code>nextToken</code> value returned from a previous paginated <code>ListTasks</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. This value is <code>null</code> when there are no more results to return.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>The name of the service with which to filter the <code>ListTasks</code> results. Specifying a <code>serviceName</code> limits the results to tasks that belong to that service.</p>"]
     #[serde(rename="serviceName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub service_name: Option<String>,
     #[doc="<p>The <code>startedBy</code> value with which to filter the task results. Specifying a <code>startedBy</code> value limits the results to tasks that were started with that value.</p>"]
     #[serde(rename="startedBy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub started_by: Option<String>,
 }
 
@@ -768,9 +916,11 @@ pub struct ListTasksRequest {
 pub struct ListTasksResponse {
     #[doc="<p>The <code>nextToken</code> value to include in a future <code>ListTasks</code> request. When the results of a <code>ListTasks</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
     #[doc="<p>The list of task Amazon Resource Name (ARN) entries for the <code>ListTasks</code> request.</p>"]
     #[serde(rename="taskArns")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_arns: Option<StringList>,
 }
 
@@ -779,15 +929,19 @@ pub struct ListTasksResponse {
 pub struct LoadBalancer {
     #[doc="<p>The name of the container (as it appears in a container definition) to associate with the load balancer.</p>"]
     #[serde(rename="containerName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub container_name: Option<String>,
     #[doc="<p>The port on the container to associate with the load balancer. This port must correspond to a <code>containerPort</code> in the service's task definition. Your container instances must allow ingress traffic on the <code>hostPort</code> of the port mapping.</p>"]
     #[serde(rename="containerPort")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub container_port: Option<BoxedInteger>,
     #[doc="<p>The name of a Classic load balancer.</p>"]
     #[serde(rename="loadBalancerName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub load_balancer_name: Option<String>,
     #[doc="<p>The full Amazon Resource Name (ARN) of the Elastic Load Balancing target group associated with a service.</p>"]
     #[serde(rename="targetGroupArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_group_arn: Option<String>,
 }
 
@@ -800,6 +954,7 @@ pub struct LogConfiguration {
     pub log_driver: LogDriver,
     #[doc="<p>The configuration options to send to the log driver. This parameter requires version 1.19 of the Docker Remote API or greater on your container instance. To check the Docker Remote API version on your container instance, log into your container instance and run the following command: <code>sudo docker version | grep \"Server API version\"</code> </p>"]
     #[serde(rename="options")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub options: Option<LogConfigurationOptionsMap>,
 }
 
@@ -811,13 +966,15 @@ pub type Long = i64;
 pub struct MountPoint {
     #[doc="<p>The path on the container to mount the host volume at.</p>"]
     #[serde(rename="containerPath")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub container_path: Option<String>,
     #[doc="<p>If this value is <code>true</code>, the container has read-only access to the volume. If this value is <code>false</code>, then the container can write to the volume. The default value is <code>false</code>.</p>"]
     #[serde(rename="readOnly")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub read_only: Option<BoxedBoolean>,
     #[doc="<p>The name of the volume to mount.</p>"]
     #[serde(rename="sourceVolume")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_volume: Option<String>,
 }
 
@@ -827,15 +984,19 @@ pub type MountPointList = Vec<MountPoint>;
 pub struct NetworkBinding {
     #[doc="<p>The IP address that the container is bound to on the container instance.</p>"]
     #[serde(rename="bindIP")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bind_ip: Option<String>,
     #[doc="<p>The port number on the container that is be used with the network binding.</p>"]
     #[serde(rename="containerPort")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub container_port: Option<BoxedInteger>,
     #[doc="<p>The port number on the host that is used with the network binding.</p>"]
     #[serde(rename="hostPort")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub host_port: Option<BoxedInteger>,
     #[doc="<p>The protocol used for the network binding.</p>"]
     #[serde(rename="protocol")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub protocol: Option<TransportProtocol>,
 }
 
@@ -846,9 +1007,11 @@ pub type NetworkMode = String;
 pub struct PlacementConstraint {
     #[doc="<p>A cluster query language expression to apply to the constraint. Note you cannot specify an expression if the constraint type is <code>distinctInstance</code>. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonECS/latest/developerguide/cluster-query-language.html\">Cluster Query Language</a> in the <i>Amazon EC2 Container Service Developer Guide</i>.</p>"]
     #[serde(rename="expression")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub expression: Option<String>,
     #[doc="<p>The type of constraint. Use <code>distinctInstance</code> to ensure that each task in a particular group is running on a different container instance. Use <code>memberOf</code> to restrict selection to a group of valid candidates. Note that <code>distinctInstance</code> is not supported in task definitions.</p>"]
     #[serde(rename="type")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<PlacementConstraintType>,
 }
 
@@ -860,9 +1023,11 @@ pub type PlacementStrategies = Vec<PlacementStrategy>;
 pub struct PlacementStrategy {
     #[doc="<p>The field to apply the placement strategy against. For the <code>spread</code> placement strategy, valid values are <code>instanceId</code> (or <code>host</code>, which has the same effect), or any platform or custom attribute that is applied to a container instance, such as <code>attribute:ecs.availability-zone</code>. For the <code>binpack</code> placement strategy, valid values are <code>cpu</code> and <code>memory</code>. For the <code>random</code> placement strategy, this field is not used.</p>"]
     #[serde(rename="field")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub field: Option<String>,
     #[doc="<p>The type of placement strategy. The <code>random</code> placement strategy randomly places tasks on available candidates. The <code>spread</code> placement strategy spreads placement across available candidates evenly based on the <code>field</code> parameter. The <code>binpack</code> strategy places tasks on available candidates that have the least available amount of the resource that is specified with the <code>field</code> parameter. For example, if you binpack on memory, a task is placed on the instance with the least amount of remaining memory (but still enough to run the task).</p>"]
     #[serde(rename="type")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<PlacementStrategyType>,
 }
 
@@ -872,12 +1037,15 @@ pub type PlacementStrategyType = String;
 pub struct PortMapping {
     #[doc="<p>The port number on the container that is bound to the user-specified or automatically assigned host port. If you specify a container port and not a host port, your container automatically receives a host port in the ephemeral port range (for more information, see <code>hostPort</code>). Port mappings that are automatically assigned in this way do not count toward the 100 reserved ports limit of a container instance.</p>"]
     #[serde(rename="containerPort")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub container_port: Option<BoxedInteger>,
     #[doc="<p>The port number on the container instance to reserve for your container. You can specify a non-reserved host port for your container port mapping, or you can omit the <code>hostPort</code> (or set it to <code>0</code>) while specifying a <code>containerPort</code> and your container automatically receives a port in the ephemeral port range for your container instance operating system and Docker version.</p> <p>The default ephemeral port range is 49153 to 65535, and this range is used for Docker versions prior to 1.6.0. For Docker version 1.6.0 and later, the Docker daemon tries to read the ephemeral port range from <code>/proc/sys/net/ipv4/ip_local_port_range</code>; if this kernel parameter is unavailable, the default ephemeral port range is used. You should not attempt to specify a host port in the ephemeral port range, because these are reserved for automatic assignment. In general, ports below 32768 are outside of the ephemeral port range.</p> <p>The default reserved ports are 22 for SSH, the Docker ports 2375 and 2376, and the Amazon ECS container agent ports 51678 and 51679. Any host port that was previously specified in a running task is also reserved while the task is running (after a task stops, the host port is released).The current reserved ports are displayed in the <code>remainingResources</code> of <a>DescribeContainerInstances</a> output, and a container instance may have up to 100 reserved ports at a time, including the default reserved ports (automatically assigned ports do not count toward the 100 reserved ports limit).</p>"]
     #[serde(rename="hostPort")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub host_port: Option<BoxedInteger>,
     #[doc="<p>The protocol used for the port mapping. Valid values are <code>tcp</code> and <code>udp</code>. The default is <code>tcp</code>.</p>"]
     #[serde(rename="protocol")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub protocol: Option<TransportProtocol>,
 }
 
@@ -889,6 +1057,7 @@ pub struct PutAttributesRequest {
     pub attributes: Attributes,
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster that contains the resource to apply attributes. If you do not specify a cluster, the default cluster is assumed.</p>"]
     #[serde(rename="cluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster: Option<String>,
 }
 
@@ -896,6 +1065,7 @@ pub struct PutAttributesRequest {
 pub struct PutAttributesResponse {
     #[doc="<p>The attributes applied to your resource.</p>"]
     #[serde(rename="attributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attributes: Option<Attributes>,
 }
 
@@ -903,24 +1073,31 @@ pub struct PutAttributesResponse {
 pub struct RegisterContainerInstanceRequest {
     #[doc="<p>The container instance attributes that this container instance supports.</p>"]
     #[serde(rename="attributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attributes: Option<Attributes>,
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster with which to register your container instance. If you do not specify a cluster, the default cluster is assumed.</p>"]
     #[serde(rename="cluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the container instance (if it was previously registered).</p>"]
     #[serde(rename="containerInstanceArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub container_instance_arn: Option<String>,
     #[doc="<p>The instance identity document for the EC2 instance to register. This document can be found by running the following command from the instance: <code>curl http://169.254.169.254/latest/dynamic/instance-identity/document/</code> </p>"]
     #[serde(rename="instanceIdentityDocument")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_identity_document: Option<String>,
     #[doc="<p>The instance identity document signature for the EC2 instance to register. This signature can be found by running the following command from the instance: <code>curl http://169.254.169.254/latest/dynamic/instance-identity/signature/</code> </p>"]
     #[serde(rename="instanceIdentityDocumentSignature")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_identity_document_signature: Option<String>,
     #[doc="<p>The resources available on the instance.</p>"]
     #[serde(rename="totalResources")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub total_resources: Option<Resources>,
     #[doc="<p>The version information for the Amazon ECS container agent and Docker daemon running on the container instance.</p>"]
     #[serde(rename="versionInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version_info: Option<VersionInfo>,
 }
 
@@ -928,6 +1105,7 @@ pub struct RegisterContainerInstanceRequest {
 pub struct RegisterContainerInstanceResponse {
     #[doc="<p>The container instance that was registered.</p>"]
     #[serde(rename="containerInstance")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub container_instance: Option<ContainerInstance>,
 }
 
@@ -941,15 +1119,19 @@ pub struct RegisterTaskDefinitionRequest {
     pub family: String,
     #[doc="<p>The Docker networking mode to use for the containers in the task. The valid values are <code>none</code>, <code>bridge</code>, and <code>host</code>. </p> <p>The default Docker network mode is <code>bridge</code>. If the network mode is set to <code>none</code>, you cannot specify port mappings in your container definitions, and the task's containers do not have external connectivity. The <code>host</code> network mode offers the highest networking performance for containers because they use the host network stack instead of the virtualized network stack provided by the <code>bridge</code> mode; however, exposed container ports are mapped directly to the corresponding host port, so you cannot take advantage of dynamic host port mappings or run multiple instantiations of the same task on a single container instance if port mappings are used.</p> <p>For more information, see <a href=\"https://docs.docker.com/engine/reference/run/#network-settings\">Network settings</a> in the <i>Docker run reference</i>.</p>"]
     #[serde(rename="networkMode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_mode: Option<NetworkMode>,
     #[doc="<p>An array of placement constraint objects to use for the task. You can specify a maximum of 10 constraints per task (this limit includes constraints in the task definition and those specified at run time).</p>"]
     #[serde(rename="placementConstraints")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub placement_constraints: Option<TaskDefinitionPlacementConstraints>,
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the IAM role that containers in this task can assume. All containers in this task are granted the permissions that are specified in this role. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html\">IAM Roles for Tasks</a> in the <i>Amazon EC2 Container Service Developer Guide</i>.</p>"]
     #[serde(rename="taskRoleArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_role_arn: Option<String>,
     #[doc="<p>A list of volume definitions in JSON format that containers in your task may use.</p>"]
     #[serde(rename="volumes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volumes: Option<VolumeList>,
 }
 
@@ -957,6 +1139,7 @@ pub struct RegisterTaskDefinitionRequest {
 pub struct RegisterTaskDefinitionResponse {
     #[doc="<p>The full description of the registered task definition.</p>"]
     #[serde(rename="taskDefinition")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_definition: Option<TaskDefinition>,
 }
 
@@ -966,21 +1149,27 @@ pub type RequiresAttributes = Vec<Attribute>;
 pub struct Resource {
     #[doc="<p>When the <code>doubleValue</code> type is set, the value of the resource must be a double precision floating-point type.</p>"]
     #[serde(rename="doubleValue")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub double_value: Option<Double>,
     #[doc="<p>When the <code>integerValue</code> type is set, the value of the resource must be an integer.</p>"]
     #[serde(rename="integerValue")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub integer_value: Option<Integer>,
     #[doc="<p>When the <code>longValue</code> type is set, the value of the resource must be an extended precision floating-point type.</p>"]
     #[serde(rename="longValue")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub long_value: Option<Long>,
     #[doc="<p>The name of the resource, such as <code>cpu</code>, <code>memory</code>, <code>ports</code>, or a user-defined resource.</p>"]
     #[serde(rename="name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
     #[doc="<p>When the <code>stringSetValue</code> type is set, the value of the resource must be a string type.</p>"]
     #[serde(rename="stringSetValue")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub string_set_value: Option<StringList>,
     #[doc="<p>The type of the resource, such as <code>INTEGER</code>, <code>DOUBLE</code>, <code>LONG</code>, or <code>STRINGSET</code>.</p>"]
     #[serde(rename="type")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<String>,
 }
 
@@ -989,24 +1178,31 @@ pub type Resources = Vec<Resource>;
 pub struct RunTaskRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster on which to run your task. If you do not specify a cluster, the default cluster is assumed.</p>"]
     #[serde(rename="cluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster: Option<String>,
     #[doc="<p>The number of instantiations of the specified task to place on your cluster. You can specify up to 10 tasks per call.</p>"]
     #[serde(rename="count")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub count: Option<BoxedInteger>,
     #[doc="<p>The name of the task group to associate with the task. The default value is the family name of the task definition (for example, family:my-family-name).</p>"]
     #[serde(rename="group")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group: Option<String>,
     #[doc="<p>A list of container overrides in JSON format that specify the name of a container in the specified task definition and the overrides it should receive. You can override the default command for a container (that is specified in the task definition or Docker image) with a <code>command</code> override. You can also override existing environment variables (that are specified in the task definition or Docker image) on a container or add new environment variables to it with an <code>environment</code> override.</p> <note> <p>A total of 8192 characters are allowed for overrides. This limit includes the JSON formatting characters of the override structure.</p> </note>"]
     #[serde(rename="overrides")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub overrides: Option<TaskOverride>,
     #[doc="<p>An array of placement constraint objects to use for the task. You can specify up to 10 constraints per task (including constraints in the task definition and those specified at run time).</p>"]
     #[serde(rename="placementConstraints")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub placement_constraints: Option<PlacementConstraints>,
     #[doc="<p>The placement strategy objects to use for the task. You can specify a maximum of 5 strategy rules per task.</p>"]
     #[serde(rename="placementStrategy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub placement_strategy: Option<PlacementStrategies>,
     #[doc="<p>An optional tag specified when a task is started. For example if you automatically trigger a task to run a batch process job, you could apply a unique identifier for that job to your task with the <code>startedBy</code> parameter. You can then identify which tasks belong to that job by filtering the results of a <a>ListTasks</a> call with the <code>startedBy</code> value. Up to 36 letters (uppercase and lowercase), numbers, hyphens, and underscores are allowed.</p> <p>If a task is started by an Amazon ECS service, then the <code>startedBy</code> parameter contains the deployment ID of the service that starts it.</p>"]
     #[serde(rename="startedBy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub started_by: Option<String>,
     #[doc="<p>The <code>family</code> and <code>revision</code> (<code>family:revision</code>) or full Amazon Resource Name (ARN) of the task definition to run. If a <code>revision</code> is not specified, the latest <code>ACTIVE</code> revision is used.</p>"]
     #[serde(rename="taskDefinition")]
@@ -1017,9 +1213,11 @@ pub struct RunTaskRequest {
 pub struct RunTaskResponse {
     #[doc="<p>Any failures associated with the call.</p>"]
     #[serde(rename="failures")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub failures: Option<Failures>,
     #[doc="<p>A full description of the tasks that were run. Each task that was successfully placed on your cluster are described here.</p>"]
     #[serde(rename="tasks")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tasks: Option<Tasks>,
 }
 
@@ -1028,51 +1226,67 @@ pub struct RunTaskResponse {
 pub struct Service {
     #[doc="<p>The Amazon Resource Name (ARN) of the cluster that hosts the service.</p>"]
     #[serde(rename="clusterArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_arn: Option<String>,
     #[doc="<p>The Unix timestamp for when the service was created.</p>"]
     #[serde(rename="createdAt")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub created_at: Option<Timestamp>,
     #[doc="<p>Optional deployment parameters that control how many tasks run during the deployment and the ordering of stopping and starting tasks.</p>"]
     #[serde(rename="deploymentConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_configuration: Option<DeploymentConfiguration>,
     #[doc="<p>The current state of deployments for the service.</p>"]
     #[serde(rename="deployments")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployments: Option<Deployments>,
     #[doc="<p>The desired number of instantiations of the task definition to keep running on the service. This value is specified when the service is created with <a>CreateService</a>, and it can be modified with <a>UpdateService</a>.</p>"]
     #[serde(rename="desiredCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub desired_count: Option<Integer>,
     #[doc="<p>The event stream for your service. A maximum of 100 of the latest events are displayed.</p>"]
     #[serde(rename="events")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub events: Option<ServiceEvents>,
     #[doc="<p>A list of Elastic Load Balancing load balancer objects, containing the load balancer name, the container name (as it appears in a container definition), and the container port to access from the load balancer.</p>"]
     #[serde(rename="loadBalancers")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub load_balancers: Option<LoadBalancers>,
     #[doc="<p>The number of tasks in the cluster that are in the <code>PENDING</code> state.</p>"]
     #[serde(rename="pendingCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub pending_count: Option<Integer>,
     #[doc="<p>The placement constraints for the tasks in the service.</p>"]
     #[serde(rename="placementConstraints")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub placement_constraints: Option<PlacementConstraints>,
     #[doc="<p>The placement strategy that determines how tasks for the service are placed.</p>"]
     #[serde(rename="placementStrategy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub placement_strategy: Option<PlacementStrategies>,
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM role associated with the service that allows the Amazon ECS container agent to register container instances with an Elastic Load Balancing load balancer.</p>"]
     #[serde(rename="roleArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub role_arn: Option<String>,
     #[doc="<p>The number of tasks in the cluster that are in the <code>RUNNING</code> state.</p>"]
     #[serde(rename="runningCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub running_count: Option<Integer>,
     #[doc="<p>The Amazon Resource Name (ARN) that identifies the service. The ARN contains the <code>arn:aws:ecs</code> namespace, followed by the region of the service, the AWS account ID of the service owner, the <code>service</code> namespace, and then the service name. For example, <code>arn:aws:ecs:<i>region</i>:<i>012345678910</i>:service/<i>my-service</i> </code>.</p>"]
     #[serde(rename="serviceArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub service_arn: Option<String>,
     #[doc="<p>The name of your service. Up to 255 letters (uppercase and lowercase), numbers, hyphens, and underscores are allowed. Service names must be unique within a cluster, but you can have similarly named services in multiple clusters within a region or across multiple regions.</p>"]
     #[serde(rename="serviceName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub service_name: Option<String>,
     #[doc="<p>The status of the service. The valid values are <code>ACTIVE</code>, <code>DRAINING</code>, or <code>INACTIVE</code>.</p>"]
     #[serde(rename="status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
     #[doc="<p>The task definition to use for tasks in the service. This value is specified when the service is created with <a>CreateService</a>, and it can be modified with <a>UpdateService</a>.</p>"]
     #[serde(rename="taskDefinition")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_definition: Option<String>,
 }
 
@@ -1081,12 +1295,15 @@ pub struct Service {
 pub struct ServiceEvent {
     #[doc="<p>The Unix timestamp for when the event was triggered.</p>"]
     #[serde(rename="createdAt")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub created_at: Option<Timestamp>,
     #[doc="<p>The ID string of the event.</p>"]
     #[serde(rename="id")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<String>,
     #[doc="<p>The event message.</p>"]
     #[serde(rename="message")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<String>,
 }
 
@@ -1097,18 +1314,22 @@ pub type SortOrder = String;
 pub struct StartTaskRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster on which to start your task. If you do not specify a cluster, the default cluster is assumed.</p>"]
     #[serde(rename="cluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster: Option<String>,
     #[doc="<p>The container instance IDs or full Amazon Resource Name (ARN) entries for the container instances on which you would like to place your task. You can specify up to 10 container instances.</p>"]
     #[serde(rename="containerInstances")]
     pub container_instances: StringList,
     #[doc="<p>The name of the task group to associate with the task. The default value is the family name of the task definition (for example, family:my-family-name).</p>"]
     #[serde(rename="group")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group: Option<String>,
     #[doc="<p>A list of container overrides in JSON format that specify the name of a container in the specified task definition and the overrides it should receive. You can override the default command for a container (that is specified in the task definition or Docker image) with a <code>command</code> override. You can also override existing environment variables (that are specified in the task definition or Docker image) on a container or add new environment variables to it with an <code>environment</code> override.</p> <note> <p>A total of 8192 characters are allowed for overrides. This limit includes the JSON formatting characters of the override structure.</p> </note>"]
     #[serde(rename="overrides")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub overrides: Option<TaskOverride>,
     #[doc="<p>An optional tag specified when a task is started. For example if you automatically trigger a task to run a batch process job, you could apply a unique identifier for that job to your task with the <code>startedBy</code> parameter. You can then identify which tasks belong to that job by filtering the results of a <a>ListTasks</a> call with the <code>startedBy</code> value. Up to 36 letters (uppercase and lowercase), numbers, hyphens, and underscores are allowed.</p> <p>If a task is started by an Amazon ECS service, then the <code>startedBy</code> parameter contains the deployment ID of the service that starts it.</p>"]
     #[serde(rename="startedBy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub started_by: Option<String>,
     #[doc="<p>The <code>family</code> and <code>revision</code> (<code>family:revision</code>) or full Amazon Resource Name (ARN) of the task definition to start. If a <code>revision</code> is not specified, the latest <code>ACTIVE</code> revision is used.</p>"]
     #[serde(rename="taskDefinition")]
@@ -1119,9 +1340,11 @@ pub struct StartTaskRequest {
 pub struct StartTaskResponse {
     #[doc="<p>Any failures associated with the call.</p>"]
     #[serde(rename="failures")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub failures: Option<Failures>,
     #[doc="<p>A full description of the tasks that were started. Each task that was successfully placed on your container instances are described here.</p>"]
     #[serde(rename="tasks")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tasks: Option<Tasks>,
 }
 
@@ -1129,9 +1352,11 @@ pub struct StartTaskResponse {
 pub struct StopTaskRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the task to stop. If you do not specify a cluster, the default cluster is assumed.</p>"]
     #[serde(rename="cluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster: Option<String>,
     #[doc="<p>An optional message specified when a task is stopped. For example, if you are using a custom scheduler, you can use this parameter to specify the reason for stopping the task here, and the message will appear in subsequent <a>DescribeTasks</a> API operations on this task. Up to 255 characters are allowed in this message.</p>"]
     #[serde(rename="reason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reason: Option<String>,
     #[doc="<p>The task ID or full Amazon Resource Name (ARN) entry of the task to stop.</p>"]
     #[serde(rename="task")]
@@ -1142,6 +1367,7 @@ pub struct StopTaskRequest {
 pub struct StopTaskResponse {
     #[doc="<p>The task that was stopped.</p>"]
     #[serde(rename="task")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task: Option<Task>,
 }
 
@@ -1150,24 +1376,31 @@ pub type StringList = Vec<String>;
 pub struct SubmitContainerStateChangeRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the container.</p>"]
     #[serde(rename="cluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster: Option<String>,
     #[doc="<p>The name of the container.</p>"]
     #[serde(rename="containerName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub container_name: Option<String>,
     #[doc="<p>The exit code returned for the state change request.</p>"]
     #[serde(rename="exitCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub exit_code: Option<BoxedInteger>,
     #[doc="<p>The network bindings of the container.</p>"]
     #[serde(rename="networkBindings")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_bindings: Option<NetworkBindings>,
     #[doc="<p>The reason for the state change request.</p>"]
     #[serde(rename="reason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reason: Option<String>,
     #[doc="<p>The status of the state change request.</p>"]
     #[serde(rename="status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
     #[doc="<p>The task ID or full Amazon Resource Name (ARN) of the task that hosts the container.</p>"]
     #[serde(rename="task")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task: Option<String>,
 }
 
@@ -1175,6 +1408,7 @@ pub struct SubmitContainerStateChangeRequest {
 pub struct SubmitContainerStateChangeResponse {
     #[doc="<p>Acknowledgement of the state change.</p>"]
     #[serde(rename="acknowledgment")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub acknowledgment: Option<String>,
 }
 
@@ -1182,15 +1416,19 @@ pub struct SubmitContainerStateChangeResponse {
 pub struct SubmitTaskStateChangeRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the task.</p>"]
     #[serde(rename="cluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster: Option<String>,
     #[doc="<p>The reason for the state change request.</p>"]
     #[serde(rename="reason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reason: Option<String>,
     #[doc="<p>The status of the state change request.</p>"]
     #[serde(rename="status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<String>,
     #[doc="<p>The task ID or full Amazon Resource Name (ARN) of the task in the state change request.</p>"]
     #[serde(rename="task")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task: Option<String>,
 }
 
@@ -1198,6 +1436,7 @@ pub struct SubmitTaskStateChangeRequest {
 pub struct SubmitTaskStateChangeResponse {
     #[doc="<p>Acknowledgement of the state change.</p>"]
     #[serde(rename="acknowledgment")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub acknowledgment: Option<String>,
 }
 
@@ -1207,48 +1446,63 @@ pub type TargetType = String;
 pub struct Task {
     #[doc="<p>The Amazon Resource Name (ARN) of the cluster that hosts the task.</p>"]
     #[serde(rename="clusterArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_arn: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the container instances that host the task.</p>"]
     #[serde(rename="containerInstanceArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub container_instance_arn: Option<String>,
     #[doc="<p>The containers associated with the task.</p>"]
     #[serde(rename="containers")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub containers: Option<Containers>,
     #[doc="<p>The Unix timestamp for when the task was created (the task entered the <code>PENDING</code> state).</p>"]
     #[serde(rename="createdAt")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub created_at: Option<Timestamp>,
     #[doc="<p>The desired status of the task.</p>"]
     #[serde(rename="desiredStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub desired_status: Option<String>,
     #[doc="<p>The name of the task group associated with the task.</p>"]
     #[serde(rename="group")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group: Option<String>,
     #[doc="<p>The last known status of the task.</p>"]
     #[serde(rename="lastStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_status: Option<String>,
     #[doc="<p>One or more container overrides.</p>"]
     #[serde(rename="overrides")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub overrides: Option<TaskOverride>,
     #[doc="<p>The Unix timestamp for when the task was started (the task transitioned from the <code>PENDING</code> state to the <code>RUNNING</code> state).</p>"]
     #[serde(rename="startedAt")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub started_at: Option<Timestamp>,
     #[doc="<p>The tag specified when a task is started. If the task is started by an Amazon ECS service, then the <code>startedBy</code> parameter contains the deployment ID of the service that starts it.</p>"]
     #[serde(rename="startedBy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub started_by: Option<String>,
     #[doc="<p>The Unix timestamp for when the task was stopped (the task transitioned from the <code>RUNNING</code> state to the <code>STOPPED</code> state).</p>"]
     #[serde(rename="stoppedAt")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub stopped_at: Option<Timestamp>,
     #[doc="<p>The reason the task was stopped.</p>"]
     #[serde(rename="stoppedReason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub stopped_reason: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the task.</p>"]
     #[serde(rename="taskArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_arn: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the task definition that creates the task.</p>"]
     #[serde(rename="taskDefinitionArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_definition_arn: Option<String>,
     #[doc="<p>The version counter for the task. Every time a task experiences a change that triggers a CloudWatch event, the version counter is incremented. If you are replicating your Amazon ECS task state with CloudWatch events, you can compare the version of a task reported by the Amazon ECS APIs with the version reported in CloudWatch events for the task (inside the <code>detail</code> object) to verify that the version in your event stream is current.</p>"]
     #[serde(rename="version")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version: Option<Long>,
 }
 
@@ -1257,33 +1511,43 @@ pub struct Task {
 pub struct TaskDefinition {
     #[doc="<p>A list of container definitions in JSON format that describe the different containers that make up your task. For more information about container definition parameters and defaults, see <a href=\"http://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_defintions.html\">Amazon ECS Task Definitions</a> in the <i>Amazon EC2 Container Service Developer Guide</i>.</p>"]
     #[serde(rename="containerDefinitions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub container_definitions: Option<ContainerDefinitions>,
     #[doc="<p>The family of your task definition, used as the definition name.</p>"]
     #[serde(rename="family")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub family: Option<String>,
     #[doc="<p>The Docker networking mode to use for the containers in the task. The valid values are <code>none</code>, <code>bridge</code>, and <code>host</code>. </p> <p>If the network mode is <code>none</code>, the containers do not have external connectivity. The default Docker network mode is <code>bridge</code>. The <code>host</code> network mode offers the highest networking performance for containers because it uses the host network stack instead of the virtualized network stack provided by the <code>bridge</code> mode.</p> <p>For more information, see <a href=\"https://docs.docker.com/engine/reference/run/#network-settings\">Network settings</a> in the <i>Docker run reference</i>.</p>"]
     #[serde(rename="networkMode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_mode: Option<NetworkMode>,
     #[doc="<p>An array of placement constraint objects to use for tasks. </p>"]
     #[serde(rename="placementConstraints")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub placement_constraints: Option<TaskDefinitionPlacementConstraints>,
     #[doc="<p>The container instance attributes required by your task.</p>"]
     #[serde(rename="requiresAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub requires_attributes: Option<RequiresAttributes>,
     #[doc="<p>The revision of the task in a particular family. The revision is a version number of a task definition in a family. When you register a task definition for the first time, the revision is <code>1</code>; each time you register a new revision of a task definition in the same family, the revision value always increases by one (even if you have deregistered previous revisions in this family).</p>"]
     #[serde(rename="revision")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub revision: Option<Integer>,
     #[doc="<p>The status of the task definition.</p>"]
     #[serde(rename="status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<TaskDefinitionStatus>,
     #[doc="<p>The full Amazon Resource Name (ARN) of the task definition.</p>"]
     #[serde(rename="taskDefinitionArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_definition_arn: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM role that containers in this task can assume. All containers in this task are granted the permissions that are specified in this role.</p>"]
     #[serde(rename="taskRoleArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_role_arn: Option<String>,
     #[doc="<p>The list of volumes in a task. For more information about volume definition parameters and defaults, see <a href=\"http://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_defintions.html\">Amazon ECS Task Definitions</a> in the <i>Amazon EC2 Container Service Developer Guide</i>.</p>"]
     #[serde(rename="volumes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volumes: Option<VolumeList>,
 }
 
@@ -1293,9 +1557,11 @@ pub type TaskDefinitionFamilyStatus = String;
 pub struct TaskDefinitionPlacementConstraint {
     #[doc="<p>A cluster query language expression to apply to the constraint. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonECS/latest/developerguide/cluster-query-language.html\">Cluster Query Language</a> in the <i>Amazon EC2 Container Service Developer Guide</i>.</p>"]
     #[serde(rename="expression")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub expression: Option<String>,
     #[doc="<p>The type of constraint. The <code>DistinctInstance</code> constraint ensures that each task in a particular group is running on a different container instance. The <code>MemberOf</code> constraint restricts selection to be from a group of valid candidates.</p>"]
     #[serde(rename="type")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<TaskDefinitionPlacementConstraintType>,
 }
 
@@ -1307,9 +1573,11 @@ pub type TaskDefinitionStatus = String;
 pub struct TaskOverride {
     #[doc="<p>One or more container overrides sent to a task.</p>"]
     #[serde(rename="containerOverrides")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub container_overrides: Option<ContainerOverrides>,
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM role that containers in this task can assume. All containers in this task are granted the permissions that are specified in this role.</p>"]
     #[serde(rename="taskRoleArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_role_arn: Option<String>,
 }
 
@@ -1336,6 +1604,7 @@ pub type UlimitName = String;
 pub struct UpdateContainerAgentRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster that your container instance is running on. If you do not specify a cluster, the default cluster is assumed.</p>"]
     #[serde(rename="cluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster: Option<String>,
     #[doc="<p>The container instance ID or full Amazon Resource Name (ARN) entries for the container instance on which you would like to update the Amazon ECS container agent.</p>"]
     #[serde(rename="containerInstance")]
@@ -1346,6 +1615,7 @@ pub struct UpdateContainerAgentRequest {
 pub struct UpdateContainerAgentResponse {
     #[doc="<p>The container instance for which the container agent was updated.</p>"]
     #[serde(rename="containerInstance")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub container_instance: Option<ContainerInstance>,
 }
 
@@ -1353,6 +1623,7 @@ pub struct UpdateContainerAgentResponse {
 pub struct UpdateContainerInstancesStateRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the container instance to update. If you do not specify a cluster, the default cluster is assumed.</p>"]
     #[serde(rename="cluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster: Option<String>,
     #[doc="<p>A list of container instance IDs or full Amazon Resource Name (ARN) entries.</p>"]
     #[serde(rename="containerInstances")]
@@ -1366,9 +1637,11 @@ pub struct UpdateContainerInstancesStateRequest {
 pub struct UpdateContainerInstancesStateResponse {
     #[doc="<p>The list of container instances.</p>"]
     #[serde(rename="containerInstances")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub container_instances: Option<ContainerInstances>,
     #[doc="<p>Any failures associated with the call.</p>"]
     #[serde(rename="failures")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub failures: Option<Failures>,
 }
 
@@ -1376,18 +1649,22 @@ pub struct UpdateContainerInstancesStateResponse {
 pub struct UpdateServiceRequest {
     #[doc="<p>The short name or full Amazon Resource Name (ARN) of the cluster that your service is running on. If you do not specify a cluster, the default cluster is assumed.</p>"]
     #[serde(rename="cluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster: Option<String>,
     #[doc="<p>Optional deployment parameters that control how many tasks run during the deployment and the ordering of stopping and starting tasks.</p>"]
     #[serde(rename="deploymentConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_configuration: Option<DeploymentConfiguration>,
     #[doc="<p>The number of instantiations of the task to place and keep running in your service.</p>"]
     #[serde(rename="desiredCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub desired_count: Option<BoxedInteger>,
     #[doc="<p>The name of the service to update.</p>"]
     #[serde(rename="service")]
     pub service: String,
     #[doc="<p>The <code>family</code> and <code>revision</code> (<code>family:revision</code>) or full Amazon Resource Name (ARN) of the task definition to run in your service. If a <code>revision</code> is not specified, the latest <code>ACTIVE</code> revision is used. If you modify the task definition with <code>UpdateService</code>, Amazon ECS spawns a task with the new version of the task definition and then stops an old task after the new version is running.</p>"]
     #[serde(rename="taskDefinition")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_definition: Option<String>,
 }
 
@@ -1395,6 +1672,7 @@ pub struct UpdateServiceRequest {
 pub struct UpdateServiceResponse {
     #[doc="<p>The full description of your service following the update call.</p>"]
     #[serde(rename="service")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub service: Option<Service>,
 }
 
@@ -1403,12 +1681,15 @@ pub struct UpdateServiceResponse {
 pub struct VersionInfo {
     #[doc="<p>The Git commit hash for the Amazon ECS container agent build on the <a href=\"https://github.com/aws/amazon-ecs-agent/commits/master\">amazon-ecs-agent </a> GitHub repository.</p>"]
     #[serde(rename="agentHash")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub agent_hash: Option<String>,
     #[doc="<p>The version number of the Amazon ECS container agent.</p>"]
     #[serde(rename="agentVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub agent_version: Option<String>,
     #[doc="<p>The Docker version running on the container instance.</p>"]
     #[serde(rename="dockerVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub docker_version: Option<String>,
 }
 
@@ -1417,9 +1698,11 @@ pub struct VersionInfo {
 pub struct Volume {
     #[doc="<p>The contents of the <code>host</code> parameter determine whether your data volume persists on the host container instance and where it is stored. If the host parameter is empty, then the Docker daemon assigns a host path for your data volume, but the data is not guaranteed to persist after the containers associated with it stop running.</p>"]
     #[serde(rename="host")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub host: Option<HostVolumeProperties>,
     #[doc="<p>The name of the volume. Up to 255 letters (uppercase and lowercase), numbers, hyphens, and underscores are allowed. This name is referenced in the <code>sourceVolume</code> parameter of container definition <code>mountPoints</code>.</p>"]
     #[serde(rename="name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
 }
 
@@ -1428,10 +1711,11 @@ pub struct Volume {
 pub struct VolumeFrom {
     #[doc="<p>If this value is <code>true</code>, the container has read-only access to the volume. If this value is <code>false</code>, then the container can write to the volume. The default value is <code>false</code>.</p>"]
     #[serde(rename="readOnly")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub read_only: Option<BoxedBoolean>,
     #[doc="<p>The name of another container within the same task definition to mount volumes from.</p>"]
     #[serde(rename="sourceContainer")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_container: Option<String>,
 }
 

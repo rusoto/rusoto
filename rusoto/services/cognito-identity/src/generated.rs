@@ -24,13 +24,15 @@ pub type ClaimValue = String;
 pub struct CognitoIdentityProvider {
     #[doc="<p>The client ID for the Amazon Cognito Identity User Pool.</p>"]
     #[serde(rename="ClientId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_id: Option<CognitoIdentityProviderClientId>,
     #[doc="<p>The provider name for an Amazon Cognito Identity User Pool. For example, <code>cognito-idp.us-east-1.amazonaws.com/us-east-1_123456789</code>.</p>"]
     #[serde(rename="ProviderName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub provider_name: Option<CognitoIdentityProviderName>,
     #[doc="<p>TRUE if server-side token validation is enabled for the identity provider’s token.</p>"]
     #[serde(rename="ServerSideTokenCheck")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub server_side_token_check: Option<CognitoIdentityProviderTokenCheck>,
 }
 
@@ -46,21 +48,26 @@ pub struct CreateIdentityPoolInput {
     pub allow_unauthenticated_identities: IdentityPoolUnauthenticated,
     #[doc="<p>An array of Amazon Cognito Identity user pools and their client IDs.</p>"]
     #[serde(rename="CognitoIdentityProviders")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cognito_identity_providers: Option<CognitoIdentityProviderList>,
     #[doc="<p>The \"domain\" by which Cognito will refer to your users. This name acts as a placeholder that allows your backend and the Cognito service to communicate about the developer provider. For the <code>DeveloperProviderName</code>, you can use letters as well as period (<code>.</code>), underscore (<code>_</code>), and dash (<code>-</code>).</p> <p>Once you have set a developer provider name, you cannot change it. Please take care in setting this parameter.</p>"]
     #[serde(rename="DeveloperProviderName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub developer_provider_name: Option<DeveloperProviderName>,
     #[doc="<p>A string that you provide.</p>"]
     #[serde(rename="IdentityPoolName")]
     pub identity_pool_name: IdentityPoolName,
     #[doc="<p>A list of OpendID Connect provider ARNs.</p>"]
     #[serde(rename="OpenIdConnectProviderARNs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub open_id_connect_provider_ar_ns: Option<OIDCProviderList>,
     #[doc="<p>An array of Amazon Resource Names (ARNs) of the SAML provider for your identity pool.</p>"]
     #[serde(rename="SamlProviderARNs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub saml_provider_ar_ns: Option<SAMLProviderList>,
     #[doc="<p>Optional key:value pairs mapping provider names to provider app IDs.</p>"]
     #[serde(rename="SupportedLoginProviders")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub supported_login_providers: Option<IdentityProviders>,
 }
 
@@ -69,15 +76,19 @@ pub struct CreateIdentityPoolInput {
 pub struct Credentials {
     #[doc="<p>The Access Key portion of the credentials.</p>"]
     #[serde(rename="AccessKeyId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub access_key_id: Option<AccessKeyString>,
     #[doc="<p>The date at which these credentials will expire.</p>"]
     #[serde(rename="Expiration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub expiration: Option<DateType>,
     #[doc="<p>The Secret Access Key portion of the credentials</p>"]
     #[serde(rename="SecretKey")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub secret_key: Option<SecretKeyString>,
     #[doc="<p>The Session Token portion of the credentials</p>"]
     #[serde(rename="SessionToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub session_token: Option<SessionTokenString>,
 }
 
@@ -95,6 +106,7 @@ pub struct DeleteIdentitiesInput {
 pub struct DeleteIdentitiesResponse {
     #[doc="<p>An array of UnprocessedIdentityId objects, each of which contains an ErrorCode and IdentityId.</p>"]
     #[serde(rename="UnprocessedIdentityIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub unprocessed_identity_ids: Option<UnprocessedIdentityIdList>,
 }
 
@@ -131,12 +143,14 @@ pub type ErrorCode = String;
 pub struct GetCredentialsForIdentityInput {
     #[doc="<p>The Amazon Resource Name (ARN) of the role to be assumed when multiple roles were received in the token from the identity provider. For example, a SAML-based identity provider. This parameter is optional for identity providers that do not support role customization.</p>"]
     #[serde(rename="CustomRoleArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub custom_role_arn: Option<ARNString>,
     #[doc="<p>A unique identifier in the format REGION:GUID.</p>"]
     #[serde(rename="IdentityId")]
     pub identity_id: IdentityId,
     #[doc="<p>A set of optional name-value pairs that map provider names to provider tokens.</p>"]
     #[serde(rename="Logins")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub logins: Option<LoginsMap>,
 }
 
@@ -145,9 +159,11 @@ pub struct GetCredentialsForIdentityInput {
 pub struct GetCredentialsForIdentityResponse {
     #[doc="<p>Credentials for the provided identity ID.</p>"]
     #[serde(rename="Credentials")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub credentials: Option<Credentials>,
     #[doc="<p>A unique identifier in the format REGION:GUID.</p>"]
     #[serde(rename="IdentityId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub identity_id: Option<IdentityId>,
 }
 
@@ -156,12 +172,14 @@ pub struct GetCredentialsForIdentityResponse {
 pub struct GetIdInput {
     #[doc="<p>A standard AWS account ID (9+ digits).</p>"]
     #[serde(rename="AccountId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub account_id: Option<AccountId>,
     #[doc="<p>An identity pool ID in the format REGION:GUID.</p>"]
     #[serde(rename="IdentityPoolId")]
     pub identity_pool_id: IdentityPoolId,
     #[doc="<p>A set of optional name-value pairs that map provider names to provider tokens. The available provider names for <code>Logins</code> are as follows:</p> <ul> <li> <p>Facebook: <code>graph.facebook.com</code> </p> </li> <li> <p>Amazon Cognito Identity Provider: <code>cognito-idp.us-east-1.amazonaws.com/us-east-1_123456789</code> </p> </li> <li> <p>Google: <code>accounts.google.com</code> </p> </li> <li> <p>Amazon: <code>www.amazon.com</code> </p> </li> <li> <p>Twitter: <code>api.twitter.com</code> </p> </li> <li> <p>Digits: <code>www.digits.com</code> </p> </li> </ul>"]
     #[serde(rename="Logins")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub logins: Option<LoginsMap>,
 }
 
@@ -170,6 +188,7 @@ pub struct GetIdInput {
 pub struct GetIdResponse {
     #[doc="<p>A unique identifier in the format REGION:GUID.</p>"]
     #[serde(rename="IdentityId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub identity_id: Option<IdentityId>,
 }
 
@@ -186,12 +205,15 @@ pub struct GetIdentityPoolRolesInput {
 pub struct GetIdentityPoolRolesResponse {
     #[doc="<p>An identity pool ID in the format REGION:GUID.</p>"]
     #[serde(rename="IdentityPoolId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub identity_pool_id: Option<IdentityPoolId>,
     #[doc="<p>How users for a specific identity provider are to mapped to roles. This is a String-to-<a>RoleMapping</a> object map. The string identifies the identity provider, for example, \"graph.facebook.com\" or \"cognito-idp-east-1.amazonaws.com/us-east-1_abcdefghi:app_client_id\".</p>"]
     #[serde(rename="RoleMappings")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub role_mappings: Option<RoleMappingMap>,
     #[doc="<p>The map of roles associated with this pool. Currently only authenticated and unauthenticated roles are supported.</p>"]
     #[serde(rename="Roles")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub roles: Option<RolesMap>,
 }
 
@@ -200,6 +222,7 @@ pub struct GetIdentityPoolRolesResponse {
 pub struct GetOpenIdTokenForDeveloperIdentityInput {
     #[doc="<p>A unique identifier in the format REGION:GUID.</p>"]
     #[serde(rename="IdentityId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub identity_id: Option<IdentityId>,
     #[doc="<p>An identity pool ID in the format REGION:GUID.</p>"]
     #[serde(rename="IdentityPoolId")]
@@ -209,6 +232,7 @@ pub struct GetOpenIdTokenForDeveloperIdentityInput {
     pub logins: LoginsMap,
     #[doc="<p>The expiration time of the token, in seconds. You can specify a custom expiration time for the token so that you can cache it. If you don't provide an expiration time, the token is valid for 15 minutes. You can exchange the token with Amazon STS for temporary AWS credentials, which are valid for a maximum of one hour. The maximum token duration you can set is 24 hours. You should take care in setting the expiration time for a token, as there are significant security implications: an attacker could use a leaked token to access your AWS resources for the token's duration.</p>"]
     #[serde(rename="TokenDuration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub token_duration: Option<TokenDuration>,
 }
 
@@ -217,9 +241,11 @@ pub struct GetOpenIdTokenForDeveloperIdentityInput {
 pub struct GetOpenIdTokenForDeveloperIdentityResponse {
     #[doc="<p>A unique identifier in the format REGION:GUID.</p>"]
     #[serde(rename="IdentityId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub identity_id: Option<IdentityId>,
     #[doc="<p>An OpenID token.</p>"]
     #[serde(rename="Token")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub token: Option<OIDCToken>,
 }
 
@@ -231,6 +257,7 @@ pub struct GetOpenIdTokenInput {
     pub identity_id: IdentityId,
     #[doc="<p>A set of optional name-value pairs that map provider names to provider tokens. When using graph.facebook.com and www.amazon.com, supply the access_token returned from the provider's authflow. For accounts.google.com, an Amazon Cognito Identity Provider, or any other OpenId Connect provider, always include the <code>id_token</code>.</p>"]
     #[serde(rename="Logins")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub logins: Option<LoginsMap>,
 }
 
@@ -239,9 +266,11 @@ pub struct GetOpenIdTokenInput {
 pub struct GetOpenIdTokenResponse {
     #[doc="<p>A unique identifier in the format REGION:GUID. Note that the IdentityId returned may not match the one passed on input.</p>"]
     #[serde(rename="IdentityId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub identity_id: Option<IdentityId>,
     #[doc="<p>An OpenID token, valid for 15 minutes.</p>"]
     #[serde(rename="Token")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub token: Option<OIDCToken>,
 }
 
@@ -252,15 +281,19 @@ pub type IdentitiesList = Vec<IdentityDescription>;
 pub struct IdentityDescription {
     #[doc="<p>Date on which the identity was created.</p>"]
     #[serde(rename="CreationDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub creation_date: Option<DateType>,
     #[doc="<p>A unique identifier in the format REGION:GUID.</p>"]
     #[serde(rename="IdentityId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub identity_id: Option<IdentityId>,
     #[doc="<p>Date on which the identity was last modified.</p>"]
     #[serde(rename="LastModifiedDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_modified_date: Option<DateType>,
     #[doc="<p>A set of optional name-value pairs that map provider names to provider tokens.</p>"]
     #[serde(rename="Logins")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub logins: Option<LoginsList>,
 }
 
@@ -274,9 +307,11 @@ pub struct IdentityPool {
     pub allow_unauthenticated_identities: IdentityPoolUnauthenticated,
     #[doc="<p>A list representing an Amazon Cognito Identity User Pool and its client ID.</p>"]
     #[serde(rename="CognitoIdentityProviders")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cognito_identity_providers: Option<CognitoIdentityProviderList>,
     #[doc="<p>The \"domain\" by which Cognito will refer to your users.</p>"]
     #[serde(rename="DeveloperProviderName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub developer_provider_name: Option<DeveloperProviderName>,
     #[doc="<p>An identity pool ID in the format REGION:GUID.</p>"]
     #[serde(rename="IdentityPoolId")]
@@ -286,12 +321,15 @@ pub struct IdentityPool {
     pub identity_pool_name: IdentityPoolName,
     #[doc="<p>A list of OpendID Connect provider ARNs.</p>"]
     #[serde(rename="OpenIdConnectProviderARNs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub open_id_connect_provider_ar_ns: Option<OIDCProviderList>,
     #[doc="<p>An array of Amazon Resource Names (ARNs) of the SAML provider for your identity pool.</p>"]
     #[serde(rename="SamlProviderARNs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub saml_provider_ar_ns: Option<SAMLProviderList>,
     #[doc="<p>Optional key:value pairs mapping provider names to provider app IDs.</p>"]
     #[serde(rename="SupportedLoginProviders")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub supported_login_providers: Option<IdentityProviders>,
 }
 
@@ -302,9 +340,11 @@ pub type IdentityPoolName = String;
 pub struct IdentityPoolShortDescription {
     #[doc="<p>An identity pool ID in the format REGION:GUID.</p>"]
     #[serde(rename="IdentityPoolId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub identity_pool_id: Option<IdentityPoolId>,
     #[doc="<p>A string that you provide.</p>"]
     #[serde(rename="IdentityPoolName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub identity_pool_name: Option<IdentityPoolName>,
 }
 
@@ -319,7 +359,7 @@ pub type IdentityProviders = ::std::collections::HashMap<IdentityProviderName, I
 pub struct ListIdentitiesInput {
     #[doc="<p>An optional boolean parameter that allows you to hide disabled identities. If omitted, the ListIdentities API will include disabled identities in the response.</p>"]
     #[serde(rename="HideDisabled")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hide_disabled: Option<HideDisabled>,
     #[doc="<p>An identity pool ID in the format REGION:GUID.</p>"]
     #[serde(rename="IdentityPoolId")]
@@ -329,6 +369,7 @@ pub struct ListIdentitiesInput {
     pub max_results: QueryLimit,
     #[doc="<p>A pagination token.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<PaginationKey>,
 }
 
@@ -337,12 +378,15 @@ pub struct ListIdentitiesInput {
 pub struct ListIdentitiesResponse {
     #[doc="<p>An object containing a set of identities and associated mappings.</p>"]
     #[serde(rename="Identities")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub identities: Option<IdentitiesList>,
     #[doc="<p>An identity pool ID in the format REGION:GUID.</p>"]
     #[serde(rename="IdentityPoolId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub identity_pool_id: Option<IdentityPoolId>,
     #[doc="<p>A pagination token.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<PaginationKey>,
 }
 
@@ -354,6 +398,7 @@ pub struct ListIdentityPoolsInput {
     pub max_results: QueryLimit,
     #[doc="<p>A pagination token.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<PaginationKey>,
 }
 
@@ -362,9 +407,11 @@ pub struct ListIdentityPoolsInput {
 pub struct ListIdentityPoolsResponse {
     #[doc="<p>The identity pools returned by the ListIdentityPools action.</p>"]
     #[serde(rename="IdentityPools")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub identity_pools: Option<IdentityPoolsList>,
     #[doc="<p>A pagination token.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<PaginationKey>,
 }
 
@@ -375,18 +422,22 @@ pub type LoginsMap = ::std::collections::HashMap<IdentityProviderName, IdentityP
 pub struct LookupDeveloperIdentityInput {
     #[doc="<p>A unique ID used by your backend authentication process to identify a user. Typically, a developer identity provider would issue many developer user identifiers, in keeping with the number of users.</p>"]
     #[serde(rename="DeveloperUserIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub developer_user_identifier: Option<DeveloperUserIdentifier>,
     #[doc="<p>A unique identifier in the format REGION:GUID.</p>"]
     #[serde(rename="IdentityId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub identity_id: Option<IdentityId>,
     #[doc="<p>An identity pool ID in the format REGION:GUID.</p>"]
     #[serde(rename="IdentityPoolId")]
     pub identity_pool_id: IdentityPoolId,
     #[doc="<p>The maximum number of identities to return.</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<QueryLimit>,
     #[doc="<p>A pagination token. The first call you make will have <code>NextToken</code> set to null. After that the service will return <code>NextToken</code> values as needed. For example, let's say you make a request with <code>MaxResults</code> set to 10, and there are 20 matches in the database. The service will return a pagination token as a part of the response. This token can be used to call the API again and get results starting from the 11th match.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<PaginationKey>,
 }
 
@@ -395,12 +446,15 @@ pub struct LookupDeveloperIdentityInput {
 pub struct LookupDeveloperIdentityResponse {
     #[doc="<p>This is the list of developer user identifiers associated with an identity ID. Cognito supports the association of multiple developer user identifiers with an identity ID.</p>"]
     #[serde(rename="DeveloperUserIdentifierList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub developer_user_identifier_list: Option<DeveloperUserIdentifierList>,
     #[doc="<p>A unique identifier in the format REGION:GUID.</p>"]
     #[serde(rename="IdentityId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub identity_id: Option<IdentityId>,
     #[doc="<p>A pagination token. The first call you make will have <code>NextToken</code> set to null. After that the service will return <code>NextToken</code> values as needed. For example, let's say you make a request with <code>MaxResults</code> set to 10, and there are 20 matches in the database. The service will return a pagination token as a part of the response. This token can be used to call the API again and get results starting from the 11th match.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<PaginationKey>,
 }
 
@@ -445,6 +499,7 @@ pub struct MergeDeveloperIdentitiesInput {
 pub struct MergeDeveloperIdentitiesResponse {
     #[doc="<p>A unique identifier in the format REGION:GUID.</p>"]
     #[serde(rename="IdentityId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub identity_id: Option<IdentityId>,
 }
 
@@ -457,9 +512,11 @@ pub type QueryLimit = i64;
 pub struct RoleMapping {
     #[doc="<p>If you specify Token or Rules as the <code>Type</code>, <code>AmbiguousRoleResolution</code> is required.</p> <p>Specifies the action to be taken if either no rules match the claim value for the <code>Rules</code> type, or there is no <code>cognito:preferred_role</code> claim and there are multiple <code>cognito:roles</code> matches for the <code>Token</code> type.</p>"]
     #[serde(rename="AmbiguousRoleResolution")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ambiguous_role_resolution: Option<AmbiguousRoleResolutionType>,
     #[doc="<p>The rules to be used for mapping users to roles.</p> <p>If you specify Rules as the role mapping type, <code>RulesConfiguration</code> is required.</p>"]
     #[serde(rename="RulesConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rules_configuration: Option<RulesConfigurationType>,
     #[doc="<p>The role mapping type. Token will use <code>cognito:roles</code> and <code>cognito:preferred_role</code> claims from the Cognito identity provider token to map groups to roles. Rules will attempt to match claims from the token to map to a role.</p>"]
     #[serde(rename="Type")]
@@ -489,6 +546,7 @@ pub struct SetIdentityPoolRolesInput {
     pub identity_pool_id: IdentityPoolId,
     #[doc="<p>How users for a specific identity provider are to mapped to roles. This is a string to <a>RoleMapping</a> object map. The string identifies the identity provider, for example, \"graph.facebook.com\" or \"cognito-idp-east-1.amazonaws.com/us-east-1_abcdefghi:app_client_id\".</p> <p>Up to 25 rules can be specified per identity provider.</p>"]
     #[serde(rename="RoleMappings")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub role_mappings: Option<RoleMappingMap>,
     #[doc="<p>The map of roles associated with this pool. For a given role, the key will be either \"authenticated\" or \"unauthenticated\" and the value will be the Role ARN.</p>"]
     #[serde(rename="Roles")]
@@ -532,9 +590,11 @@ pub struct UnlinkIdentityInput {
 pub struct UnprocessedIdentityId {
     #[doc="<p>The error code indicating the type of error that occurred.</p>"]
     #[serde(rename="ErrorCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub error_code: Option<ErrorCode>,
     #[doc="<p>A unique identifier in the format REGION:GUID.</p>"]
     #[serde(rename="IdentityId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub identity_id: Option<IdentityId>,
 }
 

@@ -22,7 +22,7 @@ pub struct AcceptCertificateTransferRequest {
     pub certificate_id: CertificateId,
     #[doc="<p>Specifies whether the certificate is active.</p>"]
     #[serde(rename="setAsActive")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub set_as_active: Option<SetAsActive>,
 }
 
@@ -31,39 +31,51 @@ pub struct AcceptCertificateTransferRequest {
 pub struct Action {
     #[doc="<p>Change the state of a CloudWatch alarm.</p>"]
     #[serde(rename="cloudwatchAlarm")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cloudwatch_alarm: Option<CloudwatchAlarmAction>,
     #[doc="<p>Capture a CloudWatch metric.</p>"]
     #[serde(rename="cloudwatchMetric")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cloudwatch_metric: Option<CloudwatchMetricAction>,
     #[doc="<p>Write to a DynamoDB table.</p>"]
     #[serde(rename="dynamoDB")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dynamo_db: Option<DynamoDBAction>,
     #[doc="<p>Write to a DynamoDB table. This is a new version of the DynamoDB action. It allows you to write each attribute in an MQTT message payload into a separate DynamoDB column.</p>"]
     #[serde(rename="dynamoDBv2")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dynamo_d_bv_2: Option<DynamoDBv2Action>,
     #[doc="<p>Write data to an Amazon Elasticsearch Service domain.</p>"]
     #[serde(rename="elasticsearch")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub elasticsearch: Option<ElasticsearchAction>,
     #[doc="<p>Write to an Amazon Kinesis Firehose stream.</p>"]
     #[serde(rename="firehose")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub firehose: Option<FirehoseAction>,
     #[doc="<p>Write data to an Amazon Kinesis stream.</p>"]
     #[serde(rename="kinesis")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub kinesis: Option<KinesisAction>,
     #[doc="<p>Invoke a Lambda function.</p>"]
     #[serde(rename="lambda")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub lambda: Option<LambdaAction>,
     #[doc="<p>Publish to another MQTT topic.</p>"]
     #[serde(rename="republish")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub republish: Option<RepublishAction>,
     #[doc="<p>Write to an Amazon S3 bucket.</p>"]
     #[serde(rename="s3")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub s_3: Option<S3Action>,
     #[doc="<p>Publish to an Amazon SNS topic.</p>"]
     #[serde(rename="sns")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sns: Option<SnsAction>,
     #[doc="<p>Publish to an Amazon SQS queue.</p>"]
     #[serde(rename="sqs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sqs: Option<SqsAction>,
 }
 
@@ -103,10 +115,11 @@ pub type AttributeName = String;
 pub struct AttributePayload {
     #[doc="<p>A JSON string containing up to three key-value pair in JSON format. For example:</p> <p><code>{\\\"attributes\\\":{\\\"string1\\\":\\\"string2\\\"}})</code></p>"]
     #[serde(rename="attributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attributes: Option<Attributes>,
     #[doc="<p>Specifies whether the list of attributes provided in the <code>AttributePayload</code> is merged with the attributes stored in the registry, instead of overwriting them.</p> <p>To remove an attribute, call <code>UpdateThing</code> with an empty attribute value.</p> <note> <p>The <code>merge</code> attribute is only valid when calling <code>UpdateThing</code>.</p> </note>"]
     #[serde(rename="merge")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub merge: Option<Flag>,
 }
 
@@ -124,15 +137,19 @@ pub type BucketName = String;
 pub struct CACertificate {
     #[doc="<p>The ARN of the CA certificate.</p>"]
     #[serde(rename="certificateArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate_arn: Option<CertificateArn>,
     #[doc="<p>The ID of the CA certificate.</p>"]
     #[serde(rename="certificateId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate_id: Option<CertificateId>,
     #[doc="<p>The date the CA certificate was created.</p>"]
     #[serde(rename="creationDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub creation_date: Option<DateType>,
     #[doc="<p>The status of the CA certificate. </p> <p>The status value REGISTER_INACTIVE is deprecated and should not be used.</p>"]
     #[serde(rename="status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<CACertificateStatus>,
 }
 
@@ -141,24 +158,31 @@ pub struct CACertificate {
 pub struct CACertificateDescription {
     #[doc="<p>Whether the CA certificate configured for auto registration of device certificates. Valid values are \"ENABLE\" and \"DISABLE\"</p>"]
     #[serde(rename="autoRegistrationStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_registration_status: Option<AutoRegistrationStatus>,
     #[doc="<p>The CA certificate ARN.</p>"]
     #[serde(rename="certificateArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate_arn: Option<CertificateArn>,
     #[doc="<p>The CA certificate ID.</p>"]
     #[serde(rename="certificateId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate_id: Option<CertificateId>,
     #[doc="<p>The CA certificate data, in PEM format.</p>"]
     #[serde(rename="certificatePem")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate_pem: Option<CertificatePem>,
     #[doc="<p>The date the CA certificate was created.</p>"]
     #[serde(rename="creationDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub creation_date: Option<DateType>,
     #[doc="<p>The owner of the CA certificate.</p>"]
     #[serde(rename="ownedBy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owned_by: Option<AwsAccountId>,
     #[doc="<p>The status of a CA certificate.</p>"]
     #[serde(rename="status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<CACertificateStatus>,
 }
 
@@ -178,15 +202,19 @@ pub type CannedAccessControlList = String;
 pub struct Certificate {
     #[doc="<p>The ARN of the certificate.</p>"]
     #[serde(rename="certificateArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate_arn: Option<CertificateArn>,
     #[doc="<p>The ID of the certificate.</p>"]
     #[serde(rename="certificateId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate_id: Option<CertificateId>,
     #[doc="<p>The date and time the certificate was created.</p>"]
     #[serde(rename="creationDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub creation_date: Option<DateType>,
     #[doc="<p>The status of the certificate.</p> <p>The status value REGISTER_INACTIVE is deprecated and should not be used.</p>"]
     #[serde(rename="status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<CertificateStatus>,
 }
 
@@ -196,33 +224,43 @@ pub type CertificateArn = String;
 pub struct CertificateDescription {
     #[doc="<p>The certificate ID of the CA certificate used to sign this certificate.</p>"]
     #[serde(rename="caCertificateId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ca_certificate_id: Option<CertificateId>,
     #[doc="<p>The ARN of the certificate.</p>"]
     #[serde(rename="certificateArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate_arn: Option<CertificateArn>,
     #[doc="<p>The ID of the certificate.</p>"]
     #[serde(rename="certificateId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate_id: Option<CertificateId>,
     #[doc="<p>The certificate data, in PEM format.</p>"]
     #[serde(rename="certificatePem")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate_pem: Option<CertificatePem>,
     #[doc="<p>The date and time the certificate was created.</p>"]
     #[serde(rename="creationDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub creation_date: Option<DateType>,
     #[doc="<p>The date and time the certificate was last modified.</p>"]
     #[serde(rename="lastModifiedDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_modified_date: Option<DateType>,
     #[doc="<p>The ID of the AWS account that owns the certificate.</p>"]
     #[serde(rename="ownedBy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owned_by: Option<AwsAccountId>,
     #[doc="<p>The ID of the AWS account of the previous owner of the certificate.</p>"]
     #[serde(rename="previousOwnedBy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub previous_owned_by: Option<AwsAccountId>,
     #[doc="<p>The status of the certificate.</p>"]
     #[serde(rename="status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<CertificateStatus>,
     #[doc="<p>The transfer data.</p>"]
     #[serde(rename="transferData")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub transfer_data: Option<TransferData>,
 }
 
@@ -260,6 +298,7 @@ pub struct CloudwatchMetricAction {
     pub metric_namespace: MetricNamespace,
     #[doc="<p>An optional <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/cloudwatch_concepts.html#about_timestamp\">Unix timestamp</a>.</p>"]
     #[serde(rename="metricTimestamp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub metric_timestamp: Option<MetricTimestamp>,
     #[doc="<p>The <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/cloudwatch_concepts.html#Unit\">metric unit</a> supported by CloudWatch.</p>"]
     #[serde(rename="metricUnit")]
@@ -280,7 +319,7 @@ pub struct CreateCertificateFromCsrRequest {
     pub certificate_signing_request: CertificateSigningRequest,
     #[doc="<p>Specifies whether the certificate is active.</p>"]
     #[serde(rename="setAsActive")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub set_as_active: Option<SetAsActive>,
 }
 
@@ -289,12 +328,15 @@ pub struct CreateCertificateFromCsrRequest {
 pub struct CreateCertificateFromCsrResponse {
     #[doc="<p>The Amazon Resource Name (ARN) of the certificate. You can use the ARN as a principal for policy operations.</p>"]
     #[serde(rename="certificateArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate_arn: Option<CertificateArn>,
     #[doc="<p>The ID of the certificate. Certificate management operations only take a certificateId.</p>"]
     #[serde(rename="certificateId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate_id: Option<CertificateId>,
     #[doc="<p>The certificate data, in PEM format.</p>"]
     #[serde(rename="certificatePem")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate_pem: Option<CertificatePem>,
 }
 
@@ -303,7 +345,7 @@ pub struct CreateCertificateFromCsrResponse {
 pub struct CreateKeysAndCertificateRequest {
     #[doc="<p>Specifies whether the certificate is active.</p>"]
     #[serde(rename="setAsActive")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub set_as_active: Option<SetAsActive>,
 }
 
@@ -312,15 +354,19 @@ pub struct CreateKeysAndCertificateRequest {
 pub struct CreateKeysAndCertificateResponse {
     #[doc="<p>The ARN of the certificate.</p>"]
     #[serde(rename="certificateArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate_arn: Option<CertificateArn>,
     #[doc="<p>The ID of the certificate. AWS IoT issues a default subject name for the certificate (for example, AWS IoT Certificate).</p>"]
     #[serde(rename="certificateId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate_id: Option<CertificateId>,
     #[doc="<p>The certificate data, in PEM format.</p>"]
     #[serde(rename="certificatePem")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate_pem: Option<CertificatePem>,
     #[doc="<p>The generated key pair.</p>"]
     #[serde(rename="keyPair")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key_pair: Option<KeyPair>,
 }
 
@@ -340,15 +386,19 @@ pub struct CreatePolicyRequest {
 pub struct CreatePolicyResponse {
     #[doc="<p>The policy ARN.</p>"]
     #[serde(rename="policyArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_arn: Option<PolicyArn>,
     #[doc="<p>The JSON document that describes the policy.</p>"]
     #[serde(rename="policyDocument")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_document: Option<PolicyDocument>,
     #[doc="<p>The policy name.</p>"]
     #[serde(rename="policyName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_name: Option<PolicyName>,
     #[doc="<p>The policy version ID.</p>"]
     #[serde(rename="policyVersionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_version_id: Option<PolicyVersionId>,
 }
 
@@ -363,7 +413,7 @@ pub struct CreatePolicyVersionRequest {
     pub policy_name: PolicyName,
     #[doc="<p>Specifies whether the policy version is set as the default. When this parameter is true, the new policy version becomes the operative version (that is, the version that is in effect for the certificates to which the policy is attached).</p>"]
     #[serde(rename="setAsDefault")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub set_as_default: Option<SetAsDefault>,
 }
 
@@ -372,16 +422,19 @@ pub struct CreatePolicyVersionRequest {
 pub struct CreatePolicyVersionResponse {
     #[doc="<p>Specifies whether the policy version is the default.</p>"]
     #[serde(rename="isDefaultVersion")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_default_version: Option<IsDefaultVersion>,
     #[doc="<p>The policy ARN.</p>"]
     #[serde(rename="policyArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_arn: Option<PolicyArn>,
     #[doc="<p>The JSON document that describes the policy.</p>"]
     #[serde(rename="policyDocument")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_document: Option<PolicyDocument>,
     #[doc="<p>The policy version ID.</p>"]
     #[serde(rename="policyVersionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_version_id: Option<PolicyVersionId>,
 }
 
@@ -390,12 +443,14 @@ pub struct CreatePolicyVersionResponse {
 pub struct CreateThingRequest {
     #[doc="<p>The attribute payload, which consists of up to three name/value pairs in a JSON document. For example:</p> <p><code>{\\\"attributes\\\":{\\\"string1\\\":\\\"string2\\\"}})</code></p>"]
     #[serde(rename="attributePayload")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attribute_payload: Option<AttributePayload>,
     #[doc="<p>The name of the thing to create.</p>"]
     #[serde(rename="thingName")]
     pub thing_name: ThingName,
     #[doc="<p>The name of the thing type associated with the new thing.</p>"]
     #[serde(rename="thingTypeName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub thing_type_name: Option<ThingTypeName>,
 }
 
@@ -404,9 +459,11 @@ pub struct CreateThingRequest {
 pub struct CreateThingResponse {
     #[doc="<p>The ARN of the new thing.</p>"]
     #[serde(rename="thingArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub thing_arn: Option<ThingArn>,
     #[doc="<p>The name of the new thing.</p>"]
     #[serde(rename="thingName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub thing_name: Option<ThingName>,
 }
 
@@ -418,6 +475,7 @@ pub struct CreateThingTypeRequest {
     pub thing_type_name: ThingTypeName,
     #[doc="<p>The ThingTypeProperties for the thing type to create. It contains information about the new thing type including a description, and a list of searchable thing attribute names.</p>"]
     #[serde(rename="thingTypeProperties")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub thing_type_properties: Option<ThingTypeProperties>,
 }
 
@@ -426,9 +484,11 @@ pub struct CreateThingTypeRequest {
 pub struct CreateThingTypeResponse {
     #[doc="<p>The Amazon Resource Name (ARN) of the thing type.</p>"]
     #[serde(rename="thingTypeArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub thing_type_arn: Option<ThingTypeArn>,
     #[doc="<p>The name of the thing type.</p>"]
     #[serde(rename="thingTypeName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub thing_type_name: Option<ThingTypeName>,
 }
 
@@ -498,6 +558,7 @@ pub struct DeleteRegistrationCodeResponse;
 pub struct DeleteThingRequest {
     #[doc="<p>The expected version of the thing record in the registry. If the version of the record in the registry does not match the expected version specified in the request, the <code>DeleteThing</code> request is rejected with a <code>VersionConflictException</code>.</p>"]
     #[serde(rename="expectedVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub expected_version: Option<OptionalVersion>,
     #[doc="<p>The name of the thing to delete.</p>"]
     #[serde(rename="thingName")]
@@ -537,7 +598,7 @@ pub struct DeprecateThingTypeRequest {
     pub thing_type_name: ThingTypeName,
     #[doc="<p>Whether to undeprecate a deprecated thing type. If <b>true</b>, the thing type will not be deprecated anymore and you can associate it with things.</p>"]
     #[serde(rename="undoDeprecate")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub undo_deprecate: Option<UndoDeprecate>,
 }
 
@@ -559,6 +620,7 @@ pub struct DescribeCACertificateRequest {
 pub struct DescribeCACertificateResponse {
     #[doc="<p>The CA certificate description.</p>"]
     #[serde(rename="certificateDescription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate_description: Option<CACertificateDescription>,
 }
 
@@ -575,6 +637,7 @@ pub struct DescribeCertificateRequest {
 pub struct DescribeCertificateResponse {
     #[doc="<p>The description of the certificate.</p>"]
     #[serde(rename="certificateDescription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate_description: Option<CertificateDescription>,
 }
 
@@ -587,6 +650,7 @@ pub struct DescribeEndpointRequest;
 pub struct DescribeEndpointResponse {
     #[doc="<p>The endpoint. The format of the endpoint is as follows: <i>identifier</i>.iot.<i>region</i>.amazonaws.com.</p>"]
     #[serde(rename="endpointAddress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub endpoint_address: Option<EndpointAddress>,
 }
 
@@ -603,18 +667,23 @@ pub struct DescribeThingRequest {
 pub struct DescribeThingResponse {
     #[doc="<p>The thing attributes.</p>"]
     #[serde(rename="attributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attributes: Option<Attributes>,
     #[doc="<p>The default client ID.</p>"]
     #[serde(rename="defaultClientId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_client_id: Option<ClientId>,
     #[doc="<p>The name of the thing.</p>"]
     #[serde(rename="thingName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub thing_name: Option<ThingName>,
     #[doc="<p>The thing type name.</p>"]
     #[serde(rename="thingTypeName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub thing_type_name: Option<ThingTypeName>,
     #[doc="<p>The current version of the thing record in the registry.</p> <note> <p>To avoid unintentional changes to the information in the registry, you can pass the version information in the <code>expectedVersion</code> parameter of the <code>UpdateThing</code> and <code>DeleteThing</code> calls.</p> </note>"]
     #[serde(rename="version")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version: Option<Version>,
 }
 
@@ -630,12 +699,15 @@ pub struct DescribeThingTypeRequest {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DescribeThingTypeResponse {
     #[serde(rename="thingTypeMetadata")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub thing_type_metadata: Option<ThingTypeMetadata>,
     #[doc="<p>The name of the thing type.</p>"]
     #[serde(rename="thingTypeName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub thing_type_name: Option<ThingTypeName>,
     #[doc="<p>The ThingTypeProperties contains information about the thing type including description, and a list of searchable thing attribute names.</p>"]
     #[serde(rename="thingTypeProperties")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub thing_type_properties: Option<ThingTypeProperties>,
 }
 
@@ -682,24 +754,30 @@ pub struct DynamoDBAction {
     pub hash_key_field: HashKeyField,
     #[doc="<p>The hash key type. Valid values are \"STRING\" or \"NUMBER\"</p>"]
     #[serde(rename="hashKeyType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hash_key_type: Option<DynamoKeyType>,
     #[doc="<p>The hash key value.</p>"]
     #[serde(rename="hashKeyValue")]
     pub hash_key_value: HashKeyValue,
     #[doc="<p>The type of operation to be performed. This follows the substitution template, so it can be <code>${operation}</code>, but the substitution must result in one of the following: <code>INSERT</code>, <code>UPDATE</code>, or <code>DELETE</code>.</p>"]
     #[serde(rename="operation")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub operation: Option<DynamoOperation>,
     #[doc="<p>The action payload. This name can be customized.</p>"]
     #[serde(rename="payloadField")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub payload_field: Option<PayloadField>,
     #[doc="<p>The range key name.</p>"]
     #[serde(rename="rangeKeyField")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub range_key_field: Option<RangeKeyField>,
     #[doc="<p>The range key type. Valid values are \"STRING\" or \"NUMBER\"</p>"]
     #[serde(rename="rangeKeyType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub range_key_type: Option<DynamoKeyType>,
     #[doc="<p>The range key value.</p>"]
     #[serde(rename="rangeKeyValue")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub range_key_value: Option<RangeKeyValue>,
     #[doc="<p>The ARN of the IAM role that grants access to the DynamoDB table.</p>"]
     #[serde(rename="roleArn")]
@@ -714,9 +792,11 @@ pub struct DynamoDBAction {
 pub struct DynamoDBv2Action {
     #[doc="<p>Specifies the DynamoDB table to which the message data will be written. For example:</p> <p><code>{ \"dynamoDBv2\": { \"roleArn\": \"aws:iam:12341251:my-role\" \"putItem\": { \"tableName\": \"my-table\" } } }</code></p> <p>Each attribute in the message payload will be written to a separate column in the DynamoDB database.</p>"]
     #[serde(rename="putItem")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub put_item: Option<PutItemInput>,
     #[doc="<p>The ARN of the IAM role that grants access to the DynamoDB table.</p>"]
     #[serde(rename="roleArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub role_arn: Option<AwsArn>,
 }
 
@@ -767,6 +847,7 @@ pub struct FirehoseAction {
     pub role_arn: AwsArn,
     #[doc="<p>A character separator that will be used to separate records written to the Firehose stream. Valid values are: '\\n' (newline), '\\t' (tab), '\\r\\n' (Windows newline), ',' (comma).</p>"]
     #[serde(rename="separator")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub separator: Option<FirehoseSeparator>,
 }
 
@@ -782,9 +863,11 @@ pub struct GetLoggingOptionsRequest;
 pub struct GetLoggingOptionsResponse {
     #[doc="<p>The logging level.</p>"]
     #[serde(rename="logLevel")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub log_level: Option<LogLevel>,
     #[doc="<p>The ARN of the IAM role that grants access.</p>"]
     #[serde(rename="roleArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub role_arn: Option<AwsArn>,
 }
 
@@ -801,15 +884,19 @@ pub struct GetPolicyRequest {
 pub struct GetPolicyResponse {
     #[doc="<p>The default policy version ID.</p>"]
     #[serde(rename="defaultVersionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_version_id: Option<PolicyVersionId>,
     #[doc="<p>The policy ARN.</p>"]
     #[serde(rename="policyArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_arn: Option<PolicyArn>,
     #[doc="<p>The JSON document that describes the policy.</p>"]
     #[serde(rename="policyDocument")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_document: Option<PolicyDocument>,
     #[doc="<p>The policy name.</p>"]
     #[serde(rename="policyName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_name: Option<PolicyName>,
 }
 
@@ -829,19 +916,23 @@ pub struct GetPolicyVersionRequest {
 pub struct GetPolicyVersionResponse {
     #[doc="<p>Specifies whether the policy version is the default.</p>"]
     #[serde(rename="isDefaultVersion")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_default_version: Option<IsDefaultVersion>,
     #[doc="<p>The policy ARN.</p>"]
     #[serde(rename="policyArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_arn: Option<PolicyArn>,
     #[doc="<p>The JSON document that describes the policy.</p>"]
     #[serde(rename="policyDocument")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_document: Option<PolicyDocument>,
     #[doc="<p>The policy name.</p>"]
     #[serde(rename="policyName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_name: Option<PolicyName>,
     #[doc="<p>The policy version ID.</p>"]
     #[serde(rename="policyVersionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_version_id: Option<PolicyVersionId>,
 }
 
@@ -854,6 +945,7 @@ pub struct GetRegistrationCodeRequest;
 pub struct GetRegistrationCodeResponse {
     #[doc="<p>The CA certificate registration code.</p>"]
     #[serde(rename="registrationCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub registration_code: Option<RegistrationCode>,
 }
 
@@ -870,9 +962,11 @@ pub struct GetTopicRuleRequest {
 pub struct GetTopicRuleResponse {
     #[doc="<p>The rule.</p>"]
     #[serde(rename="rule")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rule: Option<TopicRule>,
     #[doc="<p>The rule ARN.</p>"]
     #[serde(rename="ruleArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rule_arn: Option<RuleArn>,
 }
 
@@ -886,9 +980,11 @@ pub type Key = String;
 pub struct KeyPair {
     #[doc="<p>The private key.</p>"]
     #[serde(rename="PrivateKey")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub private_key: Option<PrivateKey>,
     #[doc="<p>The public key.</p>"]
     #[serde(rename="PublicKey")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub public_key: Option<PublicKey>,
 }
 
@@ -897,6 +993,7 @@ pub struct KeyPair {
 pub struct KinesisAction {
     #[doc="<p>The partition key.</p>"]
     #[serde(rename="partitionKey")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub partition_key: Option<PartitionKey>,
     #[doc="<p>The ARN of the IAM role that grants access to the Amazon Kinesis stream.</p>"]
     #[serde(rename="roleArn")]
@@ -919,13 +1016,15 @@ pub struct LambdaAction {
 pub struct ListCACertificatesRequest {
     #[doc="<p>Determines the order of the results.</p>"]
     #[serde(rename="ascendingOrder")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ascending_order: Option<AscendingOrder>,
     #[doc="<p>The marker for the next set of results.</p>"]
     #[serde(rename="marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
     #[doc="<p>The result page size.</p>"]
     #[serde(rename="pageSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub page_size: Option<PageSize>,
 }
 
@@ -934,9 +1033,11 @@ pub struct ListCACertificatesRequest {
 pub struct ListCACertificatesResponse {
     #[doc="<p>The CA certificates registered in your AWS account.</p>"]
     #[serde(rename="certificates")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificates: Option<CACertificates>,
     #[doc="<p>The current position within the list of CA certificates.</p>"]
     #[serde(rename="nextMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_marker: Option<Marker>,
 }
 
@@ -945,16 +1046,18 @@ pub struct ListCACertificatesResponse {
 pub struct ListCertificatesByCARequest {
     #[doc="<p>Specifies the order for results. If True, the results are returned in ascending order, based on the creation date.</p>"]
     #[serde(rename="ascendingOrder")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ascending_order: Option<AscendingOrder>,
     #[doc="<p>The ID of the CA certificate. This operation will list all registered device certificate that were signed by this CA certificate. </p>"]
     #[serde(rename="caCertificateId")]
     pub ca_certificate_id: CertificateId,
     #[doc="<p>The marker for the next set of results.</p>"]
     #[serde(rename="marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
     #[doc="<p>The result page size.</p>"]
     #[serde(rename="pageSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub page_size: Option<PageSize>,
 }
 
@@ -963,9 +1066,11 @@ pub struct ListCertificatesByCARequest {
 pub struct ListCertificatesByCAResponse {
     #[doc="<p>The device certificates signed by the specified CA certificate.</p>"]
     #[serde(rename="certificates")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificates: Option<Certificates>,
     #[doc="<p>The marker for the next set of results, or null if there are no additional results.</p>"]
     #[serde(rename="nextMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_marker: Option<Marker>,
 }
 
@@ -974,13 +1079,15 @@ pub struct ListCertificatesByCAResponse {
 pub struct ListCertificatesRequest {
     #[doc="<p>Specifies the order for results. If True, the results are returned in ascending order, based on the creation date.</p>"]
     #[serde(rename="ascendingOrder")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ascending_order: Option<AscendingOrder>,
     #[doc="<p>The marker for the next set of results.</p>"]
     #[serde(rename="marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
     #[doc="<p>The result page size.</p>"]
     #[serde(rename="pageSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub page_size: Option<PageSize>,
 }
 
@@ -989,9 +1096,11 @@ pub struct ListCertificatesRequest {
 pub struct ListCertificatesResponse {
     #[doc="<p>The descriptions of the certificates.</p>"]
     #[serde(rename="certificates")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificates: Option<Certificates>,
     #[doc="<p>The marker for the next set of results, or null if there are no additional results.</p>"]
     #[serde(rename="nextMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_marker: Option<Marker>,
 }
 
@@ -1000,13 +1109,15 @@ pub struct ListCertificatesResponse {
 pub struct ListOutgoingCertificatesRequest {
     #[doc="<p>Specifies the order for results. If True, the results are returned in ascending order, based on the creation date.</p>"]
     #[serde(rename="ascendingOrder")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ascending_order: Option<AscendingOrder>,
     #[doc="<p>The marker for the next set of results.</p>"]
     #[serde(rename="marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
     #[doc="<p>The result page size.</p>"]
     #[serde(rename="pageSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub page_size: Option<PageSize>,
 }
 
@@ -1015,9 +1126,11 @@ pub struct ListOutgoingCertificatesRequest {
 pub struct ListOutgoingCertificatesResponse {
     #[doc="<p>The marker for the next set of results.</p>"]
     #[serde(rename="nextMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_marker: Option<Marker>,
     #[doc="<p>The certificates that are being transfered but not yet accepted.</p>"]
     #[serde(rename="outgoingCertificates")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub outgoing_certificates: Option<OutgoingCertificates>,
 }
 
@@ -1026,13 +1139,15 @@ pub struct ListOutgoingCertificatesResponse {
 pub struct ListPoliciesRequest {
     #[doc="<p>Specifies the order for results. If true, the results are returned in ascending creation order.</p>"]
     #[serde(rename="ascendingOrder")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ascending_order: Option<AscendingOrder>,
     #[doc="<p>The marker for the next set of results.</p>"]
     #[serde(rename="marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
     #[doc="<p>The result page size.</p>"]
     #[serde(rename="pageSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub page_size: Option<PageSize>,
 }
 
@@ -1041,9 +1156,11 @@ pub struct ListPoliciesRequest {
 pub struct ListPoliciesResponse {
     #[doc="<p>The marker for the next set of results, or null if there are no additional results.</p>"]
     #[serde(rename="nextMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_marker: Option<Marker>,
     #[doc="<p>The descriptions of the policies.</p>"]
     #[serde(rename="policies")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policies: Option<Policies>,
 }
 
@@ -1052,13 +1169,15 @@ pub struct ListPoliciesResponse {
 pub struct ListPolicyPrincipalsRequest {
     #[doc="<p>Specifies the order for results. If true, the results are returned in ascending creation order.</p>"]
     #[serde(rename="ascendingOrder")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ascending_order: Option<AscendingOrder>,
     #[doc="<p>The marker for the next set of results.</p>"]
     #[serde(rename="marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
     #[doc="<p>The result page size.</p>"]
     #[serde(rename="pageSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub page_size: Option<PageSize>,
     #[doc="<p>The policy name.</p>"]
     #[serde(rename="policyName")]
@@ -1070,9 +1189,11 @@ pub struct ListPolicyPrincipalsRequest {
 pub struct ListPolicyPrincipalsResponse {
     #[doc="<p>The marker for the next set of results, or null if there are no additional results.</p>"]
     #[serde(rename="nextMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_marker: Option<Marker>,
     #[doc="<p>The descriptions of the principals.</p>"]
     #[serde(rename="principals")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub principals: Option<Principals>,
 }
 
@@ -1089,6 +1210,7 @@ pub struct ListPolicyVersionsRequest {
 pub struct ListPolicyVersionsResponse {
     #[doc="<p>The policy versions.</p>"]
     #[serde(rename="policyVersions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_versions: Option<PolicyVersions>,
 }
 
@@ -1097,13 +1219,15 @@ pub struct ListPolicyVersionsResponse {
 pub struct ListPrincipalPoliciesRequest {
     #[doc="<p>Specifies the order for results. If true, results are returned in ascending creation order.</p>"]
     #[serde(rename="ascendingOrder")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ascending_order: Option<AscendingOrder>,
     #[doc="<p>The marker for the next set of results.</p>"]
     #[serde(rename="marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
     #[doc="<p>The result page size.</p>"]
     #[serde(rename="pageSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub page_size: Option<PageSize>,
     #[doc="<p>The principal.</p>"]
     #[serde(rename="principal")]
@@ -1115,9 +1239,11 @@ pub struct ListPrincipalPoliciesRequest {
 pub struct ListPrincipalPoliciesResponse {
     #[doc="<p>The marker for the next set of results, or null if there are no additional results.</p>"]
     #[serde(rename="nextMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_marker: Option<Marker>,
     #[doc="<p>The policies.</p>"]
     #[serde(rename="policies")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policies: Option<Policies>,
 }
 
@@ -1126,9 +1252,11 @@ pub struct ListPrincipalPoliciesResponse {
 pub struct ListPrincipalThingsRequest {
     #[doc="<p>The maximum number of results to return in this operation.</p>"]
     #[serde(rename="maxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<MaxResults>,
     #[doc="<p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The principal.</p>"]
     #[serde(rename="principal")]
@@ -1140,9 +1268,11 @@ pub struct ListPrincipalThingsRequest {
 pub struct ListPrincipalThingsResponse {
     #[doc="<p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The things.</p>"]
     #[serde(rename="things")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub things: Option<ThingNameList>,
 }
 
@@ -1159,6 +1289,7 @@ pub struct ListThingPrincipalsRequest {
 pub struct ListThingPrincipalsResponse {
     #[doc="<p>The principals associated with the thing.</p>"]
     #[serde(rename="principals")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub principals: Option<Principals>,
 }
 
@@ -1167,12 +1298,15 @@ pub struct ListThingPrincipalsResponse {
 pub struct ListThingTypesRequest {
     #[doc="<p>The maximum number of results to return in this operation.</p>"]
     #[serde(rename="maxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<MaxResults>,
     #[doc="<p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The name of the thing type.</p>"]
     #[serde(rename="thingTypeName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub thing_type_name: Option<ThingTypeName>,
 }
 
@@ -1181,9 +1315,11 @@ pub struct ListThingTypesRequest {
 pub struct ListThingTypesResponse {
     #[doc="<p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The thing types.</p>"]
     #[serde(rename="thingTypes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub thing_types: Option<ThingTypeList>,
 }
 
@@ -1192,18 +1328,23 @@ pub struct ListThingTypesResponse {
 pub struct ListThingsRequest {
     #[doc="<p>The attribute name used to search for things.</p>"]
     #[serde(rename="attributeName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attribute_name: Option<AttributeName>,
     #[doc="<p>The attribute value used to search for things.</p>"]
     #[serde(rename="attributeValue")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attribute_value: Option<AttributeValue>,
     #[doc="<p>The maximum number of results to return in this operation.</p>"]
     #[serde(rename="maxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<MaxResults>,
     #[doc="<p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The name of the thing type used to search for things.</p>"]
     #[serde(rename="thingTypeName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub thing_type_name: Option<ThingTypeName>,
 }
 
@@ -1212,9 +1353,11 @@ pub struct ListThingsRequest {
 pub struct ListThingsResponse {
     #[doc="<p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The things.</p>"]
     #[serde(rename="things")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub things: Option<ThingAttributeList>,
 }
 
@@ -1223,16 +1366,19 @@ pub struct ListThingsResponse {
 pub struct ListTopicRulesRequest {
     #[doc="<p>The maximum number of results to return.</p>"]
     #[serde(rename="maxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<MaxResults>,
     #[doc="<p>A token used to retrieve the next value.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>Specifies whether the rule is disabled.</p>"]
     #[serde(rename="ruleDisabled")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rule_disabled: Option<IsDisabled>,
     #[doc="<p>The topic.</p>"]
     #[serde(rename="topic")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub topic: Option<Topic>,
 }
 
@@ -1241,9 +1387,11 @@ pub struct ListTopicRulesRequest {
 pub struct ListTopicRulesResponse {
     #[doc="<p>A token used to retrieve the next value.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The rules.</p>"]
     #[serde(rename="rules")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rules: Option<TopicRuleList>,
 }
 
@@ -1253,6 +1401,7 @@ pub type LogLevel = String;
 pub struct LoggingOptionsPayload {
     #[doc="<p>The logging level.</p>"]
     #[serde(rename="logLevel")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub log_level: Option<LogLevel>,
     #[doc="<p>The ARN of the IAM role that grants access.</p>"]
     #[serde(rename="roleArn")]
@@ -1275,21 +1424,27 @@ pub type OptionalVersion = i64;
 pub struct OutgoingCertificate {
     #[doc="<p>The certificate ARN.</p>"]
     #[serde(rename="certificateArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate_arn: Option<CertificateArn>,
     #[doc="<p>The certificate ID.</p>"]
     #[serde(rename="certificateId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate_id: Option<CertificateId>,
     #[doc="<p>The certificate creation date.</p>"]
     #[serde(rename="creationDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub creation_date: Option<DateType>,
     #[doc="<p>The date the transfer was initiated.</p>"]
     #[serde(rename="transferDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub transfer_date: Option<DateType>,
     #[doc="<p>The transfer message.</p>"]
     #[serde(rename="transferMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub transfer_message: Option<Message>,
     #[doc="<p>The AWS account to which the transfer was made.</p>"]
     #[serde(rename="transferredTo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub transferred_to: Option<AwsAccountId>,
 }
 
@@ -1303,9 +1458,11 @@ pub type Policies = Vec<Policy>;
 pub struct Policy {
     #[doc="<p>The policy ARN.</p>"]
     #[serde(rename="policyArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_arn: Option<PolicyArn>,
     #[doc="<p>The policy name.</p>"]
     #[serde(rename="policyName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub policy_name: Option<PolicyName>,
 }
 
@@ -1317,13 +1474,15 @@ pub type PolicyName = String;
 pub struct PolicyVersion {
     #[doc="<p>The date and time the policy was created.</p>"]
     #[serde(rename="createDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub create_date: Option<DateType>,
     #[doc="<p>Specifies whether the policy version is the default.</p>"]
     #[serde(rename="isDefaultVersion")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_default_version: Option<IsDefaultVersion>,
     #[doc="<p>The policy version ID.</p>"]
     #[serde(rename="versionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version_id: Option<PolicyVersionId>,
 }
 
@@ -1350,14 +1509,14 @@ pub type RangeKeyValue = String;
 pub struct RegisterCACertificateRequest {
     #[doc="<p>Allows this CA certificate to be used for auto registration of device certificates.</p>"]
     #[serde(rename="allowAutoRegistration")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub allow_auto_registration: Option<AllowAutoRegistration>,
     #[doc="<p>The CA certificate.</p>"]
     #[serde(rename="caCertificate")]
     pub ca_certificate: CertificatePem,
     #[doc="<p>A boolean value that specifies if the CA certificate is set to active.</p>"]
     #[serde(rename="setAsActive")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub set_as_active: Option<SetAsActive>,
     #[doc="<p>The private key verification certificate.</p>"]
     #[serde(rename="verificationCertificate")]
@@ -1369,9 +1528,11 @@ pub struct RegisterCACertificateRequest {
 pub struct RegisterCACertificateResponse {
     #[doc="<p>The CA certificate ARN.</p>"]
     #[serde(rename="certificateArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate_arn: Option<CertificateArn>,
     #[doc="<p>The CA certificate identifier.</p>"]
     #[serde(rename="certificateId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate_id: Option<CertificateId>,
 }
 
@@ -1380,11 +1541,13 @@ pub struct RegisterCACertificateResponse {
 pub struct RegisterCertificateRequest {
     #[doc="<p>The CA certificate used to sign the device certificate being registered.</p>"]
     #[serde(rename="caCertificatePem")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ca_certificate_pem: Option<CertificatePem>,
     #[doc="<p>The certificate data, in PEM format.</p>"]
     #[serde(rename="certificatePem")]
     pub certificate_pem: CertificatePem,
     #[serde(rename="status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<CertificateStatus>,
 }
 
@@ -1393,9 +1556,11 @@ pub struct RegisterCertificateRequest {
 pub struct RegisterCertificateResponse {
     #[doc="<p>The certificate ARN.</p>"]
     #[serde(rename="certificateArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate_arn: Option<CertificateArn>,
     #[doc="<p>The certificate identifier.</p>"]
     #[serde(rename="certificateId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate_id: Option<CertificateId>,
 }
 
@@ -1408,6 +1573,7 @@ pub struct RejectCertificateTransferRequest {
     pub certificate_id: CertificateId,
     #[doc="<p>The reason the certificate transfer was rejected.</p>"]
     #[serde(rename="rejectReason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reject_reason: Option<Message>,
 }
 
@@ -1446,6 +1612,7 @@ pub struct S3Action {
     pub bucket_name: BucketName,
     #[doc="<p>The Amazon S3 canned ACL that controls access to the object identified by the object key. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl\">S3 canned ACLs</a>.</p>"]
     #[serde(rename="cannedAcl")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub canned_acl: Option<CannedAccessControlList>,
     #[doc="<p>The object key.</p>"]
     #[serde(rename="key")]
@@ -1484,6 +1651,7 @@ pub struct SetLoggingOptionsRequest {
 pub struct SnsAction {
     #[doc="<p>The message format of the message to publish. Optional. Accepted values are \"JSON\" and \"RAW\". The default value of the attribute is \"RAW\". SNS uses this setting to determine if the payload should be parsed and relevant platform-specific bits of the payload should be extracted. To read more about SNS message formats, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/json-formats.html\"></a> refer to their official documentation.</p>"]
     #[serde(rename="messageFormat")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message_format: Option<MessageFormat>,
     #[doc="<p>The ARN of the IAM role that grants access.</p>"]
     #[serde(rename="roleArn")]
@@ -1504,7 +1672,7 @@ pub struct SqsAction {
     pub role_arn: AwsArn,
     #[doc="<p>Specifies whether to use Base64 encoding.</p>"]
     #[serde(rename="useBase64")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub use_base_64: Option<UseBase64>,
 }
 
@@ -1518,15 +1686,19 @@ pub type ThingArn = String;
 pub struct ThingAttribute {
     #[doc="<p>A list of thing attributes which are name-value pairs.</p>"]
     #[serde(rename="attributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attributes: Option<Attributes>,
     #[doc="<p>The name of the thing.</p>"]
     #[serde(rename="thingName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub thing_name: Option<ThingName>,
     #[doc="<p>The name of the thing type, if the thing has been associated with a type.</p>"]
     #[serde(rename="thingTypeName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub thing_type_name: Option<ThingTypeName>,
     #[doc="<p>The version of the thing record in the registry.</p>"]
     #[serde(rename="version")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version: Option<Version>,
 }
 
@@ -1538,12 +1710,15 @@ pub type ThingTypeArn = String;
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ThingTypeDefinition {
     #[serde(rename="thingTypeMetadata")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub thing_type_metadata: Option<ThingTypeMetadata>,
     #[doc="<p>The name of the thing type.</p>"]
     #[serde(rename="thingTypeName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub thing_type_name: Option<ThingTypeName>,
     #[doc="<p>The ThingTypeProperties for the thing type.</p>"]
     #[serde(rename="thingTypeProperties")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub thing_type_properties: Option<ThingTypeProperties>,
 }
 
@@ -1554,13 +1729,15 @@ pub type ThingTypeList = Vec<ThingTypeDefinition>;
 pub struct ThingTypeMetadata {
     #[doc="<p>The date and time when the thing type was created.</p>"]
     #[serde(rename="creationDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub creation_date: Option<CreationDate>,
     #[doc="<p>Whether the thing type is deprecated. If <b>true</b>, no new things could be associated with this type.</p>"]
     #[serde(rename="deprecated")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deprecated: Option<Boolean>,
     #[doc="<p>The date and time when the thing type was deprecated.</p>"]
     #[serde(rename="deprecationDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deprecation_date: Option<DeprecationDate>,
 }
 
@@ -1570,9 +1747,11 @@ pub type ThingTypeName = String;
 pub struct ThingTypeProperties {
     #[doc="<p>A list of searchable thing attribute names.</p>"]
     #[serde(rename="searchableAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub searchable_attributes: Option<SearchableAttributes>,
     #[doc="<p>The description of the thing type.</p>"]
     #[serde(rename="thingTypeDescription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub thing_type_description: Option<ThingTypeDescription>,
 }
 
@@ -1583,25 +1762,31 @@ pub type TopicPattern = String;
 pub struct TopicRule {
     #[doc="<p>The actions associated with the rule.</p>"]
     #[serde(rename="actions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub actions: Option<ActionList>,
     #[doc="<p>The version of the SQL rules engine to use when evaluating the rule.</p>"]
     #[serde(rename="awsIotSqlVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub aws_iot_sql_version: Option<AwsIotSqlVersion>,
     #[doc="<p>The date and time the rule was created.</p>"]
     #[serde(rename="createdAt")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub created_at: Option<CreatedAtDate>,
     #[doc="<p>The description of the rule.</p>"]
     #[serde(rename="description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<Description>,
     #[doc="<p>Specifies whether the rule is disabled.</p>"]
     #[serde(rename="ruleDisabled")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rule_disabled: Option<IsDisabled>,
     #[doc="<p>The name of the rule.</p>"]
     #[serde(rename="ruleName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rule_name: Option<RuleName>,
     #[doc="<p>The SQL statement used to query the topic. When using a SQL query with multiple lines, be sure to escape the newline characters.</p>"]
     #[serde(rename="sql")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sql: Option<SQL>,
 }
 
@@ -1611,19 +1796,23 @@ pub type TopicRuleList = Vec<TopicRuleListItem>;
 pub struct TopicRuleListItem {
     #[doc="<p>The date and time the rule was created.</p>"]
     #[serde(rename="createdAt")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub created_at: Option<CreatedAtDate>,
     #[doc="<p>The rule ARN.</p>"]
     #[serde(rename="ruleArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rule_arn: Option<RuleArn>,
     #[doc="<p>Specifies whether the rule is disabled.</p>"]
     #[serde(rename="ruleDisabled")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rule_disabled: Option<IsDisabled>,
     #[doc="<p>The name of the rule.</p>"]
     #[serde(rename="ruleName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rule_name: Option<RuleName>,
     #[doc="<p>The pattern for the topic names that apply.</p>"]
     #[serde(rename="topicPattern")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub topic_pattern: Option<TopicPattern>,
 }
 
@@ -1635,13 +1824,15 @@ pub struct TopicRulePayload {
     pub actions: ActionList,
     #[doc="<p>The version of the SQL rules engine to use when evaluating the rule.</p>"]
     #[serde(rename="awsIotSqlVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub aws_iot_sql_version: Option<AwsIotSqlVersion>,
     #[doc="<p>The description of the rule.</p>"]
     #[serde(rename="description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<Description>,
     #[doc="<p>Specifies whether the rule is disabled.</p>"]
     #[serde(rename="ruleDisabled")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rule_disabled: Option<IsDisabled>,
     #[doc="<p>The SQL statement used to query the topic. For more information, see <a href=\"http://docs.aws.amazon.com/iot/latest/developerguide/iot-rules.html#aws-iot-sql-reference\">AWS IoT SQL Reference</a> in the <i>AWS IoT Developer Guide</i>.</p>"]
     #[serde(rename="sql")]
@@ -1659,6 +1850,7 @@ pub struct TransferCertificateRequest {
     pub target_aws_account: AwsAccountId,
     #[doc="<p>The transfer message.</p>"]
     #[serde(rename="transferMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub transfer_message: Option<Message>,
 }
 
@@ -1667,6 +1859,7 @@ pub struct TransferCertificateRequest {
 pub struct TransferCertificateResponse {
     #[doc="<p>The ARN of the certificate.</p>"]
     #[serde(rename="transferredCertificateArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub transferred_certificate_arn: Option<CertificateArn>,
 }
 
@@ -1675,18 +1868,23 @@ pub struct TransferCertificateResponse {
 pub struct TransferData {
     #[doc="<p>The date the transfer was accepted.</p>"]
     #[serde(rename="acceptDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub accept_date: Option<DateType>,
     #[doc="<p>The date the transfer was rejected.</p>"]
     #[serde(rename="rejectDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reject_date: Option<DateType>,
     #[doc="<p>The reason why the transfer was rejected.</p>"]
     #[serde(rename="rejectReason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reject_reason: Option<Message>,
     #[doc="<p>The date the transfer took place.</p>"]
     #[serde(rename="transferDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub transfer_date: Option<DateType>,
     #[doc="<p>The transfer message.</p>"]
     #[serde(rename="transferMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub transfer_message: Option<Message>,
 }
 
@@ -1699,9 +1897,11 @@ pub struct UpdateCACertificateRequest {
     pub certificate_id: CertificateId,
     #[doc="<p>The new value for the auto registration status. Valid values are: \"ENABLE\" or \"DISABLE\".</p>"]
     #[serde(rename="newAutoRegistrationStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub new_auto_registration_status: Option<AutoRegistrationStatus>,
     #[doc="<p>The updated status of the CA certificate.</p> <p><b>Note:</b> The status value REGISTER_INACTIVE is deprecated and should not be used.</p>"]
     #[serde(rename="newStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub new_status: Option<CACertificateStatus>,
 }
 
@@ -1721,19 +1921,22 @@ pub struct UpdateCertificateRequest {
 pub struct UpdateThingRequest {
     #[doc="<p>A list of thing attributes, a JSON string containing name-value pairs. For example:</p> <p><code>{\\\"attributes\\\":{\\\"name1\\\":\\\"value2\\\"}})</code></p> <p>This data is used to add new attributes or update existing attributes.</p>"]
     #[serde(rename="attributePayload")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attribute_payload: Option<AttributePayload>,
     #[doc="<p>The expected version of the thing record in the registry. If the version of the record in the registry does not match the expected version specified in the request, the <code>UpdateThing</code> request is rejected with a <code>VersionConflictException</code>.</p>"]
     #[serde(rename="expectedVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub expected_version: Option<OptionalVersion>,
     #[doc="<p>Remove a thing type association. If <b>true</b>, the assocation is removed.</p>"]
     #[serde(rename="removeThingType")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub remove_thing_type: Option<RemoveThingType>,
     #[doc="<p>The name of the thing to update.</p>"]
     #[serde(rename="thingName")]
     pub thing_name: ThingName,
     #[doc="<p>The name of the thing type.</p>"]
     #[serde(rename="thingTypeName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub thing_type_name: Option<ThingTypeName>,
 }
 

@@ -26,6 +26,7 @@ pub type FromDate = f64;
 pub struct GenerateDataSetRequest {
     #[doc="(Optional) Key-value pairs which will be returned, unmodified, in the Amazon SNS notification message and the data set metadata file. These key-value pairs can be used to correlated responses with tracking information from other systems."]
     #[serde(rename="customerDefinedValues")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub customer_defined_values: Option<CustomerDefinedValues>,
     #[doc="The date a data set was published. For daily data sets, provide a date with day-level granularity for the desired day. For weekly data sets, provide a date with day-level granularity within the desired week (the day value will be ignored). For monthly data sets, provide a date with month-level granularity for the desired month (the day value will be ignored)."]
     #[serde(rename="dataSetPublicationDate")]
@@ -38,6 +39,7 @@ pub struct GenerateDataSetRequest {
     pub destination_s3_bucket_name: DestinationS3BucketName,
     #[doc="(Optional) The desired S3 prefix for the published data set, similar to a directory path in standard file systems. For example, if given the bucket name \"mybucket\" and the prefix \"myprefix/mydatasets\", the output file \"outputfile\" would be published to \"s3://mybucket/myprefix/mydatasets/outputfile\". If the prefix directory structure does not exist, it will be created. If no prefix is provided, the data set will be published to the S3 bucket root."]
     #[serde(rename="destinationS3Prefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub destination_s3_prefix: Option<DestinationS3Prefix>,
     #[doc="The Amazon Resource Name (ARN) of the Role with an attached permissions policy to interact with the provided AWS services."]
     #[serde(rename="roleNameArn")]
@@ -52,6 +54,7 @@ pub struct GenerateDataSetRequest {
 pub struct GenerateDataSetResult {
     #[doc="A unique identifier representing a specific request to the GenerateDataSet operation. This identifier can be used to correlate a request with notifications from the SNS topic."]
     #[serde(rename="dataSetRequestId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub data_set_request_id: Option<DataSetRequestId>,
 }
 
@@ -64,6 +67,7 @@ pub type SnsTopicArn = String;
 pub struct StartSupportDataExportRequest {
     #[doc="(Optional) Key-value pairs which will be returned, unmodified, in the Amazon SNS notification message and the data set metadata file."]
     #[serde(rename="customerDefinedValues")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub customer_defined_values: Option<CustomerDefinedValues>,
     #[doc="<p> Specifies the data set type to be written to the output csv file. The data set types customer_support_contacts_data and test_customer_support_contacts_data both result in a csv file containing the following fields: Product Id, Product Code, Customer Guid, Subscription Guid, Subscription Start Date, Organization, AWS Account Id, Given Name, Surname, Telephone Number, Email, Title, Country Code, ZIP Code, Operation Type, and Operation Time. </p> <p> <ul> <li><i>customer_support_contacts_data</i> Customer support contact data. The data set will contain all changes (Creates, Updates, and Deletes) to customer support contact data from the date specified in the from_date parameter.</li> <li><i>test_customer_support_contacts_data</i> An example data set containing static test data in the same format as customer_support_contacts_data</li> </ul> </p>"]
     #[serde(rename="dataSetType")]
@@ -73,6 +77,7 @@ pub struct StartSupportDataExportRequest {
     pub destination_s3_bucket_name: DestinationS3BucketName,
     #[doc="(Optional) The desired S3 prefix for the published data set, similar to a directory path in standard file systems. For example, if given the bucket name \"mybucket\" and the prefix \"myprefix/mydatasets\", the output file \"outputfile\" would be published to \"s3://mybucket/myprefix/mydatasets/outputfile\". If the prefix directory structure does not exist, it will be created. If no prefix is provided, the data set will be published to the S3 bucket root."]
     #[serde(rename="destinationS3Prefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub destination_s3_prefix: Option<DestinationS3Prefix>,
     #[doc="The start date from which to retrieve the data set in UTC. This parameter only affects the customer_support_contacts_data data set type."]
     #[serde(rename="fromDate")]
@@ -90,6 +95,7 @@ pub struct StartSupportDataExportRequest {
 pub struct StartSupportDataExportResult {
     #[doc="A unique identifier representing a specific request to the StartSupportDataExport operation. This identifier can be used to correlate a request with notifications from the SNS topic."]
     #[serde(rename="dataSetRequestId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub data_set_request_id: Option<DataSetRequestId>,
 }
 

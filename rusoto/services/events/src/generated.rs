@@ -33,24 +33,31 @@ pub struct DescribeRuleRequest {
 pub struct DescribeRuleResponse {
     #[doc="<p>The Amazon Resource Name (ARN) of the rule.</p>"]
     #[serde(rename="Arn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub arn: Option<RuleArn>,
     #[doc="<p>The description of the rule.</p>"]
     #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<RuleDescription>,
     #[doc="<p>The event pattern. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/CloudWatchEventsandEventPatterns.html\">Events and Event Patterns</a> in the <i>Amazon CloudWatch Events User Guide</i>.</p>"]
     #[serde(rename="EventPattern")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub event_pattern: Option<EventPattern>,
     #[doc="<p>The name of the rule.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<RuleName>,
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM role associated with the rule.</p>"]
     #[serde(rename="RoleArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub role_arn: Option<RoleArn>,
     #[doc="<p>The scheduling expression. For example, \"cron(0 20 * * ? *)\", \"rate(5 minutes)\".</p>"]
     #[serde(rename="ScheduleExpression")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub schedule_expression: Option<ScheduleExpression>,
     #[doc="<p>Specifies whether the rule is enabled or disabled.</p>"]
     #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<RuleState>,
 }
 
@@ -66,6 +73,7 @@ pub struct DisableRuleRequest {
 pub struct EcsParameters {
     #[doc="<p>The number of tasks to create based on the <code>TaskDefinition</code>. The default is one.</p>"]
     #[serde(rename="TaskCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_count: Option<LimitMin1>,
     #[doc="<p>The ARN of the task definition to use if the event target is an Amazon ECS cluster. </p>"]
     #[serde(rename="TaskDefinitionArn")]
@@ -91,6 +99,7 @@ pub type EventTime = f64;
 pub struct InputTransformer {
     #[doc="<p>Map of JSON paths to be extracted from the event. These are key-value pairs, where each value is a JSON path. You must use JSON dot notation, not bracket notation.</p>"]
     #[serde(rename="InputPathsMap")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub input_paths_map: Option<TransformerPaths>,
     #[doc="<p>Input template where you can use the values of the keys from <code>InputPathsMap</code> to customize the data sent to the target.</p>"]
     #[serde(rename="InputTemplate")]
@@ -113,9 +122,11 @@ pub type LimitMin1 = i64;
 pub struct ListRuleNamesByTargetRequest {
     #[doc="<p>The maximum number of results to return.</p>"]
     #[serde(rename="Limit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub limit: Option<LimitMax100>,
     #[doc="<p>The token returned by a previous call to retrieve the next set of results.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The Amazon Resource Name (ARN) of the target resource.</p>"]
     #[serde(rename="TargetArn")]
@@ -126,9 +137,11 @@ pub struct ListRuleNamesByTargetRequest {
 pub struct ListRuleNamesByTargetResponse {
     #[doc="<p>Indicates whether there are additional results to retrieve. If there are no more results, the value is null.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The names of the rules that can invoke the given target.</p>"]
     #[serde(rename="RuleNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rule_names: Option<RuleNameList>,
 }
 
@@ -136,12 +149,15 @@ pub struct ListRuleNamesByTargetResponse {
 pub struct ListRulesRequest {
     #[doc="<p>The maximum number of results to return.</p>"]
     #[serde(rename="Limit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub limit: Option<LimitMax100>,
     #[doc="<p>The prefix matching the rule name.</p>"]
     #[serde(rename="NamePrefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name_prefix: Option<RuleName>,
     #[doc="<p>The token returned by a previous call to retrieve the next set of results.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -149,9 +165,11 @@ pub struct ListRulesRequest {
 pub struct ListRulesResponse {
     #[doc="<p>Indicates whether there are additional results to retrieve. If there are no more results, the value is null.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The rules that match the specified criteria.</p>"]
     #[serde(rename="Rules")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rules: Option<RuleResponseList>,
 }
 
@@ -159,9 +177,11 @@ pub struct ListRulesResponse {
 pub struct ListTargetsByRuleRequest {
     #[doc="<p>The maximum number of results to return.</p>"]
     #[serde(rename="Limit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub limit: Option<LimitMax100>,
     #[doc="<p>The token returned by a previous call to retrieve the next set of results.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The name of the rule.</p>"]
     #[serde(rename="Rule")]
@@ -172,9 +192,11 @@ pub struct ListTargetsByRuleRequest {
 pub struct ListTargetsByRuleResponse {
     #[doc="<p>Indicates whether there are additional results to retrieve. If there are no more results, the value is null.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The targets assigned to the rule.</p>"]
     #[serde(rename="Targets")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub targets: Option<TargetList>,
 }
 
@@ -191,18 +213,23 @@ pub struct PutEventsRequest {
 pub struct PutEventsRequestEntry {
     #[doc="<p>In the JSON sense, an object containing fields, which may also contain nested subobjects. No constraints are imposed on its contents.</p>"]
     #[serde(rename="Detail")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub detail: Option<String>,
     #[doc="<p>Free-form string used to decide what fields to expect in the event detail.</p>"]
     #[serde(rename="DetailType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub detail_type: Option<String>,
     #[doc="<p>AWS resources, identified by Amazon Resource Name (ARN), which the event primarily concerns. Any number, including zero, may be present.</p>"]
     #[serde(rename="Resources")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resources: Option<EventResourceList>,
     #[doc="<p>The source of the event.</p>"]
     #[serde(rename="Source")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source: Option<String>,
     #[doc="<p>The timestamp of the event, per <a href=\"https://www.rfc-editor.org/rfc/rfc3339.txt\">RFC3339</a>. If no timestamp is provided, the timestamp of the <a>PutEvents</a> call is used.</p>"]
     #[serde(rename="Time")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub time: Option<EventTime>,
 }
 
@@ -211,9 +238,11 @@ pub type PutEventsRequestEntryList = Vec<PutEventsRequestEntry>;
 pub struct PutEventsResponse {
     #[doc="<p>The successfully and unsuccessfully ingested events results. If the ingestion was successful, the entry has the event ID in it. Otherwise, you can use the error code and error message to identify the problem with the entry.</p>"]
     #[serde(rename="Entries")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub entries: Option<PutEventsResultEntryList>,
     #[doc="<p>The number of failed entries.</p>"]
     #[serde(rename="FailedEntryCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub failed_entry_count: Option<Integer>,
 }
 
@@ -222,12 +251,15 @@ pub struct PutEventsResponse {
 pub struct PutEventsResultEntry {
     #[doc="<p>The error code that indicates why the event submission failed.</p>"]
     #[serde(rename="ErrorCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub error_code: Option<ErrorCode>,
     #[doc="<p>The error message that explains why the event submission failed.</p>"]
     #[serde(rename="ErrorMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub error_message: Option<ErrorMessage>,
     #[doc="<p>The ID of the event.</p>"]
     #[serde(rename="EventId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub event_id: Option<EventId>,
 }
 
@@ -236,21 +268,26 @@ pub type PutEventsResultEntryList = Vec<PutEventsResultEntry>;
 pub struct PutRuleRequest {
     #[doc="<p>A description of the rule.</p>"]
     #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<RuleDescription>,
     #[doc="<p>The event pattern. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/CloudWatchEventsandEventPatterns.html\">Events and Event Patterns</a> in the <i>Amazon CloudWatch Events User Guide</i>.</p>"]
     #[serde(rename="EventPattern")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub event_pattern: Option<EventPattern>,
     #[doc="<p>The name of the rule that you are creating or updating.</p>"]
     #[serde(rename="Name")]
     pub name: RuleName,
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM role associated with the rule.</p>"]
     #[serde(rename="RoleArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub role_arn: Option<RoleArn>,
     #[doc="<p>The scheduling expression. For example, \"cron(0 20 * * ? *)\", \"rate(5 minutes)\".</p>"]
     #[serde(rename="ScheduleExpression")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub schedule_expression: Option<ScheduleExpression>,
     #[doc="<p>Indicates whether the rule is enabled or disabled.</p>"]
     #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<RuleState>,
 }
 
@@ -258,6 +295,7 @@ pub struct PutRuleRequest {
 pub struct PutRuleResponse {
     #[doc="<p>The Amazon Resource Name (ARN) of the rule.</p>"]
     #[serde(rename="RuleArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rule_arn: Option<RuleArn>,
 }
 
@@ -275,9 +313,11 @@ pub struct PutTargetsRequest {
 pub struct PutTargetsResponse {
     #[doc="<p>The failed target entries.</p>"]
     #[serde(rename="FailedEntries")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub failed_entries: Option<PutTargetsResultEntryList>,
     #[doc="<p>The number of failed entries.</p>"]
     #[serde(rename="FailedEntryCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub failed_entry_count: Option<Integer>,
 }
 
@@ -286,12 +326,15 @@ pub struct PutTargetsResponse {
 pub struct PutTargetsResultEntry {
     #[doc="<p>The error code that indicates why the target addition failed. If the value is <code>ConcurrentModificationException</code>, too many requests were made at the same time.</p>"]
     #[serde(rename="ErrorCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub error_code: Option<ErrorCode>,
     #[doc="<p>The error message that explains why the target addition failed.</p>"]
     #[serde(rename="ErrorMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub error_message: Option<ErrorMessage>,
     #[doc="<p>The ID of the target.</p>"]
     #[serde(rename="TargetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_id: Option<TargetId>,
 }
 
@@ -310,9 +353,11 @@ pub struct RemoveTargetsRequest {
 pub struct RemoveTargetsResponse {
     #[doc="<p>The failed target entries.</p>"]
     #[serde(rename="FailedEntries")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub failed_entries: Option<RemoveTargetsResultEntryList>,
     #[doc="<p>The number of failed entries.</p>"]
     #[serde(rename="FailedEntryCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub failed_entry_count: Option<Integer>,
 }
 
@@ -321,12 +366,15 @@ pub struct RemoveTargetsResponse {
 pub struct RemoveTargetsResultEntry {
     #[doc="<p>The error code that indicates why the target removal failed. If the value is <code>ConcurrentModificationException</code>, too many requests were made at the same time.</p>"]
     #[serde(rename="ErrorCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub error_code: Option<ErrorCode>,
     #[doc="<p>The error message that explains why the target removal failed.</p>"]
     #[serde(rename="ErrorMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub error_message: Option<ErrorMessage>,
     #[doc="<p>The ID of the target.</p>"]
     #[serde(rename="TargetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_id: Option<TargetId>,
 }
 
@@ -337,24 +385,31 @@ pub type RoleArn = String;
 pub struct Rule {
     #[doc="<p>The Amazon Resource Name (ARN) of the rule.</p>"]
     #[serde(rename="Arn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub arn: Option<RuleArn>,
     #[doc="<p>The description of the rule.</p>"]
     #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<RuleDescription>,
     #[doc="<p>The event pattern of the rule. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/CloudWatchEventsandEventPatterns.html\">Events and Event Patterns</a> in the <i>Amazon CloudWatch Events User Guide</i>.</p>"]
     #[serde(rename="EventPattern")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub event_pattern: Option<EventPattern>,
     #[doc="<p>The name of the rule.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<RuleName>,
     #[doc="<p>The Amazon Resource Name (ARN) of the role that is used for target invocation.</p>"]
     #[serde(rename="RoleArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub role_arn: Option<RoleArn>,
     #[doc="<p>The scheduling expression. For example, \"cron(0 20 * * ? *)\", \"rate(5 minutes)\".</p>"]
     #[serde(rename="ScheduleExpression")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub schedule_expression: Option<ScheduleExpression>,
     #[doc="<p>The state of the rule.</p>"]
     #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<RuleState>,
 }
 
@@ -396,27 +451,34 @@ pub struct Target {
     pub arn: TargetArn,
     #[doc="<p>Contains the Amazon ECS task definition and task count to be used, if the event target is an Amazon ECS task. For more information about Amazon ECS tasks, see <a href=\"http://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_defintions.html\">Task Definitions </a> in the <i>Amazon EC2 Container Service Developer Guide</i>.</p>"]
     #[serde(rename="EcsParameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ecs_parameters: Option<EcsParameters>,
     #[doc="<p>The ID of the target.</p>"]
     #[serde(rename="Id")]
     pub id: TargetId,
     #[doc="<p>Valid JSON text passed to the target. In this case, nothing from the event itself is passed to the target. You must use JSON dot notation, not bracket notation. For more information, see <a href=\"http://www.rfc-editor.org/rfc/rfc7159.txt\">The JavaScript Object Notation (JSON) Data Interchange Format</a>.</p>"]
     #[serde(rename="Input")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub input: Option<TargetInput>,
     #[doc="<p>The value of the JSONPath that is used for extracting part of the matched event when passing it to the target. You must use JSON dot notation, not bracket notation. For more information about JSON paths, see <a href=\"http://goessner.net/articles/JsonPath/\">JSONPath</a>.</p>"]
     #[serde(rename="InputPath")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub input_path: Option<TargetInputPath>,
     #[doc="<p>Settings to enable you to provide custom input to a target based on certain event data. You can extract one or more key-value pairs from the event and then use that data to send customized input to the target.</p>"]
     #[serde(rename="InputTransformer")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub input_transformer: Option<InputTransformer>,
     #[doc="<p>The custom parameter you can use to control shard assignment, when the target is an Amazon Kinesis stream. If you do not include this parameter, the default is to use the <code>eventId</code> as the partition key.</p>"]
     #[serde(rename="KinesisParameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub kinesis_parameters: Option<KinesisParameters>,
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM role to be used for this target when the rule is triggered. If one rule triggers multiple targets, you can use a different IAM role for each target.</p>"]
     #[serde(rename="RoleArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub role_arn: Option<RoleArn>,
     #[doc="<p>Parameters used when you are using the rule to invoke Amazon EC2 Run Command.</p>"]
     #[serde(rename="RunCommandParameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub run_command_parameters: Option<RunCommandParameters>,
 }
 
@@ -441,7 +503,7 @@ pub struct TestEventPatternRequest {
 pub struct TestEventPatternResponse {
     #[doc="<p>Indicates whether the event matches the event pattern.</p>"]
     #[serde(rename="Result")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub result: Option<Boolean>,
 }
 

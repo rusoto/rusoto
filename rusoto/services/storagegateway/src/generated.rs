@@ -30,12 +30,15 @@ pub struct ActivateGatewayInput {
     pub gateway_timezone: GatewayTimezone,
     #[doc="<p>A value that defines the type of gateway to activate. The type specified is critical to all later functions of the gateway and cannot be changed after activation. The default value is <code>STORED</code>. </p> <p> Valid Values: \"STORED\", \"CACHED\", \"VTL\", \"FILE_S3\"</p>"]
     #[serde(rename="GatewayType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_type: Option<GatewayType>,
     #[doc="<p>The value that indicates the type of medium changer to use for tape gateway. This field is optional.</p> <p> Valid Values: \"STK-L700\", \"AWS-Gateway-VTL\"</p>"]
     #[serde(rename="MediumChangerType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub medium_changer_type: Option<MediumChangerType>,
     #[doc="<p>The value that indicates the type of tape drive to use for tape gateway. This field is optional.</p> <p> Valid Values: \"IBM-ULT3580-TD5\" </p>"]
     #[serde(rename="TapeDriveType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tape_drive_type: Option<TapeDriveType>,
 }
 
@@ -43,6 +46,7 @@ pub struct ActivateGatewayInput {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ActivateGatewayOutput {
     #[serde(rename="GatewayARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_arn: Option<GatewayARN>,
 }
 
@@ -58,6 +62,7 @@ pub struct AddCacheInput {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct AddCacheOutput {
     #[serde(rename="GatewayARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_arn: Option<GatewayARN>,
 }
 
@@ -77,6 +82,7 @@ pub struct AddTagsToResourceInput {
 pub struct AddTagsToResourceOutput {
     #[doc="<p>The Amazon Resource Name (ARN) of the resource you want to add tags to.</p>"]
     #[serde(rename="ResourceARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resource_arn: Option<ResourceARN>,
 }
 
@@ -91,6 +97,7 @@ pub struct AddUploadBufferInput {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct AddUploadBufferOutput {
     #[serde(rename="GatewayARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_arn: Option<GatewayARN>,
 }
 
@@ -108,6 +115,7 @@ pub struct AddWorkingStorageInput {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct AddWorkingStorageOutput {
     #[serde(rename="GatewayARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_arn: Option<GatewayARN>,
 }
 
@@ -120,30 +128,39 @@ pub type Boolean = bool;
 pub struct CachediSCSIVolume {
     #[doc="<p>The date the volume was created. Volumes created prior to March 28, 2017 don’t have this time stamp.</p>"]
     #[serde(rename="CreatedDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub created_date: Option<CreatedDate>,
     #[doc="<p>If the cached volume was created from a snapshot, this field contains the snapshot ID used, e.g. snap-78e22663. Otherwise, this field is not included.</p>"]
     #[serde(rename="SourceSnapshotId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_snapshot_id: Option<SnapshotId>,
     #[doc="<p>The Amazon Resource Name (ARN) of the storage volume.</p>"]
     #[serde(rename="VolumeARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_arn: Option<VolumeARN>,
     #[doc="<p>The unique identifier of the volume, e.g. vol-AE4B946D.</p>"]
     #[serde(rename="VolumeId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_id: Option<VolumeId>,
     #[doc="<p>Represents the percentage complete if the volume is restoring or bootstrapping that represents the percent of data transferred. This field does not appear in the response if the cached volume is not restoring or bootstrapping.</p>"]
     #[serde(rename="VolumeProgress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_progress: Option<DoubleObject>,
     #[doc="<p>The size of the volume in bytes.</p>"]
     #[serde(rename="VolumeSizeInBytes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_size_in_bytes: Option<Long>,
     #[doc="<p>One of the VolumeStatus values that indicates the state of the storage volume.</p>"]
     #[serde(rename="VolumeStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_status: Option<VolumeStatus>,
     #[doc="<p>One of the VolumeType enumeration values that describes the type of the volume.</p>"]
     #[serde(rename="VolumeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_type: Option<VolumeType>,
     #[doc="<p>An <a>VolumeiSCSIAttributes</a> object that represents a collection of iSCSI attributes for one stored volume.</p>"]
     #[serde(rename="VolumeiSCSIAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volumei_scsi_attributes: Option<VolumeiSCSIAttributes>,
 }
 
@@ -163,6 +180,7 @@ pub struct CancelArchivalInput {
 pub struct CancelArchivalOutput {
     #[doc="<p>The Amazon Resource Name (ARN) of the virtual tape for which archiving was canceled.</p>"]
     #[serde(rename="TapeARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tape_arn: Option<TapeARN>,
 }
 
@@ -181,6 +199,7 @@ pub struct CancelRetrievalInput {
 pub struct CancelRetrievalOutput {
     #[doc="<p>The Amazon Resource Name (ARN) of the virtual tape for which retrieval was canceled.</p>"]
     #[serde(rename="TapeARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tape_arn: Option<TapeARN>,
 }
 
@@ -190,15 +209,19 @@ pub type ChapCredentials = Vec<ChapInfo>;
 pub struct ChapInfo {
     #[doc="<p>The iSCSI initiator that connects to the target.</p>"]
     #[serde(rename="InitiatorName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub initiator_name: Option<IqnName>,
     #[doc="<p>The secret key that the initiator (for example, the Windows client) must provide to participate in mutual CHAP with the target.</p>"]
     #[serde(rename="SecretToAuthenticateInitiator")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub secret_to_authenticate_initiator: Option<ChapSecret>,
     #[doc="<p>The secret key that the target must provide to participate in mutual CHAP with the initiator (e.g. Windows client).</p>"]
     #[serde(rename="SecretToAuthenticateTarget")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub secret_to_authenticate_target: Option<ChapSecret>,
     #[doc="<p>The Amazon Resource Name (ARN) of the volume.</p> <p> Valid Values: 50 to 500 lowercase letters, numbers, periods (.), and hyphens (-).</p>"]
     #[serde(rename="TargetARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_arn: Option<TargetARN>,
 }
 
@@ -213,9 +236,11 @@ pub struct CreateCachediSCSIVolumeInput {
     #[serde(rename="NetworkInterfaceId")]
     pub network_interface_id: NetworkInterfaceId,
     #[serde(rename="SnapshotId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_id: Option<SnapshotId>,
     #[doc="<p>The ARN for an existing volume. Specifying this ARN makes the new volume into an exact copy of the specified existing volume's latest recovery point. The <code>VolumeSizeInBytes</code> value for this new volume must be equal to or larger than the size of the existing volume, in bytes.</p>"]
     #[serde(rename="SourceVolumeARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_volume_arn: Option<VolumeARN>,
     #[serde(rename="TargetName")]
     pub target_name: TargetName,
@@ -226,8 +251,10 @@ pub struct CreateCachediSCSIVolumeInput {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct CreateCachediSCSIVolumeOutput {
     #[serde(rename="TargetARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_arn: Option<TargetARN>,
     #[serde(rename="VolumeARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_arn: Option<VolumeARN>,
 }
 
@@ -236,38 +263,43 @@ pub struct CreateCachediSCSIVolumeOutput {
 pub struct CreateNFSFileShareInput {
     #[doc="<p>The list of clients that are allowed to access the file gateway. The list must contain either valid IP addresses or valid CIDR blocks. </p>"]
     #[serde(rename="ClientList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_list: Option<FileShareClientList>,
     #[doc="<p>A unique string value that you supply that is used by file gateway to ensure idempotent file share creation.</p>"]
     #[serde(rename="ClientToken")]
     pub client_token: ClientToken,
     #[doc="<p>The default storage class for objects put into an Amazon S3 bucket by file gateway. Possible values are S3_STANDARD or S3_STANDARD_IA. If this field is not populated, the default value S3_STANDARD is used. Optional.</p>"]
     #[serde(rename="DefaultStorageClass")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_storage_class: Option<StorageClass>,
     #[doc="<p>The Amazon Resource Name (ARN) of the file gateway on which you want to create a file share.</p>"]
     #[serde(rename="GatewayARN")]
     pub gateway_arn: GatewayARN,
     #[doc="<p>True to use Amazon S3 server side encryption with your own AWS KMS key, or false to use a key managed by Amazon S3. Optional.</p>"]
     #[serde(rename="KMSEncrypted")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub kms_encrypted: Option<Boolean>,
     #[doc="<p>The KMS key used for Amazon S3 server side encryption. This value can only be set when KmsEncrypted is true. Optional.</p>"]
     #[serde(rename="KMSKey")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub kms_key: Option<KMSKey>,
     #[doc="<p>The ARN of the backed storage used for storing file data. </p>"]
     #[serde(rename="LocationARN")]
     pub location_arn: LocationARN,
     #[doc="<p>File share default values. Optional.</p>"]
     #[serde(rename="NFSFileShareDefaults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub nfs_file_share_defaults: Option<NFSFileShareDefaults>,
     #[doc="<p>Sets the write status of a file share: \"true\" if the write status is read-only, and otherwise \"false\".</p>"]
     #[serde(rename="ReadOnly")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub read_only: Option<Boolean>,
     #[doc="<p>The ARN of the AWS Identity and Access Management (IAM) role that a file gateway assumes when it accesses the underlying storage. </p>"]
     #[serde(rename="Role")]
     pub role: Role,
     #[doc="<p>Maps a user to anonymous user. Valid options are the following: </p> <ul> <li> <p>\"RootSquash\" - Only root is mapped to anonymous user.</p> </li> <li> <p>\"NoSquash\" - No one is mapped to anonymous user.</p> </li> <li> <p>\"AllSquash\" - Everyone is mapped to anonymous user.</p> </li> </ul>"]
     #[serde(rename="Squash")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub squash: Option<Squash>,
 }
 
@@ -276,6 +308,7 @@ pub struct CreateNFSFileShareInput {
 pub struct CreateNFSFileShareOutput {
     #[doc="<p>The Amazon Resource Name (ARN) of the newly created file share. </p>"]
     #[serde(rename="FileShareARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub file_share_arn: Option<FileShareARN>,
 }
 
@@ -290,10 +323,13 @@ pub struct CreateSnapshotFromVolumeRecoveryPointInput {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct CreateSnapshotFromVolumeRecoveryPointOutput {
     #[serde(rename="SnapshotId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_id: Option<SnapshotId>,
     #[serde(rename="VolumeARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_arn: Option<VolumeARN>,
     #[serde(rename="VolumeRecoveryPointTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_recovery_point_time: Option<String>,
 }
 
@@ -313,9 +349,11 @@ pub struct CreateSnapshotInput {
 pub struct CreateSnapshotOutput {
     #[doc="<p>The snapshot ID that is used to refer to the snapshot in future operations such as describing snapshots (Amazon Elastic Compute Cloud API <code>DescribeSnapshots</code>) or creating a volume from a snapshot (<a>CreateStorediSCSIVolume</a>).</p>"]
     #[serde(rename="SnapshotId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_id: Option<SnapshotId>,
     #[doc="<p>The Amazon Resource Name (ARN) of the volume of which the snapshot was taken.</p>"]
     #[serde(rename="VolumeARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_arn: Option<VolumeARN>,
 }
 
@@ -335,6 +373,7 @@ pub struct CreateStorediSCSIVolumeInput {
     pub preserve_existing_data: Boolean,
     #[doc="<p>The snapshot ID (e.g. \"snap-1122aabb\") of the snapshot to restore as the new stored volume. Specify this field if you want to create the iSCSI storage volume from a snapshot otherwise do not include this field. To list snapshots for your account use <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-DescribeSnapshots.html\">DescribeSnapshots</a> in the <i>Amazon Elastic Compute Cloud API Reference</i>.</p>"]
     #[serde(rename="SnapshotId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_id: Option<SnapshotId>,
     #[doc="<p>The name of the iSCSI target used by initiators to connect to the target and as a suffix for the target ARN. For example, specifying <code>TargetName</code> as <i>myvolume</i> results in the target ARN of arn:aws:storagegateway:us-east-1:111122223333:gateway/sgw-12A3456B/target/iqn.1997-05.com.amazon:myvolume. The target name must be unique across all volumes of a gateway.</p>"]
     #[serde(rename="TargetName")]
@@ -346,12 +385,15 @@ pub struct CreateStorediSCSIVolumeInput {
 pub struct CreateStorediSCSIVolumeOutput {
     #[doc="<p>he Amazon Resource Name (ARN) of the volume target that includes the iSCSI name that initiators can use to connect to the target.</p>"]
     #[serde(rename="TargetARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_arn: Option<TargetARN>,
     #[doc="<p>The Amazon Resource Name (ARN) of the configured volume.</p>"]
     #[serde(rename="VolumeARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_arn: Option<VolumeARN>,
     #[doc="<p>The size of the volume in bytes.</p>"]
     #[serde(rename="VolumeSizeInBytes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_size_in_bytes: Option<Long>,
 }
 
@@ -374,6 +416,7 @@ pub struct CreateTapeWithBarcodeInput {
 pub struct CreateTapeWithBarcodeOutput {
     #[doc="<p>A unique Amazon Resource Name (ARN) that represents the virtual tape that was created.</p>"]
     #[serde(rename="TapeARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tape_arn: Option<TapeARN>,
 }
 
@@ -402,6 +445,7 @@ pub struct CreateTapesInput {
 pub struct CreateTapesOutput {
     #[doc="<p>A list of unique Amazon Resource Names (ARNs) that represents the virtual tapes that were created.</p>"]
     #[serde(rename="TapeARNs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tape_ar_ns: Option<TapeARNs>,
 }
 
@@ -421,6 +465,7 @@ pub struct DeleteBandwidthRateLimitInput {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DeleteBandwidthRateLimitOutput {
     #[serde(rename="GatewayARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_arn: Option<GatewayARN>,
 }
 
@@ -440,9 +485,11 @@ pub struct DeleteChapCredentialsInput {
 pub struct DeleteChapCredentialsOutput {
     #[doc="<p>The iSCSI initiator that connects to the target.</p>"]
     #[serde(rename="InitiatorName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub initiator_name: Option<IqnName>,
     #[doc="<p>The Amazon Resource Name (ARN) of the target.</p>"]
     #[serde(rename="TargetARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_arn: Option<TargetARN>,
 }
 
@@ -459,6 +506,7 @@ pub struct DeleteFileShareInput {
 pub struct DeleteFileShareOutput {
     #[doc="<p>The Amazon Resource Name (ARN) of the deleted file share. </p>"]
     #[serde(rename="FileShareARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub file_share_arn: Option<FileShareARN>,
 }
 
@@ -473,6 +521,7 @@ pub struct DeleteGatewayInput {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DeleteGatewayOutput {
     #[serde(rename="GatewayARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_arn: Option<GatewayARN>,
 }
 
@@ -485,6 +534,7 @@ pub struct DeleteSnapshotScheduleInput {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DeleteSnapshotScheduleOutput {
     #[serde(rename="VolumeARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_arn: Option<VolumeARN>,
 }
 
@@ -501,6 +551,7 @@ pub struct DeleteTapeArchiveInput {
 pub struct DeleteTapeArchiveOutput {
     #[doc="<p>The Amazon Resource Name (ARN) of the virtual tape that was deleted from the virtual tape shelf (VTS).</p>"]
     #[serde(rename="TapeARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tape_arn: Option<TapeARN>,
 }
 
@@ -520,6 +571,7 @@ pub struct DeleteTapeInput {
 pub struct DeleteTapeOutput {
     #[doc="<p>The Amazon Resource Name (ARN) of the deleted virtual tape.</p>"]
     #[serde(rename="TapeARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tape_arn: Option<TapeARN>,
 }
 
@@ -536,6 +588,7 @@ pub struct DeleteVolumeInput {
 pub struct DeleteVolumeOutput {
     #[doc="<p>The Amazon Resource Name (ARN) of the storage volume that was deleted. It is the same ARN you provided in the request.</p>"]
     #[serde(rename="VolumeARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_arn: Option<VolumeARN>,
 }
 
@@ -551,11 +604,14 @@ pub struct DescribeBandwidthRateLimitInput {
 pub struct DescribeBandwidthRateLimitOutput {
     #[doc="<p>The average download bandwidth rate limit in bits per second. This field does not appear in the response if the download rate limit is not set.</p>"]
     #[serde(rename="AverageDownloadRateLimitInBitsPerSec")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub average_download_rate_limit_in_bits_per_sec: Option<BandwidthDownloadRateLimit>,
     #[doc="<p>The average upload bandwidth rate limit in bits per second. This field does not appear in the response if the upload rate limit is not set.</p>"]
     #[serde(rename="AverageUploadRateLimitInBitsPerSec")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub average_upload_rate_limit_in_bits_per_sec: Option<BandwidthUploadRateLimit>,
     #[serde(rename="GatewayARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_arn: Option<GatewayARN>,
 }
 
@@ -568,18 +624,25 @@ pub struct DescribeCacheInput {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DescribeCacheOutput {
     #[serde(rename="CacheAllocatedInBytes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_allocated_in_bytes: Option<Long>,
     #[serde(rename="CacheDirtyPercentage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_dirty_percentage: Option<Double>,
     #[serde(rename="CacheHitPercentage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_hit_percentage: Option<Double>,
     #[serde(rename="CacheMissPercentage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_miss_percentage: Option<Double>,
     #[serde(rename="CacheUsedPercentage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cache_used_percentage: Option<Double>,
     #[serde(rename="DiskIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub disk_ids: Option<DiskIds>,
     #[serde(rename="GatewayARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_arn: Option<GatewayARN>,
 }
 
@@ -594,6 +657,7 @@ pub struct DescribeCachediSCSIVolumesInput {
 pub struct DescribeCachediSCSIVolumesOutput {
     #[doc="<p>An array of objects where each object contains metadata about one cached volume.</p>"]
     #[serde(rename="CachediSCSIVolumes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cachedi_scsi_volumes: Option<CachediSCSIVolumes>,
 }
 
@@ -610,6 +674,7 @@ pub struct DescribeChapCredentialsInput {
 pub struct DescribeChapCredentialsOutput {
     #[doc="<p>An array of <a>ChapInfo</a> objects that represent CHAP credentials. Each object in the array contains CHAP credential information for one target-initiator pair. If no CHAP credentials are set, an empty array is returned. CHAP credential information is provided in a JSON object with the following fields:</p> <ul> <li> <p> <b>InitiatorName</b>: The iSCSI initiator that connects to the target.</p> </li> <li> <p> <b>SecretToAuthenticateInitiator</b>: The secret key that the initiator (for example, the Windows client) must provide to participate in mutual CHAP with the target.</p> </li> <li> <p> <b>SecretToAuthenticateTarget</b>: The secret key that the target must provide to participate in mutual CHAP with the initiator (e.g. Windows client).</p> </li> <li> <p> <b>TargetARN</b>: The Amazon Resource Name (ARN) of the storage volume.</p> </li> </ul>"]
     #[serde(rename="ChapCredentials")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub chap_credentials: Option<ChapCredentials>,
 }
 
@@ -624,30 +689,39 @@ pub struct DescribeGatewayInformationInput {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DescribeGatewayInformationOutput {
     #[serde(rename="GatewayARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_arn: Option<GatewayARN>,
     #[doc="<p>The unique identifier assigned to your gateway during activation. This ID becomes part of the gateway Amazon Resource Name (ARN), which you use as input for other operations.</p>"]
     #[serde(rename="GatewayId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_id: Option<GatewayId>,
     #[doc="<p>The name you configured for your gateway.</p>"]
     #[serde(rename="GatewayName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_name: Option<String>,
     #[doc="<p>A <a>NetworkInterface</a> array that contains descriptions of the gateway network interfaces.</p>"]
     #[serde(rename="GatewayNetworkInterfaces")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_network_interfaces: Option<GatewayNetworkInterfaces>,
     #[doc="<p>A value that indicates the operating state of the gateway.</p>"]
     #[serde(rename="GatewayState")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_state: Option<GatewayState>,
     #[doc="<p>A value that indicates the time zone configured for the gateway.</p>"]
     #[serde(rename="GatewayTimezone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_timezone: Option<GatewayTimezone>,
     #[doc="<p>The type of the gateway.</p>"]
     #[serde(rename="GatewayType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_type: Option<GatewayType>,
     #[doc="<p>The date on which the last software update was applied to the gateway. If the gateway has never been updated, this field does not return a value in the response.</p>"]
     #[serde(rename="LastSoftwareUpdate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_software_update: Option<LastSoftwareUpdate>,
     #[doc="<p>The date on which an update to the gateway is available. This date is in the time zone of the gateway. If the gateway is not available for an update this field is not returned in the response.</p>"]
     #[serde(rename="NextUpdateAvailabilityDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_update_availability_date: Option<NextUpdateAvailabilityDate>,
 }
 
@@ -663,16 +737,21 @@ pub struct DescribeMaintenanceStartTimeInput {
 pub struct DescribeMaintenanceStartTimeOutput {
     #[doc="<p>An ordinal number between 0 and 6 that represents the day of the week, where 0 represents Sunday and 6 represents Saturday. The day of week is in the time zone of the gateway.</p>"]
     #[serde(rename="DayOfWeek")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub day_of_week: Option<DayOfWeek>,
     #[serde(rename="GatewayARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_arn: Option<GatewayARN>,
     #[doc="<p>The hour component of the maintenance start time represented as <i>hh</i>, where <i>hh</i> is the hour (0 to 23). The hour of the day is in the time zone of the gateway.</p>"]
     #[serde(rename="HourOfDay")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hour_of_day: Option<HourOfDay>,
     #[doc="<p>The minute component of the maintenance start time represented as <i>mm</i>, where <i>mm</i> is the minute (0 to 59). The minute of the hour is in the time zone of the gateway.</p>"]
     #[serde(rename="MinuteOfHour")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub minute_of_hour: Option<MinuteOfHour>,
     #[serde(rename="Timezone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub timezone: Option<GatewayTimezone>,
 }
 
@@ -689,6 +768,7 @@ pub struct DescribeNFSFileSharesInput {
 pub struct DescribeNFSFileSharesOutput {
     #[doc="<p>An array containing a description for each requested file share. </p>"]
     #[serde(rename="NFSFileShareInfoList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub nfs_file_share_info_list: Option<NFSFileShareInfoList>,
 }
 
@@ -703,14 +783,19 @@ pub struct DescribeSnapshotScheduleInput {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DescribeSnapshotScheduleOutput {
     #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<Description>,
     #[serde(rename="RecurrenceInHours")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub recurrence_in_hours: Option<RecurrenceInHours>,
     #[serde(rename="StartAt")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_at: Option<HourOfDay>,
     #[serde(rename="Timezone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub timezone: Option<GatewayTimezone>,
     #[serde(rename="VolumeARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_arn: Option<VolumeARN>,
 }
 
@@ -725,6 +810,7 @@ pub struct DescribeStorediSCSIVolumesInput {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DescribeStorediSCSIVolumesOutput {
     #[serde(rename="StorediSCSIVolumes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub storedi_scsi_volumes: Option<StorediSCSIVolumes>,
 }
 
@@ -733,12 +819,15 @@ pub struct DescribeStorediSCSIVolumesOutput {
 pub struct DescribeTapeArchivesInput {
     #[doc="<p>Specifies that the number of virtual tapes descried be limited to the specified number.</p>"]
     #[serde(rename="Limit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub limit: Option<PositiveIntObject>,
     #[doc="<p>An opaque string that indicates the position at which to begin describing virtual tapes.</p>"]
     #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
     #[doc="<p>Specifies one or more unique Amazon Resource Names (ARNs) that represent the virtual tapes you want to describe.</p>"]
     #[serde(rename="TapeARNs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tape_ar_ns: Option<TapeARNs>,
 }
 
@@ -747,9 +836,11 @@ pub struct DescribeTapeArchivesInput {
 pub struct DescribeTapeArchivesOutput {
     #[doc="<p>An opaque string that indicates the position at which the virtual tapes that were fetched for description ended. Use this marker in your next request to fetch the next set of virtual tapes in the virtual tape shelf (VTS). If there are no more virtual tapes to describe, this field does not appear in the response.</p>"]
     #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
     #[doc="<p>An array of virtual tape objects in the virtual tape shelf (VTS). The description includes of the Amazon Resource Name(ARN) of the virtual tapes. The information returned includes the Amazon Resource Names (ARNs) of the tapes, size of the tapes, status of the tapes, progress of the description and tape barcode.</p>"]
     #[serde(rename="TapeArchives")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tape_archives: Option<TapeArchives>,
 }
 
@@ -760,9 +851,11 @@ pub struct DescribeTapeRecoveryPointsInput {
     pub gateway_arn: GatewayARN,
     #[doc="<p>Specifies that the number of virtual tape recovery points that are described be limited to the specified number.</p>"]
     #[serde(rename="Limit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub limit: Option<PositiveIntObject>,
     #[doc="<p>An opaque string that indicates the position at which to begin describing the virtual tape recovery points.</p>"]
     #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
 }
 
@@ -770,12 +863,15 @@ pub struct DescribeTapeRecoveryPointsInput {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DescribeTapeRecoveryPointsOutput {
     #[serde(rename="GatewayARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_arn: Option<GatewayARN>,
     #[doc="<p>An opaque string that indicates the position at which the virtual tape recovery points that were listed for description ended.</p> <p>Use this marker in your next request to list the next set of virtual tape recovery points in the list. If there are no more recovery points to describe, this field does not appear in the response.</p>"]
     #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
     #[doc="<p>An array of TapeRecoveryPointInfos that are available for the specified gateway.</p>"]
     #[serde(rename="TapeRecoveryPointInfos")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tape_recovery_point_infos: Option<TapeRecoveryPointInfos>,
 }
 
@@ -786,12 +882,15 @@ pub struct DescribeTapesInput {
     pub gateway_arn: GatewayARN,
     #[doc="<p>Specifies that the number of virtual tapes described be limited to the specified number.</p> <note> <p>Amazon Web Services may impose its own limit, if this field is not set.</p> </note>"]
     #[serde(rename="Limit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub limit: Option<PositiveIntObject>,
     #[doc="<p>A marker value, obtained in a previous call to <code>DescribeTapes</code>. This marker indicates which page of results to retrieve. </p> <p>If not specified, the first page of results is retrieved.</p>"]
     #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
     #[doc="<p>Specifies one or more unique Amazon Resource Names (ARNs) that represent the virtual tapes you want to describe. If this parameter is not specified, Tape gateway returns a description of all virtual tapes associated with the specified gateway.</p>"]
     #[serde(rename="TapeARNs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tape_ar_ns: Option<TapeARNs>,
 }
 
@@ -800,9 +899,11 @@ pub struct DescribeTapesInput {
 pub struct DescribeTapesOutput {
     #[doc="<p>An opaque string which can be used as part of a subsequent DescribeTapes call to retrieve the next page of results.</p> <p>If a response does not contain a marker, then there are no more results to be retrieved.</p>"]
     #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
     #[doc="<p>An array of virtual tape descriptions.</p>"]
     #[serde(rename="Tapes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tapes: Option<Tapes>,
 }
 
@@ -815,12 +916,16 @@ pub struct DescribeUploadBufferInput {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DescribeUploadBufferOutput {
     #[serde(rename="DiskIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub disk_ids: Option<DiskIds>,
     #[serde(rename="GatewayARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_arn: Option<GatewayARN>,
     #[serde(rename="UploadBufferAllocatedInBytes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub upload_buffer_allocated_in_bytes: Option<Long>,
     #[serde(rename="UploadBufferUsedInBytes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub upload_buffer_used_in_bytes: Option<Long>,
 }
 
@@ -831,12 +936,15 @@ pub struct DescribeVTLDevicesInput {
     pub gateway_arn: GatewayARN,
     #[doc="<p>Specifies that the number of VTL devices described be limited to the specified number.</p>"]
     #[serde(rename="Limit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub limit: Option<PositiveIntObject>,
     #[doc="<p>An opaque string that indicates the position at which to begin describing the VTL devices.</p>"]
     #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
     #[doc="<p>An array of strings, where each string represents the Amazon Resource Name (ARN) of a VTL device.</p> <note> <p>All of the specified VTL devices must be from the same gateway. If no VTL devices are specified, the result will contain all devices on the specified gateway.</p> </note>"]
     #[serde(rename="VTLDeviceARNs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vtl_device_ar_ns: Option<VTLDeviceARNs>,
 }
 
@@ -844,12 +952,15 @@ pub struct DescribeVTLDevicesInput {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DescribeVTLDevicesOutput {
     #[serde(rename="GatewayARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_arn: Option<GatewayARN>,
     #[doc="<p>An opaque string that indicates the position at which the VTL devices that were fetched for description ended. Use the marker in your next request to fetch the next set of VTL devices in the list. If there are no more VTL devices to describe, this field does not appear in the response.</p>"]
     #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
     #[doc="<p>An array of VTL device objects composed of the Amazon Resource Name(ARN) of the VTL devices.</p>"]
     #[serde(rename="VTLDevices")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vtl_devices: Option<VTLDevices>,
 }
 
@@ -865,14 +976,18 @@ pub struct DescribeWorkingStorageInput {
 pub struct DescribeWorkingStorageOutput {
     #[doc="<p>An array of the gateway's local disk IDs that are configured as working storage. Each local disk ID is specified as a string (minimum length of 1 and maximum length of 300). If no local disks are configured as working storage, then the DiskIds array is empty.</p>"]
     #[serde(rename="DiskIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub disk_ids: Option<DiskIds>,
     #[serde(rename="GatewayARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_arn: Option<GatewayARN>,
     #[doc="<p>The total working storage in bytes allocated for the gateway. If no working storage is configured for the gateway, this field returns 0.</p>"]
     #[serde(rename="WorkingStorageAllocatedInBytes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub working_storage_allocated_in_bytes: Option<Long>,
     #[doc="<p>The total working storage in bytes in use by the gateway. If no working storage is configured for the gateway, this field returns 0.</p>"]
     #[serde(rename="WorkingStorageUsedInBytes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub working_storage_used_in_bytes: Option<Long>,
 }
 
@@ -883,16 +998,19 @@ pub type DeviceType = String;
 pub struct DeviceiSCSIAttributes {
     #[doc="<p>Indicates whether mutual CHAP is enabled for the iSCSI target.</p>"]
     #[serde(rename="ChapEnabled")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub chap_enabled: Option<Boolean>,
     #[doc="<p>The network interface identifier of the VTL device.</p>"]
     #[serde(rename="NetworkInterfaceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_interface_id: Option<NetworkInterfaceId>,
     #[doc="<p>The port used to communicate with iSCSI VTL device targets.</p>"]
     #[serde(rename="NetworkInterfacePort")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_interface_port: Option<Integer>,
     #[doc="<p>Specifies the unique Amazon Resource Name(ARN) that encodes the iSCSI qualified name(iqn) of a tape drive or media changer target.</p>"]
     #[serde(rename="TargetARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_arn: Option<TargetARN>,
 }
 
@@ -908,24 +1026,32 @@ pub struct DisableGatewayInput {
 pub struct DisableGatewayOutput {
     #[doc="<p>The unique Amazon Resource Name of the disabled gateway.</p>"]
     #[serde(rename="GatewayARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_arn: Option<GatewayARN>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Disk {
     #[serde(rename="DiskAllocationResource")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub disk_allocation_resource: Option<String>,
     #[serde(rename="DiskAllocationType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub disk_allocation_type: Option<DiskAllocationType>,
     #[serde(rename="DiskId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub disk_id: Option<DiskId>,
     #[serde(rename="DiskNode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub disk_node: Option<String>,
     #[serde(rename="DiskPath")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub disk_path: Option<String>,
     #[serde(rename="DiskSizeInBytes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub disk_size_in_bytes: Option<Long>,
     #[serde(rename="DiskStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub disk_status: Option<String>,
 }
 
@@ -948,12 +1074,16 @@ pub type FileShareId = String;
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct FileShareInfo {
     #[serde(rename="FileShareARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub file_share_arn: Option<FileShareARN>,
     #[serde(rename="FileShareId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub file_share_id: Option<FileShareId>,
     #[serde(rename="FileShareStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub file_share_status: Option<FileShareStatus>,
     #[serde(rename="GatewayARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_arn: Option<GatewayARN>,
 }
 
@@ -968,18 +1098,23 @@ pub type GatewayId = String;
 pub struct GatewayInfo {
     #[doc="<p>The Amazon Resource Name (ARN) of the gateway. Use the <a>ListGateways</a> operation to return a list of gateways for your account and region.</p>"]
     #[serde(rename="GatewayARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_arn: Option<GatewayARN>,
     #[doc="<p>The unique identifier assigned to your gateway during activation. This ID becomes part of the gateway Amazon Resource Name (ARN), which you use as input for other operations.</p>"]
     #[serde(rename="GatewayId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_id: Option<GatewayId>,
     #[doc="<p>The name of the gateway.</p>"]
     #[serde(rename="GatewayName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_name: Option<String>,
     #[doc="<p>The state of the gateway.</p> <p>Valid Values: DISABLED or ACTIVE</p>"]
     #[serde(rename="GatewayOperationalState")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_operational_state: Option<GatewayOperationalState>,
     #[doc="<p>The type of the gateway.</p>"]
     #[serde(rename="GatewayType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_type: Option<GatewayType>,
 }
 
@@ -1005,12 +1140,15 @@ pub type LastSoftwareUpdate = String;
 pub struct ListFileSharesInput {
     #[doc="<p>The Amazon resource Name (ARN) of the gateway whose file shares you want to list. If this field is not present, all file shares under your account are listed.</p>"]
     #[serde(rename="GatewayARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_arn: Option<GatewayARN>,
     #[doc="<p>The maximum number of file shares to return in the response. The value must be an integer with a value greater than zero. Optional.</p>"]
     #[serde(rename="Limit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub limit: Option<PositiveIntObject>,
     #[doc="<p>Opaque pagination token returned from a previous ListFileShares operation. If present, <code>Marker</code> specifies where to continue the list from after a previous call to ListFileShares. Optional.</p>"]
     #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
 }
 
@@ -1019,12 +1157,15 @@ pub struct ListFileSharesInput {
 pub struct ListFileSharesOutput {
     #[doc="<p>An array of information about the file gateway's file shares. </p>"]
     #[serde(rename="FileShareInfoList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub file_share_info_list: Option<FileShareInfoList>,
     #[doc="<p>If the request includes <code>Marker</code>, the response returns that value in this field. </p>"]
     #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
     #[doc="<p>If a value is present, there are more file shares to return. In a subsequent request, use <code>NextMarker</code> as the value for <code>Marker</code> to retrieve the next set of file shares. </p>"]
     #[serde(rename="NextMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_marker: Option<Marker>,
 }
 
@@ -1033,17 +1174,21 @@ pub struct ListFileSharesOutput {
 pub struct ListGatewaysInput {
     #[doc="<p>Specifies that the list of gateways returned be limited to the specified number of items.</p>"]
     #[serde(rename="Limit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub limit: Option<PositiveIntObject>,
     #[doc="<p>An opaque string that indicates the position at which to begin the returned list of gateways.</p>"]
     #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ListGatewaysOutput {
     #[serde(rename="Gateways")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateways: Option<Gateways>,
     #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
 }
 
@@ -1057,8 +1202,10 @@ pub struct ListLocalDisksInput {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ListLocalDisksOutput {
     #[serde(rename="Disks")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub disks: Option<Disks>,
     #[serde(rename="GatewayARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_arn: Option<GatewayARN>,
 }
 
@@ -1067,9 +1214,11 @@ pub struct ListLocalDisksOutput {
 pub struct ListTagsForResourceInput {
     #[doc="<p>Specifies that the list of tags returned be limited to the specified number of items.</p>"]
     #[serde(rename="Limit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub limit: Option<PositiveIntObject>,
     #[doc="<p>An opaque string that indicates the position at which to begin returning the list of tags.</p>"]
     #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
     #[doc="<p>The Amazon Resource Name (ARN) of the resource for which you want to list tags.</p>"]
     #[serde(rename="ResourceARN")]
@@ -1081,12 +1230,15 @@ pub struct ListTagsForResourceInput {
 pub struct ListTagsForResourceOutput {
     #[doc="<p>An opaque string that indicates the position at which to stop returning the list of tags.</p>"]
     #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
     #[doc="<p>he Amazon Resource Name (ARN) of the resource for which you want to list tags.</p>"]
     #[serde(rename="ResourceARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resource_arn: Option<ResourceARN>,
     #[doc="<p>An array that contains the tags for the specified resource.</p>"]
     #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Tags>,
 }
 
@@ -1095,11 +1247,14 @@ pub struct ListTagsForResourceOutput {
 pub struct ListTapesInput {
     #[doc="<p>An optional number limit for the tapes in the list returned by this call.</p>"]
     #[serde(rename="Limit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub limit: Option<PositiveIntObject>,
     #[doc="<p>A string that indicates the position at which to begin the returned list of tapes.</p>"]
     #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
     #[serde(rename="TapeARNs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tape_ar_ns: Option<TapeARNs>,
 }
 
@@ -1108,8 +1263,10 @@ pub struct ListTapesInput {
 pub struct ListTapesOutput {
     #[doc="<p>A string that indicates the position at which to begin returning the next list of tapes. Use the marker in your next request to continue pagination of tapes. If there are no more tapes to list, this element does not appear in the response body.</p>"]
     #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
     #[serde(rename="TapeInfos")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tape_infos: Option<TapeInfos>,
 }
 
@@ -1126,6 +1283,7 @@ pub struct ListVolumeInitiatorsInput {
 pub struct ListVolumeInitiatorsOutput {
     #[doc="<p>The host names and port numbers of all iSCSI initiators that are connected to the gateway.</p>"]
     #[serde(rename="Initiators")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub initiators: Option<Initiators>,
 }
 
@@ -1138,8 +1296,10 @@ pub struct ListVolumeRecoveryPointsInput {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ListVolumeRecoveryPointsOutput {
     #[serde(rename="GatewayARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_arn: Option<GatewayARN>,
     #[serde(rename="VolumeRecoveryPointInfos")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_recovery_point_infos: Option<VolumeRecoveryPointInfos>,
 }
 
@@ -1147,22 +1307,28 @@ pub struct ListVolumeRecoveryPointsOutput {
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListVolumesInput {
     #[serde(rename="GatewayARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_arn: Option<GatewayARN>,
     #[doc="<p>Specifies that the list of volumes returned be limited to the specified number of items.</p>"]
     #[serde(rename="Limit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub limit: Option<PositiveIntObject>,
     #[doc="<p>A string that indicates the position at which to begin the returned list of volumes. Obtain the marker from the response of a previous List iSCSI Volumes request.</p>"]
     #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ListVolumesOutput {
     #[serde(rename="GatewayARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_arn: Option<GatewayARN>,
     #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
     #[serde(rename="VolumeInfos")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_infos: Option<VolumeInfos>,
 }
 
@@ -1178,15 +1344,19 @@ pub type MinuteOfHour = i64;
 pub struct NFSFileShareDefaults {
     #[doc="<p>The Unix directory mode in the form \"nnnn\". For example, \"0666\" represents the default access mode for all directories inside the file share. The default value is 0777.</p>"]
     #[serde(rename="DirectoryMode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub directory_mode: Option<PermissionMode>,
     #[doc="<p>The Unix file mode in the form \"nnnn\". For example, \"0666\" represents the default file mode inside the file share. The default value is 0666. </p>"]
     #[serde(rename="FileMode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub file_mode: Option<PermissionMode>,
     #[doc="<p>The default group ID for the file share (unless the files have another group ID specified). The default value is nfsnobody. </p>"]
     #[serde(rename="GroupId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub group_id: Option<PermissionId>,
     #[doc="<p>The default owner ID for files in the file share (unless the files have another owner ID specified). The default value is nfsnobody. </p>"]
     #[serde(rename="OwnerId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner_id: Option<PermissionId>,
 }
 
@@ -1194,36 +1364,48 @@ pub struct NFSFileShareDefaults {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct NFSFileShareInfo {
     #[serde(rename="ClientList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_list: Option<FileShareClientList>,
     #[doc="<p>The default storage class for objects put into an Amazon S3 bucket by file gateway. Possible values are S3_STANDARD or S3_STANDARD_IA. If this field is not populated, the default value S3_STANDARD is used. Optional.</p>"]
     #[serde(rename="DefaultStorageClass")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_storage_class: Option<StorageClass>,
     #[serde(rename="FileShareARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub file_share_arn: Option<FileShareARN>,
     #[serde(rename="FileShareId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub file_share_id: Option<FileShareId>,
     #[serde(rename="FileShareStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub file_share_status: Option<FileShareStatus>,
     #[serde(rename="GatewayARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_arn: Option<GatewayARN>,
     #[doc="<p>True to use Amazon S3 server side encryption with your own KMS key, or false to use a key managed by Amazon S3. Optional. </p>"]
     #[serde(rename="KMSEncrypted")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub kms_encrypted: Option<Boolean>,
     #[serde(rename="KMSKey")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub kms_key: Option<KMSKey>,
     #[serde(rename="LocationARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub location_arn: Option<LocationARN>,
     #[serde(rename="NFSFileShareDefaults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub nfs_file_share_defaults: Option<NFSFileShareDefaults>,
     #[serde(rename="Path")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub path: Option<Path>,
     #[serde(rename="ReadOnly")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub read_only: Option<Boolean>,
     #[serde(rename="Role")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub role: Option<Role>,
     #[serde(rename="Squash")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub squash: Option<Squash>,
 }
 
@@ -1233,12 +1415,15 @@ pub type NFSFileShareInfoList = Vec<NFSFileShareInfo>;
 pub struct NetworkInterface {
     #[doc="<p>The Internet Protocol version 4 (IPv4) address of the interface.</p>"]
     #[serde(rename="Ipv4Address")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ipv_4_address: Option<String>,
     #[doc="<p>The Internet Protocol version 6 (IPv6) address of the interface. <i>Currently not supported</i>.</p>"]
     #[serde(rename="Ipv6Address")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ipv_6_address: Option<String>,
     #[doc="<p>The Media Access Control (MAC) address of the interface.</p> <note> <p>This is currently unsupported and will not be returned in output.</p> </note>"]
     #[serde(rename="MacAddress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub mac_address: Option<String>,
 }
 
@@ -1260,6 +1445,7 @@ pub struct RefreshCacheInput {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct RefreshCacheOutput {
     #[serde(rename="FileShareARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub file_share_arn: Option<FileShareARN>,
 }
 
@@ -1280,6 +1466,7 @@ pub struct RemoveTagsFromResourceInput {
 pub struct RemoveTagsFromResourceOutput {
     #[doc="<p>The Amazon Resource Name (ARN) of the resource that the tags were removed from.</p>"]
     #[serde(rename="ResourceARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resource_arn: Option<ResourceARN>,
 }
 
@@ -1292,6 +1479,7 @@ pub struct ResetCacheInput {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ResetCacheOutput {
     #[serde(rename="GatewayARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_arn: Option<GatewayARN>,
 }
 
@@ -1312,6 +1500,7 @@ pub struct RetrieveTapeArchiveInput {
 pub struct RetrieveTapeArchiveOutput {
     #[doc="<p>The Amazon Resource Name (ARN) of the retrieved virtual tape.</p>"]
     #[serde(rename="TapeARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tape_arn: Option<TapeARN>,
 }
 
@@ -1330,6 +1519,7 @@ pub struct RetrieveTapeRecoveryPointInput {
 pub struct RetrieveTapeRecoveryPointOutput {
     #[doc="<p>The Amazon Resource Name (ARN) of the virtual tape for which the recovery point was retrieved.</p>"]
     #[serde(rename="TapeARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tape_arn: Option<TapeARN>,
 }
 
@@ -1348,6 +1538,7 @@ pub struct SetLocalConsolePasswordInput {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct SetLocalConsolePasswordOutput {
     #[serde(rename="GatewayARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_arn: Option<GatewayARN>,
 }
 
@@ -1362,6 +1553,7 @@ pub struct ShutdownGatewayInput {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ShutdownGatewayOutput {
     #[serde(rename="GatewayARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_arn: Option<GatewayARN>,
 }
 
@@ -1380,6 +1572,7 @@ pub struct StartGatewayInput {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct StartGatewayOutput {
     #[serde(rename="GatewayARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_arn: Option<GatewayARN>,
 }
 
@@ -1399,37 +1592,47 @@ pub struct StorageGatewayError {
 pub struct StorediSCSIVolume {
     #[doc="<p>The date the volume was created. Volumes created prior to March 28, 2017 don’t have this time stamp.</p>"]
     #[serde(rename="CreatedDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub created_date: Option<CreatedDate>,
     #[doc="<p>Indicates if when the stored volume was created, existing data on the underlying local disk was preserved.</p> <p> Valid Values: true, false</p>"]
     #[serde(rename="PreservedExistingData")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub preserved_existing_data: Option<Boolean>,
     #[doc="<p>If the stored volume was created from a snapshot, this field contains the snapshot ID used, e.g. snap-78e22663. Otherwise, this field is not included.</p>"]
     #[serde(rename="SourceSnapshotId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub source_snapshot_id: Option<SnapshotId>,
     #[doc="<p>The Amazon Resource Name (ARN) of the storage volume.</p>"]
     #[serde(rename="VolumeARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_arn: Option<VolumeARN>,
     #[doc="<p>The ID of the local disk that was specified in the <a>CreateStorediSCSIVolume</a> operation.</p>"]
     #[serde(rename="VolumeDiskId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_disk_id: Option<DiskId>,
     #[doc="<p>The unique identifier of the volume, e.g. vol-AE4B946D.</p>"]
     #[serde(rename="VolumeId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_id: Option<VolumeId>,
     #[doc="<p>Represents the percentage complete if the volume is restoring or bootstrapping that represents the percent of data transferred. This field does not appear in the response if the stored volume is not restoring or bootstrapping.</p>"]
     #[serde(rename="VolumeProgress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_progress: Option<DoubleObject>,
     #[doc="<p>The size of the volume in bytes.</p>"]
     #[serde(rename="VolumeSizeInBytes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_size_in_bytes: Option<Long>,
     #[doc="<p>One of the VolumeStatus values that indicates the state of the storage volume.</p>"]
     #[serde(rename="VolumeStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_status: Option<VolumeStatus>,
     #[doc="<p>One of the VolumeType enumeration values describing the type of the volume.</p>"]
     #[serde(rename="VolumeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_type: Option<VolumeType>,
     #[doc="<p>An <a>VolumeiSCSIAttributes</a> object that represents a collection of iSCSI attributes for one stored volume.</p>"]
     #[serde(rename="VolumeiSCSIAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volumei_scsi_attributes: Option<VolumeiSCSIAttributes>,
 }
 
@@ -1451,27 +1654,35 @@ pub type Tags = Vec<Tag>;
 pub struct Tape {
     #[doc="<p>For archiving virtual tapes, indicates how much data remains to be uploaded before archiving is complete.</p> <p>Range: 0 (not started) to 100 (complete).</p>"]
     #[serde(rename="Progress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub progress: Option<DoubleObject>,
     #[doc="<p>The Amazon Resource Name (ARN) of the virtual tape.</p>"]
     #[serde(rename="TapeARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tape_arn: Option<TapeARN>,
     #[doc="<p>The barcode that identifies a specific virtual tape.</p>"]
     #[serde(rename="TapeBarcode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tape_barcode: Option<TapeBarcode>,
     #[doc="<p>The date the virtual tape was created.</p>"]
     #[serde(rename="TapeCreatedDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tape_created_date: Option<Time>,
     #[doc="<p>The size, in bytes, of the virtual tape capacity.</p>"]
     #[serde(rename="TapeSizeInBytes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tape_size_in_bytes: Option<TapeSize>,
     #[doc="<p>The current state of the virtual tape.</p>"]
     #[serde(rename="TapeStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tape_status: Option<TapeStatus>,
     #[doc="<p>The size, in bytes, of data written to the virtual tape.</p> <note> <p>This value is not available for tapes created prior to May,13 2015.</p> </note>"]
     #[serde(rename="TapeUsedInBytes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tape_used_in_bytes: Option<TapeUsage>,
     #[doc="<p>The virtual tape library (VTL) device that the virtual tape is associated with.</p>"]
     #[serde(rename="VTLDevice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vtl_device: Option<VTLDeviceARN>,
 }
 
@@ -1483,26 +1694,34 @@ pub type TapeARNs = Vec<TapeARN>;
 pub struct TapeArchive {
     #[doc="<p>The time that the archiving of the virtual tape was completed.</p> <p>The string format of the completion time is in the ISO8601 extended YYYY-MM-DD'T'HH:MM:SS'Z' format.</p>"]
     #[serde(rename="CompletionTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub completion_time: Option<Time>,
     #[doc="<p>The Amazon Resource Name (ARN) of the tape gateway that the virtual tape is being retrieved to.</p> <p>The virtual tape is retrieved from the virtual tape shelf (VTS).</p>"]
     #[serde(rename="RetrievedTo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub retrieved_to: Option<GatewayARN>,
     #[doc="<p>The Amazon Resource Name (ARN) of an archived virtual tape.</p>"]
     #[serde(rename="TapeARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tape_arn: Option<TapeARN>,
     #[doc="<p>The barcode that identifies the archived virtual tape.</p>"]
     #[serde(rename="TapeBarcode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tape_barcode: Option<TapeBarcode>,
     #[serde(rename="TapeCreatedDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tape_created_date: Option<Time>,
     #[doc="<p>The size, in bytes, of the archived virtual tape.</p>"]
     #[serde(rename="TapeSizeInBytes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tape_size_in_bytes: Option<TapeSize>,
     #[doc="<p>The current state of the archived virtual tape.</p>"]
     #[serde(rename="TapeStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tape_status: Option<TapeArchiveStatus>,
     #[doc="<p>The size, in bytes, of data written to the virtual tape.</p> <note> <p>This value is not available for tapes created prior to May,13 2015.</p> </note>"]
     #[serde(rename="TapeUsedInBytes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tape_used_in_bytes: Option<TapeUsage>,
 }
 
@@ -1516,18 +1735,23 @@ pub type TapeDriveType = String;
 pub struct TapeInfo {
     #[doc="<p>The Amazon Resource Name (ARN) of the gateway. Use the <a>ListGateways</a> operation to return a list of gateways for your account and region.</p>"]
     #[serde(rename="GatewayARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_arn: Option<GatewayARN>,
     #[doc="<p>The Amazon Resource Name (ARN) of a virtual tape.</p>"]
     #[serde(rename="TapeARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tape_arn: Option<TapeARN>,
     #[doc="<p>The barcode that identifies a specific virtual tape.</p>"]
     #[serde(rename="TapeBarcode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tape_barcode: Option<TapeBarcode>,
     #[doc="<p>The size, in bytes, of a virtual tape.</p>"]
     #[serde(rename="TapeSizeInBytes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tape_size_in_bytes: Option<TapeSize>,
     #[doc="<p>The status of the tape.</p>"]
     #[serde(rename="TapeStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tape_status: Option<TapeStatus>,
 }
 
@@ -1538,14 +1762,18 @@ pub type TapeInfos = Vec<TapeInfo>;
 pub struct TapeRecoveryPointInfo {
     #[doc="<p>The Amazon Resource Name (ARN) of the virtual tape.</p>"]
     #[serde(rename="TapeARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tape_arn: Option<TapeARN>,
     #[doc="<p>The time when the point-in-time view of the virtual tape was replicated for later recovery.</p> <p>The string format of the tape recovery point time is in the ISO8601 extended YYYY-MM-DD'T'HH:MM:SS'Z' format.</p>"]
     #[serde(rename="TapeRecoveryPointTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tape_recovery_point_time: Option<Time>,
     #[doc="<p>The size, in bytes, of the virtual tapes to recover.</p>"]
     #[serde(rename="TapeSizeInBytes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tape_size_in_bytes: Option<TapeSize>,
     #[serde(rename="TapeStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tape_status: Option<TapeRecoveryPointStatus>,
 }
 
@@ -1563,9 +1791,11 @@ pub type Time = f64;
 pub struct UpdateBandwidthRateLimitInput {
     #[doc="<p>The average download bandwidth rate limit in bits per second.</p>"]
     #[serde(rename="AverageDownloadRateLimitInBitsPerSec")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub average_download_rate_limit_in_bits_per_sec: Option<BandwidthDownloadRateLimit>,
     #[doc="<p>The average upload bandwidth rate limit in bits per second.</p>"]
     #[serde(rename="AverageUploadRateLimitInBitsPerSec")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub average_upload_rate_limit_in_bits_per_sec: Option<BandwidthUploadRateLimit>,
     #[serde(rename="GatewayARN")]
     pub gateway_arn: GatewayARN,
@@ -1575,6 +1805,7 @@ pub struct UpdateBandwidthRateLimitInput {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct UpdateBandwidthRateLimitOutput {
     #[serde(rename="GatewayARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_arn: Option<GatewayARN>,
 }
 
@@ -1589,6 +1820,7 @@ pub struct UpdateChapCredentialsInput {
     pub secret_to_authenticate_initiator: ChapSecret,
     #[doc="<p>The secret key that the target must provide to participate in mutual CHAP with the initiator (e.g. Windows client).</p> <p>Byte constraints: Minimum bytes of 12. Maximum bytes of 16.</p> <note> <p>The secret key must be between 12 and 16 bytes when encoded in UTF-8.</p> </note>"]
     #[serde(rename="SecretToAuthenticateTarget")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub secret_to_authenticate_target: Option<ChapSecret>,
     #[doc="<p>The Amazon Resource Name (ARN) of the iSCSI volume target. Use the <a>DescribeStorediSCSIVolumes</a> operation to return the TargetARN for specified VolumeARN.</p>"]
     #[serde(rename="TargetARN")]
@@ -1600,9 +1832,11 @@ pub struct UpdateChapCredentialsInput {
 pub struct UpdateChapCredentialsOutput {
     #[doc="<p>The iSCSI initiator that connects to the target. This is the same initiator name specified in the request.</p>"]
     #[serde(rename="InitiatorName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub initiator_name: Option<IqnName>,
     #[doc="<p>The Amazon Resource Name (ARN) of the target. This is the same target specified in the request.</p>"]
     #[serde(rename="TargetARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_arn: Option<TargetARN>,
 }
 
@@ -1611,8 +1845,10 @@ pub struct UpdateGatewayInformationInput {
     #[serde(rename="GatewayARN")]
     pub gateway_arn: GatewayARN,
     #[serde(rename="GatewayName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_name: Option<GatewayName>,
     #[serde(rename="GatewayTimezone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_timezone: Option<GatewayTimezone>,
 }
 
@@ -1620,8 +1856,10 @@ pub struct UpdateGatewayInformationInput {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct UpdateGatewayInformationOutput {
     #[serde(rename="GatewayARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_arn: Option<GatewayARN>,
     #[serde(rename="GatewayName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_name: Option<String>,
 }
 
@@ -1636,6 +1874,7 @@ pub struct UpdateGatewaySoftwareNowInput {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct UpdateGatewaySoftwareNowOutput {
     #[serde(rename="GatewayARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_arn: Option<GatewayARN>,
 }
 
@@ -1659,6 +1898,7 @@ pub struct UpdateMaintenanceStartTimeInput {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct UpdateMaintenanceStartTimeOutput {
     #[serde(rename="GatewayARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_arn: Option<GatewayARN>,
 }
 
@@ -1667,29 +1907,34 @@ pub struct UpdateMaintenanceStartTimeOutput {
 pub struct UpdateNFSFileShareInput {
     #[doc="<p>The list of clients that are allowed to access the file gateway. The list must contain either valid IP addresses or valid CIDR blocks.</p>"]
     #[serde(rename="ClientList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_list: Option<FileShareClientList>,
     #[doc="<p>The default storage class for objects put into an Amazon S3 bucket by a file gateway. Possible values are S3_STANDARD or S3_STANDARD_IA. If this field is not populated, the default value S3_STANDARD is used. Optional.</p>"]
     #[serde(rename="DefaultStorageClass")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_storage_class: Option<StorageClass>,
     #[doc="<p>The Amazon Resource Name (ARN) of the file share to be updated. </p>"]
     #[serde(rename="FileShareARN")]
     pub file_share_arn: FileShareARN,
     #[doc="<p>True to use Amazon S3 server side encryption with your own AWS KMS key, or false to use a key managed by Amazon S3. Optional. </p>"]
     #[serde(rename="KMSEncrypted")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub kms_encrypted: Option<Boolean>,
     #[doc="<p>The KMS key used for Amazon S3 server side encryption. This value can only be set when KmsEncrypted is true. Optional. </p>"]
     #[serde(rename="KMSKey")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub kms_key: Option<KMSKey>,
     #[doc="<p>The default values for the file share. Optional.</p>"]
     #[serde(rename="NFSFileShareDefaults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub nfs_file_share_defaults: Option<NFSFileShareDefaults>,
     #[doc="<p>Sets the write status of a file share: \"true\" if the write status is read-only, and otherwise \"false\".</p>"]
     #[serde(rename="ReadOnly")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub read_only: Option<Boolean>,
     #[doc="<p>The user mapped to anonymous user. Valid options are the following:</p> <ul> <li> <p>\"RootSquash\" - Only root is mapped to anonymous user.</p> </li> <li> <p>\"NoSquash\" - No one is mapped to anonymous user</p> </li> <li> <p>\"AllSquash\" - Everyone is mapped to anonymous user.</p> </li> </ul>"]
     #[serde(rename="Squash")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub squash: Option<Squash>,
 }
 
@@ -1698,6 +1943,7 @@ pub struct UpdateNFSFileShareInput {
 pub struct UpdateNFSFileShareOutput {
     #[doc="<p>The Amazon Resource Name (ARN) of the updated file share. </p>"]
     #[serde(rename="FileShareARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub file_share_arn: Option<FileShareARN>,
 }
 
@@ -1706,6 +1952,7 @@ pub struct UpdateNFSFileShareOutput {
 pub struct UpdateSnapshotScheduleInput {
     #[doc="<p>Optional description of the snapshot that overwrites the existing description.</p>"]
     #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<Description>,
     #[doc="<p>Frequency of snapshots. Specify the number of hours between snapshots.</p>"]
     #[serde(rename="RecurrenceInHours")]
@@ -1723,6 +1970,7 @@ pub struct UpdateSnapshotScheduleInput {
 pub struct UpdateSnapshotScheduleOutput {
     #[doc="<p/>"]
     #[serde(rename="VolumeARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_arn: Option<VolumeARN>,
 }
 
@@ -1741,6 +1989,7 @@ pub struct UpdateVTLDeviceTypeInput {
 pub struct UpdateVTLDeviceTypeOutput {
     #[doc="<p>The Amazon Resource Name (ARN) of the medium changer you have selected.</p>"]
     #[serde(rename="VTLDeviceARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vtl_device_arn: Option<VTLDeviceARN>,
 }
 
@@ -1749,15 +1998,20 @@ pub struct UpdateVTLDeviceTypeOutput {
 pub struct VTLDevice {
     #[doc="<p>A list of iSCSI information about a VTL device.</p>"]
     #[serde(rename="DeviceiSCSIAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub devicei_scsi_attributes: Option<DeviceiSCSIAttributes>,
     #[doc="<p>Specifies the unique Amazon Resource Name (ARN) of the device (tape drive or media changer).</p>"]
     #[serde(rename="VTLDeviceARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vtl_device_arn: Option<VTLDeviceARN>,
     #[serde(rename="VTLDeviceProductIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vtl_device_product_identifier: Option<VTLDeviceProductIdentifier>,
     #[serde(rename="VTLDeviceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vtl_device_type: Option<VTLDeviceType>,
     #[serde(rename="VTLDeviceVendor")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vtl_device_vendor: Option<VTLDeviceVendor>,
 }
 
@@ -1774,20 +2028,26 @@ pub type VolumeId = String;
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct VolumeInfo {
     #[serde(rename="GatewayARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_arn: Option<GatewayARN>,
     #[doc="<p>The unique identifier assigned to your gateway during activation. This ID becomes part of the gateway Amazon Resource Name (ARN), which you use as input for other operations.</p> <p> Valid Values: 50 to 500 lowercase letters, numbers, periods (.), and hyphens (-).</p>"]
     #[serde(rename="GatewayId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub gateway_id: Option<GatewayId>,
     #[doc="<p>The Amazon Resource Name (ARN) for the storage volume. For example, the following is a valid ARN:</p> <p> <code>arn:aws:storagegateway:us-east-1:111122223333:gateway/sgw-12A3456B/volume/vol-1122AABB</code> </p> <p> Valid Values: 50 to 500 lowercase letters, numbers, periods (.), and hyphens (-).</p>"]
     #[serde(rename="VolumeARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_arn: Option<VolumeARN>,
     #[doc="<p>The unique identifier assigned to the volume. This ID becomes part of the volume Amazon Resource Name (ARN), which you use as input for other operations.</p> <p> Valid Values: 50 to 500 lowercase letters, numbers, periods (.), and hyphens (-).</p>"]
     #[serde(rename="VolumeId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_id: Option<VolumeId>,
     #[doc="<p>The size of the volume in bytes.</p> <p>Valid Values: 50 to 500 lowercase letters, numbers, periods (.), and hyphens (-).</p>"]
     #[serde(rename="VolumeSizeInBytes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_size_in_bytes: Option<Long>,
     #[serde(rename="VolumeType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_type: Option<VolumeType>,
 }
 
@@ -1795,12 +2055,16 @@ pub type VolumeInfos = Vec<VolumeInfo>;
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct VolumeRecoveryPointInfo {
     #[serde(rename="VolumeARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_arn: Option<VolumeARN>,
     #[serde(rename="VolumeRecoveryPointTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_recovery_point_time: Option<String>,
     #[serde(rename="VolumeSizeInBytes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_size_in_bytes: Option<Long>,
     #[serde(rename="VolumeUsageInBytes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_usage_in_bytes: Option<Long>,
 }
 
@@ -1812,19 +2076,23 @@ pub type VolumeType = String;
 pub struct VolumeiSCSIAttributes {
     #[doc="<p>Indicates whether mutual CHAP is enabled for the iSCSI target.</p>"]
     #[serde(rename="ChapEnabled")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub chap_enabled: Option<Boolean>,
     #[doc="<p>The logical disk number.</p>"]
     #[serde(rename="LunNumber")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub lun_number: Option<PositiveIntObject>,
     #[doc="<p>The network interface identifier.</p>"]
     #[serde(rename="NetworkInterfaceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_interface_id: Option<NetworkInterfaceId>,
     #[doc="<p>The port used to communicate with iSCSI targets.</p>"]
     #[serde(rename="NetworkInterfacePort")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub network_interface_port: Option<Integer>,
     #[doc="<p>The Amazon Resource Name (ARN) of the volume target.</p>"]
     #[serde(rename="TargetARN")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_arn: Option<TargetARN>,
 }
 

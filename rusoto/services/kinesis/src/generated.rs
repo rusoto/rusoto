@@ -74,9 +74,11 @@ pub struct DescribeLimitsOutput {
 pub struct DescribeStreamInput {
     #[doc="<p>The shard ID of the shard to start with.</p>"]
     #[serde(rename="ExclusiveStartShardId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub exclusive_start_shard_id: Option<ShardId>,
     #[doc="<p>The maximum number of shards to return in a single call. The default value is 100. If you specify a value greater than 100, at most 100 shards are returned.</p>"]
     #[serde(rename="Limit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub limit: Option<DescribeStreamInputLimit>,
     #[doc="<p>The name of the stream to describe.</p>"]
     #[serde(rename="StreamName")]
@@ -119,6 +121,7 @@ pub struct EnableEnhancedMonitoringInput {
 pub struct EnhancedMetrics {
     #[doc="<p>List of shard-level metrics.</p> <p>The following are the valid shard-level metrics. The value \"<code>ALL</code>\" enhances every metric.</p> <ul> <li> <p> <code>IncomingBytes</code> </p> </li> <li> <p> <code>IncomingRecords</code> </p> </li> <li> <p> <code>OutgoingBytes</code> </p> </li> <li> <p> <code>OutgoingRecords</code> </p> </li> <li> <p> <code>WriteProvisionedThroughputExceeded</code> </p> </li> <li> <p> <code>ReadProvisionedThroughputExceeded</code> </p> </li> <li> <p> <code>IteratorAgeMilliseconds</code> </p> </li> <li> <p> <code>ALL</code> </p> </li> </ul> <p>For more information, see <a href=\"http://docs.aws.amazon.com/kinesis/latest/dev/monitoring-with-cloudwatch.html\">Monitoring the Amazon Kinesis Streams Service with Amazon CloudWatch</a> in the <i>Amazon Kinesis Streams Developer Guide</i>.</p>"]
     #[serde(rename="ShardLevelMetrics")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub shard_level_metrics: Option<MetricsNameList>,
 }
 
@@ -128,12 +131,15 @@ pub type EnhancedMonitoringList = Vec<EnhancedMetrics>;
 pub struct EnhancedMonitoringOutput {
     #[doc="<p>Represents the current state of the metrics that are in the enhanced state before the operation.</p>"]
     #[serde(rename="CurrentShardLevelMetrics")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub current_shard_level_metrics: Option<MetricsNameList>,
     #[doc="<p>Represents the list of all the metrics that would be in the enhanced state after the operation.</p>"]
     #[serde(rename="DesiredShardLevelMetrics")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub desired_shard_level_metrics: Option<MetricsNameList>,
     #[doc="<p>The name of the Amazon Kinesis stream.</p>"]
     #[serde(rename="StreamName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub stream_name: Option<StreamName>,
 }
 
@@ -144,6 +150,7 @@ pub type ErrorMessage = String;
 pub struct GetRecordsInput {
     #[doc="<p>The maximum number of records to return. Specify a value of up to 10,000. If you specify a value that is greater than 10,000, <a>GetRecords</a> throws <code>InvalidArgumentException</code>.</p>"]
     #[serde(rename="Limit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub limit: Option<GetRecordsInputLimit>,
     #[doc="<p>The position in the shard from which you want to start sequentially reading data records. A shard iterator specifies this position using the sequence number of a data record in the shard.</p>"]
     #[serde(rename="ShardIterator")]
@@ -156,9 +163,11 @@ pub type GetRecordsInputLimit = i64;
 pub struct GetRecordsOutput {
     #[doc="<p>The number of milliseconds the <a>GetRecords</a> response is from the tip of the stream, indicating how far behind current time the consumer is. A value of zero indicates record processing is caught up, and there are no new records to process at this moment.</p>"]
     #[serde(rename="MillisBehindLatest")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub millis_behind_latest: Option<MillisBehindLatest>,
     #[doc="<p>The next position in the shard from which to start sequentially reading data records. If set to <code>null</code>, the shard has been closed and the requested iterator will not return any more data. </p>"]
     #[serde(rename="NextShardIterator")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_shard_iterator: Option<ShardIterator>,
     #[doc="<p>The data records retrieved from the shard.</p>"]
     #[serde(rename="Records")]
@@ -176,12 +185,14 @@ pub struct GetShardIteratorInput {
     pub shard_iterator_type: ShardIteratorType,
     #[doc="<p>The sequence number of the data record in the shard from which to start reading. Used with shard iterator type AT_SEQUENCE_NUMBER and AFTER_SEQUENCE_NUMBER.</p>"]
     #[serde(rename="StartingSequenceNumber")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub starting_sequence_number: Option<SequenceNumber>,
     #[doc="<p>The name of the Amazon Kinesis stream.</p>"]
     #[serde(rename="StreamName")]
     pub stream_name: StreamName,
     #[doc="<p>The timestamp of the data record from which to start reading. Used with shard iterator type AT_TIMESTAMP. A timestamp is the Unix epoch date with precision in milliseconds. For example, <code>2016-04-04T19:58:46.480-00:00</code> or <code>1459799926.480</code>. If a record with this exact timestamp does not exist, the iterator returned is for the next (later) record. If the timestamp is older than the current trim horizon, the iterator returned is for the oldest untrimmed data record (TRIM_HORIZON).</p>"]
     #[serde(rename="Timestamp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub timestamp: Option<Timestamp>,
 }
 
@@ -190,6 +201,7 @@ pub struct GetShardIteratorInput {
 pub struct GetShardIteratorOutput {
     #[doc="<p>The position in the shard from which to start reading data records sequentially. A shard iterator specifies this position using the sequence number of a data record in a shard.</p>"]
     #[serde(rename="ShardIterator")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub shard_iterator: Option<ShardIterator>,
 }
 
@@ -221,9 +233,11 @@ pub struct IncreaseStreamRetentionPeriodInput {
 pub struct ListStreamsInput {
     #[doc="<p>The name of the stream to start the list with.</p>"]
     #[serde(rename="ExclusiveStartStreamName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub exclusive_start_stream_name: Option<StreamName>,
     #[doc="<p>The maximum number of streams to list.</p>"]
     #[serde(rename="Limit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub limit: Option<ListStreamsInputLimit>,
 }
 
@@ -244,9 +258,11 @@ pub struct ListStreamsOutput {
 pub struct ListTagsForStreamInput {
     #[doc="<p>The key to use as the starting point for the list of tags. If this parameter is set, <code>ListTagsForStream</code> gets all tags that occur after <code>ExclusiveStartTagKey</code>. </p>"]
     #[serde(rename="ExclusiveStartTagKey")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub exclusive_start_tag_key: Option<TagKey>,
     #[doc="<p>The number of tags to return. If this number is less than the total number of tags associated with the stream, <code>HasMoreTags</code> is set to <code>true</code>. To list additional tags, set <code>ExclusiveStartTagKey</code> to the last key in the response.</p>"]
     #[serde(rename="Limit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub limit: Option<ListTagsForStreamInputLimit>,
     #[doc="<p>The name of the stream.</p>"]
     #[serde(rename="StreamName")]
@@ -297,12 +313,14 @@ pub struct PutRecordInput {
     pub data: Data,
     #[doc="<p>The hash value used to explicitly determine the shard the data record is assigned to by overriding the partition key hash.</p>"]
     #[serde(rename="ExplicitHashKey")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub explicit_hash_key: Option<HashKey>,
     #[doc="<p>Determines which shard in the stream the data record is assigned to. Partition keys are Unicode strings with a maximum length limit of 256 characters for each key. Amazon Kinesis uses the partition key as input to a hash function that maps the partition key and associated data to a specific shard. Specifically, an MD5 hash function is used to map partition keys to 128-bit integer values and to map associated data records to shards. As a result of this hashing mechanism, all data records with the same partition key map to the same shard within the stream.</p>"]
     #[serde(rename="PartitionKey")]
     pub partition_key: PartitionKey,
     #[doc="<p>Guarantees strictly increasing sequence numbers, for puts from the same client and to the same partition key. Usage: set the <code>SequenceNumberForOrdering</code> of record <i>n</i> to the sequence number of record <i>n-1</i> (as returned in the result when putting record <i>n-1</i>). If this parameter is not set, records will be coarsely ordered based on arrival time.</p>"]
     #[serde(rename="SequenceNumberForOrdering")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sequence_number_for_ordering: Option<SequenceNumber>,
     #[doc="<p>The name of the stream to put the data record into.</p>"]
     #[serde(rename="StreamName")]
@@ -336,6 +354,7 @@ pub struct PutRecordsInput {
 pub struct PutRecordsOutput {
     #[doc="<p>The number of unsuccessfully processed records in a <code>PutRecords</code> request.</p>"]
     #[serde(rename="FailedRecordCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub failed_record_count: Option<PositiveIntegerObject>,
     #[doc="<p>An array of successfully and unsuccessfully processed record results, correlated with the request by natural ordering. A record that is successfully added to a stream includes <code>SequenceNumber</code> and <code>ShardId</code> in the result. A record that fails to be added to a stream includes <code>ErrorCode</code> and <code>ErrorMessage</code> in the result.</p>"]
     #[serde(rename="Records")]
@@ -355,6 +374,7 @@ pub struct PutRecordsRequestEntry {
     pub data: Data,
     #[doc="<p>The hash value used to determine explicitly the shard that the data record is assigned to by overriding the partition key hash.</p>"]
     #[serde(rename="ExplicitHashKey")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub explicit_hash_key: Option<HashKey>,
     #[doc="<p>Determines which shard in the stream the data record is assigned to. Partition keys are Unicode strings with a maximum length limit of 256 characters for each key. Amazon Kinesis uses the partition key as input to a hash function that maps the partition key and associated data to a specific shard. Specifically, an MD5 hash function is used to map partition keys to 128-bit integer values and to map associated data records to shards. As a result of this hashing mechanism, all data records with the same partition key map to the same shard within the stream.</p>"]
     #[serde(rename="PartitionKey")]
@@ -367,15 +387,19 @@ pub type PutRecordsRequestEntryList = Vec<PutRecordsRequestEntry>;
 pub struct PutRecordsResultEntry {
     #[doc="<p>The error code for an individual record result. <code>ErrorCodes</code> can be either <code>ProvisionedThroughputExceededException</code> or <code>InternalFailure</code>.</p>"]
     #[serde(rename="ErrorCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub error_code: Option<ErrorCode>,
     #[doc="<p>The error message for an individual record result. An <code>ErrorCode</code> value of <code>ProvisionedThroughputExceededException</code> has an error message that includes the account ID, stream name, and shard ID. An <code>ErrorCode</code> value of <code>InternalFailure</code> has the error message <code>\"Internal Service Failure\"</code>.</p>"]
     #[serde(rename="ErrorMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub error_message: Option<ErrorMessage>,
     #[doc="<p>The sequence number for an individual record result.</p>"]
     #[serde(rename="SequenceNumber")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sequence_number: Option<SequenceNumber>,
     #[doc="<p>The shard ID for an individual record result.</p>"]
     #[serde(rename="ShardId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub shard_id: Option<ShardId>,
 }
 
@@ -385,6 +409,7 @@ pub type PutRecordsResultEntryList = Vec<PutRecordsResultEntry>;
 pub struct Record {
     #[doc="<p>The approximate time that the record was inserted into the stream.</p>"]
     #[serde(rename="ApproximateArrivalTimestamp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub approximate_arrival_timestamp: Option<Timestamp>,
     #[doc="<p>The data blob. The data in the blob is both opaque and immutable to the Amazon Kinesis service, which does not inspect, interpret, or change the data in the blob in any way. When the data blob (the payload before base64-encoding) is added to the partition key size, the total size must not exceed the maximum record size (1 MB).</p>"]
     #[serde(rename="Data")]
@@ -421,6 +446,7 @@ pub type SequenceNumber = String;
 pub struct SequenceNumberRange {
     #[doc="<p>The ending sequence number for the range. Shards that are in the OPEN state have an ending sequence number of <code>null</code>.</p>"]
     #[serde(rename="EndingSequenceNumber")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ending_sequence_number: Option<SequenceNumber>,
     #[doc="<p>The starting sequence number for the range.</p>"]
     #[serde(rename="StartingSequenceNumber")]
@@ -432,12 +458,14 @@ pub struct SequenceNumberRange {
 pub struct Shard {
     #[doc="<p>The shard ID of the shard adjacent to the shard's parent.</p>"]
     #[serde(rename="AdjacentParentShardId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub adjacent_parent_shard_id: Option<ShardId>,
     #[doc="<p>The range of possible hash key values for the shard, which is a set of ordered contiguous positive integers.</p>"]
     #[serde(rename="HashKeyRange")]
     pub hash_key_range: HashKeyRange,
     #[doc="<p>The shard ID of the shard's parent.</p>"]
     #[serde(rename="ParentShardId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parent_shard_id: Option<ShardId>,
     #[doc="<p>The range of possible sequence numbers for the shard.</p>"]
     #[serde(rename="SequenceNumberRange")]
@@ -507,6 +535,7 @@ pub struct Tag {
     pub key: TagKey,
     #[doc="<p>An optional string, typically used to describe or define the tag. Maximum length: 256 characters. Valid characters: Unicode letters, digits, white space, _ . / = + - % @</p>"]
     #[serde(rename="Value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<TagValue>,
 }
 
@@ -533,12 +562,15 @@ pub struct UpdateShardCountInput {
 pub struct UpdateShardCountOutput {
     #[doc="<p>The current number of shards.</p>"]
     #[serde(rename="CurrentShardCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub current_shard_count: Option<PositiveIntegerObject>,
     #[doc="<p>The name of the stream.</p>"]
     #[serde(rename="StreamName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub stream_name: Option<StreamName>,
     #[doc="<p>The updated number of shards.</p>"]
     #[serde(rename="TargetShardCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_shard_count: Option<PositiveIntegerObject>,
 }
 
