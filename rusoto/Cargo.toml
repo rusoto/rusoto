@@ -32,6 +32,7 @@ members = [
     "services/emr",
     "services/events",
     "services/firehose",
+    "services/gamelift",
     "services/iam",
     "services/importexport",
     "services/inspector",
