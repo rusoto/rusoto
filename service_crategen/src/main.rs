@@ -16,70 +16,22 @@ extern crate lazy_static;
 extern crate regex;
 extern crate hyper;
 
-mod codegen;
 mod cargo;
+mod codegen;
+mod config;
+mod service;
 
-use std::collections::BTreeMap;
-use std::fs::{self, File, OpenOptions};
-use std::io::{Read, Write, BufWriter};
+use std::fs::{self, OpenOptions};
+use std::io::{Write, BufWriter};
 use std::path::Path;
 
 use rayon::prelude::*;
 
 use clap::{Arg, App};
 
-use codegen::botocore::Service;
-
-#[derive(Clone, Deserialize)]
-struct ServiceConfig {
-    pub version: String,
-    #[serde(rename = "coreVersion")]
-    pub core_version: String,
-    #[serde(rename = "protocolVersion")]
-    pub protocol_version: String,
-    #[serde(rename = "customDependencies")]
-    pub custom_dependencies: Option<BTreeMap<String, cargo::Dependency>>
-}
-
-fn get_dependencies(service: &Service, config: &ServiceConfig) -> BTreeMap<String, cargo::Dependency> {
-    let mut dependencies = BTreeMap::new();
-
-    dependencies.insert("hyper".to_owned(), cargo::Dependency::Simple("0.10.0".into()));
-    dependencies.insert("rusoto_core".to_owned(), cargo::Dependency::Extended {
-        path: Some("../../core".into()),
-        version: Some(config.core_version.clone()),
-        optional: None,
-        default_features: None,
-        features: None
-    });
-
-    match &service.metadata.protocol[..] {
-        "json" => {
-            dependencies.insert("serde".to_owned(), cargo::Dependency::Simple("1.0.2".into()));
-            dependencies.insert("serde_derive".to_owned(), cargo::Dependency::Simple("1.0.2".into()));
-            dependencies.insert("serde_json".to_owned(), cargo::Dependency::Simple("1.0.1".into()));
-        },
-        "query" | "ec2" => {
-            dependencies.insert("xml-rs".to_owned(), cargo::Dependency::Simple("0.6".into()));
-        },
-        "rest-json" => {
-            dependencies.insert("log".to_owned(), cargo::Dependency::Simple("0.3.6".into()));
-            dependencies.insert("serde".to_owned(), cargo::Dependency::Simple("1.0.2".into()));
-            dependencies.insert("serde_derive".to_owned(), cargo::Dependency::Simple("1.0.2".into()));
-            dependencies.insert("serde_json".to_owned(), cargo::Dependency::Simple("1.0.1".into()));
-        },
-        "rest-xml" => {
-            dependencies.insert("xml-rs".to_owned(), cargo::Dependency::Simple("0.6".into()));
-        },
-        protocol => panic!("Unknown protocol {}", protocol),
-    }
-
-    if let Some(ref custom_dependencies) = config.custom_dependencies {
-        dependencies.extend(custom_dependencies.clone());
-    }
-
-    dependencies
-}
+use codegen::botocore::{ServiceDefinition};
+pub use service::Service;
+use config::ServiceConfig;
 
 fn main() {
     let matches = App::new("Rusoto Service Crate Generator")
@@ -103,37 +55,26 @@ fn main() {
         fs::create_dir(out_dir).expect("Unable to create output directory");
     }
 
-    let service_configs: Vec<(String, ServiceConfig)> = {
-        let services_config = matches.value_of("services_config").unwrap();
-        let contents = File::open(services_config).and_then(|mut f| {
-            let mut contents = String::new();
-            f.read_to_string(&mut contents).map(|_| contents)
-        }).expect("Unable to read services configuration file.");
-
-        let parsed: BTreeMap<String, ServiceConfig> = serde_json::from_str(&contents).expect("Unable to parse services configuration file.");
-        parsed.iter().map(|(k, v)| (k.clone(), v.clone())).collect()
-    };
+    let services_config_path = matches.value_of("services_config").unwrap();
+    let service_configs = ServiceConfig::load_all(services_config_path).expect("Unable to read services configuration file.");
 
     service_configs.par_iter().for_each(|&(ref name, ref service_config)| {
-        let service = Service::load(name, &service_config.protocol_version);
-
-        if let Err(ref e) = service {
-            println!("Failed to load service {}: {}. Make sure the botocore submodule has been initialized!", name, e);
-            return;
-        }
-
-        let service = service.as_ref().unwrap();
+        let service = {
+            let service_definition = ServiceDefinition::load(name, &service_config.protocol_version)
+                .expect(&format!("Failed to load service {}. Make sure the botocore submodule has been initialized!", name));
+            Service::new(service_config.clone(), service_definition)
+        };
 
         let crate_dir = out_dir.join(&name);
         let crate_name = format!("rusoto_{}", &name.replace('-', "_"));
 
-        println!("Generating crate for {} @ {}...", service.metadata.service_full_name, service.metadata.api_version);
+        println!("Generating crate for {} @ {}...", service.full_name(), service.api_version());
 
         if !crate_dir.exists() {
             fs::create_dir(&crate_dir).expect(&format!("Unable to create directory at {}", crate_dir.display()));
         }
 
-        let service_dependencies = get_dependencies(&service, &service_config);
+        let service_dependencies = service.get_dependencies();
 
         let extern_crates = service_dependencies.iter().map(|(k, _)| {
             if k == "xml-rs" {
@@ -162,7 +103,7 @@ fn main() {
                     "Matthew Mayer <matthewkmayer@gmail.com>".into(),
                     "Nikita Pekin <contact@nikitapek.in>".into()
                 ]),
-                description: Some(format!("AWS SDK for Rust - {} @ {}", &service.metadata.service_full_name, &service.metadata.api_version)),
+                description: Some(format!("AWS SDK for Rust - {} @ {}", service.full_name(), service.api_version())),
                 documentation: Some("https://rusoto.github.io/rusoto/rusoto_core/index.html".into()),
                 keywords: Some(vec!["AWS".into(), "Amazon".into(), name.clone()]),
                 license: Some("MIT".into()),
@@ -241,7 +182,7 @@ See [LICENSE][license] for details.
 [supported-aws-services]: https://www.rusoto.org/supported-aws-services.html "List of AWS services supported by Rusoto"
         "#,
         short_name = service.service_type_name(),
-        aws_name = service.metadata.service_full_name,
+        aws_name = service.full_name(),
         crate_name = crate_name,
         version = service_config.version
         );
@@ -277,7 +218,7 @@ mod custom;
 pub use generated::*;
 pub use custom::*;
             "#,
-            service_full_name = service.metadata.service_full_name,
+            service_full_name = service.full_name(),
             client_name = service.client_type_name(),
             trait_name = service.service_type_name(),
             extern_crates = extern_crates

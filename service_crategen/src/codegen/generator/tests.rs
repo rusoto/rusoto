@@ -3,8 +3,8 @@ use std::io::Write;
 use std::path::{Path, PathBuf};
 
 use super::{capitalize_first, FileWriter, IoResult};
-use codegen::botocore::Service;
-use codegen::util::case_insensitive_btreemap_get;
+use ::Service;
+use super::super::util::case_insensitive_btreemap_get;
 use inflector::Inflector;
 
 const BOTOCORE_ERROR_RESPONSE_TESTS_DIR: &'static str = concat!(env!("CARGO_MANIFEST_DIR"),
@@ -85,7 +85,7 @@ fn generate_response_parse_test(
     status_code: i32,
     is_ok: bool,
 ) -> Option<String> {
-    let maybe_operation = case_insensitive_btreemap_get(&service.operations, &response.action);
+    let maybe_operation = case_insensitive_btreemap_get(service.operations(), &response.action);
 
     if maybe_operation.is_none() {
         return None;

@@ -1,6 +1,8 @@
 use std::io::Write;
 use inflector::Inflector;
-use codegen::botocore::{Operation, Service, Shape, ShapeType, Member};
+
+use ::Service;
+use codegen::botocore::{Operation, Shape, ShapeType, Member};
 
 use super::xml_payload_parser;
 use super::{IoResult, FileWriter, GenerateProtocol, error_type_name, capitalize_first,
@@ -10,7 +12,7 @@ pub struct QueryGenerator;
 
 impl GenerateProtocol for QueryGenerator {
     fn generate_method_signatures(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
-        for (operation_name, operation) in service.operations.iter() {
+        for (operation_name, operation) in service.operations().iter() {
             writeln!(writer,"
                 {documentation}
                 {method_signature};
@@ -23,7 +25,7 @@ impl GenerateProtocol for QueryGenerator {
     }
 
     fn generate_method_impls(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
-        for (operation_name, operation) in service.operations.iter() {
+        for (operation_name, operation) in service.operations().iter() {
             writeln!(writer,
                      "
                 {documentation}
@@ -49,11 +51,11 @@ impl GenerateProtocol for QueryGenerator {
                     }}
                 }}
                 ",
-                     api_version = &service.metadata.api_version,
+                     api_version = service.api_version(),
                      documentation = generate_documentation(operation),
                      error_type = error_type_name(operation_name),
                      http_method = &operation.http.method,
-                     endpoint_prefix = &service.metadata.endpoint_prefix,
+                     endpoint_prefix = service.endpoint_prefix(),
                      parse_payload =
                          xml_payload_parser::generate_response_parser(service, operation, false),
                      method_signature = generate_method_signature(operation_name, operation),
@@ -180,7 +182,7 @@ fn generate_list_serializer(service: &Service, shape: &Shape) -> String {
 }
 
 fn list_member_format(service: &Service, flattened: bool) -> String {
-    match &service.metadata.protocol[..] {
+    match service.protocol() {
         "ec2" => "{}.{}".to_owned(),
         "query" => {
             match flattened {
@@ -250,7 +252,7 @@ fn member_location(service: &Service, member: &Member, default: &str) -> String 
 }
 
 fn capitalize_if_ec2(service: &Service, name: &str) -> String {
-    match &service.metadata.protocol[..] {
+    match service.protocol() {
         "ec2" => capitalize_first(name),
         _ => name.to_owned(),
     }

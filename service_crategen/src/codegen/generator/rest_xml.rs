@@ -1,7 +1,8 @@
 use std::io::Write;
 use inflector::Inflector;
 
-use codegen::botocore::{Member, Operation, Service, Shape, ShapeType};
+use ::Service;
+use codegen::botocore::{Member, Operation, Shape, ShapeType};
 use super::{xml_payload_parser, rest_response_parser, mutate_type_name};
 use super::{GenerateProtocol, generate_field_name, error_type_name};
 use super::{IoResult, FileWriter};
@@ -10,7 +11,7 @@ pub struct RestXmlGenerator;
 
 impl GenerateProtocol for RestXmlGenerator {
     fn generate_method_signatures(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
-        for (operation_name, operation) in service.operations.iter() {
+        for (operation_name, operation) in service.operations().iter() {
             writeln!(writer,"
                 {documentation}
                 {method_signature};
@@ -24,7 +25,7 @@ impl GenerateProtocol for RestXmlGenerator {
 
     fn generate_method_impls(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
 
-        for (operation_name, operation) in service.operations.iter() {
+        for (operation_name, operation) in service.operations().iter() {
 
             // botocore includes + for greedy parameters and we don't care about it
             let (request_uri, maybe_params) = parse_query_string(&operation.http.request_uri);
@@ -76,7 +77,7 @@ impl GenerateProtocol for RestXmlGenerator {
                 ",
                      documentation = generate_documentation(operation),
                      http_method = &operation.http.method,
-                     endpoint_prefix = &service.metadata.endpoint_prefix,
+                     endpoint_prefix = service.endpoint_prefix(),
                      method_signature = generate_method_signature(operation_name, operation),
                      error_type = error_type_name(operation_name),
                      request_uri = request_uri,
@@ -186,7 +187,7 @@ fn generate_method_input_serialization(service: &Service, operation: &Operation)
         return None;
     }
     "let mut payload: Option<Vec<u8>> = None;";
-    let input_shape = &service.shapes[&operation.input.as_ref().unwrap().shape];
+    let input_shape = service.get_shape(&operation.input.as_ref().unwrap().shape).unwrap();
 
     let mut parts: Vec<String> = Vec::new();
 
@@ -208,7 +209,7 @@ fn generate_uri_modification(service: &Service, operation: &Operation) -> Option
         return None;
     }
 
-    let shape = &service.shapes[&operation.input.as_ref().unwrap().shape];
+    let shape = service.get_shape(&operation.input.as_ref().unwrap().shape).unwrap();
 
     Some(shape.members.as_ref().unwrap().iter().filter_map(|(member_name, member)| {
         if member.location.is_none() {
@@ -237,7 +238,7 @@ fn generate_headers(service: &Service, operation: &Operation) -> Option<String> 
         return None;
     }
 
-    let shape = &service.shapes[&operation.input.as_ref().unwrap().shape];
+    let shape = service.get_shape(&operation.input.as_ref().unwrap().shape).unwrap();
 
     Some(shape.members.as_ref().unwrap().iter().filter_map(|(member_name, member)| {
         if member.location.is_none() {
@@ -269,7 +270,7 @@ fn generate_parameters(service: &Service, operation: &Operation) -> Option<Strin
         return None;
     }
 
-    let shape = &service.shapes[&operation.input.as_ref().unwrap().shape];
+    let shape = service.get_shape(&operation.input.as_ref().unwrap().shape).unwrap();
 
     Some(shape.members.as_ref().unwrap().iter().filter_map(|(member_name, member)| {
         match member.location.as_ref().to_owned() {

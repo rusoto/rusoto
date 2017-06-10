@@ -1,14 +1,15 @@
 use std::io::Write;
 use inflector::Inflector;
 
-use codegen::botocore::{Operation, Service};
+use ::Service;
+use codegen::botocore::Operation;
 use super::{GenerateProtocol, error_type_name, IoResult, FileWriter};
 
 pub struct JsonGenerator;
 
 impl GenerateProtocol for JsonGenerator {
     fn generate_method_signatures(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
-        for (operation_name, operation) in service.operations.iter() {
+        for (operation_name, operation) in service.operations().iter() {
             let output_type = operation.output_shape_or("()");
 
             writeln!(writer,"
@@ -25,7 +26,7 @@ impl GenerateProtocol for JsonGenerator {
     }
 
     fn generate_method_impls(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
-        for (operation_name, operation) in service.operations.iter() {
+        for (operation_name, operation) in service.operations().iter() {
 
             let output_type = operation.output_shape_or("()");
 
@@ -60,8 +61,8 @@ impl GenerateProtocol for JsonGenerator {
                      name = operation.name,
                      ok_response = generate_ok_response(operation, output_type),
                      request_uri = operation.http.request_uri,
-                     target_prefix = service.metadata.target_prefix.as_ref().unwrap(),
-                     json_version = service.metadata.json_version.as_ref().unwrap(),
+                     target_prefix = service.target_prefix().unwrap(),
+                     json_version = service.json_version().unwrap(),
                      error_type = error_type_name(operation_name),
                      output_type = output_type)?;
         }
@@ -99,11 +100,11 @@ impl GenerateProtocol for JsonGenerator {
 }
 
 fn generate_endpoint_modification(service: &Service) -> Option<String> {
-    if service.signing_name() == service.metadata.endpoint_prefix {
+    if service.signing_name() == service.endpoint_prefix() {
         None
     } else {
         Some(format!("request.set_endpoint_prefix(\"{}\".to_string());",
-                     service.metadata.endpoint_prefix))
+                     service.endpoint_prefix()))
     }
 }
 
