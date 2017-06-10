@@ -67,6 +67,7 @@ pub struct AgentPreview {
     pub agent_id: AgentId,
     #[doc="<p>The Auto Scaling group for the EC2 instance where the agent is installed.</p>"]
     #[serde(rename="autoScalingGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_scaling_group: Option<AutoScalingGroup>,
 }
 
@@ -85,6 +86,7 @@ pub struct AssessmentRun {
     pub assessment_template_arn: Arn,
     #[doc="<p>The assessment run completion time that corresponds to the rules packages evaluation completion time or failure.</p>"]
     #[serde(rename="completedAt")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub completed_at: Option<Timestamp>,
     #[doc="<p>The time when <a>StartAssessmentRun</a> was called.</p>"]
     #[serde(rename="createdAt")]
@@ -109,6 +111,7 @@ pub struct AssessmentRun {
     pub rules_package_arns: AssessmentRulesPackageArnList,
     #[doc="<p>The time when <a>StartAssessmentRun</a> was called.</p>"]
     #[serde(rename="startedAt")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub started_at: Option<Timestamp>,
     #[doc="<p>The state of the assessment run.</p>"]
     #[serde(rename="state")]
@@ -135,6 +138,7 @@ pub struct AssessmentRunAgent {
     pub agent_health_code: AgentHealthCode,
     #[doc="<p>The description for the agent health code.</p>"]
     #[serde(rename="agentHealthDetails")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub agent_health_details: Option<Message>,
     #[doc="<p>The AWS account of the EC2 instance where the agent is installed.</p>"]
     #[serde(rename="agentId")]
@@ -144,6 +148,7 @@ pub struct AssessmentRunAgent {
     pub assessment_run_arn: Arn,
     #[doc="<p>The Auto Scaling group of the EC2 instance that is specified by the agent ID.</p>"]
     #[serde(rename="autoScalingGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_scaling_group: Option<AutoScalingGroup>,
     #[doc="<p>The Amazon Inspector application data metrics that are collected by the agent.</p>"]
     #[serde(rename="telemetryMetadata")]
@@ -157,24 +162,31 @@ pub type AssessmentRunDuration = i64;
 pub struct AssessmentRunFilter {
     #[doc="<p>For a record to match a filter, the value that is specified for this data type property must inclusively match any value between the specified minimum and maximum values of the <b>completedAt</b> property of the <a>AssessmentRun</a> data type.</p>"]
     #[serde(rename="completionTimeRange")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub completion_time_range: Option<TimestampRange>,
     #[doc="<p>For a record to match a filter, the value that is specified for this data type property must inclusively match any value between the specified minimum and maximum values of the <b>durationInSeconds</b> property of the <a>AssessmentRun</a> data type.</p>"]
     #[serde(rename="durationRange")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub duration_range: Option<DurationRange>,
     #[doc="<p>For a record to match a filter, an explicit value or a string containing a wildcard that is specified for this data type property must match the value of the <b>assessmentRunName</b> property of the <a>AssessmentRun</a> data type.</p>"]
     #[serde(rename="namePattern")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name_pattern: Option<NamePattern>,
     #[doc="<p>For a record to match a filter, the value that is specified for this data type property must be contained in the list of values of the <b>rulesPackages</b> property of the <a>AssessmentRun</a> data type.</p>"]
     #[serde(rename="rulesPackageArns")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rules_package_arns: Option<FilterRulesPackageArnList>,
     #[doc="<p>For a record to match a filter, the value that is specified for this data type property must inclusively match any value between the specified minimum and maximum values of the <b>startTime</b> property of the <a>AssessmentRun</a> data type.</p>"]
     #[serde(rename="startTimeRange")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_time_range: Option<TimestampRange>,
     #[doc="<p>For a record to match a filter, the value that is specified for this data type property must match the <b>stateChangedAt</b> property of the <a>AssessmentRun</a> data type.</p>"]
     #[serde(rename="stateChangeTimeRange")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state_change_time_range: Option<TimestampRange>,
     #[doc="<p>For a record to match a filter, one of the values specified for this data type property must be the exact match of the value of the <b>assessmentRunState</b> property of the <a>AssessmentRun</a> data type.</p>"]
     #[serde(rename="states")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub states: Option<AssessmentRunStateList>,
 }
 
@@ -196,12 +208,15 @@ pub struct AssessmentRunNotification {
     pub event: InspectorEvent,
     #[doc="<p>The message included in the notification.</p>"]
     #[serde(rename="message")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<Message>,
     #[doc="<p>The status code of the SNS notification.</p>"]
     #[serde(rename="snsPublishStatusCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sns_publish_status_code: Option<AssessmentRunNotificationSnsStatusCode>,
     #[doc="<p>The SNS topic to which the SNS notification is sent.</p>"]
     #[serde(rename="snsTopicArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sns_topic_arn: Option<Arn>,
 }
 
@@ -246,6 +261,7 @@ pub struct AssessmentTarget {
 pub struct AssessmentTargetFilter {
     #[doc="<p>For a record to match a filter, an explicit value or a string that contains a wildcard that is specified for this data type property must match the value of the <b>assessmentTargetName</b> property of the <a>AssessmentTarget</a> data type.</p>"]
     #[serde(rename="assessmentTargetNamePattern")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub assessment_target_name_pattern: Option<NamePattern>,
 }
 
@@ -282,12 +298,15 @@ pub struct AssessmentTemplate {
 pub struct AssessmentTemplateFilter {
     #[doc="<p>For a record to match a filter, the value specified for this data type property must inclusively match any value between the specified minimum and maximum values of the <b>durationInSeconds</b> property of the <a>AssessmentTemplate</a> data type.</p>"]
     #[serde(rename="durationRange")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub duration_range: Option<DurationRange>,
     #[doc="<p>For a record to match a filter, an explicit value or a string that contains a wildcard that is specified for this data type property must match the value of the <b>assessmentTemplateName</b> property of the <a>AssessmentTemplate</a> data type.</p>"]
     #[serde(rename="namePattern")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name_pattern: Option<NamePattern>,
     #[doc="<p>For a record to match a filter, the values that are specified for this data type property must be contained in the list of values of the <b>rulesPackageArns</b> property of the <a>AssessmentTemplate</a> data type.</p>"]
     #[serde(rename="rulesPackageArns")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rules_package_arns: Option<FilterRulesPackageArnList>,
 }
 
@@ -299,18 +318,23 @@ pub type AssessmentTemplateRulesPackageArnList = Vec<Arn>;
 pub struct AssetAttributes {
     #[doc="<p>The ID of the agent that is installed on the EC2 instance where the finding is generated.</p>"]
     #[serde(rename="agentId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub agent_id: Option<AgentId>,
     #[doc="<p>The ID of the Amazon Machine Image (AMI) that is installed on the EC2 instance where the finding is generated.</p>"]
     #[serde(rename="amiId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ami_id: Option<AmiId>,
     #[doc="<p>The Auto Scaling group of the EC2 instance where the finding is generated.</p>"]
     #[serde(rename="autoScalingGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_scaling_group: Option<AutoScalingGroup>,
     #[doc="<p>The hostname of the EC2 instance where the finding is generated.</p>"]
     #[serde(rename="hostname")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hostname: Option<Hostname>,
     #[doc="<p>The list of IP v4 addresses of the EC2 instance where the finding is generated.</p>"]
     #[serde(rename="ipv4Addresses")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ipv_4_addresses: Option<Ipv4AddressList>,
     #[doc="<p>The schema version of this data type.</p>"]
     #[serde(rename="schemaVersion")]
@@ -326,6 +350,7 @@ pub struct Attribute {
     pub key: AttributeKey,
     #[doc="<p>The value assigned to the attribute key.</p>"]
     #[serde(rename="value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<AttributeValue>,
 }
 
@@ -369,6 +394,7 @@ pub struct CreateAssessmentTemplateRequest {
     pub rules_package_arns: AssessmentTemplateRulesPackageArnList,
     #[doc="<p>The user-defined attributes that are assigned to every finding that is generated by the assessment run that uses this assessment template.</p>"]
     #[serde(rename="userAttributesForFindings")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_attributes_for_findings: Option<UserAttributeList>,
 }
 
@@ -484,6 +510,7 @@ pub struct DescribeFindingsRequest {
     pub finding_arns: BatchDescribeArnList,
     #[doc="<p>The locale into which you want to translate a finding description, recommendation, and the short description that identifies the finding.</p>"]
     #[serde(rename="locale")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub locale: Option<Locale>,
 }
 
@@ -518,6 +545,7 @@ pub struct DescribeResourceGroupsResponse {
 pub struct DescribeRulesPackagesRequest {
     #[doc="<p>The locale that you want to translate a rules package description into.</p>"]
     #[serde(rename="locale")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub locale: Option<Locale>,
     #[doc="<p>The ARN that specifies the rules package that you want to describe.</p>"]
     #[serde(rename="rulesPackageArns")]
@@ -539,9 +567,11 @@ pub struct DescribeRulesPackagesResponse {
 pub struct DurationRange {
     #[doc="<p>The maximum value of the duration range. Must be less than or equal to 604800 seconds (1 week).</p>"]
     #[serde(rename="maxSeconds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_seconds: Option<AssessmentRunDuration>,
     #[doc="<p>The minimum value of the duration range. Must be greater than zero.</p>"]
     #[serde(rename="minSeconds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub min_seconds: Option<AssessmentRunDuration>,
 }
 
@@ -580,49 +610,61 @@ pub struct Finding {
     pub arn: Arn,
     #[doc="<p>A collection of attributes of the host from which the finding is generated.</p>"]
     #[serde(rename="assetAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub asset_attributes: Option<AssetAttributes>,
     #[doc="<p>The type of the host from which the finding is generated.</p>"]
     #[serde(rename="assetType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub asset_type: Option<AssetType>,
     #[doc="<p>The system-defined attributes for the finding.</p>"]
     #[serde(rename="attributes")]
     pub attributes: AttributeList,
     #[doc="<p>This data element is currently not used.</p>"]
     #[serde(rename="confidence")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub confidence: Option<IocConfidence>,
     #[doc="<p>The time when the finding was generated.</p>"]
     #[serde(rename="createdAt")]
     pub created_at: Timestamp,
     #[doc="<p>The description of the finding.</p>"]
     #[serde(rename="description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<Text>,
     #[doc="<p>The ID of the finding.</p>"]
     #[serde(rename="id")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<FindingId>,
     #[doc="<p>This data element is currently not used.</p>"]
     #[serde(rename="indicatorOfCompromise")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub indicator_of_compromise: Option<Bool>,
     #[doc="<p>The numeric value of the finding severity.</p>"]
     #[serde(rename="numericSeverity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub numeric_severity: Option<NumericSeverity>,
     #[doc="<p>The recommendation for the finding.</p>"]
     #[serde(rename="recommendation")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub recommendation: Option<Text>,
     #[doc="<p>The schema version of this data type.</p>"]
     #[serde(rename="schemaVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub schema_version: Option<NumericVersion>,
     #[doc="<p>The data element is set to \"Inspector\".</p>"]
     #[serde(rename="service")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub service: Option<ServiceName>,
     #[doc="<p>This data type is used in the <a>Finding</a> data type.</p>"]
     #[serde(rename="serviceAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub service_attributes: Option<InspectorServiceAttributes>,
     #[doc="<p>The finding severity. Values can be set to High, Medium, Low, and Informational.</p>"]
     #[serde(rename="severity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub severity: Option<Severity>,
     #[doc="<p>The name of the finding.</p>"]
     #[serde(rename="title")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub title: Option<Text>,
     #[doc="<p>The time when <a>AddAttributesToFindings</a> is called.</p>"]
     #[serde(rename="updatedAt")]
@@ -638,27 +680,35 @@ pub type FindingCount = i64;
 pub struct FindingFilter {
     #[doc="<p>For a record to match a filter, one of the values that is specified for this data type property must be the exact match of the value of the <b>agentId</b> property of the <a>Finding</a> data type.</p>"]
     #[serde(rename="agentIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub agent_ids: Option<AgentIdList>,
     #[doc="<p>For a record to match a filter, the list of values that are specified for this data type property must be contained in the list of values of the <b>attributes</b> property of the <a>Finding</a> data type.</p>"]
     #[serde(rename="attributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub attributes: Option<AttributeList>,
     #[doc="<p>For a record to match a filter, one of the values that is specified for this data type property must be the exact match of the value of the <b>autoScalingGroup</b> property of the <a>Finding</a> data type.</p>"]
     #[serde(rename="autoScalingGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_scaling_groups: Option<AutoScalingGroupList>,
     #[doc="<p>The time range during which the finding is generated.</p>"]
     #[serde(rename="creationTimeRange")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub creation_time_range: Option<TimestampRange>,
     #[doc="<p>For a record to match a filter, one of the values that is specified for this data type property must be the exact match of the value of the <b>ruleName</b> property of the <a>Finding</a> data type.</p>"]
     #[serde(rename="ruleNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rule_names: Option<RuleNameList>,
     #[doc="<p>For a record to match a filter, one of the values that is specified for this data type property must be the exact match of the value of the <b>rulesPackageArn</b> property of the <a>Finding</a> data type.</p>"]
     #[serde(rename="rulesPackageArns")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rules_package_arns: Option<FilterRulesPackageArnList>,
     #[doc="<p>For a record to match a filter, one of the values that is specified for this data type property must be the exact match of the value of the <b>severity</b> property of the <a>Finding</a> data type.</p>"]
     #[serde(rename="severities")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub severities: Option<SeverityList>,
     #[doc="<p>For a record to match a filter, the value that is specified for this data type property must be contained in the list of values of the <b>userAttributes</b> property of the <a>Finding</a> data type.</p>"]
     #[serde(rename="userAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_attributes: Option<AttributeList>,
 }
 
@@ -684,6 +734,7 @@ pub struct GetAssessmentReportResponse {
     pub status: ReportStatus,
     #[doc="<p>Specifies the URL where you can find the generated assessment report. This parameter is only returned if the report is successfully generated.</p>"]
     #[serde(rename="url")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub url: Option<Url>,
 }
 
@@ -708,9 +759,11 @@ pub type InspectorEvent = String;
 pub struct InspectorServiceAttributes {
     #[doc="<p>The ARN of the assessment run during which the finding is generated.</p>"]
     #[serde(rename="assessmentRunArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub assessment_run_arn: Option<Arn>,
     #[doc="<p>The ARN of the rules package that is used to generate the finding.</p>"]
     #[serde(rename="rulesPackageArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rules_package_arn: Option<Arn>,
     #[doc="<p>The schema version of this data type.</p>"]
     #[serde(rename="schemaVersion")]
@@ -730,12 +783,15 @@ pub struct ListAssessmentRunAgentsRequest {
     pub assessment_run_arn: Arn,
     #[doc="<p>You can use this parameter to specify a subset of data to be included in the action's response.</p> <p>For a record to match a filter, all specified filter attributes must match. When multiple values are specified for a filter attribute, any of the values can match.</p>"]
     #[serde(rename="filter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filter: Option<AgentFilter>,
     #[doc="<p>You can use this parameter to indicate the maximum number of items that you want in the response. The default value is 10. The maximum value is 500.</p>"]
     #[serde(rename="maxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<ListMaxResults>,
     #[doc="<p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the <b>ListAssessmentRunAgents</b> action. Subsequent calls to the action fill <b>nextToken</b> in the request with the value of <b>NextToken</b> from the previous response to continue listing data.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<PaginationToken>,
 }
 
@@ -746,6 +802,7 @@ pub struct ListAssessmentRunAgentsResponse {
     pub assessment_run_agents: AssessmentRunAgentList,
     #[doc="<p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<PaginationToken>,
 }
 
@@ -753,15 +810,19 @@ pub struct ListAssessmentRunAgentsResponse {
 pub struct ListAssessmentRunsRequest {
     #[doc="<p>The ARNs that specify the assessment templates whose assessment runs you want to list.</p>"]
     #[serde(rename="assessmentTemplateArns")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub assessment_template_arns: Option<ListParentArnList>,
     #[doc="<p>You can use this parameter to specify a subset of data to be included in the action's response.</p> <p>For a record to match a filter, all specified filter attributes must match. When multiple values are specified for a filter attribute, any of the values can match.</p>"]
     #[serde(rename="filter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filter: Option<AssessmentRunFilter>,
     #[doc="<p>You can use this parameter to indicate the maximum number of items that you want in the response. The default value is 10. The maximum value is 500.</p>"]
     #[serde(rename="maxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<ListMaxResults>,
     #[doc="<p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the <b>ListAssessmentRuns</b> action. Subsequent calls to the action fill <b>nextToken</b> in the request with the value of <b>NextToken</b> from the previous response to continue listing data.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<PaginationToken>,
 }
 
@@ -772,6 +833,7 @@ pub struct ListAssessmentRunsResponse {
     pub assessment_run_arns: ListReturnedArnList,
     #[doc="<p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<PaginationToken>,
 }
 
@@ -779,12 +841,15 @@ pub struct ListAssessmentRunsResponse {
 pub struct ListAssessmentTargetsRequest {
     #[doc="<p>You can use this parameter to specify a subset of data to be included in the action's response.</p> <p>For a record to match a filter, all specified filter attributes must match. When multiple values are specified for a filter attribute, any of the values can match.</p>"]
     #[serde(rename="filter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filter: Option<AssessmentTargetFilter>,
     #[doc="<p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>"]
     #[serde(rename="maxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<ListMaxResults>,
     #[doc="<p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the <b>ListAssessmentTargets</b> action. Subsequent calls to the action fill <b>nextToken</b> in the request with the value of <b>NextToken</b> from the previous response to continue listing data.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<PaginationToken>,
 }
 
@@ -795,6 +860,7 @@ pub struct ListAssessmentTargetsResponse {
     pub assessment_target_arns: ListReturnedArnList,
     #[doc="<p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<PaginationToken>,
 }
 
@@ -802,15 +868,19 @@ pub struct ListAssessmentTargetsResponse {
 pub struct ListAssessmentTemplatesRequest {
     #[doc="<p>A list of ARNs that specifies the assessment targets whose assessment templates you want to list.</p>"]
     #[serde(rename="assessmentTargetArns")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub assessment_target_arns: Option<ListParentArnList>,
     #[doc="<p>You can use this parameter to specify a subset of data to be included in the action's response.</p> <p>For a record to match a filter, all specified filter attributes must match. When multiple values are specified for a filter attribute, any of the values can match.</p>"]
     #[serde(rename="filter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filter: Option<AssessmentTemplateFilter>,
     #[doc="<p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>"]
     #[serde(rename="maxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<ListMaxResults>,
     #[doc="<p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the <b>ListAssessmentTemplates</b> action. Subsequent calls to the action fill <b>nextToken</b> in the request with the value of <b>NextToken</b> from the previous response to continue listing data.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<PaginationToken>,
 }
 
@@ -821,6 +891,7 @@ pub struct ListAssessmentTemplatesResponse {
     pub assessment_template_arns: ListReturnedArnList,
     #[doc="<p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<PaginationToken>,
 }
 
@@ -829,12 +900,15 @@ pub type ListEventSubscriptionsMaxResults = i64;
 pub struct ListEventSubscriptionsRequest {
     #[doc="<p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>"]
     #[serde(rename="maxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<ListEventSubscriptionsMaxResults>,
     #[doc="<p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the <b>ListEventSubscriptions</b> action. Subsequent calls to the action fill <b>nextToken</b> in the request with the value of <b>NextToken</b> from the previous response to continue listing data.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<PaginationToken>,
     #[doc="<p>The ARN of the assessment template for which you want to list the existing event subscriptions.</p>"]
     #[serde(rename="resourceArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resource_arn: Option<Arn>,
 }
 
@@ -842,6 +916,7 @@ pub struct ListEventSubscriptionsRequest {
 pub struct ListEventSubscriptionsResponse {
     #[doc="<p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<PaginationToken>,
     #[doc="<p>Details of the returned event subscriptions.</p>"]
     #[serde(rename="subscriptions")]
@@ -852,15 +927,19 @@ pub struct ListEventSubscriptionsResponse {
 pub struct ListFindingsRequest {
     #[doc="<p>The ARNs of the assessment runs that generate the findings that you want to list.</p>"]
     #[serde(rename="assessmentRunArns")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub assessment_run_arns: Option<ListParentArnList>,
     #[doc="<p>You can use this parameter to specify a subset of data to be included in the action's response.</p> <p>For a record to match a filter, all specified filter attributes must match. When multiple values are specified for a filter attribute, any of the values can match.</p>"]
     #[serde(rename="filter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filter: Option<FindingFilter>,
     #[doc="<p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>"]
     #[serde(rename="maxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<ListMaxResults>,
     #[doc="<p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the <b>ListFindings</b> action. Subsequent calls to the action fill <b>nextToken</b> in the request with the value of <b>NextToken</b> from the previous response to continue listing data.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<PaginationToken>,
 }
 
@@ -871,6 +950,7 @@ pub struct ListFindingsResponse {
     pub finding_arns: ListReturnedArnList,
     #[doc="<p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<PaginationToken>,
 }
 
@@ -881,9 +961,11 @@ pub type ListReturnedArnList = Vec<Arn>;
 pub struct ListRulesPackagesRequest {
     #[doc="<p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>"]
     #[serde(rename="maxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<ListMaxResults>,
     #[doc="<p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the <b>ListRulesPackages</b> action. Subsequent calls to the action fill <b>nextToken</b> in the request with the value of <b>NextToken</b> from the previous response to continue listing data.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<PaginationToken>,
 }
 
@@ -891,6 +973,7 @@ pub struct ListRulesPackagesRequest {
 pub struct ListRulesPackagesResponse {
     #[doc="<p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<PaginationToken>,
     #[doc="<p>The list of ARNs that specifies the rules packages returned by the action.</p>"]
     #[serde(rename="rulesPackageArns")]
@@ -925,9 +1008,11 @@ pub type PreviewAgentsMaxResults = i64;
 pub struct PreviewAgentsRequest {
     #[doc="<p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>"]
     #[serde(rename="maxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<PreviewAgentsMaxResults>,
     #[doc="<p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the <b>PreviewAgents</b> action. Subsequent calls to the action fill <b>nextToken</b> in the request with the value of <b>NextToken</b> from the previous response to continue listing data.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<PaginationToken>,
     #[doc="<p>The ARN of the assessment target whose agents you want to preview.</p>"]
     #[serde(rename="previewAgentsArn")]
@@ -941,6 +1026,7 @@ pub struct PreviewAgentsResponse {
     pub agent_previews: AgentPreviewList,
     #[doc="<p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<PaginationToken>,
 }
 
@@ -995,6 +1081,7 @@ pub struct ResourceGroupTag {
     pub key: TagKey,
     #[doc="<p>The value assigned to a tag key.</p>"]
     #[serde(rename="value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<TagValue>,
 }
 
@@ -1009,6 +1096,7 @@ pub struct RulesPackage {
     pub arn: Arn,
     #[doc="<p>The description of the rules package.</p>"]
     #[serde(rename="description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<Text>,
     #[doc="<p>The name of the rules package.</p>"]
     #[serde(rename="name")]
@@ -1031,6 +1119,7 @@ pub struct SetTagsForResourceRequest {
     pub resource_arn: Arn,
     #[doc="<p>A collection of key and value pairs that you want to set to the assessment template.</p>"]
     #[serde(rename="tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<TagList>,
 }
 
@@ -1040,6 +1129,7 @@ pub type SeverityList = Vec<Severity>;
 pub struct StartAssessmentRunRequest {
     #[doc="<p>You can specify the name for the assessment run. The name must be unique for the assessment template whose ARN is used to start the assessment run.</p>"]
     #[serde(rename="assessmentRunName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub assessment_run_name: Option<AssessmentRunName>,
     #[doc="<p>The ARN of the assessment template of the assessment run that you want to start.</p>"]
     #[serde(rename="assessmentTemplateArn")]
@@ -1096,6 +1186,7 @@ pub struct Tag {
     pub key: TagKey,
     #[doc="<p>A value assigned to a tag key.</p>"]
     #[serde(rename="value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<TagValue>,
 }
 
@@ -1110,6 +1201,7 @@ pub struct TelemetryMetadata {
     pub count: Long,
     #[doc="<p>The data size of messages that the agent sends to the Amazon Inspector service.</p>"]
     #[serde(rename="dataSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub data_size: Option<Long>,
     #[doc="<p>A specific type of behavioral data that is collected by the agent.</p>"]
     #[serde(rename="messageType")]
@@ -1124,9 +1216,11 @@ pub type Timestamp = f64;
 pub struct TimestampRange {
     #[doc="<p>The minimum value of the timestamp range.</p>"]
     #[serde(rename="beginDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub begin_date: Option<Timestamp>,
     #[doc="<p>The maximum value of the timestamp range.</p>"]
     #[serde(rename="endDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub end_date: Option<Timestamp>,
 }
 

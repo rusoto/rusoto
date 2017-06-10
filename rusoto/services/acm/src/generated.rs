@@ -33,66 +33,87 @@ pub type CertificateChainBlob = Vec<u8>;
 pub struct CertificateDetail {
     #[doc="<p>The Amazon Resource Name (ARN) of the certificate. For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
     #[serde(rename="CertificateArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate_arn: Option<Arn>,
     #[doc="<p>The time at which the certificate was requested. This value exists only when the certificate type is <code>AMAZON_ISSUED</code>.</p>"]
     #[serde(rename="CreatedAt")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub created_at: Option<TStamp>,
     #[doc="<p>The fully qualified domain name for the certificate, such as www.example.com or example.com.</p>"]
     #[serde(rename="DomainName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub domain_name: Option<DomainNameString>,
     #[doc="<p>Contains information about the initial validation of each domain name that occurs as a result of the <a>RequestCertificate</a> request. This field exists only when the certificate type is <code>AMAZON_ISSUED</code>.</p>"]
     #[serde(rename="DomainValidationOptions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub domain_validation_options: Option<DomainValidationList>,
     #[doc="<p>The reason the certificate request failed. This value exists only when the certificate status is <code>FAILED</code>. For more information, see <a href=\"http://docs.aws.amazon.com/acm/latest/userguide/troubleshooting.html#troubleshooting-failed\">Certificate Request Failed</a> in the <i>AWS Certificate Manager User Guide</i>.</p>"]
     #[serde(rename="FailureReason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub failure_reason: Option<FailureReason>,
     #[doc="<p>The date and time at which the certificate was imported. This value exists only when the certificate type is <code>IMPORTED</code>.</p>"]
     #[serde(rename="ImportedAt")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub imported_at: Option<TStamp>,
     #[doc="<p>A list of ARNs for the AWS resources that are using the certificate. A certificate can be used by multiple AWS resources.</p>"]
     #[serde(rename="InUseBy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub in_use_by: Option<InUseList>,
     #[doc="<p>The time at which the certificate was issued. This value exists only when the certificate type is <code>AMAZON_ISSUED</code>.</p>"]
     #[serde(rename="IssuedAt")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub issued_at: Option<TStamp>,
     #[doc="<p>The name of the certificate authority that issued and signed the certificate.</p>"]
     #[serde(rename="Issuer")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub issuer: Option<String>,
     #[doc="<p>The algorithm that was used to generate the key pair (the public and private key).</p>"]
     #[serde(rename="KeyAlgorithm")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key_algorithm: Option<KeyAlgorithm>,
     #[doc="<p>The time after which the certificate is not valid.</p>"]
     #[serde(rename="NotAfter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub not_after: Option<TStamp>,
     #[doc="<p>The time before which the certificate is not valid.</p>"]
     #[serde(rename="NotBefore")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub not_before: Option<TStamp>,
     #[doc="<p>Contains information about the status of ACM's <a href=\"http://docs.aws.amazon.com/acm/latest/userguide/acm-renewal.html\">managed renewal</a> for the certificate. This field exists only when the certificate type is <code>AMAZON_ISSUED</code>.</p>"]
     #[serde(rename="RenewalSummary")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub renewal_summary: Option<RenewalSummary>,
     #[doc="<p>The reason the certificate was revoked. This value exists only when the certificate status is <code>REVOKED</code>.</p>"]
     #[serde(rename="RevocationReason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub revocation_reason: Option<RevocationReason>,
     #[doc="<p>The time at which the certificate was revoked. This value exists only when the certificate status is <code>REVOKED</code>.</p>"]
     #[serde(rename="RevokedAt")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub revoked_at: Option<TStamp>,
     #[doc="<p>The serial number of the certificate.</p>"]
     #[serde(rename="Serial")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub serial: Option<String>,
     #[doc="<p>The algorithm that was used to sign the certificate.</p>"]
     #[serde(rename="SignatureAlgorithm")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub signature_algorithm: Option<String>,
     #[doc="<p>The status of the certificate.</p>"]
     #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<CertificateStatus>,
     #[doc="<p>The name of the entity that is associated with the public key contained in the certificate.</p>"]
     #[serde(rename="Subject")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subject: Option<String>,
     #[doc="<p>One or more domain names (subject alternative names) included in the certificate. This list contains the domain names that are bound to the public key that is contained in the certificate. The subject alternative names include the canonical domain name (CN) of the certificate and additional domain names that can be used to connect to the website.</p>"]
     #[serde(rename="SubjectAlternativeNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subject_alternative_names: Option<DomainList>,
     #[doc="<p>The source of the certificate. For certificates provided by ACM, this value is <code>AMAZON_ISSUED</code>. For certificates that you imported with <a>ImportCertificate</a>, this value is <code>IMPORTED</code>. ACM does not provide <a href=\"http://docs.aws.amazon.com/acm/latest/userguide/acm-renewal.html\">managed renewal</a> for imported certificates. For more information about the differences between certificates that you import and those that ACM provides, see <a href=\"http://docs.aws.amazon.com/acm/latest/userguide/import-certificate.html\">Importing Certificates</a> in the <i>AWS Certificate Manager User Guide</i>.</p>"]
     #[serde(rename="Type")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<CertificateType>,
 }
 
@@ -103,9 +124,11 @@ pub type CertificateStatuses = Vec<CertificateStatus>;
 pub struct CertificateSummary {
     #[doc="<p>Amazon Resource Name (ARN) of the certificate. This is of the form:</p> <p> <code>arn:aws:acm:region:123456789012:certificate/12345678-1234-1234-1234-123456789012</code> </p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>.</p>"]
     #[serde(rename="CertificateArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate_arn: Option<Arn>,
     #[doc="<p>Fully qualified domain name (FQDN), such as www.example.com or example.com, for the certificate.</p>"]
     #[serde(rename="DomainName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub domain_name: Option<DomainNameString>,
 }
 
@@ -129,6 +152,7 @@ pub struct DescribeCertificateRequest {
 pub struct DescribeCertificateResponse {
     #[doc="<p>Metadata about an ACM certificate.</p>"]
     #[serde(rename="Certificate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate: Option<CertificateDetail>,
 }
 
@@ -143,12 +167,15 @@ pub struct DomainValidation {
     pub domain_name: DomainNameString,
     #[doc="<p>The domain name that ACM used to send domain validation emails.</p>"]
     #[serde(rename="ValidationDomain")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub validation_domain: Option<DomainNameString>,
     #[doc="<p>A list of email addresses that ACM used to send domain validation emails.</p>"]
     #[serde(rename="ValidationEmails")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub validation_emails: Option<ValidationEmailList>,
     #[doc="<p>The validation status of the domain name.</p>"]
     #[serde(rename="ValidationStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub validation_status: Option<DomainStatus>,
 }
 
@@ -177,9 +204,11 @@ pub struct GetCertificateRequest {
 pub struct GetCertificateResponse {
     #[doc="<p>String that contains the ACM Certificate represented by the ARN specified at input.</p>"]
     #[serde(rename="Certificate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate: Option<CertificateBody>,
     #[doc="<p>The certificate chain that contains the root certificate issued by the certificate authority (CA).</p>"]
     #[serde(rename="CertificateChain")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate_chain: Option<CertificateChain>,
 }
 
@@ -196,6 +225,7 @@ pub struct ImportCertificateRequest {
     pub certificate: CertificateBodyBlob,
     #[doc="<p>The <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Name (ARN)</a> of an imported certificate to replace. To import a new certificate, omit this field.</p>"]
     #[serde(rename="CertificateArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate_arn: Option<Arn>,
     #[doc="<p>The certificate chain. It must be PEM-encoded.</p>"]
     #[serde(rename="CertificateChain")]
@@ -219,6 +249,7 @@ pub struct ImportCertificateRequest {
 pub struct ImportCertificateResponse {
     #[doc="<p>The <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Name (ARN)</a> of the imported certificate.</p>"]
     #[serde(rename="CertificateArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate_arn: Option<Arn>,
 }
 
@@ -228,12 +259,15 @@ pub type KeyAlgorithm = String;
 pub struct ListCertificatesRequest {
     #[doc="<p>The status or statuses on which to filter the list of ACM Certificates.</p>"]
     #[serde(rename="CertificateStatuses")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate_statuses: Option<CertificateStatuses>,
     #[doc="<p>Use this parameter when paginating results to specify the maximum number of items to return in the response. If additional items exist beyond the number you specify, the <code>NextToken</code> element is sent in the response. Use this <code>NextToken</code> value in a subsequent request to retrieve additional items.</p>"]
     #[serde(rename="MaxItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_items: Option<MaxItems>,
     #[doc="<p>Use this parameter only when paginating results and only in a subsequent request after you receive a response with truncated results. Set it to the value of <code>NextToken</code> from the response you just received.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -241,9 +275,11 @@ pub struct ListCertificatesRequest {
 pub struct ListCertificatesResponse {
     #[doc="<p>A list of ACM Certificates.</p>"]
     #[serde(rename="CertificateSummaryList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate_summary_list: Option<CertificateSummaryList>,
     #[doc="<p>When the list is truncated, this value is present and contains the value to use for the <code>NextToken</code> parameter in a subsequent pagination request.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -258,6 +294,7 @@ pub struct ListTagsForCertificateRequest {
 pub struct ListTagsForCertificateResponse {
     #[doc="<p>The key-value pairs that define the applied tags.</p>"]
     #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<TagList>,
 }
 
@@ -293,12 +330,15 @@ pub struct RequestCertificateRequest {
     pub domain_name: DomainNameString,
     #[doc="<p>The domain name that you want ACM to use to send you emails to validate your ownership of the domain.</p>"]
     #[serde(rename="DomainValidationOptions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub domain_validation_options: Option<DomainValidationOptionList>,
     #[doc="<p>Customer chosen string that can be used to distinguish between calls to <code>RequestCertificate</code>. Idempotency tokens time out after one hour. Therefore, if you call <code>RequestCertificate</code> multiple times with the same idempotency token within one hour, ACM recognizes that you are requesting only one certificate and will issue only one. If you change the idempotency token for each call, ACM recognizes that you are requesting multiple certificates.</p>"]
     #[serde(rename="IdempotencyToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub idempotency_token: Option<IdempotencyToken>,
     #[doc="<p>Additional FQDNs to be included in the Subject Alternative Name extension of the ACM Certificate. For example, add the name www.example.net to a certificate for which the <code>DomainName</code> field is www.example.com if users can reach your site by using either name.</p>"]
     #[serde(rename="SubjectAlternativeNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subject_alternative_names: Option<DomainList>,
 }
 
@@ -306,6 +346,7 @@ pub struct RequestCertificateRequest {
 pub struct RequestCertificateResponse {
     #[doc="<p>String that contains the ARN of the issued certificate. This must be of the form:</p> <p> <code>arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012</code> </p>"]
     #[serde(rename="CertificateArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub certificate_arn: Option<Arn>,
 }
 
@@ -332,6 +373,7 @@ pub struct Tag {
     pub key: TagKey,
     #[doc="<p>The value of the tag.</p>"]
     #[serde(rename="Value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<TagValue>,
 }
 

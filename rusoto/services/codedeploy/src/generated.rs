@@ -30,6 +30,7 @@ pub type AdditionalDeploymentStatusInfo = String;
 pub struct Alarm {
     #[doc="<p>The name of the alarm. Maximum length is 255 characters. Each alarm name can be used only once in a list of alarms.</p>"]
     #[serde(rename="name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<AlarmName>,
 }
 
@@ -38,14 +39,15 @@ pub struct Alarm {
 pub struct AlarmConfiguration {
     #[doc="<p>A list of alarms configured for the deployment group. A maximum of 10 alarms can be added to a deployment group.</p>"]
     #[serde(rename="alarms")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub alarms: Option<AlarmList>,
     #[doc="<p>Indicates whether the alarm configuration is enabled.</p>"]
     #[serde(rename="enabled")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub enabled: Option<Boolean>,
     #[doc="<p>Indicates whether a deployment should continue if information about the current state of alarms cannot be retrieved from Amazon CloudWatch. The default value is false.</p> <ul> <li> <p>true: The deployment will proceed even if alarm status information can't be retrieved from Amazon CloudWatch.</p> </li> <li> <p>false: The deployment will stop if alarm status information can't be retrieved from Amazon CloudWatch.</p> </li> </ul>"]
     #[serde(rename="ignorePollAlarmFailure")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ignore_poll_alarm_failure: Option<Boolean>,
 }
 
@@ -57,19 +59,23 @@ pub type ApplicationId = String;
 pub struct ApplicationInfo {
     #[doc="<p>The application ID.</p>"]
     #[serde(rename="applicationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub application_id: Option<ApplicationId>,
     #[doc="<p>The application name.</p>"]
     #[serde(rename="applicationName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub application_name: Option<ApplicationName>,
     #[doc="<p>The time at which the application was created.</p>"]
     #[serde(rename="createTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub create_time: Option<Timestamp>,
     #[doc="<p>The name for a connection to a GitHub account.</p>"]
     #[serde(rename="gitHubAccountName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub git_hub_account_name: Option<GitHubAccountTokenName>,
     #[doc="<p>True if the user has authenticated with GitHub for the specified application; otherwise, false.</p>"]
     #[serde(rename="linkedToGitHub")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub linked_to_git_hub: Option<Boolean>,
 }
 
@@ -82,10 +88,11 @@ pub type ApplicationsList = Vec<ApplicationName>;
 pub struct AutoRollbackConfiguration {
     #[doc="<p>Indicates whether a defined automatic rollback configuration is currently enabled.</p>"]
     #[serde(rename="enabled")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub enabled: Option<Boolean>,
     #[doc="<p>The event type or types that trigger a rollback.</p>"]
     #[serde(rename="events")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub events: Option<AutoRollbackEventsList>,
 }
 
@@ -96,9 +103,11 @@ pub type AutoRollbackEventsList = Vec<AutoRollbackEvent>;
 pub struct AutoScalingGroup {
     #[doc="<p>An Auto Scaling lifecycle event hook name.</p>"]
     #[serde(rename="hook")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hook: Option<AutoScalingGroupHook>,
     #[doc="<p>The Auto Scaling group name.</p>"]
     #[serde(rename="name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<AutoScalingGroupName>,
 }
 
@@ -122,12 +131,15 @@ pub struct BatchGetApplicationRevisionsInput {
 pub struct BatchGetApplicationRevisionsOutput {
     #[doc="<p>The name of the application that corresponds to the revisions.</p>"]
     #[serde(rename="applicationName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub application_name: Option<ApplicationName>,
     #[doc="<p>Information about errors that may have occurred during the API call.</p>"]
     #[serde(rename="errorMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub error_message: Option<ErrorMessage>,
     #[doc="<p>Additional information about the revisions, including the type and location.</p>"]
     #[serde(rename="revisions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub revisions: Option<RevisionInfoList>,
 }
 
@@ -136,6 +148,7 @@ pub struct BatchGetApplicationRevisionsOutput {
 pub struct BatchGetApplicationsInput {
     #[doc="<p>A list of application names separated by spaces.</p>"]
     #[serde(rename="applicationNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub application_names: Option<ApplicationsList>,
 }
 
@@ -144,6 +157,7 @@ pub struct BatchGetApplicationsInput {
 pub struct BatchGetApplicationsOutput {
     #[doc="<p>Information about the applications.</p>"]
     #[serde(rename="applicationsInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub applications_info: Option<ApplicationsInfoList>,
 }
 
@@ -163,9 +177,11 @@ pub struct BatchGetDeploymentGroupsInput {
 pub struct BatchGetDeploymentGroupsOutput {
     #[doc="<p>Information about the deployment groups.</p>"]
     #[serde(rename="deploymentGroupsInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_groups_info: Option<DeploymentGroupInfoList>,
     #[doc="<p>Information about errors that may have occurred during the API call.</p>"]
     #[serde(rename="errorMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub error_message: Option<ErrorMessage>,
 }
 
@@ -185,9 +201,11 @@ pub struct BatchGetDeploymentInstancesInput {
 pub struct BatchGetDeploymentInstancesOutput {
     #[doc="<p>Information about errors that may have occurred during the API call.</p>"]
     #[serde(rename="errorMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub error_message: Option<ErrorMessage>,
     #[doc="<p>Information about the instance.</p>"]
     #[serde(rename="instancesSummary")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instances_summary: Option<InstanceSummaryList>,
 }
 
@@ -196,6 +214,7 @@ pub struct BatchGetDeploymentInstancesOutput {
 pub struct BatchGetDeploymentsInput {
     #[doc="<p>A list of deployment IDs, separated by spaces.</p>"]
     #[serde(rename="deploymentIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_ids: Option<DeploymentsList>,
 }
 
@@ -204,6 +223,7 @@ pub struct BatchGetDeploymentsInput {
 pub struct BatchGetDeploymentsOutput {
     #[doc="<p>Information about the deployments.</p>"]
     #[serde(rename="deploymentsInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployments_info: Option<DeploymentsInfoList>,
 }
 
@@ -212,6 +232,7 @@ pub struct BatchGetDeploymentsOutput {
 pub struct BatchGetOnPremisesInstancesInput {
     #[doc="<p>The names of the on-premises instances about which to get information.</p>"]
     #[serde(rename="instanceNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_names: Option<InstanceNameList>,
 }
 
@@ -220,6 +241,7 @@ pub struct BatchGetOnPremisesInstancesInput {
 pub struct BatchGetOnPremisesInstancesOutput {
     #[doc="<p>Information about the on-premises instances.</p>"]
     #[serde(rename="instanceInfos")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_infos: Option<InstanceInfoList>,
 }
 
@@ -228,12 +250,15 @@ pub struct BatchGetOnPremisesInstancesOutput {
 pub struct BlueGreenDeploymentConfiguration {
     #[doc="<p>Information about the action to take when newly provisioned instances are ready to receive traffic in a blue/green deployment.</p>"]
     #[serde(rename="deploymentReadyOption")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_ready_option: Option<DeploymentReadyOption>,
     #[doc="<p>Information about how instances are provisioned for a replacement environment in a blue/green deployment.</p>"]
     #[serde(rename="greenFleetProvisioningOption")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub green_fleet_provisioning_option: Option<GreenFleetProvisioningOption>,
     #[doc="<p>Information about whether to terminate instances in the original fleet during a blue/green deployment.</p>"]
     #[serde(rename="terminateBlueInstancesOnDeploymentSuccess")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub terminate_blue_instances_on_deployment_success: Option<BlueInstanceTerminationOption>,
 }
 
@@ -242,9 +267,11 @@ pub struct BlueGreenDeploymentConfiguration {
 pub struct BlueInstanceTerminationOption {
     #[doc="<p>The action to take on instances in the original environment after a successful blue/green deployment.</p> <ul> <li> <p>TERMINATE: Instances are terminated after a specified wait time.</p> </li> <li> <p>KEEP_ALIVE: Instances are left running after they are deregistered from the load balancer and removed from the deployment group.</p> </li> </ul>"]
     #[serde(rename="action")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub action: Option<InstanceAction>,
     #[doc="<p>The number of minutes to wait after a successful blue/green deployment before terminating instances from the original environment.</p>"]
     #[serde(rename="terminationWaitTimeInMinutes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub termination_wait_time_in_minutes: Option<Duration>,
 }
 
@@ -255,6 +282,7 @@ pub type CommitId = String;
 pub struct ContinueDeploymentInput {
     #[doc="<p>The deployment ID of the blue/green deployment for which you want to start rerouting traffic to the replacement environment.</p>"]
     #[serde(rename="deploymentId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_id: Option<DeploymentId>,
 }
 
@@ -271,6 +299,7 @@ pub struct CreateApplicationInput {
 pub struct CreateApplicationOutput {
     #[doc="<p>A unique application ID.</p>"]
     #[serde(rename="applicationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub application_id: Option<ApplicationId>,
 }
 
@@ -282,6 +311,7 @@ pub struct CreateDeploymentConfigInput {
     pub deployment_config_name: DeploymentConfigName,
     #[doc="<p>The minimum number of healthy instances that should be available at any time during the deployment. There are two parameters expected in the input: type and value.</p> <p>The type parameter takes either of the following values:</p> <ul> <li> <p>HOST_COUNT: The value parameter represents the minimum number of healthy instances as an absolute value.</p> </li> <li> <p>FLEET_PERCENT: The value parameter represents the minimum number of healthy instances as a percentage of the total number of instances in the deployment. If you specify FLEET_PERCENT, at the start of the deployment, AWS CodeDeploy converts the percentage to the equivalent number of instance and rounds up fractional instances.</p> </li> </ul> <p>The value parameter takes an integer.</p> <p>For example, to set a minimum of 95% healthy instance, specify a type of FLEET_PERCENT and a value of 95.</p>"]
     #[serde(rename="minimumHealthyHosts")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub minimum_healthy_hosts: Option<MinimumHealthyHosts>,
 }
 
@@ -290,6 +320,7 @@ pub struct CreateDeploymentConfigInput {
 pub struct CreateDeploymentConfigOutput {
     #[doc="<p>A unique deployment configuration ID.</p>"]
     #[serde(rename="deploymentConfigId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_config_id: Option<DeploymentConfigId>,
 }
 
@@ -298,42 +329,52 @@ pub struct CreateDeploymentConfigOutput {
 pub struct CreateDeploymentGroupInput {
     #[doc="<p>Information to add about Amazon CloudWatch alarms when the deployment group is created.</p>"]
     #[serde(rename="alarmConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub alarm_configuration: Option<AlarmConfiguration>,
     #[doc="<p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>"]
     #[serde(rename="applicationName")]
     pub application_name: ApplicationName,
     #[doc="<p>Configuration information for an automatic rollback that is added when a deployment group is created.</p>"]
     #[serde(rename="autoRollbackConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_rollback_configuration: Option<AutoRollbackConfiguration>,
     #[doc="<p>A list of associated Auto Scaling groups.</p>"]
     #[serde(rename="autoScalingGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_scaling_groups: Option<AutoScalingGroupNameList>,
     #[doc="<p>Information about blue/green deployment options for a deployment group.</p>"]
     #[serde(rename="blueGreenDeploymentConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub blue_green_deployment_configuration: Option<BlueGreenDeploymentConfiguration>,
     #[doc="<p>If specified, the deployment configuration name can be either one of the predefined configurations provided with AWS CodeDeploy or a custom deployment configuration that you create by calling the create deployment configuration operation.</p> <p>CodeDeployDefault.OneAtATime is the default deployment configuration. It is used if a configuration isn't specified for the deployment or the deployment group.</p> <p>For more information about the predefined deployment configurations in AWS CodeDeploy, see <a href=\"http://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations.html\">Working with Deployment Groups in AWS CodeDeploy</a> in the AWS CodeDeploy User Guide.</p>"]
     #[serde(rename="deploymentConfigName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_config_name: Option<DeploymentConfigName>,
     #[doc="<p>The name of a new deployment group for the specified application.</p>"]
     #[serde(rename="deploymentGroupName")]
     pub deployment_group_name: DeploymentGroupName,
     #[doc="<p>Information about the type of deployment, in-place or blue/green, that you want to run and whether to route deployment traffic behind a load balancer.</p>"]
     #[serde(rename="deploymentStyle")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_style: Option<DeploymentStyle>,
     #[doc="<p>The Amazon EC2 tags on which to filter. The deployment group will include EC2 instances with any of the specified tags.</p>"]
     #[serde(rename="ec2TagFilters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ec_2_tag_filters: Option<EC2TagFilterList>,
     #[doc="<p>Information about the load balancer used in a deployment.</p>"]
     #[serde(rename="loadBalancerInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub load_balancer_info: Option<LoadBalancerInfo>,
     #[doc="<p>The on-premises instance tags on which to filter. The deployment group will include on-premises instances with any of the specified tags.</p>"]
     #[serde(rename="onPremisesInstanceTagFilters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub on_premises_instance_tag_filters: Option<TagFilterList>,
     #[doc="<p>A service role ARN that allows AWS CodeDeploy to act on the user's behalf when interacting with AWS services.</p>"]
     #[serde(rename="serviceRoleArn")]
     pub service_role_arn: Role,
     #[doc="<p>Information about triggers to create when the deployment group is created. For examples, see <a href=\"http://docs.aws.amazon.com/codedeploy/latest/userguide/how-to-notify-sns.html\">Create a Trigger for an AWS CodeDeploy Event</a> in the AWS CodeDeploy User Guide.</p>"]
     #[serde(rename="triggerConfigurations")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub trigger_configurations: Option<TriggerConfigList>,
 }
 
@@ -342,6 +383,7 @@ pub struct CreateDeploymentGroupInput {
 pub struct CreateDeploymentGroupOutput {
     #[doc="<p>A unique deployment group ID.</p>"]
     #[serde(rename="deploymentGroupId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_group_id: Option<DeploymentGroupId>,
 }
 
@@ -353,32 +395,39 @@ pub struct CreateDeploymentInput {
     pub application_name: ApplicationName,
     #[doc="<p>Configuration information for an automatic rollback that is added when a deployment is created.</p>"]
     #[serde(rename="autoRollbackConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_rollback_configuration: Option<AutoRollbackConfiguration>,
     #[doc="<p>The name of a deployment configuration associated with the applicable IAM user or AWS account.</p> <p>If not specified, the value configured in the deployment group will be used as the default. If the deployment group does not have a deployment configuration associated with it, then CodeDeployDefault.OneAtATime will be used by default.</p>"]
     #[serde(rename="deploymentConfigName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_config_name: Option<DeploymentConfigName>,
     #[doc="<p>The name of the deployment group.</p>"]
     #[serde(rename="deploymentGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_group_name: Option<DeploymentGroupName>,
     #[doc="<p>A comment about the deployment.</p>"]
     #[serde(rename="description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<Description>,
     #[doc="<p>Information about how AWS CodeDeploy handles files that already exist in a deployment target location but weren't part of the previous successful deployment.</p> <p>The fileExistsBehavior parameter takes any of the following values:</p> <ul> <li> <p>DISALLOW: The deployment fails. This is also the default behavior if no option is specified.</p> </li> <li> <p>OVERWRITE: The version of the file from the application revision currently being deployed replaces the version already on the instance.</p> </li> <li> <p>RETAIN: The version of the file already on the instance is kept and used as part of the new deployment.</p> </li> </ul>"]
     #[serde(rename="fileExistsBehavior")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub file_exists_behavior: Option<FileExistsBehavior>,
     #[doc="<p>If set to true, then if the deployment causes the ApplicationStop deployment lifecycle event to an instance to fail, the deployment to that instance will not be considered to have failed at that point and will continue on to the BeforeInstall deployment lifecycle event.</p> <p>If set to false or not specified, then if the deployment causes the ApplicationStop deployment lifecycle event to fail to an instance, the deployment to that instance will stop, and the deployment to that instance will be considered to have failed.</p>"]
     #[serde(rename="ignoreApplicationStopFailures")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ignore_application_stop_failures: Option<Boolean>,
     #[doc="<p>The type and location of the revision to deploy.</p>"]
     #[serde(rename="revision")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub revision: Option<RevisionLocation>,
     #[doc="<p>Information about the instances that will belong to the replacement environment in a blue/green deployment.</p>"]
     #[serde(rename="targetInstances")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_instances: Option<TargetInstances>,
     #[doc="<p>Indicates whether to deploy to all instances or only to instances that are not running the latest application revision.</p>"]
     #[serde(rename="updateOutdatedInstancesOnly")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub update_outdated_instances_only: Option<Boolean>,
 }
 
@@ -387,6 +436,7 @@ pub struct CreateDeploymentInput {
 pub struct CreateDeploymentOutput {
     #[doc="<p>A unique deployment ID.</p>"]
     #[serde(rename="deploymentId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_id: Option<DeploymentId>,
 }
 
@@ -422,6 +472,7 @@ pub struct DeleteDeploymentGroupInput {
 pub struct DeleteDeploymentGroupOutput {
     #[doc="<p>If the output contains no data, and the corresponding deployment group contained at least one Auto Scaling group, AWS CodeDeploy successfully removed all corresponding Auto Scaling lifecycle event hooks from the Amazon EC2 instances in the Auto Scaling group. If the output contains data, AWS CodeDeploy could not remove some Auto Scaling lifecycle event hooks from the Amazon EC2 instances in the Auto Scaling group.</p>"]
     #[serde(rename="hooksNotCleanedUp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hooks_not_cleaned_up: Option<AutoScalingGroupList>,
 }
 
@@ -431,15 +482,19 @@ pub type DeploymentConfigId = String;
 pub struct DeploymentConfigInfo {
     #[doc="<p>The time at which the deployment configuration was created.</p>"]
     #[serde(rename="createTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub create_time: Option<Timestamp>,
     #[doc="<p>The deployment configuration ID.</p>"]
     #[serde(rename="deploymentConfigId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_config_id: Option<DeploymentConfigId>,
     #[doc="<p>The deployment configuration name.</p>"]
     #[serde(rename="deploymentConfigName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_config_name: Option<DeploymentConfigName>,
     #[doc="<p>Information about the number or percentage of minimum healthy instance.</p>"]
     #[serde(rename="minimumHealthyHosts")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub minimum_healthy_hosts: Option<MinimumHealthyHosts>,
 }
 
@@ -452,54 +507,71 @@ pub type DeploymentGroupId = String;
 pub struct DeploymentGroupInfo {
     #[doc="<p>A list of alarms associated with the deployment group.</p>"]
     #[serde(rename="alarmConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub alarm_configuration: Option<AlarmConfiguration>,
     #[doc="<p>The application name.</p>"]
     #[serde(rename="applicationName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub application_name: Option<ApplicationName>,
     #[doc="<p>Information about the automatic rollback configuration associated with the deployment group.</p>"]
     #[serde(rename="autoRollbackConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_rollback_configuration: Option<AutoRollbackConfiguration>,
     #[doc="<p>A list of associated Auto Scaling groups.</p>"]
     #[serde(rename="autoScalingGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_scaling_groups: Option<AutoScalingGroupList>,
     #[doc="<p>Information about blue/green deployment options for a deployment group.</p>"]
     #[serde(rename="blueGreenDeploymentConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub blue_green_deployment_configuration: Option<BlueGreenDeploymentConfiguration>,
     #[doc="<p>The deployment configuration name.</p>"]
     #[serde(rename="deploymentConfigName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_config_name: Option<DeploymentConfigName>,
     #[doc="<p>The deployment group ID.</p>"]
     #[serde(rename="deploymentGroupId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_group_id: Option<DeploymentGroupId>,
     #[doc="<p>The deployment group name.</p>"]
     #[serde(rename="deploymentGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_group_name: Option<DeploymentGroupName>,
     #[doc="<p>Information about the type of deployment, either in-place or blue/green, you want to run and whether to route deployment traffic behind a load balancer.</p>"]
     #[serde(rename="deploymentStyle")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_style: Option<DeploymentStyle>,
     #[doc="<p>The Amazon EC2 tags on which to filter.</p>"]
     #[serde(rename="ec2TagFilters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ec_2_tag_filters: Option<EC2TagFilterList>,
     #[doc="<p>Information about the most recent attempted deployment to the deployment group.</p>"]
     #[serde(rename="lastAttemptedDeployment")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_attempted_deployment: Option<LastDeploymentInfo>,
     #[doc="<p>Information about the most recent successful deployment to the deployment group.</p>"]
     #[serde(rename="lastSuccessfulDeployment")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_successful_deployment: Option<LastDeploymentInfo>,
     #[doc="<p>Information about the load balancer to use in a deployment.</p>"]
     #[serde(rename="loadBalancerInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub load_balancer_info: Option<LoadBalancerInfo>,
     #[doc="<p>The on-premises instance tags on which to filter.</p>"]
     #[serde(rename="onPremisesInstanceTagFilters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub on_premises_instance_tag_filters: Option<TagFilterList>,
     #[doc="<p>A service role ARN.</p>"]
     #[serde(rename="serviceRoleArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub service_role_arn: Option<Role>,
     #[doc="<p>Information about the deployment group's target revision, including type and location.</p>"]
     #[serde(rename="targetRevision")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_revision: Option<RevisionLocation>,
     #[doc="<p>Information about triggers associated with the deployment group.</p>"]
     #[serde(rename="triggerConfigurations")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub trigger_configurations: Option<TriggerConfigList>,
 }
 
@@ -512,81 +584,103 @@ pub type DeploymentId = String;
 pub struct DeploymentInfo {
     #[doc="<p>Provides information about the results of a deployment, such as whether instances in the original environment in a blue/green deployment were not terminated.</p>"]
     #[serde(rename="additionalDeploymentStatusInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub additional_deployment_status_info: Option<AdditionalDeploymentStatusInfo>,
     #[doc="<p>The application name.</p>"]
     #[serde(rename="applicationName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub application_name: Option<ApplicationName>,
     #[doc="<p>Information about the automatic rollback configuration associated with the deployment.</p>"]
     #[serde(rename="autoRollbackConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_rollback_configuration: Option<AutoRollbackConfiguration>,
     #[doc="<p>Information about blue/green deployment options for this deployment.</p>"]
     #[serde(rename="blueGreenDeploymentConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub blue_green_deployment_configuration: Option<BlueGreenDeploymentConfiguration>,
     #[doc="<p>A timestamp indicating when the deployment was complete.</p>"]
     #[serde(rename="completeTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub complete_time: Option<Timestamp>,
     #[doc="<p>A timestamp indicating when the deployment was created.</p>"]
     #[serde(rename="createTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub create_time: Option<Timestamp>,
     #[doc="<p>The means by which the deployment was created:</p> <ul> <li> <p>user: A user created the deployment.</p> </li> <li> <p>autoscaling: Auto Scaling created the deployment.</p> </li> <li> <p>codeDeployRollback: A rollback process created the deployment.</p> </li> </ul>"]
     #[serde(rename="creator")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub creator: Option<DeploymentCreator>,
     #[doc="<p>The deployment configuration name.</p>"]
     #[serde(rename="deploymentConfigName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_config_name: Option<DeploymentConfigName>,
     #[doc="<p>The deployment group name.</p>"]
     #[serde(rename="deploymentGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_group_name: Option<DeploymentGroupName>,
     #[doc="<p>The deployment ID.</p>"]
     #[serde(rename="deploymentId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_id: Option<DeploymentId>,
     #[doc="<p>A summary of the deployment status of the instances in the deployment.</p>"]
     #[serde(rename="deploymentOverview")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_overview: Option<DeploymentOverview>,
     #[doc="<p>Information about the type of deployment, either in-place or blue/green, you want to run and whether to route deployment traffic behind a load balancer.</p>"]
     #[serde(rename="deploymentStyle")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_style: Option<DeploymentStyle>,
     #[doc="<p>A comment about the deployment.</p>"]
     #[serde(rename="description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<Description>,
     #[doc="<p>Information about any error associated with this deployment.</p>"]
     #[serde(rename="errorInformation")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub error_information: Option<ErrorInformation>,
     #[doc="<p>Information about how AWS CodeDeploy handles files that already exist in a deployment target location but weren't part of the previous successful deployment.</p> <ul> <li> <p>DISALLOW: The deployment fails. This is also the default behavior if no option is specified.</p> </li> <li> <p>OVERWRITE: The version of the file from the application revision currently being deployed replaces the version already on the instance.</p> </li> <li> <p>RETAIN: The version of the file already on the instance is kept and used as part of the new deployment.</p> </li> </ul>"]
     #[serde(rename="fileExistsBehavior")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub file_exists_behavior: Option<FileExistsBehavior>,
     #[doc="<p>If true, then if the deployment causes the ApplicationStop deployment lifecycle event to an instance to fail, the deployment to that instance will not be considered to have failed at that point and will continue on to the BeforeInstall deployment lifecycle event.</p> <p>If false or not specified, then if the deployment causes the ApplicationStop deployment lifecycle event to an instance to fail, the deployment to that instance will stop, and the deployment to that instance will be considered to have failed.</p>"]
     #[serde(rename="ignoreApplicationStopFailures")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ignore_application_stop_failures: Option<Boolean>,
     #[doc="<p>Indicates whether the wait period set for the termination of instances in the original environment has started. Status is 'false' if the KEEP_ALIVE option is specified; otherwise, 'true' as soon as the termination wait period starts.</p>"]
     #[serde(rename="instanceTerminationWaitTimeStarted")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_termination_wait_time_started: Option<Boolean>,
     #[doc="<p>Information about the load balancer used in the deployment.</p>"]
     #[serde(rename="loadBalancerInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub load_balancer_info: Option<LoadBalancerInfo>,
     #[doc="<p>Information about the application revision that was deployed to the deployment group before the most recent successful deployment.</p>"]
     #[serde(rename="previousRevision")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub previous_revision: Option<RevisionLocation>,
     #[doc="<p>Information about the location of stored application artifacts and the service from which to retrieve them.</p>"]
     #[serde(rename="revision")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub revision: Option<RevisionLocation>,
     #[doc="<p>Information about a deployment rollback.</p>"]
     #[serde(rename="rollbackInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rollback_info: Option<RollbackInfo>,
     #[doc="<p>A timestamp indicating when the deployment was deployed to the deployment group.</p> <p>In some cases, the reported value of the start time may be later than the complete time. This is due to differences in the clock settings of back-end servers that participate in the deployment process.</p>"]
     #[serde(rename="startTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_time: Option<Timestamp>,
     #[doc="<p>The current state of the deployment as a whole.</p>"]
     #[serde(rename="status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<DeploymentStatus>,
     #[doc="<p>Information about the instances that belong to the replacement environment in a blue/green deployment.</p>"]
     #[serde(rename="targetInstances")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_instances: Option<TargetInstances>,
     #[doc="<p>Indicates whether only instances that are not running the latest application revision are to be deployed to.</p>"]
     #[serde(rename="updateOutdatedInstancesOnly")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub update_outdated_instances_only: Option<Boolean>,
 }
 
@@ -596,21 +690,27 @@ pub type DeploymentOption = String;
 pub struct DeploymentOverview {
     #[doc="<p>The number of instances in the deployment in a failed state.</p>"]
     #[serde(rename="Failed")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub failed: Option<InstanceCount>,
     #[doc="<p>The number of instances in which the deployment is in progress.</p>"]
     #[serde(rename="InProgress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub in_progress: Option<InstanceCount>,
     #[doc="<p>The number of instances in the deployment in a pending state.</p>"]
     #[serde(rename="Pending")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub pending: Option<InstanceCount>,
     #[doc="<p>The number of instances in a replacement environment ready to receive traffic in a blue/green deployment.</p>"]
     #[serde(rename="Ready")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ready: Option<InstanceCount>,
     #[doc="<p>The number of instances in the deployment in a skipped state.</p>"]
     #[serde(rename="Skipped")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub skipped: Option<InstanceCount>,
     #[doc="<p>The number of instances in the deployment to which revisions have been successfully deployed.</p>"]
     #[serde(rename="Succeeded")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub succeeded: Option<InstanceCount>,
 }
 
@@ -620,9 +720,11 @@ pub type DeploymentReadyAction = String;
 pub struct DeploymentReadyOption {
     #[doc="<p>Information about when to reroute traffic from an original environment to a replacement environment in a blue/green deployment.</p> <ul> <li> <p>CONTINUE_DEPLOYMENT: Register new instances with the load balancer immediately after the new application revision is installed on the instances in the replacement environment.</p> </li> <li> <p>STOP_DEPLOYMENT: Do not register new instances with load balancer unless traffic is rerouted manually. If traffic is not rerouted manually before the end of the specified wait period, the deployment status is changed to Stopped.</p> </li> </ul>"]
     #[serde(rename="actionOnTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub action_on_timeout: Option<DeploymentReadyAction>,
     #[doc="<p>The number of minutes to wait before the status of a blue/green deployment changed to Stopped if rerouting is not started manually. Applies only to the STOP_DEPLOYMENT option for actionOnTimeout</p>"]
     #[serde(rename="waitTimeInMinutes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub wait_time_in_minutes: Option<Duration>,
 }
 
@@ -633,9 +735,11 @@ pub type DeploymentStatusList = Vec<DeploymentStatus>;
 pub struct DeploymentStyle {
     #[doc="<p>Indicates whether to route deployment traffic behind a load balancer.</p>"]
     #[serde(rename="deploymentOption")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_option: Option<DeploymentOption>,
     #[doc="<p>Indicates whether to run an in-place deployment or a blue/green deployment.</p>"]
     #[serde(rename="deploymentType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_type: Option<DeploymentType>,
 }
 
@@ -656,15 +760,19 @@ pub type Description = String;
 pub struct Diagnostics {
     #[doc="<p>The associated error code:</p> <ul> <li> <p>Success: The specified script ran.</p> </li> <li> <p>ScriptMissing: The specified script was not found in the specified location.</p> </li> <li> <p>ScriptNotExecutable: The specified script is not a recognized executable file type.</p> </li> <li> <p>ScriptTimedOut: The specified script did not finish running in the specified time period.</p> </li> <li> <p>ScriptFailed: The specified script failed to run as expected.</p> </li> <li> <p>UnknownError: The specified script did not run for an unknown reason.</p> </li> </ul>"]
     #[serde(rename="errorCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub error_code: Option<LifecycleErrorCode>,
     #[doc="<p>The last portion of the diagnostic log.</p> <p>If available, AWS CodeDeploy returns up to the last 4 KB of the diagnostic log.</p>"]
     #[serde(rename="logTail")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub log_tail: Option<LogTail>,
     #[doc="<p>The message associated with the error.</p>"]
     #[serde(rename="message")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<LifecycleMessage>,
     #[doc="<p>The name of the script.</p>"]
     #[serde(rename="scriptName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub script_name: Option<ScriptName>,
 }
 
@@ -674,12 +782,15 @@ pub type Duration = i64;
 pub struct EC2TagFilter {
     #[doc="<p>The tag filter key.</p>"]
     #[serde(rename="Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key: Option<Key>,
     #[doc="<p>The tag filter type:</p> <ul> <li> <p>KEY_ONLY: Key only.</p> </li> <li> <p>VALUE_ONLY: Value only.</p> </li> <li> <p>KEY_AND_VALUE: Key and value.</p> </li> </ul>"]
     #[serde(rename="Type")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<EC2TagFilterType>,
     #[doc="<p>The tag filter value.</p>"]
     #[serde(rename="Value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<Value>,
 }
 
@@ -690,6 +801,7 @@ pub type EC2TagFilterType = String;
 pub struct ELBInfo {
     #[doc="<p>For blue/green deployments, the name of the load balancer that will be used to route traffic from original instances to replacement instances in a blue/green deployment. For in-place deployments, the name of the load balancer that instances are deregistered from so they are not serving traffic during a deployment, and then re-registered with after the deployment completes.</p>"]
     #[serde(rename="name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<ELBName>,
 }
 
@@ -702,9 +814,11 @@ pub type ErrorCode = String;
 pub struct ErrorInformation {
     #[doc="<p>For information about additional error codes, see <a href=\"http://docs.aws.amazon.com/codedeploy/latest/userguide/error-codes.html\">Error Codes for AWS CodeDeploy</a> in the <a href=\"http://docs.aws.amazon.com/codedeploy/latest/userguide\">AWS CodeDeploy User Guide</a>.</p> <p>The error code:</p> <ul> <li> <p>APPLICATION_MISSING: The application was missing. This error code will most likely be raised if the application is deleted after the deployment is created but before it is started.</p> </li> <li> <p>DEPLOYMENT_GROUP_MISSING: The deployment group was missing. This error code will most likely be raised if the deployment group is deleted after the deployment is created but before it is started.</p> </li> <li> <p>HEALTH_CONSTRAINTS: The deployment failed on too many instances to be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>HEALTH_CONSTRAINTS_INVALID: The revision cannot be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>IAM_ROLE_MISSING: The service role cannot be accessed.</p> </li> <li> <p>IAM_ROLE_PERMISSIONS: The service role does not have the correct permissions.</p> </li> <li> <p>INTERNAL_ERROR: There was an internal error.</p> </li> <li> <p>NO_EC2_SUBSCRIPTION: The calling account is not subscribed to the Amazon EC2 service.</p> </li> <li> <p>NO_INSTANCES: No instance were specified, or no instance can be found.</p> </li> <li> <p>OVER_MAX_INSTANCES: The maximum number of instance was exceeded.</p> </li> <li> <p>THROTTLED: The operation was throttled because the calling account exceeded the throttling limits of one or more AWS services.</p> </li> <li> <p>TIMEOUT: The deployment has timed out.</p> </li> <li> <p>REVISION_MISSING: The revision ID was missing. This error code will most likely be raised if the revision is deleted after the deployment is created but before it is started.</p> </li> </ul>"]
     #[serde(rename="code")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub code: Option<ErrorCode>,
     #[doc="<p>An accompanying error message.</p>"]
     #[serde(rename="message")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<ErrorMessage>,
 }
 
@@ -715,18 +829,23 @@ pub type FileExistsBehavior = String;
 pub struct GenericRevisionInfo {
     #[doc="<p>The deployment groups for which this is the current target revision.</p>"]
     #[serde(rename="deploymentGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_groups: Option<DeploymentGroupsList>,
     #[doc="<p>A comment about the revision.</p>"]
     #[serde(rename="description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<Description>,
     #[doc="<p>When the revision was first used by AWS CodeDeploy.</p>"]
     #[serde(rename="firstUsedTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub first_used_time: Option<Timestamp>,
     #[doc="<p>When the revision was last used by AWS CodeDeploy.</p>"]
     #[serde(rename="lastUsedTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_used_time: Option<Timestamp>,
     #[doc="<p>When the revision was registered with AWS CodeDeploy.</p>"]
     #[serde(rename="registerTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub register_time: Option<Timestamp>,
 }
 
@@ -743,6 +862,7 @@ pub struct GetApplicationInput {
 pub struct GetApplicationOutput {
     #[doc="<p>Information about the application.</p>"]
     #[serde(rename="application")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub application: Option<ApplicationInfo>,
 }
 
@@ -762,12 +882,15 @@ pub struct GetApplicationRevisionInput {
 pub struct GetApplicationRevisionOutput {
     #[doc="<p>The name of the application that corresponds to the revision.</p>"]
     #[serde(rename="applicationName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub application_name: Option<ApplicationName>,
     #[doc="<p>Additional information about the revision, including type and location.</p>"]
     #[serde(rename="revision")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub revision: Option<RevisionLocation>,
     #[doc="<p>General information about the revision.</p>"]
     #[serde(rename="revisionInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub revision_info: Option<GenericRevisionInfo>,
 }
 
@@ -784,6 +907,7 @@ pub struct GetDeploymentConfigInput {
 pub struct GetDeploymentConfigOutput {
     #[doc="<p>Information about the deployment configuration.</p>"]
     #[serde(rename="deploymentConfigInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_config_info: Option<DeploymentConfigInfo>,
 }
 
@@ -803,6 +927,7 @@ pub struct GetDeploymentGroupInput {
 pub struct GetDeploymentGroupOutput {
     #[doc="<p>Information about the deployment group.</p>"]
     #[serde(rename="deploymentGroupInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_group_info: Option<DeploymentGroupInfo>,
 }
 
@@ -830,6 +955,7 @@ pub struct GetDeploymentInstanceInput {
 pub struct GetDeploymentInstanceOutput {
     #[doc="<p>Information about the instance.</p>"]
     #[serde(rename="instanceSummary")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_summary: Option<InstanceSummary>,
 }
 
@@ -838,6 +964,7 @@ pub struct GetDeploymentInstanceOutput {
 pub struct GetDeploymentOutput {
     #[doc="<p>Information about the deployment.</p>"]
     #[serde(rename="deploymentInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_info: Option<DeploymentInfo>,
 }
 
@@ -854,6 +981,7 @@ pub struct GetOnPremisesInstanceInput {
 pub struct GetOnPremisesInstanceOutput {
     #[doc="<p>Information about the on-premises instance.</p>"]
     #[serde(rename="instanceInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_info: Option<InstanceInfo>,
 }
 
@@ -864,9 +992,11 @@ pub type GitHubAccountTokenNameList = Vec<GitHubAccountTokenName>;
 pub struct GitHubLocation {
     #[doc="<p>The SHA1 commit ID of the GitHub commit that represents the bundled artifacts for the application revision.</p>"]
     #[serde(rename="commitId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub commit_id: Option<CommitId>,
     #[doc="<p>The GitHub account and repository pair that stores a reference to the commit that represents the bundled artifacts for the application revision. </p> <p>Specified as account/repository.</p>"]
     #[serde(rename="repository")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub repository: Option<Repository>,
 }
 
@@ -876,6 +1006,7 @@ pub type GreenFleetProvisioningAction = String;
 pub struct GreenFleetProvisioningOption {
     #[doc="<p>The method used to add instances to a replacement environment.</p> <ul> <li> <p>DISCOVER_EXISTING: Use instances that already exist or will be created manually.</p> </li> <li> <p>COPY_AUTO_SCALING_GROUP: Use settings from a specified Auto Scaling group to define and create instances in a new Auto Scaling group.</p> </li> </ul>"]
     #[serde(rename="action")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub action: Option<GreenFleetProvisioningAction>,
 }
 
@@ -890,24 +1021,31 @@ pub type InstanceId = String;
 pub struct InstanceInfo {
     #[doc="<p>If the on-premises instance was deregistered, the time at which the on-premises instance was deregistered.</p>"]
     #[serde(rename="deregisterTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deregister_time: Option<Timestamp>,
     #[doc="<p>The ARN of the IAM session associated with the on-premises instance.</p>"]
     #[serde(rename="iamSessionArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub iam_session_arn: Option<IamSessionArn>,
     #[doc="<p>The IAM user ARN associated with the on-premises instance.</p>"]
     #[serde(rename="iamUserArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub iam_user_arn: Option<IamUserArn>,
     #[doc="<p>The ARN of the on-premises instance.</p>"]
     #[serde(rename="instanceArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_arn: Option<InstanceArn>,
     #[doc="<p>The name of the on-premises instance.</p>"]
     #[serde(rename="instanceName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_name: Option<InstanceName>,
     #[doc="<p>The time at which the on-premises instance was registered.</p>"]
     #[serde(rename="registerTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub register_time: Option<Timestamp>,
     #[doc="<p>The tags currently associated with the on-premises instance.</p>"]
     #[serde(rename="tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<TagList>,
 }
 
@@ -921,21 +1059,27 @@ pub type InstanceStatusList = Vec<InstanceStatus>;
 pub struct InstanceSummary {
     #[doc="<p>The deployment ID.</p>"]
     #[serde(rename="deploymentId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_id: Option<DeploymentId>,
     #[doc="<p>The instance ID.</p>"]
     #[serde(rename="instanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<InstanceId>,
     #[doc="<p>Information about which environment an instance belongs to in a blue/green deployment.</p> <ul> <li> <p>BLUE: The instance is part of the original environment.</p> </li> <li> <p>GREEN: The instance is part of the replacement environment.</p> </li> </ul>"]
     #[serde(rename="instanceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_type: Option<InstanceType>,
     #[doc="<p>A timestamp indicating when the instance information was last updated.</p>"]
     #[serde(rename="lastUpdatedAt")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_updated_at: Option<Timestamp>,
     #[doc="<p>A list of lifecycle events for this instance.</p>"]
     #[serde(rename="lifecycleEvents")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub lifecycle_events: Option<LifecycleEventList>,
     #[doc="<p>The deployment status for this instance:</p> <ul> <li> <p>Pending: The deployment is pending for this instance.</p> </li> <li> <p>In Progress: The deployment is in progress for this instance.</p> </li> <li> <p>Succeeded: The deployment has succeeded for this instance.</p> </li> <li> <p>Failed: The deployment has failed for this instance.</p> </li> <li> <p>Skipped: The deployment has been skipped for this instance.</p> </li> <li> <p>Unknown: The deployment status is unknown for this instance.</p> </li> </ul>"]
     #[serde(rename="status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<InstanceStatus>,
 }
 
@@ -949,15 +1093,19 @@ pub type Key = String;
 pub struct LastDeploymentInfo {
     #[doc="<p>A timestamp indicating when the most recent deployment to the deployment group started.</p>"]
     #[serde(rename="createTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub create_time: Option<Timestamp>,
     #[doc="<p>The deployment ID.</p>"]
     #[serde(rename="deploymentId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_id: Option<DeploymentId>,
     #[doc="<p>A timestamp indicating when the most recent deployment to the deployment group completed.</p>"]
     #[serde(rename="endTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub end_time: Option<Timestamp>,
     #[doc="<p>The status of the most recent deployment.</p>"]
     #[serde(rename="status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<DeploymentStatus>,
 }
 
@@ -967,18 +1115,23 @@ pub type LifecycleErrorCode = String;
 pub struct LifecycleEvent {
     #[doc="<p>Diagnostic information about the deployment lifecycle event.</p>"]
     #[serde(rename="diagnostics")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub diagnostics: Option<Diagnostics>,
     #[doc="<p>A timestamp indicating when the deployment lifecycle event ended.</p>"]
     #[serde(rename="endTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub end_time: Option<Timestamp>,
     #[doc="<p>The deployment lifecycle event name, such as ApplicationStop, BeforeInstall, AfterInstall, ApplicationStart, or ValidateService.</p>"]
     #[serde(rename="lifecycleEventName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub lifecycle_event_name: Option<LifecycleEventName>,
     #[doc="<p>A timestamp indicating when the deployment lifecycle event started.</p>"]
     #[serde(rename="startTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_time: Option<Timestamp>,
     #[doc="<p>The deployment lifecycle event status:</p> <ul> <li> <p>Pending: The deployment lifecycle event is pending.</p> </li> <li> <p>InProgress: The deployment lifecycle event is in progress.</p> </li> <li> <p>Succeeded: The deployment lifecycle event ran successfully.</p> </li> <li> <p>Failed: The deployment lifecycle event has failed.</p> </li> <li> <p>Skipped: The deployment lifecycle event has been skipped.</p> </li> <li> <p>Unknown: The deployment lifecycle event is unknown.</p> </li> </ul>"]
     #[serde(rename="status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<LifecycleEventStatus>,
 }
 
@@ -994,21 +1147,27 @@ pub struct ListApplicationRevisionsInput {
     pub application_name: ApplicationName,
     #[doc="<p>Whether to list revisions based on whether the revision is the target revision of an deployment group:</p> <ul> <li> <p>include: List revisions that are target revisions of a deployment group.</p> </li> <li> <p>exclude: Do not list revisions that are target revisions of a deployment group.</p> </li> <li> <p>ignore: List all revisions.</p> </li> </ul>"]
     #[serde(rename="deployed")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployed: Option<ListStateFilterAction>,
     #[doc="<p>An identifier returned from the previous list application revisions call. It can be used to return the next set of applications in the list.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>An Amazon S3 bucket name to limit the search for revisions.</p> <p>If set to null, all of the user's buckets will be searched.</p>"]
     #[serde(rename="s3Bucket")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub s_3_bucket: Option<S3Bucket>,
     #[doc="<p>A key prefix for the set of Amazon S3 objects to limit the search for revisions.</p>"]
     #[serde(rename="s3KeyPrefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub s_3_key_prefix: Option<S3Key>,
     #[doc="<p>The column name to use to sort the list results:</p> <ul> <li> <p>registerTime: Sort by the time the revisions were registered with AWS CodeDeploy.</p> </li> <li> <p>firstUsedTime: Sort by the time the revisions were first used in a deployment.</p> </li> <li> <p>lastUsedTime: Sort by the time the revisions were last used in a deployment.</p> </li> </ul> <p>If not specified or set to null, the results will be returned in an arbitrary order.</p>"]
     #[serde(rename="sortBy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sort_by: Option<ApplicationRevisionSortBy>,
     #[doc="<p>The order in which to sort the list results:</p> <ul> <li> <p>ascending: ascending order.</p> </li> <li> <p>descending: descending order.</p> </li> </ul> <p>If not specified, the results will be sorted in ascending order.</p> <p>If set to null, the results will be sorted in an arbitrary order.</p>"]
     #[serde(rename="sortOrder")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sort_order: Option<SortOrder>,
 }
 
@@ -1017,9 +1176,11 @@ pub struct ListApplicationRevisionsInput {
 pub struct ListApplicationRevisionsOutput {
     #[doc="<p>If a large amount of information is returned, an identifier will also be returned. It can be used in a subsequent list application revisions call to return the next set of application revisions in the list.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>A list of locations that contain the matching revisions.</p>"]
     #[serde(rename="revisions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub revisions: Option<RevisionLocationList>,
 }
 
@@ -1028,6 +1189,7 @@ pub struct ListApplicationRevisionsOutput {
 pub struct ListApplicationsInput {
     #[doc="<p>An identifier returned from the previous list applications call. It can be used to return the next set of applications in the list.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -1036,9 +1198,11 @@ pub struct ListApplicationsInput {
 pub struct ListApplicationsOutput {
     #[doc="<p>A list of application names.</p>"]
     #[serde(rename="applications")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub applications: Option<ApplicationsList>,
     #[doc="<p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list applications call to return the next set of applications, will also be returned. in the list.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -1047,6 +1211,7 @@ pub struct ListApplicationsOutput {
 pub struct ListDeploymentConfigsInput {
     #[doc="<p>An identifier returned from the previous list deployment configurations call. It can be used to return the next set of deployment configurations in the list. </p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -1055,9 +1220,11 @@ pub struct ListDeploymentConfigsInput {
 pub struct ListDeploymentConfigsOutput {
     #[doc="<p>A list of deployment configurations, including built-in configurations such as CodeDeployDefault.OneAtATime.</p>"]
     #[serde(rename="deploymentConfigsList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_configs_list: Option<DeploymentConfigsList>,
     #[doc="<p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list deployment configurations call to return the next set of deployment configurations in the list.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -1069,6 +1236,7 @@ pub struct ListDeploymentGroupsInput {
     pub application_name: ApplicationName,
     #[doc="<p>An identifier returned from the previous list deployment groups call. It can be used to return the next set of deployment groups in the list.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -1077,12 +1245,15 @@ pub struct ListDeploymentGroupsInput {
 pub struct ListDeploymentGroupsOutput {
     #[doc="<p>The application name.</p>"]
     #[serde(rename="applicationName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub application_name: Option<ApplicationName>,
     #[doc="<p>A list of corresponding deployment group names.</p>"]
     #[serde(rename="deploymentGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_groups: Option<DeploymentGroupsList>,
     #[doc="<p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list deployment groups call to return the next set of deployment groups in the list.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -1094,12 +1265,15 @@ pub struct ListDeploymentInstancesInput {
     pub deployment_id: DeploymentId,
     #[doc="<p>A subset of instances to list by status:</p> <ul> <li> <p>Pending: Include those instance with pending deployments.</p> </li> <li> <p>InProgress: Include those instance where deployments are still in progress.</p> </li> <li> <p>Succeeded: Include those instances with successful deployments.</p> </li> <li> <p>Failed: Include those instance with failed deployments.</p> </li> <li> <p>Skipped: Include those instance with skipped deployments.</p> </li> <li> <p>Unknown: Include those instance with deployments in an unknown state.</p> </li> </ul>"]
     #[serde(rename="instanceStatusFilter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_status_filter: Option<InstanceStatusList>,
     #[doc="<p>The set of instances in a blue/green deployment, either those in the original environment (\"BLUE\") or those in the replacement environment (\"GREEN\"), for which you want to view instance information.</p>"]
     #[serde(rename="instanceTypeFilter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_type_filter: Option<InstanceTypeList>,
     #[doc="<p>An identifier returned from the previous list deployment instances call. It can be used to return the next set of deployment instances in the list.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -1108,9 +1282,11 @@ pub struct ListDeploymentInstancesInput {
 pub struct ListDeploymentInstancesOutput {
     #[doc="<p>A list of instance IDs.</p>"]
     #[serde(rename="instancesList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instances_list: Option<InstancesList>,
     #[doc="<p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list deployment instances call to return the next set of deployment instances in the list.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -1119,18 +1295,23 @@ pub struct ListDeploymentInstancesOutput {
 pub struct ListDeploymentsInput {
     #[doc="<p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>"]
     #[serde(rename="applicationName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub application_name: Option<ApplicationName>,
     #[doc="<p>A time range (start and end) for returning a subset of the list of deployments.</p>"]
     #[serde(rename="createTimeRange")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub create_time_range: Option<TimeRange>,
     #[doc="<p>The name of an existing deployment group for the specified application.</p>"]
     #[serde(rename="deploymentGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_group_name: Option<DeploymentGroupName>,
     #[doc="<p>A subset of deployments to list by status:</p> <ul> <li> <p>Created: Include created deployments in the resulting list.</p> </li> <li> <p>Queued: Include queued deployments in the resulting list.</p> </li> <li> <p>In Progress: Include in-progress deployments in the resulting list.</p> </li> <li> <p>Succeeded: Include successful deployments in the resulting list.</p> </li> <li> <p>Failed: Include failed deployments in the resulting list.</p> </li> <li> <p>Stopped: Include stopped deployments in the resulting list.</p> </li> </ul>"]
     #[serde(rename="includeOnlyStatuses")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub include_only_statuses: Option<DeploymentStatusList>,
     #[doc="<p>An identifier returned from the previous list deployments call. It can be used to return the next set of deployments in the list.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -1139,9 +1320,11 @@ pub struct ListDeploymentsInput {
 pub struct ListDeploymentsOutput {
     #[doc="<p>A list of deployment IDs.</p>"]
     #[serde(rename="deployments")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployments: Option<DeploymentsList>,
     #[doc="<p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list deployments call to return the next set of deployments in the list.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -1150,6 +1333,7 @@ pub struct ListDeploymentsOutput {
 pub struct ListGitHubAccountTokenNamesInput {
     #[doc="<p>An identifier returned from the previous ListGitHubAccountTokenNames call. It can be used to return the next set of names in the list. </p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -1158,9 +1342,11 @@ pub struct ListGitHubAccountTokenNamesInput {
 pub struct ListGitHubAccountTokenNamesOutput {
     #[doc="<p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent ListGitHubAccountTokenNames call to return the next set of names in the list. </p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>A list of names of connections to GitHub accounts.</p>"]
     #[serde(rename="tokenNameList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub token_name_list: Option<GitHubAccountTokenNameList>,
 }
 
@@ -1169,12 +1355,15 @@ pub struct ListGitHubAccountTokenNamesOutput {
 pub struct ListOnPremisesInstancesInput {
     #[doc="<p>An identifier returned from the previous list on-premises instances call. It can be used to return the next set of on-premises instances in the list.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The registration status of the on-premises instances:</p> <ul> <li> <p>Deregistered: Include deregistered on-premises instances in the resulting list.</p> </li> <li> <p>Registered: Include registered on-premises instances in the resulting list.</p> </li> </ul>"]
     #[serde(rename="registrationStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub registration_status: Option<RegistrationStatus>,
     #[doc="<p>The on-premises instance tags that will be used to restrict the corresponding on-premises instance names returned.</p>"]
     #[serde(rename="tagFilters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_filters: Option<TagFilterList>,
 }
 
@@ -1183,9 +1372,11 @@ pub struct ListOnPremisesInstancesInput {
 pub struct ListOnPremisesInstancesOutput {
     #[doc="<p>The list of matching on-premises instance names.</p>"]
     #[serde(rename="instanceNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_names: Option<InstanceNameList>,
     #[doc="<p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list on-premises instances call to return the next set of on-premises instances in the list.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -1195,6 +1386,7 @@ pub type ListStateFilterAction = String;
 pub struct LoadBalancerInfo {
     #[doc="<p>An array containing information about the load balancer in Elastic Load Balancing to use in a deployment.</p>"]
     #[serde(rename="elbInfoList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub elb_info_list: Option<ELBInfoList>,
 }
 
@@ -1205,9 +1397,11 @@ pub type Message = String;
 pub struct MinimumHealthyHosts {
     #[doc="<p>The minimum healthy instance type:</p> <ul> <li> <p>HOST_COUNT: The minimum number of healthy instance as an absolute value.</p> </li> <li> <p>FLEET_PERCENT: The minimum number of healthy instance as a percentage of the total number of instance in the deployment.</p> </li> </ul> <p>In an example of nine instance, if a HOST_COUNT of six is specified, deploy to up to three instances at a time. The deployment will be successful if six or more instances are deployed to successfully; otherwise, the deployment fails. If a FLEET_PERCENT of 40 is specified, deploy to up to five instance at a time. The deployment will be successful if four or more instance are deployed to successfully; otherwise, the deployment fails.</p> <note> <p>In a call to the get deployment configuration operation, CodeDeployDefault.OneAtATime will return a minimum healthy instance type of MOST_CONCURRENCY and a value of 1. This means a deployment to only one instance at a time. (You cannot set the type to MOST_CONCURRENCY, only to HOST_COUNT or FLEET_PERCENT.) In addition, with CodeDeployDefault.OneAtATime, AWS CodeDeploy will try to ensure that all instances but one are kept in a healthy state during the deployment. Although this allows one instance at a time to be taken offline for a new deployment, it also means that if the deployment to the last instance fails, the overall deployment still succeeds.</p> </note> <p>For more information, see <a href=\"http://docs.aws.amazon.com/codedeploy/latest/userguide/instances-health.html\">AWS CodeDeploy Instance Health</a> in the <i>AWS CodeDeploy User Guide</i>.</p>"]
     #[serde(rename="type")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<MinimumHealthyHostsType>,
     #[doc="<p>The minimum healthy instance value.</p>"]
     #[serde(rename="value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<MinimumHealthyHostsValue>,
 }
 
@@ -1223,6 +1417,7 @@ pub struct RegisterApplicationRevisionInput {
     pub application_name: ApplicationName,
     #[doc="<p>A comment about the revision.</p>"]
     #[serde(rename="description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<Description>,
     #[doc="<p>Information about the application revision to register, including type and location.</p>"]
     #[serde(rename="revision")]
@@ -1234,9 +1429,11 @@ pub struct RegisterApplicationRevisionInput {
 pub struct RegisterOnPremisesInstanceInput {
     #[doc="<p>The ARN of the IAM session to associate with the on-premises instance.</p>"]
     #[serde(rename="iamSessionArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub iam_session_arn: Option<IamSessionArn>,
     #[doc="<p>The ARN of the IAM user to associate with the on-premises instance.</p>"]
     #[serde(rename="iamUserArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub iam_user_arn: Option<IamUserArn>,
     #[doc="<p>The name of the on-premises instance to register.</p>"]
     #[serde(rename="instanceName")]
@@ -1261,9 +1458,11 @@ pub type Repository = String;
 pub struct RevisionInfo {
     #[doc="<p>Information about an application revision, including usage details and associated deployment groups.</p>"]
     #[serde(rename="genericRevisionInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub generic_revision_info: Option<GenericRevisionInfo>,
     #[doc="<p>Information about the location and type of an application revision.</p>"]
     #[serde(rename="revisionLocation")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub revision_location: Option<RevisionLocation>,
 }
 
@@ -1273,12 +1472,15 @@ pub type RevisionInfoList = Vec<RevisionInfo>;
 pub struct RevisionLocation {
     #[doc="<p>Information about the location of application artifacts stored in GitHub.</p>"]
     #[serde(rename="gitHubLocation")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub git_hub_location: Option<GitHubLocation>,
     #[doc="<p>The type of application revision:</p> <ul> <li> <p>S3: An application revision stored in Amazon S3.</p> </li> <li> <p>GitHub: An application revision stored in GitHub.</p> </li> </ul>"]
     #[serde(rename="revisionType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub revision_type: Option<RevisionLocationType>,
     #[doc="<p>Information about the location of application artifacts stored in Amazon S3. </p>"]
     #[serde(rename="s3Location")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub s_3_location: Option<S3Location>,
 }
 
@@ -1290,12 +1492,15 @@ pub type Role = String;
 pub struct RollbackInfo {
     #[doc="<p>The ID of the deployment rollback.</p>"]
     #[serde(rename="rollbackDeploymentId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rollback_deployment_id: Option<DeploymentId>,
     #[doc="<p>Information describing the status of a deployment rollback; for example, whether the deployment can't be rolled back, is in progress, failed, or succeeded. </p>"]
     #[serde(rename="rollbackMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rollback_message: Option<Description>,
     #[doc="<p>The deployment ID of the deployment that was underway and triggered a rollback deployment because it failed or was stopped.</p>"]
     #[serde(rename="rollbackTriggeringDeploymentId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rollback_triggering_deployment_id: Option<DeploymentId>,
 }
 
@@ -1306,18 +1511,23 @@ pub type S3Key = String;
 pub struct S3Location {
     #[doc="<p>The name of the Amazon S3 bucket where the application revision is stored.</p>"]
     #[serde(rename="bucket")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bucket: Option<S3Bucket>,
     #[doc="<p>The file type of the application revision. Must be one of the following:</p> <ul> <li> <p>tar: A tar archive file.</p> </li> <li> <p>tgz: A compressed tar archive file.</p> </li> <li> <p>zip: A zip archive file.</p> </li> </ul>"]
     #[serde(rename="bundleType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bundle_type: Option<BundleType>,
     #[doc="<p>The ETag of the Amazon S3 object that represents the bundled artifacts for the application revision.</p> <p>If the ETag is not specified as an input parameter, ETag validation of the object will be skipped.</p>"]
     #[serde(rename="eTag")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub e_tag: Option<ETag>,
     #[doc="<p>The name of the Amazon S3 object that represents the bundled artifacts for the application revision.</p>"]
     #[serde(rename="key")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key: Option<S3Key>,
     #[doc="<p>A specific version of the Amazon S3 object that represents the bundled artifacts for the application revision.</p> <p>If the version is not specified, the system will use the most recent version by default.</p>"]
     #[serde(rename="version")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version: Option<VersionId>,
 }
 
@@ -1326,6 +1536,7 @@ pub type ScriptName = String;
 pub struct SkipWaitTimeForInstanceTerminationInput {
     #[doc="<p>The ID of the blue/green deployment for which you want to skip the instance termination wait time.</p>"]
     #[serde(rename="deploymentId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_id: Option<DeploymentId>,
 }
 
@@ -1335,7 +1546,7 @@ pub type SortOrder = String;
 pub struct StopDeploymentInput {
     #[doc="<p>Indicates, when a deployment is stopped, whether instances that have been updated should be rolled back to the previous version of the application revision.</p>"]
     #[serde(rename="autoRollbackEnabled")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_rollback_enabled: Option<NullableBoolean>,
     #[doc="<p>The unique ID of a deployment.</p>"]
     #[serde(rename="deploymentId")]
@@ -1347,9 +1558,11 @@ pub struct StopDeploymentInput {
 pub struct StopDeploymentOutput {
     #[doc="<p>The status of the stop deployment operation:</p> <ul> <li> <p>Pending: The stop operation is pending.</p> </li> <li> <p>Succeeded: The stop operation was successful.</p> </li> </ul>"]
     #[serde(rename="status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<StopStatus>,
     #[doc="<p>An accompanying status message.</p>"]
     #[serde(rename="statusMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status_message: Option<Message>,
 }
 
@@ -1359,9 +1572,11 @@ pub type StopStatus = String;
 pub struct Tag {
     #[doc="<p>The tag's key.</p>"]
     #[serde(rename="Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key: Option<Key>,
     #[doc="<p>The tag's value.</p>"]
     #[serde(rename="Value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<Value>,
 }
 
@@ -1370,12 +1585,15 @@ pub struct Tag {
 pub struct TagFilter {
     #[doc="<p>The on-premises instance tag filter key.</p>"]
     #[serde(rename="Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key: Option<Key>,
     #[doc="<p>The on-premises instance tag filter type:</p> <ul> <li> <p>KEY_ONLY: Key only.</p> </li> <li> <p>VALUE_ONLY: Value only.</p> </li> <li> <p>KEY_AND_VALUE: Key and value.</p> </li> </ul>"]
     #[serde(rename="Type")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<TagFilterType>,
     #[doc="<p>The on-premises instance tag filter value.</p>"]
     #[serde(rename="Value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<Value>,
 }
 
@@ -1387,9 +1605,11 @@ pub type TagList = Vec<Tag>;
 pub struct TargetInstances {
     #[doc="<p>The names of one or more Auto Scaling groups to identify a replacement environment for a blue/green deployment.</p>"]
     #[serde(rename="autoScalingGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_scaling_groups: Option<AutoScalingGroupNameList>,
     #[doc="<p>The tag filter key, type, and value used to identify Amazon EC2 instances in a replacement environment for a blue/green deployment.</p>"]
     #[serde(rename="tagFilters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_filters: Option<EC2TagFilterList>,
 }
 
@@ -1398,9 +1618,11 @@ pub struct TargetInstances {
 pub struct TimeRange {
     #[doc="<p>The end time of the time range.</p> <note> <p>Specify null to leave the end time open-ended.</p> </note>"]
     #[serde(rename="end")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub end: Option<Timestamp>,
     #[doc="<p>The start time of the time range.</p> <note> <p>Specify null to leave the start time open-ended.</p> </note>"]
     #[serde(rename="start")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start: Option<Timestamp>,
 }
 
@@ -1410,12 +1632,15 @@ pub type Timestamp = f64;
 pub struct TriggerConfig {
     #[doc="<p>The event type or types for which notifications are triggered.</p>"]
     #[serde(rename="triggerEvents")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub trigger_events: Option<TriggerEventTypeList>,
     #[doc="<p>The name of the notification trigger.</p>"]
     #[serde(rename="triggerName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub trigger_name: Option<TriggerName>,
     #[doc="<p>The ARN of the Amazon Simple Notification Service topic through which notifications about deployment or instance events are sent.</p>"]
     #[serde(rename="triggerTargetArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub trigger_target_arn: Option<TriggerTargetArn>,
 }
 
@@ -1429,9 +1654,11 @@ pub type TriggerTargetArn = String;
 pub struct UpdateApplicationInput {
     #[doc="<p>The current name of the application you want to change.</p>"]
     #[serde(rename="applicationName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub application_name: Option<ApplicationName>,
     #[doc="<p>The new name to give the application.</p>"]
     #[serde(rename="newApplicationName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub new_application_name: Option<ApplicationName>,
 }
 
@@ -1440,45 +1667,57 @@ pub struct UpdateApplicationInput {
 pub struct UpdateDeploymentGroupInput {
     #[doc="<p>Information to add or change about Amazon CloudWatch alarms when the deployment group is updated.</p>"]
     #[serde(rename="alarmConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub alarm_configuration: Option<AlarmConfiguration>,
     #[doc="<p>The application name corresponding to the deployment group to update.</p>"]
     #[serde(rename="applicationName")]
     pub application_name: ApplicationName,
     #[doc="<p>Information for an automatic rollback configuration that is added or changed when a deployment group is updated.</p>"]
     #[serde(rename="autoRollbackConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_rollback_configuration: Option<AutoRollbackConfiguration>,
     #[doc="<p>The replacement list of Auto Scaling groups to be included in the deployment group, if you want to change them. To keep the Auto Scaling groups, enter their names. To remove Auto Scaling groups, do not enter any Auto Scaling group names.</p>"]
     #[serde(rename="autoScalingGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_scaling_groups: Option<AutoScalingGroupNameList>,
     #[doc="<p>Information about blue/green deployment options for a deployment group.</p>"]
     #[serde(rename="blueGreenDeploymentConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub blue_green_deployment_configuration: Option<BlueGreenDeploymentConfiguration>,
     #[doc="<p>The current name of the deployment group.</p>"]
     #[serde(rename="currentDeploymentGroupName")]
     pub current_deployment_group_name: DeploymentGroupName,
     #[doc="<p>The replacement deployment configuration name to use, if you want to change it.</p>"]
     #[serde(rename="deploymentConfigName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_config_name: Option<DeploymentConfigName>,
     #[doc="<p>Information about the type of deployment, either in-place or blue/green, you want to run and whether to route deployment traffic behind a load balancer.</p>"]
     #[serde(rename="deploymentStyle")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_style: Option<DeploymentStyle>,
     #[doc="<p>The replacement set of Amazon EC2 tags on which to filter, if you want to change them. To keep the existing tags, enter their names. To remove tags, do not enter any tag names.</p>"]
     #[serde(rename="ec2TagFilters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ec_2_tag_filters: Option<EC2TagFilterList>,
     #[doc="<p>Information about the load balancer used in a deployment.</p>"]
     #[serde(rename="loadBalancerInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub load_balancer_info: Option<LoadBalancerInfo>,
     #[doc="<p>The new name of the deployment group, if you want to change it.</p>"]
     #[serde(rename="newDeploymentGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub new_deployment_group_name: Option<DeploymentGroupName>,
     #[doc="<p>The replacement set of on-premises instance tags on which to filter, if you want to change them. To keep the existing tags, enter their names. To remove tags, do not enter any tag names.</p>"]
     #[serde(rename="onPremisesInstanceTagFilters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub on_premises_instance_tag_filters: Option<TagFilterList>,
     #[doc="<p>A replacement ARN for the service role, if you want to change it.</p>"]
     #[serde(rename="serviceRoleArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub service_role_arn: Option<Role>,
     #[doc="<p>Information about triggers to change when the deployment group is updated. For examples, see <a href=\"http://docs.aws.amazon.com/codedeploy/latest/userguide/how-to-notify-edit.html\">Modify Triggers in an AWS CodeDeploy Deployment Group</a> in the AWS CodeDeploy User Guide.</p>"]
     #[serde(rename="triggerConfigurations")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub trigger_configurations: Option<TriggerConfigList>,
 }
 
@@ -1487,6 +1726,7 @@ pub struct UpdateDeploymentGroupInput {
 pub struct UpdateDeploymentGroupOutput {
     #[doc="<p>If the output contains no data, and the corresponding deployment group contained at least one Auto Scaling group, AWS CodeDeploy successfully removed all corresponding Auto Scaling lifecycle event hooks from the AWS account. If the output contains data, AWS CodeDeploy could not remove some Auto Scaling lifecycle event hooks from the AWS account.</p>"]
     #[serde(rename="hooksNotCleanedUp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hooks_not_cleaned_up: Option<AutoScalingGroupList>,
 }
 

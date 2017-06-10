@@ -24,7 +24,7 @@ pub struct AddIpRoutesRequest {
     pub ip_routes: IpRoutes,
     #[doc="<p>If set to true, updates the inbound and outbound rules of the security group that has the description: \"AWS created security group for <i>directory ID</i> directory controllers.\" Following are the new rules: </p> <p>Inbound:</p> <ul> <li> <p>Type: Custom UDP Rule, Protocol: UDP, Range: 88, Source: 0.0.0.0/0</p> </li> <li> <p>Type: Custom UDP Rule, Protocol: UDP, Range: 123, Source: 0.0.0.0/0</p> </li> <li> <p>Type: Custom UDP Rule, Protocol: UDP, Range: 138, Source: 0.0.0.0/0</p> </li> <li> <p>Type: Custom UDP Rule, Protocol: UDP, Range: 389, Source: 0.0.0.0/0</p> </li> <li> <p>Type: Custom UDP Rule, Protocol: UDP, Range: 464, Source: 0.0.0.0/0</p> </li> <li> <p>Type: Custom UDP Rule, Protocol: UDP, Range: 445, Source: 0.0.0.0/0</p> </li> <li> <p>Type: Custom TCP Rule, Protocol: TCP, Range: 88, Source: 0.0.0.0/0</p> </li> <li> <p>Type: Custom TCP Rule, Protocol: TCP, Range: 135, Source: 0.0.0.0/0</p> </li> <li> <p>Type: Custom TCP Rule, Protocol: TCP, Range: 445, Source: 0.0.0.0/0</p> </li> <li> <p>Type: Custom TCP Rule, Protocol: TCP, Range: 464, Source: 0.0.0.0/0</p> </li> <li> <p>Type: Custom TCP Rule, Protocol: TCP, Range: 636, Source: 0.0.0.0/0</p> </li> <li> <p>Type: Custom TCP Rule, Protocol: TCP, Range: 1024-65535, Source: 0.0.0.0/0</p> </li> <li> <p>Type: Custom TCP Rule, Protocol: TCP, Range: 3268-33269, Source: 0.0.0.0/0</p> </li> <li> <p>Type: DNS (UDP), Protocol: UDP, Range: 53, Source: 0.0.0.0/0</p> </li> <li> <p>Type: DNS (TCP), Protocol: TCP, Range: 53, Source: 0.0.0.0/0</p> </li> <li> <p>Type: LDAP, Protocol: TCP, Range: 389, Source: 0.0.0.0/0</p> </li> <li> <p>Type: All ICMP, Protocol: All, Range: N/A, Source: 0.0.0.0/0</p> </li> </ul> <p/> <p>Outbound:</p> <ul> <li> <p>Type: All traffic, Protocol: All, Range: All, Destination: 0.0.0.0/0</p> </li> </ul> <p>These security rules impact an internal network interface that is not exposed publicly.</p>"]
     #[serde(rename="UpdateSecurityGroupForDirectoryControllers")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub update_security_group_for_directory_controllers:
         Option<UpdateSecurityGroupForDirectoryControllers>,
 }
@@ -52,9 +52,11 @@ pub type AliasName = String;
 pub struct Attribute {
     #[doc="<p>The name of the attribute.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<AttributeName>,
     #[doc="<p>The value of the attribute.</p>"]
     #[serde(rename="Value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<AttributeValue>,
 }
 
@@ -84,12 +86,15 @@ pub type CloudOnlyDirectoriesLimitReached = bool;
 pub struct Computer {
     #[doc="<p>An array of <a>Attribute</a> objects containing the LDAP attributes that belong to the computer account.</p>"]
     #[serde(rename="ComputerAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub computer_attributes: Option<Attributes>,
     #[doc="<p>The identifier of the computer.</p>"]
     #[serde(rename="ComputerId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub computer_id: Option<SID>,
     #[doc="<p>The computer name.</p>"]
     #[serde(rename="ComputerName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub computer_name: Option<ComputerName>,
 }
 
@@ -100,12 +105,15 @@ pub type ComputerPassword = String;
 pub struct ConditionalForwarder {
     #[doc="<p>The IP addresses of the remote DNS server associated with RemoteDomainName. This is the IP address of the DNS server that your conditional forwarder points to.</p>"]
     #[serde(rename="DnsIpAddrs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dns_ip_addrs: Option<DnsIpAddrs>,
     #[doc="<p>The fully qualified domain name (FQDN) of the remote domains pointed to by the conditional forwarder.</p>"]
     #[serde(rename="RemoteDomainName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub remote_domain_name: Option<RemoteDomainName>,
     #[doc="<p>The replication scope of the conditional forwarder. The only allowed value is <code>Domain</code>, which will replicate the conditional forwarder to all of the domain controllers for your AWS directory.</p>"]
     #[serde(rename="ReplicationScope")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub replication_scope: Option<ReplicationScope>,
 }
 
@@ -118,6 +126,7 @@ pub struct ConnectDirectoryRequest {
     pub connect_settings: DirectoryConnectSettings,
     #[doc="<p>A textual description for the directory.</p>"]
     #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<Description>,
     #[doc="<p>The fully-qualified name of the on-premises directory, such as <code>corp.example.com</code>.</p>"]
     #[serde(rename="Name")]
@@ -127,6 +136,7 @@ pub struct ConnectDirectoryRequest {
     pub password: ConnectPassword,
     #[doc="<p>The NetBIOS name of the on-premises directory, such as <code>CORP</code>.</p>"]
     #[serde(rename="ShortName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub short_name: Option<DirectoryShortName>,
     #[doc="<p>The size of the directory.</p>"]
     #[serde(rename="Size")]
@@ -138,6 +148,7 @@ pub struct ConnectDirectoryRequest {
 pub struct ConnectDirectoryResult {
     #[doc="<p>The identifier of the new directory.</p>"]
     #[serde(rename="DirectoryId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub directory_id: Option<DirectoryId>,
 }
 
@@ -159,9 +170,11 @@ pub struct CreateAliasRequest {
 pub struct CreateAliasResult {
     #[doc="<p>The alias for the directory.</p>"]
     #[serde(rename="Alias")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub alias: Option<AliasName>,
     #[doc="<p>The identifier of the directory.</p>"]
     #[serde(rename="DirectoryId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub directory_id: Option<DirectoryId>,
 }
 
@@ -170,6 +183,7 @@ pub struct CreateAliasResult {
 pub struct CreateComputerRequest {
     #[doc="<p>An array of <a>Attribute</a> objects that contain any LDAP attributes to apply to the computer account.</p>"]
     #[serde(rename="ComputerAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub computer_attributes: Option<Attributes>,
     #[doc="<p>The name of the computer account.</p>"]
     #[serde(rename="ComputerName")]
@@ -179,6 +193,7 @@ pub struct CreateComputerRequest {
     pub directory_id: DirectoryId,
     #[doc="<p>The fully-qualified distinguished name of the organizational unit to place the computer account in.</p>"]
     #[serde(rename="OrganizationalUnitDistinguishedName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub organizational_unit_distinguished_name: Option<OrganizationalUnitDN>,
     #[doc="<p>A one-time password that is used to join the computer to the directory. You should generate a random, strong password to use for this parameter.</p>"]
     #[serde(rename="Password")]
@@ -190,6 +205,7 @@ pub struct CreateComputerRequest {
 pub struct CreateComputerResult {
     #[doc="<p>A <a>Computer</a> object that represents the computer account.</p>"]
     #[serde(rename="Computer")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub computer: Option<Computer>,
 }
 
@@ -216,6 +232,7 @@ pub struct CreateConditionalForwarderResult;
 pub struct CreateDirectoryRequest {
     #[doc="<p>A textual description for the directory.</p>"]
     #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<Description>,
     #[doc="<p>The fully qualified name for the directory, such as <code>corp.example.com</code>.</p>"]
     #[serde(rename="Name")]
@@ -225,12 +242,14 @@ pub struct CreateDirectoryRequest {
     pub password: Password,
     #[doc="<p>The short name of the directory, such as <code>CORP</code>.</p>"]
     #[serde(rename="ShortName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub short_name: Option<DirectoryShortName>,
     #[doc="<p>The size of the directory.</p>"]
     #[serde(rename="Size")]
     pub size: DirectorySize,
     #[doc="<p>A <a>DirectoryVpcSettings</a> object that contains additional information for the operation.</p>"]
     #[serde(rename="VpcSettings")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_settings: Option<DirectoryVpcSettings>,
 }
 
@@ -239,6 +258,7 @@ pub struct CreateDirectoryRequest {
 pub struct CreateDirectoryResult {
     #[doc="<p>The identifier of the directory that was created.</p>"]
     #[serde(rename="DirectoryId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub directory_id: Option<DirectoryId>,
 }
 
@@ -247,6 +267,7 @@ pub struct CreateDirectoryResult {
 pub struct CreateMicrosoftADRequest {
     #[doc="<p>A textual description for the directory. This label will appear on the AWS console <code>Directory Details</code> page after the directory is created.</p>"]
     #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<Description>,
     #[doc="<p>The fully qualified domain name for the directory, such as <code>corp.example.com</code>. This name will resolve inside your VPC only. It does not need to be publicly resolvable.</p>"]
     #[serde(rename="Name")]
@@ -256,6 +277,7 @@ pub struct CreateMicrosoftADRequest {
     pub password: Password,
     #[doc="<p>The NetBIOS name for your domain. A short identifier for your domain, such as <code>CORP</code>. If you don't specify a NetBIOS name, it will default to the first part of your directory DNS. For example, <code>CORP</code> for the directory DNS <code>corp.example.com</code>. </p>"]
     #[serde(rename="ShortName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub short_name: Option<DirectoryShortName>,
     #[serde(rename="VpcSettings")]
     pub vpc_settings: DirectoryVpcSettings,
@@ -266,6 +288,7 @@ pub struct CreateMicrosoftADRequest {
 pub struct CreateMicrosoftADResult {
     #[doc="<p>The identifier of the directory that was created.</p>"]
     #[serde(rename="DirectoryId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub directory_id: Option<DirectoryId>,
 }
 
@@ -278,6 +301,7 @@ pub struct CreateSnapshotRequest {
     pub directory_id: DirectoryId,
     #[doc="<p>The descriptive name to apply to the snapshot.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<SnapshotName>,
 }
 
@@ -286,6 +310,7 @@ pub struct CreateSnapshotRequest {
 pub struct CreateSnapshotResult {
     #[doc="<p>The identifier of the snapshot that was created.</p>"]
     #[serde(rename="SnapshotId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_id: Option<SnapshotId>,
 }
 
@@ -294,6 +319,7 @@ pub struct CreateSnapshotResult {
 pub struct CreateTrustRequest {
     #[doc="<p>The IP addresses of the remote DNS server associated with RemoteDomainName.</p>"]
     #[serde(rename="ConditionalForwarderIpAddrs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub conditional_forwarder_ip_addrs: Option<DnsIpAddrs>,
     #[doc="<p>The Directory ID of the Microsoft AD in the AWS cloud for which to establish the trust relationship.</p>"]
     #[serde(rename="DirectoryId")]
@@ -309,6 +335,7 @@ pub struct CreateTrustRequest {
     pub trust_password: TrustPassword,
     #[doc="<p>The trust relationship type.</p>"]
     #[serde(rename="TrustType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub trust_type: Option<TrustType>,
 }
 
@@ -317,6 +344,7 @@ pub struct CreateTrustRequest {
 pub struct CreateTrustResult {
     #[doc="<p>A unique identifier for the trust relationship that was created.</p>"]
     #[serde(rename="TrustId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub trust_id: Option<TrustId>,
 }
 
@@ -350,6 +378,7 @@ pub struct DeleteDirectoryRequest {
 pub struct DeleteDirectoryResult {
     #[doc="<p>The directory identifier.</p>"]
     #[serde(rename="DirectoryId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub directory_id: Option<DirectoryId>,
 }
 
@@ -366,6 +395,7 @@ pub struct DeleteSnapshotRequest {
 pub struct DeleteSnapshotResult {
     #[doc="<p>The identifier of the directory snapshot that was deleted.</p>"]
     #[serde(rename="SnapshotId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_id: Option<SnapshotId>,
 }
 
@@ -374,7 +404,7 @@ pub struct DeleteSnapshotResult {
 pub struct DeleteTrustRequest {
     #[doc="<p>Delete a conditional forwarder as part of a DeleteTrustRequest.</p>"]
     #[serde(rename="DeleteAssociatedConditionalForwarder")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub delete_associated_conditional_forwarder: Option<DeleteAssociatedConditionalForwarder>,
     #[doc="<p>The Trust ID of the trust relationship to be deleted.</p>"]
     #[serde(rename="TrustId")]
@@ -386,6 +416,7 @@ pub struct DeleteTrustRequest {
 pub struct DeleteTrustResult {
     #[doc="<p>The Trust ID of the trust relationship that was deleted.</p>"]
     #[serde(rename="TrustId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub trust_id: Option<TrustId>,
 }
 
@@ -412,6 +443,7 @@ pub struct DescribeConditionalForwardersRequest {
     pub directory_id: DirectoryId,
     #[doc="<p>The fully qualified domain names (FQDN) of the remote domains for which to get the list of associated conditional forwarders. If this member is null, all conditional forwarders are returned.</p>"]
     #[serde(rename="RemoteDomainNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub remote_domain_names: Option<RemoteDomainNames>,
 }
 
@@ -420,6 +452,7 @@ pub struct DescribeConditionalForwardersRequest {
 pub struct DescribeConditionalForwardersResult {
     #[doc="<p>The list of conditional forwarders that have been created.</p>"]
     #[serde(rename="ConditionalForwarders")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub conditional_forwarders: Option<ConditionalForwarders>,
 }
 
@@ -428,12 +461,15 @@ pub struct DescribeConditionalForwardersResult {
 pub struct DescribeDirectoriesRequest {
     #[doc="<p>A list of identifiers of the directories for which to obtain the information. If this member is null, all directories that belong to the current account are returned.</p> <p>An empty list results in an <code>InvalidParameterException</code> being thrown.</p>"]
     #[serde(rename="DirectoryIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub directory_ids: Option<DirectoryIds>,
     #[doc="<p>The maximum number of items to return. If this value is zero, the maximum number of items is specified by the limitations of the operation.</p>"]
     #[serde(rename="Limit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub limit: Option<Limit>,
     #[doc="<p>The <i>DescribeDirectoriesResult.NextToken</i> value from a previous call to <a>DescribeDirectories</a>. Pass null if this is the first call.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -442,9 +478,11 @@ pub struct DescribeDirectoriesRequest {
 pub struct DescribeDirectoriesResult {
     #[doc="<p>The list of <a>DirectoryDescription</a> objects that were retrieved.</p> <p>It is possible that this list contains less than the number of items specified in the <i>Limit</i> member of the request. This occurs if there are less than the requested number of items left to retrieve, or if the limitations of the operation have been exceeded.</p>"]
     #[serde(rename="DirectoryDescriptions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub directory_descriptions: Option<DirectoryDescriptions>,
     #[doc="<p>If not null, more results are available. Pass this value for the <i>NextToken</i> parameter in a subsequent call to <a>DescribeDirectories</a> to retrieve the next set of items.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -453,9 +491,11 @@ pub struct DescribeDirectoriesResult {
 pub struct DescribeEventTopicsRequest {
     #[doc="<p>The Directory ID for which to get the list of associated SNS topics. If this member is null, associations for all Directory IDs are returned.</p>"]
     #[serde(rename="DirectoryId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub directory_id: Option<DirectoryId>,
     #[doc="<p>A list of SNS topic names for which to obtain the information. If this member is null, all associations for the specified Directory ID are returned.</p> <p>An empty list results in an <code>InvalidParameterException</code> being thrown.</p>"]
     #[serde(rename="TopicNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub topic_names: Option<TopicNames>,
 }
 
@@ -464,6 +504,7 @@ pub struct DescribeEventTopicsRequest {
 pub struct DescribeEventTopicsResult {
     #[doc="<p>A list of SNS topic names that receive status messages from the specified Directory ID.</p>"]
     #[serde(rename="EventTopics")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub event_topics: Option<EventTopics>,
 }
 
@@ -472,15 +513,19 @@ pub struct DescribeEventTopicsResult {
 pub struct DescribeSnapshotsRequest {
     #[doc="<p>The identifier of the directory for which to retrieve snapshot information.</p>"]
     #[serde(rename="DirectoryId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub directory_id: Option<DirectoryId>,
     #[doc="<p>The maximum number of objects to return.</p>"]
     #[serde(rename="Limit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub limit: Option<Limit>,
     #[doc="<p>The <i>DescribeSnapshotsResult.NextToken</i> value from a previous call to <a>DescribeSnapshots</a>. Pass null if this is the first call.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>A list of identifiers of the snapshots to obtain the information for. If this member is null or empty, all snapshots are returned using the <i>Limit</i> and <i>NextToken</i> members.</p>"]
     #[serde(rename="SnapshotIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_ids: Option<SnapshotIds>,
 }
 
@@ -489,9 +534,11 @@ pub struct DescribeSnapshotsRequest {
 pub struct DescribeSnapshotsResult {
     #[doc="<p>If not null, more results are available. Pass this value in the <i>NextToken</i> member of a subsequent call to <a>DescribeSnapshots</a>.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The list of <a>Snapshot</a> objects that were retrieved.</p> <p>It is possible that this list contains less than the number of items specified in the <i>Limit</i> member of the request. This occurs if there are less than the requested number of items left to retrieve, or if the limitations of the operation have been exceeded.</p>"]
     #[serde(rename="Snapshots")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshots: Option<Snapshots>,
 }
 
@@ -500,15 +547,19 @@ pub struct DescribeSnapshotsResult {
 pub struct DescribeTrustsRequest {
     #[doc="<p>The Directory ID of the AWS directory that is a part of the requested trust relationship.</p>"]
     #[serde(rename="DirectoryId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub directory_id: Option<DirectoryId>,
     #[doc="<p>The maximum number of objects to return.</p>"]
     #[serde(rename="Limit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub limit: Option<Limit>,
     #[doc="<p>The <i>DescribeTrustsResult.NextToken</i> value from a previous call to <a>DescribeTrusts</a>. Pass null if this is the first call.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>A list of identifiers of the trust relationships for which to obtain the information. If this member is null, all trust relationships that belong to the current account are returned.</p> <p>An empty list results in an <code>InvalidParameterException</code> being thrown.</p>"]
     #[serde(rename="TrustIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub trust_ids: Option<TrustIds>,
 }
 
@@ -517,9 +568,11 @@ pub struct DescribeTrustsRequest {
 pub struct DescribeTrustsResult {
     #[doc="<p>If not null, more results are available. Pass this value for the <i>NextToken</i> parameter in a subsequent call to <a>DescribeTrusts</a> to retrieve the next set of items.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The list of Trust objects that were retrieved.</p> <p>It is possible that this list contains less than the number of items specified in the <i>Limit</i> member of the request. This occurs if there are less than the requested number of items left to retrieve, or if the limitations of the operation have been exceeded.</p>"]
     #[serde(rename="Trusts")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub trusts: Option<Trusts>,
 }
 
@@ -546,21 +599,27 @@ pub struct DirectoryConnectSettings {
 pub struct DirectoryConnectSettingsDescription {
     #[doc="<p>A list of the Availability Zones that the directory is in.</p>"]
     #[serde(rename="AvailabilityZones")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zones: Option<AvailabilityZones>,
     #[doc="<p>The IP addresses of the AD Connector servers.</p>"]
     #[serde(rename="ConnectIps")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub connect_ips: Option<IpAddrs>,
     #[doc="<p>The username of the service account in the on-premises directory.</p>"]
     #[serde(rename="CustomerUserName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub customer_user_name: Option<UserName>,
     #[doc="<p>The security group identifier for the AD Connector directory.</p>"]
     #[serde(rename="SecurityGroupId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub security_group_id: Option<SecurityGroupId>,
     #[doc="<p>A list of subnet identifiers in the VPC that the AD connector is in.</p>"]
     #[serde(rename="SubnetIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subnet_ids: Option<SubnetIds>,
     #[doc="<p>The identifier of the VPC that the AD Connector is in.</p>"]
     #[serde(rename="VpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<VpcId>,
 }
 
@@ -569,58 +628,75 @@ pub struct DirectoryConnectSettingsDescription {
 pub struct DirectoryDescription {
     #[doc="<p>The access URL for the directory, such as <code>http://&lt;alias&gt;.awsapps.com</code>. If no alias has been created for the directory, <code>&lt;alias&gt;</code> is the directory identifier, such as <code>d-XXXXXXXXXX</code>.</p>"]
     #[serde(rename="AccessUrl")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub access_url: Option<AccessUrl>,
     #[doc="<p>The alias for the directory. If no alias has been created for the directory, the alias is the directory identifier, such as <code>d-XXXXXXXXXX</code>.</p>"]
     #[serde(rename="Alias")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub alias: Option<AliasName>,
     #[doc="<p>A <a>DirectoryConnectSettingsDescription</a> object that contains additional information about an AD Connector directory. This member is only present if the directory is an AD Connector directory.</p>"]
     #[serde(rename="ConnectSettings")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub connect_settings: Option<DirectoryConnectSettingsDescription>,
     #[doc="<p>The textual description for the directory.</p>"]
     #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<Description>,
     #[doc="<p>The directory identifier.</p>"]
     #[serde(rename="DirectoryId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub directory_id: Option<DirectoryId>,
     #[doc="<p>The IP addresses of the DNS servers for the directory. For a Simple AD or Microsoft AD directory, these are the IP addresses of the Simple AD or Microsoft AD directory servers. For an AD Connector directory, these are the IP addresses of the DNS servers or domain controllers in the on-premises directory to which the AD Connector is connected.</p>"]
     #[serde(rename="DnsIpAddrs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dns_ip_addrs: Option<DnsIpAddrs>,
     #[doc="<p>Specifies when the directory was created.</p>"]
     #[serde(rename="LaunchTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub launch_time: Option<LaunchTime>,
     #[doc="<p>The fully-qualified name of the directory.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<DirectoryName>,
     #[doc="<p>A <a>RadiusSettings</a> object that contains information about the RADIUS server configured for this directory.</p>"]
     #[serde(rename="RadiusSettings")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub radius_settings: Option<RadiusSettings>,
     #[doc="<p>The status of the RADIUS MFA server connection.</p>"]
     #[serde(rename="RadiusStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub radius_status: Option<RadiusStatus>,
     #[doc="<p>The short name of the directory.</p>"]
     #[serde(rename="ShortName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub short_name: Option<DirectoryShortName>,
     #[doc="<p>The directory size.</p>"]
     #[serde(rename="Size")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub size: Option<DirectorySize>,
     #[doc="<p>Indicates if single-sign on is enabled for the directory. For more information, see <a>EnableSso</a> and <a>DisableSso</a>.</p>"]
     #[serde(rename="SsoEnabled")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sso_enabled: Option<SsoEnabled>,
     #[doc="<p>The current stage of the directory.</p>"]
     #[serde(rename="Stage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub stage: Option<DirectoryStage>,
     #[doc="<p>The date and time that the stage was last updated.</p>"]
     #[serde(rename="StageLastUpdatedDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub stage_last_updated_date_time: Option<LastUpdatedDateTime>,
     #[doc="<p>Additional information about the directory stage.</p>"]
     #[serde(rename="StageReason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub stage_reason: Option<StageReason>,
     #[doc="<p>The directory size.</p>"]
     #[serde(rename="Type")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<DirectoryType>,
     #[doc="<p>A <a>DirectoryVpcSettingsDescription</a> object that contains additional information about a directory. This member is only present if the directory is a Simple AD or Managed AD directory.</p>"]
     #[serde(rename="VpcSettings")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_settings: Option<DirectoryVpcSettingsDescription>,
 }
 
@@ -634,33 +710,39 @@ pub type DirectoryIds = Vec<DirectoryId>;
 pub struct DirectoryLimits {
     #[doc="<p>The current number of cloud directories in the region.</p>"]
     #[serde(rename="CloudOnlyDirectoriesCurrentCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cloud_only_directories_current_count: Option<Limit>,
     #[doc="<p>The maximum number of cloud directories allowed in the region.</p>"]
     #[serde(rename="CloudOnlyDirectoriesLimit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cloud_only_directories_limit: Option<Limit>,
     #[doc="<p>Indicates if the cloud directory limit has been reached.</p>"]
     #[serde(rename="CloudOnlyDirectoriesLimitReached")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cloud_only_directories_limit_reached: Option<CloudOnlyDirectoriesLimitReached>,
     #[doc="<p>The current number of Microsoft AD directories in the region.</p>"]
     #[serde(rename="CloudOnlyMicrosoftADCurrentCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cloud_only_microsoft_ad_current_count: Option<Limit>,
     #[doc="<p>The maximum number of Microsoft AD directories allowed in the region.</p>"]
     #[serde(rename="CloudOnlyMicrosoftADLimit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cloud_only_microsoft_ad_limit: Option<Limit>,
     #[doc="<p>Indicates if the Microsoft AD directory limit has been reached.</p>"]
     #[serde(rename="CloudOnlyMicrosoftADLimitReached")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cloud_only_microsoft_ad_limit_reached: Option<CloudOnlyDirectoriesLimitReached>,
     #[doc="<p>The current number of connected directories in the region.</p>"]
     #[serde(rename="ConnectedDirectoriesCurrentCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub connected_directories_current_count: Option<Limit>,
     #[doc="<p>The maximum number of connected directories allowed in the region.</p>"]
     #[serde(rename="ConnectedDirectoriesLimit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub connected_directories_limit: Option<Limit>,
     #[doc="<p>Indicates if the connected directory limit has been reached.</p>"]
     #[serde(rename="ConnectedDirectoriesLimitReached")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub connected_directories_limit_reached: Option<ConnectedDirectoriesLimitReached>,
 }
 
@@ -685,15 +767,19 @@ pub struct DirectoryVpcSettings {
 pub struct DirectoryVpcSettingsDescription {
     #[doc="<p>The list of Availability Zones that the directory is in.</p>"]
     #[serde(rename="AvailabilityZones")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zones: Option<AvailabilityZones>,
     #[doc="<p>The security group identifier for the directory. If the directory was created before 8/1/2014, this is the identifier of the directory members security group that was created when the directory was created. If the directory was created after this date, this value is null.</p>"]
     #[serde(rename="SecurityGroupId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub security_group_id: Option<SecurityGroupId>,
     #[doc="<p>The identifiers of the subnets for the directory servers.</p>"]
     #[serde(rename="SubnetIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subnet_ids: Option<SubnetIds>,
     #[doc="<p>The identifier of the VPC that the directory is in.</p>"]
     #[serde(rename="VpcId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<VpcId>,
 }
 
@@ -717,9 +803,11 @@ pub struct DisableSsoRequest {
     pub directory_id: DirectoryId,
     #[doc="<p>The password of an alternate account to use to disable single-sign on. This is only used for AD Connector directories. For more information, see the <i>UserName</i> parameter.</p>"]
     #[serde(rename="Password")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub password: Option<ConnectPassword>,
     #[doc="<p>The username of an alternate account to use to disable single-sign on. This is only used for AD Connector directories. This account must have privileges to remove a service principal name.</p> <p>If the AD Connector service account does not have privileges to remove a service principal name, you can specify an alternate account with the <i>UserName</i> and <i>Password</i> parameters. These credentials are only used to disable single sign-on and are not stored by the service. The AD Connector service account is not changed.</p>"]
     #[serde(rename="UserName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_name: Option<UserName>,
 }
 
@@ -751,9 +839,11 @@ pub struct EnableSsoRequest {
     pub directory_id: DirectoryId,
     #[doc="<p>The password of an alternate account to use to enable single-sign on. This is only used for AD Connector directories. For more information, see the <i>UserName</i> parameter.</p>"]
     #[serde(rename="Password")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub password: Option<ConnectPassword>,
     #[doc="<p>The username of an alternate account to use to enable single-sign on. This is only used for AD Connector directories. This account must have privileges to add a service principal name.</p> <p>If the AD Connector service account does not have privileges to add a service principal name, you can specify an alternate account with the <i>UserName</i> and <i>Password</i> parameters. These credentials are only used to enable single sign-on and are not stored by the service. The AD Connector service account is not changed.</p>"]
     #[serde(rename="UserName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub user_name: Option<UserName>,
 }
 
@@ -767,18 +857,23 @@ pub type EndDateTime = f64;
 pub struct EventTopic {
     #[doc="<p>The date and time of when you associated your directory with the SNS topic.</p>"]
     #[serde(rename="CreatedDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub created_date_time: Option<CreatedDateTime>,
     #[doc="<p>The Directory ID of an AWS Directory Service directory that will publish status messages to an SNS topic.</p>"]
     #[serde(rename="DirectoryId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub directory_id: Option<DirectoryId>,
     #[doc="<p>The topic registration status.</p>"]
     #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<TopicStatus>,
     #[doc="<p>The SNS topic ARN (Amazon Resource Name).</p>"]
     #[serde(rename="TopicArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub topic_arn: Option<TopicArn>,
     #[doc="<p>The name of an AWS SNS topic the receives status messages from the directory.</p>"]
     #[serde(rename="TopicName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub topic_name: Option<TopicName>,
 }
 
@@ -794,6 +889,7 @@ pub struct GetDirectoryLimitsRequest;
 pub struct GetDirectoryLimitsResult {
     #[doc="<p>A <a>DirectoryLimits</a> object that contains the directory limits for the current region.</p>"]
     #[serde(rename="DirectoryLimits")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub directory_limits: Option<DirectoryLimits>,
 }
 
@@ -810,6 +906,7 @@ pub struct GetSnapshotLimitsRequest {
 pub struct GetSnapshotLimitsResult {
     #[doc="<p>A <a>SnapshotLimits</a> object that contains the manual snapshot limits for the specified directory.</p>"]
     #[serde(rename="SnapshotLimits")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_limits: Option<SnapshotLimits>,
 }
 
@@ -820,9 +917,11 @@ pub type IpAddrs = Vec<IpAddr>;
 pub struct IpRoute {
     #[doc="<p>IP address block using CIDR format, for example 10.0.0.0/24. This is often the address block of the DNS server used for your on-premises domain. For a single IP address use a CIDR address block with /32. For example 10.0.0.0/32.</p>"]
     #[serde(rename="CidrIp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cidr_ip: Option<CidrIp>,
     #[doc="<p>Description of the address block.</p>"]
     #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<Description>,
 }
 
@@ -831,21 +930,27 @@ pub struct IpRoute {
 pub struct IpRouteInfo {
     #[doc="<p>The date and time the address block was added to the directory.</p>"]
     #[serde(rename="AddedDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub added_date_time: Option<AddedDateTime>,
     #[doc="<p>IP address block in the <a>IpRoute</a>.</p>"]
     #[serde(rename="CidrIp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cidr_ip: Option<CidrIp>,
     #[doc="<p>Description of the <a>IpRouteInfo</a>.</p>"]
     #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<Description>,
     #[doc="<p>Identifier (ID) of the directory associated with the IP addresses.</p>"]
     #[serde(rename="DirectoryId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub directory_id: Option<DirectoryId>,
     #[doc="<p>The status of the IP address block.</p>"]
     #[serde(rename="IpRouteStatusMsg")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ip_route_status_msg: Option<IpRouteStatusMsg>,
     #[doc="<p>The reason for the IpRouteStatusMsg.</p>"]
     #[serde(rename="IpRouteStatusReason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ip_route_status_reason: Option<IpRouteStatusReason>,
 }
 
@@ -864,9 +969,11 @@ pub struct ListIpRoutesRequest {
     pub directory_id: DirectoryId,
     #[doc="<p>Maximum number of items to return. If this value is zero, the maximum number of items is specified by the limitations of the operation.</p>"]
     #[serde(rename="Limit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub limit: Option<Limit>,
     #[doc="<p>The <i>ListIpRoutes.NextToken</i> value from a previous call to <a>ListIpRoutes</a>. Pass null if this is the first call.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -874,9 +981,11 @@ pub struct ListIpRoutesRequest {
 pub struct ListIpRoutesResult {
     #[doc="<p>A list of <a>IpRoute</a>s.</p>"]
     #[serde(rename="IpRoutesInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ip_routes_info: Option<IpRoutesInfo>,
     #[doc="<p>If not null, more results are available. Pass this value for the <i>NextToken</i> parameter in a subsequent call to <a>ListIpRoutes</a> to retrieve the next set of items.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -887,9 +996,11 @@ pub struct ListSchemaExtensionsRequest {
     pub directory_id: DirectoryId,
     #[doc="<p>The maximum number of items to return.</p>"]
     #[serde(rename="Limit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub limit: Option<Limit>,
     #[doc="<p>The <code>ListSchemaExtensions.NextToken</code> value from a previous call to <code>ListSchemaExtensions</code>. Pass null if this is the first call.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -897,9 +1008,11 @@ pub struct ListSchemaExtensionsRequest {
 pub struct ListSchemaExtensionsResult {
     #[doc="<p>If not null, more results are available. Pass this value for the <code>NextToken</code> parameter in a subsequent call to <code>ListSchemaExtensions</code> to retrieve the next set of items.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>Information about the schema extensions applied to the directory.</p>"]
     #[serde(rename="SchemaExtensionsInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub schema_extensions_info: Option<SchemaExtensionsInfo>,
 }
 
@@ -907,9 +1020,11 @@ pub struct ListSchemaExtensionsResult {
 pub struct ListTagsForResourceRequest {
     #[doc="<p>Reserved for future use.</p>"]
     #[serde(rename="Limit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub limit: Option<Limit>,
     #[doc="<p>Reserved for future use.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>Identifier (ID) of the directory for which you want to retrieve tags.</p>"]
     #[serde(rename="ResourceId")]
@@ -920,9 +1035,11 @@ pub struct ListTagsForResourceRequest {
 pub struct ListTagsForResourceResult {
     #[doc="<p>Reserved for future use.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>List of tags returned by the ListTagsForResource operation.</p>"]
     #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Tags>,
 }
 
@@ -939,28 +1056,35 @@ pub type RadiusRetries = i64;
 pub struct RadiusSettings {
     #[doc="<p>The protocol specified for your RADIUS endpoints.</p>"]
     #[serde(rename="AuthenticationProtocol")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub authentication_protocol: Option<RadiusAuthenticationProtocol>,
     #[doc="<p>Not currently used.</p>"]
     #[serde(rename="DisplayLabel")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub display_label: Option<RadiusDisplayLabel>,
     #[doc="<p>The port that your RADIUS server is using for communications. Your on-premises network must allow inbound traffic over this port from the AWS Directory Service servers.</p>"]
     #[serde(rename="RadiusPort")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub radius_port: Option<PortNumber>,
     #[doc="<p>The maximum number of times that communication with the RADIUS server is attempted.</p>"]
     #[serde(rename="RadiusRetries")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub radius_retries: Option<RadiusRetries>,
     #[doc="<p>An array of strings that contains the IP addresses of the RADIUS server endpoints, or the IP addresses of your RADIUS server load balancer.</p>"]
     #[serde(rename="RadiusServers")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub radius_servers: Option<Servers>,
     #[doc="<p>The amount of time, in seconds, to wait for the RADIUS server to respond.</p>"]
     #[serde(rename="RadiusTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub radius_timeout: Option<RadiusTimeout>,
     #[doc="<p>Not currently used.</p>"]
     #[serde(rename="SharedSecret")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub shared_secret: Option<RadiusSharedSecret>,
     #[doc="<p>Not currently used.</p>"]
     #[serde(rename="UseSameUsername")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub use_same_username: Option<UseSameUsername>,
 }
 
@@ -1033,24 +1157,31 @@ pub type SchemaExtensionId = String;
 pub struct SchemaExtensionInfo {
     #[doc="<p>A description of the schema extension.</p>"]
     #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<Description>,
     #[doc="<p>The identifier of the directory to which the schema extension is applied.</p>"]
     #[serde(rename="DirectoryId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub directory_id: Option<DirectoryId>,
     #[doc="<p>The date and time that the schema extension was completed.</p>"]
     #[serde(rename="EndDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub end_date_time: Option<EndDateTime>,
     #[doc="<p>The identifier of the schema extension.</p>"]
     #[serde(rename="SchemaExtensionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub schema_extension_id: Option<SchemaExtensionId>,
     #[doc="<p>The current status of the schema extension.</p>"]
     #[serde(rename="SchemaExtensionStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub schema_extension_status: Option<SchemaExtensionStatus>,
     #[doc="<p>The reason for the <code>SchemaExtensionStatus</code>.</p>"]
     #[serde(rename="SchemaExtensionStatusReason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub schema_extension_status_reason: Option<SchemaExtensionStatusReason>,
     #[doc="<p>The date and time that the schema extension started being applied to the directory.</p>"]
     #[serde(rename="StartDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_date_time: Option<StartDateTime>,
 }
 
@@ -1065,21 +1196,27 @@ pub type Servers = Vec<Server>;
 pub struct Snapshot {
     #[doc="<p>The directory identifier.</p>"]
     #[serde(rename="DirectoryId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub directory_id: Option<DirectoryId>,
     #[doc="<p>The descriptive name of the snapshot.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<SnapshotName>,
     #[doc="<p>The snapshot identifier.</p>"]
     #[serde(rename="SnapshotId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_id: Option<SnapshotId>,
     #[doc="<p>The date and time that the snapshot was taken.</p>"]
     #[serde(rename="StartTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_time: Option<StartTime>,
     #[doc="<p>The snapshot status.</p>"]
     #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<SnapshotStatus>,
     #[doc="<p>The snapshot type.</p>"]
     #[serde(rename="Type")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<SnapshotType>,
 }
 
@@ -1091,13 +1228,15 @@ pub type SnapshotIds = Vec<SnapshotId>;
 pub struct SnapshotLimits {
     #[doc="<p>The current number of manual snapshots of the directory.</p>"]
     #[serde(rename="ManualSnapshotsCurrentCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub manual_snapshots_current_count: Option<Limit>,
     #[doc="<p>The maximum number of manual snapshots allowed.</p>"]
     #[serde(rename="ManualSnapshotsLimit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub manual_snapshots_limit: Option<Limit>,
     #[doc="<p>Indicates if the manual snapshot limit has been reached.</p>"]
     #[serde(rename="ManualSnapshotsLimitReached")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub manual_snapshots_limit_reached: Option<ManualSnapshotsLimitReached>,
 }
 
@@ -1129,6 +1268,7 @@ pub struct StartSchemaExtensionRequest {
 pub struct StartSchemaExtensionResult {
     #[doc="<p>The identifier of the schema extension that will be applied.</p>"]
     #[serde(rename="SchemaExtensionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub schema_extension_id: Option<SchemaExtensionId>,
 }
 
@@ -1160,33 +1300,43 @@ pub type TopicStatus = String;
 pub struct Trust {
     #[doc="<p>The date and time that the trust relationship was created.</p>"]
     #[serde(rename="CreatedDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub created_date_time: Option<CreatedDateTime>,
     #[doc="<p>The Directory ID of the AWS directory involved in the trust relationship.</p>"]
     #[serde(rename="DirectoryId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub directory_id: Option<DirectoryId>,
     #[doc="<p>The date and time that the trust relationship was last updated.</p>"]
     #[serde(rename="LastUpdatedDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_updated_date_time: Option<LastUpdatedDateTime>,
     #[doc="<p>The Fully Qualified Domain Name (FQDN) of the external domain involved in the trust relationship.</p>"]
     #[serde(rename="RemoteDomainName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub remote_domain_name: Option<RemoteDomainName>,
     #[doc="<p>The date and time that the TrustState was last updated.</p>"]
     #[serde(rename="StateLastUpdatedDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state_last_updated_date_time: Option<StateLastUpdatedDateTime>,
     #[doc="<p>The trust relationship direction.</p>"]
     #[serde(rename="TrustDirection")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub trust_direction: Option<TrustDirection>,
     #[doc="<p>The unique ID of the trust relationship.</p>"]
     #[serde(rename="TrustId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub trust_id: Option<TrustId>,
     #[doc="<p>The trust relationship state.</p>"]
     #[serde(rename="TrustState")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub trust_state: Option<TrustState>,
     #[doc="<p>The reason for the TrustState.</p>"]
     #[serde(rename="TrustStateReason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub trust_state_reason: Option<TrustStateReason>,
     #[doc="<p>The trust relationship type.</p>"]
     #[serde(rename="TrustType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub trust_type: Option<TrustType>,
 }
 
@@ -1247,6 +1397,7 @@ pub struct VerifyTrustRequest {
 pub struct VerifyTrustResult {
     #[doc="<p>The unique Trust ID of the trust relationship that was verified.</p>"]
     #[serde(rename="TrustId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub trust_id: Option<TrustId>,
 }
 

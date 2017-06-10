@@ -19,18 +19,23 @@ pub type AddressLine = String;
 pub struct BillingRecord {
     #[doc="<p>The date that the operation was billed, in Unix format.</p>"]
     #[serde(rename="BillDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bill_date: Option<Timestamp>,
     #[doc="<p>The name of the domain that the billing record applies to. If the domain name contains characters other than a-z, 0-9, and - (hyphen), such as an internationalized domain name, then this value is in Punycode. For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DomainNameFormat.html\">DNS Domain Name Format</a> in the <i>Amazon Route 53 Developer Guidezzz</i>.</p>"]
     #[serde(rename="DomainName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub domain_name: Option<DomainName>,
     #[doc="<p>The ID of the invoice that is associated with the billing record.</p>"]
     #[serde(rename="InvoiceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub invoice_id: Option<InvoiceId>,
     #[doc="<p>The operation that you were charged for.</p>"]
     #[serde(rename="Operation")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub operation: Option<OperationType>,
     #[doc="<p>The price that you were charged for the operation, in US dollars.</p> <p>Example value: 12.0</p>"]
     #[serde(rename="Price")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub price: Option<Price>,
 }
 
@@ -44,6 +49,7 @@ pub struct CheckDomainAvailabilityRequest {
     pub domain_name: DomainName,
     #[doc="<p>Reserved for future use.</p>"]
     #[serde(rename="IdnLangCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub idn_lang_code: Option<LangCode>,
 }
 
@@ -61,45 +67,59 @@ pub type City = String;
 pub struct ContactDetail {
     #[doc="<p>First line of the contact's address.</p>"]
     #[serde(rename="AddressLine1")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub address_line_1: Option<AddressLine>,
     #[doc="<p>Second line of contact's address, if any.</p>"]
     #[serde(rename="AddressLine2")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub address_line_2: Option<AddressLine>,
     #[doc="<p>The city of the contact's address.</p>"]
     #[serde(rename="City")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub city: Option<City>,
     #[doc="<p>Indicates whether the contact is a person, company, association, or public organization. If you choose an option other than <code>PERSON</code>, you must enter an organization name, and you can't enable privacy protection for the contact.</p>"]
     #[serde(rename="ContactType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub contact_type: Option<ContactType>,
     #[doc="<p>Code for the country of the contact's address.</p>"]
     #[serde(rename="CountryCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub country_code: Option<CountryCode>,
     #[doc="<p>Email address of the contact.</p>"]
     #[serde(rename="Email")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub email: Option<Email>,
     #[doc="<p>A list of name-value pairs for parameters required by certain top-level domains.</p>"]
     #[serde(rename="ExtraParams")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub extra_params: Option<ExtraParamList>,
     #[doc="<p>Fax number of the contact.</p> <p>Constraints: Phone number must be specified in the format \"+[country dialing code].[number including any area code]\". For example, a US phone number might appear as <code>\"+1.1234567890\"</code>.</p>"]
     #[serde(rename="Fax")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub fax: Option<ContactNumber>,
     #[doc="<p>First name of contact.</p>"]
     #[serde(rename="FirstName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub first_name: Option<ContactName>,
     #[doc="<p>Last name of contact.</p>"]
     #[serde(rename="LastName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_name: Option<ContactName>,
     #[doc="<p>Name of the organization for contact types other than <code>PERSON</code>.</p>"]
     #[serde(rename="OrganizationName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub organization_name: Option<ContactName>,
     #[doc="<p>The phone number of the contact.</p> <p>Constraints: Phone number must be specified in the format \"+[country dialing code].[number including any area code&gt;]\". For example, a US phone number might appear as <code>\"+1.1234567890\"</code>.</p>"]
     #[serde(rename="PhoneNumber")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub phone_number: Option<ContactNumber>,
     #[doc="<p>The state or province of the contact's city.</p>"]
     #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<State>,
     #[doc="<p>The zip or postal code of the contact's address.</p>"]
     #[serde(rename="ZipCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub zip_code: Option<ZipCode>,
 }
 
@@ -159,9 +179,11 @@ pub type DomainStatusList = Vec<DomainStatus>;
 pub struct DomainSuggestion {
     #[doc="<p>Whether the domain name is available for registering.</p> <note> <p>You can register only the domains that are designated as <code>AVAILABLE</code>.</p> </note> <p>Valid values:</p> <dl> <dt>AVAILABLE</dt> <dd> <p>The domain name is available.</p> </dd> <dt>AVAILABLE_RESERVED</dt> <dd> <p>The domain name is reserved under specific conditions.</p> </dd> <dt>AVAILABLE_PREORDER</dt> <dd> <p>The domain name is available and can be preordered.</p> </dd> <dt>DONT_KNOW</dt> <dd> <p>The TLD registry didn't reply with a definitive answer about whether the domain name is available. Amazon Route 53 can return this response for a variety of reasons, for example, the registry is performing maintenance. Try again later.</p> </dd> <dt>PENDING</dt> <dd> <p>The TLD registry didn't return a response in the expected amount of time. When the response is delayed, it usually takes just a few extra seconds. You can resubmit the request immediately.</p> </dd> <dt>RESERVED</dt> <dd> <p>The domain name has been reserved for another person or organization.</p> </dd> <dt>UNAVAILABLE</dt> <dd> <p>The domain name is not available.</p> </dd> <dt>UNAVAILABLE_PREMIUM</dt> <dd> <p>The domain name is not available.</p> </dd> <dt>UNAVAILABLE_RESTRICTED</dt> <dd> <p>The domain name is forbidden.</p> </dd> </dl>"]
     #[serde(rename="Availability")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability: Option<String>,
     #[doc="<p>A suggested domain name.</p>"]
     #[serde(rename="DomainName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub domain_name: Option<DomainName>,
 }
 
@@ -171,17 +193,18 @@ pub type DomainSuggestionsList = Vec<DomainSuggestion>;
 pub struct DomainSummary {
     #[doc="<p>Indicates whether the domain is automatically renewed upon expiration.</p>"]
     #[serde(rename="AutoRenew")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_renew: Option<Boolean>,
     #[doc="<p>The name of the domain that the summary information applies to.</p>"]
     #[serde(rename="DomainName")]
     pub domain_name: DomainName,
     #[doc="<p>Expiration date of the domain in Coordinated Universal Time (UTC).</p>"]
     #[serde(rename="Expiry")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub expiry: Option<Timestamp>,
     #[doc="<p>Indicates whether a domain is locked from unauthorized transfer to another party.</p>"]
     #[serde(rename="TransferLock")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub transfer_lock: Option<Boolean>,
 }
 
@@ -234,6 +257,7 @@ pub type FIAuthKey = String;
 pub struct GetContactReachabilityStatusRequest {
     #[doc="<p>The name of the domain for which you want to know whether the registrant contact has confirmed that the email address is valid.</p>"]
     #[serde(rename="domainName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub domain_name: Option<DomainName>,
 }
 
@@ -241,9 +265,11 @@ pub struct GetContactReachabilityStatusRequest {
 pub struct GetContactReachabilityStatusResponse {
     #[doc="<p>The domain name for which you requested the reachability status.</p>"]
     #[serde(rename="domainName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub domain_name: Option<DomainName>,
     #[doc="<p>Whether the registrant contact has responded. Values include the following:</p> <dl> <dt>PENDING</dt> <dd> <p>We sent the confirmation email and haven't received a response yet.</p> </dd> <dt>DONE</dt> <dd> <p>We sent the email and got confirmation from the registrant contact.</p> </dd> <dt>EXPIRED</dt> <dd> <p>The time limit expired before the registrant contact responded.</p> </dd> </dl>"]
     #[serde(rename="status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<ReachabilityStatus>,
 }
 
@@ -260,32 +286,37 @@ pub struct GetDomainDetailRequest {
 pub struct GetDomainDetailResponse {
     #[doc="<p>Email address to contact to report incorrect contact information for a domain, to report that the domain is being used to send spam, to report that someone is cybersquatting on a domain name, or report some other type of abuse.</p>"]
     #[serde(rename="AbuseContactEmail")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub abuse_contact_email: Option<Email>,
     #[doc="<p>Phone number for reporting abuse.</p>"]
     #[serde(rename="AbuseContactPhone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub abuse_contact_phone: Option<ContactNumber>,
     #[doc="<p>Provides details about the domain administrative contact.</p>"]
     #[serde(rename="AdminContact")]
     pub admin_contact: ContactDetail,
     #[doc="<p>Specifies whether contact information for the admin contact is concealed from WHOIS queries. If the value is <code>true</code>, WHOIS (\"who is\") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p>"]
     #[serde(rename="AdminPrivacy")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub admin_privacy: Option<Boolean>,
     #[doc="<p>Specifies whether the domain registration is set to renew automatically.</p>"]
     #[serde(rename="AutoRenew")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_renew: Option<Boolean>,
     #[doc="<p>The date when the domain was created as found in the response to a WHOIS query. The date format is Unix time.</p>"]
     #[serde(rename="CreationDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub creation_date: Option<Timestamp>,
     #[doc="<p>Reserved for future use.</p>"]
     #[serde(rename="DnsSec")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dns_sec: Option<DNSSec>,
     #[doc="<p>The name of a domain.</p>"]
     #[serde(rename="DomainName")]
     pub domain_name: DomainName,
     #[doc="<p>The date when the registration for the domain is set to expire. The date format is Unix time.</p>"]
     #[serde(rename="ExpirationDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub expiration_date: Option<Timestamp>,
     #[doc="<p>The name of the domain.</p>"]
     #[serde(rename="Nameservers")]
@@ -295,35 +326,42 @@ pub struct GetDomainDetailResponse {
     pub registrant_contact: ContactDetail,
     #[doc="<p>Specifies whether contact information for the registrant contact is concealed from WHOIS queries. If the value is <code>true</code>, WHOIS (\"who is\") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p>"]
     #[serde(rename="RegistrantPrivacy")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub registrant_privacy: Option<Boolean>,
     #[doc="<p>Name of the registrar of the domain as identified in the registry. Amazon Route 53 domains are registered by registrar Gandi. The value is <code>\"GANDI SAS\"</code>. </p>"]
     #[serde(rename="RegistrarName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub registrar_name: Option<RegistrarName>,
     #[doc="<p>Web address of the registrar.</p>"]
     #[serde(rename="RegistrarUrl")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub registrar_url: Option<RegistrarUrl>,
     #[doc="<p>Reserved for future use.</p>"]
     #[serde(rename="RegistryDomainId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub registry_domain_id: Option<RegistryDomainId>,
     #[doc="<p>Reseller of the domain. Domains registered or transferred using Amazon Route 53 domains will have <code>\"Amazon\"</code> as the reseller. </p>"]
     #[serde(rename="Reseller")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reseller: Option<Reseller>,
     #[doc="<p>An array of domain name status codes, also known as Extensible Provisioning Protocol (EPP) status codes.</p> <p>ICANN, the organization that maintains a central database of domain names, has developed a set of domain name status codes that tell you the status of a variety of operations on a domain name, for example, registering a domain name, transferring a domain name to another registrar, renewing the registration for a domain name, and so on. All registrars use this same set of status codes.</p> <p>For a current list of domain name status codes and an explanation of what each code means, go to the <a href=\"https://www.icann.org/\">ICANN website</a> and search for <code>epp status codes</code>. (Search on the ICANN website; web searches sometimes return an old version of the document.)</p>"]
     #[serde(rename="StatusList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status_list: Option<DomainStatusList>,
     #[doc="<p>Provides details about the domain technical contact.</p>"]
     #[serde(rename="TechContact")]
     pub tech_contact: ContactDetail,
     #[doc="<p>Specifies whether contact information for the tech contact is concealed from WHOIS queries. If the value is <code>true</code>, WHOIS (\"who is\") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p>"]
     #[serde(rename="TechPrivacy")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tech_privacy: Option<Boolean>,
     #[doc="<p>The last updated date of the domain as found in the response to a WHOIS query. The date format is Unix time.</p>"]
     #[serde(rename="UpdatedDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub updated_date: Option<Timestamp>,
     #[doc="<p>The fully qualified name of the WHOIS server that can answer the WHOIS query for the domain.</p>"]
     #[serde(rename="WhoIsServer")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub who_is_server: Option<RegistrarWhoIsServer>,
 }
 
@@ -344,6 +382,7 @@ pub struct GetDomainSuggestionsRequest {
 pub struct GetDomainSuggestionsResponse {
     #[doc="<p>A list of possible domain names. If you specified <code>true</code> for <code>OnlyAvailable</code> in the request, the list contains only domains that are available for registration.</p>"]
     #[serde(rename="SuggestionsList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub suggestions_list: Option<DomainSuggestionsList>,
 }
 
@@ -360,21 +399,27 @@ pub struct GetOperationDetailRequest {
 pub struct GetOperationDetailResponse {
     #[doc="<p>The name of a domain.</p>"]
     #[serde(rename="DomainName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub domain_name: Option<DomainName>,
     #[doc="<p>Detailed information on the status including possible errors.</p>"]
     #[serde(rename="Message")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<ErrorMessage>,
     #[doc="<p>The identifier for the operation.</p>"]
     #[serde(rename="OperationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub operation_id: Option<OperationId>,
     #[doc="<p>The current status of the requested operation in the system.</p>"]
     #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<OperationStatus>,
     #[doc="<p>The date when the request was submitted.</p>"]
     #[serde(rename="SubmittedDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub submitted_date: Option<Timestamp>,
     #[doc="<p>The type of operation that was requested.</p>"]
     #[serde(rename="Type")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<OperationType>,
 }
 
@@ -389,9 +434,11 @@ pub type LangCode = String;
 pub struct ListDomainsRequest {
     #[doc="<p>For an initial request for a list of domains, omit this element. If the number of domains that are associated with the current AWS account is greater than the value that you specified for <code>MaxItems</code>, you can use <code>Marker</code> to return additional domains. Get the value of <code>NextPageMarker</code> from the previous response, and submit another request that includes the value of <code>NextPageMarker</code> in the <code>Marker</code> element.</p> <p>Constraints: The marker must match the value specified in the previous request.</p>"]
     #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<PageMarker>,
     #[doc="<p>Number of domains to be returned.</p> <p>Default: 20</p>"]
     #[serde(rename="MaxItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_items: Option<PageMaxItems>,
 }
 
@@ -403,6 +450,7 @@ pub struct ListDomainsResponse {
     pub domains: DomainSummaryList,
     #[doc="<p>If there are more domains than you specified for <code>MaxItems</code> in the request, submit another request and include the value of <code>NextPageMarker</code> in the value of <code>Marker</code>.</p>"]
     #[serde(rename="NextPageMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_page_marker: Option<PageMarker>,
 }
 
@@ -411,9 +459,11 @@ pub struct ListDomainsResponse {
 pub struct ListOperationsRequest {
     #[doc="<p>For an initial request for a list of operations, omit this element. If the number of operations that are not yet complete is greater than the value that you specified for <code>MaxItems</code>, you can use <code>Marker</code> to return additional operations. Get the value of <code>NextPageMarker</code> from the previous response, and submit another request that includes the value of <code>NextPageMarker</code> in the <code>Marker</code> element.</p>"]
     #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<PageMarker>,
     #[doc="<p>Number of domains to be returned.</p> <p>Default: 20</p>"]
     #[serde(rename="MaxItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_items: Option<PageMaxItems>,
 }
 
@@ -422,6 +472,7 @@ pub struct ListOperationsRequest {
 pub struct ListOperationsResponse {
     #[doc="<p>If there are more operations than you specified for <code>MaxItems</code> in the request, submit another request and include the value of <code>NextPageMarker</code> in the value of <code>Marker</code>.</p>"]
     #[serde(rename="NextPageMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_page_marker: Option<PageMarker>,
     #[doc="<p>Lists summaries of the operations.</p>"]
     #[serde(rename="Operations")]
@@ -449,6 +500,7 @@ pub struct ListTagsForDomainResponse {
 pub struct Nameserver {
     #[doc="<p>Glue IP address of a name server entry. Glue IP addresses are required only when the name of the name server is a subdomain of the domain. For example, if your domain is example.com and the name server for the domain is ns.example.com, you need to specify the IP address for ns.example.com.</p> <p>Constraints: The list can contain only one IPv4 and one IPv6 address.</p>"]
     #[serde(rename="GlueIps")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub glue_ips: Option<GlueIpList>,
     #[doc="<p>The fully qualified host name of the name server.</p> <p>Constraint: Maximum 255 characters</p>"]
     #[serde(rename="Name")]
@@ -489,7 +541,7 @@ pub struct RegisterDomainRequest {
     pub admin_contact: ContactDetail,
     #[doc="<p>Indicates whether the domain will be automatically renewed (<code>true</code>) or not (<code>false</code>). Autorenewal only takes effect after the account is charged.</p> <p>Default: <code>true</code> </p>"]
     #[serde(rename="AutoRenew")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_renew: Option<Boolean>,
     #[doc="<p>The domain name that you want to register.</p> <p>Constraints: The domain name can contain only the letters a through z, the numbers 0 through 9, and hyphen (-). Internationalized Domain Names are not supported.</p>"]
     #[serde(rename="DomainName")]
@@ -499,18 +551,19 @@ pub struct RegisterDomainRequest {
     pub duration_in_years: DurationInYears,
     #[doc="<p>Reserved for future use.</p>"]
     #[serde(rename="IdnLangCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub idn_lang_code: Option<LangCode>,
     #[doc="<p>Whether you want to conceal contact information from WHOIS queries. If you specify <code>true</code>, WHOIS (\"who is\") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p> <p>Default: <code>true</code> </p>"]
     #[serde(rename="PrivacyProtectAdminContact")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub privacy_protect_admin_contact: Option<Boolean>,
     #[doc="<p>Whether you want to conceal contact information from WHOIS queries. If you specify <code>true</code>, WHOIS (\"who is\") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p> <p>Default: <code>true</code> </p>"]
     #[serde(rename="PrivacyProtectRegistrantContact")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub privacy_protect_registrant_contact: Option<Boolean>,
     #[doc="<p>Whether you want to conceal contact information from WHOIS queries. If you specify <code>true</code>, WHOIS (\"who is\") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p> <p>Default: <code>true</code> </p>"]
     #[serde(rename="PrivacyProtectTechContact")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub privacy_protect_tech_contact: Option<Boolean>,
     #[doc="<p>Provides detailed contact information.</p>"]
     #[serde(rename="RegistrantContact")]
@@ -543,6 +596,7 @@ pub struct RenewDomainRequest {
     pub domain_name: DomainName,
     #[doc="<p>The number of years that you want to renew the domain for. The maximum number of years depends on the top-level domain. For the range of valid values for your domain, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/registrar-tld-list.html\">Domains that You Can Register with Amazon Route 53</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>Default: 1</p>"]
     #[serde(rename="DurationInYears")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub duration_in_years: Option<DurationInYears>,
 }
 
@@ -558,6 +612,7 @@ pub type Reseller = String;
 pub struct ResendContactReachabilityEmailRequest {
     #[doc="<p>The name of the domain for which you want Amazon Route 53 to resend a confirmation email to the registrant contact.</p>"]
     #[serde(rename="domainName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub domain_name: Option<DomainName>,
 }
 
@@ -565,13 +620,15 @@ pub struct ResendContactReachabilityEmailRequest {
 pub struct ResendContactReachabilityEmailResponse {
     #[doc="<p>The domain name for which you requested a confirmation email.</p>"]
     #[serde(rename="domainName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub domain_name: Option<DomainName>,
     #[doc="<p>The email address for the registrant contact at the time that we sent the verification email.</p>"]
     #[serde(rename="emailAddress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub email_address: Option<Email>,
     #[doc="<p> <code>True</code> if the email address for the registrant contact has already been verified, and <code>false</code> otherwise. If the email address has already been verified, we don't send another confirmation email.</p>"]
     #[serde(rename="isAlreadyVerified")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_already_verified: Option<Boolean>,
 }
 
@@ -597,9 +654,11 @@ pub type State = String;
 pub struct Tag {
     #[doc="<p>The key (name) of a tag.</p> <p>Valid values: A-Z, a-z, 0-9, space, \".:/=+\\-@\"</p> <p>Constraints: Each key can be 1-128 characters long.</p>"]
     #[serde(rename="Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key: Option<TagKey>,
     #[doc="<p>The value of a tag.</p> <p>Valid values: A-Z, a-z, 0-9, space, \".:/=+\\-@\"</p> <p>Constraints: Each value can be 0-256 characters long.</p>"]
     #[serde(rename="Value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<TagValue>,
 }
 
@@ -616,10 +675,11 @@ pub struct TransferDomainRequest {
     pub admin_contact: ContactDetail,
     #[doc="<p>The authorization code for the domain. You get this value from the current registrar.</p>"]
     #[serde(rename="AuthCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auth_code: Option<DomainAuthCode>,
     #[doc="<p>Indicates whether the domain will be automatically renewed (true) or not (false). Autorenewal only takes effect after the account is charged.</p> <p>Default: true</p>"]
     #[serde(rename="AutoRenew")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_renew: Option<Boolean>,
     #[doc="<p>The name of the domain that you want to transfer to Amazon Route 53.</p> <p>Constraints: The domain name can contain only the letters a through z, the numbers 0 through 9, and hyphen (-). Internationalized Domain Names are not supported.</p>"]
     #[serde(rename="DomainName")]
@@ -629,21 +689,23 @@ pub struct TransferDomainRequest {
     pub duration_in_years: DurationInYears,
     #[doc="<p>Reserved for future use.</p>"]
     #[serde(rename="IdnLangCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub idn_lang_code: Option<LangCode>,
     #[doc="<p>Contains details for the host and glue IP addresses.</p>"]
     #[serde(rename="Nameservers")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub nameservers: Option<NameserverList>,
     #[doc="<p>Whether you want to conceal contact information from WHOIS queries. If you specify <code>true</code>, WHOIS (\"who is\") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p> <p>Default: <code>true</code> </p>"]
     #[serde(rename="PrivacyProtectAdminContact")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub privacy_protect_admin_contact: Option<Boolean>,
     #[doc="<p>Whether you want to conceal contact information from WHOIS queries. If you specify <code>true</code>, WHOIS (\"who is\") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p> <p>Default: <code>true</code> </p>"]
     #[serde(rename="PrivacyProtectRegistrantContact")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub privacy_protect_registrant_contact: Option<Boolean>,
     #[doc="<p>Whether you want to conceal contact information from WHOIS queries. If you specify <code>true</code>, WHOIS (\"who is\") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p> <p>Default: <code>true</code> </p>"]
     #[serde(rename="PrivacyProtectTechContact")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub privacy_protect_tech_contact: Option<Boolean>,
     #[doc="<p>Provides detailed contact information.</p>"]
     #[serde(rename="RegistrantContact")]
@@ -666,18 +728,18 @@ pub struct TransferDomainResponse {
 pub struct UpdateDomainContactPrivacyRequest {
     #[doc="<p>Whether you want to conceal contact information from WHOIS queries. If you specify <code>true</code>, WHOIS (\"who is\") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p>"]
     #[serde(rename="AdminPrivacy")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub admin_privacy: Option<Boolean>,
     #[doc="<p>The name of the domain that you want to update the privacy setting for.</p>"]
     #[serde(rename="DomainName")]
     pub domain_name: DomainName,
     #[doc="<p>Whether you want to conceal contact information from WHOIS queries. If you specify <code>true</code>, WHOIS (\"who is\") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p>"]
     #[serde(rename="RegistrantPrivacy")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub registrant_privacy: Option<Boolean>,
     #[doc="<p>Whether you want to conceal contact information from WHOIS queries. If you specify <code>true</code>, WHOIS (\"who is\") queries will return contact information for our registrar partner, Gandi, instead of the contact information that you enter.</p>"]
     #[serde(rename="TechPrivacy")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tech_privacy: Option<Boolean>,
 }
 
@@ -694,15 +756,18 @@ pub struct UpdateDomainContactPrivacyResponse {
 pub struct UpdateDomainContactRequest {
     #[doc="<p>Provides detailed contact information.</p>"]
     #[serde(rename="AdminContact")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub admin_contact: Option<ContactDetail>,
     #[doc="<p>The name of the domain that you want to update contact information for.</p>"]
     #[serde(rename="DomainName")]
     pub domain_name: DomainName,
     #[doc="<p>Provides detailed contact information.</p>"]
     #[serde(rename="RegistrantContact")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub registrant_contact: Option<ContactDetail>,
     #[doc="<p>Provides detailed contact information.</p>"]
     #[serde(rename="TechContact")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tech_contact: Option<ContactDetail>,
 }
 
@@ -722,6 +787,7 @@ pub struct UpdateDomainNameserversRequest {
     pub domain_name: DomainName,
     #[doc="<p>The authorization key for .fi domains</p>"]
     #[serde(rename="FIAuthKey")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub fi_auth_key: Option<FIAuthKey>,
     #[doc="<p>A list of new name servers for the domain.</p>"]
     #[serde(rename="Nameservers")]
@@ -744,6 +810,7 @@ pub struct UpdateTagsForDomainRequest {
     pub domain_name: DomainName,
     #[doc="<p>A list of the tag keys and values that you want to add or update. If you specify a key that already exists, the corresponding value will be replaced.</p>"]
     #[serde(rename="TagsToUpdate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags_to_update: Option<TagList>,
 }
 
@@ -755,15 +822,19 @@ pub struct UpdateTagsForDomainResponse;
 pub struct ViewBillingRequest {
     #[doc="<p>The end date and time for the time period for which you want a list of billing records. Specify the date in Unix time format.</p>"]
     #[serde(rename="End")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub end: Option<Timestamp>,
     #[doc="<p>For an initial request for a list of billing records, omit this element. If the number of billing records that are associated with the current AWS account during the specified period is greater than the value that you specified for <code>MaxItems</code>, you can use <code>Marker</code> to return additional billing records. Get the value of <code>NextPageMarker</code> from the previous response, and submit another request that includes the value of <code>NextPageMarker</code> in the <code>Marker</code> element. </p> <p>Constraints: The marker must match the value of <code>NextPageMarker</code> that was returned in the previous response.</p>"]
     #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<PageMarker>,
     #[doc="<p>The number of billing records to be returned.</p> <p>Default: 20</p>"]
     #[serde(rename="MaxItems")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_items: Option<PageMaxItems>,
     #[doc="<p>The beginning date and time for the time period for which you want a list of billing records. Specify the date in Unix time format.</p>"]
     #[serde(rename="Start")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start: Option<Timestamp>,
 }
 
@@ -772,9 +843,11 @@ pub struct ViewBillingRequest {
 pub struct ViewBillingResponse {
     #[doc="<p>A summary of billing records.</p>"]
     #[serde(rename="BillingRecords")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub billing_records: Option<BillingRecords>,
     #[doc="<p>If there are more billing records than you specified for <code>MaxItems</code> in the request, submit another request and include the value of <code>NextPageMarker</code> in the value of <code>Marker</code>.</p>"]
     #[serde(rename="NextPageMarker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_page_marker: Option<PageMarker>,
 }
 

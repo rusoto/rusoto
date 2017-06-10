@@ -45,6 +45,7 @@ pub struct AcknowledgeJobInput {
 pub struct AcknowledgeJobOutput {
     #[doc="<p>Whether the job worker has received the specified job.</p>"]
     #[serde(rename="status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<JobStatus>,
 }
 
@@ -67,6 +68,7 @@ pub struct AcknowledgeThirdPartyJobInput {
 pub struct AcknowledgeThirdPartyJobOutput {
     #[doc="<p>The status information for the third party job, if any.</p>"]
     #[serde(rename="status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<JobStatus>,
 }
 
@@ -76,6 +78,7 @@ pub type ActionCategory = String;
 pub struct ActionConfiguration {
     #[doc="<p>The configuration data for the action.</p>"]
     #[serde(rename="configuration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub configuration: Option<ActionConfigurationMap>,
 }
 
@@ -87,6 +90,7 @@ pub type ActionConfigurationMap = ::std::collections::HashMap<ActionConfiguratio
 pub struct ActionConfigurationProperty {
     #[doc="<p>The description of the action configuration property that will be displayed to users.</p>"]
     #[serde(rename="description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<Description>,
     #[doc="<p>Whether the configuration property is a key.</p>"]
     #[serde(rename="key")]
@@ -96,7 +100,7 @@ pub struct ActionConfigurationProperty {
     pub name: ActionConfigurationKey,
     #[doc="<p>Indicates that the proprety will be used in conjunction with PollForJobs. When creating a custom action, an action can have up to one queryable property. If it has one, that property must be both required and not secret.</p> <p>If you create a pipeline with a custom action type, and that custom action contains a queryable property, the value for that configuration property is subject to additional restrictions. The value must be less than or equal to twenty (20) characters. The value can contain only alphanumeric characters, underscores, and hyphens.</p>"]
     #[serde(rename="queryable")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub queryable: Option<Boolean>,
     #[doc="<p>Whether the configuration property is a required value.</p>"]
     #[serde(rename="required")]
@@ -106,6 +110,7 @@ pub struct ActionConfigurationProperty {
     pub secret: Boolean,
     #[doc="<p>The type of the configuration property.</p>"]
     #[serde(rename="type")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<ActionConfigurationPropertyType>,
 }
 
@@ -118,6 +123,7 @@ pub type ActionConfigurationValue = String;
 pub struct ActionContext {
     #[doc="<p>The name of the action within the context of a job.</p>"]
     #[serde(rename="name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<ActionName>,
 }
 
@@ -129,21 +135,26 @@ pub struct ActionDeclaration {
     pub action_type_id: ActionTypeId,
     #[doc="<p>The action declaration's configuration.</p>"]
     #[serde(rename="configuration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub configuration: Option<ActionConfigurationMap>,
     #[doc="<p>The name or ID of the artifact consumed by the action, such as a test or build artifact.</p>"]
     #[serde(rename="inputArtifacts")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub input_artifacts: Option<InputArtifactList>,
     #[doc="<p>The action declaration's name.</p>"]
     #[serde(rename="name")]
     pub name: ActionName,
     #[doc="<p>The name or ID of the result of the action declaration, such as a test or build artifact.</p>"]
     #[serde(rename="outputArtifacts")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub output_artifacts: Option<OutputArtifactList>,
     #[doc="<p>The ARN of the IAM service role that will perform the declared action. This is assumed through the roleArn for the pipeline.</p>"]
     #[serde(rename="roleArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub role_arn: Option<RoleArn>,
     #[doc="<p>The order in which actions are run.</p>"]
     #[serde(rename="runOrder")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub run_order: Option<ActionRunOrder>,
 }
 
@@ -152,30 +163,39 @@ pub struct ActionDeclaration {
 pub struct ActionExecution {
     #[doc="<p>The details of an error returned by a URL external to AWS.</p>"]
     #[serde(rename="errorDetails")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub error_details: Option<ErrorDetails>,
     #[doc="<p>The external ID of the run of the action.</p>"]
     #[serde(rename="externalExecutionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub external_execution_id: Option<ExecutionId>,
     #[doc="<p>The URL of a resource external to AWS that will be used when running the action, for example an external repository URL.</p>"]
     #[serde(rename="externalExecutionUrl")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub external_execution_url: Option<Url>,
     #[doc="<p>The last status change of the action.</p>"]
     #[serde(rename="lastStatusChange")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_status_change: Option<Timestamp>,
     #[doc="<p>The ARN of the user who last changed the pipeline.</p>"]
     #[serde(rename="lastUpdatedBy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_updated_by: Option<LastUpdatedBy>,
     #[doc="<p>A percentage of completeness of the action as it runs.</p>"]
     #[serde(rename="percentComplete")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub percent_complete: Option<Percentage>,
     #[doc="<p>The status of the action, or for a completed action, the last status of the action.</p>"]
     #[serde(rename="status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<ActionExecutionStatus>,
     #[doc="<p>A summary of the run of the action.</p>"]
     #[serde(rename="summary")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub summary: Option<ExecutionSummary>,
     #[doc="<p>The system-generated token used to identify a unique approval request. The token for each open approval request can be obtained using the GetPipelineState command and is used to validate that the approval request corresponding to this token is still valid.</p>"]
     #[serde(rename="token")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub token: Option<ActionExecutionToken>,
 }
 
@@ -204,16 +224,21 @@ pub type ActionRunOrder = i64;
 pub struct ActionState {
     #[doc="<p>The name of the action.</p>"]
     #[serde(rename="actionName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub action_name: Option<ActionName>,
     #[serde(rename="currentRevision")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub current_revision: Option<ActionRevision>,
     #[doc="<p>A URL link for more information about the state of the action, such as a deployment group details page.</p>"]
     #[serde(rename="entityUrl")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub entity_url: Option<Url>,
     #[serde(rename="latestExecution")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub latest_execution: Option<ActionExecution>,
     #[doc="<p>A URL link for more information about the revision, such as a commit details page.</p>"]
     #[serde(rename="revisionUrl")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub revision_url: Option<Url>,
 }
 
@@ -223,6 +248,7 @@ pub type ActionStateList = Vec<ActionState>;
 pub struct ActionType {
     #[doc="<p>The configuration properties for the action type.</p>"]
     #[serde(rename="actionConfigurationProperties")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub action_configuration_properties: Option<ActionConfigurationPropertyList>,
     #[serde(rename="id")]
     pub id: ActionTypeId,
@@ -234,6 +260,7 @@ pub struct ActionType {
     pub output_artifact_details: ArtifactDetails,
     #[doc="<p>The settings for the action type.</p>"]
     #[serde(rename="settings")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub settings: Option<ActionTypeSettings>,
 }
 
@@ -260,15 +287,19 @@ pub type ActionTypeList = Vec<ActionType>;
 pub struct ActionTypeSettings {
     #[doc="<p>The URL returned to the AWS CodePipeline console that provides a deep link to the resources of the external system, such as the configuration page for an AWS CodeDeploy deployment group. This link is provided as part of the action display within the pipeline.</p>"]
     #[serde(rename="entityUrlTemplate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub entity_url_template: Option<UrlTemplate>,
     #[doc="<p>The URL returned to the AWS CodePipeline console that contains a link to the top-level landing page for the external system, such as console page for AWS CodeDeploy. This link is shown on the pipeline view page in the AWS CodePipeline console and provides a link to the execution entity of the external action.</p>"]
     #[serde(rename="executionUrlTemplate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub execution_url_template: Option<UrlTemplate>,
     #[doc="<p>The URL returned to the AWS CodePipeline console that contains a link to the page where customers can update or change the configuration of the external action.</p>"]
     #[serde(rename="revisionUrlTemplate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub revision_url_template: Option<UrlTemplate>,
     #[doc="<p>The URL of a sign-up page where users can sign up for an external service and perform initial configuration of the action provided by that service.</p>"]
     #[serde(rename="thirdPartyConfigurationUrl")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub third_party_configuration_url: Option<Url>,
 }
 
@@ -291,12 +322,15 @@ pub type ApprovalToken = String;
 pub struct Artifact {
     #[doc="<p>The location of an artifact.</p>"]
     #[serde(rename="location")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub location: Option<ArtifactLocation>,
     #[doc="<p>The artifact's name.</p>"]
     #[serde(rename="name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<ArtifactName>,
     #[doc="<p>The artifact's revision ID. Depending on the type of object, this could be a commit ID (GitHub) or a revision ID (Amazon S3).</p>"]
     #[serde(rename="revision")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub revision: Option<Revision>,
 }
 
@@ -317,9 +351,11 @@ pub type ArtifactList = Vec<Artifact>;
 pub struct ArtifactLocation {
     #[doc="<p>The Amazon S3 bucket that contains the artifact.</p>"]
     #[serde(rename="s3Location")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub s_3_location: Option<S3ArtifactLocation>,
     #[doc="<p>The type of artifact in the location.</p>"]
     #[serde(rename="type")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<ArtifactLocationType>,
 }
 
@@ -330,21 +366,27 @@ pub type ArtifactName = String;
 pub struct ArtifactRevision {
     #[doc="<p>The date and time when the most recent revision of the artifact was created, in timestamp format.</p>"]
     #[serde(rename="created")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub created: Option<Timestamp>,
     #[doc="<p>The name of an artifact. This name might be system-generated, such as \"MyApp\", or might be defined by the user when an action is created.</p>"]
     #[serde(rename="name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<ArtifactName>,
     #[doc="<p>An additional identifier for a revision, such as a commit date or, for artifacts stored in Amazon S3 buckets, the ETag value.</p>"]
     #[serde(rename="revisionChangeIdentifier")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub revision_change_identifier: Option<RevisionChangeIdentifier>,
     #[doc="<p>The revision ID of the artifact.</p>"]
     #[serde(rename="revisionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub revision_id: Option<Revision>,
     #[doc="<p>Summary information about the most recent revision of the artifact. For GitHub and AWS CodeCommit repositories, the commit message. For Amazon S3 buckets or actions, the user-provided content of a <code>codepipeline-artifact-revision-summary</code> key specified in the object metadata.</p>"]
     #[serde(rename="revisionSummary")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub revision_summary: Option<RevisionSummary>,
     #[doc="<p>The commit ID for the artifact revision. For artifacts stored in GitHub or AWS CodeCommit repositories, the commit ID is linked to a commit details page.</p>"]
     #[serde(rename="revisionUrl")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub revision_url: Option<Url>,
 }
 
@@ -354,6 +396,7 @@ pub type ArtifactRevisionList = Vec<ArtifactRevision>;
 pub struct ArtifactStore {
     #[doc="<p>The encryption key used to encrypt the data in the artifact store, such as an AWS Key Management Service (AWS KMS) key. If this is undefined, the default key for Amazon S3 is used.</p>"]
     #[serde(rename="encryptionKey")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub encryption_key: Option<EncryptionKey>,
     #[doc="<p>The location for storing the artifacts for a pipeline, such as an S3 bucket or folder.</p>"]
     #[serde(rename="location")]
@@ -391,6 +434,7 @@ pub struct CreateCustomActionTypeInput {
     pub category: ActionCategory,
     #[doc="<p>The configuration properties for the custom action.</p> <note> <p>You can refer to a name in the configuration properties of the custom action within the URL templates by following the format of {Config:name}, as long as the configuration property is both required and not secret. For more information, see <a href=\"http://docs.aws.amazon.com/codepipeline/latest/userguide/how-to-create-custom-action.html\">Create a Custom Action for a Pipeline</a>.</p> </note>"]
     #[serde(rename="configurationProperties")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub configuration_properties: Option<ActionConfigurationPropertyList>,
     #[serde(rename="inputArtifactDetails")]
     pub input_artifact_details: ArtifactDetails,
@@ -400,6 +444,7 @@ pub struct CreateCustomActionTypeInput {
     #[serde(rename="provider")]
     pub provider: ActionProvider,
     #[serde(rename="settings")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub settings: Option<ActionTypeSettings>,
     #[doc="<p>The version identifier of the custom action.</p>"]
     #[serde(rename="version")]
@@ -424,6 +469,7 @@ pub struct CreatePipelineInput {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct CreatePipelineOutput {
     #[serde(rename="pipeline")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub pipeline: Option<PipelineDeclaration>,
 }
 
@@ -435,12 +481,14 @@ pub struct CurrentRevision {
     pub change_identifier: RevisionChangeIdentifier,
     #[doc="<p>The date and time when the most recent revision of the artifact was created, in timestamp format.</p>"]
     #[serde(rename="created")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub created: Option<Time>,
     #[doc="<p>The revision ID of the current version of an artifact.</p>"]
     #[serde(rename="revision")]
     pub revision: Revision,
     #[doc="<p>The summary of the most recent revision of the artifact.</p>"]
     #[serde(rename="revisionSummary")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub revision_summary: Option<RevisionSummary>,
 }
 
@@ -518,9 +566,11 @@ pub type EncryptionKeyType = String;
 pub struct ErrorDetails {
     #[doc="<p>The system ID or error number code of the error.</p>"]
     #[serde(rename="code")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub code: Option<Code>,
     #[doc="<p>The text of the error message.</p>"]
     #[serde(rename="message")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<Message>,
 }
 
@@ -529,12 +579,15 @@ pub struct ErrorDetails {
 pub struct ExecutionDetails {
     #[doc="<p>The system-generated unique ID of this action used to identify this job worker in any external systems, such as AWS CodeDeploy.</p>"]
     #[serde(rename="externalExecutionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub external_execution_id: Option<ExecutionId>,
     #[doc="<p>The percentage of work completed on the action, represented on a scale of zero to one hundred percent.</p>"]
     #[serde(rename="percentComplete")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub percent_complete: Option<Percentage>,
     #[doc="<p>The summary of the current status of the actions.</p>"]
     #[serde(rename="summary")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub summary: Option<ExecutionSummary>,
 }
 
@@ -545,6 +598,7 @@ pub type ExecutionSummary = String;
 pub struct FailureDetails {
     #[doc="<p>The external ID of the run of the action that failed.</p>"]
     #[serde(rename="externalExecutionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub external_execution_id: Option<ExecutionId>,
     #[doc="<p>The message about the failure.</p>"]
     #[serde(rename="message")]
@@ -568,6 +622,7 @@ pub struct GetJobDetailsInput {
 pub struct GetJobDetailsOutput {
     #[doc="<p>The details of the job.</p> <note> <p>If AWSSessionCredentials is used, a long-running job can call GetJobDetails again to obtain new credentials.</p> </note>"]
     #[serde(rename="jobDetails")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub job_details: Option<JobDetails>,
 }
 
@@ -587,6 +642,7 @@ pub struct GetPipelineExecutionInput {
 pub struct GetPipelineExecutionOutput {
     #[doc="<p>Represents information about the execution of a pipeline.</p>"]
     #[serde(rename="pipelineExecution")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub pipeline_execution: Option<PipelineExecution>,
 }
 
@@ -598,6 +654,7 @@ pub struct GetPipelineInput {
     pub name: PipelineName,
     #[doc="<p>The version number of the pipeline. If you do not specify a version, defaults to the most current version.</p>"]
     #[serde(rename="version")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version: Option<PipelineVersion>,
 }
 
@@ -605,6 +662,7 @@ pub struct GetPipelineInput {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GetPipelineOutput {
     #[serde(rename="pipeline")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub pipeline: Option<PipelineDeclaration>,
 }
 
@@ -621,18 +679,23 @@ pub struct GetPipelineStateInput {
 pub struct GetPipelineStateOutput {
     #[doc="<p>The date and time the pipeline was created, in timestamp format.</p>"]
     #[serde(rename="created")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub created: Option<Timestamp>,
     #[doc="<p>The name of the pipeline for which you want to get the state.</p>"]
     #[serde(rename="pipelineName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub pipeline_name: Option<PipelineName>,
     #[doc="<p>The version number of the pipeline.</p> <note> <p>A newly-created pipeline is always assigned a version number of <code>1</code>.</p> </note>"]
     #[serde(rename="pipelineVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub pipeline_version: Option<PipelineVersion>,
     #[doc="<p>A list of the pipeline stage output information, including stage name, state, most recent run details, whether the stage is disabled, and other data.</p>"]
     #[serde(rename="stageStates")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub stage_states: Option<StageStateList>,
     #[doc="<p>The date and time the pipeline was last updated, in timestamp format.</p>"]
     #[serde(rename="updated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub updated: Option<Timestamp>,
 }
 
@@ -652,6 +715,7 @@ pub struct GetThirdPartyJobDetailsInput {
 pub struct GetThirdPartyJobDetailsOutput {
     #[doc="<p>The details of the job, including any protected values defined for the job.</p>"]
     #[serde(rename="jobDetails")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub job_details: Option<ThirdPartyJobDetails>,
 }
 
@@ -669,15 +733,19 @@ pub type InputArtifactList = Vec<InputArtifact>;
 pub struct Job {
     #[doc="<p>The ID of the AWS account to use when performing the job.</p>"]
     #[serde(rename="accountId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub account_id: Option<AccountId>,
     #[doc="<p>Additional data about a job.</p>"]
     #[serde(rename="data")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub data: Option<JobData>,
     #[doc="<p>The unique system-generated ID of the job.</p>"]
     #[serde(rename="id")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<JobId>,
     #[doc="<p>A system-generated random number that AWS CodePipeline uses to ensure that the job is being worked on by only one job worker. Use this number in an <a>AcknowledgeJob</a> request.</p>"]
     #[serde(rename="nonce")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub nonce: Option<Nonce>,
 }
 
@@ -685,23 +753,31 @@ pub struct Job {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct JobData {
     #[serde(rename="actionConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub action_configuration: Option<ActionConfiguration>,
     #[serde(rename="actionTypeId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub action_type_id: Option<ActionTypeId>,
     #[serde(rename="artifactCredentials")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub artifact_credentials: Option<AWSSessionCredentials>,
     #[doc="<p>A system-generated token, such as a AWS CodeDeploy deployment ID, that a job requires in order to continue the job asynchronously.</p>"]
     #[serde(rename="continuationToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub continuation_token: Option<ContinuationToken>,
     #[serde(rename="encryptionKey")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub encryption_key: Option<EncryptionKey>,
     #[doc="<p>The artifact supplied to the job.</p>"]
     #[serde(rename="inputArtifacts")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub input_artifacts: Option<ArtifactList>,
     #[doc="<p>The output of the job.</p>"]
     #[serde(rename="outputArtifacts")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub output_artifacts: Option<ArtifactList>,
     #[serde(rename="pipelineContext")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub pipeline_context: Option<PipelineContext>,
 }
 
@@ -710,11 +786,14 @@ pub struct JobData {
 pub struct JobDetails {
     #[doc="<p>The AWS account ID associated with the job.</p>"]
     #[serde(rename="accountId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub account_id: Option<AccountId>,
     #[serde(rename="data")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub data: Option<JobData>,
     #[doc="<p>The unique system-generated ID of the job.</p>"]
     #[serde(rename="id")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<JobId>,
 }
 
@@ -729,9 +808,11 @@ pub type LastUpdatedBy = String;
 pub struct ListActionTypesInput {
     #[doc="<p>Filters the list of action types to those created by a specified entity.</p>"]
     #[serde(rename="actionOwnerFilter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub action_owner_filter: Option<ActionOwner>,
     #[doc="<p>An identifier that was returned from the previous list action types call, which can be used to return the next set of action types in the list.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -743,6 +824,7 @@ pub struct ListActionTypesOutput {
     pub action_types: ActionTypeList,
     #[doc="<p>If the amount of returned information is significantly large, an identifier is also returned which can be used in a subsequent list action types call to return the next set of action types in the list.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -751,6 +833,7 @@ pub struct ListActionTypesOutput {
 pub struct ListPipelinesInput {
     #[doc="<p>An identifier that was returned from the previous list pipelines call, which can be used to return the next set of pipelines in the list.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -759,9 +842,11 @@ pub struct ListPipelinesInput {
 pub struct ListPipelinesOutput {
     #[doc="<p>If the amount of returned information is significantly large, an identifier is also returned which can be used in a subsequent list pipelines call to return the next set of pipelines in the list.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The list of pipelines.</p>"]
     #[serde(rename="pipelines")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub pipelines: Option<PipelineList>,
 }
 
@@ -785,12 +870,15 @@ pub type Percentage = i64;
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct PipelineContext {
     #[serde(rename="action")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub action: Option<ActionContext>,
     #[doc="<p>The name of the pipeline. This is a user-specified value. Pipeline names must be unique across all pipeline names under an Amazon Web Services account.</p>"]
     #[serde(rename="pipelineName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub pipeline_name: Option<PipelineName>,
     #[doc="<p>The stage of the pipeline.</p>"]
     #[serde(rename="stage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub stage: Option<StageContext>,
 }
 
@@ -810,6 +898,7 @@ pub struct PipelineDeclaration {
     pub stages: PipelineStageDeclarationList,
     #[doc="<p>The version number of the pipeline. A new pipeline always has a version number of 1. This number is automatically incremented when a pipeline is updated.</p>"]
     #[serde(rename="version")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version: Option<PipelineVersion>,
 }
 
@@ -818,18 +907,23 @@ pub struct PipelineDeclaration {
 pub struct PipelineExecution {
     #[doc="<p>A list of ArtifactRevision objects included in a pipeline execution.</p>"]
     #[serde(rename="artifactRevisions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub artifact_revisions: Option<ArtifactRevisionList>,
     #[doc="<p>The ID of the pipeline execution.</p>"]
     #[serde(rename="pipelineExecutionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub pipeline_execution_id: Option<PipelineExecutionId>,
     #[doc="<p>The name of the pipeline that was executed.</p>"]
     #[serde(rename="pipelineName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub pipeline_name: Option<PipelineName>,
     #[doc="<p>The version number of the pipeline that was executed.</p>"]
     #[serde(rename="pipelineVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub pipeline_version: Option<PipelineVersion>,
     #[doc="<p>The status of the pipeline execution.</p> <ul> <li> <p>InProgress: The pipeline execution is currently running.</p> </li> <li> <p>Succeeded: The pipeline execution completed successfully. </p> </li> <li> <p>Superseded: While this pipeline execution was waiting for the next stage to be completed, a newer pipeline execution caught up and continued through the pipeline instead. </p> </li> <li> <p>Failed: The pipeline did not complete successfully.</p> </li> </ul>"]
     #[serde(rename="status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<PipelineExecutionStatus>,
 }
 
@@ -843,15 +937,19 @@ pub type PipelineStageDeclarationList = Vec<StageDeclaration>;
 pub struct PipelineSummary {
     #[doc="<p>The date and time the pipeline was created, in timestamp format.</p>"]
     #[serde(rename="created")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub created: Option<Timestamp>,
     #[doc="<p>The name of the pipeline.</p>"]
     #[serde(rename="name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<PipelineName>,
     #[doc="<p>The date and time of the last update to the pipeline, in timestamp format.</p>"]
     #[serde(rename="updated")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub updated: Option<Timestamp>,
     #[doc="<p>The version number of the pipeline.</p>"]
     #[serde(rename="version")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version: Option<PipelineVersion>,
 }
 
@@ -863,9 +961,11 @@ pub struct PollForJobsInput {
     pub action_type_id: ActionTypeId,
     #[doc="<p>The maximum number of jobs to return in a poll for jobs call.</p>"]
     #[serde(rename="maxBatchSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_batch_size: Option<MaxBatchSize>,
     #[doc="<p>A map of property names and values. For an action type with no queryable properties, this value must be null or an empty map. For an action type with a queryable property, you must supply that property as a key in the map. Only jobs whose action configuration matches the mapped value will be returned.</p>"]
     #[serde(rename="queryParam")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub query_param: Option<QueryParamMap>,
 }
 
@@ -874,6 +974,7 @@ pub struct PollForJobsInput {
 pub struct PollForJobsOutput {
     #[doc="<p>Information about the jobs to take action on.</p>"]
     #[serde(rename="jobs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub jobs: Option<JobList>,
 }
 
@@ -884,6 +985,7 @@ pub struct PollForThirdPartyJobsInput {
     pub action_type_id: ActionTypeId,
     #[doc="<p>The maximum number of jobs to return in a poll for jobs call.</p>"]
     #[serde(rename="maxBatchSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_batch_size: Option<MaxBatchSize>,
 }
 
@@ -892,6 +994,7 @@ pub struct PollForThirdPartyJobsInput {
 pub struct PollForThirdPartyJobsOutput {
     #[doc="<p>Information about the jobs to take action on.</p>"]
     #[serde(rename="jobs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub jobs: Option<ThirdPartyJobList>,
 }
 
@@ -916,10 +1019,11 @@ pub struct PutActionRevisionInput {
 pub struct PutActionRevisionOutput {
     #[doc="<p>Indicates whether the artifact revision was previously used in an execution of the specified pipeline.</p>"]
     #[serde(rename="newRevision")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub new_revision: Option<Boolean>,
     #[doc="<p>The ID of the current workflow state of the pipeline.</p>"]
     #[serde(rename="pipelineExecutionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub pipeline_execution_id: Option<PipelineExecutionId>,
 }
 
@@ -948,6 +1052,7 @@ pub struct PutApprovalResultInput {
 pub struct PutApprovalResultOutput {
     #[doc="<p>The timestamp showing when the approval or rejection was submitted.</p>"]
     #[serde(rename="approvedAt")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub approved_at: Option<Timestamp>,
 }
 
@@ -967,12 +1072,15 @@ pub struct PutJobFailureResultInput {
 pub struct PutJobSuccessResultInput {
     #[doc="<p>A token generated by a job worker, such as an AWS CodeDeploy deployment ID, that a successful job provides to identify a custom action in progress. Future jobs will use this token in order to identify the running instance of the action. It can be reused to return additional information about the progress of the custom action. When the action is complete, no continuation token should be supplied.</p>"]
     #[serde(rename="continuationToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub continuation_token: Option<ContinuationToken>,
     #[doc="<p>The ID of the current revision of the artifact successfully worked upon by the job.</p>"]
     #[serde(rename="currentRevision")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub current_revision: Option<CurrentRevision>,
     #[doc="<p>The execution details of the successful job, such as the actions taken by the job worker.</p>"]
     #[serde(rename="executionDetails")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub execution_details: Option<ExecutionDetails>,
     #[doc="<p>The unique system-generated ID of the job that succeeded. This is the same ID returned from PollForJobs.</p>"]
     #[serde(rename="jobId")]
@@ -1000,10 +1108,13 @@ pub struct PutThirdPartyJobSuccessResultInput {
     pub client_token: ClientToken,
     #[doc="<p>A token generated by a job worker, such as an AWS CodeDeploy deployment ID, that a successful job provides to identify a partner action in progress. Future jobs will use this token in order to identify the running instance of the action. It can be reused to return additional information about the progress of the partner action. When the action is complete, no continuation token should be supplied.</p>"]
     #[serde(rename="continuationToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub continuation_token: Option<ContinuationToken>,
     #[serde(rename="currentRevision")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub current_revision: Option<CurrentRevision>,
     #[serde(rename="executionDetails")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub execution_details: Option<ExecutionDetails>,
     #[doc="<p>The ID of the job that successfully completed. This is the same ID returned from PollForThirdPartyJobs.</p>"]
     #[serde(rename="jobId")]
@@ -1034,6 +1145,7 @@ pub struct RetryStageExecutionInput {
 pub struct RetryStageExecutionOutput {
     #[doc="<p>The ID of the current workflow execution in the failed stage.</p>"]
     #[serde(rename="pipelineExecutionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub pipeline_execution_id: Option<PipelineExecutionId>,
 }
 
@@ -1063,6 +1175,7 @@ pub type StageBlockerDeclarationList = Vec<BlockerDeclaration>;
 pub struct StageContext {
     #[doc="<p>The name of the stage.</p>"]
     #[serde(rename="name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<StageName>,
 }
 
@@ -1074,6 +1187,7 @@ pub struct StageDeclaration {
     pub actions: StageActionDeclarationList,
     #[doc="<p>Reserved for future use.</p>"]
     #[serde(rename="blockers")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub blockers: Option<StageBlockerDeclarationList>,
     #[doc="<p>The name of the stage.</p>"]
     #[serde(rename="name")]
@@ -1099,15 +1213,19 @@ pub type StageRetryMode = String;
 pub struct StageState {
     #[doc="<p>The state of the stage.</p>"]
     #[serde(rename="actionStates")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub action_states: Option<ActionStateList>,
     #[doc="<p>The state of the inbound transition, which is either enabled or disabled.</p>"]
     #[serde(rename="inboundTransitionState")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub inbound_transition_state: Option<TransitionState>,
     #[doc="<p>Information about the latest execution in the stage, including its ID and status.</p>"]
     #[serde(rename="latestExecution")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub latest_execution: Option<StageExecution>,
     #[doc="<p>The name of the stage.</p>"]
     #[serde(rename="stageName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub stage_name: Option<StageName>,
 }
 
@@ -1126,6 +1244,7 @@ pub struct StartPipelineExecutionInput {
 pub struct StartPipelineExecutionOutput {
     #[doc="<p>The unique system-generated ID of the pipeline execution that was started.</p>"]
     #[serde(rename="pipelineExecutionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub pipeline_execution_id: Option<PipelineExecutionId>,
 }
 
@@ -1134,9 +1253,11 @@ pub struct StartPipelineExecutionOutput {
 pub struct ThirdPartyJob {
     #[doc="<p>The clientToken portion of the clientId and clientToken pair used to verify that the calling entity is allowed access to the job and its details.</p>"]
     #[serde(rename="clientId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_id: Option<ClientId>,
     #[doc="<p>The identifier used to identify the job in AWS CodePipeline.</p>"]
     #[serde(rename="jobId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub job_id: Option<JobId>,
 }
 
@@ -1144,24 +1265,32 @@ pub struct ThirdPartyJob {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ThirdPartyJobData {
     #[serde(rename="actionConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub action_configuration: Option<ActionConfiguration>,
     #[serde(rename="actionTypeId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub action_type_id: Option<ActionTypeId>,
     #[serde(rename="artifactCredentials")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub artifact_credentials: Option<AWSSessionCredentials>,
     #[doc="<p>A system-generated token, such as a AWS CodeDeploy deployment ID, that a job requires in order to continue the job asynchronously.</p>"]
     #[serde(rename="continuationToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub continuation_token: Option<ContinuationToken>,
     #[doc="<p>The encryption key used to encrypt and decrypt data in the artifact store for the pipeline, such as an AWS Key Management Service (AWS KMS) key. This is optional and might not be present.</p>"]
     #[serde(rename="encryptionKey")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub encryption_key: Option<EncryptionKey>,
     #[doc="<p>The name of the artifact that will be worked upon by the action, if any. This name might be system-generated, such as \"MyApp\", or might be defined by the user when the action is created. The input artifact name must match the name of an output artifact generated by an action in an earlier action or stage of the pipeline.</p>"]
     #[serde(rename="inputArtifacts")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub input_artifacts: Option<ArtifactList>,
     #[doc="<p>The name of the artifact that will be the result of the action, if any. This name might be system-generated, such as \"MyBuiltApp\", or might be defined by the user when the action is created.</p>"]
     #[serde(rename="outputArtifacts")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub output_artifacts: Option<ArtifactList>,
     #[serde(rename="pipelineContext")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub pipeline_context: Option<PipelineContext>,
 }
 
@@ -1170,12 +1299,15 @@ pub struct ThirdPartyJobData {
 pub struct ThirdPartyJobDetails {
     #[doc="<p>The data to be returned by the third party job worker.</p>"]
     #[serde(rename="data")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub data: Option<ThirdPartyJobData>,
     #[doc="<p>The identifier used to identify the job details in AWS CodePipeline.</p>"]
     #[serde(rename="id")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<ThirdPartyJobId>,
     #[doc="<p>A system-generated random number that AWS CodePipeline uses to ensure that the job is being worked on by only one job worker. Use this number in an <a>AcknowledgeThirdPartyJob</a> request.</p>"]
     #[serde(rename="nonce")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub nonce: Option<Nonce>,
 }
 
@@ -1188,16 +1320,19 @@ pub type Timestamp = f64;
 pub struct TransitionState {
     #[doc="<p>The user-specified reason why the transition between two stages of a pipeline was disabled.</p>"]
     #[serde(rename="disabledReason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub disabled_reason: Option<DisabledReason>,
     #[doc="<p>Whether the transition between stages is enabled (true) or disabled (false).</p>"]
     #[serde(rename="enabled")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub enabled: Option<Enabled>,
     #[doc="<p>The timestamp when the transition state was last changed.</p>"]
     #[serde(rename="lastChangedAt")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_changed_at: Option<LastChangedAt>,
     #[doc="<p>The ID of the user who last changed the transition state.</p>"]
     #[serde(rename="lastChangedBy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_changed_by: Option<LastChangedBy>,
 }
 
@@ -1214,6 +1349,7 @@ pub struct UpdatePipelineInput {
 pub struct UpdatePipelineOutput {
     #[doc="<p>The structure of the updated pipeline.</p>"]
     #[serde(rename="pipeline")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub pipeline: Option<PipelineDeclaration>,
 }
 

@@ -29,6 +29,7 @@ pub struct CreateExportTaskRequest {
     pub destination: ExportDestinationBucket,
     #[doc="<p>The prefix used as the start of the key for every object exported. If you don't specify a value, the default is <code>exportedlogs</code>.</p>"]
     #[serde(rename="destinationPrefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub destination_prefix: Option<ExportDestinationPrefix>,
     #[doc="<p>The start time of the range for the request, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. Events with a timestamp earlier than this time are not exported.</p>"]
     #[serde(rename="from")]
@@ -38,9 +39,11 @@ pub struct CreateExportTaskRequest {
     pub log_group_name: LogGroupName,
     #[doc="<p>Export only log streams that match the provided prefix. If you don't specify a value, no prefix filter is applied.</p>"]
     #[serde(rename="logStreamNamePrefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub log_stream_name_prefix: Option<LogStreamName>,
     #[doc="<p>The name of the export task.</p>"]
     #[serde(rename="taskName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_name: Option<ExportTaskName>,
     #[doc="<p>The end time of the range for the request, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. Events with a timestamp later than this time are not exported.</p>"]
     #[serde(rename="to")]
@@ -51,6 +54,7 @@ pub struct CreateExportTaskRequest {
 pub struct CreateExportTaskResponse {
     #[doc="<p>The ID of the export task.</p>"]
     #[serde(rename="taskId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_id: Option<ExportTaskId>,
 }
 
@@ -61,6 +65,7 @@ pub struct CreateLogGroupRequest {
     pub log_group_name: LogGroupName,
     #[doc="<p>The key-value pairs to use for the tags.</p>"]
     #[serde(rename="tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Tags>,
 }
 
@@ -133,12 +138,15 @@ pub type Descending = bool;
 pub struct DescribeDestinationsRequest {
     #[doc="<p>The prefix to match. If you don't specify a value, no prefix filter is applied.</p>"]
     #[serde(rename="DestinationNamePrefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub destination_name_prefix: Option<DestinationName>,
     #[doc="<p>The maximum number of items returned. If you don't specify a value, the default is up to 50 items.</p>"]
     #[serde(rename="limit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub limit: Option<DescribeLimit>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -146,8 +154,10 @@ pub struct DescribeDestinationsRequest {
 pub struct DescribeDestinationsResponse {
     #[doc="<p>The destinations.</p>"]
     #[serde(rename="destinations")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub destinations: Option<Destinations>,
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -155,15 +165,19 @@ pub struct DescribeDestinationsResponse {
 pub struct DescribeExportTasksRequest {
     #[doc="<p>The maximum number of items returned. If you don't specify a value, the default is up to 50 items.</p>"]
     #[serde(rename="limit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub limit: Option<DescribeLimit>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The status code of the export task. Specifying a status code filters the results to zero or more export tasks.</p>"]
     #[serde(rename="statusCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status_code: Option<ExportTaskStatusCode>,
     #[doc="<p>The ID of the export task. Specifying a task ID filters the results to zero or one export tasks.</p>"]
     #[serde(rename="taskId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_id: Option<ExportTaskId>,
 }
 
@@ -171,8 +185,10 @@ pub struct DescribeExportTasksRequest {
 pub struct DescribeExportTasksResponse {
     #[doc="<p>The export tasks.</p>"]
     #[serde(rename="exportTasks")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub export_tasks: Option<ExportTasks>,
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -181,12 +197,15 @@ pub type DescribeLimit = i64;
 pub struct DescribeLogGroupsRequest {
     #[doc="<p>The maximum number of items returned. If you don't specify a value, the default is up to 50 items.</p>"]
     #[serde(rename="limit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub limit: Option<DescribeLimit>,
     #[doc="<p>The prefix to match.</p>"]
     #[serde(rename="logGroupNamePrefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub log_group_name_prefix: Option<LogGroupName>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -194,8 +213,10 @@ pub struct DescribeLogGroupsRequest {
 pub struct DescribeLogGroupsResponse {
     #[doc="<p>The log groups.</p>"]
     #[serde(rename="logGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub log_groups: Option<LogGroups>,
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -203,22 +224,26 @@ pub struct DescribeLogGroupsResponse {
 pub struct DescribeLogStreamsRequest {
     #[doc="<p>If the value is true, results are returned in descending order. If the value is to false, results are returned in ascending order. The default value is false.</p>"]
     #[serde(rename="descending")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub descending: Option<Descending>,
     #[doc="<p>The maximum number of items returned. If you don't specify a value, the default is up to 50 items.</p>"]
     #[serde(rename="limit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub limit: Option<DescribeLimit>,
     #[doc="<p>The name of the log group.</p>"]
     #[serde(rename="logGroupName")]
     pub log_group_name: LogGroupName,
     #[doc="<p>The prefix to match.</p> <p>You cannot specify this parameter if <code>orderBy</code> is <code>LastEventTime</code>.</p>"]
     #[serde(rename="logStreamNamePrefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub log_stream_name_prefix: Option<LogStreamName>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>If the value is <code>LogStreamName</code>, the results are ordered by log stream name. If the value is <code>LastEventTime</code>, the results are ordered by the event time. The default value is <code>LogStreamName</code>.</p> <p>If you order the results by event time, you cannot specify the <code>logStreamNamePrefix</code> parameter.</p> <p>lastEventTimestamp represents the time of the most recent log event in the log stream in CloudWatch Logs. This number is expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. lastEventTimeStamp updates on an eventual consistency basis. It typically updates in less than an hour from ingestion, but may take longer in some rare situations.</p>"]
     #[serde(rename="orderBy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub order_by: Option<OrderBy>,
 }
 
@@ -226,8 +251,10 @@ pub struct DescribeLogStreamsRequest {
 pub struct DescribeLogStreamsResponse {
     #[doc="<p>The log streams.</p>"]
     #[serde(rename="logStreams")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub log_streams: Option<LogStreams>,
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -235,21 +262,27 @@ pub struct DescribeLogStreamsResponse {
 pub struct DescribeMetricFiltersRequest {
     #[doc="<p>The prefix to match.</p>"]
     #[serde(rename="filterNamePrefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filter_name_prefix: Option<FilterName>,
     #[doc="<p>The maximum number of items returned. If you don't specify a value, the default is up to 50 items.</p>"]
     #[serde(rename="limit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub limit: Option<DescribeLimit>,
     #[doc="<p>The name of the log group.</p>"]
     #[serde(rename="logGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub log_group_name: Option<LogGroupName>,
     #[doc="<p>The name of the CloudWatch metric.</p>"]
     #[serde(rename="metricName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub metric_name: Option<MetricName>,
     #[doc="<p>The namespace of the CloudWatch metric.</p>"]
     #[serde(rename="metricNamespace")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub metric_namespace: Option<MetricNamespace>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -257,8 +290,10 @@ pub struct DescribeMetricFiltersRequest {
 pub struct DescribeMetricFiltersResponse {
     #[doc="<p>The metric filters.</p>"]
     #[serde(rename="metricFilters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub metric_filters: Option<MetricFilters>,
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -266,24 +301,29 @@ pub struct DescribeMetricFiltersResponse {
 pub struct DescribeSubscriptionFiltersRequest {
     #[doc="<p>The prefix to match. If you don't specify a value, no prefix filter is applied.</p>"]
     #[serde(rename="filterNamePrefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filter_name_prefix: Option<FilterName>,
     #[doc="<p>The maximum number of items returned. If you don't specify a value, the default is up to 50 items.</p>"]
     #[serde(rename="limit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub limit: Option<DescribeLimit>,
     #[doc="<p>The name of the log group.</p>"]
     #[serde(rename="logGroupName")]
     pub log_group_name: LogGroupName,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DescribeSubscriptionFiltersResponse {
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The subscription filters.</p>"]
     #[serde(rename="subscriptionFilters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub subscription_filters: Option<SubscriptionFilters>,
 }
 
@@ -292,21 +332,27 @@ pub struct DescribeSubscriptionFiltersResponse {
 pub struct Destination {
     #[doc="<p>An IAM policy document that governs which AWS accounts can create subscription filters against this destination.</p>"]
     #[serde(rename="accessPolicy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub access_policy: Option<AccessPolicy>,
     #[doc="<p>The ARN of this destination.</p>"]
     #[serde(rename="arn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub arn: Option<Arn>,
     #[doc="<p>The creation time of the destination, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
     #[serde(rename="creationTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub creation_time: Option<Timestamp>,
     #[doc="<p>The name of the destination.</p>"]
     #[serde(rename="destinationName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub destination_name: Option<DestinationName>,
     #[doc="<p>A role for impersonation, used when delivering log events to the target.</p>"]
     #[serde(rename="roleArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub role_arn: Option<RoleArn>,
     #[doc="<p>The Amazon Resource Name (ARN) of the physical target where the log events will be delivered (for example, a Kinesis stream).</p>"]
     #[serde(rename="targetArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_arn: Option<TargetArn>,
 }
 
@@ -325,30 +371,39 @@ pub type ExportDestinationPrefix = String;
 pub struct ExportTask {
     #[doc="<p>The name of Amazon S3 bucket to which the log data was exported.</p>"]
     #[serde(rename="destination")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub destination: Option<ExportDestinationBucket>,
     #[doc="<p>The prefix that was used as the start of Amazon S3 key for every object exported.</p>"]
     #[serde(rename="destinationPrefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub destination_prefix: Option<ExportDestinationPrefix>,
     #[doc="<p>Execution info about the export task.</p>"]
     #[serde(rename="executionInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub execution_info: Option<ExportTaskExecutionInfo>,
     #[doc="<p>The start time, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. Events with a timestamp prior to this time are not exported.</p>"]
     #[serde(rename="from")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub from: Option<Timestamp>,
     #[doc="<p>The name of the log group from which logs data was exported.</p>"]
     #[serde(rename="logGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub log_group_name: Option<LogGroupName>,
     #[doc="<p>The status of the export task.</p>"]
     #[serde(rename="status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<ExportTaskStatus>,
     #[doc="<p>The ID of the export task.</p>"]
     #[serde(rename="taskId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_id: Option<ExportTaskId>,
     #[doc="<p>The name of the export task.</p>"]
     #[serde(rename="taskName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_name: Option<ExportTaskName>,
     #[doc="<p>The end time, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. Events with a timestamp later than this time are not exported.</p>"]
     #[serde(rename="to")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub to: Option<Timestamp>,
 }
 
@@ -357,9 +412,11 @@ pub struct ExportTask {
 pub struct ExportTaskExecutionInfo {
     #[doc="<p>The completion time of the export task, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
     #[serde(rename="completionTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub completion_time: Option<Timestamp>,
     #[doc="<p>The creation time of the export task, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
     #[serde(rename="creationTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub creation_time: Option<Timestamp>,
 }
 
@@ -370,9 +427,11 @@ pub type ExportTaskName = String;
 pub struct ExportTaskStatus {
     #[doc="<p>The status code of the export task.</p>"]
     #[serde(rename="code")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub code: Option<ExportTaskStatusCode>,
     #[doc="<p>The status message related to the status code.</p>"]
     #[serde(rename="message")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<ExportTaskStatusMessage>,
 }
 
@@ -385,28 +444,34 @@ pub type FilterCount = i64;
 pub struct FilterLogEventsRequest {
     #[doc="<p>The end of the time range, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. Events with a timestamp later than this time are not returned.</p>"]
     #[serde(rename="endTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub end_time: Option<Timestamp>,
     #[doc="<p>The filter pattern to use. If not provided, all the events are matched.</p>"]
     #[serde(rename="filterPattern")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filter_pattern: Option<FilterPattern>,
     #[doc="<p>If the value is true, the operation makes a best effort to provide responses that contain events from multiple log streams within the log group interleaved in a single response. If the value is false all the matched log events in the first log stream are searched first, then those in the next log stream, and so on. The default is false.</p>"]
     #[serde(rename="interleaved")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub interleaved: Option<Interleaved>,
     #[doc="<p>The maximum number of events to return. The default is 10,000 events.</p>"]
     #[serde(rename="limit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub limit: Option<EventsLimit>,
     #[doc="<p>The name of the log group.</p>"]
     #[serde(rename="logGroupName")]
     pub log_group_name: LogGroupName,
     #[doc="<p>Optional list of log stream names.</p>"]
     #[serde(rename="logStreamNames")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub log_stream_names: Option<InputLogStreamNames>,
     #[doc="<p>The token for the next set of events to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The start of the time range, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. Events with a timestamp prior to this time are not returned.</p>"]
     #[serde(rename="startTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_time: Option<Timestamp>,
 }
 
@@ -414,12 +479,15 @@ pub struct FilterLogEventsRequest {
 pub struct FilterLogEventsResponse {
     #[doc="<p>The matched events.</p>"]
     #[serde(rename="events")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub events: Option<FilteredLogEvents>,
     #[doc="<p>The token to use when requesting the next set of items. The token expires after 24 hours.</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>Indicates which log streams have been searched and whether each has been searched completely.</p>"]
     #[serde(rename="searchedLogStreams")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub searched_log_streams: Option<SearchedLogStreams>,
 }
 
@@ -431,18 +499,23 @@ pub type FilterPattern = String;
 pub struct FilteredLogEvent {
     #[doc="<p>The ID of the event.</p>"]
     #[serde(rename="eventId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub event_id: Option<EventId>,
     #[doc="<p>The time the event was ingested, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
     #[serde(rename="ingestionTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ingestion_time: Option<Timestamp>,
     #[doc="<p>The name of the log stream this event belongs to.</p>"]
     #[serde(rename="logStreamName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub log_stream_name: Option<LogStreamName>,
     #[doc="<p>The data contained in the log event.</p>"]
     #[serde(rename="message")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<EventMessage>,
     #[doc="<p>The time the event occurred, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
     #[serde(rename="timestamp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub timestamp: Option<Timestamp>,
 }
 
@@ -451,9 +524,11 @@ pub type FilteredLogEvents = Vec<FilteredLogEvent>;
 pub struct GetLogEventsRequest {
     #[doc="<p>The end of the time range, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. Events with a timestamp later than this time are not included.</p>"]
     #[serde(rename="endTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub end_time: Option<Timestamp>,
     #[doc="<p>The maximum number of log events returned. If you don't specify a value, the maximum is as many log events as can fit in a response size of 1MB, up to 10,000 log events.</p>"]
     #[serde(rename="limit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub limit: Option<EventsLimit>,
     #[doc="<p>The name of the log group.</p>"]
     #[serde(rename="logGroupName")]
@@ -463,13 +538,15 @@ pub struct GetLogEventsRequest {
     pub log_stream_name: LogStreamName,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="nextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>If the value is true, the earliest log events are returned first. If the value is false, the latest log events are returned first. The default value is false.</p>"]
     #[serde(rename="startFromHead")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_from_head: Option<StartFromHead>,
     #[doc="<p>The start of the time range, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. Events with a timestamp earlier than this time are not included.</p>"]
     #[serde(rename="startTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_time: Option<Timestamp>,
 }
 
@@ -477,12 +554,15 @@ pub struct GetLogEventsRequest {
 pub struct GetLogEventsResponse {
     #[doc="<p>The events.</p>"]
     #[serde(rename="events")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub events: Option<OutputLogEvents>,
     #[doc="<p>The token for the next set of items in the backward direction. The token expires after 24 hours.</p>"]
     #[serde(rename="nextBackwardToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_backward_token: Option<NextToken>,
     #[doc="<p>The token for the next set of items in the forward direction. The token expires after 24 hours.</p>"]
     #[serde(rename="nextForwardToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_forward_token: Option<NextToken>,
 }
 
@@ -511,6 +591,7 @@ pub struct ListTagsLogGroupRequest {
 pub struct ListTagsLogGroupResponse {
     #[doc="<p>The tags.</p>"]
     #[serde(rename="tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Tags>,
 }
 
@@ -520,20 +601,26 @@ pub type LogEventIndex = i64;
 pub struct LogGroup {
     #[doc="<p>The Amazon Resource Name (ARN) of the log group.</p>"]
     #[serde(rename="arn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub arn: Option<Arn>,
     #[doc="<p>The creation time of the log group, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
     #[serde(rename="creationTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub creation_time: Option<Timestamp>,
     #[doc="<p>The name of the log group.</p>"]
     #[serde(rename="logGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub log_group_name: Option<LogGroupName>,
     #[doc="<p>The number of metric filters.</p>"]
     #[serde(rename="metricFilterCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub metric_filter_count: Option<FilterCount>,
     #[serde(rename="retentionInDays")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub retention_in_days: Option<Days>,
     #[doc="<p>The number of bytes stored.</p>"]
     #[serde(rename="storedBytes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub stored_bytes: Option<StoredBytes>,
 }
 
@@ -544,27 +631,35 @@ pub type LogGroups = Vec<LogGroup>;
 pub struct LogStream {
     #[doc="<p>The Amazon Resource Name (ARN) of the log stream.</p>"]
     #[serde(rename="arn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub arn: Option<Arn>,
     #[doc="<p>The creation time of the stream, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
     #[serde(rename="creationTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub creation_time: Option<Timestamp>,
     #[doc="<p>The time of the first event, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
     #[serde(rename="firstEventTimestamp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub first_event_timestamp: Option<Timestamp>,
     #[doc="<p> the time of the most recent log event in the log stream in CloudWatch Logs. This number is expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. lastEventTime updates on an eventual consistency basis. It typically updates in less than an hour from ingestion, but may take longer in some rare situations.</p>"]
     #[serde(rename="lastEventTimestamp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_event_timestamp: Option<Timestamp>,
     #[doc="<p>The ingestion time, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
     #[serde(rename="lastIngestionTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_ingestion_time: Option<Timestamp>,
     #[doc="<p>The name of the log stream.</p>"]
     #[serde(rename="logStreamName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub log_stream_name: Option<LogStreamName>,
     #[doc="<p>The number of bytes stored.</p>"]
     #[serde(rename="storedBytes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub stored_bytes: Option<StoredBytes>,
     #[doc="<p>The sequence token.</p>"]
     #[serde(rename="uploadSequenceToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub upload_sequence_token: Option<SequenceToken>,
 }
 
@@ -576,17 +671,22 @@ pub type LogStreams = Vec<LogStream>;
 pub struct MetricFilter {
     #[doc="<p>The creation time of the metric filter, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
     #[serde(rename="creationTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub creation_time: Option<Timestamp>,
     #[doc="<p>The name of the metric filter.</p>"]
     #[serde(rename="filterName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filter_name: Option<FilterName>,
     #[serde(rename="filterPattern")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filter_pattern: Option<FilterPattern>,
     #[doc="<p>The name of the log group.</p>"]
     #[serde(rename="logGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub log_group_name: Option<LogGroupName>,
     #[doc="<p>The metric transformations.</p>"]
     #[serde(rename="metricTransformations")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub metric_transformations: Option<MetricTransformations>,
 }
 
@@ -595,12 +695,15 @@ pub struct MetricFilter {
 pub struct MetricFilterMatchRecord {
     #[doc="<p>The raw event data.</p>"]
     #[serde(rename="eventMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub event_message: Option<EventMessage>,
     #[doc="<p>The event number.</p>"]
     #[serde(rename="eventNumber")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub event_number: Option<EventNumber>,
     #[doc="<p>The values extracted from the event data by the filter.</p>"]
     #[serde(rename="extractedValues")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub extracted_values: Option<ExtractedValues>,
 }
 
@@ -614,6 +717,7 @@ pub type MetricNamespace = String;
 pub struct MetricTransformation {
     #[doc="<p>(Optional) The value to emit when a filter pattern does not match a log event. This value can be null.</p>"]
     #[serde(rename="defaultValue")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_value: Option<DefaultValue>,
     #[doc="<p>The name of the CloudWatch metric.</p>"]
     #[serde(rename="metricName")]
@@ -637,12 +741,15 @@ pub type OrderBy = String;
 pub struct OutputLogEvent {
     #[doc="<p>The time the event was ingested, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
     #[serde(rename="ingestionTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ingestion_time: Option<Timestamp>,
     #[doc="<p>The data contained in the log event.</p>"]
     #[serde(rename="message")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<EventMessage>,
     #[doc="<p>The time the event occurred, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
     #[serde(rename="timestamp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub timestamp: Option<Timestamp>,
 }
 
@@ -674,6 +781,7 @@ pub struct PutDestinationRequest {
 pub struct PutDestinationResponse {
     #[doc="<p>The destination.</p>"]
     #[serde(rename="destination")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub destination: Option<Destination>,
 }
 
@@ -690,6 +798,7 @@ pub struct PutLogEventsRequest {
     pub log_stream_name: LogStreamName,
     #[doc="<p>The sequence token.</p>"]
     #[serde(rename="sequenceToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sequence_token: Option<SequenceToken>,
 }
 
@@ -697,9 +806,11 @@ pub struct PutLogEventsRequest {
 pub struct PutLogEventsResponse {
     #[doc="<p>The next sequence token.</p>"]
     #[serde(rename="nextSequenceToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_sequence_token: Option<SequenceToken>,
     #[doc="<p>The rejected events.</p>"]
     #[serde(rename="rejectedLogEventsInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rejected_log_events_info: Option<RejectedLogEventsInfo>,
 }
 
@@ -735,6 +846,7 @@ pub struct PutSubscriptionFilterRequest {
     pub destination_arn: DestinationArn,
     #[doc="<p>The method used to distribute log data to the destination, when the destination is an Amazon Kinesis stream. By default, log data is grouped by log stream. For a more even distribution, you can group log data randomly.</p>"]
     #[serde(rename="distribution")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub distribution: Option<Distribution>,
     #[doc="<p>A name for the subscription filter. If you are updating an existing filter, you must specify the correct name in <code>filterName</code>. Otherwise, the call will fail because you cannot associate a second filter with a log group. To find the name of the filter currently associated with a log group, use <a>DescribeSubscriptionFilters</a>.</p>"]
     #[serde(rename="filterName")]
@@ -747,6 +859,7 @@ pub struct PutSubscriptionFilterRequest {
     pub log_group_name: LogGroupName,
     #[doc="<p>The ARN of an IAM role that grants CloudWatch Logs permissions to deliver ingested log events to the destination stream. You don't need to provide the ARN when you are working with a logical destination for cross-account delivery.</p>"]
     #[serde(rename="roleArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub role_arn: Option<RoleArn>,
 }
 
@@ -755,12 +868,15 @@ pub struct PutSubscriptionFilterRequest {
 pub struct RejectedLogEventsInfo {
     #[doc="<p>The expired log events.</p>"]
     #[serde(rename="expiredLogEventEndIndex")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub expired_log_event_end_index: Option<LogEventIndex>,
     #[doc="<p>The log events that are too new.</p>"]
     #[serde(rename="tooNewLogEventStartIndex")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub too_new_log_event_start_index: Option<LogEventIndex>,
     #[doc="<p>The log events that are too old.</p>"]
     #[serde(rename="tooOldLogEventEndIndex")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub too_old_log_event_end_index: Option<LogEventIndex>,
 }
 
@@ -770,10 +886,11 @@ pub type RoleArn = String;
 pub struct SearchedLogStream {
     #[doc="<p>The name of the log stream.</p>"]
     #[serde(rename="logStreamName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub log_stream_name: Option<LogStreamName>,
     #[doc="<p>Indicates whether all the events in this log stream were searched.</p>"]
     #[serde(rename="searchedCompletely")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub searched_completely: Option<LogStreamSearchedCompletely>,
 }
 
@@ -786,23 +903,30 @@ pub type StoredBytes = i64;
 pub struct SubscriptionFilter {
     #[doc="<p>The creation time of the subscription filter, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
     #[serde(rename="creationTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub creation_time: Option<Timestamp>,
     #[doc="<p>The Amazon Resource Name (ARN) of the destination.</p>"]
     #[serde(rename="destinationArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub destination_arn: Option<DestinationArn>,
     #[doc="<p>The method used to distribute log data to the destination, when the destination is an Amazon Kinesis stream.</p>"]
     #[serde(rename="distribution")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub distribution: Option<Distribution>,
     #[doc="<p>The name of the subscription filter.</p>"]
     #[serde(rename="filterName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filter_name: Option<FilterName>,
     #[serde(rename="filterPattern")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filter_pattern: Option<FilterPattern>,
     #[doc="<p>The name of the log group.</p>"]
     #[serde(rename="logGroupName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub log_group_name: Option<LogGroupName>,
     #[doc="<p/>"]
     #[serde(rename="roleArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub role_arn: Option<RoleArn>,
 }
 
@@ -836,6 +960,7 @@ pub struct TestMetricFilterRequest {
 pub struct TestMetricFilterResponse {
     #[doc="<p>The matched events.</p>"]
     #[serde(rename="matches")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub matches: Option<MetricFilterMatches>,
 }
 

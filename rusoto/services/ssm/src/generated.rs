@@ -20,31 +20,39 @@ pub type AccountIdList = Vec<AccountId>;
 pub struct Activation {
     #[doc="<p>The ID created by Systems Manager when you submitted the activation.</p>"]
     #[serde(rename="ActivationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub activation_id: Option<ActivationId>,
     #[doc="<p>The date the activation was created.</p>"]
     #[serde(rename="CreatedDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub created_date: Option<CreatedDate>,
     #[doc="<p>A name for the managed instance when it is created.</p>"]
     #[serde(rename="DefaultInstanceName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_instance_name: Option<DefaultInstanceName>,
     #[doc="<p>A user defined description of the activation.</p>"]
     #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<ActivationDescription>,
     #[doc="<p>The date when this activation can no longer be used to register managed instances.</p>"]
     #[serde(rename="ExpirationDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub expiration_date: Option<ExpirationDate>,
     #[doc="<p>Whether or not the activation is expired.</p>"]
     #[serde(rename="Expired")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub expired: Option<Boolean>,
     #[doc="<p>The Amazon Identity and Access Management (IAM) role to assign to the managed instance.</p>"]
     #[serde(rename="IamRole")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub iam_role: Option<IamRole>,
     #[doc="<p>The maximum number of managed instances that can be registered using this activation.</p>"]
     #[serde(rename="RegistrationLimit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub registration_limit: Option<RegistrationLimit>,
     #[doc="<p>The number of managed instances already registered with this activation.</p>"]
     #[serde(rename="RegistrationsCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub registrations_count: Option<RegistrationsCount>,
 }
 
@@ -75,27 +83,35 @@ pub type ApproveAfterDays = i64;
 pub struct Association {
     #[doc="<p>The ID created by the system when you create an association. An association is a binding between a document and a set of targets with a schedule.</p>"]
     #[serde(rename="AssociationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub association_id: Option<AssociationId>,
     #[doc="<p>The version of the document used in the association.</p>"]
     #[serde(rename="DocumentVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub document_version: Option<DocumentVersion>,
     #[doc="<p>The ID of the instance.</p>"]
     #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<InstanceId>,
     #[doc="<p>The date on which the association was last run.</p>"]
     #[serde(rename="LastExecutionDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_execution_date: Option<DateTime>,
     #[doc="<p>The name of the SSM document.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<DocumentName>,
     #[doc="<p>Information about the association.</p>"]
     #[serde(rename="Overview")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub overview: Option<AssociationOverview>,
     #[doc="<p>A cron expression that specifies a schedule when the association runs.</p>"]
     #[serde(rename="ScheduleExpression")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub schedule_expression: Option<ScheduleExpression>,
     #[doc="<p>The instances targeted by the request to create an association. </p>"]
     #[serde(rename="Targets")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub targets: Option<Targets>,
 }
 
@@ -104,45 +120,59 @@ pub struct Association {
 pub struct AssociationDescription {
     #[doc="<p>The association ID.</p>"]
     #[serde(rename="AssociationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub association_id: Option<AssociationId>,
     #[doc="<p>The date when the association was made.</p>"]
     #[serde(rename="Date")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub date: Option<DateTime>,
     #[doc="<p>The document version.</p>"]
     #[serde(rename="DocumentVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub document_version: Option<DocumentVersion>,
     #[doc="<p>The ID of the instance.</p>"]
     #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<InstanceId>,
     #[doc="<p>The date on which the association was last run.</p>"]
     #[serde(rename="LastExecutionDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_execution_date: Option<DateTime>,
     #[doc="<p>The last date on which the association was successfully run.</p>"]
     #[serde(rename="LastSuccessfulExecutionDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_successful_execution_date: Option<DateTime>,
     #[doc="<p>The date when the association was last updated.</p>"]
     #[serde(rename="LastUpdateAssociationDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_update_association_date: Option<DateTime>,
     #[doc="<p>The name of the SSM document.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<DocumentName>,
     #[doc="<p>An Amazon S3 bucket where you want to store the output details of the request.</p>"]
     #[serde(rename="OutputLocation")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub output_location: Option<InstanceAssociationOutputLocation>,
     #[doc="<p>Information about the association.</p>"]
     #[serde(rename="Overview")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub overview: Option<AssociationOverview>,
     #[doc="<p>A description of the parameters for a document. </p>"]
     #[serde(rename="Parameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameters: Option<Parameters>,
     #[doc="<p>A cron expression that specifies a schedule when the association runs.</p>"]
     #[serde(rename="ScheduleExpression")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub schedule_expression: Option<ScheduleExpression>,
     #[doc="<p>The association status.</p>"]
     #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<AssociationStatus>,
     #[doc="<p>The instances targeted by the request. </p>"]
     #[serde(rename="Targets")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub targets: Option<Targets>,
 }
 
@@ -168,12 +198,15 @@ pub type AssociationList = Vec<Association>;
 pub struct AssociationOverview {
     #[doc="<p>Returns the number of targets for the association status. For example, if you created an association with two instances, and one of them was successful, this would return the count of instances by status.</p>"]
     #[serde(rename="AssociationStatusAggregatedCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub association_status_aggregated_count: Option<AssociationStatusAggregatedCount>,
     #[doc="<p>A detailed status of the association.</p>"]
     #[serde(rename="DetailedStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub detailed_status: Option<StatusName>,
     #[doc="<p>The status of the association. Status can be: Pending, Success, or Failed.</p>"]
     #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<StatusName>,
 }
 
@@ -182,6 +215,7 @@ pub struct AssociationOverview {
 pub struct AssociationStatus {
     #[doc="<p>A user-defined string.</p>"]
     #[serde(rename="AdditionalInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub additional_info: Option<StatusAdditionalInfo>,
     #[doc="<p>The date when the status changed.</p>"]
     #[serde(rename="Date")]
@@ -204,33 +238,43 @@ pub type AutomationActionName = String;
 pub struct AutomationExecution {
     #[doc="<p>The execution ID.</p>"]
     #[serde(rename="AutomationExecutionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub automation_execution_id: Option<AutomationExecutionId>,
     #[doc="<p>The execution status of the Automation.</p>"]
     #[serde(rename="AutomationExecutionStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub automation_execution_status: Option<AutomationExecutionStatus>,
     #[doc="<p>The name of the Automation document used during the execution.</p>"]
     #[serde(rename="DocumentName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub document_name: Option<DocumentName>,
     #[doc="<p>The version of the document to use during execution.</p>"]
     #[serde(rename="DocumentVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub document_version: Option<DocumentVersion>,
     #[doc="<p>The time the execution finished.</p>"]
     #[serde(rename="ExecutionEndTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub execution_end_time: Option<DateTime>,
     #[doc="<p>The time the execution started.</p>"]
     #[serde(rename="ExecutionStartTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub execution_start_time: Option<DateTime>,
     #[doc="<p>A message describing why an execution has failed, if the status is set to Failed.</p>"]
     #[serde(rename="FailureMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub failure_message: Option<String>,
     #[doc="<p>The list of execution outputs as defined in the automation document.</p>"]
     #[serde(rename="Outputs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub outputs: Option<AutomationParameterMap>,
     #[doc="<p>The key-value map of execution parameters, which were supplied when calling StartAutomationExecution.</p>"]
     #[serde(rename="Parameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameters: Option<AutomationParameterMap>,
     #[doc="<p>A list of details about the current state of all steps that comprise an execution. An Automation document contains a list of steps that are executed in order.</p>"]
     #[serde(rename="StepExecutions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub step_executions: Option<StepExecutionList>,
 }
 
@@ -255,30 +299,39 @@ pub type AutomationExecutionId = String;
 pub struct AutomationExecutionMetadata {
     #[doc="<p>The execution ID.</p>"]
     #[serde(rename="AutomationExecutionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub automation_execution_id: Option<AutomationExecutionId>,
     #[doc="<p>The status of the execution. Valid values include: Running, Succeeded, Failed, Timed out, or Cancelled.</p>"]
     #[serde(rename="AutomationExecutionStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub automation_execution_status: Option<AutomationExecutionStatus>,
     #[doc="<p>The name of the Automation document used during execution.</p>"]
     #[serde(rename="DocumentName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub document_name: Option<DocumentName>,
     #[doc="<p>The document version used during the execution.</p>"]
     #[serde(rename="DocumentVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub document_version: Option<DocumentVersion>,
     #[doc="<p>The IAM role ARN of the user who executed the Automation.</p>"]
     #[serde(rename="ExecutedBy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub executed_by: Option<String>,
     #[doc="<p>The time the execution finished. This is not populated if the execution is still in progress.</p>"]
     #[serde(rename="ExecutionEndTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub execution_end_time: Option<DateTime>,
     #[doc="<p>The time the execution started.&gt;</p>"]
     #[serde(rename="ExecutionStartTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub execution_start_time: Option<DateTime>,
     #[doc="<p>An Amazon S3 bucket where execution information is stored.</p>"]
     #[serde(rename="LogFile")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub log_file: Option<String>,
     #[doc="<p>The list of execution outputs as defined in the Automation document.</p>"]
     #[serde(rename="Outputs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub outputs: Option<AutomationParameterMap>,
 }
 
@@ -302,6 +355,7 @@ pub struct CancelCommandRequest {
     pub command_id: CommandId,
     #[doc="<p>(Optional) A list of instance IDs on which you want to cancel the command. If not provided, the command is canceled on every instance on which it was requested.</p>"]
     #[serde(rename="InstanceIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_ids: Option<InstanceIdList>,
 }
 
@@ -315,63 +369,83 @@ pub type ClientToken = String;
 pub struct Command {
     #[doc="<p>A unique identifier for this command.</p>"]
     #[serde(rename="CommandId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub command_id: Option<CommandId>,
     #[doc="<p>User-specified information about the command, such as a brief description of what the command should do.</p>"]
     #[serde(rename="Comment")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub comment: Option<Comment>,
     #[doc="<p>The number of targets for which the command invocation reached a terminal state. Terminal states include the following: Success, Failed, Execution Timed Out, Delivery Timed Out, Canceled, Terminated, or Undeliverable.</p>"]
     #[serde(rename="CompletedCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub completed_count: Option<CompletedCount>,
     #[doc="<p>The name of the document requested for execution.</p>"]
     #[serde(rename="DocumentName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub document_name: Option<DocumentName>,
     #[doc="<p>The number of targets for which the status is Failed or Execution Timed Out.</p>"]
     #[serde(rename="ErrorCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub error_count: Option<ErrorCount>,
     #[doc="<p>If this time is reached and the command has not already started executing, it will not execute. Calculated based on the ExpiresAfter user input provided as part of the SendCommand API.</p>"]
     #[serde(rename="ExpiresAfter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub expires_after: Option<DateTime>,
     #[doc="<p>The instance IDs against which this command was requested.</p>"]
     #[serde(rename="InstanceIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_ids: Option<InstanceIdList>,
     #[doc="<p>The maximum number of instances that are allowed to execute the command at the same time. You can specify a number of instances, such as 10, or a percentage of instances, such as 10%. The default value is 50. For more information about how to use MaxConcurrency, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html\">Executing a Command Using Systems Manager Run Command</a>.</p>"]
     #[serde(rename="MaxConcurrency")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_concurrency: Option<MaxConcurrency>,
     #[doc="<p>The maximum number of errors allowed before the system stops sending the command to additional targets. You can specify a number of errors, such as 10, or a percentage or errors, such as 10%. The default value is 50. For more information about how to use MaxErrors, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html\">Executing a Command Using Systems Manager Run Command</a>.</p>"]
     #[serde(rename="MaxErrors")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_errors: Option<MaxErrors>,
     #[doc="<p>Configurations for sending notifications about command status changes. </p>"]
     #[serde(rename="NotificationConfig")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub notification_config: Option<NotificationConfig>,
     #[doc="<p>The S3 bucket where the responses to the command executions should be stored. This was requested when issuing the command.</p>"]
     #[serde(rename="OutputS3BucketName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub output_s3_bucket_name: Option<S3BucketName>,
     #[doc="<p>The S3 directory path inside the bucket where the responses to the command executions should be stored. This was requested when issuing the command.</p>"]
     #[serde(rename="OutputS3KeyPrefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub output_s3_key_prefix: Option<S3KeyPrefix>,
     #[doc="<p>The region where the Amazon Simple Storage Service (Amazon S3) output bucket is located. The default value is the region where Run Command is being called.</p>"]
     #[serde(rename="OutputS3Region")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub output_s3_region: Option<S3Region>,
     #[doc="<p>The parameter values to be inserted in the document when executing the command.</p>"]
     #[serde(rename="Parameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameters: Option<Parameters>,
     #[doc="<p>The date and time the command was requested.</p>"]
     #[serde(rename="RequestedDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub requested_date_time: Option<DateTime>,
     #[doc="<p>The IAM service role that Run Command uses to act on your behalf when sending notifications about command status changes. </p>"]
     #[serde(rename="ServiceRole")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub service_role: Option<ServiceRole>,
     #[doc="<p>The status of the command.</p>"]
     #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<CommandStatus>,
     #[doc="<p>A detailed status of the command execution. StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-about-status.html\">Run Command Status</a>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to any instances.</p> </li> <li> <p>In Progress: The command has been sent to at least one instance but has not reached a final state on all instances.</p> </li> <li> <p>Success: The command successfully executed on all invocations. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The value of MaxErrors or more command invocations shows a status of Delivery Timed Out. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: The value of MaxErrors or more command invocations shows a status of Execution Timed Out. This is a terminal state.</p> </li> <li> <p>Failed: The value of MaxErrors or more command invocations shows a status of Failed. This is a terminal state.</p> </li> <li> <p>Incomplete: The command was attempted on all instances and one or more invocations does not have a value of Success but not enough invocations failed for the status to be Failed. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Rate Exceeded: The number of instances targeted by the command exceeded the account limit for pending invocations. The system has canceled the command before executing it on any instance. This is a terminal state.</p> </li> </ul>"]
     #[serde(rename="StatusDetails")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status_details: Option<StatusDetails>,
     #[doc="<p>The number of targets for the command.</p>"]
     #[serde(rename="TargetCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_count: Option<TargetCount>,
     #[doc="<p>An array of search criteria that targets instances using a Key,Value combination that you specify. Targets is required if you don't provide one or more instance IDs in the call.</p>"]
     #[serde(rename="Targets")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub targets: Option<Targets>,
 }
 
@@ -395,44 +469,58 @@ pub type CommandId = String;
 pub struct CommandInvocation {
     #[doc="<p>The command against which this invocation was requested.</p>"]
     #[serde(rename="CommandId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub command_id: Option<CommandId>,
     #[serde(rename="CommandPlugins")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub command_plugins: Option<CommandPluginList>,
     #[doc="<p>User-specified information about the command, such as a brief description of what the command should do.</p>"]
     #[serde(rename="Comment")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub comment: Option<Comment>,
     #[doc="<p>The document name that was requested for execution.</p>"]
     #[serde(rename="DocumentName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub document_name: Option<DocumentName>,
     #[doc="<p>The instance ID in which this invocation was requested.</p>"]
     #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<InstanceId>,
     #[doc="<p>The name of the invocation target. For Amazon EC2 instances this is the value for the aws:Name tag. For on-premises instances, this is the name of the instance.</p>"]
     #[serde(rename="InstanceName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_name: Option<InstanceTagName>,
     #[doc="<p>Configurations for sending notifications about command status changes on a per instance basis.</p>"]
     #[serde(rename="NotificationConfig")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub notification_config: Option<NotificationConfig>,
     #[doc="<p>The time and date the request was sent to this instance.</p>"]
     #[serde(rename="RequestedDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub requested_date_time: Option<DateTime>,
     #[doc="<p>The IAM service role that Run Command uses to act on your behalf when sending notifications about command status changes on a per instance basis.</p>"]
     #[serde(rename="ServiceRole")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub service_role: Option<ServiceRole>,
     #[doc="<p>The URL to the plugin's StdErr file in Amazon S3, if the Amazon S3 bucket was defined for the parent command. For an invocation, StandardErrorUrl is populated if there is just one plugin defined for the command, and the Amazon S3 bucket was defined for the command.</p>"]
     #[serde(rename="StandardErrorUrl")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub standard_error_url: Option<Url>,
     #[doc="<p>The URL to the plugin's StdOut file in Amazon S3, if the Amazon S3 bucket was defined for the parent command. For an invocation, StandardOutputUrl is populated if there is just one plugin defined for the command, and the Amazon S3 bucket was defined for the command.</p>"]
     #[serde(rename="StandardOutputUrl")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub standard_output_url: Option<Url>,
     #[doc="<p>Whether or not the invocation succeeded, failed, or is pending.</p>"]
     #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<CommandInvocationStatus>,
     #[doc="<p>A detailed status of the command execution for each invocation (each instance targeted by the command). StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-about-status.html\">Run Command Status</a>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to the instance.</p> </li> <li> <p>In Progress: The command has been sent to the instance but has not reached a terminal state.</p> </li> <li> <p>Success: The execution of the command or plugin was successfully completed. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The command was not delivered to the instance before the delivery timeout expired. Delivery timeouts do not count against the parent command's MaxErrors limit, but they do contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: Command execution started on the instance, but the execution was not complete before the execution timeout expired. Execution timeouts count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Failed: The command was not successful on the instance. For a plugin, this indicates that the result code was not zero. For a command invocation, this indicates that the result code for one or more plugins was not zero. Invocation failures count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Undeliverable: The command can't be delivered to the instance. The instance might not exist or might not be responding. Undeliverable invocations don't count against the parent command's MaxErrors limit and don't contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Terminated: The parent command exceeded its MaxErrors limit and subsequent command invocations were canceled by the system. This is a terminal state.</p> </li> </ul>"]
     #[serde(rename="StatusDetails")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status_details: Option<StatusDetails>,
     #[doc="<p> Gets the trace output sent by the agent. </p>"]
     #[serde(rename="TraceOutput")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub trace_output: Option<InvocationTraceOutput>,
 }
 
@@ -445,39 +533,51 @@ pub type CommandMaxResults = i64;
 pub struct CommandPlugin {
     #[doc="<p>The name of the plugin. Must be one of the following: aws:updateAgent, aws:domainjoin, aws:applications, aws:runPowerShellScript, aws:psmodule, aws:cloudWatch, aws:runShellScript, or aws:updateSSMAgent. </p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<CommandPluginName>,
     #[doc="<p>Output of the plugin execution.</p>"]
     #[serde(rename="Output")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub output: Option<CommandPluginOutput>,
     #[doc="<p>The S3 bucket where the responses to the command executions should be stored. This was requested when issuing the command. For example, in the following response:</p> <p> test_folder/ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix/i-1234567876543/awsrunShellScript </p> <p>test_folder is the name of the Amazon S3 bucket;</p> <p> ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix is the name of the S3 prefix;</p> <p>i-1234567876543 is the instance ID;</p> <p>awsrunShellScript is the name of the plugin.</p>"]
     #[serde(rename="OutputS3BucketName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub output_s3_bucket_name: Option<S3BucketName>,
     #[doc="<p>The S3 directory path inside the bucket where the responses to the command executions should be stored. This was requested when issuing the command. For example, in the following response:</p> <p> test_folder/ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix/i-1234567876543/awsrunShellScript </p> <p>test_folder is the name of the Amazon S3 bucket;</p> <p> ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix is the name of the S3 prefix;</p> <p>i-1234567876543 is the instance ID;</p> <p>awsrunShellScript is the name of the plugin.</p>"]
     #[serde(rename="OutputS3KeyPrefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub output_s3_key_prefix: Option<S3KeyPrefix>,
     #[doc="<p>The name of the region where the output is stored in Amazon S3.</p>"]
     #[serde(rename="OutputS3Region")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub output_s3_region: Option<S3Region>,
     #[doc="<p>A numeric response code generated after executing the plugin. </p>"]
     #[serde(rename="ResponseCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub response_code: Option<ResponseCode>,
     #[doc="<p>The time the plugin stopped executing. Could stop prematurely if, for example, a cancel command was sent. </p>"]
     #[serde(rename="ResponseFinishDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub response_finish_date_time: Option<DateTime>,
     #[doc="<p>The time the plugin started executing. </p>"]
     #[serde(rename="ResponseStartDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub response_start_date_time: Option<DateTime>,
     #[doc="<p>The URL for the complete text written by the plugin to stderr. If execution is not yet complete, then this string is empty.</p>"]
     #[serde(rename="StandardErrorUrl")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub standard_error_url: Option<Url>,
     #[doc="<p>The URL for the complete text written by the plugin to stdout in Amazon S3. If the Amazon S3 bucket for the command was not specified, then this string is empty.</p>"]
     #[serde(rename="StandardOutputUrl")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub standard_output_url: Option<Url>,
     #[doc="<p>The status of this plugin. You can execute a document with multiple plugins.</p>"]
     #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<CommandPluginStatus>,
     #[doc="<p>A detailed status of the plugin execution. StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-about-status.html\">Run Command Status</a>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to the instance.</p> </li> <li> <p>In Progress: The command has been sent to the instance but has not reached a terminal state.</p> </li> <li> <p>Success: The execution of the command or plugin was successfully completed. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The command was not delivered to the instance before the delivery timeout expired. Delivery timeouts do not count against the parent command's MaxErrors limit, but they do contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: Command execution started on the instance, but the execution was not complete before the execution timeout expired. Execution timeouts count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Failed: The command was not successful on the instance. For a plugin, this indicates that the result code was not zero. For a command invocation, this indicates that the result code for one or more plugins was not zero. Invocation failures count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Undeliverable: The command can't be delivered to the instance. The instance might not exist, or it might not be responding. Undeliverable invocations don't count against the parent command's MaxErrors limit, and they don't contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Terminated: The parent command exceeded its MaxErrors limit and subsequent command invocations were canceled by the system. This is a terminal state.</p> </li> </ul>"]
     #[serde(rename="StatusDetails")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status_details: Option<StatusDetails>,
 }
 
@@ -493,18 +593,22 @@ pub type ComputerName = String;
 pub struct CreateActivationRequest {
     #[doc="<p>The name of the registered, managed instance as it will appear in the Amazon EC2 console or when you use the AWS command line tools to list EC2 resources.</p>"]
     #[serde(rename="DefaultInstanceName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_instance_name: Option<DefaultInstanceName>,
     #[doc="<p>A userdefined description of the resource that you want to register with Amazon EC2. </p>"]
     #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<ActivationDescription>,
     #[doc="<p>The date by which this activation request should expire. The default value is 24 hours.</p>"]
     #[serde(rename="ExpirationDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub expiration_date: Option<ExpirationDate>,
     #[doc="<p>The Amazon Identity and Access Management (IAM) role that you want to assign to the managed instance. </p>"]
     #[serde(rename="IamRole")]
     pub iam_role: IamRole,
     #[doc="<p>Specify the maximum number of managed instances you want to register. The default value is 1 instance.</p>"]
     #[serde(rename="RegistrationLimit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub registration_limit: Option<RegistrationLimit>,
 }
 
@@ -512,9 +616,11 @@ pub struct CreateActivationRequest {
 pub struct CreateActivationResult {
     #[doc="<p>The code the system generates when it processes the activation. The activation code functions like a password to validate the activation ID. </p>"]
     #[serde(rename="ActivationCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub activation_code: Option<ActivationCode>,
     #[doc="<p>The ID number generated by the system when it processed the activation. The activation ID functions like a user name.</p>"]
     #[serde(rename="ActivationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub activation_id: Option<ActivationId>,
 }
 
@@ -531,24 +637,30 @@ pub type CreateAssociationBatchRequestEntries = Vec<CreateAssociationBatchReques
 pub struct CreateAssociationBatchRequestEntry {
     #[doc="<p>The document version.</p>"]
     #[serde(rename="DocumentVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub document_version: Option<DocumentVersion>,
     #[doc="<p>The ID of the instance. </p>"]
     #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<InstanceId>,
     #[doc="<p>The name of the configuration document. </p>"]
     #[serde(rename="Name")]
     pub name: DocumentName,
     #[doc="<p>An Amazon S3 bucket where you want to store the results of this request.</p>"]
     #[serde(rename="OutputLocation")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub output_location: Option<InstanceAssociationOutputLocation>,
     #[doc="<p>A description of the parameters for a document. </p>"]
     #[serde(rename="Parameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameters: Option<Parameters>,
     #[doc="<p>A cron expression that specifies a schedule when the association runs.</p>"]
     #[serde(rename="ScheduleExpression")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub schedule_expression: Option<ScheduleExpression>,
     #[doc="<p>The instances targeted by the request.</p>"]
     #[serde(rename="Targets")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub targets: Option<Targets>,
 }
 
@@ -556,9 +668,11 @@ pub struct CreateAssociationBatchRequestEntry {
 pub struct CreateAssociationBatchResult {
     #[doc="<p>Information about the associations that failed.</p>"]
     #[serde(rename="Failed")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub failed: Option<FailedCreateAssociationList>,
     #[doc="<p>Information about the associations that succeeded.</p>"]
     #[serde(rename="Successful")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub successful: Option<AssociationDescriptionList>,
 }
 
@@ -566,24 +680,30 @@ pub struct CreateAssociationBatchResult {
 pub struct CreateAssociationRequest {
     #[doc="<p>The document version you want to associate with the target(s). Can be a specific version or the default version.</p>"]
     #[serde(rename="DocumentVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub document_version: Option<DocumentVersion>,
     #[doc="<p>The instance ID.</p>"]
     #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<InstanceId>,
     #[doc="<p>The name of the Systems Manager document.</p>"]
     #[serde(rename="Name")]
     pub name: DocumentName,
     #[doc="<p>An Amazon S3 bucket where you want to store the output details of the request.</p>"]
     #[serde(rename="OutputLocation")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub output_location: Option<InstanceAssociationOutputLocation>,
     #[doc="<p>The parameters for the documents runtime configuration. </p>"]
     #[serde(rename="Parameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameters: Option<Parameters>,
     #[doc="<p>A cron expression when the association will be applied to the target(s).</p>"]
     #[serde(rename="ScheduleExpression")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub schedule_expression: Option<ScheduleExpression>,
     #[doc="<p>The targets (either instances or tags) for the association.</p>"]
     #[serde(rename="Targets")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub targets: Option<Targets>,
 }
 
@@ -591,6 +711,7 @@ pub struct CreateAssociationRequest {
 pub struct CreateAssociationResult {
     #[doc="<p>Information about the association.</p>"]
     #[serde(rename="AssociationDescription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub association_description: Option<AssociationDescription>,
 }
 
@@ -601,6 +722,7 @@ pub struct CreateDocumentRequest {
     pub content: DocumentContent,
     #[doc="<p>The type of document to create. Valid document types include: Policy, Automation, and Command.</p>"]
     #[serde(rename="DocumentType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub document_type: Option<DocumentType>,
     #[doc="<p>A name for the Systems Manager document.</p>"]
     #[serde(rename="Name")]
@@ -611,6 +733,7 @@ pub struct CreateDocumentRequest {
 pub struct CreateDocumentResult {
     #[doc="<p>Information about the Systems Manager document.</p>"]
     #[serde(rename="DocumentDescription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub document_description: Option<DocumentDescription>,
 }
 
@@ -621,6 +744,7 @@ pub struct CreateMaintenanceWindowRequest {
     pub allow_unassociated_targets: MaintenanceWindowAllowUnassociatedTargets,
     #[doc="<p>User-provided idempotency token.</p>"]
     #[serde(rename="ClientToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_token: Option<ClientToken>,
     #[doc="<p>The number of hours before the end of the Maintenance Window that Systems Manager stops scheduling new tasks for execution.</p>"]
     #[serde(rename="Cutoff")]
@@ -640,6 +764,7 @@ pub struct CreateMaintenanceWindowRequest {
 pub struct CreateMaintenanceWindowResult {
     #[doc="<p>The ID of the created Maintenance Window.</p>"]
     #[serde(rename="WindowId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub window_id: Option<MaintenanceWindowId>,
 }
 
@@ -647,24 +772,30 @@ pub struct CreateMaintenanceWindowResult {
 pub struct CreatePatchBaselineRequest {
     #[doc="<p>A set of rules used to include patches in the baseline.</p>"]
     #[serde(rename="ApprovalRules")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub approval_rules: Option<PatchRuleGroup>,
     #[doc="<p>A list of explicitly approved patches for the baseline.</p>"]
     #[serde(rename="ApprovedPatches")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub approved_patches: Option<PatchIdList>,
     #[doc="<p>User-provided idempotency token.</p>"]
     #[serde(rename="ClientToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_token: Option<ClientToken>,
     #[doc="<p>A description of the patch baseline.</p>"]
     #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<BaselineDescription>,
     #[doc="<p>A set of global filters used to exclude patches from the baseline.</p>"]
     #[serde(rename="GlobalFilters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub global_filters: Option<PatchFilterGroup>,
     #[doc="<p>The name of the patch baseline.</p>"]
     #[serde(rename="Name")]
     pub name: BaselineName,
     #[doc="<p>A list of explicitly rejected patches for the baseline.</p>"]
     #[serde(rename="RejectedPatches")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rejected_patches: Option<PatchIdList>,
 }
 
@@ -672,6 +803,7 @@ pub struct CreatePatchBaselineRequest {
 pub struct CreatePatchBaselineResult {
     #[doc="<p>The ID of the created patch baseline.</p>"]
     #[serde(rename="BaselineId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub baseline_id: Option<BaselineId>,
 }
 
@@ -693,12 +825,15 @@ pub struct DeleteActivationResult;
 pub struct DeleteAssociationRequest {
     #[doc="<p>The association ID that you want to delete.</p>"]
     #[serde(rename="AssociationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub association_id: Option<AssociationId>,
     #[doc="<p>The ID of the instance.</p>"]
     #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<InstanceId>,
     #[doc="<p>The name of the Systems Manager document.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<DocumentName>,
 }
 
@@ -726,6 +861,7 @@ pub struct DeleteMaintenanceWindowRequest {
 pub struct DeleteMaintenanceWindowResult {
     #[doc="<p>The ID of the deleted Maintenance Window.</p>"]
     #[serde(rename="WindowId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub window_id: Option<MaintenanceWindowId>,
 }
 
@@ -750,6 +886,7 @@ pub struct DeletePatchBaselineRequest {
 pub struct DeletePatchBaselineResult {
     #[doc="<p>The ID of the deleted patch baseline.</p>"]
     #[serde(rename="BaselineId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub baseline_id: Option<BaselineId>,
 }
 
@@ -777,9 +914,11 @@ pub struct DeregisterPatchBaselineForPatchGroupRequest {
 pub struct DeregisterPatchBaselineForPatchGroupResult {
     #[doc="<p>The ID of the patch baseline the patch group was deregistered from.</p>"]
     #[serde(rename="BaselineId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub baseline_id: Option<BaselineId>,
     #[doc="<p>The name of the patch group deregistered from the patch baseline.</p>"]
     #[serde(rename="PatchGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub patch_group: Option<PatchGroup>,
 }
 
@@ -797,9 +936,11 @@ pub struct DeregisterTargetFromMaintenanceWindowRequest {
 pub struct DeregisterTargetFromMaintenanceWindowResult {
     #[doc="<p>The ID of the Maintenance Window the target was removed from.</p>"]
     #[serde(rename="WindowId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub window_id: Option<MaintenanceWindowId>,
     #[doc="<p>The ID of the removed target definition.</p>"]
     #[serde(rename="WindowTargetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub window_target_id: Option<MaintenanceWindowTargetId>,
 }
 
@@ -817,9 +958,11 @@ pub struct DeregisterTaskFromMaintenanceWindowRequest {
 pub struct DeregisterTaskFromMaintenanceWindowResult {
     #[doc="<p>The ID of the Maintenance Window the task was removed from.</p>"]
     #[serde(rename="WindowId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub window_id: Option<MaintenanceWindowId>,
     #[doc="<p>The ID of the task removed from the Maintenance Window.</p>"]
     #[serde(rename="WindowTaskId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub window_task_id: Option<MaintenanceWindowTaskId>,
 }
 
@@ -828,9 +971,11 @@ pub struct DeregisterTaskFromMaintenanceWindowResult {
 pub struct DescribeActivationsFilter {
     #[doc="<p>The name of the filter.</p>"]
     #[serde(rename="FilterKey")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filter_key: Option<DescribeActivationsFilterKeys>,
     #[doc="<p>The filter values.</p>"]
     #[serde(rename="FilterValues")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filter_values: Option<StringList>,
 }
 
@@ -840,12 +985,15 @@ pub type DescribeActivationsFilterList = Vec<DescribeActivationsFilter>;
 pub struct DescribeActivationsRequest {
     #[doc="<p>A filter to view information about your activations.</p>"]
     #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<DescribeActivationsFilterList>,
     #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<MaxResults>,
     #[doc="<p>A token to start the list. Use this token to get the next set of results. </p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -853,9 +1001,11 @@ pub struct DescribeActivationsRequest {
 pub struct DescribeActivationsResult {
     #[doc="<p>A list of activations for your AWS account.</p>"]
     #[serde(rename="ActivationList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub activation_list: Option<ActivationList>,
     #[doc="<p> The token for the next set of items to return. Use this token to get the next set of results. </p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -863,12 +1013,15 @@ pub struct DescribeActivationsResult {
 pub struct DescribeAssociationRequest {
     #[doc="<p>The association ID for which you want information.</p>"]
     #[serde(rename="AssociationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub association_id: Option<AssociationId>,
     #[doc="<p>The instance ID.</p>"]
     #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<InstanceId>,
     #[doc="<p>The name of the SSM document.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<DocumentName>,
 }
 
@@ -876,6 +1029,7 @@ pub struct DescribeAssociationRequest {
 pub struct DescribeAssociationResult {
     #[doc="<p>Information about the association.</p>"]
     #[serde(rename="AssociationDescription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub association_description: Option<AssociationDescription>,
 }
 
@@ -883,12 +1037,15 @@ pub struct DescribeAssociationResult {
 pub struct DescribeAutomationExecutionsRequest {
     #[doc="<p>Filters used to limit the scope of executions that are requested.</p>"]
     #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<AutomationExecutionFilterList>,
     #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<MaxResults>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -896,9 +1053,11 @@ pub struct DescribeAutomationExecutionsRequest {
 pub struct DescribeAutomationExecutionsResult {
     #[doc="<p>The list of details about each automation execution which has occurred which matches the filter specification, if any.</p>"]
     #[serde(rename="AutomationExecutionMetadataList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub automation_execution_metadata_list: Option<AutomationExecutionMetadataList>,
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -906,12 +1065,15 @@ pub struct DescribeAutomationExecutionsResult {
 pub struct DescribeAvailablePatchesRequest {
     #[doc="<p>Filters used to scope down the returned patches.</p>"]
     #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<PatchOrchestratorFilterList>,
     #[doc="<p>The maximum number of patches to return (per page).</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<PatchBaselineMaxResults>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -919,9 +1081,11 @@ pub struct DescribeAvailablePatchesRequest {
 pub struct DescribeAvailablePatchesResult {
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>An array of patches. Each entry in the array is a patch structure.</p>"]
     #[serde(rename="Patches")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub patches: Option<PatchList>,
 }
 
@@ -939,6 +1103,7 @@ pub struct DescribeDocumentPermissionRequest {
 pub struct DescribeDocumentPermissionResponse {
     #[doc="<p>The account IDs that have permission to use this document. The ID can be either an AWS account or <i>All</i>.</p>"]
     #[serde(rename="AccountIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub account_ids: Option<AccountIdList>,
 }
 
@@ -946,6 +1111,7 @@ pub struct DescribeDocumentPermissionResponse {
 pub struct DescribeDocumentRequest {
     #[doc="<p>The document version for which you want information. Can be a specific version or the default version.</p>"]
     #[serde(rename="DocumentVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub document_version: Option<DocumentVersion>,
     #[doc="<p>The name of the SSM document.</p>"]
     #[serde(rename="Name")]
@@ -956,6 +1122,7 @@ pub struct DescribeDocumentRequest {
 pub struct DescribeDocumentResult {
     #[doc="<p>Information about the SSM document.</p>"]
     #[serde(rename="Document")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub document: Option<DocumentDescription>,
 }
 
@@ -966,9 +1133,11 @@ pub struct DescribeEffectiveInstanceAssociationsRequest {
     pub instance_id: InstanceId,
     #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<EffectiveInstanceAssociationMaxResults>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -976,9 +1145,11 @@ pub struct DescribeEffectiveInstanceAssociationsRequest {
 pub struct DescribeEffectiveInstanceAssociationsResult {
     #[doc="<p>The associations for the requested instance.</p>"]
     #[serde(rename="Associations")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub associations: Option<InstanceAssociationList>,
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -989,9 +1160,11 @@ pub struct DescribeEffectivePatchesForPatchBaselineRequest {
     pub baseline_id: BaselineId,
     #[doc="<p>The maximum number of patches to return (per page).</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<PatchBaselineMaxResults>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -999,9 +1172,11 @@ pub struct DescribeEffectivePatchesForPatchBaselineRequest {
 pub struct DescribeEffectivePatchesForPatchBaselineResult {
     #[doc="<p>An array of patches and patch status.</p>"]
     #[serde(rename="EffectivePatches")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub effective_patches: Option<EffectivePatchList>,
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -1012,9 +1187,11 @@ pub struct DescribeInstanceAssociationsStatusRequest {
     pub instance_id: InstanceId,
     #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<MaxResults>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -1022,9 +1199,11 @@ pub struct DescribeInstanceAssociationsStatusRequest {
 pub struct DescribeInstanceAssociationsStatusResult {
     #[doc="<p>Status information about the association.</p>"]
     #[serde(rename="InstanceAssociationStatusInfos")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_association_status_infos: Option<InstanceAssociationStatusInfos>,
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -1032,15 +1211,19 @@ pub struct DescribeInstanceAssociationsStatusResult {
 pub struct DescribeInstanceInformationRequest {
     #[doc="<p>One or more filters. Use a filter to return a more specific list of instances.</p>"]
     #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<InstanceInformationStringFilterList>,
     #[doc="<p>One or more filters. Use a filter to return a more specific list of instances.</p>"]
     #[serde(rename="InstanceInformationFilterList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_information_filter_list: Option<InstanceInformationFilterList>,
     #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results. </p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<MaxResultsEC2Compatible>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -1048,9 +1231,11 @@ pub struct DescribeInstanceInformationRequest {
 pub struct DescribeInstanceInformationResult {
     #[doc="<p>The instance information list.</p>"]
     #[serde(rename="InstanceInformationList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_information_list: Option<InstanceInformationList>,
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty. </p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -1058,12 +1243,15 @@ pub struct DescribeInstanceInformationResult {
 pub struct DescribeInstancePatchStatesForPatchGroupRequest {
     #[doc="<p>Each entry in the array is a structure containing:</p> <p>Key (string between 1 and 200 characters)</p> <p> Values (array containing a single string)</p> <p> Type (string \"Equal\", \"NotEqual\", \"LessThan\", \"GreaterThan\")</p>"]
     #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<InstancePatchStateFilterList>,
     #[doc="<p>The maximum number of patches to return (per page).</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<PatchComplianceMaxResults>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The name of the patch group for which the patch state information should be retrieved.</p>"]
     #[serde(rename="PatchGroup")]
@@ -1074,9 +1262,11 @@ pub struct DescribeInstancePatchStatesForPatchGroupRequest {
 pub struct DescribeInstancePatchStatesForPatchGroupResult {
     #[doc="<p>The high-level patch state for the requested instances. </p>"]
     #[serde(rename="InstancePatchStates")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_patch_states: Option<InstancePatchStatesList>,
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -1087,9 +1277,11 @@ pub struct DescribeInstancePatchStatesRequest {
     pub instance_ids: InstanceIdList,
     #[doc="<p>The maximum number of instances to return (per page).</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<PatchComplianceMaxResults>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -1097,9 +1289,11 @@ pub struct DescribeInstancePatchStatesRequest {
 pub struct DescribeInstancePatchStatesResult {
     #[doc="<p>The high-level patch state for the requested instances.</p>"]
     #[serde(rename="InstancePatchStates")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_patch_states: Option<InstancePatchStateList>,
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -1107,15 +1301,18 @@ pub struct DescribeInstancePatchStatesResult {
 pub struct DescribeInstancePatchesRequest {
     #[doc="<p>Each entry in the array is a structure containing:</p> <p>Key (string, between 1 and 128 characters)</p> <p>Values (array of strings, each string between 1 and 256 characters)</p>"]
     #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<PatchOrchestratorFilterList>,
     #[doc="<p>The ID of the instance whose patch state information should be retrieved.</p>"]
     #[serde(rename="InstanceId")]
     pub instance_id: InstanceId,
     #[doc="<p>The maximum number of patches to return (per page).</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<PatchComplianceMaxResults>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -1123,9 +1320,11 @@ pub struct DescribeInstancePatchesRequest {
 pub struct DescribeInstancePatchesResult {
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>Each entry in the array is a structure containing:</p> <p>Title (string)</p> <p>KBId (string)</p> <p>Classification (string)</p> <p>Severity (string)</p> <p>State (string: \"INSTALLED\", \"INSTALLED OTHER\", \"MISSING\", \"NOT APPLICABLE\", \"FAILED\")</p> <p>InstalledTime (DateTime)</p> <p>InstalledBy (string)</p>"]
     #[serde(rename="Patches")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub patches: Option<PatchComplianceDataList>,
 }
 
@@ -1133,12 +1332,15 @@ pub struct DescribeInstancePatchesResult {
 pub struct DescribeMaintenanceWindowExecutionTaskInvocationsRequest {
     #[doc="<p>Optional filters used to scope down the returned task invocations. The supported filter key is STATUS with the corresponding values PENDING, IN_PROGRESS, SUCCESS, FAILED, TIMED_OUT, CANCELLING, and CANCELLED.</p>"]
     #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<MaintenanceWindowFilterList>,
     #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<MaintenanceWindowMaxResults>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The ID of the specific task in the Maintenance Window task that should be retrieved.</p>"]
     #[serde(rename="TaskId")]
@@ -1152,9 +1354,11 @@ pub struct DescribeMaintenanceWindowExecutionTaskInvocationsRequest {
 pub struct DescribeMaintenanceWindowExecutionTaskInvocationsResult {
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>Information about the task invocation results per invocation.</p>"]
     #[serde(rename="WindowExecutionTaskInvocationIdentities")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub window_execution_task_invocation_identities:
         Option<MaintenanceWindowExecutionTaskInvocationIdentityList>,
 }
@@ -1163,12 +1367,15 @@ pub struct DescribeMaintenanceWindowExecutionTaskInvocationsResult {
 pub struct DescribeMaintenanceWindowExecutionTasksRequest {
     #[doc="<p>Optional filters used to scope down the returned tasks. The supported filter key is STATUS with the corresponding values PENDING, IN_PROGRESS, SUCCESS, FAILED, TIMED_OUT, CANCELLING, and CANCELLED. </p>"]
     #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<MaintenanceWindowFilterList>,
     #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<MaintenanceWindowMaxResults>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The ID of the Maintenance Window execution whose task executions should be retrieved.</p>"]
     #[serde(rename="WindowExecutionId")]
@@ -1179,9 +1386,11 @@ pub struct DescribeMaintenanceWindowExecutionTasksRequest {
 pub struct DescribeMaintenanceWindowExecutionTasksResult {
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>Information about the task executions.</p>"]
     #[serde(rename="WindowExecutionTaskIdentities")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub window_execution_task_identities: Option<MaintenanceWindowExecutionTaskIdentityList>,
 }
 
@@ -1189,12 +1398,15 @@ pub struct DescribeMaintenanceWindowExecutionTasksResult {
 pub struct DescribeMaintenanceWindowExecutionsRequest {
     #[doc="<p>Each entry in the array is a structure containing:</p> <p>Key (string, between 1 and 128 characters)</p> <p>Values (array of strings, each string is between 1 and 256 characters)</p> <p>The supported Keys are ExecutedBefore and ExecutedAfter with the value being a date/time string such as 2016-11-04T05:00:00Z.</p>"]
     #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<MaintenanceWindowFilterList>,
     #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<MaintenanceWindowMaxResults>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The ID of the Maintenance Window whose executions should be retrieved.</p>"]
     #[serde(rename="WindowId")]
@@ -1205,9 +1417,11 @@ pub struct DescribeMaintenanceWindowExecutionsRequest {
 pub struct DescribeMaintenanceWindowExecutionsResult {
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>Information about the Maintenance Windows execution.</p>"]
     #[serde(rename="WindowExecutions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub window_executions: Option<MaintenanceWindowExecutionList>,
 }
 
@@ -1215,12 +1429,15 @@ pub struct DescribeMaintenanceWindowExecutionsResult {
 pub struct DescribeMaintenanceWindowTargetsRequest {
     #[doc="<p>Optional filters that can be used to narrow down the scope of the returned window targets. The supported filter keys are Type, WindowTargetId and OwnerInformation.</p>"]
     #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<MaintenanceWindowFilterList>,
     #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<MaintenanceWindowMaxResults>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The ID of the Maintenance Window whose targets should be retrieved.</p>"]
     #[serde(rename="WindowId")]
@@ -1231,9 +1448,11 @@ pub struct DescribeMaintenanceWindowTargetsRequest {
 pub struct DescribeMaintenanceWindowTargetsResult {
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>Information about the targets in the Maintenance Window.</p>"]
     #[serde(rename="Targets")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub targets: Option<MaintenanceWindowTargetList>,
 }
 
@@ -1241,12 +1460,15 @@ pub struct DescribeMaintenanceWindowTargetsResult {
 pub struct DescribeMaintenanceWindowTasksRequest {
     #[doc="<p>Optional filters used to narrow down the scope of the returned tasks. The supported filter keys are WindowTaskId, TaskArn, Priority, and TaskType.</p>"]
     #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<MaintenanceWindowFilterList>,
     #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<MaintenanceWindowMaxResults>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The ID of the Maintenance Window whose tasks should be retrieved.</p>"]
     #[serde(rename="WindowId")]
@@ -1257,9 +1479,11 @@ pub struct DescribeMaintenanceWindowTasksRequest {
 pub struct DescribeMaintenanceWindowTasksResult {
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>Information about the tasks in the Maintenance Window.</p>"]
     #[serde(rename="Tasks")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tasks: Option<MaintenanceWindowTaskList>,
 }
 
@@ -1267,12 +1491,15 @@ pub struct DescribeMaintenanceWindowTasksResult {
 pub struct DescribeMaintenanceWindowsRequest {
     #[doc="<p>Optional filters used to narrow down the scope of the returned Maintenance Windows. Supported filter keys are Name and Enabled.</p>"]
     #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<MaintenanceWindowFilterList>,
     #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<MaintenanceWindowMaxResults>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -1280,9 +1507,11 @@ pub struct DescribeMaintenanceWindowsRequest {
 pub struct DescribeMaintenanceWindowsResult {
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>Information about the Maintenance Windows.</p>"]
     #[serde(rename="WindowIdentities")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub window_identities: Option<MaintenanceWindowIdentityList>,
 }
 
@@ -1290,12 +1519,15 @@ pub struct DescribeMaintenanceWindowsResult {
 pub struct DescribeParametersRequest {
     #[doc="<p>One or more filters. Use a filter to return a more specific list of results.</p>"]
     #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<ParametersFilterList>,
     #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<MaxResults>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -1303,9 +1535,11 @@ pub struct DescribeParametersRequest {
 pub struct DescribeParametersResult {
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>Parameters returned by the request.</p>"]
     #[serde(rename="Parameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameters: Option<ParameterMetadataList>,
 }
 
@@ -1313,12 +1547,15 @@ pub struct DescribeParametersResult {
 pub struct DescribePatchBaselinesRequest {
     #[doc="<p>Each element in the array is a structure containing: </p> <p>Key: (string, \"NAME_PREFIX\" or \"OWNER\")</p> <p>Value: (array of strings, exactly 1 entry, between 1 and 255 characters)</p>"]
     #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<PatchOrchestratorFilterList>,
     #[doc="<p>The maximum number of patch baselines to return (per page).</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<PatchBaselineMaxResults>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -1326,9 +1563,11 @@ pub struct DescribePatchBaselinesRequest {
 pub struct DescribePatchBaselinesResult {
     #[doc="<p>An array of PatchBaselineIdentity elements.</p>"]
     #[serde(rename="BaselineIdentities")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub baseline_identities: Option<PatchBaselineIdentityList>,
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -1343,21 +1582,27 @@ pub struct DescribePatchGroupStateRequest {
 pub struct DescribePatchGroupStateResult {
     #[doc="<p>The number of instances in the patch group.</p>"]
     #[serde(rename="Instances")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instances: Option<Integer>,
     #[doc="<p>The number of instances with patches from the patch baseline that failed to install.</p>"]
     #[serde(rename="InstancesWithFailedPatches")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instances_with_failed_patches: Option<Integer>,
     #[doc="<p>The number of instances with patches installed that aren't defined in the patch baseline.</p>"]
     #[serde(rename="InstancesWithInstalledOtherPatches")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instances_with_installed_other_patches: Option<Integer>,
     #[doc="<p>The number of instances with installed patches.</p>"]
     #[serde(rename="InstancesWithInstalledPatches")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instances_with_installed_patches: Option<Integer>,
     #[doc="<p>The number of instances with missing patches from the patch baseline.</p>"]
     #[serde(rename="InstancesWithMissingPatches")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instances_with_missing_patches: Option<Integer>,
     #[doc="<p>The number of instances with patches that aren't applicable.</p>"]
     #[serde(rename="InstancesWithNotApplicablePatches")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instances_with_not_applicable_patches: Option<Integer>,
 }
 
@@ -1365,9 +1610,11 @@ pub struct DescribePatchGroupStateResult {
 pub struct DescribePatchGroupsRequest {
     #[doc="<p>The maximum number of patch groups to return (per page).</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<PatchBaselineMaxResults>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -1375,9 +1622,11 @@ pub struct DescribePatchGroupsRequest {
 pub struct DescribePatchGroupsResult {
     #[doc="<p>Each entry in the array contains:</p> <p>PatchGroup: string (between 1 and 256 characters, Regex: ^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$)</p> <p>PatchBaselineIdentity: A PatchBaselineIdentity element. </p>"]
     #[serde(rename="Mappings")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub mappings: Option<PatchGroupPatchBaselineMappingList>,
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -1389,9 +1638,11 @@ pub type DocumentContent = String;
 pub struct DocumentDefaultVersionDescription {
     #[doc="<p>The default version of the document.</p>"]
     #[serde(rename="DefaultVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_version: Option<DocumentVersion>,
     #[doc="<p>The name of the document.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<DocumentName>,
 }
 
@@ -1400,48 +1651,63 @@ pub struct DocumentDefaultVersionDescription {
 pub struct DocumentDescription {
     #[doc="<p>The date when the document was created.</p>"]
     #[serde(rename="CreatedDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub created_date: Option<DateTime>,
     #[doc="<p>The default version.</p>"]
     #[serde(rename="DefaultVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_version: Option<DocumentVersion>,
     #[doc="<p>A description of the document. </p>"]
     #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<DescriptionInDocument>,
     #[doc="<p>The type of document. </p>"]
     #[serde(rename="DocumentType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub document_type: Option<DocumentType>,
     #[doc="<p>The document version.</p>"]
     #[serde(rename="DocumentVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub document_version: Option<DocumentVersion>,
     #[doc="<p>The Sha256 or Sha1 hash created by the system when the document was created. </p> <note> <p>Sha1 hashes have been deprecated.</p> </note>"]
     #[serde(rename="Hash")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hash: Option<DocumentHash>,
     #[doc="<p>Sha256 or Sha1.</p> <note> <p>Sha1 hashes have been deprecated.</p> </note>"]
     #[serde(rename="HashType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hash_type: Option<DocumentHashType>,
     #[doc="<p>The latest version of the document.</p>"]
     #[serde(rename="LatestVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub latest_version: Option<DocumentVersion>,
     #[doc="<p>The name of the SSM document.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<DocumentARN>,
     #[doc="<p>The AWS user account of the person who created the document.</p>"]
     #[serde(rename="Owner")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner: Option<DocumentOwner>,
     #[doc="<p>A description of the parameters for a document.</p>"]
     #[serde(rename="Parameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameters: Option<DocumentParameterList>,
     #[doc="<p>The list of OS platforms compatible with this SSM document. </p>"]
     #[serde(rename="PlatformTypes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub platform_types: Option<PlatformTypeList>,
     #[doc="<p>The schema version.</p>"]
     #[serde(rename="SchemaVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub schema_version: Option<DocumentSchemaVersion>,
     #[doc="<p>The SHA1 hash of the document, which you can use for verification purposes.</p>"]
     #[serde(rename="Sha1")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub sha_1: Option<DocumentSha1>,
     #[doc="<p>The status of the SSM document.</p>"]
     #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<DocumentStatus>,
 }
 
@@ -1466,21 +1732,27 @@ pub type DocumentHashType = String;
 pub struct DocumentIdentifier {
     #[doc="<p>The document type.</p>"]
     #[serde(rename="DocumentType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub document_type: Option<DocumentType>,
     #[doc="<p>The document version.</p>"]
     #[serde(rename="DocumentVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub document_version: Option<DocumentVersion>,
     #[doc="<p>The name of the SSM document.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<DocumentARN>,
     #[doc="<p>The AWS user account of the person who created the document.</p>"]
     #[serde(rename="Owner")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner: Option<DocumentOwner>,
     #[doc="<p>The operating system platform. </p>"]
     #[serde(rename="PlatformTypes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub platform_types: Option<PlatformTypeList>,
     #[doc="<p>The schema version.</p>"]
     #[serde(rename="SchemaVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub schema_version: Option<DocumentSchemaVersion>,
 }
 
@@ -1492,15 +1764,19 @@ pub type DocumentOwner = String;
 pub struct DocumentParameter {
     #[doc="<p>If specified, the default values for the parameters. Parameters without a default value are required. Parameters with a default value are optional.</p>"]
     #[serde(rename="DefaultValue")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_value: Option<DocumentParameterDefaultValue>,
     #[doc="<p>A description of what the parameter does, how to use it, the default value, and whether or not the parameter is optional.</p>"]
     #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<DocumentParameterDescrption>,
     #[doc="<p>The name of the parameter.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<DocumentParameterName>,
     #[doc="<p>The type of parameter. The type can be either String or StringList.</p>"]
     #[serde(rename="Type")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<DocumentParameterType>,
 }
 
@@ -1520,16 +1796,19 @@ pub type DocumentVersion = String;
 pub struct DocumentVersionInfo {
     #[doc="<p>The date the document was created.</p>"]
     #[serde(rename="CreatedDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub created_date: Option<DateTime>,
     #[doc="<p>The document version.</p>"]
     #[serde(rename="DocumentVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub document_version: Option<DocumentVersion>,
     #[doc="<p>An identifier for the default version of the document.</p>"]
     #[serde(rename="IsDefaultVersion")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_default_version: Option<Boolean>,
     #[doc="<p>The document name.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<DocumentName>,
 }
 
@@ -1541,9 +1820,11 @@ pub type EffectiveInstanceAssociationMaxResults = i64;
 pub struct EffectivePatch {
     #[doc="<p>Provides metadata for a patch, including information such as the KB ID, severity, classification and a URL for where more information can be obtained about the patch.</p>"]
     #[serde(rename="Patch")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub patch: Option<Patch>,
     #[doc="<p>The status of the patch in a patch baseline. This includes information about whether the patch is currently approved, due to be approved by a rule, explicitly approved, or explicitly rejected and the date the patch was or will be approved.</p>"]
     #[serde(rename="PatchStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub patch_status: Option<PatchStatus>,
 }
 
@@ -1555,12 +1836,15 @@ pub type ExpirationDate = f64;
 pub struct FailedCreateAssociation {
     #[doc="<p>The association.</p>"]
     #[serde(rename="Entry")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub entry: Option<CreateAssociationBatchRequestEntry>,
     #[doc="<p>The source of the failure.</p>"]
     #[serde(rename="Fault")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub fault: Option<Fault>,
     #[doc="<p>A description of the failure.</p>"]
     #[serde(rename="Message")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<BatchErrorMessage>,
 }
 
@@ -1570,12 +1854,15 @@ pub type FailedCreateAssociationList = Vec<FailedCreateAssociation>;
 pub struct FailureDetails {
     #[doc="<p>Detailed information about the Automation step failure.</p>"]
     #[serde(rename="Details")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub details: Option<AutomationParameterMap>,
     #[doc="<p>The stage of the Automation execution when the failure occurred. The stages include the following: InputValidation, PreVerification, Invocation, PostVerification.</p>"]
     #[serde(rename="FailureStage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub failure_stage: Option<String>,
     #[doc="<p>The type of Automation failure. Failure types include the following: Action, Permission, Throttling, Verification, Internal.</p>"]
     #[serde(rename="FailureType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub failure_type: Option<String>,
 }
 
@@ -1591,6 +1878,7 @@ pub struct GetAutomationExecutionRequest {
 pub struct GetAutomationExecutionResult {
     #[doc="<p>Detailed information about the current state of an automation execution.</p>"]
     #[serde(rename="AutomationExecution")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub automation_execution: Option<AutomationExecution>,
 }
 
@@ -1604,6 +1892,7 @@ pub struct GetCommandInvocationRequest {
     pub instance_id: InstanceId,
     #[doc="<p>(Optional) The name of the plugin for which you want detailed results. If the document contains only one plugin, the name can be omitted and the details will be returned.</p>"]
     #[serde(rename="PluginName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub plugin_name: Option<CommandPluginName>,
 }
 
@@ -1611,48 +1900,63 @@ pub struct GetCommandInvocationRequest {
 pub struct GetCommandInvocationResult {
     #[doc="<p>The parent command ID of the invocation plugin.</p>"]
     #[serde(rename="CommandId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub command_id: Option<CommandId>,
     #[doc="<p>The comment text for the command.</p>"]
     #[serde(rename="Comment")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub comment: Option<Comment>,
     #[doc="<p>The name of the document that was executed. For example, AWS-RunShellScript.</p>"]
     #[serde(rename="DocumentName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub document_name: Option<DocumentName>,
     #[doc="<p>Duration since ExecutionStartDateTime.</p>"]
     #[serde(rename="ExecutionElapsedTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub execution_elapsed_time: Option<StringDateTime>,
     #[doc="<p>The date and time the plugin was finished executing. Date and time are written in ISO 8601 format. For example, August 28, 2016 is represented as 2016-08-28. If the plugin has not started to execute, the string is empty.</p>"]
     #[serde(rename="ExecutionEndDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub execution_end_date_time: Option<StringDateTime>,
     #[doc="<p>The date and time the plugin started executing. Date and time are written in ISO 8601 format. For example, August 28, 2016 is represented as 2016-08-28. If the plugin has not started to execute, the string is empty.</p>"]
     #[serde(rename="ExecutionStartDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub execution_start_date_time: Option<StringDateTime>,
     #[doc="<p>The ID of the managed instance targeted by the command. A managed instance can be an Amazon EC2 instance or an instance in your hybrid environment that is configured for Systems Manager.</p>"]
     #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<InstanceId>,
     #[doc="<p>The name of the plugin for which you want detailed results. For example, aws:RunShellScript is a plugin.</p>"]
     #[serde(rename="PluginName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub plugin_name: Option<CommandPluginName>,
     #[doc="<p>The error level response code for the plugin script. If the response code is -1, then the command has not started executing on the instance, or it was not received by the instance.</p>"]
     #[serde(rename="ResponseCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub response_code: Option<ResponseCode>,
     #[doc="<p>The first 8,000 characters written by the plugin to stderr. If the command has not finished executing, then this string is empty.</p>"]
     #[serde(rename="StandardErrorContent")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub standard_error_content: Option<StandardErrorContent>,
     #[doc="<p>The URL for the complete text written by the plugin to stderr. If the command has not finished executing, then this string is empty.</p>"]
     #[serde(rename="StandardErrorUrl")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub standard_error_url: Option<Url>,
     #[doc="<p>The first 24,000 characters written by the plugin to stdout. If the command has not finished executing, if ExecutionStatus is neither Succeeded nor Failed, then this string is empty.</p>"]
     #[serde(rename="StandardOutputContent")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub standard_output_content: Option<StandardOutputContent>,
     #[doc="<p>The URL for the complete text written by the plugin to stdout in Amazon S3. If an Amazon S3 bucket was not specified, then this string is empty.</p>"]
     #[serde(rename="StandardOutputUrl")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub standard_output_url: Option<Url>,
     #[doc="<p>The status of the parent command for this invocation. This status can be different than StatusDetails.</p>"]
     #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<CommandInvocationStatus>,
     #[doc="<p>A detailed status of the command execution for an invocation. StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-about-status.html\">Run Command Status</a>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to the instance.</p> </li> <li> <p>In Progress: The command has been sent to the instance but has not reached a terminal state.</p> </li> <li> <p>Delayed: The system attempted to send the command to the target, but the target was not available. The instance might not be available because of network issues, the instance was stopped, etc. The system will try to deliver the command again.</p> </li> <li> <p>Success: The command or plugin was executed successfully. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The command was not delivered to the instance before the delivery timeout expired. Delivery timeouts do not count against the parent command's MaxErrors limit, but they do contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: The command started to execute on the instance, but the execution was not complete before the timeout expired. Execution timeouts count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Failed: The command wasn't executed successfully on the instance. For a plugin, this indicates that the result code was not zero. For a command invocation, this indicates that the result code for one or more plugins was not zero. Invocation failures count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Undeliverable: The command can't be delivered to the instance. The instance might not exist or might not be responding. Undeliverable invocations don't count against the parent command's MaxErrors limit and don't contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Terminated: The parent command exceeded its MaxErrors limit and subsequent command invocations were canceled by the system. This is a terminal state.</p> </li> </ul>"]
     #[serde(rename="StatusDetails")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status_details: Option<StatusDetails>,
 }
 
@@ -1663,6 +1967,7 @@ pub struct GetDefaultPatchBaselineRequest;
 pub struct GetDefaultPatchBaselineResult {
     #[doc="<p>The ID of the default patch baseline.</p>"]
     #[serde(rename="BaselineId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub baseline_id: Option<BaselineId>,
 }
 
@@ -1680,12 +1985,15 @@ pub struct GetDeployablePatchSnapshotForInstanceRequest {
 pub struct GetDeployablePatchSnapshotForInstanceResult {
     #[doc="<p>The ID of the instance.</p>"]
     #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<InstanceId>,
     #[doc="<p>A pre-signed Amazon S3 URL that can be used to download the patch snapshot.</p>"]
     #[serde(rename="SnapshotDownloadUrl")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_download_url: Option<SnapshotDownloadUrl>,
     #[doc="<p>The user-defined snapshot ID.</p>"]
     #[serde(rename="SnapshotId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_id: Option<SnapshotId>,
 }
 
@@ -1693,6 +2001,7 @@ pub struct GetDeployablePatchSnapshotForInstanceResult {
 pub struct GetDocumentRequest {
     #[doc="<p>The document version for which you want information.</p>"]
     #[serde(rename="DocumentVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub document_version: Option<DocumentVersion>,
     #[doc="<p>The name of the SSM document.</p>"]
     #[serde(rename="Name")]
@@ -1703,15 +2012,19 @@ pub struct GetDocumentRequest {
 pub struct GetDocumentResult {
     #[doc="<p>The contents of the SSM document.</p>"]
     #[serde(rename="Content")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content: Option<DocumentContent>,
     #[doc="<p>The document type.</p>"]
     #[serde(rename="DocumentType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub document_type: Option<DocumentType>,
     #[doc="<p>The document version.</p>"]
     #[serde(rename="DocumentVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub document_version: Option<DocumentVersion>,
     #[doc="<p>The name of the SSM document.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<DocumentARN>,
 }
 
@@ -1719,15 +2032,19 @@ pub struct GetDocumentResult {
 pub struct GetInventoryRequest {
     #[doc="<p>One or more filters. Use a filter to return a more specific list of results.</p>"]
     #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<InventoryFilterList>,
     #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<MaxResults>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The list of inventory item types to return.</p>"]
     #[serde(rename="ResultAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub result_attributes: Option<ResultAttributeList>,
 }
 
@@ -1735,9 +2052,11 @@ pub struct GetInventoryRequest {
 pub struct GetInventoryResult {
     #[doc="<p>Collection of inventory entities such as a collection of instance inventory. </p>"]
     #[serde(rename="Entities")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub entities: Option<InventoryResultEntityList>,
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -1746,12 +2065,15 @@ pub type GetInventorySchemaMaxResults = i64;
 pub struct GetInventorySchemaRequest {
     #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<GetInventorySchemaMaxResults>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The type of inventory item to return.</p>"]
     #[serde(rename="TypeName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_name: Option<InventoryItemTypeNameFilter>,
 }
 
@@ -1759,9 +2081,11 @@ pub struct GetInventorySchemaRequest {
 pub struct GetInventorySchemaResult {
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>Inventory schemas returned by the request.</p>"]
     #[serde(rename="Schemas")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub schemas: Option<InventoryItemSchemaResultList>,
 }
 
@@ -1776,21 +2100,27 @@ pub struct GetMaintenanceWindowExecutionRequest {
 pub struct GetMaintenanceWindowExecutionResult {
     #[doc="<p>The time the Maintenance Window finished executing.</p>"]
     #[serde(rename="EndTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub end_time: Option<DateTime>,
     #[doc="<p>The time the Maintenance Window started executing.</p>"]
     #[serde(rename="StartTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_time: Option<DateTime>,
     #[doc="<p>The status of the Maintenance Window execution.</p>"]
     #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<MaintenanceWindowExecutionStatus>,
     #[doc="<p>The details explaining the Status. Only available for certain status values.</p>"]
     #[serde(rename="StatusDetails")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status_details: Option<MaintenanceWindowExecutionStatusDetails>,
     #[doc="<p>The ID of the task executions from the Maintenance Window execution.</p>"]
     #[serde(rename="TaskIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_ids: Option<MaintenanceWindowExecutionTaskIdList>,
     #[doc="<p>The ID of the Maintenance Window execution.</p>"]
     #[serde(rename="WindowExecutionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub window_execution_id: Option<MaintenanceWindowExecutionId>,
 }
 
@@ -1808,42 +2138,55 @@ pub struct GetMaintenanceWindowExecutionTaskRequest {
 pub struct GetMaintenanceWindowExecutionTaskResult {
     #[doc="<p>The time the task execution completed.</p>"]
     #[serde(rename="EndTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub end_time: Option<DateTime>,
     #[doc="<p>The defined maximum number of task executions that could be run in parallel.</p>"]
     #[serde(rename="MaxConcurrency")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_concurrency: Option<MaxConcurrency>,
     #[doc="<p>The defined maximum number of task execution errors allowed before scheduling of the task execution would have been stopped.</p>"]
     #[serde(rename="MaxErrors")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_errors: Option<MaxErrors>,
     #[doc="<p>The priority of the task.</p>"]
     #[serde(rename="Priority")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub priority: Option<MaintenanceWindowTaskPriority>,
     #[doc="<p>The role that was assumed when executing the task.</p>"]
     #[serde(rename="ServiceRole")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub service_role: Option<ServiceRole>,
     #[doc="<p>The time the task execution started.</p>"]
     #[serde(rename="StartTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_time: Option<DateTime>,
     #[doc="<p>The status of the task.</p>"]
     #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<MaintenanceWindowExecutionStatus>,
     #[doc="<p>The details explaining the Status. Only available for certain status values.</p>"]
     #[serde(rename="StatusDetails")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status_details: Option<MaintenanceWindowExecutionStatusDetails>,
     #[doc="<p>The ARN of the executed task.</p>"]
     #[serde(rename="TaskArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_arn: Option<MaintenanceWindowTaskArn>,
     #[doc="<p>The ID of the specific task execution in the Maintenance Window task that was retrieved.</p>"]
     #[serde(rename="TaskExecutionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_execution_id: Option<MaintenanceWindowExecutionTaskId>,
     #[doc="<p>The parameters passed to the task when it was executed. The map has the following format:</p> <p>Key: string, between 1 and 255 characters</p> <p>Value: an array of strings, each string is between 1 and 255 characters</p>"]
     #[serde(rename="TaskParameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_parameters: Option<MaintenanceWindowTaskParametersList>,
     #[doc="<p>The type of task executed.</p>"]
     #[serde(rename="Type")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<MaintenanceWindowTaskType>,
     #[doc="<p>The ID of the Maintenance Window execution that includes the task.</p>"]
     #[serde(rename="WindowExecutionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub window_execution_id: Option<MaintenanceWindowExecutionId>,
 }
 
@@ -1858,32 +2201,39 @@ pub struct GetMaintenanceWindowRequest {
 pub struct GetMaintenanceWindowResult {
     #[doc="<p>Whether targets must be registered with the Maintenance Window before tasks can be defined for those targets.</p>"]
     #[serde(rename="AllowUnassociatedTargets")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub allow_unassociated_targets: Option<MaintenanceWindowAllowUnassociatedTargets>,
     #[doc="<p>The date the Maintenance Window was created.</p>"]
     #[serde(rename="CreatedDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub created_date: Option<DateTime>,
     #[doc="<p>The number of hours before the end of the Maintenance Window that Systems Manager stops scheduling new tasks for execution.</p>"]
     #[serde(rename="Cutoff")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cutoff: Option<MaintenanceWindowCutoff>,
     #[doc="<p>The duration of the Maintenance Window in hours.</p>"]
     #[serde(rename="Duration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub duration: Option<MaintenanceWindowDurationHours>,
     #[doc="<p>Whether the Maintenance Windows is enabled.</p>"]
     #[serde(rename="Enabled")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub enabled: Option<MaintenanceWindowEnabled>,
     #[doc="<p>The date the Maintenance Window was last modified.</p>"]
     #[serde(rename="ModifiedDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub modified_date: Option<DateTime>,
     #[doc="<p>The name of the Maintenance Window.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<MaintenanceWindowName>,
     #[doc="<p>The schedule of the Maintenance Window in the form of a cron or rate expression.</p>"]
     #[serde(rename="Schedule")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub schedule: Option<MaintenanceWindowSchedule>,
     #[doc="<p>The ID of the created Maintenance Window.</p>"]
     #[serde(rename="WindowId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub window_id: Option<MaintenanceWindowId>,
 }
 
@@ -1891,16 +2241,18 @@ pub struct GetMaintenanceWindowResult {
 pub struct GetParameterHistoryRequest {
     #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<MaxResults>,
     #[doc="<p>The name of a parameter you want to query.</p>"]
     #[serde(rename="Name")]
     pub name: PSParameterName,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>Return decrypted values for secure string parameters. This flag is ignored for String and StringList parameter types.</p>"]
     #[serde(rename="WithDecryption")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub with_decryption: Option<Boolean>,
 }
 
@@ -1908,9 +2260,11 @@ pub struct GetParameterHistoryRequest {
 pub struct GetParameterHistoryResult {
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>A list of parameters returned by the request.</p>"]
     #[serde(rename="Parameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameters: Option<ParameterHistoryList>,
 }
 
@@ -1921,7 +2275,7 @@ pub struct GetParametersRequest {
     pub names: ParameterNameList,
     #[doc="<p>Return decrypted secure string value. Return decrypted values for secure string parameters. This flag is ignored for String and StringList parameter types.</p>"]
     #[serde(rename="WithDecryption")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub with_decryption: Option<Boolean>,
 }
 
@@ -1929,9 +2283,11 @@ pub struct GetParametersRequest {
 pub struct GetParametersResult {
     #[doc="<p>A list of parameters that are not formatted correctly or do not run when executed.</p>"]
     #[serde(rename="InvalidParameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub invalid_parameters: Option<ParameterNameList>,
     #[doc="<p>A list of details for a parameter.</p>"]
     #[serde(rename="Parameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameters: Option<ParameterList>,
 }
 
@@ -1946,9 +2302,11 @@ pub struct GetPatchBaselineForPatchGroupRequest {
 pub struct GetPatchBaselineForPatchGroupResult {
     #[doc="<p>The ID of the patch baseline that should be used for the patch group.</p>"]
     #[serde(rename="BaselineId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub baseline_id: Option<BaselineId>,
     #[doc="<p>The name of the patch group.</p>"]
     #[serde(rename="PatchGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub patch_group: Option<PatchGroup>,
 }
 
@@ -1963,33 +2321,43 @@ pub struct GetPatchBaselineRequest {
 pub struct GetPatchBaselineResult {
     #[doc="<p>A set of rules used to include patches in the baseline.</p>"]
     #[serde(rename="ApprovalRules")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub approval_rules: Option<PatchRuleGroup>,
     #[doc="<p>A list of explicitly approved patches for the baseline.</p>"]
     #[serde(rename="ApprovedPatches")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub approved_patches: Option<PatchIdList>,
     #[doc="<p>The ID of the retrieved patch baseline.</p>"]
     #[serde(rename="BaselineId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub baseline_id: Option<BaselineId>,
     #[doc="<p>The date the patch baseline was created.</p>"]
     #[serde(rename="CreatedDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub created_date: Option<DateTime>,
     #[doc="<p>A description of the patch baseline.</p>"]
     #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<BaselineDescription>,
     #[doc="<p>A set of global filters used to exclude patches from the baseline.</p>"]
     #[serde(rename="GlobalFilters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub global_filters: Option<PatchFilterGroup>,
     #[doc="<p>The date the patch baseline was last modified.</p>"]
     #[serde(rename="ModifiedDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub modified_date: Option<DateTime>,
     #[doc="<p>The name of the patch baseline.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<BaselineName>,
     #[doc="<p>Patch groups included in the patch baseline.</p>"]
     #[serde(rename="PatchGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub patch_groups: Option<PatchGroupList>,
     #[doc="<p>A list of explicitly rejected patches for the baseline.</p>"]
     #[serde(rename="RejectedPatches")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rejected_patches: Option<PatchIdList>,
 }
 
@@ -2000,9 +2368,11 @@ pub type IamRole = String;
 pub struct InstanceAggregatedAssociationOverview {
     #[doc="<p>Detailed status information about the aggregated associations.</p>"]
     #[serde(rename="DetailedStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub detailed_status: Option<StatusName>,
     #[doc="<p>The number of associations for the instance(s).</p>"]
     #[serde(rename="InstanceAssociationStatusAggregatedCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_association_status_aggregated_count:
         Option<InstanceAssociationStatusAggregatedCount>,
 }
@@ -2012,12 +2382,15 @@ pub struct InstanceAggregatedAssociationOverview {
 pub struct InstanceAssociation {
     #[doc="<p>The association ID.</p>"]
     #[serde(rename="AssociationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub association_id: Option<AssociationId>,
     #[doc="<p>The content of the association document for the instance(s).</p>"]
     #[serde(rename="Content")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content: Option<DocumentContent>,
     #[doc="<p>The instance ID.</p>"]
     #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<InstanceId>,
 }
 
@@ -2028,6 +2401,7 @@ pub type InstanceAssociationList = Vec<InstanceAssociation>;
 pub struct InstanceAssociationOutputLocation {
     #[doc="<p>An Amazon S3 bucket where you want to store the results of this request.</p>"]
     #[serde(rename="S3Location")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub s3_location: Option<S3OutputLocation>,
 }
 
@@ -2036,6 +2410,7 @@ pub struct InstanceAssociationOutputLocation {
 pub struct InstanceAssociationOutputUrl {
     #[doc="<p>The URL of Amazon S3 bucket where you want to store the results of this request.</p>"]
     #[serde(rename="S3OutputUrl")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub s3_output_url: Option<S3OutputUrl>,
 }
 
@@ -2046,33 +2421,43 @@ pub type InstanceAssociationStatusAggregatedCount = ::std::collections::HashMap<
 pub struct InstanceAssociationStatusInfo {
     #[doc="<p>The association ID.</p>"]
     #[serde(rename="AssociationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub association_id: Option<AssociationId>,
     #[doc="<p>Detailed status information about the instance association.</p>"]
     #[serde(rename="DetailedStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub detailed_status: Option<StatusName>,
     #[doc="<p>The association document verions.</p>"]
     #[serde(rename="DocumentVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub document_version: Option<DocumentVersion>,
     #[doc="<p>An error code returned by the request to create the association.</p>"]
     #[serde(rename="ErrorCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub error_code: Option<AgentErrorCode>,
     #[doc="<p>The date the instance association executed. </p>"]
     #[serde(rename="ExecutionDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub execution_date: Option<DateTime>,
     #[doc="<p>Summary information about association execution.</p>"]
     #[serde(rename="ExecutionSummary")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub execution_summary: Option<InstanceAssociationExecutionSummary>,
     #[doc="<p>The instance ID where the association was created.</p>"]
     #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<InstanceId>,
     #[doc="<p>The name of the association.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<DocumentName>,
     #[doc="<p>A URL for an Amazon S3 bucket where you want to store the results of this request.</p>"]
     #[serde(rename="OutputUrl")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub output_url: Option<InstanceAssociationOutputUrl>,
     #[doc="<p>Status information about the instance association.</p>"]
     #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<StatusName>,
 }
 
@@ -2085,61 +2470,79 @@ pub type InstanceIdList = Vec<InstanceId>;
 pub struct InstanceInformation {
     #[doc="<p>The activation ID created by Systems Manager when the server or VM was registered.</p>"]
     #[serde(rename="ActivationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub activation_id: Option<ActivationId>,
     #[doc="<p>The version of the SSM Agent running on your Linux instance. </p>"]
     #[serde(rename="AgentVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub agent_version: Option<Version>,
     #[doc="<p>Information about the association.</p>"]
     #[serde(rename="AssociationOverview")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub association_overview: Option<InstanceAggregatedAssociationOverview>,
     #[doc="<p>The status of the association.</p>"]
     #[serde(rename="AssociationStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub association_status: Option<StatusName>,
     #[doc="<p>The fully qualified host name of the managed instance.</p>"]
     #[serde(rename="ComputerName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub computer_name: Option<ComputerName>,
     #[doc="<p>The IP address of the managed instance.</p>"]
     #[serde(rename="IPAddress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ip_address: Option<IPAddress>,
     #[doc="<p>The Amazon Identity and Access Management (IAM) role assigned to EC2 instances or managed instances. </p>"]
     #[serde(rename="IamRole")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub iam_role: Option<IamRole>,
     #[doc="<p>The instance ID. </p>"]
     #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<InstanceId>,
     #[doc="<p>Indicates whether latest version of the SSM Agent is running on your instance. </p>"]
     #[serde(rename="IsLatestVersion")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub is_latest_version: Option<Boolean>,
     #[doc="<p>The date the association was last executed.</p>"]
     #[serde(rename="LastAssociationExecutionDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_association_execution_date: Option<DateTime>,
     #[doc="<p>The date and time when agent last pinged Systems Manager service. </p>"]
     #[serde(rename="LastPingDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_ping_date_time: Option<DateTime>,
     #[doc="<p>The last date the association was successfully run.</p>"]
     #[serde(rename="LastSuccessfulAssociationExecutionDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_successful_association_execution_date: Option<DateTime>,
     #[doc="<p>The name of the managed instance.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
     #[doc="<p>Connection status of the SSM Agent. </p>"]
     #[serde(rename="PingStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ping_status: Option<PingStatus>,
     #[doc="<p>The name of the operating system platform running on your instance. </p>"]
     #[serde(rename="PlatformName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub platform_name: Option<String>,
     #[doc="<p>The operating system platform type. </p>"]
     #[serde(rename="PlatformType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub platform_type: Option<PlatformType>,
     #[doc="<p>The version of the OS platform running on your instance. </p>"]
     #[serde(rename="PlatformVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub platform_version: Option<String>,
     #[doc="<p>The date the server or VM was registered with AWS as a managed instance.</p>"]
     #[serde(rename="RegistrationDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub registration_date: Option<DateTime>,
     #[doc="<p>The type of instance. Instances are either EC2 instances or managed instances. </p>"]
     #[serde(rename="ResourceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resource_type: Option<ResourceType>,
 }
 
@@ -2180,21 +2583,26 @@ pub struct InstancePatchState {
     pub baseline_id: BaselineId,
     #[doc="<p>The number of patches from the patch baseline that were attempted to be installed during the last patching operation, but failed to install.</p>"]
     #[serde(rename="FailedCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub failed_count: Option<PatchFailedCount>,
     #[doc="<p>The number of patches from the patch baseline that are installed on the instance.</p>"]
     #[serde(rename="InstalledCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub installed_count: Option<PatchInstalledCount>,
     #[doc="<p>The number of patches not specified in the patch baseline that are installed on the instance.</p>"]
     #[serde(rename="InstalledOtherCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub installed_other_count: Option<PatchInstalledOtherCount>,
     #[doc="<p>The ID of the managed instance the high-level patch compliance information was collected for.</p>"]
     #[serde(rename="InstanceId")]
     pub instance_id: InstanceId,
     #[doc="<p>The number of patches from the patch baseline that are applicable for the instance but aren't currently installed.</p>"]
     #[serde(rename="MissingCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub missing_count: Option<PatchMissingCount>,
     #[doc="<p>The number of patches from the patch baseline that aren't applicable for the instance and hence aren't installed on the instance.</p>"]
     #[serde(rename="NotApplicableCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub not_applicable_count: Option<PatchNotApplicableCount>,
     #[doc="<p>The type of patching operation that was performed: SCAN (assess patch compliance state) or INSTALL (install missing patches).</p>"]
     #[serde(rename="Operation")]
@@ -2207,12 +2615,14 @@ pub struct InstancePatchState {
     pub operation_start_time: PatchOperationStartTime,
     #[doc="<p>Placeholder information, this field will always be empty in the current release of the service.</p>"]
     #[serde(rename="OwnerInformation")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner_information: Option<OwnerInformation>,
     #[doc="<p>The name of the patch group the managed instance belongs to.</p>"]
     #[serde(rename="PatchGroup")]
     pub patch_group: PatchGroup,
     #[doc="<p>The ID of the patch baseline snapshot used during the patching operation when this compliance data was collected.</p>"]
     #[serde(rename="SnapshotId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub snapshot_id: Option<SnapshotId>,
 }
 
@@ -2248,6 +2658,7 @@ pub struct InventoryFilter {
     pub key: InventoryFilterKey,
     #[doc="<p>The type of filter. Valid values include the following: \"Equal\"|\"NotEqual\"|\"BeginWith\"|\"LessThan\"|\"GreaterThan\"</p>"]
     #[serde(rename="Type")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<InventoryQueryOperatorType>,
     #[doc="<p>Inventory filter values. Example: inventory filter where instance IDs are specified as values Key=AWS:InstanceInformation.InstanceId,Values= i-a12b3c4d5e6g, i-1a2b3c4d5e6,Type=Equal </p>"]
     #[serde(rename="Values")]
@@ -2266,9 +2677,11 @@ pub struct InventoryItem {
     pub capture_time: InventoryItemCaptureTime,
     #[doc="<p>The inventory data of the inventory type.</p>"]
     #[serde(rename="Content")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content: Option<InventoryItemEntryList>,
     #[doc="<p>MD5 hash of the inventory item type contents. The content hash is used to determine whether to update inventory information. The PutInventory API does not update the inventory item type contents if the MD5 hash has not changed since last update. </p>"]
     #[serde(rename="ContentHash")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_hash: Option<InventoryItemContentHash>,
     #[doc="<p>The schema version for the inventory item.</p>"]
     #[serde(rename="SchemaVersion")]
@@ -2307,6 +2720,7 @@ pub struct InventoryItemSchema {
     pub type_name: InventoryItemTypeName,
     #[doc="<p>The schema version for the inventory item.</p>"]
     #[serde(rename="Version")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version: Option<InventoryItemSchemaVersion>,
 }
 
@@ -2320,9 +2734,11 @@ pub type InventoryQueryOperatorType = String;
 pub struct InventoryResultEntity {
     #[doc="<p>The data section in the inventory result entity json.</p>"]
     #[serde(rename="Data")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub data: Option<InventoryResultItemMap>,
     #[doc="<p>ID of the inventory result entity. For example, for managed instance inventory the result will be the managed instance ID. For EC2 instance inventory, the result will be the instance ID. </p>"]
     #[serde(rename="Id")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<InventoryResultEntityId>,
 }
 
@@ -2333,12 +2749,14 @@ pub type InventoryResultEntityList = Vec<InventoryResultEntity>;
 pub struct InventoryResultItem {
     #[doc="<p>The time inventory item data was captured.</p>"]
     #[serde(rename="CaptureTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub capture_time: Option<InventoryItemCaptureTime>,
     #[doc="<p>Contains all the inventory data of the item type. Results include attribute names and values. </p>"]
     #[serde(rename="Content")]
     pub content: InventoryItemEntryList,
     #[doc="<p>MD5 hash of the inventory item type contents. The content hash is used to determine whether to update inventory information. The PutInventory API does not update the inventory item type contents if the MD5 hash has not changed since last update. </p>"]
     #[serde(rename="ContentHash")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_hash: Option<InventoryItemContentHash>,
     #[doc="<p>The schema version for the inventory result item/</p>"]
     #[serde(rename="SchemaVersion")]
@@ -2357,12 +2775,15 @@ pub type KeyList = Vec<TagKey>;
 pub struct ListAssociationsRequest {
     #[doc="<p>One or more filters. Use a filter to return a more specific list of results.</p>"]
     #[serde(rename="AssociationFilterList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub association_filter_list: Option<AssociationFilterList>,
     #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<MaxResults>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -2370,9 +2791,11 @@ pub struct ListAssociationsRequest {
 pub struct ListAssociationsResult {
     #[doc="<p>The associations.</p>"]
     #[serde(rename="Associations")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub associations: Option<AssociationList>,
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -2380,22 +2803,27 @@ pub struct ListAssociationsResult {
 pub struct ListCommandInvocationsRequest {
     #[doc="<p>(Optional) The invocations for a specific command ID.</p>"]
     #[serde(rename="CommandId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub command_id: Option<CommandId>,
     #[doc="<p>(Optional) If set this returns the response of the command executions and any command output. By default this is set to False. </p>"]
     #[serde(rename="Details")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub details: Option<Boolean>,
     #[doc="<p>(Optional) One or more filters. Use a filter to return a more specific list of results.</p>"]
     #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<CommandFilterList>,
     #[doc="<p>(Optional) The command execution details for a specific instance ID.</p>"]
     #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<InstanceId>,
     #[doc="<p>(Optional) The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<CommandMaxResults>,
     #[doc="<p>(Optional) The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -2403,9 +2831,11 @@ pub struct ListCommandInvocationsRequest {
 pub struct ListCommandInvocationsResult {
     #[doc="<p>(Optional) A list of all invocations. </p>"]
     #[serde(rename="CommandInvocations")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub command_invocations: Option<CommandInvocationList>,
     #[doc="<p>(Optional) The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -2413,18 +2843,23 @@ pub struct ListCommandInvocationsResult {
 pub struct ListCommandsRequest {
     #[doc="<p>(Optional) If provided, lists only the specified command.</p>"]
     #[serde(rename="CommandId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub command_id: Option<CommandId>,
     #[doc="<p>(Optional) One or more filters. Use a filter to return a more specific list of results. </p>"]
     #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<CommandFilterList>,
     #[doc="<p>(Optional) Lists commands issued against this instance ID.</p>"]
     #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<InstanceId>,
     #[doc="<p>(Optional) The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<CommandMaxResults>,
     #[doc="<p>(Optional) The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -2432,9 +2867,11 @@ pub struct ListCommandsRequest {
 pub struct ListCommandsResult {
     #[doc="<p>(Optional) The list of commands requested by the user. </p>"]
     #[serde(rename="Commands")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub commands: Option<CommandList>,
     #[doc="<p>(Optional) The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -2442,12 +2879,14 @@ pub struct ListCommandsResult {
 pub struct ListDocumentVersionsRequest {
     #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<MaxResults>,
     #[doc="<p>The name of the document about which you want version information.</p>"]
     #[serde(rename="Name")]
     pub name: DocumentName,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -2455,9 +2894,11 @@ pub struct ListDocumentVersionsRequest {
 pub struct ListDocumentVersionsResult {
     #[doc="<p>The document versions.</p>"]
     #[serde(rename="DocumentVersions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub document_versions: Option<DocumentVersionList>,
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -2465,12 +2906,15 @@ pub struct ListDocumentVersionsResult {
 pub struct ListDocumentsRequest {
     #[doc="<p>One or more filters. Use a filter to return a more specific list of results.</p>"]
     #[serde(rename="DocumentFilterList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub document_filter_list: Option<DocumentFilterList>,
     #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<MaxResults>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -2478,9 +2922,11 @@ pub struct ListDocumentsRequest {
 pub struct ListDocumentsResult {
     #[doc="<p>The names of the SSM documents.</p>"]
     #[serde(rename="DocumentIdentifiers")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub document_identifiers: Option<DocumentIdentifierList>,
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
 }
 
@@ -2488,15 +2934,18 @@ pub struct ListDocumentsResult {
 pub struct ListInventoryEntriesRequest {
     #[doc="<p>One or more filters. Use a filter to return a more specific list of results.</p>"]
     #[serde(rename="Filters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub filters: Option<InventoryFilterList>,
     #[doc="<p>The instance ID for which you want inventory information.</p>"]
     #[serde(rename="InstanceId")]
     pub instance_id: InstanceId,
     #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
     #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_results: Option<MaxResults>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The type of inventory item for which you want information.</p>"]
     #[serde(rename="TypeName")]
@@ -2507,21 +2956,27 @@ pub struct ListInventoryEntriesRequest {
 pub struct ListInventoryEntriesResult {
     #[doc="<p>The time that inventory information was collected for the instance(s).</p>"]
     #[serde(rename="CaptureTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub capture_time: Option<InventoryItemCaptureTime>,
     #[doc="<p>A list of inventory items on the instance(s).</p>"]
     #[serde(rename="Entries")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub entries: Option<InventoryItemEntryList>,
     #[doc="<p>The instance ID targeted by the request to query inventory information.</p>"]
     #[serde(rename="InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_id: Option<InstanceId>,
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
     #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
     #[doc="<p>The inventory schema version used by the instance(s).</p>"]
     #[serde(rename="SchemaVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub schema_version: Option<InventoryItemSchemaVersion>,
     #[doc="<p>The type of inventory item returned by the request.</p>"]
     #[serde(rename="TypeName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_name: Option<InventoryItemTypeName>,
 }
 
@@ -2539,6 +2994,7 @@ pub struct ListTagsForResourceRequest {
 pub struct ListTagsForResourceResult {
     #[doc="<p>A list of tags.</p>"]
     #[serde(rename="TagList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_list: Option<TagList>,
 }
 
@@ -2550,6 +3006,7 @@ pub struct LoggingInfo {
     pub s3_bucket_name: S3BucketName,
     #[doc="<p>(Optional) The Amazon S3 bucket subfolder. </p>"]
     #[serde(rename="S3KeyPrefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub s3_key_prefix: Option<S3KeyPrefix>,
     #[doc="<p>The region where the Amazon S3 bucket is located.</p>"]
     #[serde(rename="S3Region")]
@@ -2565,21 +3022,27 @@ pub type MaintenanceWindowEnabled = bool;
 pub struct MaintenanceWindowExecution {
     #[doc="<p>The time the execution finished.</p>"]
     #[serde(rename="EndTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub end_time: Option<DateTime>,
     #[doc="<p>The time the execution started.</p>"]
     #[serde(rename="StartTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_time: Option<DateTime>,
     #[doc="<p>The status of the execution.</p>"]
     #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<MaintenanceWindowExecutionStatus>,
     #[doc="<p>The details explaining the Status. Only available for certain status values.</p>"]
     #[serde(rename="StatusDetails")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status_details: Option<MaintenanceWindowExecutionStatusDetails>,
     #[doc="<p>The ID of the Maintenance Window execution.</p>"]
     #[serde(rename="WindowExecutionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub window_execution_id: Option<MaintenanceWindowExecutionId>,
     #[doc="<p>The ID of the Maintenance Window.</p>"]
     #[serde(rename="WindowId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub window_id: Option<MaintenanceWindowId>,
 }
 
@@ -2595,27 +3058,35 @@ pub type MaintenanceWindowExecutionTaskIdList = Vec<MaintenanceWindowExecutionTa
 pub struct MaintenanceWindowExecutionTaskIdentity {
     #[doc="<p>The time the task execution finished.</p>"]
     #[serde(rename="EndTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub end_time: Option<DateTime>,
     #[doc="<p>The time the task execution started.</p>"]
     #[serde(rename="StartTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_time: Option<DateTime>,
     #[doc="<p>The status of the task execution.</p>"]
     #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<MaintenanceWindowExecutionStatus>,
     #[doc="<p>The details explaining the status of the task execution. Only available for certain status values.</p>"]
     #[serde(rename="StatusDetails")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status_details: Option<MaintenanceWindowExecutionStatusDetails>,
     #[doc="<p>The ARN of the executed task.</p>"]
     #[serde(rename="TaskArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_arn: Option<MaintenanceWindowTaskArn>,
     #[doc="<p>The ID of the specific task execution in the Maintenance Window execution.</p>"]
     #[serde(rename="TaskExecutionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_execution_id: Option<MaintenanceWindowExecutionTaskId>,
     #[doc="<p>The type of executed task.</p>"]
     #[serde(rename="TaskType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_type: Option<MaintenanceWindowTaskType>,
     #[doc="<p>The ID of the Maintenance Window execution that ran the task.</p>"]
     #[serde(rename="WindowExecutionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub window_execution_id: Option<MaintenanceWindowExecutionId>,
 }
 
@@ -2626,36 +3097,47 @@ pub type MaintenanceWindowExecutionTaskInvocationId = String;
 pub struct MaintenanceWindowExecutionTaskInvocationIdentity {
     #[doc="<p>The time the invocation finished.</p>"]
     #[serde(rename="EndTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub end_time: Option<DateTime>,
     #[doc="<p>The ID of the action performed in the service that actually handled the task invocation. If the task type is RUN_COMMAND, this value is the command ID.</p>"]
     #[serde(rename="ExecutionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub execution_id: Option<MaintenanceWindowExecutionTaskExecutionId>,
     #[doc="<p>The ID of the task invocation.</p>"]
     #[serde(rename="InvocationId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub invocation_id: Option<MaintenanceWindowExecutionTaskInvocationId>,
     #[doc="<p>User-provided value that was specified when the target was registered with the Maintenance Window. This was also included in any CloudWatch events raised during the task invocation.</p>"]
     #[serde(rename="OwnerInformation")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner_information: Option<OwnerInformation>,
     #[doc="<p>The parameters that were provided for the invocation when it was executed.</p>"]
     #[serde(rename="Parameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameters: Option<MaintenanceWindowExecutionTaskInvocationParameters>,
     #[doc="<p>The time the invocation started.</p>"]
     #[serde(rename="StartTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_time: Option<DateTime>,
     #[doc="<p>The status of the task invocation.</p>"]
     #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<MaintenanceWindowExecutionStatus>,
     #[doc="<p>The details explaining the status of the task invocation. Only available for certain Status values. </p>"]
     #[serde(rename="StatusDetails")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status_details: Option<MaintenanceWindowExecutionStatusDetails>,
     #[doc="<p>The ID of the specific task execution in the Maintenance Window execution.</p>"]
     #[serde(rename="TaskExecutionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_execution_id: Option<MaintenanceWindowExecutionTaskId>,
     #[doc="<p>The ID of the Maintenance Window execution that ran the task.</p>"]
     #[serde(rename="WindowExecutionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub window_execution_id: Option<MaintenanceWindowExecutionId>,
     #[doc="<p>The ID of the target definition in this Maintenance Window the invocation was performed for.</p>"]
     #[serde(rename="WindowTargetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub window_target_id: Option<MaintenanceWindowTaskTargetId>,
 }
 
@@ -2667,9 +3149,11 @@ pub type MaintenanceWindowExecutionTaskInvocationParameters = String;
 pub struct MaintenanceWindowFilter {
     #[doc="<p>The name of the filter.</p>"]
     #[serde(rename="Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key: Option<MaintenanceWindowFilterKey>,
     #[doc="<p>The filter values.</p>"]
     #[serde(rename="Values")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub values: Option<MaintenanceWindowFilterValues>,
 }
 
@@ -2683,19 +3167,23 @@ pub type MaintenanceWindowId = String;
 pub struct MaintenanceWindowIdentity {
     #[doc="<p>The number of hours before the end of the Maintenance Window that Systems Manager stops scheduling new tasks for execution.</p>"]
     #[serde(rename="Cutoff")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cutoff: Option<MaintenanceWindowCutoff>,
     #[doc="<p>The duration of the Maintenance Window in hours.</p>"]
     #[serde(rename="Duration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub duration: Option<MaintenanceWindowDurationHours>,
     #[doc="<p>Whether the Maintenance Window is enabled.</p>"]
     #[serde(rename="Enabled")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub enabled: Option<MaintenanceWindowEnabled>,
     #[doc="<p>The name of the Maintenance Window.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<MaintenanceWindowName>,
     #[doc="<p>The ID of the Maintenance Window.</p>"]
     #[serde(rename="WindowId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub window_id: Option<MaintenanceWindowId>,
 }
 
@@ -2709,18 +3197,23 @@ pub type MaintenanceWindowSchedule = String;
 pub struct MaintenanceWindowTarget {
     #[doc="<p>User-provided value that will be included in any CloudWatch events raised while running tasks for these targets in this Maintenance Window.</p>"]
     #[serde(rename="OwnerInformation")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner_information: Option<OwnerInformation>,
     #[doc="<p>The type of target.</p>"]
     #[serde(rename="ResourceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub resource_type: Option<MaintenanceWindowResourceType>,
     #[doc="<p>The targets (either instances or tags). Instances are specified using Key=instanceids,Values=&lt;instanceid1&gt;,&lt;instanceid2&gt;. Tags are specified using Key=&lt;tag name&gt;,Values=&lt;tag value&gt;.</p>"]
     #[serde(rename="Targets")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub targets: Option<Targets>,
     #[doc="<p>The Maintenance Window ID where the target is registered.</p>"]
     #[serde(rename="WindowId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub window_id: Option<MaintenanceWindowId>,
     #[doc="<p>The ID of the target.</p>"]
     #[serde(rename="WindowTargetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub window_target_id: Option<MaintenanceWindowTargetId>,
 }
 
@@ -2731,36 +3224,47 @@ pub type MaintenanceWindowTargetList = Vec<MaintenanceWindowTarget>;
 pub struct MaintenanceWindowTask {
     #[doc="<p>Information about an Amazon S3 bucket to write task-level logs to.</p>"]
     #[serde(rename="LoggingInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub logging_info: Option<LoggingInfo>,
     #[doc="<p>The maximum number of targets this task can be run for in parallel.</p>"]
     #[serde(rename="MaxConcurrency")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_concurrency: Option<MaxConcurrency>,
     #[doc="<p>The maximum number of errors allowed before this task stops being scheduled.</p>"]
     #[serde(rename="MaxErrors")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_errors: Option<MaxErrors>,
     #[doc="<p>The priority of the task in the Maintenance Window, the lower the number the higher the priority. Tasks in a Maintenance Window are scheduled in priority order with tasks that have the same priority scheduled in parallel.</p>"]
     #[serde(rename="Priority")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub priority: Option<MaintenanceWindowTaskPriority>,
     #[doc="<p>The role that should be assumed when executing the task</p>"]
     #[serde(rename="ServiceRoleArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub service_role_arn: Option<ServiceRole>,
     #[doc="<p>The targets (either instances or tags). Instances are specified using Key=instanceids,Values=&lt;instanceid1&gt;,&lt;instanceid2&gt;. Tags are specified using Key=&lt;tag name&gt;,Values=&lt;tag value&gt;.</p>"]
     #[serde(rename="Targets")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub targets: Option<Targets>,
     #[doc="<p>The ARN of the task to execute.</p>"]
     #[serde(rename="TaskArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_arn: Option<MaintenanceWindowTaskArn>,
     #[doc="<p>The parameters that should be passed to the task when it is executed.</p>"]
     #[serde(rename="TaskParameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_parameters: Option<MaintenanceWindowTaskParameters>,
     #[doc="<p>The type of task.</p>"]
     #[serde(rename="Type")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<MaintenanceWindowTaskType>,
     #[doc="<p>The Maintenance Window ID where the task is registered.</p>"]
     #[serde(rename="WindowId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub window_id: Option<MaintenanceWindowId>,
     #[doc="<p>The task ID.</p>"]
     #[serde(rename="WindowTaskId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub window_task_id: Option<MaintenanceWindowTaskId>,
 }
 
@@ -2774,6 +3278,7 @@ pub type MaintenanceWindowTaskParameterValue = String;
 pub struct MaintenanceWindowTaskParameterValueExpression {
     #[doc="<p>This field contains an array of 0 or more strings, each 1 to 255 characters in length.</p>"]
     #[serde(rename="Values")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub values: Option<MaintenanceWindowTaskParameterValueList>,
 }
 
@@ -2794,9 +3299,11 @@ pub type MaxResultsEC2Compatible = i64;
 pub struct ModifyDocumentPermissionRequest {
     #[doc="<p>The AWS user accounts that should have access to the document. The account IDs can either be a group of account IDs or <i>All</i>.</p>"]
     #[serde(rename="AccountIdsToAdd")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub account_ids_to_add: Option<AccountIdList>,
     #[doc="<p>The AWS user accounts that should no longer have access to the document. The AWS user account can either be a group of account IDs or <i>All</i>. This action has a higher priority than <i>AccountIdsToAdd</i>. If you specify an account ID to add and the same ID to remove, the system removes access to the document.</p>"]
     #[serde(rename="AccountIdsToRemove")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub account_ids_to_remove: Option<AccountIdList>,
     #[doc="<p>The name of the document that you want to share.</p>"]
     #[serde(rename="Name")]
@@ -2817,12 +3324,15 @@ pub type NotificationArn = String;
 pub struct NotificationConfig {
     #[doc="<p>An Amazon Resource Name (ARN) for a Simple Notification Service (SNS) topic. Run Command pushes notifications about command status changes to this topic.</p>"]
     #[serde(rename="NotificationArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub notification_arn: Option<NotificationArn>,
     #[doc="<p>The different events for which you can receive notifications. These events include the following: All (events), InProgress, Success, TimedOut, Cancelled, Failed. To learn more about these events, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-commands.html\">Setting Up Events and Notifications</a> in the <i>Amazon EC2 Systems Manager User Guide</i>.</p>"]
     #[serde(rename="NotificationEvents")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub notification_events: Option<NotificationEventList>,
     #[doc="<p>Command: Receive notification when the status of a command changes. Invocation: For commands sent to multiple instances, receive notification on a per-instance basis when the status of a command changes. </p>"]
     #[serde(rename="NotificationType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub notification_type: Option<NotificationType>,
 }
 
@@ -2837,12 +3347,15 @@ pub type PSParameterValue = String;
 pub struct Parameter {
     #[doc="<p>The name of the parameter.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<PSParameterName>,
     #[doc="<p>The type of parameter. Valid values include the following: String, String list, Secure string.</p>"]
     #[serde(rename="Type")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<ParameterType>,
     #[doc="<p>The parameter value.</p>"]
     #[serde(rename="Value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<PSParameterValue>,
 }
 
@@ -2852,24 +3365,31 @@ pub type ParameterDescription = String;
 pub struct ParameterHistory {
     #[doc="<p>Information about the parameter.</p>"]
     #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<ParameterDescription>,
     #[doc="<p>The ID of the query key used for this parameter.</p>"]
     #[serde(rename="KeyId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key_id: Option<ParameterKeyId>,
     #[doc="<p>Date the parameter was last changed or updated.</p>"]
     #[serde(rename="LastModifiedDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_modified_date: Option<DateTime>,
     #[doc="<p>Amazon Resource Name (ARN) of the AWS user who last changed the parameter.</p>"]
     #[serde(rename="LastModifiedUser")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_modified_user: Option<String>,
     #[doc="<p>The name of the parameter.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<PSParameterName>,
     #[doc="<p>The type of parameter used.</p>"]
     #[serde(rename="Type")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<ParameterType>,
     #[doc="<p>The parameter value.</p>"]
     #[serde(rename="Value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<PSParameterValue>,
 }
 
@@ -2881,21 +3401,27 @@ pub type ParameterList = Vec<Parameter>;
 pub struct ParameterMetadata {
     #[doc="<p>Description of the parameter actions.</p>"]
     #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<ParameterDescription>,
     #[doc="<p>The ID of the query key used for this parameter.</p>"]
     #[serde(rename="KeyId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key_id: Option<ParameterKeyId>,
     #[doc="<p>Date the parameter was last changed or updated.</p>"]
     #[serde(rename="LastModifiedDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_modified_date: Option<DateTime>,
     #[doc="<p>Amazon Resource Name (ARN) of the AWS user who last changed the parameter.</p>"]
     #[serde(rename="LastModifiedUser")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_modified_user: Option<String>,
     #[doc="<p>The parameter name.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<PSParameterName>,
     #[doc="<p>The type of parameter. Valid parameter types include the following: String, String list, Secure string.</p>"]
     #[serde(rename="Type")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<ParameterType>,
 }
 
@@ -2911,6 +3437,7 @@ pub type Parameters = ::std::collections::HashMap<ParameterName, ParameterValueL
 pub struct ParametersFilter {
     #[doc="<p>The name of the filter.</p>"]
     #[serde(rename="Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key: Option<ParametersFilterKey>,
     #[doc="<p>The filter values.</p>"]
     #[serde(rename="Values")]
@@ -2926,42 +3453,55 @@ pub type ParametersFilterValueList = Vec<ParametersFilterValue>;
 pub struct Patch {
     #[doc="<p>The classification of the patch (for example, SecurityUpdates, Updates, CriticalUpdates).</p>"]
     #[serde(rename="Classification")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub classification: Option<PatchClassification>,
     #[doc="<p>The URL where more information can be obtained about the patch.</p>"]
     #[serde(rename="ContentUrl")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub content_url: Option<PatchContentUrl>,
     #[doc="<p>The description of the patch.</p>"]
     #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<PatchDescription>,
     #[doc="<p>The ID of the patch (this is different than the Microsoft Knowledge Base ID).</p>"]
     #[serde(rename="Id")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<PatchId>,
     #[doc="<p>The Microsoft Knowledge Base ID of the patch.</p>"]
     #[serde(rename="KbNumber")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub kb_number: Option<PatchKbNumber>,
     #[doc="<p>The language of the patch if it's language-specific.</p>"]
     #[serde(rename="Language")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub language: Option<PatchLanguage>,
     #[doc="<p>The ID of the MSRC bulletin the patch is related to.</p>"]
     #[serde(rename="MsrcNumber")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub msrc_number: Option<PatchMsrcNumber>,
     #[doc="<p>The severity of the patch (for example Critical, Important, Moderate).</p>"]
     #[serde(rename="MsrcSeverity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub msrc_severity: Option<PatchMsrcSeverity>,
     #[doc="<p>The specific product the patch is applicable for (for example, WindowsServer2016).</p>"]
     #[serde(rename="Product")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub product: Option<PatchProduct>,
     #[doc="<p>The product family the patch is applicable for (for example, Windows).</p>"]
     #[serde(rename="ProductFamily")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub product_family: Option<PatchProductFamily>,
     #[doc="<p>The date the patch was released.</p>"]
     #[serde(rename="ReleaseDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub release_date: Option<DateTime>,
     #[doc="<p>The title of the patch.</p>"]
     #[serde(rename="Title")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub title: Option<PatchTitle>,
     #[doc="<p>The name of the vendor providing the patch.</p>"]
     #[serde(rename="Vendor")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub vendor: Option<PatchVendor>,
 }
 
@@ -2970,16 +3510,19 @@ pub struct Patch {
 pub struct PatchBaselineIdentity {
     #[doc="<p>The description of the patch baseline.</p>"]
     #[serde(rename="BaselineDescription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub baseline_description: Option<BaselineDescription>,
     #[doc="<p>The ID of the patch baseline.</p>"]
     #[serde(rename="BaselineId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub baseline_id: Option<BaselineId>,
     #[doc="<p>The name of the patch baseline.</p>"]
     #[serde(rename="BaselineName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub baseline_name: Option<BaselineName>,
     #[doc="<p>Whether this is the default baseline.</p>"]
     #[serde(rename="DefaultBaseline")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_baseline: Option<DefaultBaseline>,
 }
 
@@ -3046,9 +3589,11 @@ pub type PatchGroupList = Vec<PatchGroup>;
 pub struct PatchGroupPatchBaselineMapping {
     #[doc="<p>The patch baseline the patch group is registered with.</p>"]
     #[serde(rename="BaselineIdentity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub baseline_identity: Option<PatchBaselineIdentity>,
     #[doc="<p>The name of the patch group registered with the patch baseline.</p>"]
     #[serde(rename="PatchGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub patch_group: Option<PatchGroup>,
 }
 
@@ -3073,9 +3618,11 @@ pub type PatchOperationType = String;
 pub struct PatchOrchestratorFilter {
     #[doc="<p>The key for the filter.</p>"]
     #[serde(rename="Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key: Option<PatchOrchestratorFilterKey>,
     #[doc="<p>The value for the filter.</p>"]
     #[serde(rename="Values")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub values: Option<PatchOrchestratorFilterValues>,
 }
 
@@ -3111,9 +3658,11 @@ pub type PatchSeverity = String;
 pub struct PatchStatus {
     #[doc="<p>The date the patch was approved (or will be approved if the status is PENDING_APPROVAL).</p>"]
     #[serde(rename="ApprovalDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub approval_date: Option<DateTime>,
     #[doc="<p>The approval status of a patch (APPROVED, PENDING_APPROVAL, EXPLICIT_APPROVED, EXPLICIT_REJECTED).</p>"]
     #[serde(rename="DeploymentStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deployment_status: Option<PatchDeploymentStatus>,
 }
 
@@ -3139,16 +3688,18 @@ pub struct PutInventoryResult;
 pub struct PutParameterRequest {
     #[doc="<p>Information about the parameter that you want to add to the system</p>"]
     #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<ParameterDescription>,
     #[doc="<p>The parameter key ID that you want to add to the system.</p>"]
     #[serde(rename="KeyId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key_id: Option<ParameterKeyId>,
     #[doc="<p>The name of the parameter that you want to add to the system.</p>"]
     #[serde(rename="Name")]
     pub name: PSParameterName,
     #[doc="<p>Overwrite an existing parameter. If not specified, will default to \"false\".</p>"]
     #[serde(rename="Overwrite")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub overwrite: Option<Boolean>,
     #[doc="<p>The type of parameter that you want to add to the system.</p>"]
     #[serde(rename="Type")]
@@ -3172,6 +3723,7 @@ pub struct RegisterDefaultPatchBaselineRequest {
 pub struct RegisterDefaultPatchBaselineResult {
     #[doc="<p>The ID of the default patch baseline.</p>"]
     #[serde(rename="BaselineId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub baseline_id: Option<BaselineId>,
 }
 
@@ -3189,9 +3741,11 @@ pub struct RegisterPatchBaselineForPatchGroupRequest {
 pub struct RegisterPatchBaselineForPatchGroupResult {
     #[doc="<p>The ID of the patch baseline the patch group was registered with.</p>"]
     #[serde(rename="BaselineId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub baseline_id: Option<BaselineId>,
     #[doc="<p>The name of the patch group registered with the patch baseline.</p>"]
     #[serde(rename="PatchGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub patch_group: Option<PatchGroup>,
 }
 
@@ -3199,9 +3753,11 @@ pub struct RegisterPatchBaselineForPatchGroupResult {
 pub struct RegisterTargetWithMaintenanceWindowRequest {
     #[doc="<p>User-provided idempotency token.</p>"]
     #[serde(rename="ClientToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_token: Option<ClientToken>,
     #[doc="<p>User-provided value that will be included in any CloudWatch events raised while running tasks for these targets in this Maintenance Window.</p>"]
     #[serde(rename="OwnerInformation")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub owner_information: Option<OwnerInformation>,
     #[doc="<p>The type of target being registered with the Maintenance Window.</p>"]
     #[serde(rename="ResourceType")]
@@ -3218,6 +3774,7 @@ pub struct RegisterTargetWithMaintenanceWindowRequest {
 pub struct RegisterTargetWithMaintenanceWindowResult {
     #[doc="<p>The ID of the target definition in this Maintenance Window.</p>"]
     #[serde(rename="WindowTargetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub window_target_id: Option<MaintenanceWindowTargetId>,
 }
 
@@ -3225,9 +3782,11 @@ pub struct RegisterTargetWithMaintenanceWindowResult {
 pub struct RegisterTaskWithMaintenanceWindowRequest {
     #[doc="<p>User-provided idempotency token.</p>"]
     #[serde(rename="ClientToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub client_token: Option<ClientToken>,
     #[doc="<p>A structure containing information about an Amazon S3 bucket to write instance-level logs to. </p>"]
     #[serde(rename="LoggingInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub logging_info: Option<LoggingInfo>,
     #[doc="<p>The maximum number of targets this task can be run for in parallel.</p>"]
     #[serde(rename="MaxConcurrency")]
@@ -3237,6 +3796,7 @@ pub struct RegisterTaskWithMaintenanceWindowRequest {
     pub max_errors: MaxErrors,
     #[doc="<p>The priority of the task in the Maintenance Window, the lower the number the higher the priority. Tasks in a Maintenance Window are scheduled in priority order with tasks that have the same priority scheduled in parallel.</p>"]
     #[serde(rename="Priority")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub priority: Option<MaintenanceWindowTaskPriority>,
     #[doc="<p>The role that should be assumed when executing the task.</p>"]
     #[serde(rename="ServiceRoleArn")]
@@ -3249,6 +3809,7 @@ pub struct RegisterTaskWithMaintenanceWindowRequest {
     pub task_arn: MaintenanceWindowTaskArn,
     #[doc="<p>The parameters that should be passed to the task when it is executed.</p>"]
     #[serde(rename="TaskParameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_parameters: Option<MaintenanceWindowTaskParameters>,
     #[doc="<p>The type of task being registered.</p>"]
     #[serde(rename="TaskType")]
@@ -3262,6 +3823,7 @@ pub struct RegisterTaskWithMaintenanceWindowRequest {
 pub struct RegisterTaskWithMaintenanceWindowResult {
     #[doc="<p>The id of the task in the Maintenance Window.</p>"]
     #[serde(rename="WindowTaskId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub window_task_id: Option<MaintenanceWindowTaskId>,
 }
 
@@ -3303,12 +3865,15 @@ pub type S3KeyPrefix = String;
 pub struct S3OutputLocation {
     #[doc="<p>The name of the Amazon S3 bucket.</p>"]
     #[serde(rename="OutputS3BucketName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub output_s3_bucket_name: Option<S3BucketName>,
     #[doc="<p>The Amazon S3 bucket subfolder.</p>"]
     #[serde(rename="OutputS3KeyPrefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub output_s3_key_prefix: Option<S3KeyPrefix>,
     #[doc="<p>The Amazon S3 region where the association information is stored.</p>"]
     #[serde(rename="OutputS3Region")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub output_s3_region: Option<S3Region>,
 }
 
@@ -3317,6 +3882,7 @@ pub struct S3OutputLocation {
 pub struct S3OutputUrl {
     #[doc="<p>A URL for an Amazon S3 bucket where you want to store the results of this request.</p>"]
     #[serde(rename="OutputUrl")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub output_url: Option<Url>,
 }
 
@@ -3326,48 +3892,62 @@ pub type ScheduleExpression = String;
 pub struct SendCommandRequest {
     #[doc="<p>User-specified information about the command, such as a brief description of what the command should do.</p>"]
     #[serde(rename="Comment")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub comment: Option<Comment>,
     #[doc="<p>The Sha256 or Sha1 hash created by the system when the document was created. </p> <note> <p>Sha1 hashes have been deprecated.</p> </note>"]
     #[serde(rename="DocumentHash")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub document_hash: Option<DocumentHash>,
     #[doc="<p>Sha256 or Sha1.</p> <note> <p>Sha1 hashes have been deprecated.</p> </note>"]
     #[serde(rename="DocumentHashType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub document_hash_type: Option<DocumentHashType>,
     #[doc="<p>Required. The name of the Systems Manager document to execute. This can be a public document or a custom document.</p>"]
     #[serde(rename="DocumentName")]
     pub document_name: DocumentARN,
     #[doc="<p>The instance IDs where the command should execute. You can specify a maximum of 50 IDs. If you prefer not to list individual instance IDs, you can instead send commands to a fleet of instances using the Targets parameter, which accepts EC2 tags.</p>"]
     #[serde(rename="InstanceIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_ids: Option<InstanceIdList>,
     #[doc="<p>(Optional) The maximum number of instances that are allowed to execute the command at the same time. You can specify a number such as 10 or a percentage such as 10%. The default value is 50. For more information about how to use MaxConcurrency, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html\">Executing a Command Using Systems Manager Run Command</a>.</p>"]
     #[serde(rename="MaxConcurrency")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_concurrency: Option<MaxConcurrency>,
     #[doc="<p>The maximum number of errors allowed without the command failing. When the command fails one more time beyond the value of MaxErrors, the systems stops sending the command to additional targets. You can specify a number like 10 or a percentage like 10%. The default value is 50. For more information about how to use MaxErrors, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html\">Executing a Command Using Systems Manager Run Command</a>.</p>"]
     #[serde(rename="MaxErrors")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub max_errors: Option<MaxErrors>,
     #[doc="<p>Configurations for sending notifications.</p>"]
     #[serde(rename="NotificationConfig")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub notification_config: Option<NotificationConfig>,
     #[doc="<p>The name of the S3 bucket where command execution responses should be stored.</p>"]
     #[serde(rename="OutputS3BucketName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub output_s3_bucket_name: Option<S3BucketName>,
     #[doc="<p>The directory structure within the S3 bucket where the responses should be stored.</p>"]
     #[serde(rename="OutputS3KeyPrefix")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub output_s3_key_prefix: Option<S3KeyPrefix>,
     #[doc="<p>(Optional) The region where the Amazon Simple Storage Service (Amazon S3) output bucket is located. The default value is the region where Run Command is being called.</p>"]
     #[serde(rename="OutputS3Region")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub output_s3_region: Option<S3Region>,
     #[doc="<p>The required and optional parameters specified in the document being executed.</p>"]
     #[serde(rename="Parameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameters: Option<Parameters>,
     #[doc="<p>The IAM role that Systems Manager uses to send notifications. </p>"]
     #[serde(rename="ServiceRoleArn")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub service_role_arn: Option<ServiceRole>,
     #[doc="<p>(Optional) An array of search criteria that targets instances using a Key,Value combination that you specify. Targets is required if you don't provide one or more instance IDs in the call. For more information about how to use Targets, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html\">Executing a Command Using Systems Manager Run Command</a>.</p>"]
     #[serde(rename="Targets")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub targets: Option<Targets>,
     #[doc="<p>If this time is reached and the command has not already started executing, it will not execute.</p>"]
     #[serde(rename="TimeoutSeconds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub timeout_seconds: Option<TimeoutSeconds>,
 }
 
@@ -3375,6 +3955,7 @@ pub struct SendCommandRequest {
 pub struct SendCommandResult {
     #[doc="<p>The request as it was received by Systems Manager. Also provides the command ID which can be used future references to this request.</p>"]
     #[serde(rename="Command")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub command: Option<Command>,
 }
 
@@ -3390,9 +3971,11 @@ pub struct StartAutomationExecutionRequest {
     pub document_name: DocumentARN,
     #[doc="<p>The version of the Automation document to use for this execution.</p>"]
     #[serde(rename="DocumentVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub document_version: Option<DocumentVersion>,
     #[doc="<p>A key-value map of execution parameters, which match the declared parameters in the Automation document.</p>"]
     #[serde(rename="Parameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameters: Option<AutomationParameterMap>,
 }
 
@@ -3400,6 +3983,7 @@ pub struct StartAutomationExecutionRequest {
 pub struct StartAutomationExecutionResult {
     #[doc="<p>The unique ID of a newly scheduled automation execution.</p>"]
     #[serde(rename="AutomationExecutionId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub automation_execution_id: Option<AutomationExecutionId>,
 }
 
@@ -3412,36 +3996,47 @@ pub type StatusName = String;
 pub struct StepExecution {
     #[doc="<p>The action this step performs. The action determines the behavior of the step.</p>"]
     #[serde(rename="Action")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub action: Option<AutomationActionName>,
     #[doc="<p>If a step has finished execution, this contains the time the execution ended. If the step has not yet concluded, this field is not populated.</p>"]
     #[serde(rename="ExecutionEndTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub execution_end_time: Option<DateTime>,
     #[doc="<p>If a step has begun execution, this contains the time the step started. If the step is in Pending status, this field is not populated.</p>"]
     #[serde(rename="ExecutionStartTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub execution_start_time: Option<DateTime>,
     #[doc="<p>Information about the Automation failure.</p>"]
     #[serde(rename="FailureDetails")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub failure_details: Option<FailureDetails>,
     #[doc="<p>If a step failed, this message explains why the execution failed.</p>"]
     #[serde(rename="FailureMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub failure_message: Option<String>,
     #[doc="<p>Fully-resolved values passed into the step before execution.</p>"]
     #[serde(rename="Inputs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub inputs: Option<NormalStringMap>,
     #[doc="<p>Returned values from the execution of the step.</p>"]
     #[serde(rename="Outputs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub outputs: Option<AutomationParameterMap>,
     #[doc="<p>A message associated with the response code for an execution.</p>"]
     #[serde(rename="Response")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub response: Option<String>,
     #[doc="<p>The response code returned by the execution of the step.</p>"]
     #[serde(rename="ResponseCode")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub response_code: Option<String>,
     #[doc="<p>The name of this execution step.</p>"]
     #[serde(rename="StepName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub step_name: Option<String>,
     #[doc="<p>The execution status for this step. Valid values include: Pending, InProgress, Success, Cancelled, Failed, and TimedOut.</p>"]
     #[serde(rename="StepStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub step_status: Option<AutomationExecutionStatus>,
 }
 
@@ -3477,9 +4072,11 @@ pub type TagValue = String;
 pub struct Target {
     #[doc="<p>User-defined criteria for sending commands that target instances that meet the criteria. Key can be tag:&lt;Amazon EC2 tag&gt; or InstanceIds. For more information about how to send commands that target instances using Key,Value parameters, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html\">Executing a Command Using Systems Manager Run Command</a>.</p>"]
     #[serde(rename="Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key: Option<TargetKey>,
     #[doc="<p>User-defined criteria that maps to Key. For example, if you specified tag:ServerRole, you could specify value:WebServer to execute a command on instances that include Amazon EC2 tags of ServerRole,WebServer. For more information about how to send commands that target instances using Key,Value parameters, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html\">Executing a Command Using Systems Manager Run Command</a>.</p>"]
     #[serde(rename="Values")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub values: Option<TargetValues>,
 }
 
@@ -3496,21 +4093,27 @@ pub struct UpdateAssociationRequest {
     pub association_id: AssociationId,
     #[doc="<p>The document version you want update for the association. </p>"]
     #[serde(rename="DocumentVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub document_version: Option<DocumentVersion>,
     #[doc="<p>The name of the association document.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<DocumentName>,
     #[doc="<p>An Amazon S3 bucket where you want to store the results of this request.</p>"]
     #[serde(rename="OutputLocation")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub output_location: Option<InstanceAssociationOutputLocation>,
     #[doc="<p>The parameters you want to update for the association. If you create a parameter using Parameter Store, you can reference the parameter using {{ssm:parameter-name}}</p>"]
     #[serde(rename="Parameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parameters: Option<Parameters>,
     #[doc="<p>The cron expression used to schedule the association that you want to update.</p>"]
     #[serde(rename="ScheduleExpression")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub schedule_expression: Option<ScheduleExpression>,
     #[doc="<p>The targets of the association.</p>"]
     #[serde(rename="Targets")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub targets: Option<Targets>,
 }
 
@@ -3518,6 +4121,7 @@ pub struct UpdateAssociationRequest {
 pub struct UpdateAssociationResult {
     #[doc="<p>The description of the association that was updated.</p>"]
     #[serde(rename="AssociationDescription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub association_description: Option<AssociationDescription>,
 }
 
@@ -3538,6 +4142,7 @@ pub struct UpdateAssociationStatusRequest {
 pub struct UpdateAssociationStatusResult {
     #[doc="<p>Information about the association.</p>"]
     #[serde(rename="AssociationDescription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub association_description: Option<AssociationDescription>,
 }
 
@@ -3555,6 +4160,7 @@ pub struct UpdateDocumentDefaultVersionRequest {
 pub struct UpdateDocumentDefaultVersionResult {
     #[doc="<p>The description of a custom document that you want to set as the default version.</p>"]
     #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<DocumentDefaultVersionDescription>,
 }
 
@@ -3565,6 +4171,7 @@ pub struct UpdateDocumentRequest {
     pub content: DocumentContent,
     #[doc="<p>The version of the document that you want to update.</p>"]
     #[serde(rename="DocumentVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub document_version: Option<DocumentVersion>,
     #[doc="<p>The name of the document that you want to update.</p>"]
     #[serde(rename="Name")]
@@ -3575,6 +4182,7 @@ pub struct UpdateDocumentRequest {
 pub struct UpdateDocumentResult {
     #[doc="<p>A description of the document that was updated.</p>"]
     #[serde(rename="DocumentDescription")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub document_description: Option<DocumentDescription>,
 }
 
@@ -3582,23 +4190,27 @@ pub struct UpdateDocumentResult {
 pub struct UpdateMaintenanceWindowRequest {
     #[doc="<p>Whether targets must be registered with the Maintenance Window before tasks can be defined for those targets.</p>"]
     #[serde(rename="AllowUnassociatedTargets")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub allow_unassociated_targets: Option<MaintenanceWindowAllowUnassociatedTargets>,
     #[doc="<p>The number of hours before the end of the Maintenance Window that Systems Manager stops scheduling new tasks for execution.</p>"]
     #[serde(rename="Cutoff")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cutoff: Option<MaintenanceWindowCutoff>,
     #[doc="<p>The duration of the Maintenance Window in hours.</p>"]
     #[serde(rename="Duration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub duration: Option<MaintenanceWindowDurationHours>,
     #[doc="<p>Whether the Maintenance Window is enabled.</p>"]
     #[serde(rename="Enabled")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub enabled: Option<MaintenanceWindowEnabled>,
     #[doc="<p>The name of the Maintenance Window.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<MaintenanceWindowName>,
     #[doc="<p>The schedule of the Maintenance Window in the form of a cron or rate expression.</p>"]
     #[serde(rename="Schedule")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub schedule: Option<MaintenanceWindowSchedule>,
     #[doc="<p>The ID of the Maintenance Window to update.</p>"]
     #[serde(rename="WindowId")]
@@ -3609,26 +4221,31 @@ pub struct UpdateMaintenanceWindowRequest {
 pub struct UpdateMaintenanceWindowResult {
     #[doc="<p>Whether targets must be registered with the Maintenance Window before tasks can be defined for those targets.</p>"]
     #[serde(rename="AllowUnassociatedTargets")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub allow_unassociated_targets: Option<MaintenanceWindowAllowUnassociatedTargets>,
     #[doc="<p>The number of hours before the end of the Maintenance Window that Systems Manager stops scheduling new tasks for execution.</p>"]
     #[serde(rename="Cutoff")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cutoff: Option<MaintenanceWindowCutoff>,
     #[doc="<p>The duration of the Maintenance Window in hours.</p>"]
     #[serde(rename="Duration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub duration: Option<MaintenanceWindowDurationHours>,
     #[doc="<p>Whether the Maintenance Window is enabled.</p>"]
     #[serde(rename="Enabled")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub enabled: Option<MaintenanceWindowEnabled>,
     #[doc="<p>The name of the Maintenance Window.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<MaintenanceWindowName>,
     #[doc="<p>The schedule of the Maintenance Window in the form of a cron or rate expression.</p>"]
     #[serde(rename="Schedule")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub schedule: Option<MaintenanceWindowSchedule>,
     #[doc="<p>The ID of the created Maintenance Window.</p>"]
     #[serde(rename="WindowId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub window_id: Option<MaintenanceWindowId>,
 }
 
@@ -3649,24 +4266,30 @@ pub struct UpdateManagedInstanceRoleResult;
 pub struct UpdatePatchBaselineRequest {
     #[doc="<p>A set of rules used to include patches in the baseline.</p>"]
     #[serde(rename="ApprovalRules")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub approval_rules: Option<PatchRuleGroup>,
     #[doc="<p>A list of explicitly approved patches for the baseline.</p>"]
     #[serde(rename="ApprovedPatches")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub approved_patches: Option<PatchIdList>,
     #[doc="<p>The ID of the patch baseline to update.</p>"]
     #[serde(rename="BaselineId")]
     pub baseline_id: BaselineId,
     #[doc="<p>A description of the patch baseline.</p>"]
     #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<BaselineDescription>,
     #[doc="<p>A set of global filters used to exclude patches from the baseline.</p>"]
     #[serde(rename="GlobalFilters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub global_filters: Option<PatchFilterGroup>,
     #[doc="<p>The name of the patch baseline.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<BaselineName>,
     #[doc="<p>A list of explicitly rejected patches for the baseline.</p>"]
     #[serde(rename="RejectedPatches")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rejected_patches: Option<PatchIdList>,
 }
 
@@ -3674,30 +4297,39 @@ pub struct UpdatePatchBaselineRequest {
 pub struct UpdatePatchBaselineResult {
     #[doc="<p>A set of rules used to include patches in the baseline.</p>"]
     #[serde(rename="ApprovalRules")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub approval_rules: Option<PatchRuleGroup>,
     #[doc="<p>A list of explicitly approved patches for the baseline.</p>"]
     #[serde(rename="ApprovedPatches")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub approved_patches: Option<PatchIdList>,
     #[doc="<p>The ID of the deleted patch baseline.</p>"]
     #[serde(rename="BaselineId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub baseline_id: Option<BaselineId>,
     #[doc="<p>The date when the patch baseline was created.</p>"]
     #[serde(rename="CreatedDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub created_date: Option<DateTime>,
     #[doc="<p>A description of the Patch Baseline.</p>"]
     #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<BaselineDescription>,
     #[doc="<p>A set of global filters used to exclude patches from the baseline.</p>"]
     #[serde(rename="GlobalFilters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub global_filters: Option<PatchFilterGroup>,
     #[doc="<p>The date when the patch baseline was last modified.</p>"]
     #[serde(rename="ModifiedDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub modified_date: Option<DateTime>,
     #[doc="<p>The name of the patch baseline.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<BaselineName>,
     #[doc="<p>A list of explicitly rejected patches for the baseline.</p>"]
     #[serde(rename="RejectedPatches")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rejected_patches: Option<PatchIdList>,
 }
 

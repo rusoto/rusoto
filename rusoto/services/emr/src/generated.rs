@@ -28,9 +28,11 @@ pub struct AddInstanceFleetInput {
 pub struct AddInstanceFleetOutput {
     #[doc="<p>The unique identifier of the cluster.</p>"]
     #[serde(rename="ClusterId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_id: Option<XmlStringMaxLen256>,
     #[doc="<p>The unique identifier of the instance fleet.</p>"]
     #[serde(rename="InstanceFleetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_fleet_id: Option<InstanceFleetId>,
 }
 
@@ -50,9 +52,11 @@ pub struct AddInstanceGroupsInput {
 pub struct AddInstanceGroupsOutput {
     #[doc="<p>Instance group IDs of the newly created instance groups.</p>"]
     #[serde(rename="InstanceGroupIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_group_ids: Option<InstanceGroupIdsList>,
     #[doc="<p>The job flow ID in which the instance groups are added.</p>"]
     #[serde(rename="JobFlowId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub job_flow_id: Option<XmlStringMaxLen256>,
 }
 
@@ -72,6 +76,7 @@ pub struct AddJobFlowStepsInput {
 pub struct AddJobFlowStepsOutput {
     #[doc="<p>The identifiers of the list of steps added to the job flow.</p>"]
     #[serde(rename="StepIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub step_ids: Option<StepIdsList>,
 }
 
@@ -96,15 +101,19 @@ pub type AdjustmentType = String;
 pub struct Application {
     #[doc="<p>This option is for advanced users only. This is meta information about third-party applications that third-party vendors use for testing purposes.</p>"]
     #[serde(rename="AdditionalInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub additional_info: Option<StringMap>,
     #[doc="<p>Arguments for Amazon EMR to pass to the application.</p>"]
     #[serde(rename="Args")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub args: Option<StringList>,
     #[doc="<p>The name of the application.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
     #[doc="<p>The version of the application.</p>"]
     #[serde(rename="Version")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version: Option<String>,
 }
 
@@ -125,12 +134,15 @@ pub struct AutoScalingPolicy {
 pub struct AutoScalingPolicyDescription {
     #[doc="<p>The upper and lower EC2 instance limits for an automatic scaling policy. Automatic scaling activity will not cause an instance group to grow above or below these limits.</p>"]
     #[serde(rename="Constraints")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub constraints: Option<ScalingConstraints>,
     #[doc="<p>The scale-in and scale-out rules that comprise the automatic scaling policy.</p>"]
     #[serde(rename="Rules")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub rules: Option<ScalingRuleList>,
     #[doc="<p>The status of an automatic scaling policy. </p>"]
     #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<AutoScalingPolicyStatus>,
 }
 
@@ -140,9 +152,11 @@ pub type AutoScalingPolicyState = String;
 pub struct AutoScalingPolicyStateChangeReason {
     #[doc="<p>The code indicating the reason for the change in status.<code>USER_REQUEST</code> indicates that the scaling policy status was changed by a user. <code>PROVISION_FAILURE</code> indicates that the status change was because the policy failed to provision. <code>CLEANUP_FAILURE</code> indicates an error.</p>"]
     #[serde(rename="Code")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub code: Option<AutoScalingPolicyStateChangeReasonCode>,
     #[doc="<p>A friendly, more verbose message that accompanies an automatic scaling policy state change.</p>"]
     #[serde(rename="Message")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<String>,
 }
 
@@ -152,9 +166,11 @@ pub type AutoScalingPolicyStateChangeReasonCode = String;
 pub struct AutoScalingPolicyStatus {
     #[doc="<p>Indicates the status of the automatic scaling policy.</p>"]
     #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<AutoScalingPolicyState>,
     #[doc="<p>The reason for a change in status.</p>"]
     #[serde(rename="StateChangeReason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state_change_reason: Option<AutoScalingPolicyStateChangeReason>,
 }
 
@@ -177,6 +193,7 @@ pub type BootstrapActionConfigList = Vec<BootstrapActionConfig>;
 pub struct BootstrapActionDetail {
     #[doc="<p>A description of the bootstrap action.</p>"]
     #[serde(rename="BootstrapActionConfig")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bootstrap_action_config: Option<BootstrapActionConfig>,
 }
 
@@ -186,12 +203,15 @@ pub type BootstrapActionDetailList = Vec<BootstrapActionDetail>;
 pub struct CancelStepsInfo {
     #[doc="<p>The reason for the failure if the CancelSteps request fails.</p>"]
     #[serde(rename="Reason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reason: Option<String>,
     #[doc="<p>The status of a CancelSteps Request. The value may be SUBMITTED or FAILED.</p>"]
     #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<CancelStepsRequestStatus>,
     #[doc="<p>The encrypted StepId of a step.</p>"]
     #[serde(rename="StepId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub step_id: Option<StepId>,
 }
 
@@ -201,9 +221,11 @@ pub type CancelStepsInfoList = Vec<CancelStepsInfo>;
 pub struct CancelStepsInput {
     #[doc="<p>The <code>ClusterID</code> for which specified steps will be canceled. Use <a>RunJobFlow</a> and <a>ListClusters</a> to get ClusterIDs. </p>"]
     #[serde(rename="ClusterId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_id: Option<XmlStringMaxLen256>,
     #[doc="<p>The list of <code>StepIDs</code> to cancel. Use <a>ListSteps</a> to get steps and their states for the specified cluster.</p>"]
     #[serde(rename="StepIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub step_ids: Option<StepIdsList>,
 }
 
@@ -212,6 +234,7 @@ pub struct CancelStepsInput {
 pub struct CancelStepsOutput {
     #[doc="<p>A list of <a>CancelStepsInfo</a>, which shows the status of specified cancel requests for each <code>StepID</code> specified.</p>"]
     #[serde(rename="CancelStepsInfoList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cancel_steps_info_list: Option<CancelStepsInfoList>,
 }
 
@@ -224,27 +247,32 @@ pub struct CloudWatchAlarmDefinition {
     pub comparison_operator: ComparisonOperator,
     #[doc="<p>A CloudWatch metric dimension.</p>"]
     #[serde(rename="Dimensions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub dimensions: Option<MetricDimensionList>,
     #[doc="<p>The number of periods, expressed in seconds using <code>Period</code>, during which the alarm condition must exist before the alarm triggers automatic scaling activity. The default value is <code>1</code>.</p>"]
     #[serde(rename="EvaluationPeriods")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub evaluation_periods: Option<Integer>,
     #[doc="<p>The name of the CloudWatch metric that is watched to determine an alarm condition.</p>"]
     #[serde(rename="MetricName")]
     pub metric_name: String,
     #[doc="<p>The namespace for the CloudWatch metric. The default is <code>AWS/ElasticMapReduce</code>.</p>"]
     #[serde(rename="Namespace")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub namespace: Option<String>,
     #[doc="<p>The period, in seconds, over which the statistic is applied. EMR CloudWatch metrics are emitted every five minutes (300 seconds), so if an EMR CloudWatch metric is specified, specify <code>300</code>.</p>"]
     #[serde(rename="Period")]
     pub period: Integer,
     #[doc="<p>The statistic to apply to the metric associated with the alarm. The default is <code>AVERAGE</code>.</p>"]
     #[serde(rename="Statistic")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub statistic: Option<Statistic>,
     #[doc="<p>The value against which the specified statistic is compared.</p>"]
     #[serde(rename="Threshold")]
     pub threshold: NonNegativeDouble,
     #[doc="<p>The unit of measure associated with the CloudWatch metric being watched. The value specified for <code>Unit</code> must correspond to the units specified in the CloudWatch metric.</p>"]
     #[serde(rename="Unit")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub unit: Option<Unit>,
 }
 
@@ -253,69 +281,87 @@ pub struct CloudWatchAlarmDefinition {
 pub struct Cluster {
     #[doc="<p>The applications installed on this cluster.</p>"]
     #[serde(rename="Applications")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub applications: Option<ApplicationList>,
     #[doc="<p>An IAM role for automatic scaling policies. The default role is <code>EMR_AutoScaling_DefaultRole</code>. The IAM role provides permissions that the automatic scaling feature requires to launch and terminate EC2 instances in an instance group.</p>"]
     #[serde(rename="AutoScalingRole")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_scaling_role: Option<XmlString>,
     #[doc="<p>Specifies whether the cluster should terminate after completing all steps.</p>"]
     #[serde(rename="AutoTerminate")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_terminate: Option<Boolean>,
     #[doc="<note> <p>Amazon EMR releases 4.x or later.</p> </note> <p>The list of Configurations supplied to the EMR cluster.</p>"]
     #[serde(rename="Configurations")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub configurations: Option<ConfigurationList>,
     #[doc="<p>Provides information about the EC2 instances in a cluster grouped by category. For example, key name, subnet ID, IAM instance profile, and so on.</p>"]
     #[serde(rename="Ec2InstanceAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ec_2_instance_attributes: Option<Ec2InstanceAttributes>,
     #[doc="<p>The unique identifier for the cluster.</p>"]
     #[serde(rename="Id")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<ClusterId>,
     #[doc="<note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note> <p>The instance group configuration of the cluster. A value of <code>INSTANCE_GROUP</code> indicates a uniform instance group configuration. A value of <code>INSTANCE_FLEET</code> indicates an instance fleets configuration.</p>"]
     #[serde(rename="InstanceCollectionType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_collection_type: Option<InstanceCollectionType>,
     #[doc="<p>The path to the Amazon S3 location where logs for this cluster are stored.</p>"]
     #[serde(rename="LogUri")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub log_uri: Option<String>,
     #[doc="<p>The public DNS name of the master EC2 instance.</p>"]
     #[serde(rename="MasterPublicDnsName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub master_public_dns_name: Option<String>,
     #[doc="<p>The name of the cluster.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
     #[doc="<p>An approximation of the cost of the cluster, represented in m1.small/hours. This value is incremented one time for every hour an m1.small instance runs. Larger instances are weighted more, so an EC2 instance that is roughly four times more expensive would result in the normalized instance hours being incremented by four. This result is only an approximation and does not reflect the actual billing rate.</p>"]
     #[serde(rename="NormalizedInstanceHours")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub normalized_instance_hours: Option<Integer>,
     #[doc="<p>The release label for the Amazon EMR release. For Amazon EMR 3.x and 2.x AMIs, use amiVersion instead instead of ReleaseLabel.</p>"]
     #[serde(rename="ReleaseLabel")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub release_label: Option<String>,
     #[doc="<p>The AMI version requested for this cluster.</p>"]
     #[serde(rename="RequestedAmiVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub requested_ami_version: Option<String>,
     #[doc="<p>The AMI version running on this cluster.</p>"]
     #[serde(rename="RunningAmiVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub running_ami_version: Option<String>,
     #[doc="<p>The way that individual Amazon EC2 instances terminate when an automatic scale-in activity occurs or an instance group is resized. <code>TERMINATE_AT_INSTANCE_HOUR</code> indicates that Amazon EMR terminates nodes at the instance-hour boundary, regardless of when the request to terminate the instance was submitted. This option is only available with Amazon EMR 5.1.0 and later and is the default for clusters created using that version. <code>TERMINATE_AT_TASK_COMPLETION</code> indicates that Amazon EMR blacklists and drains tasks from nodes before terminating the Amazon EC2 instances, regardless of the instance-hour boundary. With either behavior, Amazon EMR removes the least active nodes first and blocks instance termination if it could lead to HDFS corruption. <code>TERMINATE_AT_TASK_COMPLETION</code> is available only in Amazon EMR version 4.1.0 and later, and is the default for versions of Amazon EMR earlier than 5.1.0.</p>"]
     #[serde(rename="ScaleDownBehavior")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub scale_down_behavior: Option<ScaleDownBehavior>,
     #[doc="<p>The name of the security configuration applied to the cluster.</p>"]
     #[serde(rename="SecurityConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub security_configuration: Option<XmlString>,
     #[doc="<p>The IAM role that will be assumed by the Amazon EMR service to access AWS resources on your behalf.</p>"]
     #[serde(rename="ServiceRole")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub service_role: Option<String>,
     #[doc="<p>The current status details about the cluster.</p>"]
     #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<ClusterStatus>,
     #[doc="<p>A list of tags associated with a cluster.</p>"]
     #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<TagList>,
     #[doc="<p>Indicates whether Amazon EMR will lock the cluster to prevent the EC2 instances from being terminated by an API call or user intervention, or in the event of a cluster error.</p>"]
     #[serde(rename="TerminationProtected")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub termination_protected: Option<Boolean>,
     #[doc="<p>Indicates whether the cluster is visible to all IAM users of the AWS account associated with the cluster. If this value is set to <code>true</code>, all IAM users of that AWS account can view and manage the cluster if they have the proper policy permissions set. If this value is <code>false</code>, only the IAM user that created the cluster can view and manage it. This value can be changed using the <a>SetVisibleToAllUsers</a> action.</p>"]
     #[serde(rename="VisibleToAllUsers")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub visible_to_all_users: Option<Boolean>,
 }
 
@@ -326,9 +372,11 @@ pub type ClusterState = String;
 pub struct ClusterStateChangeReason {
     #[doc="<p>The programmatic code for the state change reason.</p>"]
     #[serde(rename="Code")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub code: Option<ClusterStateChangeReasonCode>,
     #[doc="<p>The descriptive message for the state change reason.</p>"]
     #[serde(rename="Message")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<String>,
 }
 
@@ -339,12 +387,15 @@ pub type ClusterStateList = Vec<ClusterState>;
 pub struct ClusterStatus {
     #[doc="<p>The current state of the cluster.</p>"]
     #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<ClusterState>,
     #[doc="<p>The reason for the cluster status change.</p>"]
     #[serde(rename="StateChangeReason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state_change_reason: Option<ClusterStateChangeReason>,
     #[doc="<p>A timeline that represents the status of a cluster over the lifetime of the cluster.</p>"]
     #[serde(rename="Timeline")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub timeline: Option<ClusterTimeline>,
 }
 
@@ -353,15 +404,19 @@ pub struct ClusterStatus {
 pub struct ClusterSummary {
     #[doc="<p>The unique identifier for the cluster.</p>"]
     #[serde(rename="Id")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<ClusterId>,
     #[doc="<p>The name of the cluster.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
     #[doc="<p>An approximation of the cost of the cluster, represented in m1.small/hours. This value is incremented one time for every hour an m1.small instance runs. Larger instances are weighted more, so an EC2 instance that is roughly four times more expensive would result in the normalized instance hours being incremented by four. This result is only an approximation and does not reflect the actual billing rate.</p>"]
     #[serde(rename="NormalizedInstanceHours")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub normalized_instance_hours: Option<Integer>,
     #[doc="<p>The details about the current status of the cluster.</p>"]
     #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<ClusterStatus>,
 }
 
@@ -371,12 +426,15 @@ pub type ClusterSummaryList = Vec<ClusterSummary>;
 pub struct ClusterTimeline {
     #[doc="<p>The creation date and time of the cluster.</p>"]
     #[serde(rename="CreationDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub creation_date_time: Option<Date>,
     #[doc="<p>The date and time when the cluster was terminated.</p>"]
     #[serde(rename="EndDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub end_date_time: Option<Date>,
     #[doc="<p>The date and time when the cluster was ready to execute steps.</p>"]
     #[serde(rename="ReadyDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ready_date_time: Option<Date>,
 }
 
@@ -385,12 +443,15 @@ pub struct ClusterTimeline {
 pub struct Command {
     #[doc="<p>Arguments for Amazon EMR to pass to the command for execution.</p>"]
     #[serde(rename="Args")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub args: Option<StringList>,
     #[doc="<p>The name of the command.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
     #[doc="<p>The Amazon S3 location of the command script.</p>"]
     #[serde(rename="ScriptPath")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub script_path: Option<String>,
 }
 
@@ -401,12 +462,15 @@ pub type ComparisonOperator = String;
 pub struct Configuration {
     #[doc="<p>The classification within a configuration.</p>"]
     #[serde(rename="Classification")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub classification: Option<String>,
     #[doc="<p>A list of additional configurations to apply within a configuration object.</p>"]
     #[serde(rename="Configurations")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub configurations: Option<ConfigurationList>,
     #[doc="<p>A set of properties specified within a configuration classification.</p>"]
     #[serde(rename="Properties")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub properties: Option<StringMap>,
 }
 
@@ -455,6 +519,7 @@ pub struct DescribeClusterInput {
 pub struct DescribeClusterOutput {
     #[doc="<p>This output contains the details for the requested cluster.</p>"]
     #[serde(rename="Cluster")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster: Option<Cluster>,
 }
 
@@ -463,15 +528,19 @@ pub struct DescribeClusterOutput {
 pub struct DescribeJobFlowsInput {
     #[doc="<p>Return only job flows created after this date and time.</p>"]
     #[serde(rename="CreatedAfter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub created_after: Option<Date>,
     #[doc="<p>Return only job flows created before this date and time.</p>"]
     #[serde(rename="CreatedBefore")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub created_before: Option<Date>,
     #[doc="<p>Return only job flows whose job flow ID is contained in this list.</p>"]
     #[serde(rename="JobFlowIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub job_flow_ids: Option<XmlStringList>,
     #[doc="<p>Return only job flows whose state is contained in this list.</p>"]
     #[serde(rename="JobFlowStates")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub job_flow_states: Option<JobFlowExecutionStateList>,
 }
 
@@ -480,6 +549,7 @@ pub struct DescribeJobFlowsInput {
 pub struct DescribeJobFlowsOutput {
     #[doc="<p>A list of job flows matching the parameters supplied.</p>"]
     #[serde(rename="JobFlows")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub job_flows: Option<JobFlowDetailList>,
 }
 
@@ -494,12 +564,15 @@ pub struct DescribeSecurityConfigurationInput {
 pub struct DescribeSecurityConfigurationOutput {
     #[doc="<p>The date and time the security configuration was created</p>"]
     #[serde(rename="CreationDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub creation_date_time: Option<Date>,
     #[doc="<p>The name of the security configuration.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<XmlString>,
     #[doc="<p>The security configuration details in JSON format.</p>"]
     #[serde(rename="SecurityConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub security_configuration: Option<String>,
 }
 
@@ -519,6 +592,7 @@ pub struct DescribeStepInput {
 pub struct DescribeStepOutput {
     #[doc="<p>The step details for the requested step identifier.</p>"]
     #[serde(rename="Step")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub step: Option<Step>,
 }
 
@@ -529,9 +603,11 @@ pub type EC2InstanceIdsToTerminateList = Vec<InstanceId>;
 pub struct EbsBlockDevice {
     #[doc="<p>The device name that is exposed to the instance, such as /dev/sdh.</p>"]
     #[serde(rename="Device")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub device: Option<String>,
     #[doc="<p>EBS volume specifications such as volume type, IOPS, and size (GiB) that will be requested for the EBS volume attached to an EC2 instance in the cluster.</p>"]
     #[serde(rename="VolumeSpecification")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_specification: Option<VolumeSpecification>,
 }
 
@@ -543,6 +619,7 @@ pub struct EbsBlockDeviceConfig {
     pub volume_specification: VolumeSpecification,
     #[doc="<p>Number of EBS volumes with a specific volume configuration that will be associated with every instance in the instance group</p>"]
     #[serde(rename="VolumesPerInstance")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volumes_per_instance: Option<Integer>,
 }
 
@@ -553,10 +630,11 @@ pub type EbsBlockDeviceList = Vec<EbsBlockDevice>;
 pub struct EbsConfiguration {
     #[doc="<p>An array of Amazon EBS volume specifications attached to a cluster instance.</p>"]
     #[serde(rename="EbsBlockDeviceConfigs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ebs_block_device_configs: Option<EbsBlockDeviceConfigList>,
     #[doc="<p>Indicates whether an Amazon EBS volume is EBS-optimized.</p>"]
     #[serde(rename="EbsOptimized")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ebs_optimized: Option<BooleanObject>,
 }
 
@@ -565,9 +643,11 @@ pub struct EbsConfiguration {
 pub struct EbsVolume {
     #[doc="<p>The device name that is exposed to the instance, such as /dev/sdh.</p>"]
     #[serde(rename="Device")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub device: Option<String>,
     #[doc="<p>The volume identifier of the EBS volume.</p>"]
     #[serde(rename="VolumeId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub volume_id: Option<String>,
 }
 
@@ -577,36 +657,47 @@ pub type EbsVolumeList = Vec<EbsVolume>;
 pub struct Ec2InstanceAttributes {
     #[doc="<p>A list of additional Amazon EC2 security group IDs for the master node.</p>"]
     #[serde(rename="AdditionalMasterSecurityGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub additional_master_security_groups: Option<StringList>,
     #[doc="<p>A list of additional Amazon EC2 security group IDs for the slave nodes.</p>"]
     #[serde(rename="AdditionalSlaveSecurityGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub additional_slave_security_groups: Option<StringList>,
     #[doc="<p>The Availability Zone in which the cluster will run. </p>"]
     #[serde(rename="Ec2AvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ec_2_availability_zone: Option<String>,
     #[doc="<p>The name of the Amazon EC2 key pair to use when connecting with SSH into the master node as a user named \"hadoop\".</p>"]
     #[serde(rename="Ec2KeyName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ec_2_key_name: Option<String>,
     #[doc="<p>To launch the cluster in Amazon VPC, set this parameter to the identifier of the Amazon VPC subnet where you want the cluster to launch. If you do not specify this value, the cluster is launched in the normal AWS cloud, outside of a VPC.</p> <p>Amazon VPC currently does not support cluster compute quadruple extra large (cc1.4xlarge) instances. Thus, you cannot specify the cc1.4xlarge instance type for nodes of a cluster launched in a VPC.</p>"]
     #[serde(rename="Ec2SubnetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ec_2_subnet_id: Option<String>,
     #[doc="<p>The identifier of the Amazon EC2 security group for the master node.</p>"]
     #[serde(rename="EmrManagedMasterSecurityGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub emr_managed_master_security_group: Option<String>,
     #[doc="<p>The identifier of the Amazon EC2 security group for the slave nodes.</p>"]
     #[serde(rename="EmrManagedSlaveSecurityGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub emr_managed_slave_security_group: Option<String>,
     #[doc="<p>The IAM role that was specified when the cluster was launched. The EC2 instances of the cluster assume this role.</p>"]
     #[serde(rename="IamInstanceProfile")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub iam_instance_profile: Option<String>,
     #[doc="<p>Applies to clusters configured with the The list of availability zones to choose from. The service will choose the availability zone with the best mix of available capacity and lowest cost to launch the cluster. If you do not specify this value, the cluster is launched in any availability zone that the customer account has access to.</p>"]
     #[serde(rename="RequestedEc2AvailabilityZones")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub requested_ec_2_availability_zones: Option<XmlStringMaxLen256List>,
     #[doc="<p>Applies to clusters configured with the instance fleets option. Specifies the unique identifier of one or more Amazon EC2 subnets in which to launch EC2 cluster instances. Amazon EMR chooses the EC2 subnet with the best performance and cost characteristics from among the list of RequestedEc2SubnetIds and launches all cluster instances within that subnet. If this value is not specified, and the account supports EC2-Classic networks, the cluster launches instances in the EC2-Classic network and uses Requested</p>"]
     #[serde(rename="RequestedEc2SubnetIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub requested_ec_2_subnet_ids: Option<XmlStringMaxLen256List>,
     #[doc="<p>The identifier of the Amazon EC2 security group for the Amazon EMR service to access clusters in VPC private subnets.</p>"]
     #[serde(rename="ServiceAccessSecurityGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub service_access_security_group: Option<String>,
 }
 
@@ -617,12 +708,15 @@ pub type ErrorMessage = String;
 pub struct FailureDetails {
     #[doc="<p>The path to the log file where the step failure root cause was originally recorded.</p>"]
     #[serde(rename="LogFile")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub log_file: Option<String>,
     #[doc="<p>The descriptive message including the error the EMR service has identified as the cause of step failure. This is text from an error log that describes the root cause of the failure.</p>"]
     #[serde(rename="Message")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<String>,
     #[doc="<p>The reason for the step failure. In the case where the service cannot successfully determine the root cause of the failure, it returns \"Unknown Error\" as a reason.</p>"]
     #[serde(rename="Reason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reason: Option<String>,
 }
 
@@ -631,15 +725,18 @@ pub struct FailureDetails {
 pub struct HadoopJarStepConfig {
     #[doc="<p>A list of command line arguments passed to the JAR file's main function when executed.</p>"]
     #[serde(rename="Args")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub args: Option<XmlStringList>,
     #[doc="<p>A path to a JAR file run during the step.</p>"]
     #[serde(rename="Jar")]
     pub jar: XmlString,
     #[doc="<p>The name of the main class in the specified Java file. If not specified, the JAR file should specify a Main-Class in its manifest file.</p>"]
     #[serde(rename="MainClass")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub main_class: Option<XmlString>,
     #[doc="<p>A list of Java properties that are set when the step runs. You can use these properties to pass key value pairs to your main function.</p>"]
     #[serde(rename="Properties")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub properties: Option<KeyValueList>,
 }
 
@@ -648,15 +745,19 @@ pub struct HadoopJarStepConfig {
 pub struct HadoopStepConfig {
     #[doc="<p>The list of command line arguments to pass to the JAR file's main function for execution.</p>"]
     #[serde(rename="Args")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub args: Option<StringList>,
     #[doc="<p>The path to the JAR file that runs during the step.</p>"]
     #[serde(rename="Jar")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub jar: Option<String>,
     #[doc="<p>The name of the main class in the specified Java file. If not specified, the JAR file should specify a main class in its manifest file.</p>"]
     #[serde(rename="MainClass")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub main_class: Option<String>,
     #[doc="<p>The list of Java properties that are set when the step runs. You can use these properties to pass key value pairs to your main function.</p>"]
     #[serde(rename="Properties")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub properties: Option<StringMap>,
 }
 
@@ -665,39 +766,51 @@ pub struct HadoopStepConfig {
 pub struct Instance {
     #[doc="<p>The list of EBS volumes that are attached to this instance.</p>"]
     #[serde(rename="EbsVolumes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ebs_volumes: Option<EbsVolumeList>,
     #[doc="<p>The unique identifier of the instance in Amazon EC2.</p>"]
     #[serde(rename="Ec2InstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ec_2_instance_id: Option<InstanceId>,
     #[doc="<p>The unique identifier for the instance in Amazon EMR.</p>"]
     #[serde(rename="Id")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<InstanceId>,
     #[doc="<p>The unique identifier of the instance fleet to which an EC2 instance belongs.</p>"]
     #[serde(rename="InstanceFleetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_fleet_id: Option<InstanceFleetId>,
     #[doc="<p>The identifier of the instance group to which this instance belongs.</p>"]
     #[serde(rename="InstanceGroupId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_group_id: Option<String>,
     #[doc="<p>The EC2 instance type, for example <code>m3.xlarge</code>.</p>"]
     #[serde(rename="InstanceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_type: Option<InstanceType>,
     #[doc="<p>The instance purchasing option. Valid values are <code>ON_DEMAND</code> or <code>SPOT</code>. </p>"]
     #[serde(rename="Market")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub market: Option<MarketType>,
     #[doc="<p>The private DNS name of the instance.</p>"]
     #[serde(rename="PrivateDnsName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub private_dns_name: Option<String>,
     #[doc="<p>The private IP address of the instance.</p>"]
     #[serde(rename="PrivateIpAddress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub private_ip_address: Option<String>,
     #[doc="<p>The public DNS name of the instance.</p>"]
     #[serde(rename="PublicDnsName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub public_dns_name: Option<String>,
     #[doc="<p>The public IP address of the instance.</p>"]
     #[serde(rename="PublicIpAddress")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub public_ip_address: Option<String>,
     #[doc="<p>The current status of the instance.</p>"]
     #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<InstanceStatus>,
 }
 
@@ -707,33 +820,43 @@ pub type InstanceCollectionType = String;
 pub struct InstanceFleet {
     #[doc="<p>The unique identifier of the instance fleet.</p>"]
     #[serde(rename="Id")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<InstanceFleetId>,
     #[doc="<p>The node type that the instance fleet hosts. Valid values are MASTER, CORE, or TASK. </p>"]
     #[serde(rename="InstanceFleetType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_fleet_type: Option<InstanceFleetType>,
     #[doc="<p>The specification for the instance types that comprise an instance fleet. Up to five unique instance specifications may be defined for each instance fleet. </p>"]
     #[serde(rename="InstanceTypeSpecifications")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_type_specifications: Option<InstanceTypeSpecificationList>,
     #[doc="<p>Describes the launch specification for an instance fleet. </p>"]
     #[serde(rename="LaunchSpecifications")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub launch_specifications: Option<InstanceFleetProvisioningSpecifications>,
     #[doc="<p>A friendly name for the instance fleet.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<XmlStringMaxLen256>,
     #[doc="<p>The number of On-Demand units that have been provisioned for the instance fleet to fulfill <code>TargetOnDemandCapacity</code>. This provisioned capacity might be less than or greater than <code>TargetOnDemandCapacity</code>.</p>"]
     #[serde(rename="ProvisionedOnDemandCapacity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub provisioned_on_demand_capacity: Option<WholeNumber>,
     #[doc="<p>The number of Spot units that have been provisioned for this instance fleet to fulfill <code>TargetSpotCapacity</code>. This provisioned capacity might be less than or greater than <code>TargetSpotCapacity</code>.</p>"]
     #[serde(rename="ProvisionedSpotCapacity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub provisioned_spot_capacity: Option<WholeNumber>,
     #[doc="<p>The current status of the instance fleet. </p>"]
     #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<InstanceFleetStatus>,
     #[doc="<p>The target capacity of On-Demand units for the instance fleet, which determines how many On-Demand instances to provision. When the instance fleet launches, Amazon EMR tries to provision On-Demand instances as specified by <a>InstanceTypeConfig</a>. Each instance configuration has a specified <code>WeightedCapacity</code>. When an On-Demand instance is provisioned, the <code>WeightedCapacity</code> units count toward the target capacity. Amazon EMR provisions instances until the target capacity is totally fulfilled, even if this results in an overage. For example, if there are 2 units remaining to fulfill capacity, and Amazon EMR can only provision an instance with a <code>WeightedCapacity</code> of 5 units, the instance is provisioned, and the target capacity is exceeded by 3 units. You can use <a>InstanceFleet$ProvisionedOnDemandCapacity</a> to determine the Spot capacity units that have been provisioned for the instance fleet.</p> <note> <p>If not specified or set to 0, only Spot instances are provisioned for the instance fleet using <code>TargetSpotCapacity</code>. At least one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> should be greater than 0. For a master instance fleet, only one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> can be specified, and its value must be 1.</p> </note>"]
     #[serde(rename="TargetOnDemandCapacity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_on_demand_capacity: Option<WholeNumber>,
     #[doc="<p>The target capacity of Spot units for the instance fleet, which determines how many Spot instances to provision. When the instance fleet launches, Amazon EMR tries to provision Spot instances as specified by <a>InstanceTypeConfig</a>. Each instance configuration has a specified <code>WeightedCapacity</code>. When a Spot instance is provisioned, the <code>WeightedCapacity</code> units count toward the target capacity. Amazon EMR provisions instances until the target capacity is totally fulfilled, even if this results in an overage. For example, if there are 2 units remaining to fulfill capacity, and Amazon EMR can only provision an instance with a <code>WeightedCapacity</code> of 5 units, the instance is provisioned, and the target capacity is exceeded by 3 units. You can use <a>InstanceFleet$ProvisionedSpotCapacity</a> to determine the Spot capacity units that have been provisioned for the instance fleet.</p> <note> <p>If not specified or set to 0, only On-Demand instances are provisioned for the instance fleet. At least one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> should be greater than 0. For a master instance fleet, only one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> can be specified, and its value must be 1.</p> </note>"]
     #[serde(rename="TargetSpotCapacity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_spot_capacity: Option<WholeNumber>,
 }
 
@@ -745,18 +868,23 @@ pub struct InstanceFleetConfig {
     pub instance_fleet_type: InstanceFleetType,
     #[doc="<p>The instance type configurations that define the EC2 instances in the instance fleet.</p>"]
     #[serde(rename="InstanceTypeConfigs")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_type_configs: Option<InstanceTypeConfigList>,
     #[doc="<p>The launch specification for the instance fleet.</p>"]
     #[serde(rename="LaunchSpecifications")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub launch_specifications: Option<InstanceFleetProvisioningSpecifications>,
     #[doc="<p>The friendly name of the instance fleet.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<XmlStringMaxLen256>,
     #[doc="<p>The target capacity of On-Demand units for the instance fleet, which determines how many On-Demand instances to provision. When the instance fleet launches, Amazon EMR tries to provision On-Demand instances as specified by <a>InstanceTypeConfig</a>. Each instance configuration has a specified <code>WeightedCapacity</code>. When an On-Demand instance is provisioned, the <code>WeightedCapacity</code> units count toward the target capacity. Amazon EMR provisions instances until the target capacity is totally fulfilled, even if this results in an overage. For example, if there are 2 units remaining to fulfill capacity, and Amazon EMR can only provision an instance with a <code>WeightedCapacity</code> of 5 units, the instance is provisioned, and the target capacity is exceeded by 3 units.</p> <note> <p>If not specified or set to 0, only Spot instances are provisioned for the instance fleet using <code>TargetSpotCapacity</code>. At least one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> should be greater than 0. For a master instance fleet, only one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> can be specified, and its value must be 1.</p> </note>"]
     #[serde(rename="TargetOnDemandCapacity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_on_demand_capacity: Option<WholeNumber>,
     #[doc="<p>The target capacity of Spot units for the instance fleet, which determines how many Spot instances to provision. When the instance fleet launches, Amazon EMR tries to provision Spot instances as specified by <a>InstanceTypeConfig</a>. Each instance configuration has a specified <code>WeightedCapacity</code>. When a Spot instance is provisioned, the <code>WeightedCapacity</code> units count toward the target capacity. Amazon EMR provisions instances until the target capacity is totally fulfilled, even if this results in an overage. For example, if there are 2 units remaining to fulfill capacity, and Amazon EMR can only provision an instance with a <code>WeightedCapacity</code> of 5 units, the instance is provisioned, and the target capacity is exceeded by 3 units.</p> <note> <p>If not specified or set to 0, only On-Demand instances are provisioned for the instance fleet. At least one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> should be greater than 0. For a master instance fleet, only one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> can be specified, and its value must be 1.</p> </note>"]
     #[serde(rename="TargetSpotCapacity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_spot_capacity: Option<WholeNumber>,
 }
 
@@ -771,9 +899,11 @@ pub struct InstanceFleetModifyConfig {
     pub instance_fleet_id: InstanceFleetId,
     #[doc="<p>The target capacity of On-Demand units for the instance fleet. For more information see <a>InstanceFleetConfig$TargetOnDemandCapacity</a>.</p>"]
     #[serde(rename="TargetOnDemandCapacity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_on_demand_capacity: Option<WholeNumber>,
     #[doc="<p>The target capacity of Spot units for the instance fleet. For more information, see <a>InstanceFleetConfig$TargetSpotCapacity</a>.</p>"]
     #[serde(rename="TargetSpotCapacity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub target_spot_capacity: Option<WholeNumber>,
 }
 
@@ -791,9 +921,11 @@ pub type InstanceFleetState = String;
 pub struct InstanceFleetStateChangeReason {
     #[doc="<p>A code corresponding to the reason the state change occurred.</p>"]
     #[serde(rename="Code")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub code: Option<InstanceFleetStateChangeReasonCode>,
     #[doc="<p>An explanatory message.</p>"]
     #[serde(rename="Message")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<String>,
 }
 
@@ -803,12 +935,15 @@ pub type InstanceFleetStateChangeReasonCode = String;
 pub struct InstanceFleetStatus {
     #[doc="<p>A code representing the instance fleet status.</p>"]
     #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<InstanceFleetState>,
     #[doc="<p>Provides status change reason details for the instance fleet.</p>"]
     #[serde(rename="StateChangeReason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state_change_reason: Option<InstanceFleetStateChangeReason>,
     #[doc="<p>Provides historical timestamps for the instance fleet, including the time of creation, the time it became ready to run jobs, and the time of termination.</p>"]
     #[serde(rename="Timeline")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub timeline: Option<InstanceFleetTimeline>,
 }
 
@@ -817,12 +952,15 @@ pub struct InstanceFleetStatus {
 pub struct InstanceFleetTimeline {
     #[doc="<p>The time and date the instance fleet was created.</p>"]
     #[serde(rename="CreationDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub creation_date_time: Option<Date>,
     #[doc="<p>The time and date the instance fleet terminated.</p>"]
     #[serde(rename="EndDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub end_date_time: Option<Date>,
     #[doc="<p>The time and date the instance fleet was ready to run jobs.</p>"]
     #[serde(rename="ReadyDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ready_date_time: Option<Date>,
 }
 
@@ -832,46 +970,59 @@ pub type InstanceFleetType = String;
 pub struct InstanceGroup {
     #[doc="<p>An automatic scaling policy for a core instance group or task instance group in an Amazon EMR cluster. The automatic scaling policy defines how an instance group dynamically adds and terminates EC2 instances in response to the value of a CloudWatch metric. See PutAutoScalingPolicy.</p>"]
     #[serde(rename="AutoScalingPolicy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_scaling_policy: Option<AutoScalingPolicyDescription>,
     #[doc="<p>The bid price for each EC2 instance in the instance group when launching nodes as Spot Instances, expressed in USD.</p>"]
     #[serde(rename="BidPrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bid_price: Option<String>,
     #[doc="<note> <p>Amazon EMR releases 4.x or later.</p> </note> <p>The list of configurations supplied for an EMR cluster instance group. You can specify a separate configuration for each instance group (master, core, and task).</p>"]
     #[serde(rename="Configurations")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub configurations: Option<ConfigurationList>,
     #[doc="<p>The EBS block devices that are mapped to this instance group.</p>"]
     #[serde(rename="EbsBlockDevices")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ebs_block_devices: Option<EbsBlockDeviceList>,
     #[doc="<p>If the instance group is EBS-optimized. An Amazon EBS-optimized instance uses an optimized configuration stack and provides additional, dedicated capacity for Amazon EBS I/O.</p>"]
     #[serde(rename="EbsOptimized")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ebs_optimized: Option<BooleanObject>,
     #[doc="<p>The identifier of the instance group.</p>"]
     #[serde(rename="Id")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<InstanceGroupId>,
     #[doc="<p>The type of the instance group. Valid values are MASTER, CORE or TASK.</p>"]
     #[serde(rename="InstanceGroupType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_group_type: Option<InstanceGroupType>,
     #[doc="<p>The EC2 instance type for all instances in the instance group.</p>"]
     #[serde(rename="InstanceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_type: Option<InstanceType>,
     #[doc="<p>The marketplace to provision instances for this group. Valid values are ON_DEMAND or SPOT.</p>"]
     #[serde(rename="Market")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub market: Option<MarketType>,
     #[doc="<p>The name of the instance group.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
     #[doc="<p>The target number of instances for the instance group.</p>"]
     #[serde(rename="RequestedInstanceCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub requested_instance_count: Option<Integer>,
     #[doc="<p>The number of instances currently running in this instance group.</p>"]
     #[serde(rename="RunningInstanceCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub running_instance_count: Option<Integer>,
     #[doc="<p>Policy for customizing shrink operations.</p>"]
     #[serde(rename="ShrinkPolicy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub shrink_policy: Option<ShrinkPolicy>,
     #[doc="<p>The current status of the instance group.</p>"]
     #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<InstanceGroupStatus>,
 }
 
@@ -880,15 +1031,19 @@ pub struct InstanceGroup {
 pub struct InstanceGroupConfig {
     #[doc="<p>An automatic scaling policy for a core instance group or task instance group in an Amazon EMR cluster. The automatic scaling policy defines how an instance group dynamically adds and terminates EC2 instances in response to the value of a CloudWatch metric. See <a>PutAutoScalingPolicy</a>.</p>"]
     #[serde(rename="AutoScalingPolicy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_scaling_policy: Option<AutoScalingPolicy>,
     #[doc="<p>Bid price for each EC2 instance in the instance group when launching nodes as Spot Instances, expressed in USD.</p>"]
     #[serde(rename="BidPrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bid_price: Option<XmlStringMaxLen256>,
     #[doc="<note> <p>Amazon EMR releases 4.x or later.</p> </note> <p>The list of configurations supplied for an EMR cluster instance group. You can specify a separate configuration for each instance group (master, core, and task).</p>"]
     #[serde(rename="Configurations")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub configurations: Option<ConfigurationList>,
     #[doc="<p>EBS configurations that will be attached to each EC2 instance in the instance group.</p>"]
     #[serde(rename="EbsConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ebs_configuration: Option<EbsConfiguration>,
     #[doc="<p>Target number of instances for the instance group.</p>"]
     #[serde(rename="InstanceCount")]
@@ -901,9 +1056,11 @@ pub struct InstanceGroupConfig {
     pub instance_type: InstanceType,
     #[doc="<p>Market type of the EC2 instances used to create a cluster node.</p>"]
     #[serde(rename="Market")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub market: Option<MarketType>,
     #[doc="<p>Friendly name given to the instance group.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<XmlStringMaxLen256>,
 }
 
@@ -913,15 +1070,18 @@ pub type InstanceGroupConfigList = Vec<InstanceGroupConfig>;
 pub struct InstanceGroupDetail {
     #[doc="<p>Bid price for EC2 Instances when launching nodes as Spot Instances, expressed in USD.</p>"]
     #[serde(rename="BidPrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bid_price: Option<XmlStringMaxLen256>,
     #[doc="<p>The date/time the instance group was created.</p>"]
     #[serde(rename="CreationDateTime")]
     pub creation_date_time: Date,
     #[doc="<p>The date/time the instance group was terminated.</p>"]
     #[serde(rename="EndDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub end_date_time: Option<Date>,
     #[doc="<p>Unique identifier for the instance group.</p>"]
     #[serde(rename="InstanceGroupId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_group_id: Option<XmlStringMaxLen256>,
     #[doc="<p>Target number of instances to run in the instance group.</p>"]
     #[serde(rename="InstanceRequestCount")]
@@ -937,18 +1097,22 @@ pub struct InstanceGroupDetail {
     pub instance_type: InstanceType,
     #[doc="<p>Details regarding the state of the instance group.</p>"]
     #[serde(rename="LastStateChangeReason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_state_change_reason: Option<XmlString>,
     #[doc="<p>Market type of the EC2 instances used to create a cluster node.</p>"]
     #[serde(rename="Market")]
     pub market: MarketType,
     #[doc="<p>Friendly name for the instance group.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<XmlStringMaxLen256>,
     #[doc="<p>The date/time the instance group was available to the cluster.</p>"]
     #[serde(rename="ReadyDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ready_date_time: Option<Date>,
     #[doc="<p>The date/time the instance group was started.</p>"]
     #[serde(rename="StartDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_date_time: Option<Date>,
     #[doc="<p>State of instance group. The following values are deprecated: STARTING, TERMINATED, and FAILED.</p>"]
     #[serde(rename="State")]
@@ -964,15 +1128,18 @@ pub type InstanceGroupList = Vec<InstanceGroup>;
 pub struct InstanceGroupModifyConfig {
     #[doc="<p>The EC2 InstanceIds to terminate. After you terminate the instances, the instance group will not return to its original requested size.</p>"]
     #[serde(rename="EC2InstanceIdsToTerminate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ec2_instance_ids_to_terminate: Option<EC2InstanceIdsToTerminateList>,
     #[doc="<p>Target size for the instance group.</p>"]
     #[serde(rename="InstanceCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_count: Option<Integer>,
     #[doc="<p>Unique ID of the instance group to expand or shrink.</p>"]
     #[serde(rename="InstanceGroupId")]
     pub instance_group_id: XmlStringMaxLen256,
     #[doc="<p>Policy for customizing shrink operations.</p>"]
     #[serde(rename="ShrinkPolicy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub shrink_policy: Option<ShrinkPolicy>,
 }
 
@@ -983,9 +1150,11 @@ pub type InstanceGroupState = String;
 pub struct InstanceGroupStateChangeReason {
     #[doc="<p>The programmable code for the state change reason.</p>"]
     #[serde(rename="Code")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub code: Option<InstanceGroupStateChangeReasonCode>,
     #[doc="<p>The status change reason description.</p>"]
     #[serde(rename="Message")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<String>,
 }
 
@@ -995,12 +1164,15 @@ pub type InstanceGroupStateChangeReasonCode = String;
 pub struct InstanceGroupStatus {
     #[doc="<p>The current state of the instance group.</p>"]
     #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<InstanceGroupState>,
     #[doc="<p>The status change reason details for the instance group.</p>"]
     #[serde(rename="StateChangeReason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state_change_reason: Option<InstanceGroupStateChangeReason>,
     #[doc="<p>The timeline of the instance group status over time.</p>"]
     #[serde(rename="Timeline")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub timeline: Option<InstanceGroupTimeline>,
 }
 
@@ -1009,12 +1181,15 @@ pub struct InstanceGroupStatus {
 pub struct InstanceGroupTimeline {
     #[doc="<p>The creation date and time of the instance group.</p>"]
     #[serde(rename="CreationDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub creation_date_time: Option<Date>,
     #[doc="<p>The date and time when the instance group terminated.</p>"]
     #[serde(rename="EndDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub end_date_time: Option<Date>,
     #[doc="<p>The date and time when the instance group became ready to perform tasks.</p>"]
     #[serde(rename="ReadyDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ready_date_time: Option<Date>,
 }
 
@@ -1027,12 +1202,15 @@ pub type InstanceList = Vec<Instance>;
 pub struct InstanceResizePolicy {
     #[doc="<p>Decommissioning timeout override for the specific list of instances to be terminated.</p>"]
     #[serde(rename="InstanceTerminationTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_termination_timeout: Option<Integer>,
     #[doc="<p>Specific list of instances to be protected when shrinking an instance group.</p>"]
     #[serde(rename="InstancesToProtect")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instances_to_protect: Option<EC2InstanceIdsList>,
     #[doc="<p>Specific list of instances to be terminated when shrinking an instance group.</p>"]
     #[serde(rename="InstancesToTerminate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instances_to_terminate: Option<EC2InstanceIdsList>,
 }
 
@@ -1043,9 +1221,11 @@ pub type InstanceState = String;
 pub struct InstanceStateChangeReason {
     #[doc="<p>The programmable code for the state change reason.</p>"]
     #[serde(rename="Code")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub code: Option<InstanceStateChangeReasonCode>,
     #[doc="<p>The status change reason description.</p>"]
     #[serde(rename="Message")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<String>,
 }
 
@@ -1056,12 +1236,15 @@ pub type InstanceStateList = Vec<InstanceState>;
 pub struct InstanceStatus {
     #[doc="<p>The current state of the instance.</p>"]
     #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<InstanceState>,
     #[doc="<p>The details of the status change reason for the instance.</p>"]
     #[serde(rename="StateChangeReason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state_change_reason: Option<InstanceStateChangeReason>,
     #[doc="<p>The timeline of the instance status over time.</p>"]
     #[serde(rename="Timeline")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub timeline: Option<InstanceTimeline>,
 }
 
@@ -1070,12 +1253,15 @@ pub struct InstanceStatus {
 pub struct InstanceTimeline {
     #[doc="<p>The creation date and time of the instance.</p>"]
     #[serde(rename="CreationDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub creation_date_time: Option<Date>,
     #[doc="<p>The date and time when the instance was terminated.</p>"]
     #[serde(rename="EndDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub end_date_time: Option<Date>,
     #[doc="<p>The date and time when the instance was ready to perform tasks.</p>"]
     #[serde(rename="ReadyDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ready_date_time: Option<Date>,
 }
 
@@ -1085,21 +1271,26 @@ pub type InstanceType = String;
 pub struct InstanceTypeConfig {
     #[doc="<p>The bid price for each EC2 Spot instance type as defined by <code>InstanceType</code>. Expressed in USD. If neither <code>BidPrice</code> nor <code>BidPriceAsPercentageOfOnDemandPrice</code> is provided, <code>BidPriceAsPercentageOfOnDemandPrice</code> defaults to 100%. </p>"]
     #[serde(rename="BidPrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bid_price: Option<XmlStringMaxLen256>,
     #[doc="<p>The bid price, as a percentage of On-Demand price, for each EC2 Spot instance as defined by <code>InstanceType</code>. Expressed as a number between 0 and 1000 (for example, 20 specifies 20%). If neither <code>BidPrice</code> nor <code>BidPriceAsPercentageOfOnDemandPrice</code> is provided, <code>BidPriceAsPercentageOfOnDemandPrice</code> defaults to 100%.</p>"]
     #[serde(rename="BidPriceAsPercentageOfOnDemandPrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bid_price_as_percentage_of_on_demand_price: Option<NonNegativeDouble>,
     #[doc="<p>A configuration classification that applies when provisioning cluster instances, which can include configurations for applications and software that run on the cluster.</p>"]
     #[serde(rename="Configurations")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub configurations: Option<ConfigurationList>,
     #[doc="<p>The configuration of Amazon Elastic Block Storage (EBS) attached to each instance as defined by <code>InstanceType</code>. </p>"]
     #[serde(rename="EbsConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ebs_configuration: Option<EbsConfiguration>,
     #[doc="<p>An EC2 instance type, such as <code>m3.xlarge</code>. </p>"]
     #[serde(rename="InstanceType")]
     pub instance_type: InstanceType,
     #[doc="<p>The number of units that a provisioned instance of this type provides toward fulfilling the target capacities defined in <a>InstanceFleetConfig</a>. This value is 1 for a master instance fleet, and must be greater than 0 for core and task instance fleets. </p>"]
     #[serde(rename="WeightedCapacity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub weighted_capacity: Option<WholeNumber>,
 }
 
@@ -1109,25 +1300,31 @@ pub type InstanceTypeConfigList = Vec<InstanceTypeConfig>;
 pub struct InstanceTypeSpecification {
     #[doc="<p>The bid price for each EC2 Spot instance type as defined by <code>InstanceType</code>. Expressed in USD.</p>"]
     #[serde(rename="BidPrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bid_price: Option<XmlStringMaxLen256>,
     #[doc="<p>The bid price, as a percentage of On-Demand price, for each EC2 Spot instance as defined by <code>InstanceType</code>. Expressed as a number (for example, 20 specifies 20%).</p>"]
     #[serde(rename="BidPriceAsPercentageOfOnDemandPrice")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bid_price_as_percentage_of_on_demand_price: Option<NonNegativeDouble>,
     #[doc="<p>A configuration classification that applies when provisioning cluster instances, which can include configurations for applications and software bundled with Amazon EMR.</p>"]
     #[serde(rename="Configurations")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub configurations: Option<ConfigurationList>,
     #[doc="<p>The configuration of Amazon Elastic Block Storage (EBS) attached to each instance as defined by <code>InstanceType</code>.</p>"]
     #[serde(rename="EbsBlockDevices")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ebs_block_devices: Option<EbsBlockDeviceList>,
     #[doc="<p>Evaluates to <code>TRUE</code> when the specified <code>InstanceType</code> is EBS-optimized.</p>"]
     #[serde(rename="EbsOptimized")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ebs_optimized: Option<BooleanObject>,
     #[doc="<p>The EC2 instance type, for example <code>m3.xlarge</code>.</p>"]
     #[serde(rename="InstanceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_type: Option<InstanceType>,
     #[doc="<p>The number of units that a provisioned instance of this type provides toward fulfilling the target capacities defined in <a>InstanceFleetConfig</a>. Capacity values represent performance characteristics such as vCPUs, memory, or I/O. If not specified, the default value is 1.</p>"]
     #[serde(rename="WeightedCapacity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub weighted_capacity: Option<WholeNumber>,
 }
 
@@ -1138,12 +1335,15 @@ pub type Integer = i64;
 pub struct JobFlowDetail {
     #[doc="<p>The version of the AMI used to initialize Amazon EC2 instances in the job flow. For a list of AMI versions currently supported by Amazon EMR, see <a href=\"http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/EnvironmentConfig_AMIVersion.html#ami-versions-supported\">AMI Versions Supported in EMR</a> in the <i>Amazon EMR Developer Guide.</i> </p>"]
     #[serde(rename="AmiVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ami_version: Option<XmlStringMaxLen256>,
     #[doc="<p>An IAM role for automatic scaling policies. The default role is <code>EMR_AutoScaling_DefaultRole</code>. The IAM role provides a way for the automatic scaling feature to get the required permissions it needs to launch and terminate EC2 instances in an instance group.</p>"]
     #[serde(rename="AutoScalingRole")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_scaling_role: Option<XmlString>,
     #[doc="<p>A list of the bootstrap actions run by the job flow.</p>"]
     #[serde(rename="BootstrapActions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bootstrap_actions: Option<BootstrapActionDetailList>,
     #[doc="<p>Describes the execution status of the job flow.</p>"]
     #[serde(rename="ExecutionStatusDetail")]
@@ -1156,28 +1356,34 @@ pub struct JobFlowDetail {
     pub job_flow_id: XmlStringMaxLen256,
     #[doc="<p>The IAM role that was specified when the job flow was launched. The EC2 instances of the job flow assume this role.</p>"]
     #[serde(rename="JobFlowRole")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub job_flow_role: Option<XmlString>,
     #[doc="<p>The location in Amazon S3 where log files for the job are stored.</p>"]
     #[serde(rename="LogUri")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub log_uri: Option<XmlString>,
     #[doc="<p>The name of the job flow.</p>"]
     #[serde(rename="Name")]
     pub name: XmlStringMaxLen256,
     #[doc="<p>The way that individual Amazon EC2 instances terminate when an automatic scale-in activity occurs or an instance group is resized. <code>TERMINATE_AT_INSTANCE_HOUR</code> indicates that Amazon EMR terminates nodes at the instance-hour boundary, regardless of when the request to terminate the instance was submitted. This option is only available with Amazon EMR 5.1.0 and later and is the default for clusters created using that version. <code>TERMINATE_AT_TASK_COMPLETION</code> indicates that Amazon EMR blacklists and drains tasks from nodes before terminating the Amazon EC2 instances, regardless of the instance-hour boundary. With either behavior, Amazon EMR removes the least active nodes first and blocks instance termination if it could lead to HDFS corruption. <code>TERMINATE_AT_TASK_COMPLETION</code> available only in Amazon EMR version 4.1.0 and later, and is the default for versions of Amazon EMR earlier than 5.1.0.</p>"]
     #[serde(rename="ScaleDownBehavior")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub scale_down_behavior: Option<ScaleDownBehavior>,
     #[doc="<p>The IAM role that will be assumed by the Amazon EMR service to access AWS resources on your behalf.</p>"]
     #[serde(rename="ServiceRole")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub service_role: Option<XmlString>,
     #[doc="<p>A list of steps run by the job flow.</p>"]
     #[serde(rename="Steps")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub steps: Option<StepDetailList>,
     #[doc="<p>A list of strings set by third party software when the job flow is launched. If you are not using third party software to manage the job flow this value is empty.</p>"]
     #[serde(rename="SupportedProducts")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub supported_products: Option<SupportedProductsList>,
     #[doc="<p>Specifies whether the cluster is visible to all IAM users of the AWS account associated with the cluster. If this value is set to <code>true</code>, all IAM users of that AWS account can view and (if they have the proper policy permissions set) manage the cluster. If it is set to <code>false</code>, only the IAM user that created the cluster can view and manage it. This value can be changed using the <a>SetVisibleToAllUsers</a> action.</p>"]
     #[serde(rename="VisibleToAllUsers")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub visible_to_all_users: Option<Boolean>,
 }
 
@@ -1193,15 +1399,19 @@ pub struct JobFlowExecutionStatusDetail {
     pub creation_date_time: Date,
     #[doc="<p>The completion date and time of the job flow.</p>"]
     #[serde(rename="EndDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub end_date_time: Option<Date>,
     #[doc="<p>Description of the job flow last changed state.</p>"]
     #[serde(rename="LastStateChangeReason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_state_change_reason: Option<XmlString>,
     #[doc="<p>The date and time when the job flow was ready to start running bootstrap actions.</p>"]
     #[serde(rename="ReadyDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ready_date_time: Option<Date>,
     #[doc="<p>The start date and time of the job flow.</p>"]
     #[serde(rename="StartDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_date_time: Option<Date>,
     #[doc="<p>The state of the job flow.</p>"]
     #[serde(rename="State")]
@@ -1213,56 +1423,71 @@ pub struct JobFlowExecutionStatusDetail {
 pub struct JobFlowInstancesConfig {
     #[doc="<p>A list of additional Amazon EC2 security group IDs for the master node.</p>"]
     #[serde(rename="AdditionalMasterSecurityGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub additional_master_security_groups: Option<SecurityGroupsList>,
     #[doc="<p>A list of additional Amazon EC2 security group IDs for the slave nodes.</p>"]
     #[serde(rename="AdditionalSlaveSecurityGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub additional_slave_security_groups: Option<SecurityGroupsList>,
     #[doc="<p>The name of the EC2 key pair that can be used to ssh to the master node as the user called \"hadoop.\"</p>"]
     #[serde(rename="Ec2KeyName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ec_2_key_name: Option<XmlStringMaxLen256>,
     #[doc="<p>Applies to clusters that use the uniform instance group configuration. To launch the cluster in Amazon Virtual Private Cloud (Amazon VPC), set this parameter to the identifier of the Amazon VPC subnet where you want the cluster to launch. If you do not specify this value, the cluster launches in the normal Amazon Web Services cloud, outside of an Amazon VPC, if the account launching the cluster supports EC2 Classic networks in the region where the cluster launches.</p> <p>Amazon VPC currently does not support cluster compute quadruple extra large (cc1.4xlarge) instances. Thus you cannot specify the cc1.4xlarge instance type for clusters launched in an Amazon VPC.</p>"]
     #[serde(rename="Ec2SubnetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ec_2_subnet_id: Option<XmlStringMaxLen256>,
     #[doc="<p>Applies to clusters that use the instance fleet configuration. When multiple EC2 subnet IDs are specified, Amazon EMR evaluates them and launches instances in the optimal subnet.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note>"]
     #[serde(rename="Ec2SubnetIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ec_2_subnet_ids: Option<XmlStringMaxLen256List>,
     #[doc="<p>The identifier of the Amazon EC2 security group for the master node.</p>"]
     #[serde(rename="EmrManagedMasterSecurityGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub emr_managed_master_security_group: Option<XmlStringMaxLen256>,
     #[doc="<p>The identifier of the Amazon EC2 security group for the slave nodes.</p>"]
     #[serde(rename="EmrManagedSlaveSecurityGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub emr_managed_slave_security_group: Option<XmlStringMaxLen256>,
     #[doc="<p>The Hadoop version for the cluster. Valid inputs are \"0.18\" (deprecated), \"0.20\" (deprecated), \"0.20.205\" (deprecated), \"1.0.3\", \"2.2.0\", or \"2.4.0\". If you do not set this value, the default of 0.18 is used, unless the AmiVersion parameter is set in the RunJobFlow call, in which case the default version of Hadoop for that AMI version is used.</p>"]
     #[serde(rename="HadoopVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hadoop_version: Option<XmlStringMaxLen256>,
     #[doc="<p>The number of EC2 instances in the cluster.</p>"]
     #[serde(rename="InstanceCount")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_count: Option<Integer>,
     #[doc="<note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note> <p>Describes the EC2 instances and instance configurations for clusters that use the instance fleet configuration.</p>"]
     #[serde(rename="InstanceFleets")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_fleets: Option<InstanceFleetConfigList>,
     #[doc="<p>Configuration for the instance groups in a cluster.</p>"]
     #[serde(rename="InstanceGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_groups: Option<InstanceGroupConfigList>,
     #[doc="<p>Specifies whether the cluster should remain available after completing all steps.</p>"]
     #[serde(rename="KeepJobFlowAliveWhenNoSteps")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub keep_job_flow_alive_when_no_steps: Option<Boolean>,
     #[doc="<p>The EC2 instance type of the master node.</p>"]
     #[serde(rename="MasterInstanceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub master_instance_type: Option<InstanceType>,
     #[doc="<p>The Availability Zone in which the cluster runs.</p>"]
     #[serde(rename="Placement")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub placement: Option<PlacementType>,
     #[doc="<p>The identifier of the Amazon EC2 security group for the Amazon EMR service to access clusters in VPC private subnets.</p>"]
     #[serde(rename="ServiceAccessSecurityGroup")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub service_access_security_group: Option<XmlStringMaxLen256>,
     #[doc="<p>The EC2 instance type of the slave nodes.</p>"]
     #[serde(rename="SlaveInstanceType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub slave_instance_type: Option<InstanceType>,
     #[doc="<p>Specifies whether to lock the cluster to prevent the Amazon EC2 instances from being terminated by API call, user intervention, or in the event of a job-flow error.</p>"]
     #[serde(rename="TerminationProtected")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub termination_protected: Option<Boolean>,
 }
 
@@ -1271,44 +1496,52 @@ pub struct JobFlowInstancesConfig {
 pub struct JobFlowInstancesDetail {
     #[doc="<p>The name of an Amazon EC2 key pair that can be used to ssh to the master node.</p>"]
     #[serde(rename="Ec2KeyName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ec_2_key_name: Option<XmlStringMaxLen256>,
     #[doc="<p>For clusters launched within Amazon Virtual Private Cloud, this is the identifier of the subnet where the cluster was launched.</p>"]
     #[serde(rename="Ec2SubnetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ec_2_subnet_id: Option<XmlStringMaxLen256>,
     #[doc="<p>The Hadoop version for the cluster.</p>"]
     #[serde(rename="HadoopVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub hadoop_version: Option<XmlStringMaxLen256>,
     #[doc="<p>The number of Amazon EC2 instances in the cluster. If the value is 1, the same instance serves as both the master and slave node. If the value is greater than 1, one instance is the master node and all others are slave nodes.</p>"]
     #[serde(rename="InstanceCount")]
     pub instance_count: Integer,
     #[doc="<p>Details about the instance groups in a cluster.</p>"]
     #[serde(rename="InstanceGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_groups: Option<InstanceGroupDetailList>,
     #[doc="<p>Specifies whether the cluster should remain available after completing all steps.</p>"]
     #[serde(rename="KeepJobFlowAliveWhenNoSteps")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub keep_job_flow_alive_when_no_steps: Option<Boolean>,
     #[doc="<p>The Amazon EC2 instance identifier of the master node.</p>"]
     #[serde(rename="MasterInstanceId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub master_instance_id: Option<XmlString>,
     #[doc="<p>The Amazon EC2 master node instance type.</p>"]
     #[serde(rename="MasterInstanceType")]
     pub master_instance_type: InstanceType,
     #[doc="<p>The DNS name of the master node.</p>"]
     #[serde(rename="MasterPublicDnsName")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub master_public_dns_name: Option<XmlString>,
     #[doc="<p>An approximation of the cost of the cluster, represented in m1.small/hours. This value is incremented one time for every hour that an m1.small runs. Larger instances are weighted more, so an Amazon EC2 instance that is roughly four times more expensive would result in the normalized instance hours being incremented by four. This result is only an approximation and does not reflect the actual billing rate.</p>"]
     #[serde(rename="NormalizedInstanceHours")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub normalized_instance_hours: Option<Integer>,
     #[doc="<p>The Amazon EC2 Availability Zone for the cluster.</p>"]
     #[serde(rename="Placement")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub placement: Option<PlacementType>,
     #[doc="<p>The Amazon EC2 slave node instance type.</p>"]
     #[serde(rename="SlaveInstanceType")]
     pub slave_instance_type: InstanceType,
     #[doc="<p>Specifies whether the Amazon EC2 instances in the cluster are protected from termination by API calls, user intervention, or in the event of a job-flow error.</p>"]
     #[serde(rename="TerminationProtected")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub termination_protected: Option<Boolean>,
 }
 
@@ -1317,9 +1550,11 @@ pub struct JobFlowInstancesDetail {
 pub struct KeyValue {
     #[doc="<p>The unique identifier of a key value pair.</p>"]
     #[serde(rename="Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key: Option<XmlString>,
     #[doc="<p>The value part of the identified key.</p>"]
     #[serde(rename="Value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<XmlString>,
 }
 
@@ -1332,6 +1567,7 @@ pub struct ListBootstrapActionsInput {
     pub cluster_id: ClusterId,
     #[doc="<p>The pagination token that indicates the next set of results to retrieve.</p>"]
     #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
 }
 
@@ -1340,9 +1576,11 @@ pub struct ListBootstrapActionsInput {
 pub struct ListBootstrapActionsOutput {
     #[doc="<p>The bootstrap actions associated with the cluster.</p>"]
     #[serde(rename="BootstrapActions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bootstrap_actions: Option<CommandList>,
     #[doc="<p>The pagination token that indicates the next set of results to retrieve.</p>"]
     #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
 }
 
@@ -1351,15 +1589,19 @@ pub struct ListBootstrapActionsOutput {
 pub struct ListClustersInput {
     #[doc="<p>The cluster state filters to apply when listing clusters.</p>"]
     #[serde(rename="ClusterStates")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_states: Option<ClusterStateList>,
     #[doc="<p>The creation date and time beginning value filter for listing clusters.</p>"]
     #[serde(rename="CreatedAfter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub created_after: Option<Date>,
     #[doc="<p>The creation date and time end value filter for listing clusters.</p>"]
     #[serde(rename="CreatedBefore")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub created_before: Option<Date>,
     #[doc="<p>The pagination token that indicates the next set of results to retrieve.</p>"]
     #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
 }
 
@@ -1368,9 +1610,11 @@ pub struct ListClustersInput {
 pub struct ListClustersOutput {
     #[doc="<p>The list of clusters for the account based on the given filters.</p>"]
     #[serde(rename="Clusters")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub clusters: Option<ClusterSummaryList>,
     #[doc="<p>The pagination token that indicates the next set of results to retrieve.</p>"]
     #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
 }
 
@@ -1381,6 +1625,7 @@ pub struct ListInstanceFleetsInput {
     pub cluster_id: ClusterId,
     #[doc="<p>The pagination token that indicates the next set of results to retrieve.</p>"]
     #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
 }
 
@@ -1388,9 +1633,11 @@ pub struct ListInstanceFleetsInput {
 pub struct ListInstanceFleetsOutput {
     #[doc="<p>The list of instance fleets for the cluster and given filters.</p>"]
     #[serde(rename="InstanceFleets")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_fleets: Option<InstanceFleetList>,
     #[doc="<p>The pagination token that indicates the next set of results to retrieve.</p>"]
     #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
 }
 
@@ -1402,6 +1649,7 @@ pub struct ListInstanceGroupsInput {
     pub cluster_id: ClusterId,
     #[doc="<p>The pagination token that indicates the next set of results to retrieve.</p>"]
     #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
 }
 
@@ -1410,9 +1658,11 @@ pub struct ListInstanceGroupsInput {
 pub struct ListInstanceGroupsOutput {
     #[doc="<p>The list of instance groups for the cluster and given filters.</p>"]
     #[serde(rename="InstanceGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_groups: Option<InstanceGroupList>,
     #[doc="<p>The pagination token that indicates the next set of results to retrieve.</p>"]
     #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
 }
 
@@ -1424,21 +1674,27 @@ pub struct ListInstancesInput {
     pub cluster_id: ClusterId,
     #[doc="<p>The unique identifier of the instance fleet.</p>"]
     #[serde(rename="InstanceFleetId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_fleet_id: Option<InstanceFleetId>,
     #[doc="<p>The node type of the instance fleet. For example MASTER, CORE, or TASK.</p>"]
     #[serde(rename="InstanceFleetType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_fleet_type: Option<InstanceFleetType>,
     #[doc="<p>The identifier of the instance group for which to list the instances.</p>"]
     #[serde(rename="InstanceGroupId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_group_id: Option<InstanceGroupId>,
     #[doc="<p>The type of instance group for which to list the instances.</p>"]
     #[serde(rename="InstanceGroupTypes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_group_types: Option<InstanceGroupTypeList>,
     #[doc="<p>A list of instance states that will filter the instances returned with this request.</p>"]
     #[serde(rename="InstanceStates")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_states: Option<InstanceStateList>,
     #[doc="<p>The pagination token that indicates the next set of results to retrieve.</p>"]
     #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
 }
 
@@ -1447,9 +1703,11 @@ pub struct ListInstancesInput {
 pub struct ListInstancesOutput {
     #[doc="<p>The list of instances for the cluster and given filters.</p>"]
     #[serde(rename="Instances")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instances: Option<InstanceList>,
     #[doc="<p>The pagination token that indicates the next set of results to retrieve.</p>"]
     #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
 }
 
@@ -1457,6 +1715,7 @@ pub struct ListInstancesOutput {
 pub struct ListSecurityConfigurationsInput {
     #[doc="<p>The pagination token that indicates the set of results to retrieve.</p>"]
     #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
 }
 
@@ -1464,9 +1723,11 @@ pub struct ListSecurityConfigurationsInput {
 pub struct ListSecurityConfigurationsOutput {
     #[doc="<p>A pagination token that indicates the next set of results to retrieve. Include the marker in the next ListSecurityConfiguration call to retrieve the next page of results, if required.</p>"]
     #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
     #[doc="<p>The creation date and time, and name, of each security configuration.</p>"]
     #[serde(rename="SecurityConfigurations")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub security_configurations: Option<SecurityConfigurationList>,
 }
 
@@ -1478,12 +1739,15 @@ pub struct ListStepsInput {
     pub cluster_id: ClusterId,
     #[doc="<p>The pagination token that indicates the next set of results to retrieve.</p>"]
     #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
     #[doc="<p>The filter to limit the step list based on the identifier of the steps.</p>"]
     #[serde(rename="StepIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub step_ids: Option<XmlStringList>,
     #[doc="<p>The filter to limit the step list based on certain states.</p>"]
     #[serde(rename="StepStates")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub step_states: Option<StepStateList>,
 }
 
@@ -1492,9 +1756,11 @@ pub struct ListStepsInput {
 pub struct ListStepsOutput {
     #[doc="<p>The pagination token that indicates the next set of results to retrieve.</p>"]
     #[serde(rename="Marker")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<Marker>,
     #[doc="<p>The filtered list of steps for the cluster.</p>"]
     #[serde(rename="Steps")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub steps: Option<StepSummaryList>,
 }
 
@@ -1505,9 +1771,11 @@ pub type MarketType = String;
 pub struct MetricDimension {
     #[doc="<p>The dimension name.</p>"]
     #[serde(rename="Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key: Option<String>,
     #[doc="<p>The dimension value.</p>"]
     #[serde(rename="Value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<String>,
 }
 
@@ -1527,9 +1795,11 @@ pub struct ModifyInstanceFleetInput {
 pub struct ModifyInstanceGroupsInput {
     #[doc="<p>The ID of the cluster to which the instance group belongs.</p>"]
     #[serde(rename="ClusterId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_id: Option<ClusterId>,
     #[doc="<p>Instance groups to change.</p>"]
     #[serde(rename="InstanceGroups")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_groups: Option<InstanceGroupModifyConfigList>,
 }
 
@@ -1540,9 +1810,11 @@ pub type NonNegativeDouble = f64;
 pub struct PlacementType {
     #[doc="<p>The Amazon EC2 Availability Zone for the cluster. <code>AvailabilityZone</code> is used for uniform instance groups, while <code>AvailabilityZones</code> (plural) is used for instance fleets.</p>"]
     #[serde(rename="AvailabilityZone")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zone: Option<XmlString>,
     #[doc="<p>When multiple Availability Zones are specified, Amazon EMR evaluates them and launches instances in the optimal Availability Zone. <code>AvailabilityZones</code> is used for instance fleets, while <code>AvailabilityZone</code> (singular) is used for uniform instance groups.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note>"]
     #[serde(rename="AvailabilityZones")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub availability_zones: Option<XmlStringMaxLen256List>,
 }
 
@@ -1563,12 +1835,15 @@ pub struct PutAutoScalingPolicyInput {
 pub struct PutAutoScalingPolicyOutput {
     #[doc="<p>The automatic scaling policy definition.</p>"]
     #[serde(rename="AutoScalingPolicy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_scaling_policy: Option<AutoScalingPolicyDescription>,
     #[doc="<p>Specifies the ID of a cluster. The instance group to which the automatic scaling policy is applied is within this cluster.</p>"]
     #[serde(rename="ClusterId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cluster_id: Option<ClusterId>,
     #[doc="<p>Specifies the ID of the instance group to which the scaling policy is applied.</p>"]
     #[serde(rename="InstanceGroupId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_group_id: Option<InstanceGroupId>,
 }
 
@@ -1606,61 +1881,77 @@ pub type ResourceId = String;
 pub struct RunJobFlowInput {
     #[doc="<p>A JSON string for selecting additional features.</p>"]
     #[serde(rename="AdditionalInfo")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub additional_info: Option<XmlString>,
     #[doc="<note> <p>For Amazon EMR releases 3.x and 2.x. For Amazon EMR releases 4.x and greater, use ReleaseLabel.</p> </note> <p>The version of the Amazon Machine Image (AMI) to use when launching Amazon EC2 instances in the job flow. The following values are valid:</p> <ul> <li> <p>The version number of the AMI to use, for example, \"2.0.\"</p> </li> </ul> <p>If the AMI supports multiple versions of Hadoop (for example, AMI 1.0 supports both Hadoop 0.18 and 0.20) you can use the <a>JobFlowInstancesConfig</a> <code>HadoopVersion</code> parameter to modify the version of Hadoop from the defaults shown above.</p> <p>For details about the AMI versions currently supported by Amazon Elastic MapReduce, see <a href=\"http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/EnvironmentConfig_AMIVersion.html#ami-versions-supported\">AMI Versions Supported in Elastic MapReduce</a> in the <i>Amazon Elastic MapReduce Developer Guide.</i> </p> <note> <p>Previously, the EMR AMI version API parameter options allowed you to use latest for the latest AMI version rather than specify a numerical value. Some regions no longer support this deprecated option as they only have a newer release label version of EMR, which requires you to specify an EMR release label release (EMR 4.x or later).</p> </note>"]
     #[serde(rename="AmiVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub ami_version: Option<XmlStringMaxLen256>,
     #[doc="<note> <p>Amazon EMR releases 4.x or later.</p> </note> <p>A list of applications for the cluster. Valid values are: \"Hadoop\", \"Hive\", \"Mahout\", \"Pig\", and \"Spark.\" They are case insensitive.</p>"]
     #[serde(rename="Applications")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub applications: Option<ApplicationList>,
     #[doc="<p>An IAM role for automatic scaling policies. The default role is <code>EMR_AutoScaling_DefaultRole</code>. The IAM role provides permissions that the automatic scaling feature requires to launch and terminate EC2 instances in an instance group.</p>"]
     #[serde(rename="AutoScalingRole")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub auto_scaling_role: Option<XmlString>,
     #[doc="<p>A list of bootstrap actions to run before Hadoop starts on the cluster nodes.</p>"]
     #[serde(rename="BootstrapActions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub bootstrap_actions: Option<BootstrapActionConfigList>,
     #[doc="<note> <p>Amazon EMR releases 4.x or later.</p> </note> <p>The list of configurations supplied for the EMR cluster you are creating.</p>"]
     #[serde(rename="Configurations")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub configurations: Option<ConfigurationList>,
     #[doc="<p>A specification of the number and type of Amazon EC2 instances.</p>"]
     #[serde(rename="Instances")]
     pub instances: JobFlowInstancesConfig,
     #[doc="<p>Also called instance profile and EC2 role. An IAM role for an EMR cluster. The EC2 instances of the cluster assume this role. The default role is <code>EMR_EC2_DefaultRole</code>. In order to use the default role, you must have already created it using the CLI or console.</p>"]
     #[serde(rename="JobFlowRole")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub job_flow_role: Option<XmlString>,
     #[doc="<p>The location in Amazon S3 to write the log files of the job flow. If a value is not provided, logs are not created.</p>"]
     #[serde(rename="LogUri")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub log_uri: Option<XmlString>,
     #[doc="<p>The name of the job flow.</p>"]
     #[serde(rename="Name")]
     pub name: XmlStringMaxLen256,
     #[doc="<note> <p>For Amazon EMR releases 3.x and 2.x. For Amazon EMR releases 4.x and greater, use Applications.</p> </note> <p>A list of strings that indicates third-party software to use with the job flow that accepts a user argument list. EMR accepts and forwards the argument list to the corresponding installation script as bootstrap action arguments. For more information, see \"Launch a Job Flow on the MapR Distribution for Hadoop\" in the <a href=\"http://docs.aws.amazon.com/http:/docs.aws.amazon.com/emr/latest/DeveloperGuide/emr-dg.pdf\">Amazon EMR Developer Guide</a>. Supported values are:</p> <ul> <li> <p>\"mapr-m3\" - launch the cluster using MapR M3 Edition.</p> </li> <li> <p>\"mapr-m5\" - launch the cluster using MapR M5 Edition.</p> </li> <li> <p>\"mapr\" with the user arguments specifying \"--edition,m3\" or \"--edition,m5\" - launch the job flow using MapR M3 or M5 Edition respectively.</p> </li> <li> <p>\"mapr-m7\" - launch the cluster using MapR M7 Edition.</p> </li> <li> <p>\"hunk\" - launch the cluster with the Hunk Big Data Analtics Platform.</p> </li> <li> <p>\"hue\"- launch the cluster with Hue installed.</p> </li> <li> <p>\"spark\" - launch the cluster with Apache Spark installed.</p> </li> <li> <p>\"ganglia\" - launch the cluster with the Ganglia Monitoring System installed.</p> </li> </ul>"]
     #[serde(rename="NewSupportedProducts")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub new_supported_products: Option<NewSupportedProductsList>,
     #[doc="<note> <p>Amazon EMR releases 4.x or later.</p> </note> <p>The release label for the Amazon EMR release. For Amazon EMR 3.x and 2.x AMIs, use amiVersion instead instead of ReleaseLabel.</p>"]
     #[serde(rename="ReleaseLabel")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub release_label: Option<XmlStringMaxLen256>,
     #[doc="<p>Specifies the way that individual Amazon EC2 instances terminate when an automatic scale-in activity occurs or an instance group is resized. <code>TERMINATE_AT_INSTANCE_HOUR</code> indicates that Amazon EMR terminates nodes at the instance-hour boundary, regardless of when the request to terminate the instance was submitted. This option is only available with Amazon EMR 5.1.0 and later and is the default for clusters created using that version. <code>TERMINATE_AT_TASK_COMPLETION</code> indicates that Amazon EMR blacklists and drains tasks from nodes before terminating the Amazon EC2 instances, regardless of the instance-hour boundary. With either behavior, Amazon EMR removes the least active nodes first and blocks instance termination if it could lead to HDFS corruption. <code>TERMINATE_AT_TASK_COMPLETION</code> available only in Amazon EMR version 4.1.0 and later, and is the default for versions of Amazon EMR earlier than 5.1.0.</p>"]
     #[serde(rename="ScaleDownBehavior")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub scale_down_behavior: Option<ScaleDownBehavior>,
     #[doc="<p>The name of a security configuration to apply to the cluster.</p>"]
     #[serde(rename="SecurityConfiguration")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub security_configuration: Option<XmlString>,
     #[doc="<p>The IAM role that will be assumed by the Amazon EMR service to access AWS resources on your behalf.</p>"]
     #[serde(rename="ServiceRole")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub service_role: Option<XmlString>,
     #[doc="<p>A list of steps to run.</p>"]
     #[serde(rename="Steps")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub steps: Option<StepConfigList>,
     #[doc="<note> <p>For Amazon EMR releases 3.x and 2.x. For Amazon EMR releases 4.x and greater, use Applications.</p> </note> <p>A list of strings that indicates third-party software to use. For more information, see <a href=\"http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/emr-supported-products.html\">Use Third Party Applications with Amazon EMR</a>. Currently supported values are:</p> <ul> <li> <p>\"mapr-m3\" - launch the job flow using MapR M3 Edition.</p> </li> <li> <p>\"mapr-m5\" - launch the job flow using MapR M5 Edition.</p> </li> </ul>"]
     #[serde(rename="SupportedProducts")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub supported_products: Option<SupportedProductsList>,
     #[doc="<p>A list of tags to associate with a cluster and propagate to Amazon EC2 instances.</p>"]
     #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<TagList>,
     #[doc="<p>Whether the cluster is visible to all IAM users of the AWS account associated with the cluster. If this value is set to <code>true</code>, all IAM users of that AWS account can view and (if they have the proper policy permissions set) manage the cluster. If it is set to <code>false</code>, only the IAM user that created the cluster can view and manage it.</p>"]
     #[serde(rename="VisibleToAllUsers")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub visible_to_all_users: Option<Boolean>,
 }
 
@@ -1669,6 +1960,7 @@ pub struct RunJobFlowInput {
 pub struct RunJobFlowOutput {
     #[doc="<p>An unique identifier for the job flow.</p>"]
     #[serde(rename="JobFlowId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub job_flow_id: Option<XmlStringMaxLen256>,
 }
 
@@ -1678,6 +1970,7 @@ pub type ScaleDownBehavior = String;
 pub struct ScalingAction {
     #[doc="<p>Not available for instance groups. Instance groups use the market type specified for the group.</p>"]
     #[serde(rename="Market")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub market: Option<MarketType>,
     #[doc="<p>The type of adjustment the automatic scaling activity makes when triggered, and the periodicity of the adjustment.</p>"]
     #[serde(rename="SimpleScalingPolicyConfiguration")]
@@ -1703,6 +1996,7 @@ pub struct ScalingRule {
     pub action: ScalingAction,
     #[doc="<p>A friendly, more verbose description of the automatic scaling rule.</p>"]
     #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>The name used to identify an automatic scaling rule. Rule names must be unique within a scaling policy.</p>"]
     #[serde(rename="Name")]
@@ -1726,6 +2020,7 @@ pub struct ScalingTrigger {
 pub struct ScriptBootstrapActionConfig {
     #[doc="<p>A list of command line arguments to pass to the bootstrap action script.</p>"]
     #[serde(rename="Args")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub args: Option<XmlStringList>,
     #[doc="<p>Location of the script to run during a bootstrap action. Can be either a location in Amazon S3 or on a local file system.</p>"]
     #[serde(rename="Path")]
@@ -1738,9 +2033,11 @@ pub type SecurityConfigurationList = Vec<SecurityConfigurationSummary>;
 pub struct SecurityConfigurationSummary {
     #[doc="<p>The date and time the security configuration was created.</p>"]
     #[serde(rename="CreationDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub creation_date_time: Option<Date>,
     #[doc="<p>The name of the security configuration.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<XmlString>,
 }
 
@@ -1772,9 +2069,11 @@ pub struct SetVisibleToAllUsersInput {
 pub struct ShrinkPolicy {
     #[doc="<p>The desired timeout for decommissioning an instance. Overrides the default YARN decommissioning timeout.</p>"]
     #[serde(rename="DecommissionTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub decommission_timeout: Option<Integer>,
     #[doc="<p>Custom policy for requesting termination protection or termination of specific instances when shrinking an instance group.</p>"]
     #[serde(rename="InstanceResizePolicy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub instance_resize_policy: Option<InstanceResizePolicy>,
 }
 
@@ -1783,9 +2082,11 @@ pub struct ShrinkPolicy {
 pub struct SimpleScalingPolicyConfiguration {
     #[doc="<p>The way in which EC2 instances are added (if <code>ScalingAdjustment</code> is a positive number) or terminated (if <code>ScalingAdjustment</code> is a negative number) each time the scaling activity is triggered. <code>CHANGE_IN_CAPACITY</code> is the default. <code>CHANGE_IN_CAPACITY</code> indicates that the EC2 instance count increments or decrements by <code>ScalingAdjustment</code>, which should be expressed as an integer. <code>PERCENT_CHANGE_IN_CAPACITY</code> indicates the instance count increments or decrements by the percentage specified by <code>ScalingAdjustment</code>, which should be expressed as a decimal. For example, 0.20 indicates an increase in 20% increments of cluster capacity. <code>EXACT_CAPACITY</code> indicates the scaling activity results in an instance group with the number of EC2 instances specified by <code>ScalingAdjustment</code>, which should be expressed as a positive integer.</p>"]
     #[serde(rename="AdjustmentType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub adjustment_type: Option<AdjustmentType>,
     #[doc="<p>The amount of time, in seconds, after a scaling activity completes before any further trigger-related scaling activities can start. The default value is 0.</p>"]
     #[serde(rename="CoolDown")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cool_down: Option<Integer>,
     #[doc="<p>The amount by which to scale in or scale out, based on the specified <code>AdjustmentType</code>. A positive value adds to the instance group's EC2 instance count while a negative number removes instances. If <code>AdjustmentType</code> is set to <code>EXACT_CAPACITY</code>, the number should only be a positive integer. If <code>AdjustmentType</code> is set to <code>PERCENT_CHANGE_IN_CAPACITY</code>, the value should express the percentage as a decimal. For example, -0.20 indicates a decrease in 20% increments of cluster capacity.</p>"]
     #[serde(rename="ScalingAdjustment")]
@@ -1797,6 +2098,7 @@ pub struct SimpleScalingPolicyConfiguration {
 pub struct SpotProvisioningSpecification {
     #[doc="<p>The defined duration for Spot instances (also known as Spot blocks) in minutes. When specified, the Spot instance does not terminate before the defined duration expires, and defined duration pricing for Spot instances applies. Valid values are 60, 120, 180, 240, 300, or 360. The duration period starts as soon as a Spot instance receives its instance ID. At the end of the duration, Amazon EC2 marks the Spot instance for termination and provides a Spot instance termination notice, which gives the instance a two-minute warning before it terminates. </p>"]
     #[serde(rename="BlockDurationMinutes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub block_duration_minutes: Option<WholeNumber>,
     #[doc="<p>The action to take when <code>TargetSpotCapacity</code> has not been fulfilled when the <code>TimeoutDurationMinutes</code> has expired. Spot instances are not uprovisioned within the Spot provisioining timeout. Valid values are <code>TERMINATE_CLUSTER</code> and <code>SWITCH_TO_ON_DEMAND</code> to fulfill the remaining capacity.</p>"]
     #[serde(rename="TimeoutAction")]
@@ -1813,18 +2115,23 @@ pub type Statistic = String;
 pub struct Step {
     #[doc="<p>This specifies what action to take when the cluster step fails. Possible values are TERMINATE_CLUSTER, CANCEL_AND_WAIT, and CONTINUE.</p>"]
     #[serde(rename="ActionOnFailure")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub action_on_failure: Option<ActionOnFailure>,
     #[doc="<p>The Hadoop job configuration of the cluster step.</p>"]
     #[serde(rename="Config")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub config: Option<HadoopStepConfig>,
     #[doc="<p>The identifier of the cluster step.</p>"]
     #[serde(rename="Id")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<StepId>,
     #[doc="<p>The name of the cluster step.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
     #[doc="<p>The current execution status details of the cluster step.</p>"]
     #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<StepStatus>,
 }
 
@@ -1833,6 +2140,7 @@ pub struct Step {
 pub struct StepConfig {
     #[doc="<p>The action to take if the step fails.</p>"]
     #[serde(rename="ActionOnFailure")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub action_on_failure: Option<ActionOnFailure>,
     #[doc="<p>The JAR file used for the step.</p>"]
     #[serde(rename="HadoopJarStep")]
@@ -1864,12 +2172,15 @@ pub struct StepExecutionStatusDetail {
     pub creation_date_time: Date,
     #[doc="<p>The completion date and time of the step.</p>"]
     #[serde(rename="EndDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub end_date_time: Option<Date>,
     #[doc="<p>A description of the step's current state.</p>"]
     #[serde(rename="LastStateChangeReason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub last_state_change_reason: Option<XmlString>,
     #[doc="<p>The start date and time of the step.</p>"]
     #[serde(rename="StartDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_date_time: Option<Date>,
     #[doc="<p>The state of the step.</p>"]
     #[serde(rename="State")]
@@ -1884,9 +2195,11 @@ pub type StepState = String;
 pub struct StepStateChangeReason {
     #[doc="<p>The programmable code for the state change reason. Note: Currently, the service provides no code for the state change.</p>"]
     #[serde(rename="Code")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub code: Option<StepStateChangeReasonCode>,
     #[doc="<p>The descriptive message for the state change reason.</p>"]
     #[serde(rename="Message")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<String>,
 }
 
@@ -1897,15 +2210,19 @@ pub type StepStateList = Vec<StepState>;
 pub struct StepStatus {
     #[doc="<p>The details for the step failure including reason, message, and log file path where the root cause was identified.</p>"]
     #[serde(rename="FailureDetails")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub failure_details: Option<FailureDetails>,
     #[doc="<p>The execution state of the cluster step.</p>"]
     #[serde(rename="State")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state: Option<StepState>,
     #[doc="<p>The reason for the step execution status change.</p>"]
     #[serde(rename="StateChangeReason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub state_change_reason: Option<StepStateChangeReason>,
     #[doc="<p>The timeline of the cluster step status over time.</p>"]
     #[serde(rename="Timeline")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub timeline: Option<StepTimeline>,
 }
 
@@ -1914,18 +2231,23 @@ pub struct StepStatus {
 pub struct StepSummary {
     #[doc="<p>This specifies what action to take when the cluster step fails. Possible values are TERMINATE_CLUSTER, CANCEL_AND_WAIT, and CONTINUE.</p>"]
     #[serde(rename="ActionOnFailure")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub action_on_failure: Option<ActionOnFailure>,
     #[doc="<p>The Hadoop job configuration of the cluster step.</p>"]
     #[serde(rename="Config")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub config: Option<HadoopStepConfig>,
     #[doc="<p>The identifier of the cluster step.</p>"]
     #[serde(rename="Id")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<StepId>,
     #[doc="<p>The name of the cluster step.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
     #[doc="<p>The current execution status details of the cluster step.</p>"]
     #[serde(rename="Status")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<StepStatus>,
 }
 
@@ -1935,12 +2257,15 @@ pub type StepSummaryList = Vec<StepSummary>;
 pub struct StepTimeline {
     #[doc="<p>The date and time when the cluster step was created.</p>"]
     #[serde(rename="CreationDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub creation_date_time: Option<Date>,
     #[doc="<p>The date and time when the cluster step execution completed or failed.</p>"]
     #[serde(rename="EndDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub end_date_time: Option<Date>,
     #[doc="<p>The date and time when the cluster step execution started.</p>"]
     #[serde(rename="StartDateTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_date_time: Option<Date>,
 }
 
@@ -1951,9 +2276,11 @@ pub type StringMap = ::std::collections::HashMap<String, String>;
 pub struct SupportedProductConfig {
     #[doc="<p>The list of user-supplied arguments.</p>"]
     #[serde(rename="Args")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub args: Option<XmlStringList>,
     #[doc="<p>The name of the product configuration.</p>"]
     #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<XmlStringMaxLen256>,
 }
 
@@ -1963,9 +2290,11 @@ pub type SupportedProductsList = Vec<XmlStringMaxLen256>;
 pub struct Tag {
     #[doc="<p>A user-defined key, which is the minimum required information for a valid tag. For more information, see <a href=\"http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/emr-plan-tags.html\">Tagging Amazon EMR Resources</a>. </p>"]
     #[serde(rename="Key")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub key: Option<String>,
     #[doc="<p>A user-defined value, which is optional in a tag. For more information, see <a href=\"http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/emr-plan-tags.html\">Tagging Amazon EMR Resources</a>. </p>"]
     #[serde(rename="Value")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<String>,
 }
 
@@ -1984,6 +2313,7 @@ pub type Unit = String;
 pub struct VolumeSpecification {
     #[doc="<p>The number of I/O operations per second (IOPS) that the volume supports.</p>"]
     #[serde(rename="Iops")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub iops: Option<Integer>,
     #[doc="<p>The volume size, in gibibytes (GiB). This can be a number from 1 - 1024. If the volume type is EBS-optimized, the minimum value is 10.</p>"]
     #[serde(rename="SizeInGB")]

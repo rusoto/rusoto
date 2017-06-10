@@ -25,6 +25,7 @@ pub struct ActivityTask {
     pub activity_type: ActivityType,
     #[doc="<p>The inputs provided when the activity task was scheduled. The form of the input is user defined and should be meaningful to the activity implementation.</p>"]
     #[serde(rename="input")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub input: Option<Data>,
     #[doc="<p>The ID of the <code>ActivityTaskStarted</code> event recorded in the history.</p>"]
     #[serde(rename="startedEventId")]
@@ -53,9 +54,11 @@ pub struct ActivityTaskCancelRequestedEventAttributes {
 pub struct ActivityTaskCanceledEventAttributes {
     #[doc="<p>Details of the cancellation (if any).</p>"]
     #[serde(rename="details")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub details: Option<Data>,
     #[doc="<p>If set, contains the ID of the last <code>ActivityTaskCancelRequested</code> event recorded for this activity task. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>"]
     #[serde(rename="latestCancelRequestedEventId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub latest_cancel_requested_event_id: Option<EventId>,
     #[doc="<p>The ID of the <code>ActivityTaskScheduled</code> event that was recorded when this activity task was scheduled. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>"]
     #[serde(rename="scheduledEventId")]
@@ -70,6 +73,7 @@ pub struct ActivityTaskCanceledEventAttributes {
 pub struct ActivityTaskCompletedEventAttributes {
     #[doc="<p>The results of the activity task (if any).</p>"]
     #[serde(rename="result")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub result: Option<Data>,
     #[doc="<p>The ID of the <code>ActivityTaskScheduled</code> event that was recorded when this activity task was scheduled. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>"]
     #[serde(rename="scheduledEventId")]
@@ -84,9 +88,11 @@ pub struct ActivityTaskCompletedEventAttributes {
 pub struct ActivityTaskFailedEventAttributes {
     #[doc="<p>The details of the failure (if any).</p>"]
     #[serde(rename="details")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub details: Option<Data>,
     #[doc="<p>The reason provided for the failure (if any).</p>"]
     #[serde(rename="reason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reason: Option<FailureReason>,
     #[doc="<p>The ID of the <code>ActivityTaskScheduled</code> event that was recorded when this activity task was scheduled. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>"]
     #[serde(rename="scheduledEventId")]
@@ -107,30 +113,37 @@ pub struct ActivityTaskScheduledEventAttributes {
     pub activity_type: ActivityType,
     #[doc="<p><i>Optional.</i> Data attached to the event that can be used by the decider in subsequent workflow tasks. This data is not sent to the activity.</p>"]
     #[serde(rename="control")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub control: Option<Data>,
     #[doc="<p>The ID of the <code>DecisionTaskCompleted</code> event corresponding to the decision that resulted in the scheduling of this activity task. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>"]
     #[serde(rename="decisionTaskCompletedEventId")]
     pub decision_task_completed_event_id: EventId,
     #[doc="<p>The maximum time before which the worker processing this task must report progress by calling <a>RecordActivityTaskHeartbeat</a>. If the timeout is exceeded, the activity task is automatically timed out. If the worker subsequently attempts to record a heartbeat or return a result, it will be ignored.</p>"]
     #[serde(rename="heartbeatTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub heartbeat_timeout: Option<DurationInSecondsOptional>,
     #[doc="<p>The input provided to the activity task.</p>"]
     #[serde(rename="input")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub input: Option<Data>,
     #[doc="<p>The maximum amount of time for this activity task.</p>"]
     #[serde(rename="scheduleToCloseTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub schedule_to_close_timeout: Option<DurationInSecondsOptional>,
     #[doc="<p>The maximum amount of time the activity task can wait to be assigned to a worker.</p>"]
     #[serde(rename="scheduleToStartTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub schedule_to_start_timeout: Option<DurationInSecondsOptional>,
     #[doc="<p>The maximum amount of time a worker may take to process the activity task.</p>"]
     #[serde(rename="startToCloseTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_to_close_timeout: Option<DurationInSecondsOptional>,
     #[doc="<p>The task list in which the activity task has been scheduled.</p>"]
     #[serde(rename="taskList")]
     pub task_list: TaskList,
     #[doc="<p><i>Optional.</i> The priority to assign to the scheduled activity task. If set, this will override any default priority value that was assigned when the activity type was registered.</p> <p>Valid values are integers that range from Java's <code>Integer.MIN_VALUE</code> (-2147483648) to <code>Integer.MAX_VALUE</code> (2147483647). Higher numbers indicate higher priority.</p> <p>For more information about setting task priority, see <a href=\"http://docs.aws.amazon.com/amazonswf/latest/developerguide/programming-priority.html\">Setting Task Priority</a> in the <i>Amazon Simple Workflow Developer Guide</i>.</p>"]
     #[serde(rename="taskPriority")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_priority: Option<TaskPriority>,
 }
 
@@ -139,6 +152,7 @@ pub struct ActivityTaskScheduledEventAttributes {
 pub struct ActivityTaskStartedEventAttributes {
     #[doc="<p>Identity of the worker that was assigned this task. This aids diagnostics when problems arise. The form of this identity is user defined.</p>"]
     #[serde(rename="identity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub identity: Option<Identity>,
     #[doc="<p>The ID of the <code>ActivityTaskScheduled</code> event that was recorded when this activity task was scheduled. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>"]
     #[serde(rename="scheduledEventId")]
@@ -158,6 +172,7 @@ pub struct ActivityTaskStatus {
 pub struct ActivityTaskTimedOutEventAttributes {
     #[doc="<p>Contains the content of the <code>details</code> parameter for the last call made by the activity to <code>RecordActivityTaskHeartbeat</code>.</p>"]
     #[serde(rename="details")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub details: Option<LimitedData>,
     #[doc="<p>The ID of the <code>ActivityTaskScheduled</code> event that was recorded when this activity task was scheduled. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>"]
     #[serde(rename="scheduledEventId")]
@@ -187,21 +202,27 @@ pub struct ActivityType {
 pub struct ActivityTypeConfiguration {
     #[doc="<p><i>Optional.</i> The default maximum time, in seconds, before which a worker processing a task must report progress by calling <a>RecordActivityTaskHeartbeat</a>.</p> <p>You can specify this value only when <i>registering</i> an activity type. The registered default value can be overridden when you schedule a task through the <code>ScheduleActivityTask</code> decision. If the activity worker subsequently attempts to record a heartbeat or returns a result, the activity worker receives an <code>UnknownResource</code> fault. In this case, Amazon SWF no longer considers the activity task to be valid; the activity worker should clean up the activity task.</p> <p>The duration is specified in seconds; an integer greater than or equal to 0. The value \"NONE\" can be used to specify unlimited duration.</p>"]
     #[serde(rename="defaultTaskHeartbeatTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_task_heartbeat_timeout: Option<DurationInSecondsOptional>,
     #[doc="<p><i>Optional.</i> The default task list specified for this activity type at registration. This default is used if a task list is not provided when a task is scheduled through the <code>ScheduleActivityTask</code> decision. You can override the default registered task list when scheduling a task through the <code>ScheduleActivityTask</code> decision.</p>"]
     #[serde(rename="defaultTaskList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_task_list: Option<TaskList>,
     #[doc="<p><i>Optional.</i> The default task priority for tasks of this activity type, specified at registration. If not set, then \"0\" will be used as the default priority. This default can be overridden when scheduling an activity task.</p> <p>Valid values are integers that range from Java's <code>Integer.MIN_VALUE</code> (-2147483648) to <code>Integer.MAX_VALUE</code> (2147483647). Higher numbers indicate higher priority.</p> <p>For more information about setting task priority, see <a href=\"http://docs.aws.amazon.com/amazonswf/latest/developerguide/programming-priority.html\">Setting Task Priority</a> in the <i>Amazon Simple Workflow Developer Guide</i>.</p>"]
     #[serde(rename="defaultTaskPriority")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_task_priority: Option<TaskPriority>,
     #[doc="<p><i>Optional.</i> The default maximum duration, specified when registering the activity type, for tasks of this activity type. You can override this default when scheduling a task through the <code>ScheduleActivityTask</code> decision.</p> <p>The duration is specified in seconds; an integer greater than or equal to 0. The value \"NONE\" can be used to specify unlimited duration.</p>"]
     #[serde(rename="defaultTaskScheduleToCloseTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_task_schedule_to_close_timeout: Option<DurationInSecondsOptional>,
     #[doc="<p><i>Optional.</i> The default maximum duration, specified when registering the activity type, that a task of an activity type can wait before being assigned to a worker. You can override this default when scheduling a task through the <code>ScheduleActivityTask</code> decision.</p> <p>The duration is specified in seconds; an integer greater than or equal to 0. The value \"NONE\" can be used to specify unlimited duration.</p>"]
     #[serde(rename="defaultTaskScheduleToStartTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_task_schedule_to_start_timeout: Option<DurationInSecondsOptional>,
     #[doc="<p><i>Optional.</i> The default maximum duration for tasks of an activity type specified when registering the activity type. You can override this default when scheduling a task through the <code>ScheduleActivityTask</code> decision.</p> <p>The duration is specified in seconds; an integer greater than or equal to 0. The value \"NONE\" can be used to specify unlimited duration.</p>"]
     #[serde(rename="defaultTaskStartToCloseTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_task_start_to_close_timeout: Option<DurationInSecondsOptional>,
 }
 
@@ -227,9 +248,11 @@ pub struct ActivityTypeInfo {
     pub creation_date: Timestamp,
     #[doc="<p>If DEPRECATED, the date and time <a>DeprecateActivityType</a> was called.</p>"]
     #[serde(rename="deprecationDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deprecation_date: Option<Timestamp>,
     #[doc="<p>The description of the activity type provided in <a>RegisterActivityType</a>.</p>"]
     #[serde(rename="description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<Description>,
     #[doc="<p>The current status of the activity type.</p>"]
     #[serde(rename="status")]
@@ -242,6 +265,7 @@ pub type ActivityTypeInfoList = Vec<ActivityTypeInfo>;
 pub struct ActivityTypeInfos {
     #[doc="<p>If a <code>NextPageToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextPageToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maximumPageSize</code> determines how many results can be returned in a single call.</p>"]
     #[serde(rename="nextPageToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_page_token: Option<PageToken>,
     #[doc="<p>List of activity type information.</p>"]
     #[serde(rename="typeInfos")]
@@ -277,6 +301,7 @@ pub struct CancelTimerFailedEventAttributes {
 pub struct CancelWorkflowExecutionDecisionAttributes {
     #[doc="<p><i>Optional.</i> details of the cancellation.</p>"]
     #[serde(rename="details")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub details: Option<Data>,
 }
 
@@ -300,6 +325,7 @@ pub type ChildPolicy = String;
 pub struct ChildWorkflowExecutionCanceledEventAttributes {
     #[doc="<p>Details of the cancellation (if provided).</p>"]
     #[serde(rename="details")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub details: Option<Data>,
     #[doc="<p>The ID of the <code>StartChildWorkflowExecutionInitiated</code> event corresponding to the <code>StartChildWorkflowExecution</code> decision to start this child workflow execution. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>"]
     #[serde(rename="initiatedEventId")]
@@ -323,6 +349,7 @@ pub struct ChildWorkflowExecutionCompletedEventAttributes {
     pub initiated_event_id: EventId,
     #[doc="<p>The result of the child workflow execution (if any).</p>"]
     #[serde(rename="result")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub result: Option<Data>,
     #[doc="<p>The ID of the <code>ChildWorkflowExecutionStarted</code> event recorded when this child workflow execution was started. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>"]
     #[serde(rename="startedEventId")]
@@ -340,12 +367,14 @@ pub struct ChildWorkflowExecutionCompletedEventAttributes {
 pub struct ChildWorkflowExecutionFailedEventAttributes {
     #[doc="<p>The details of the failure (if provided).</p>"]
     #[serde(rename="details")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub details: Option<Data>,
     #[doc="<p>The ID of the <code>StartChildWorkflowExecutionInitiated</code> event corresponding to the <code>StartChildWorkflowExecution</code> decision to start this child workflow execution. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>"]
     #[serde(rename="initiatedEventId")]
     pub initiated_event_id: EventId,
     #[doc="<p>The reason for the failure (if provided).</p>"]
     #[serde(rename="reason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reason: Option<FailureReason>,
     #[doc="<p>The ID of the <code>ChildWorkflowExecutionStarted</code> event recorded when this child workflow execution was started. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>"]
     #[serde(rename="startedEventId")]
@@ -423,6 +452,7 @@ pub struct CloseStatusFilter {
 pub struct CompleteWorkflowExecutionDecisionAttributes {
     #[doc="<p>The result of the workflow execution. The form of the result is implementation defined.</p>"]
     #[serde(rename="result")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub result: Option<Data>,
 }
 
@@ -443,28 +473,37 @@ pub struct CompleteWorkflowExecutionFailedEventAttributes {
 pub struct ContinueAsNewWorkflowExecutionDecisionAttributes {
     #[doc="<p>If set, specifies the policy to use for the child workflow executions of the new execution if it is terminated by calling the <a>TerminateWorkflowExecution</a> action explicitly or due to an expired timeout. This policy overrides the default child policy specified when registering the workflow type using <a>RegisterWorkflowType</a>.</p> <p>The supported child policies are:</p> <ul> <li><b>TERMINATE:</b> the child executions will be terminated.</li> <li><b>REQUEST_CANCEL:</b> a request to cancel will be attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</li> <li><b>ABANDON:</b> no action will be taken. The child executions will continue to run.</li> </ul> <note>A child policy for this workflow execution must be specified either as a default for the workflow type or through this parameter. If neither this parameter is set nor a default child policy was specified at registration time then a fault will be returned.</note>"]
     #[serde(rename="childPolicy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub child_policy: Option<ChildPolicy>,
     #[doc="<p>If set, specifies the total duration for this workflow execution. This overrides the <code>defaultExecutionStartToCloseTimeout</code> specified when registering the workflow type.</p> <p>The duration is specified in seconds; an integer greater than or equal to 0. The value \"NONE\" can be used to specify unlimited duration.</p> <note>An execution start-to-close timeout for this workflow execution must be specified either as a default for the workflow type or through this field. If neither this field is set nor a default execution start-to-close timeout was specified at registration time then a fault will be returned.</note>"]
     #[serde(rename="executionStartToCloseTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub execution_start_to_close_timeout: Option<DurationInSecondsOptional>,
     #[doc="<p>The input provided to the new workflow execution.</p>"]
     #[serde(rename="input")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub input: Option<Data>,
     #[doc="<p>The ARN of an IAM role that authorizes Amazon SWF to invoke AWS Lambda functions.</p> <note>In order for this workflow execution to invoke AWS Lambda functions, an appropriate IAM role must be specified either as a default for the workflow type or through this field.</note>"]
     #[serde(rename="lambdaRole")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub lambda_role: Option<Arn>,
     #[doc="<p>The list of tags to associate with the new workflow execution. A maximum of 5 tags can be specified. You can list workflow executions with a specific tag by calling <a>ListOpenWorkflowExecutions</a> or <a>ListClosedWorkflowExecutions</a> and specifying a <a>TagFilter</a>.</p>"]
     #[serde(rename="tagList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_list: Option<TagList>,
     #[serde(rename="taskList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_list: Option<TaskList>,
     #[doc="<p><i>Optional.</i> The task priority that, if set, specifies the priority for the decision tasks for this workflow execution. This overrides the defaultTaskPriority specified when registering the workflow type. Valid values are integers that range from Java's <code>Integer.MIN_VALUE</code> (-2147483648) to <code>Integer.MAX_VALUE</code> (2147483647). Higher numbers indicate higher priority.</p> <p>For more information about setting task priority, see <a href=\"http://docs.aws.amazon.com/amazonswf/latest/developerguide/programming-priority.html\">Setting Task Priority</a> in the <i>Amazon Simple Workflow Developer Guide</i>.</p>"]
     #[serde(rename="taskPriority")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_priority: Option<TaskPriority>,
     #[doc="<p>Specifies the maximum duration of decision tasks for the new workflow execution. This parameter overrides the <code>defaultTaskStartToCloseTimout</code> specified when registering the workflow type using <a>RegisterWorkflowType</a>.</p> <p>The duration is specified in seconds; an integer greater than or equal to 0. The value \"NONE\" can be used to specify unlimited duration.</p> <note>A task start-to-close timeout for the new workflow execution must be specified either as a default for the workflow type or through this parameter. If neither this parameter is set nor a default task start-to-close timeout was specified at registration time then a fault will be returned.</note>"]
     #[serde(rename="taskStartToCloseTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_start_to_close_timeout: Option<DurationInSecondsOptional>,
     #[serde(rename="workflowTypeVersion")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub workflow_type_version: Option<Version>,
 }
 
@@ -485,24 +524,30 @@ pub type Count = i64;
 pub struct CountClosedWorkflowExecutionsInput {
     #[doc="<p>If specified, only workflow executions that match this close status are counted. This filter has an affect only if <code>executionStatus</code> is specified as <code>CLOSED</code>.</p> <note><code>closeStatusFilter</code>, <code>executionFilter</code>, <code>typeFilter</code> and <code>tagFilter</code> are mutually exclusive. You can specify at most one of these in a request.</note>"]
     #[serde(rename="closeStatusFilter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub close_status_filter: Option<CloseStatusFilter>,
     #[doc="<p>If specified, only workflow executions that meet the close time criteria of the filter are counted.</p> <note><code>startTimeFilter</code> and <code>closeTimeFilter</code> are mutually exclusive. You must specify one of these in a request but not both.</note>"]
     #[serde(rename="closeTimeFilter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub close_time_filter: Option<ExecutionTimeFilter>,
     #[doc="<p>The name of the domain containing the workflow executions to count.</p>"]
     #[serde(rename="domain")]
     pub domain: DomainName,
     #[doc="<p>If specified, only workflow executions matching the <code>WorkflowId</code> in the filter are counted.</p> <note><code>closeStatusFilter</code>, <code>executionFilter</code>, <code>typeFilter</code> and <code>tagFilter</code> are mutually exclusive. You can specify at most one of these in a request.</note>"]
     #[serde(rename="executionFilter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub execution_filter: Option<WorkflowExecutionFilter>,
     #[doc="<p>If specified, only workflow executions that meet the start time criteria of the filter are counted.</p> <note><code>startTimeFilter</code> and <code>closeTimeFilter</code> are mutually exclusive. You must specify one of these in a request but not both.</note>"]
     #[serde(rename="startTimeFilter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_time_filter: Option<ExecutionTimeFilter>,
     #[doc="<p>If specified, only executions that have a tag that matches the filter are counted.</p> <note><code>closeStatusFilter</code>, <code>executionFilter</code>, <code>typeFilter</code> and <code>tagFilter</code> are mutually exclusive. You can specify at most one of these in a request.</note>"]
     #[serde(rename="tagFilter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_filter: Option<TagFilter>,
     #[doc="<p>If specified, indicates the type of the workflow executions to be counted.</p> <note><code>closeStatusFilter</code>, <code>executionFilter</code>, <code>typeFilter</code> and <code>tagFilter</code> are mutually exclusive. You can specify at most one of these in a request.</note>"]
     #[serde(rename="typeFilter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_filter: Option<WorkflowTypeFilter>,
 }
 
@@ -513,15 +558,18 @@ pub struct CountOpenWorkflowExecutionsInput {
     pub domain: DomainName,
     #[doc="<p>If specified, only workflow executions matching the <code>WorkflowId</code> in the filter are counted.</p> <note><code>executionFilter</code>, <code>typeFilter</code> and <code>tagFilter</code> are mutually exclusive. You can specify at most one of these in a request.</note>"]
     #[serde(rename="executionFilter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub execution_filter: Option<WorkflowExecutionFilter>,
     #[doc="<p>Specifies the start time criteria that workflow executions must meet in order to be counted.</p>"]
     #[serde(rename="startTimeFilter")]
     pub start_time_filter: ExecutionTimeFilter,
     #[doc="<p>If specified, only executions that have a tag that matches the filter are counted.</p> <note><code>executionFilter</code>, <code>typeFilter</code> and <code>tagFilter</code> are mutually exclusive. You can specify at most one of these in a request.</note>"]
     #[serde(rename="tagFilter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_filter: Option<TagFilter>,
     #[doc="<p>Specifies the type of the workflow executions to be counted.</p> <note><code>executionFilter</code>, <code>typeFilter</code> and <code>tagFilter</code> are mutually exclusive. You can specify at most one of these in a request.</note>"]
     #[serde(rename="typeFilter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_filter: Option<WorkflowTypeFilter>,
 }
 
@@ -551,17 +599,21 @@ pub type Data = String;
 pub struct Decision {
     #[doc="<p>Provides details of the <code>CancelTimer</code> decision. It is not set for other decision types.</p>"]
     #[serde(rename="cancelTimerDecisionAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cancel_timer_decision_attributes: Option<CancelTimerDecisionAttributes>,
     #[doc="<p>Provides details of the <code>CancelWorkflowExecution</code> decision. It is not set for other decision types.</p>"]
     #[serde(rename="cancelWorkflowExecutionDecisionAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cancel_workflow_execution_decision_attributes:
         Option<CancelWorkflowExecutionDecisionAttributes>,
     #[doc="<p>Provides details of the <code>CompleteWorkflowExecution</code> decision. It is not set for other decision types.</p>"]
     #[serde(rename="completeWorkflowExecutionDecisionAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub complete_workflow_execution_decision_attributes:
         Option<CompleteWorkflowExecutionDecisionAttributes>,
     #[doc="<p>Provides details of the <code>ContinueAsNewWorkflowExecution</code> decision. It is not set for other decision types.</p>"]
     #[serde(rename="continueAsNewWorkflowExecutionDecisionAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub continue_as_new_workflow_execution_decision_attributes:
         Option<ContinueAsNewWorkflowExecutionDecisionAttributes>,
     #[doc="<p>Specifies the type of the decision.</p>"]
@@ -569,36 +621,45 @@ pub struct Decision {
     pub decision_type: DecisionType,
     #[doc="<p>Provides details of the <code>FailWorkflowExecution</code> decision. It is not set for other decision types.</p>"]
     #[serde(rename="failWorkflowExecutionDecisionAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub fail_workflow_execution_decision_attributes:
         Option<FailWorkflowExecutionDecisionAttributes>,
     #[doc="<p>Provides details of the <code>RecordMarker</code> decision. It is not set for other decision types.</p>"]
     #[serde(rename="recordMarkerDecisionAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub record_marker_decision_attributes: Option<RecordMarkerDecisionAttributes>,
     #[doc="<p>Provides details of the <code>RequestCancelActivityTask</code> decision. It is not set for other decision types.</p>"]
     #[serde(rename="requestCancelActivityTaskDecisionAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_cancel_activity_task_decision_attributes:
         Option<RequestCancelActivityTaskDecisionAttributes>,
     #[doc="<p>Provides details of the <code>RequestCancelExternalWorkflowExecution</code> decision. It is not set for other decision types.</p>"]
     #[serde(rename="requestCancelExternalWorkflowExecutionDecisionAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_cancel_external_workflow_execution_decision_attributes:
         Option<RequestCancelExternalWorkflowExecutionDecisionAttributes>,
     #[doc="<p>Provides details of the <code>ScheduleActivityTask</code> decision. It is not set for other decision types.</p>"]
     #[serde(rename="scheduleActivityTaskDecisionAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub schedule_activity_task_decision_attributes:
         Option<ScheduleActivityTaskDecisionAttributes>,
     #[serde(rename="scheduleLambdaFunctionDecisionAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub schedule_lambda_function_decision_attributes:
         Option<ScheduleLambdaFunctionDecisionAttributes>,
     #[doc="<p>Provides details of the <code>SignalExternalWorkflowExecution</code> decision. It is not set for other decision types.</p>"]
     #[serde(rename="signalExternalWorkflowExecutionDecisionAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub signal_external_workflow_execution_decision_attributes:
         Option<SignalExternalWorkflowExecutionDecisionAttributes>,
     #[doc="<p>Provides details of the <code>StartChildWorkflowExecution</code> decision. It is not set for other decision types.</p>"]
     #[serde(rename="startChildWorkflowExecutionDecisionAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_child_workflow_execution_decision_attributes:
         Option<StartChildWorkflowExecutionDecisionAttributes>,
     #[doc="<p>Provides details of the <code>StartTimer</code> decision. It is not set for other decision types.</p>"]
     #[serde(rename="startTimerDecisionAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_timer_decision_attributes: Option<StartTimerDecisionAttributes>,
 }
 
@@ -611,9 +672,11 @@ pub struct DecisionTask {
     pub events: HistoryEventList,
     #[doc="<p>If a <code>NextPageToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextPageToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maximumPageSize</code> determines how many results can be returned in a single call.</p>"]
     #[serde(rename="nextPageToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_page_token: Option<PageToken>,
     #[doc="<p>The ID of the DecisionTaskStarted event of the previous decision task of this workflow execution that was processed by the decider. This can be used to determine the events in the history new since the last decision task received by the decider.</p>"]
     #[serde(rename="previousStartedEventId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub previous_started_event_id: Option<EventId>,
     #[doc="<p>The ID of the <code>DecisionTaskStarted</code> event recorded in the history.</p>"]
     #[serde(rename="startedEventId")]
@@ -634,6 +697,7 @@ pub struct DecisionTask {
 pub struct DecisionTaskCompletedEventAttributes {
     #[doc="<p>User defined context for the workflow execution.</p>"]
     #[serde(rename="executionContext")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub execution_context: Option<Data>,
     #[doc="<p>The ID of the <code>DecisionTaskScheduled</code> event that was recorded when this decision task was scheduled. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>"]
     #[serde(rename="scheduledEventId")]
@@ -648,12 +712,14 @@ pub struct DecisionTaskCompletedEventAttributes {
 pub struct DecisionTaskScheduledEventAttributes {
     #[doc="<p>The maximum duration for this decision task. The task is considered timed out if it does not completed within this duration.</p> <p>The duration is specified in seconds; an integer greater than or equal to 0. The value \"NONE\" can be used to specify unlimited duration.</p>"]
     #[serde(rename="startToCloseTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_to_close_timeout: Option<DurationInSecondsOptional>,
     #[doc="<p>The name of the task list in which the decision task was scheduled.</p>"]
     #[serde(rename="taskList")]
     pub task_list: TaskList,
     #[doc="<p><i>Optional.</i> A task priority that, if set, specifies the priority for this decision task. Valid values are integers that range from Java's <code>Integer.MIN_VALUE</code> (-2147483648) to <code>Integer.MAX_VALUE</code> (2147483647). Higher numbers indicate higher priority.</p> <p>For more information about setting task priority, see <a href=\"http://docs.aws.amazon.com/amazonswf/latest/developerguide/programming-priority.html\">Setting Task Priority</a> in the <i>Amazon Simple Workflow Developer Guide</i>.</p>"]
     #[serde(rename="taskPriority")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_priority: Option<TaskPriority>,
 }
 
@@ -662,6 +728,7 @@ pub struct DecisionTaskScheduledEventAttributes {
 pub struct DecisionTaskStartedEventAttributes {
     #[doc="<p>Identity of the decider making the request. This enables diagnostic tracing when problems arise. The form of this identity is user defined.</p>"]
     #[serde(rename="identity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub identity: Option<Identity>,
     #[doc="<p>The ID of the <code>DecisionTaskScheduled</code> event that was recorded when this decision task was scheduled. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>"]
     #[serde(rename="scheduledEventId")]
@@ -771,6 +838,7 @@ pub struct DomainDetail {
 pub struct DomainInfo {
     #[doc="<p>The description of the domain provided through <a>RegisterDomain</a>.</p>"]
     #[serde(rename="description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<Description>,
     #[doc="<p>The name of the domain. This name is unique within the account.</p>"]
     #[serde(rename="name")]
@@ -789,6 +857,7 @@ pub struct DomainInfos {
     pub domain_infos: DomainInfoList,
     #[doc="<p>If a <code>NextPageToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextPageToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maximumPageSize</code> determines how many results can be returned in a single call.</p>"]
     #[serde(rename="nextPageToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_page_token: Option<PageToken>,
 }
 
@@ -805,6 +874,7 @@ pub type ExecutionStatus = String;
 pub struct ExecutionTimeFilter {
     #[doc="<p>Specifies the latest start or close date and time to return.</p>"]
     #[serde(rename="latestDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub latest_date: Option<Timestamp>,
     #[doc="<p>Specifies the oldest start or close date and time to return.</p>"]
     #[serde(rename="oldestDate")]
@@ -838,9 +908,11 @@ pub struct ExternalWorkflowExecutionSignaledEventAttributes {
 pub struct FailWorkflowExecutionDecisionAttributes {
     #[doc="<p><i>Optional.</i> Details of the failure.</p>"]
     #[serde(rename="details")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub details: Option<Data>,
     #[doc="<p>A descriptive reason for the failure that may help in diagnostics.</p>"]
     #[serde(rename="reason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reason: Option<FailureReason>,
 }
 
@@ -870,13 +942,15 @@ pub struct GetWorkflowExecutionHistoryInput {
     pub execution: WorkflowExecution,
     #[doc="<p>The maximum number of results that will be returned per call. <code>nextPageToken</code> can be used to obtain futher pages of results. The default is 1000, which is the maximum allowed page size. You can, however, specify a page size <i>smaller</i> than the maximum.</p> <p>This is an upper limit only; the actual number of results returned per call may be fewer than the specified maximum.</p>"]
     #[serde(rename="maximumPageSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub maximum_page_size: Option<PageSize>,
     #[doc="<p>If a <code>NextPageToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextPageToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maximumPageSize</code> determines how many results can be returned in a single call.</p>"]
     #[serde(rename="nextPageToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_page_token: Option<PageToken>,
     #[doc="<p>When set to <code>true</code>, returns the events in reverse order. By default the results are returned in ascending order of the <code>eventTimeStamp</code> of the events.</p>"]
     #[serde(rename="reverseOrder")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reverse_order: Option<ReverseOrder>,
 }
 
@@ -888,6 +962,7 @@ pub struct History {
     pub events: HistoryEventList,
     #[doc="<p>If a <code>NextPageToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextPageToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maximumPageSize</code> determines how many results can be returned in a single call.</p>"]
     #[serde(rename="nextPageToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_page_token: Option<PageToken>,
 }
 
@@ -896,76 +971,97 @@ pub struct History {
 pub struct HistoryEvent {
     #[doc="<p>If the event is of type <code>ActivityTaskcancelRequested</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="activityTaskCancelRequestedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub activity_task_cancel_requested_event_attributes:
         Option<ActivityTaskCancelRequestedEventAttributes>,
     #[doc="<p>If the event is of type <code>ActivityTaskCanceled</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="activityTaskCanceledEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub activity_task_canceled_event_attributes: Option<ActivityTaskCanceledEventAttributes>,
     #[doc="<p>If the event is of type <code>ActivityTaskCompleted</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="activityTaskCompletedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub activity_task_completed_event_attributes: Option<ActivityTaskCompletedEventAttributes>,
     #[doc="<p>If the event is of type <code>ActivityTaskFailed</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="activityTaskFailedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub activity_task_failed_event_attributes: Option<ActivityTaskFailedEventAttributes>,
     #[doc="<p>If the event is of type <code>ActivityTaskScheduled</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="activityTaskScheduledEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub activity_task_scheduled_event_attributes: Option<ActivityTaskScheduledEventAttributes>,
     #[doc="<p>If the event is of type <code>ActivityTaskStarted</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="activityTaskStartedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub activity_task_started_event_attributes: Option<ActivityTaskStartedEventAttributes>,
     #[doc="<p>If the event is of type <code>ActivityTaskTimedOut</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="activityTaskTimedOutEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub activity_task_timed_out_event_attributes: Option<ActivityTaskTimedOutEventAttributes>,
     #[doc="<p>If the event is of type <code>CancelTimerFailed</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="cancelTimerFailedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cancel_timer_failed_event_attributes: Option<CancelTimerFailedEventAttributes>,
     #[doc="<p>If the event is of type <code>CancelWorkflowExecutionFailed</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="cancelWorkflowExecutionFailedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cancel_workflow_execution_failed_event_attributes:
         Option<CancelWorkflowExecutionFailedEventAttributes>,
     #[doc="<p>If the event is of type <code>ChildWorkflowExecutionCanceled</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="childWorkflowExecutionCanceledEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub child_workflow_execution_canceled_event_attributes:
         Option<ChildWorkflowExecutionCanceledEventAttributes>,
     #[doc="<p>If the event is of type <code>ChildWorkflowExecutionCompleted</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="childWorkflowExecutionCompletedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub child_workflow_execution_completed_event_attributes:
         Option<ChildWorkflowExecutionCompletedEventAttributes>,
     #[doc="<p>If the event is of type <code>ChildWorkflowExecutionFailed</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="childWorkflowExecutionFailedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub child_workflow_execution_failed_event_attributes:
         Option<ChildWorkflowExecutionFailedEventAttributes>,
     #[doc="<p>If the event is of type <code>ChildWorkflowExecutionStarted</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="childWorkflowExecutionStartedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub child_workflow_execution_started_event_attributes:
         Option<ChildWorkflowExecutionStartedEventAttributes>,
     #[doc="<p>If the event is of type <code>ChildWorkflowExecutionTerminated</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="childWorkflowExecutionTerminatedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub child_workflow_execution_terminated_event_attributes:
         Option<ChildWorkflowExecutionTerminatedEventAttributes>,
     #[doc="<p>If the event is of type <code>ChildWorkflowExecutionTimedOut</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="childWorkflowExecutionTimedOutEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub child_workflow_execution_timed_out_event_attributes:
         Option<ChildWorkflowExecutionTimedOutEventAttributes>,
     #[doc="<p>If the event is of type <code>CompleteWorkflowExecutionFailed</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="completeWorkflowExecutionFailedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub complete_workflow_execution_failed_event_attributes:
         Option<CompleteWorkflowExecutionFailedEventAttributes>,
     #[doc="<p>If the event is of type <code>ContinueAsNewWorkflowExecutionFailed</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="continueAsNewWorkflowExecutionFailedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub continue_as_new_workflow_execution_failed_event_attributes:
         Option<ContinueAsNewWorkflowExecutionFailedEventAttributes>,
     #[doc="<p>If the event is of type <code>DecisionTaskCompleted</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="decisionTaskCompletedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub decision_task_completed_event_attributes: Option<DecisionTaskCompletedEventAttributes>,
     #[doc="<p>If the event is of type <code>DecisionTaskScheduled</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="decisionTaskScheduledEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub decision_task_scheduled_event_attributes: Option<DecisionTaskScheduledEventAttributes>,
     #[doc="<p>If the event is of type <code>DecisionTaskStarted</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="decisionTaskStartedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub decision_task_started_event_attributes: Option<DecisionTaskStartedEventAttributes>,
     #[doc="<p>If the event is of type <code>DecisionTaskTimedOut</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="decisionTaskTimedOutEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub decision_task_timed_out_event_attributes: Option<DecisionTaskTimedOutEventAttributes>,
     #[doc="<p>The system generated ID of the event. This ID uniquely identifies the event with in the workflow execution history.</p>"]
     #[serde(rename="eventId")]
@@ -978,119 +1074,152 @@ pub struct HistoryEvent {
     pub event_type: EventType,
     #[doc="<p>If the event is of type <code>ExternalWorkflowExecutionCancelRequested</code> then this member is set and provides detailed information about the event. It is not set for other event types. </p>"]
     #[serde(rename="externalWorkflowExecutionCancelRequestedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub external_workflow_execution_cancel_requested_event_attributes:
         Option<ExternalWorkflowExecutionCancelRequestedEventAttributes>,
     #[doc="<p>If the event is of type <code>ExternalWorkflowExecutionSignaled</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="externalWorkflowExecutionSignaledEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub external_workflow_execution_signaled_event_attributes:
         Option<ExternalWorkflowExecutionSignaledEventAttributes>,
     #[doc="<p>If the event is of type <code>FailWorkflowExecutionFailed</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="failWorkflowExecutionFailedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub fail_workflow_execution_failed_event_attributes:
         Option<FailWorkflowExecutionFailedEventAttributes>,
     #[serde(rename="lambdaFunctionCompletedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub lambda_function_completed_event_attributes:
         Option<LambdaFunctionCompletedEventAttributes>,
     #[serde(rename="lambdaFunctionFailedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub lambda_function_failed_event_attributes: Option<LambdaFunctionFailedEventAttributes>,
     #[serde(rename="lambdaFunctionScheduledEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub lambda_function_scheduled_event_attributes:
         Option<LambdaFunctionScheduledEventAttributes>,
     #[serde(rename="lambdaFunctionStartedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub lambda_function_started_event_attributes: Option<LambdaFunctionStartedEventAttributes>,
     #[serde(rename="lambdaFunctionTimedOutEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub lambda_function_timed_out_event_attributes:
         Option<LambdaFunctionTimedOutEventAttributes>,
     #[doc="<p>If the event is of type <code>MarkerRecorded</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="markerRecordedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub marker_recorded_event_attributes: Option<MarkerRecordedEventAttributes>,
     #[doc="<p>If the event is of type <code>DecisionTaskFailed</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="recordMarkerFailedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub record_marker_failed_event_attributes: Option<RecordMarkerFailedEventAttributes>,
     #[doc="<p>If the event is of type <code>RequestCancelActivityTaskFailed</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="requestCancelActivityTaskFailedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_cancel_activity_task_failed_event_attributes:
         Option<RequestCancelActivityTaskFailedEventAttributes>,
     #[doc="<p>If the event is of type <code>RequestCancelExternalWorkflowExecutionFailed</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="requestCancelExternalWorkflowExecutionFailedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_cancel_external_workflow_execution_failed_event_attributes:
         Option<RequestCancelExternalWorkflowExecutionFailedEventAttributes>,
     #[doc="<p>If the event is of type <code>RequestCancelExternalWorkflowExecutionInitiated</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="requestCancelExternalWorkflowExecutionInitiatedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub request_cancel_external_workflow_execution_initiated_event_attributes:
         Option<RequestCancelExternalWorkflowExecutionInitiatedEventAttributes>,
     #[doc="<p>If the event is of type <code>ScheduleActivityTaskFailed</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="scheduleActivityTaskFailedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub schedule_activity_task_failed_event_attributes:
         Option<ScheduleActivityTaskFailedEventAttributes>,
     #[serde(rename="scheduleLambdaFunctionFailedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub schedule_lambda_function_failed_event_attributes:
         Option<ScheduleLambdaFunctionFailedEventAttributes>,
     #[doc="<p>If the event is of type <code>SignalExternalWorkflowExecutionFailed</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="signalExternalWorkflowExecutionFailedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub signal_external_workflow_execution_failed_event_attributes:
         Option<SignalExternalWorkflowExecutionFailedEventAttributes>,
     #[doc="<p>If the event is of type <code>SignalExternalWorkflowExecutionInitiated</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="signalExternalWorkflowExecutionInitiatedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub signal_external_workflow_execution_initiated_event_attributes:
         Option<SignalExternalWorkflowExecutionInitiatedEventAttributes>,
     #[doc="<p>If the event is of type <code>StartChildWorkflowExecutionFailed</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="startChildWorkflowExecutionFailedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_child_workflow_execution_failed_event_attributes:
         Option<StartChildWorkflowExecutionFailedEventAttributes>,
     #[doc="<p>If the event is of type <code>StartChildWorkflowExecutionInitiated</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="startChildWorkflowExecutionInitiatedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_child_workflow_execution_initiated_event_attributes:
         Option<StartChildWorkflowExecutionInitiatedEventAttributes>,
     #[serde(rename="startLambdaFunctionFailedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_lambda_function_failed_event_attributes:
         Option<StartLambdaFunctionFailedEventAttributes>,
     #[doc="<p>If the event is of type <code>StartTimerFailed</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="startTimerFailedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_timer_failed_event_attributes: Option<StartTimerFailedEventAttributes>,
     #[doc="<p>If the event is of type <code>TimerCanceled</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="timerCanceledEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub timer_canceled_event_attributes: Option<TimerCanceledEventAttributes>,
     #[doc="<p>If the event is of type <code>TimerFired</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="timerFiredEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub timer_fired_event_attributes: Option<TimerFiredEventAttributes>,
     #[doc="<p>If the event is of type <code>TimerStarted</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="timerStartedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub timer_started_event_attributes: Option<TimerStartedEventAttributes>,
     #[doc="<p>If the event is of type <code>WorkflowExecutionCancelRequested</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="workflowExecutionCancelRequestedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub workflow_execution_cancel_requested_event_attributes:
         Option<WorkflowExecutionCancelRequestedEventAttributes>,
     #[doc="<p>If the event is of type <code>WorkflowExecutionCanceled</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="workflowExecutionCanceledEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub workflow_execution_canceled_event_attributes:
         Option<WorkflowExecutionCanceledEventAttributes>,
     #[doc="<p>If the event is of type <code>WorkflowExecutionCompleted</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="workflowExecutionCompletedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub workflow_execution_completed_event_attributes:
         Option<WorkflowExecutionCompletedEventAttributes>,
     #[doc="<p>If the event is of type <code>WorkflowExecutionContinuedAsNew</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="workflowExecutionContinuedAsNewEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub workflow_execution_continued_as_new_event_attributes:
         Option<WorkflowExecutionContinuedAsNewEventAttributes>,
     #[doc="<p>If the event is of type <code>WorkflowExecutionFailed</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="workflowExecutionFailedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub workflow_execution_failed_event_attributes:
         Option<WorkflowExecutionFailedEventAttributes>,
     #[doc="<p>If the event is of type <code>WorkflowExecutionSignaled</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="workflowExecutionSignaledEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub workflow_execution_signaled_event_attributes:
         Option<WorkflowExecutionSignaledEventAttributes>,
     #[doc="<p>If the event is of type <code>WorkflowExecutionStarted</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="workflowExecutionStartedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub workflow_execution_started_event_attributes:
         Option<WorkflowExecutionStartedEventAttributes>,
     #[doc="<p>If the event is of type <code>WorkflowExecutionTerminated</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="workflowExecutionTerminatedEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub workflow_execution_terminated_event_attributes:
         Option<WorkflowExecutionTerminatedEventAttributes>,
     #[doc="<p>If the event is of type <code>WorkflowExecutionTimedOut</code> then this member is set and provides detailed information about the event. It is not set for other event types.</p>"]
     #[serde(rename="workflowExecutionTimedOutEventAttributes")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub workflow_execution_timed_out_event_attributes:
         Option<WorkflowExecutionTimedOutEventAttributes>,
 }
@@ -1102,6 +1231,7 @@ pub type Identity = String;
 pub struct LambdaFunctionCompletedEventAttributes {
     #[doc="<p>The result of the function execution (if any).</p>"]
     #[serde(rename="result")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub result: Option<Data>,
     #[doc="<p>The ID of the <code>LambdaFunctionScheduled</code> event that was recorded when this AWS Lambda function was scheduled. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>"]
     #[serde(rename="scheduledEventId")]
@@ -1116,9 +1246,11 @@ pub struct LambdaFunctionCompletedEventAttributes {
 pub struct LambdaFunctionFailedEventAttributes {
     #[doc="<p>The details of the failure (if any).</p>"]
     #[serde(rename="details")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub details: Option<Data>,
     #[doc="<p>The reason provided for the failure (if any).</p>"]
     #[serde(rename="reason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reason: Option<FailureReason>,
     #[doc="<p>The ID of the <code>LambdaFunctionScheduled</code> event that was recorded when this AWS Lambda function was scheduled. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>"]
     #[serde(rename="scheduledEventId")]
@@ -1139,12 +1271,14 @@ pub struct LambdaFunctionScheduledEventAttributes {
     pub id: FunctionId,
     #[doc="<p>Input provided to the AWS Lambda function.</p>"]
     #[serde(rename="input")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub input: Option<FunctionInput>,
     #[doc="<p>The name of the scheduled AWS Lambda function.</p>"]
     #[serde(rename="name")]
     pub name: FunctionName,
     #[doc="<p>The maximum time, in seconds, that the AWS Lambda function can take to execute from start to close before it is marked as failed.</p>"]
     #[serde(rename="startToCloseTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_to_close_timeout: Option<DurationInSecondsOptional>,
 }
 
@@ -1167,6 +1301,7 @@ pub struct LambdaFunctionTimedOutEventAttributes {
     pub started_event_id: EventId,
     #[doc="<p>The type of the timeout that caused this event.</p>"]
     #[serde(rename="timeoutType")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub timeout_type: Option<LambdaFunctionTimeoutType>,
 }
 
@@ -1179,19 +1314,22 @@ pub struct ListActivityTypesInput {
     pub domain: DomainName,
     #[doc="<p>The maximum number of results that will be returned per call. <code>nextPageToken</code> can be used to obtain futher pages of results. The default is 1000, which is the maximum allowed page size. You can, however, specify a page size <i>smaller</i> than the maximum.</p> <p>This is an upper limit only; the actual number of results returned per call may be fewer than the specified maximum.</p>"]
     #[serde(rename="maximumPageSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub maximum_page_size: Option<PageSize>,
     #[doc="<p>If specified, only lists the activity types that have this name.</p>"]
     #[serde(rename="name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<Name>,
     #[doc="<p>If a <code>NextPageToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextPageToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maximumPageSize</code> determines how many results can be returned in a single call.</p>"]
     #[serde(rename="nextPageToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_page_token: Option<PageToken>,
     #[doc="<p>Specifies the registration status of the activity types to list.</p>"]
     #[serde(rename="registrationStatus")]
     pub registration_status: RegistrationStatus,
     #[doc="<p>When set to <code>true</code>, returns the results in reverse order. By default, the results are returned in ascending alphabetical order by <code>name</code> of the activity types.</p>"]
     #[serde(rename="reverseOrder")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reverse_order: Option<ReverseOrder>,
 }
 
@@ -1199,34 +1337,42 @@ pub struct ListActivityTypesInput {
 pub struct ListClosedWorkflowExecutionsInput {
     #[doc="<p>If specified, only workflow executions that match this <i>close status</i> are listed. For example, if TERMINATED is specified, then only TERMINATED workflow executions are listed.</p> <note><code>closeStatusFilter</code>, <code>executionFilter</code>, <code>typeFilter</code> and <code>tagFilter</code> are mutually exclusive. You can specify at most one of these in a request.</note>"]
     #[serde(rename="closeStatusFilter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub close_status_filter: Option<CloseStatusFilter>,
     #[doc="<p>If specified, the workflow executions are included in the returned results based on whether their close times are within the range specified by this filter. Also, if this parameter is specified, the returned results are ordered by their close times.</p> <note><code>startTimeFilter</code> and <code>closeTimeFilter</code> are mutually exclusive. You must specify one of these in a request but not both.</note>"]
     #[serde(rename="closeTimeFilter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub close_time_filter: Option<ExecutionTimeFilter>,
     #[doc="<p>The name of the domain that contains the workflow executions to list.</p>"]
     #[serde(rename="domain")]
     pub domain: DomainName,
     #[doc="<p>If specified, only workflow executions matching the workflow ID specified in the filter are returned.</p> <note><code>closeStatusFilter</code>, <code>executionFilter</code>, <code>typeFilter</code> and <code>tagFilter</code> are mutually exclusive. You can specify at most one of these in a request.</note>"]
     #[serde(rename="executionFilter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub execution_filter: Option<WorkflowExecutionFilter>,
     #[doc="<p>The maximum number of results that will be returned per call. <code>nextPageToken</code> can be used to obtain futher pages of results. The default is 1000, which is the maximum allowed page size. You can, however, specify a page size <i>smaller</i> than the maximum.</p> <p>This is an upper limit only; the actual number of results returned per call may be fewer than the specified maximum.</p>"]
     #[serde(rename="maximumPageSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub maximum_page_size: Option<PageSize>,
     #[doc="<p>If a <code>NextPageToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextPageToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maximumPageSize</code> determines how many results can be returned in a single call.</p>"]
     #[serde(rename="nextPageToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_page_token: Option<PageToken>,
     #[doc="<p>When set to <code>true</code>, returns the results in reverse order. By default the results are returned in descending order of the start or the close time of the executions.</p>"]
     #[serde(rename="reverseOrder")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reverse_order: Option<ReverseOrder>,
     #[doc="<p>If specified, the workflow executions are included in the returned results based on whether their start times are within the range specified by this filter. Also, if this parameter is specified, the returned results are ordered by their start times.</p> <note><code>startTimeFilter</code> and <code>closeTimeFilter</code> are mutually exclusive. You must specify one of these in a request but not both.</note>"]
     #[serde(rename="startTimeFilter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_time_filter: Option<ExecutionTimeFilter>,
     #[doc="<p>If specified, only executions that have the matching tag are listed.</p> <note><code>closeStatusFilter</code>, <code>executionFilter</code>, <code>typeFilter</code> and <code>tagFilter</code> are mutually exclusive. You can specify at most one of these in a request.</note>"]
     #[serde(rename="tagFilter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_filter: Option<TagFilter>,
     #[doc="<p>If specified, only executions of the type specified in the filter are returned.</p> <note><code>closeStatusFilter</code>, <code>executionFilter</code>, <code>typeFilter</code> and <code>tagFilter</code> are mutually exclusive. You can specify at most one of these in a request.</note>"]
     #[serde(rename="typeFilter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_filter: Option<WorkflowTypeFilter>,
 }
 
@@ -1234,16 +1380,18 @@ pub struct ListClosedWorkflowExecutionsInput {
 pub struct ListDomainsInput {
     #[doc="<p>The maximum number of results that will be returned per call. <code>nextPageToken</code> can be used to obtain futher pages of results. The default is 1000, which is the maximum allowed page size. You can, however, specify a page size <i>smaller</i> than the maximum.</p> <p>This is an upper limit only; the actual number of results returned per call may be fewer than the specified maximum.</p>"]
     #[serde(rename="maximumPageSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub maximum_page_size: Option<PageSize>,
     #[doc="<p>If a <code>NextPageToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextPageToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maximumPageSize</code> determines how many results can be returned in a single call.</p>"]
     #[serde(rename="nextPageToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_page_token: Option<PageToken>,
     #[doc="<p>Specifies the registration status of the domains to list.</p>"]
     #[serde(rename="registrationStatus")]
     pub registration_status: RegistrationStatus,
     #[doc="<p>When set to <code>true</code>, returns the results in reverse order. By default, the results are returned in ascending alphabetical order by <code>name</code> of the domains.</p>"]
     #[serde(rename="reverseOrder")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reverse_order: Option<ReverseOrder>,
 }
 
@@ -1254,25 +1402,30 @@ pub struct ListOpenWorkflowExecutionsInput {
     pub domain: DomainName,
     #[doc="<p>If specified, only workflow executions matching the workflow ID specified in the filter are returned.</p> <note><code>executionFilter</code>, <code>typeFilter</code> and <code>tagFilter</code> are mutually exclusive. You can specify at most one of these in a request.</note>"]
     #[serde(rename="executionFilter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub execution_filter: Option<WorkflowExecutionFilter>,
     #[doc="<p>The maximum number of results that will be returned per call. <code>nextPageToken</code> can be used to obtain futher pages of results. The default is 1000, which is the maximum allowed page size. You can, however, specify a page size <i>smaller</i> than the maximum.</p> <p>This is an upper limit only; the actual number of results returned per call may be fewer than the specified maximum.</p>"]
     #[serde(rename="maximumPageSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub maximum_page_size: Option<PageSize>,
     #[doc="<p>If a <code>NextPageToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextPageToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maximumPageSize</code> determines how many results can be returned in a single call.</p>"]
     #[serde(rename="nextPageToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_page_token: Option<PageToken>,
     #[doc="<p>When set to <code>true</code>, returns the results in reverse order. By default the results are returned in descending order of the start time of the executions.</p>"]
     #[serde(rename="reverseOrder")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reverse_order: Option<ReverseOrder>,
     #[doc="<p>Workflow executions are included in the returned results based on whether their start times are within the range specified by this filter.</p>"]
     #[serde(rename="startTimeFilter")]
     pub start_time_filter: ExecutionTimeFilter,
     #[doc="<p>If specified, only executions that have the matching tag are listed.</p> <note><code>executionFilter</code>, <code>typeFilter</code> and <code>tagFilter</code> are mutually exclusive. You can specify at most one of these in a request.</note>"]
     #[serde(rename="tagFilter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_filter: Option<TagFilter>,
     #[doc="<p>If specified, only executions of the type specified in the filter are returned.</p> <note><code>executionFilter</code>, <code>typeFilter</code> and <code>tagFilter</code> are mutually exclusive. You can specify at most one of these in a request.</note>"]
     #[serde(rename="typeFilter")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub type_filter: Option<WorkflowTypeFilter>,
 }
 
@@ -1283,19 +1436,22 @@ pub struct ListWorkflowTypesInput {
     pub domain: DomainName,
     #[doc="<p>The maximum number of results that will be returned per call. <code>nextPageToken</code> can be used to obtain futher pages of results. The default is 1000, which is the maximum allowed page size. You can, however, specify a page size <i>smaller</i> than the maximum.</p> <p>This is an upper limit only; the actual number of results returned per call may be fewer than the specified maximum.</p>"]
     #[serde(rename="maximumPageSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub maximum_page_size: Option<PageSize>,
     #[doc="<p>If specified, lists the workflow type with this name.</p>"]
     #[serde(rename="name")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<Name>,
     #[doc="<p>If a <code>NextPageToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextPageToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maximumPageSize</code> determines how many results can be returned in a single call.</p>"]
     #[serde(rename="nextPageToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_page_token: Option<PageToken>,
     #[doc="<p>Specifies the registration status of the workflow types to list.</p>"]
     #[serde(rename="registrationStatus")]
     pub registration_status: RegistrationStatus,
     #[doc="<p>When set to <code>true</code>, returns the results in reverse order. By default the results are returned in ascending alphabetical order of the <code>name</code> of the workflow types.</p>"]
     #[serde(rename="reverseOrder")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reverse_order: Option<ReverseOrder>,
 }
 
@@ -1308,6 +1464,7 @@ pub struct MarkerRecordedEventAttributes {
     pub decision_task_completed_event_id: EventId,
     #[doc="<p>Details of the marker (if any).</p>"]
     #[serde(rename="details")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub details: Option<Data>,
     #[doc="<p>The name of the marker.</p>"]
     #[serde(rename="markerName")]
@@ -1326,7 +1483,7 @@ pub struct PendingTaskCount {
     pub count: Count,
     #[doc="<p>If set to true, indicates that the actual count was more than the maximum supported by this API and the count returned is the truncated value.</p>"]
     #[serde(rename="truncated")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub truncated: Option<Truncated>,
 }
 
@@ -1337,6 +1494,7 @@ pub struct PollForActivityTaskInput {
     pub domain: DomainName,
     #[doc="<p>Identity of the worker making the request, recorded in the <code>ActivityTaskStarted</code> event in the workflow history. This enables diagnostic tracing when problems arise. The form of this identity is user defined.</p>"]
     #[serde(rename="identity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub identity: Option<Identity>,
     #[doc="<p>Specifies the task list to poll for activity tasks.</p> <p>The specified string must not start or end with whitespace. It must not contain a <code>:</code> (colon), <code>/</code> (slash), <code>|</code> (vertical bar), or any control characters (\\u0000-\\u001f | \\u007f - \\u009f). Also, it must not contain the literal string quotarnquot.</p>"]
     #[serde(rename="taskList")]
@@ -1350,16 +1508,19 @@ pub struct PollForDecisionTaskInput {
     pub domain: DomainName,
     #[doc="<p>Identity of the decider making the request, which is recorded in the DecisionTaskStarted event in the workflow history. This enables diagnostic tracing when problems arise. The form of this identity is user defined.</p>"]
     #[serde(rename="identity")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub identity: Option<Identity>,
     #[doc="<p>The maximum number of results that will be returned per call. <code>nextPageToken</code> can be used to obtain futher pages of results. The default is 1000, which is the maximum allowed page size. You can, however, specify a page size <i>smaller</i> than the maximum.</p> <p>This is an upper limit only; the actual number of results returned per call may be fewer than the specified maximum.</p>"]
     #[serde(rename="maximumPageSize")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub maximum_page_size: Option<PageSize>,
     #[doc="<p>If a <code>NextPageToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextPageToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maximumPageSize</code> determines how many results can be returned in a single call.</p> <note>The <code>nextPageToken</code> returned by this action cannot be used with <a>GetWorkflowExecutionHistory</a> to get the next page. You must call <a>PollForDecisionTask</a> again (with the <code>nextPageToken</code>) to retrieve the next page of history records. Calling <a>PollForDecisionTask</a> with a <code>nextPageToken</code> will not return a new decision task.</note>."]
     #[serde(rename="nextPageToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_page_token: Option<PageToken>,
     #[doc="<p>When set to <code>true</code>, returns the events in reverse order. By default the results are returned in ascending order of the <code>eventTimestamp</code> of the events.</p>"]
     #[serde(rename="reverseOrder")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reverse_order: Option<ReverseOrder>,
     #[doc="<p>Specifies the task list to poll for decision tasks.</p> <p>The specified string must not start or end with whitespace. It must not contain a <code>:</code> (colon), <code>/</code> (slash), <code>|</code> (vertical bar), or any control characters (\\u0000-\\u001f | \\u007f - \\u009f). Also, it must not contain the literal string quotarnquot.</p>"]
     #[serde(rename="taskList")]
@@ -1370,6 +1531,7 @@ pub struct PollForDecisionTaskInput {
 pub struct RecordActivityTaskHeartbeatInput {
     #[doc="<p>If specified, contains details about the progress of the task.</p>"]
     #[serde(rename="details")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub details: Option<LimitedData>,
     #[doc="<p>The <code>taskToken</code> of the <a>ActivityTask</a>.</p> <important> <code>taskToken</code> is generated by the service and should be treated as an opaque value. If the task is passed to another process, its <code>taskToken</code> must also be passed. This enables it to provide its progress and respond with results. </important>"]
     #[serde(rename="taskToken")]
@@ -1381,6 +1543,7 @@ pub struct RecordActivityTaskHeartbeatInput {
 pub struct RecordMarkerDecisionAttributes {
     #[doc="<p><i>Optional.</i> details of the marker.</p>"]
     #[serde(rename="details")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub details: Option<Data>,
     #[doc="<p><b>Required.</b> The name of the marker.</p>"]
     #[serde(rename="markerName")]
@@ -1406,24 +1569,31 @@ pub struct RecordMarkerFailedEventAttributes {
 pub struct RegisterActivityTypeInput {
     #[doc="<p>If set, specifies the default maximum time before which a worker processing a task of this type must report progress by calling <a>RecordActivityTaskHeartbeat</a>. If the timeout is exceeded, the activity task is automatically timed out. This default can be overridden when scheduling an activity task using the <code>ScheduleActivityTask</code> decision. If the activity worker subsequently attempts to record a heartbeat or returns a result, the activity worker receives an <code>UnknownResource</code> fault. In this case, Amazon SWF no longer considers the activity task to be valid; the activity worker should clean up the activity task.</p> <p>The duration is specified in seconds; an integer greater than or equal to 0. The value \"NONE\" can be used to specify unlimited duration.</p>"]
     #[serde(rename="defaultTaskHeartbeatTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_task_heartbeat_timeout: Option<DurationInSecondsOptional>,
     #[doc="<p>If set, specifies the default task list to use for scheduling tasks of this activity type. This default task list is used if a task list is not provided when a task is scheduled through the <code>ScheduleActivityTask</code> decision.</p>"]
     #[serde(rename="defaultTaskList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_task_list: Option<TaskList>,
     #[doc="<p>The default task priority to assign to the activity type. If not assigned, then \"0\" will be used. Valid values are integers that range from Java's <code>Integer.MIN_VALUE</code> (-2147483648) to <code>Integer.MAX_VALUE</code> (2147483647). Higher numbers indicate higher priority.</p> <p>For more information about setting task priority, see <a href=\"http://docs.aws.amazon.com/amazonswf/latest/developerguide/programming-priority.html\">Setting Task Priority</a> in the <i>Amazon Simple Workflow Developer Guide</i>.</p>"]
     #[serde(rename="defaultTaskPriority")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_task_priority: Option<TaskPriority>,
     #[doc="<p>If set, specifies the default maximum duration for a task of this activity type. This default can be overridden when scheduling an activity task using the <code>ScheduleActivityTask</code> decision.</p> <p>The duration is specified in seconds; an integer greater than or equal to 0. The value \"NONE\" can be used to specify unlimited duration.</p>"]
     #[serde(rename="defaultTaskScheduleToCloseTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_task_schedule_to_close_timeout: Option<DurationInSecondsOptional>,
     #[doc="<p>If set, specifies the default maximum duration that a task of this activity type can wait before being assigned to a worker. This default can be overridden when scheduling an activity task using the <code>ScheduleActivityTask</code> decision.</p> <p>The duration is specified in seconds; an integer greater than or equal to 0. The value \"NONE\" can be used to specify unlimited duration.</p>"]
     #[serde(rename="defaultTaskScheduleToStartTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_task_schedule_to_start_timeout: Option<DurationInSecondsOptional>,
     #[doc="<p>If set, specifies the default maximum duration that a worker can take to process tasks of this activity type. This default can be overridden when scheduling an activity task using the <code>ScheduleActivityTask</code> decision.</p> <p>The duration is specified in seconds; an integer greater than or equal to 0. The value \"NONE\" can be used to specify unlimited duration.</p>"]
     #[serde(rename="defaultTaskStartToCloseTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_task_start_to_close_timeout: Option<DurationInSecondsOptional>,
     #[doc="<p>A textual description of the activity type.</p>"]
     #[serde(rename="description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<Description>,
     #[doc="<p>The name of the domain in which this activity is to be registered.</p>"]
     #[serde(rename="domain")]
@@ -1440,6 +1610,7 @@ pub struct RegisterActivityTypeInput {
 pub struct RegisterDomainInput {
     #[doc="<p>A text description of the domain.</p>"]
     #[serde(rename="description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<Description>,
     #[doc="<p>Name of the domain to register. The name must be unique in the region that the domain is registered in.</p> <p>The specified string must not start or end with whitespace. It must not contain a <code>:</code> (colon), <code>/</code> (slash), <code>|</code> (vertical bar), or any control characters (\\u0000-\\u001f | \\u007f - \\u009f). Also, it must not contain the literal string quotarnquot.</p>"]
     #[serde(rename="name")]
@@ -1453,24 +1624,31 @@ pub struct RegisterDomainInput {
 pub struct RegisterWorkflowTypeInput {
     #[doc="<p>If set, specifies the default policy to use for the child workflow executions when a workflow execution of this type is terminated, by calling the <a>TerminateWorkflowExecution</a> action explicitly or due to an expired timeout. This default can be overridden when starting a workflow execution using the <a>StartWorkflowExecution</a> action or the <code>StartChildWorkflowExecution</code> decision.</p> <p>The supported child policies are:</p> <ul> <li><b>TERMINATE:</b> the child executions will be terminated.</li> <li><b>REQUEST_CANCEL:</b> a request to cancel will be attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</li> <li><b>ABANDON:</b> no action will be taken. The child executions will continue to run.</li> </ul>"]
     #[serde(rename="defaultChildPolicy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_child_policy: Option<ChildPolicy>,
     #[doc="<p>If set, specifies the default maximum duration for executions of this workflow type. You can override this default when starting an execution through the <a>StartWorkflowExecution</a> action or <code>StartChildWorkflowExecution</code> decision.</p> <p>The duration is specified in seconds; an integer greater than or equal to 0. Unlike some of the other timeout parameters in Amazon SWF, you cannot specify a value of \"NONE\" for <code>defaultExecutionStartToCloseTimeout</code>; there is a one-year max limit on the time that a workflow execution can run. Exceeding this limit will always cause the workflow execution to time out.</p>"]
     #[serde(rename="defaultExecutionStartToCloseTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_execution_start_to_close_timeout: Option<DurationInSecondsOptional>,
     #[doc="<p>The ARN of the default IAM role to use when a workflow execution of this type invokes AWS Lambda functions.</p> <p>This default can be overridden when starting a workflow execution using the <a>StartWorkflowExecution</a> action or the <code>StartChildWorkflowExecution</code> and <code>ContinueAsNewWorkflowExecution</code> decision.</p>"]
     #[serde(rename="defaultLambdaRole")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_lambda_role: Option<Arn>,
     #[doc="<p>If set, specifies the default task list to use for scheduling decision tasks for executions of this workflow type. This default is used only if a task list is not provided when starting the execution through the <a>StartWorkflowExecution</a> action or <code>StartChildWorkflowExecution</code> decision.</p>"]
     #[serde(rename="defaultTaskList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_task_list: Option<TaskList>,
     #[doc="<p>The default task priority to assign to the workflow type. If not assigned, then \"0\" will be used. Valid values are integers that range from Java's <code>Integer.MIN_VALUE</code> (-2147483648) to <code>Integer.MAX_VALUE</code> (2147483647). Higher numbers indicate higher priority.</p> <p>For more information about setting task priority, see <a href=\"http://docs.aws.amazon.com/amazonswf/latest/developerguide/programming-priority.html\">Setting Task Priority</a> in the <i>Amazon Simple Workflow Developer Guide</i>.</p>"]
     #[serde(rename="defaultTaskPriority")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_task_priority: Option<TaskPriority>,
     #[doc="<p>If set, specifies the default maximum duration of decision tasks for this workflow type. This default can be overridden when starting a workflow execution using the <a>StartWorkflowExecution</a> action or the <code>StartChildWorkflowExecution</code> decision.</p> <p>The duration is specified in seconds; an integer greater than or equal to 0. The value \"NONE\" can be used to specify unlimited duration.</p>"]
     #[serde(rename="defaultTaskStartToCloseTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_task_start_to_close_timeout: Option<DurationInSecondsOptional>,
     #[doc="<p>Textual description of the workflow type.</p>"]
     #[serde(rename="description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<Description>,
     #[doc="<p>The name of the domain in which to register the workflow type.</p>"]
     #[serde(rename="domain")]
@@ -1512,9 +1690,11 @@ pub struct RequestCancelActivityTaskFailedEventAttributes {
 pub struct RequestCancelExternalWorkflowExecutionDecisionAttributes {
     #[doc="<p><i>Optional.</i> Data attached to the event that can be used by the decider in subsequent workflow tasks.</p>"]
     #[serde(rename="control")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub control: Option<Data>,
     #[doc="<p>The <code>runId</code> of the external workflow execution to cancel.</p>"]
     #[serde(rename="runId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub run_id: Option<RunIdOptional>,
     #[doc="<p><b>Required.</b> The <code>workflowId</code> of the external workflow execution to cancel.</p>"]
     #[serde(rename="workflowId")]
@@ -1529,6 +1709,7 @@ pub struct RequestCancelExternalWorkflowExecutionFailedEventAttributes {
     #[serde(rename="cause")]
     pub cause: RequestCancelExternalWorkflowExecutionFailedCause,
     #[serde(rename="control")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub control: Option<Data>,
     #[doc="<p>The ID of the <code>DecisionTaskCompleted</code> event corresponding to the decision task that resulted in the <code>RequestCancelExternalWorkflowExecution</code> decision for this cancellation request. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>"]
     #[serde(rename="decisionTaskCompletedEventId")]
@@ -1538,6 +1719,7 @@ pub struct RequestCancelExternalWorkflowExecutionFailedEventAttributes {
     pub initiated_event_id: EventId,
     #[doc="<p>The <code>runId</code> of the external workflow execution.</p>"]
     #[serde(rename="runId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub run_id: Option<RunIdOptional>,
     #[doc="<p>The <code>workflowId</code> of the external workflow to which the cancel request was to be delivered.</p>"]
     #[serde(rename="workflowId")]
@@ -1549,12 +1731,14 @@ pub struct RequestCancelExternalWorkflowExecutionFailedEventAttributes {
 pub struct RequestCancelExternalWorkflowExecutionInitiatedEventAttributes {
     #[doc="<p><i>Optional.</i> Data attached to the event that can be used by the decider in subsequent workflow tasks.</p>"]
     #[serde(rename="control")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub control: Option<Data>,
     #[doc="<p>The ID of the <code>DecisionTaskCompleted</code> event corresponding to the decision task that resulted in the <code>RequestCancelExternalWorkflowExecution</code> decision for this cancellation request. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>"]
     #[serde(rename="decisionTaskCompletedEventId")]
     pub decision_task_completed_event_id: EventId,
     #[doc="<p>The <code>runId</code> of the external workflow execution to be canceled.</p>"]
     #[serde(rename="runId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub run_id: Option<RunIdOptional>,
     #[doc="<p>The <code>workflowId</code> of the external workflow execution to be canceled.</p>"]
     #[serde(rename="workflowId")]
@@ -1568,6 +1752,7 @@ pub struct RequestCancelWorkflowExecutionInput {
     pub domain: DomainName,
     #[doc="<p>The runId of the workflow execution to cancel.</p>"]
     #[serde(rename="runId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub run_id: Option<RunIdOptional>,
     #[doc="<p>The workflowId of the workflow execution to cancel.</p>"]
     #[serde(rename="workflowId")]
@@ -1578,6 +1763,7 @@ pub struct RequestCancelWorkflowExecutionInput {
 pub struct RespondActivityTaskCanceledInput {
     #[doc="<p><i>Optional.</i> Information about the cancellation.</p>"]
     #[serde(rename="details")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub details: Option<Data>,
     #[doc="<p>The <code>taskToken</code> of the <a>ActivityTask</a>.</p> <important><code>taskToken</code> is generated by the service and should be treated as an opaque value. If the task is passed to another process, its <code>taskToken</code> must also be passed. This enables it to provide its progress and respond with results.</important>"]
     #[serde(rename="taskToken")]
@@ -1588,6 +1774,7 @@ pub struct RespondActivityTaskCanceledInput {
 pub struct RespondActivityTaskCompletedInput {
     #[doc="<p>The result of the activity task. It is a free form string that is implementation specific.</p>"]
     #[serde(rename="result")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub result: Option<Data>,
     #[doc="<p>The <code>taskToken</code> of the <a>ActivityTask</a>.</p> <important> <code>taskToken</code> is generated by the service and should be treated as an opaque value. If the task is passed to another process, its <code>taskToken</code> must also be passed. This enables it to provide its progress and respond with results.</important>"]
     #[serde(rename="taskToken")]
@@ -1598,9 +1785,11 @@ pub struct RespondActivityTaskCompletedInput {
 pub struct RespondActivityTaskFailedInput {
     #[doc="<p><i>Optional.</i> Detailed information about the failure.</p>"]
     #[serde(rename="details")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub details: Option<Data>,
     #[doc="<p>Description of the error that may assist in diagnostics.</p>"]
     #[serde(rename="reason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reason: Option<FailureReason>,
     #[doc="<p>The <code>taskToken</code> of the <a>ActivityTask</a>.</p> <important> <code>taskToken</code> is generated by the service and should be treated as an opaque value. If the task is passed to another process, its <code>taskToken</code> must also be passed. This enables it to provide its progress and respond with results.</important>"]
     #[serde(rename="taskToken")]
@@ -1611,9 +1800,11 @@ pub struct RespondActivityTaskFailedInput {
 pub struct RespondDecisionTaskCompletedInput {
     #[doc="<p>The list of decisions (possibly empty) made by the decider while processing this decision task. See the docs for the decision structure for details.</p>"]
     #[serde(rename="decisions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub decisions: Option<DecisionList>,
     #[doc="<p>User defined context to add to workflow execution.</p>"]
     #[serde(rename="executionContext")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub execution_context: Option<Data>,
     #[doc="<p>The <code>taskToken</code> from the <a>DecisionTask</a>.</p> <important><code>taskToken</code> is generated by the service and should be treated as an opaque value. If the task is passed to another process, its <code>taskToken</code> must also be passed. This enables it to provide its progress and respond with results.</important>"]
     #[serde(rename="taskToken")]
@@ -1626,6 +1817,7 @@ pub type ReverseOrder = bool;
 pub struct Run {
     #[doc="<p>The <code>runId</code> of a workflow execution. This ID is generated by the service and can be used to uniquely identify the workflow execution within a domain.</p>"]
     #[serde(rename="runId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub run_id: Option<RunId>,
 }
 
@@ -1642,27 +1834,35 @@ pub struct ScheduleActivityTaskDecisionAttributes {
     pub activity_type: ActivityType,
     #[doc="<p><i>Optional.</i> Data attached to the event that can be used by the decider in subsequent workflow tasks. This data is not sent to the activity.</p>"]
     #[serde(rename="control")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub control: Option<Data>,
     #[doc="<p>If set, specifies the maximum time before which a worker processing a task of this type must report progress by calling <a>RecordActivityTaskHeartbeat</a>. If the timeout is exceeded, the activity task is automatically timed out. If the worker subsequently attempts to record a heartbeat or returns a result, it will be ignored. This overrides the default heartbeat timeout specified when registering the activity type using <a>RegisterActivityType</a>.</p> <p>The duration is specified in seconds; an integer greater than or equal to 0. The value \"NONE\" can be used to specify unlimited duration.</p>"]
     #[serde(rename="heartbeatTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub heartbeat_timeout: Option<DurationInSecondsOptional>,
     #[doc="<p>The input provided to the activity task.</p>"]
     #[serde(rename="input")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub input: Option<Data>,
     #[doc="<p>The maximum duration for this activity task.</p> <p>The duration is specified in seconds; an integer greater than or equal to 0. The value \"NONE\" can be used to specify unlimited duration.</p> <note>A schedule-to-close timeout for this activity task must be specified either as a default for the activity type or through this field. If neither this field is set nor a default schedule-to-close timeout was specified at registration time then a fault will be returned.</note>"]
     #[serde(rename="scheduleToCloseTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub schedule_to_close_timeout: Option<DurationInSecondsOptional>,
     #[doc="<p><i>Optional.</i> If set, specifies the maximum duration the activity task can wait to be assigned to a worker. This overrides the default schedule-to-start timeout specified when registering the activity type using <a>RegisterActivityType</a>.</p> <p>The duration is specified in seconds; an integer greater than or equal to 0. The value \"NONE\" can be used to specify unlimited duration.</p> <note>A schedule-to-start timeout for this activity task must be specified either as a default for the activity type or through this field. If neither this field is set nor a default schedule-to-start timeout was specified at registration time then a fault will be returned.</note>"]
     #[serde(rename="scheduleToStartTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub schedule_to_start_timeout: Option<DurationInSecondsOptional>,
     #[doc="<p>If set, specifies the maximum duration a worker may take to process this activity task. This overrides the default start-to-close timeout specified when registering the activity type using <a>RegisterActivityType</a>.</p> <p>The duration is specified in seconds; an integer greater than or equal to 0. The value \"NONE\" can be used to specify unlimited duration.</p> <note>A start-to-close timeout for this activity task must be specified either as a default for the activity type or through this field. If neither this field is set nor a default start-to-close timeout was specified at registration time then a fault will be returned.</note>"]
     #[serde(rename="startToCloseTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_to_close_timeout: Option<DurationInSecondsOptional>,
     #[doc="<p>If set, specifies the name of the task list in which to schedule the activity task. If not specified, the <code>defaultTaskList</code> registered with the activity type will be used.</p> <note>A task list for this activity task must be specified either as a default for the activity type or through this field. If neither this field is set nor a default task list was specified at registration time then a fault will be returned.</note> <p>The specified string must not start or end with whitespace. It must not contain a <code>:</code> (colon), <code>/</code> (slash), <code>|</code> (vertical bar), or any control characters (\\u0000-\\u001f | \\u007f - \\u009f). Also, it must not contain the literal string quotarnquot.</p>"]
     #[serde(rename="taskList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_list: Option<TaskList>,
     #[doc="<p><i>Optional.</i> If set, specifies the priority with which the activity task is to be assigned to a worker. This overrides the defaultTaskPriority specified when registering the activity type using <a>RegisterActivityType</a>. Valid values are integers that range from Java's <code>Integer.MIN_VALUE</code> (-2147483648) to <code>Integer.MAX_VALUE</code> (2147483647). Higher numbers indicate higher priority.</p> <p>For more information about setting task priority, see <a href=\"http://docs.aws.amazon.com/amazonswf/latest/developerguide/programming-priority.html\">Setting Task Priority</a> in the <i>Amazon Simple Workflow Developer Guide</i>.</p>"]
     #[serde(rename="taskPriority")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_priority: Option<TaskPriority>,
 }
 
@@ -1692,12 +1892,14 @@ pub struct ScheduleLambdaFunctionDecisionAttributes {
     pub id: FunctionId,
     #[doc="<p>The input provided to the AWS Lambda function.</p>"]
     #[serde(rename="input")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub input: Option<FunctionInput>,
     #[doc="<p><b>Required.</b> The name of the AWS Lambda function to invoke.</p>"]
     #[serde(rename="name")]
     pub name: FunctionName,
     #[doc="<p>If set, specifies the maximum duration the function may take to execute.</p>"]
     #[serde(rename="startToCloseTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub start_to_close_timeout: Option<DurationInSecondsOptional>,
 }
 
@@ -1724,12 +1926,15 @@ pub struct ScheduleLambdaFunctionFailedEventAttributes {
 pub struct SignalExternalWorkflowExecutionDecisionAttributes {
     #[doc="<p><i>Optional.</i> Data attached to the event that can be used by the decider in subsequent decision tasks.</p>"]
     #[serde(rename="control")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub control: Option<Data>,
     #[doc="<p><i>Optional.</i> Input data to be provided with the signal. The target workflow execution will use the signal name and input data to process the signal.</p>"]
     #[serde(rename="input")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub input: Option<Data>,
     #[doc="<p>The <code>runId</code> of the workflow execution to be signaled.</p>"]
     #[serde(rename="runId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub run_id: Option<RunIdOptional>,
     #[doc="<p><b>Required.</b> The name of the signal.The target workflow execution will use the signal name and input to process the signal.</p>"]
     #[serde(rename="signalName")]
@@ -1747,6 +1952,7 @@ pub struct SignalExternalWorkflowExecutionFailedEventAttributes {
     #[serde(rename="cause")]
     pub cause: SignalExternalWorkflowExecutionFailedCause,
     #[serde(rename="control")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub control: Option<Data>,
     #[doc="<p>The ID of the <code>DecisionTaskCompleted</code> event corresponding to the decision task that resulted in the <code>SignalExternalWorkflowExecution</code> decision for this signal. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>"]
     #[serde(rename="decisionTaskCompletedEventId")]
@@ -1756,6 +1962,7 @@ pub struct SignalExternalWorkflowExecutionFailedEventAttributes {
     pub initiated_event_id: EventId,
     #[doc="<p>The <code>runId</code> of the external workflow execution that the signal was being delivered to.</p>"]
     #[serde(rename="runId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub run_id: Option<RunIdOptional>,
     #[doc="<p>The <code>workflowId</code> of the external workflow execution that the signal was being delivered to.</p>"]
     #[serde(rename="workflowId")]
@@ -1767,15 +1974,18 @@ pub struct SignalExternalWorkflowExecutionFailedEventAttributes {
 pub struct SignalExternalWorkflowExecutionInitiatedEventAttributes {
     #[doc="<p><i>Optional.</i> data attached to the event that can be used by the decider in subsequent decision tasks.</p>"]
     #[serde(rename="control")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub control: Option<Data>,
     #[doc="<p>The ID of the <code>DecisionTaskCompleted</code> event corresponding to the decision task that resulted in the <code>SignalExternalWorkflowExecution</code> decision for this signal. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>"]
     #[serde(rename="decisionTaskCompletedEventId")]
     pub decision_task_completed_event_id: EventId,
     #[doc="<p>Input provided to the signal (if any).</p>"]
     #[serde(rename="input")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub input: Option<Data>,
     #[doc="<p>The <code>runId</code> of the external workflow execution to send the signal to.</p>"]
     #[serde(rename="runId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub run_id: Option<RunIdOptional>,
     #[doc="<p>The name of the signal.</p>"]
     #[serde(rename="signalName")]
@@ -1793,9 +2003,11 @@ pub struct SignalWorkflowExecutionInput {
     pub domain: DomainName,
     #[doc="<p>Data to attach to the <code>WorkflowExecutionSignaled</code> event in the target workflow execution's history.</p>"]
     #[serde(rename="input")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub input: Option<Data>,
     #[doc="<p>The runId of the workflow execution to signal.</p>"]
     #[serde(rename="runId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub run_id: Option<RunIdOptional>,
     #[doc="<p>The name of the signal. This name must be meaningful to the target workflow.</p>"]
     #[serde(rename="signalName")]
@@ -1810,30 +2022,39 @@ pub struct SignalWorkflowExecutionInput {
 pub struct StartChildWorkflowExecutionDecisionAttributes {
     #[doc="<p><i>Optional.</i> If set, specifies the policy to use for the child workflow executions if the workflow execution being started is terminated by calling the <a>TerminateWorkflowExecution</a> action explicitly or due to an expired timeout. This policy overrides the default child policy specified when registering the workflow type using <a>RegisterWorkflowType</a>.</p> <p>The supported child policies are:</p> <ul> <li><b>TERMINATE:</b> the child executions will be terminated.</li> <li><b>REQUEST_CANCEL:</b> a request to cancel will be attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</li> <li><b>ABANDON:</b> no action will be taken. The child executions will continue to run.</li> </ul> <note>A child policy for this workflow execution must be specified either as a default for the workflow type or through this parameter. If neither this parameter is set nor a default child policy was specified at registration time then a fault will be returned.</note>"]
     #[serde(rename="childPolicy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub child_policy: Option<ChildPolicy>,
     #[doc="<p><i>Optional.</i> Data attached to the event that can be used by the decider in subsequent workflow tasks. This data is not sent to the child workflow execution.</p>"]
     #[serde(rename="control")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub control: Option<Data>,
     #[doc="<p>The total duration for this workflow execution. This overrides the defaultExecutionStartToCloseTimeout specified when registering the workflow type.</p> <p>The duration is specified in seconds; an integer greater than or equal to 0. The value \"NONE\" can be used to specify unlimited duration.</p> <note>An execution start-to-close timeout for this workflow execution must be specified either as a default for the workflow type or through this parameter. If neither this parameter is set nor a default execution start-to-close timeout was specified at registration time then a fault will be returned.</note>"]
     #[serde(rename="executionStartToCloseTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub execution_start_to_close_timeout: Option<DurationInSecondsOptional>,
     #[doc="<p>The input to be provided to the workflow execution.</p>"]
     #[serde(rename="input")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub input: Option<Data>,
     #[doc="<p>The ARN of an IAM role that authorizes Amazon SWF to invoke AWS Lambda functions.</p> <note>In order for this workflow execution to invoke AWS Lambda functions, an appropriate IAM role must be specified either as a default for the workflow type or through this field.</note>"]
     #[serde(rename="lambdaRole")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub lambda_role: Option<Arn>,
     #[doc="<p>The list of tags to associate with the child workflow execution. A maximum of 5 tags can be specified. You can list workflow executions with a specific tag by calling <a>ListOpenWorkflowExecutions</a> or <a>ListClosedWorkflowExecutions</a> and specifying a <a>TagFilter</a>.</p>"]
     #[serde(rename="tagList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_list: Option<TagList>,
     #[doc="<p>The name of the task list to be used for decision tasks of the child workflow execution.</p> <note>A task list for this workflow execution must be specified either as a default for the workflow type or through this parameter. If neither this parameter is set nor a default task list was specified at registration time then a fault will be returned.</note> <p>The specified string must not start or end with whitespace. It must not contain a <code>:</code> (colon), <code>/</code> (slash), <code>|</code> (vertical bar), or any control characters (\\u0000-\\u001f | \\u007f - \\u009f). Also, it must not contain the literal string quotarnquot.</p>"]
     #[serde(rename="taskList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_list: Option<TaskList>,
     #[doc="<p><i>Optional.</i> A task priority that, if set, specifies the priority for a decision task of this workflow execution. This overrides the defaultTaskPriority specified when registering the workflow type. Valid values are integers that range from Java's <code>Integer.MIN_VALUE</code> (-2147483648) to <code>Integer.MAX_VALUE</code> (2147483647). Higher numbers indicate higher priority.</p> <p>For more information about setting task priority, see <a href=\"http://docs.aws.amazon.com/amazonswf/latest/developerguide/programming-priority.html\">Setting Task Priority</a> in the <i>Amazon Simple Workflow Developer Guide</i>.</p>"]
     #[serde(rename="taskPriority")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_priority: Option<TaskPriority>,
     #[doc="<p>Specifies the maximum duration of decision tasks for this workflow execution. This parameter overrides the <code>defaultTaskStartToCloseTimout</code> specified when registering the workflow type using <a>RegisterWorkflowType</a>.</p> <p>The duration is specified in seconds; an integer greater than or equal to 0. The value \"NONE\" can be used to specify unlimited duration.</p> <note>A task start-to-close timeout for this workflow execution must be specified either as a default for the workflow type or through this parameter. If neither this parameter is set nor a default task start-to-close timeout was specified at registration time then a fault will be returned.</note>"]
     #[serde(rename="taskStartToCloseTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_start_to_close_timeout: Option<DurationInSecondsOptional>,
     #[doc="<p><b>Required.</b> The <code>workflowId</code> of the workflow execution.</p> <p>The specified string must not start or end with whitespace. It must not contain a <code>:</code> (colon), <code>/</code> (slash), <code>|</code> (vertical bar), or any control characters (\\u0000-\\u001f | \\u007f - \\u009f). Also, it must not contain the literal string quotarnquot.</p>"]
     #[serde(rename="workflowId")]
@@ -1851,6 +2072,7 @@ pub struct StartChildWorkflowExecutionFailedEventAttributes {
     #[serde(rename="cause")]
     pub cause: StartChildWorkflowExecutionFailedCause,
     #[serde(rename="control")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub control: Option<Data>,
     #[doc="<p>The ID of the <code>DecisionTaskCompleted</code> event corresponding to the decision task that resulted in the <code>StartChildWorkflowExecution</code> decision to request this child workflow execution. This information can be useful for diagnosing problems by tracing back the cause of events.</p>"]
     #[serde(rename="decisionTaskCompletedEventId")]
@@ -1874,30 +2096,37 @@ pub struct StartChildWorkflowExecutionInitiatedEventAttributes {
     pub child_policy: ChildPolicy,
     #[doc="<p><i>Optional.</i> Data attached to the event that can be used by the decider in subsequent decision tasks. This data is not sent to the activity.</p>"]
     #[serde(rename="control")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub control: Option<Data>,
     #[doc="<p>The ID of the <code>DecisionTaskCompleted</code> event corresponding to the decision task that resulted in the <code>StartChildWorkflowExecution</code> decision to request this child workflow execution. This information can be useful for diagnosing problems by tracing back the cause of events.</p>"]
     #[serde(rename="decisionTaskCompletedEventId")]
     pub decision_task_completed_event_id: EventId,
     #[doc="<p>The maximum duration for the child workflow execution. If the workflow execution is not closed within this duration, it will be timed out and force terminated.</p> <p>The duration is specified in seconds; an integer greater than or equal to 0. The value \"NONE\" can be used to specify unlimited duration.</p>"]
     #[serde(rename="executionStartToCloseTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub execution_start_to_close_timeout: Option<DurationInSecondsOptional>,
     #[doc="<p>The inputs provided to the child workflow execution (if any).</p>"]
     #[serde(rename="input")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub input: Option<Data>,
     #[doc="<p>The IAM role attached to this workflow execution to use when invoking AWS Lambda functions.</p>"]
     #[serde(rename="lambdaRole")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub lambda_role: Option<Arn>,
     #[doc="<p>The list of tags to associated with the child workflow execution.</p>"]
     #[serde(rename="tagList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_list: Option<TagList>,
     #[doc="<p>The name of the task list used for the decision tasks of the child workflow execution.</p>"]
     #[serde(rename="taskList")]
     pub task_list: TaskList,
     #[doc="<p><i>Optional.</i> The priority assigned for the decision tasks for this workflow execution. Valid values are integers that range from Java's <code>Integer.MIN_VALUE</code> (-2147483648) to <code>Integer.MAX_VALUE</code> (2147483647). Higher numbers indicate higher priority.</p> <p>For more information about setting task priority, see <a href=\"http://docs.aws.amazon.com/amazonswf/latest/developerguide/programming-priority.html\">Setting Task Priority</a> in the <i>Amazon Simple Workflow Developer Guide</i>.</p>"]
     #[serde(rename="taskPriority")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_priority: Option<TaskPriority>,
     #[doc="<p>The maximum duration allowed for the decision tasks for this workflow execution.</p> <p>The duration is specified in seconds; an integer greater than or equal to 0. The value \"NONE\" can be used to specify unlimited duration.</p>"]
     #[serde(rename="taskStartToCloseTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_start_to_close_timeout: Option<DurationInSecondsOptional>,
     #[doc="<p>The <code>workflowId</code> of the child workflow execution.</p>"]
     #[serde(rename="workflowId")]
@@ -1913,12 +2142,15 @@ pub type StartLambdaFunctionFailedCause = String;
 pub struct StartLambdaFunctionFailedEventAttributes {
     #[doc="<p>The cause of the failure. This information is generated by the system and can be useful for diagnostic purposes.</p> <note>If <b>cause</b> is set to OPERATION_NOT_PERMITTED, the decision failed because it lacked sufficient permissions. For details and example IAM policies, see <a href=\"http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html\">Using IAM to Manage Access to Amazon SWF Workflows</a>.</note>"]
     #[serde(rename="cause")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cause: Option<StartLambdaFunctionFailedCause>,
     #[doc="<p>The error message (if any).</p>"]
     #[serde(rename="message")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<CauseMessage>,
     #[doc="<p>The ID of the <code>LambdaFunctionScheduled</code> event that was recorded when this AWS Lambda function was scheduled. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>"]
     #[serde(rename="scheduledEventId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub scheduled_event_id: Option<EventId>,
 }
 
@@ -1927,6 +2159,7 @@ pub struct StartLambdaFunctionFailedEventAttributes {
 pub struct StartTimerDecisionAttributes {
     #[doc="<p><i>Optional.</i> Data attached to the event that can be used by the decider in subsequent workflow tasks.</p>"]
     #[serde(rename="control")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub control: Option<Data>,
     #[doc="<p><b>Required.</b> The duration to wait before firing the timer.</p> <p>The duration is specified in seconds; an integer greater than or equal to 0.</p>"]
     #[serde(rename="startToFireTimeout")]
@@ -1955,30 +2188,38 @@ pub struct StartTimerFailedEventAttributes {
 pub struct StartWorkflowExecutionInput {
     #[doc="<p>If set, specifies the policy to use for the child workflow executions of this workflow execution if it is terminated, by calling the <a>TerminateWorkflowExecution</a> action explicitly or due to an expired timeout. This policy overrides the default child policy specified when registering the workflow type using <a>RegisterWorkflowType</a>.</p> <p>The supported child policies are:</p> <ul> <li><b>TERMINATE:</b> the child executions will be terminated.</li> <li><b>REQUEST_CANCEL:</b> a request to cancel will be attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</li> <li><b>ABANDON:</b> no action will be taken. The child executions will continue to run.</li> </ul> <note>A child policy for this workflow execution must be specified either as a default for the workflow type or through this parameter. If neither this parameter is set nor a default child policy was specified at registration time then a fault will be returned.</note>"]
     #[serde(rename="childPolicy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub child_policy: Option<ChildPolicy>,
     #[doc="<p>The name of the domain in which the workflow execution is created.</p>"]
     #[serde(rename="domain")]
     pub domain: DomainName,
     #[doc="<p>The total duration for this workflow execution. This overrides the defaultExecutionStartToCloseTimeout specified when registering the workflow type.</p> <p>The duration is specified in seconds; an integer greater than or equal to 0. Exceeding this limit will cause the workflow execution to time out. Unlike some of the other timeout parameters in Amazon SWF, you cannot specify a value of \"NONE\" for this timeout; there is a one-year max limit on the time that a workflow execution can run.</p> <note> An execution start-to-close timeout must be specified either through this parameter or as a default when the workflow type is registered. If neither this parameter nor a default execution start-to-close timeout is specified, a fault is returned.</note>"]
     #[serde(rename="executionStartToCloseTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub execution_start_to_close_timeout: Option<DurationInSecondsOptional>,
     #[doc="<p>The input for the workflow execution. This is a free form string which should be meaningful to the workflow you are starting. This <code>input</code> is made available to the new workflow execution in the <code>WorkflowExecutionStarted</code> history event.</p>"]
     #[serde(rename="input")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub input: Option<Data>,
     #[doc="<p>The ARN of an IAM role that authorizes Amazon SWF to invoke AWS Lambda functions.</p> <note>In order for this workflow execution to invoke AWS Lambda functions, an appropriate IAM role must be specified either as a default for the workflow type or through this field.</note>"]
     #[serde(rename="lambdaRole")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub lambda_role: Option<Arn>,
     #[doc="<p>The list of tags to associate with the workflow execution. You can specify a maximum of 5 tags. You can list workflow executions with a specific tag by calling <a>ListOpenWorkflowExecutions</a> or <a>ListClosedWorkflowExecutions</a> and specifying a <a>TagFilter</a>.</p>"]
     #[serde(rename="tagList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_list: Option<TagList>,
     #[doc="<p>The task list to use for the decision tasks generated for this workflow execution. This overrides the <code>defaultTaskList</code> specified when registering the workflow type.</p> <note>A task list for this workflow execution must be specified either as a default for the workflow type or through this parameter. If neither this parameter is set nor a default task list was specified at registration time then a fault will be returned.</note> <p>The specified string must not start or end with whitespace. It must not contain a <code>:</code> (colon), <code>/</code> (slash), <code>|</code> (vertical bar), or any control characters (\\u0000-\\u001f | \\u007f - \\u009f). Also, it must not contain the literal string quotarnquot.</p>"]
     #[serde(rename="taskList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_list: Option<TaskList>,
     #[doc="<p>The task priority to use for this workflow execution. This will override any default priority that was assigned when the workflow type was registered. If not set, then the default task priority for the workflow type will be used. Valid values are integers that range from Java's <code>Integer.MIN_VALUE</code> (-2147483648) to <code>Integer.MAX_VALUE</code> (2147483647). Higher numbers indicate higher priority.</p> <p>For more information about setting task priority, see <a href=\"http://docs.aws.amazon.com/amazonswf/latest/developerguide/programming-priority.html\">Setting Task Priority</a> in the <i>Amazon Simple Workflow Developer Guide</i>.</p>"]
     #[serde(rename="taskPriority")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_priority: Option<TaskPriority>,
     #[doc="<p>Specifies the maximum duration of decision tasks for this workflow execution. This parameter overrides the <code>defaultTaskStartToCloseTimout</code> specified when registering the workflow type using <a>RegisterWorkflowType</a>.</p> <p>The duration is specified in seconds; an integer greater than or equal to 0. The value \"NONE\" can be used to specify unlimited duration.</p> <note>A task start-to-close timeout for this workflow execution must be specified either as a default for the workflow type or through this parameter. If neither this parameter is set nor a default task start-to-close timeout was specified at registration time then a fault will be returned.</note>"]
     #[serde(rename="taskStartToCloseTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_start_to_close_timeout: Option<DurationInSecondsOptional>,
     #[doc="<p>The user defined identifier associated with the workflow execution. You can use this to associate a custom identifier with the workflow execution. You may specify the same identifier if a workflow execution is logically a <i>restart</i> of a previous execution. You cannot have two open workflow executions with the same <code>workflowId</code> at the same time.</p> <p>The specified string must not start or end with whitespace. It must not contain a <code>:</code> (colon), <code>/</code> (slash), <code>|</code> (vertical bar), or any control characters (\\u0000-\\u001f | \\u007f - \\u009f). Also, it must not contain the literal string quotarnquot.</p>"]
     #[serde(rename="workflowId")]
@@ -2013,18 +2254,22 @@ pub type TerminateReason = String;
 pub struct TerminateWorkflowExecutionInput {
     #[doc="<p>If set, specifies the policy to use for the child workflow executions of the workflow execution being terminated. This policy overrides the child policy specified for the workflow execution at registration time or when starting the execution.</p> <p>The supported child policies are:</p> <ul> <li><b>TERMINATE:</b> the child executions will be terminated.</li> <li><b>REQUEST_CANCEL:</b> a request to cancel will be attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</li> <li><b>ABANDON:</b> no action will be taken. The child executions will continue to run.</li> </ul> <note>A child policy for this workflow execution must be specified either as a default for the workflow type or through this parameter. If neither this parameter is set nor a default child policy was specified at registration time then a fault will be returned.</note>"]
     #[serde(rename="childPolicy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub child_policy: Option<ChildPolicy>,
     #[doc="<p><i>Optional.</i> Details for terminating the workflow execution.</p>"]
     #[serde(rename="details")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub details: Option<Data>,
     #[doc="<p>The domain of the workflow execution to terminate.</p>"]
     #[serde(rename="domain")]
     pub domain: DomainName,
     #[doc="<p><i>Optional.</i> A descriptive reason for terminating the workflow execution.</p>"]
     #[serde(rename="reason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reason: Option<TerminateReason>,
     #[doc="<p>The runId of the workflow execution to terminate.</p>"]
     #[serde(rename="runId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub run_id: Option<RunIdOptional>,
     #[doc="<p>The workflowId of the workflow execution to terminate.</p>"]
     #[serde(rename="workflowId")]
@@ -2062,6 +2307,7 @@ pub type TimerId = String;
 pub struct TimerStartedEventAttributes {
     #[doc="<p><i>Optional.</i> Data attached to the event that can be used by the decider in subsequent workflow tasks.</p>"]
     #[serde(rename="control")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub control: Option<Data>,
     #[doc="<p>The ID of the <code>DecisionTaskCompleted</code> event corresponding to the decision task that resulted in the <code>StartTimer</code> decision for this activity task. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>"]
     #[serde(rename="decisionTaskCompletedEventId")]
@@ -2095,12 +2341,15 @@ pub type WorkflowExecutionCancelRequestedCause = String;
 pub struct WorkflowExecutionCancelRequestedEventAttributes {
     #[doc="<p>If set, indicates that the request to cancel the workflow execution was automatically generated, and specifies the cause. This happens if the parent workflow execution times out or is terminated, and the child policy is set to cancel child executions.</p>"]
     #[serde(rename="cause")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cause: Option<WorkflowExecutionCancelRequestedCause>,
     #[doc="<p>The ID of the <code>RequestCancelExternalWorkflowExecutionInitiated</code> event corresponding to the <code>RequestCancelExternalWorkflowExecution</code> decision to cancel this workflow execution.The source event with this ID can be found in the history of the source workflow execution. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>"]
     #[serde(rename="externalInitiatedEventId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub external_initiated_event_id: Option<EventId>,
     #[doc="<p>The external workflow execution for which the cancellation was requested.</p>"]
     #[serde(rename="externalWorkflowExecution")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub external_workflow_execution: Option<WorkflowExecution>,
 }
 
@@ -2112,6 +2361,7 @@ pub struct WorkflowExecutionCanceledEventAttributes {
     pub decision_task_completed_event_id: EventId,
     #[doc="<p>Details for the cancellation (if any).</p>"]
     #[serde(rename="details")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub details: Option<Data>,
 }
 
@@ -2123,6 +2373,7 @@ pub struct WorkflowExecutionCompletedEventAttributes {
     pub decision_task_completed_event_id: EventId,
     #[doc="<p>The result produced by the workflow execution upon successful completion.</p>"]
     #[serde(rename="result")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub result: Option<Data>,
 }
 
@@ -2137,12 +2388,14 @@ pub struct WorkflowExecutionConfiguration {
     pub execution_start_to_close_timeout: DurationInSeconds,
     #[doc="<p>The IAM role used by this workflow execution when invoking AWS Lambda functions.</p>"]
     #[serde(rename="lambdaRole")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub lambda_role: Option<Arn>,
     #[doc="<p>The task list used for the decision tasks generated for this workflow execution.</p>"]
     #[serde(rename="taskList")]
     pub task_list: TaskList,
     #[doc="<p>The priority assigned to decision tasks for this workflow execution. Valid values are integers that range from Java's <code>Integer.MIN_VALUE</code> (-2147483648) to <code>Integer.MAX_VALUE</code> (2147483647). Higher numbers indicate higher priority.</p> <p>For more information about setting task priority, see <a href=\"http://docs.aws.amazon.com/amazonswf/latest/developerguide/programming-priority.html\">Setting Task Priority</a> in the <i>Amazon Simple Workflow Developer Guide</i>.</p>"]
     #[serde(rename="taskPriority")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_priority: Option<TaskPriority>,
     #[doc="<p>The maximum duration allowed for decision tasks for this workflow execution.</p> <p>The duration is specified in seconds; an integer greater than or equal to 0. The value \"NONE\" can be used to specify unlimited duration.</p>"]
     #[serde(rename="taskStartToCloseTimeout")]
@@ -2160,25 +2413,31 @@ pub struct WorkflowExecutionContinuedAsNewEventAttributes {
     pub decision_task_completed_event_id: EventId,
     #[doc="<p>The total duration allowed for the new workflow execution.</p> <p>The duration is specified in seconds; an integer greater than or equal to 0. The value \"NONE\" can be used to specify unlimited duration.</p>"]
     #[serde(rename="executionStartToCloseTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub execution_start_to_close_timeout: Option<DurationInSecondsOptional>,
     #[doc="<p>The input provided to the new workflow execution.</p>"]
     #[serde(rename="input")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub input: Option<Data>,
     #[doc="<p>The IAM role attached to this workflow execution to use when invoking AWS Lambda functions.</p>"]
     #[serde(rename="lambdaRole")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub lambda_role: Option<Arn>,
     #[doc="<p>The <code>runId</code> of the new workflow execution.</p>"]
     #[serde(rename="newExecutionRunId")]
     pub new_execution_run_id: RunId,
     #[doc="<p>The list of tags associated with the new workflow execution.</p>"]
     #[serde(rename="tagList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_list: Option<TagList>,
     #[serde(rename="taskList")]
     pub task_list: TaskList,
     #[serde(rename="taskPriority")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_priority: Option<TaskPriority>,
     #[doc="<p>The maximum duration of decision tasks for the new workflow execution.</p> <p>The duration is specified in seconds; an integer greater than or equal to 0. The value \"NONE\" can be used to specify unlimited duration.</p>"]
     #[serde(rename="taskStartToCloseTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_start_to_close_timeout: Option<DurationInSecondsOptional>,
     #[serde(rename="workflowType")]
     pub workflow_type: WorkflowType,
@@ -2192,7 +2451,7 @@ pub struct WorkflowExecutionCount {
     pub count: Count,
     #[doc="<p>If set to true, indicates that the actual count was more than the maximum supported by this API and the count returned is the truncated value.</p>"]
     #[serde(rename="truncated")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub truncated: Option<Truncated>,
 }
 
@@ -2207,9 +2466,11 @@ pub struct WorkflowExecutionDetail {
     pub execution_info: WorkflowExecutionInfo,
     #[doc="<p>The time when the last activity task was scheduled for this workflow execution. You can use this information to determine if the workflow has not made progress for an unusually long period of time and might require a corrective action.</p>"]
     #[serde(rename="latestActivityTaskTimestamp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub latest_activity_task_timestamp: Option<Timestamp>,
     #[doc="<p>The latest executionContext provided by the decider for this workflow execution. A decider can provide an executionContext (a free-form string) when closing a decision task using <a>RespondDecisionTaskCompleted</a>.</p>"]
     #[serde(rename="latestExecutionContext")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub latest_execution_context: Option<Data>,
     #[doc="<p>The number of tasks for this workflow execution. This includes open and closed tasks of all types.</p>"]
     #[serde(rename="openCounts")]
@@ -2224,9 +2485,11 @@ pub struct WorkflowExecutionFailedEventAttributes {
     pub decision_task_completed_event_id: EventId,
     #[doc="<p>The details of the failure (if any).</p>"]
     #[serde(rename="details")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub details: Option<Data>,
     #[doc="<p>The descriptive reason provided for the failure (if any).</p>"]
     #[serde(rename="reason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reason: Option<FailureReason>,
 }
 
@@ -2243,13 +2506,15 @@ pub struct WorkflowExecutionFilter {
 pub struct WorkflowExecutionInfo {
     #[doc="<p>Set to true if a cancellation is requested for this workflow execution.</p>"]
     #[serde(rename="cancelRequested")]
-    #[serde(skip_serializing_if="::std::option::Option::is_none")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cancel_requested: Option<Canceled>,
     #[doc="<p>If the execution status is closed then this specifies how the execution was closed:</p> <ul> <li> <code>COMPLETED</code>: the execution was successfully completed.</li> <li> <code>CANCELED</code>: the execution was canceled.Cancellation allows the implementation to gracefully clean up before the execution is closed.</li> <li> <code>TERMINATED</code>: the execution was force terminated.</li> <li> <code>FAILED</code>: the execution failed to complete.</li> <li> <code>TIMED_OUT</code>: the execution did not complete in the alloted time and was automatically timed out.</li> <li> <code>CONTINUED_AS_NEW</code>: the execution is logically continued. This means the current execution was completed and a new execution was started to carry on the workflow.</li> </ul>"]
     #[serde(rename="closeStatus")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub close_status: Option<CloseStatus>,
     #[doc="<p>The time when the workflow execution was closed. Set only if the execution status is CLOSED.</p>"]
     #[serde(rename="closeTimestamp")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub close_timestamp: Option<Timestamp>,
     #[doc="<p>The workflow execution this information is about.</p>"]
     #[serde(rename="execution")]
@@ -2259,12 +2524,14 @@ pub struct WorkflowExecutionInfo {
     pub execution_status: ExecutionStatus,
     #[doc="<p>If this workflow execution is a child of another execution then contains the workflow execution that started this execution.</p>"]
     #[serde(rename="parent")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parent: Option<WorkflowExecution>,
     #[doc="<p>The time when the execution was started.</p>"]
     #[serde(rename="startTimestamp")]
     pub start_timestamp: Timestamp,
     #[doc="<p>The list of tags associated with the workflow execution. Tags can be used to identify and list workflow executions of interest through the visibility APIs. A workflow execution can have a maximum of 5 tags.</p>"]
     #[serde(rename="tagList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_list: Option<TagList>,
     #[doc="<p>The type of the workflow execution.</p>"]
     #[serde(rename="workflowType")]
@@ -2280,6 +2547,7 @@ pub struct WorkflowExecutionInfos {
     pub execution_infos: WorkflowExecutionInfoList,
     #[doc="<p>If a <code>NextPageToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextPageToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maximumPageSize</code> determines how many results can be returned in a single call.</p>"]
     #[serde(rename="nextPageToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_page_token: Option<PageToken>,
 }
 
@@ -2297,6 +2565,7 @@ pub struct WorkflowExecutionOpenCounts {
     pub open_decision_tasks: OpenDecisionTasksCount,
     #[doc="<p>The count of AWS Lambda functions that are currently executing.</p>"]
     #[serde(rename="openLambdaFunctions")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub open_lambda_functions: Option<Count>,
     #[doc="<p>The count of timers started by this workflow execution that have not fired yet.</p>"]
     #[serde(rename="openTimers")]
@@ -2308,12 +2577,15 @@ pub struct WorkflowExecutionOpenCounts {
 pub struct WorkflowExecutionSignaledEventAttributes {
     #[doc="<p>The ID of the <code>SignalExternalWorkflowExecutionInitiated</code> event corresponding to the <code>SignalExternalWorkflow</code> decision to signal this workflow execution.The source event with this ID can be found in the history of the source workflow execution. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event. This field is set only if the signal was initiated by another workflow execution.</p>"]
     #[serde(rename="externalInitiatedEventId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub external_initiated_event_id: Option<EventId>,
     #[doc="<p>The workflow execution that sent the signal. This is set only of the signal was sent by another workflow execution.</p>"]
     #[serde(rename="externalWorkflowExecution")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub external_workflow_execution: Option<WorkflowExecution>,
     #[doc="<p>Inputs provided with the signal (if any). The decider can use the signal name and inputs to determine how to process the signal.</p>"]
     #[serde(rename="input")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub input: Option<Data>,
     #[doc="<p>The name of the signal received. The decider can use the signal name and inputs to determine how to the process the signal.</p>"]
     #[serde(rename="signalName")]
@@ -2328,32 +2600,41 @@ pub struct WorkflowExecutionStartedEventAttributes {
     pub child_policy: ChildPolicy,
     #[doc="<p>If this workflow execution was started due to a <code>ContinueAsNewWorkflowExecution</code> decision, then it contains the <code>runId</code> of the previous workflow execution that was closed and continued as this execution.</p>"]
     #[serde(rename="continuedExecutionRunId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub continued_execution_run_id: Option<RunIdOptional>,
     #[doc="<p>The maximum duration for this workflow execution.</p> <p>The duration is specified in seconds; an integer greater than or equal to 0. The value \"NONE\" can be used to specify unlimited duration.</p>"]
     #[serde(rename="executionStartToCloseTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub execution_start_to_close_timeout: Option<DurationInSecondsOptional>,
     #[doc="<p>The input provided to the workflow execution (if any).</p>"]
     #[serde(rename="input")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub input: Option<Data>,
     #[doc="<p>The IAM role attached to this workflow execution to use when invoking AWS Lambda functions.</p>"]
     #[serde(rename="lambdaRole")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub lambda_role: Option<Arn>,
     #[doc="<p>The ID of the <code>StartChildWorkflowExecutionInitiated</code> event corresponding to the <code>StartChildWorkflowExecution</code> decision to start this workflow execution. The source event with this ID can be found in the history of the source workflow execution. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>"]
     #[serde(rename="parentInitiatedEventId")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parent_initiated_event_id: Option<EventId>,
     #[doc="<p>The source workflow execution that started this workflow execution. The member is not set if the workflow execution was not started by a workflow.</p>"]
     #[serde(rename="parentWorkflowExecution")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub parent_workflow_execution: Option<WorkflowExecution>,
     #[doc="<p>The list of tags associated with this workflow execution. An execution can have up to 5 tags.</p>"]
     #[serde(rename="tagList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub tag_list: Option<TagList>,
     #[doc="<p>The name of the task list for scheduling the decision tasks for this workflow execution.</p>"]
     #[serde(rename="taskList")]
     pub task_list: TaskList,
     #[serde(rename="taskPriority")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_priority: Option<TaskPriority>,
     #[doc="<p>The maximum duration of decision tasks for this workflow type.</p> <p>The duration is specified in seconds; an integer greater than or equal to 0. The value \"NONE\" can be used to specify unlimited duration.</p>"]
     #[serde(rename="taskStartToCloseTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub task_start_to_close_timeout: Option<DurationInSecondsOptional>,
     #[doc="<p>The workflow type of this execution.</p>"]
     #[serde(rename="workflowType")]
@@ -2366,15 +2647,18 @@ pub type WorkflowExecutionTerminatedCause = String;
 pub struct WorkflowExecutionTerminatedEventAttributes {
     #[doc="<p>If set, indicates that the workflow execution was automatically terminated, and specifies the cause. This happens if the parent workflow execution times out or is terminated and the child policy is set to terminate child executions.</p>"]
     #[serde(rename="cause")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub cause: Option<WorkflowExecutionTerminatedCause>,
     #[doc="<p>The policy used for the child workflow executions of this workflow execution.</p> <p>The supported child policies are:</p> <ul> <li><b>TERMINATE:</b> the child executions will be terminated.</li> <li><b>REQUEST_CANCEL:</b> a request to cancel will be attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</li> <li><b>ABANDON:</b> no action will be taken. The child executions will continue to run.</li> </ul>"]
     #[serde(rename="childPolicy")]
     pub child_policy: ChildPolicy,
     #[doc="<p>The details provided for the termination (if any).</p>"]
     #[serde(rename="details")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub details: Option<Data>,
     #[doc="<p>The reason provided for the termination (if any).</p>"]
     #[serde(rename="reason")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub reason: Option<TerminateReason>,
 }
 
@@ -2407,21 +2691,27 @@ pub struct WorkflowType {
 pub struct WorkflowTypeConfiguration {
     #[doc="<p><i>Optional.</i> The default policy to use for the child workflow executions when a workflow execution of this type is terminated, by calling the <a>TerminateWorkflowExecution</a> action explicitly or due to an expired timeout. This default can be overridden when starting a workflow execution using the <a>StartWorkflowExecution</a> action or the <code>StartChildWorkflowExecution</code> decision.</p> <p>The supported child policies are:</p> <ul> <li><b>TERMINATE:</b> the child executions will be terminated.</li> <li><b>REQUEST_CANCEL:</b> a request to cancel will be attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</li> <li><b>ABANDON:</b> no action will be taken. The child executions will continue to run.</li> </ul>"]
     #[serde(rename="defaultChildPolicy")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_child_policy: Option<ChildPolicy>,
     #[doc="<p><i>Optional.</i> The default maximum duration, specified when registering the workflow type, for executions of this workflow type. This default can be overridden when starting a workflow execution using the <a>StartWorkflowExecution</a> action or the <code>StartChildWorkflowExecution</code> decision.</p> <p>The duration is specified in seconds; an integer greater than or equal to 0. The value \"NONE\" can be used to specify unlimited duration.</p>"]
     #[serde(rename="defaultExecutionStartToCloseTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_execution_start_to_close_timeout: Option<DurationInSecondsOptional>,
     #[doc="<p>The default IAM role to use when a workflow execution invokes a AWS Lambda function.</p>"]
     #[serde(rename="defaultLambdaRole")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_lambda_role: Option<Arn>,
     #[doc="<p><i>Optional.</i> The default task list, specified when registering the workflow type, for decisions tasks scheduled for workflow executions of this type. This default can be overridden when starting a workflow execution using the <a>StartWorkflowExecution</a> action or the <code>StartChildWorkflowExecution</code> decision.</p>"]
     #[serde(rename="defaultTaskList")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_task_list: Option<TaskList>,
     #[doc="<p><i>Optional.</i> The default task priority, specified when registering the workflow type, for all decision tasks of this workflow type. This default can be overridden when starting a workflow execution using the <a>StartWorkflowExecution</a> action or the <code>StartChildWorkflowExecution</code> decision.</p> <p>Valid values are integers that range from Java's <code>Integer.MIN_VALUE</code> (-2147483648) to <code>Integer.MAX_VALUE</code> (2147483647). Higher numbers indicate higher priority.</p> <p>For more information about setting task priority, see <a href=\"http://docs.aws.amazon.com/amazonswf/latest/developerguide/programming-priority.html\">Setting Task Priority</a> in the <i>Amazon Simple Workflow Developer Guide</i>.</p>"]
     #[serde(rename="defaultTaskPriority")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_task_priority: Option<TaskPriority>,
     #[doc="<p><i>Optional.</i> The default maximum duration, specified when registering the workflow type, that a decision task for executions of this workflow type might take before returning completion or failure. If the task does not close in the specified time then the task is automatically timed out and rescheduled. If the decider eventually reports a completion or failure, it is ignored. This default can be overridden when starting a workflow execution using the <a>StartWorkflowExecution</a> action or the <code>StartChildWorkflowExecution</code> decision.</p> <p>The duration is specified in seconds; an integer greater than or equal to 0. The value \"NONE\" can be used to specify unlimited duration.</p>"]
     #[serde(rename="defaultTaskStartToCloseTimeout")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub default_task_start_to_close_timeout: Option<DurationInSecondsOptional>,
 }
 
@@ -2444,6 +2734,7 @@ pub struct WorkflowTypeFilter {
     pub name: Name,
     #[doc="<p>Version of the workflow type.</p>"]
     #[serde(rename="version")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub version: Option<VersionOptional>,
 }
 
@@ -2455,9 +2746,11 @@ pub struct WorkflowTypeInfo {
     pub creation_date: Timestamp,
     #[doc="<p>If the type is in deprecated state, then it is set to the date when the type was deprecated.</p>"]
     #[serde(rename="deprecationDate")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub deprecation_date: Option<Timestamp>,
     #[doc="<p>The description of the type registered through <a>RegisterWorkflowType</a>.</p>"]
     #[serde(rename="description")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<Description>,
     #[doc="<p>The current status of the workflow type.</p>"]
     #[serde(rename="status")]
@@ -2473,6 +2766,7 @@ pub type WorkflowTypeInfoList = Vec<WorkflowTypeInfo>;
 pub struct WorkflowTypeInfos {
     #[doc="<p>If a <code>NextPageToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextPageToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maximumPageSize</code> determines how many results can be returned in a single call.</p>"]
     #[serde(rename="nextPageToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
     pub next_page_token: Option<PageToken>,
     #[doc="<p>The list of workflow type information.</p>"]
     #[serde(rename="typeInfos")]
