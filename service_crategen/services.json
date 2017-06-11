@@ -357,6 +357,12 @@
     "protocolVersion": "2010-12-01",
     "baseTypeName": "Ses"
   },
+  "sms": {
+    "version": "0.25.0",
+    "coreVersion": "0.25.0",
+    "protocolVersion": "2016-10-24",
+    "baseTypeName": "ServerMigrationService"
+  },
   "snowball": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
