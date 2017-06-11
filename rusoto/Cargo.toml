@@ -39,6 +39,7 @@ members = [
     "services/kinesis",
     "services/kms",
     "services/lambda",
+    "services/lightsail",
     "services/logs",
     "services/machinelearning",
     "services/marketplacecommerceanalytics",

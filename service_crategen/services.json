@@ -221,6 +221,12 @@
     "protocolVersion": "2015-03-31",
     "baseTypeName": "Lambda"
   },
+  "lightsail": {
+    "version": "0.25.0",
+    "coreVersion": "0.25.0",
+    "protocolVersion": "2016-11-28",
+    "baseTypeName": "Lightsail"
+  },
   "logs": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
