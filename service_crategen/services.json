@@ -209,6 +209,12 @@
     "protocolVersion": "2015-10-01",
     "baseTypeName": "GameLift"
   },
+  "health": {
+    "version": "0.25.0",
+    "coreVersion": "0.25.0",
+    "protocolVersion": "2016-08-04",
+    "baseTypeName": "AWSHealth"
+  },
   "iam": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
