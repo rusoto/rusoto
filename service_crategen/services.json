@@ -5,6 +5,12 @@
     "protocolVersion": "2015-12-08",
     "baseTypeName": "Acm"
   },
+  "appstream": {
+    "version": "0.25.0",
+    "coreVersion": "0.25.0",
+    "protocolVersion": "2016-12-01",
+    "baseTypeName": "AppStream"
+  },
   "autoscaling": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
