@@ -1,0 +1,493 @@
+#[allow(warnings)]
+use hyper::Client;
+use hyper::status::StatusCode;
+use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::region;
+
+use std::fmt;
+use std::error::Error;
+use rusoto_core::request::HttpDispatchError;
+use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+
+use serde_json;
+use rusoto_core::signature::SignedRequest;
+use serde_json::Value as SerdeJsonValue;
+use serde_json::from_str;
+#[doc="Region of customer S3 bucket."]
+pub type AWSRegion = String;
+#[doc="Enable support for Redshift and/or QuickSight."]
+pub type AdditionalArtifact = String;
+#[doc="A list of additional artifacts."]
+pub type AdditionalArtifactList = Vec<AdditionalArtifact>;
+#[doc="Preferred compression format for report."]
+pub type CompressionFormat = String;
+#[doc="Request of DeleteReportDefinition"]
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct DeleteReportDefinitionRequest {
+    #[serde(rename="ReportName")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub report_name: Option<ReportName>,
+}
+
+#[doc="Response of DeleteReportDefinition"]
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct DeleteReportDefinitionResponse {
+    #[serde(rename="ResponseMessage")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub response_message: Option<DeleteResponseMessage>,
+}
+
+#[doc="A message indicates if the deletion is successful."]
+pub type DeleteResponseMessage = String;
+#[doc="Request of DescribeReportDefinitions"]
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct DescribeReportDefinitionsRequest {
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub max_results: Option<MaxResults>,
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub next_token: Option<GenericString>,
+}
+
+#[doc="Response of DescribeReportDefinitions"]
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct DescribeReportDefinitionsResponse {
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub next_token: Option<GenericString>,
+    #[serde(rename="ReportDefinitions")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub report_definitions: Option<ReportDefinitionList>,
+}
+
+#[doc="A message to show the detail of the exception."]
+pub type ErrorMessage = String;
+#[doc="A generic string."]
+pub type GenericString = String;
+#[doc="The max number of results returned by the operation."]
+pub type MaxResults = i64;
+#[doc="Request of PutReportDefinition"]
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct PutReportDefinitionRequest {
+    #[serde(rename="ReportDefinition")]
+    pub report_definition: ReportDefinition,
+}
+
+#[doc="Response of PutReportDefinition"]
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct PutReportDefinitionResponse;
+
+#[doc="The definition of AWS Cost and Usage Report. Customer can specify the report name, time unit, report format, compression format, S3 bucket and additional artifacts and schema elements in the definition."]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+pub struct ReportDefinition {
+    #[serde(rename="AdditionalArtifacts")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub additional_artifacts: Option<AdditionalArtifactList>,
+    #[serde(rename="AdditionalSchemaElements")]
+    pub additional_schema_elements: SchemaElementList,
+    #[serde(rename="Compression")]
+    pub compression: CompressionFormat,
+    #[serde(rename="Format")]
+    pub format: ReportFormat,
+    #[serde(rename="ReportName")]
+    pub report_name: ReportName,
+    #[serde(rename="S3Bucket")]
+    pub s3_bucket: S3Bucket,
+    #[serde(rename="S3Prefix")]
+    pub s3_prefix: S3Prefix,
+    #[serde(rename="S3Region")]
+    pub s3_region: AWSRegion,
+    #[serde(rename="TimeUnit")]
+    pub time_unit: TimeUnit,
+}
+
+#[doc="A list of report definitions."]
+pub type ReportDefinitionList = Vec<ReportDefinition>;
+#[doc="Preferred format for report."]
+pub type ReportFormat = String;
+#[doc="Preferred name for a report, it has to be unique. Must starts with a number/letter, case sensitive. Limited to 256 characters."]
+pub type ReportName = String;
+#[doc="Name of customer S3 bucket."]
+pub type S3Bucket = String;
+#[doc="Preferred report path prefix. Limited to 256 characters."]
+pub type S3Prefix = String;
+#[doc="Preference of including Resource IDs. You can include additional details about individual resource IDs in your report."]
+pub type SchemaElement = String;
+#[doc="A list of schema elements."]
+pub type SchemaElementList = Vec<SchemaElement>;
+#[doc="The frequency on which report data are measured and displayed."]
+pub type TimeUnit = String;
+/// Errors returned by DeleteReportDefinition
+#[derive(Debug, PartialEq)]
+pub enum DeleteReportDefinitionError {
+    ///This exception is thrown on a known dependency failure.
+    InternalError(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl DeleteReportDefinitionError {
+    pub fn from_body(body: &str) -> DeleteReportDefinitionError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalErrorException" => {
+                        DeleteReportDefinitionError::InternalError(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteReportDefinitionError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteReportDefinitionError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteReportDefinitionError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteReportDefinitionError {
+    fn from(err: serde_json::error::Error) -> DeleteReportDefinitionError {
+        DeleteReportDefinitionError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteReportDefinitionError {
+    fn from(err: CredentialsError) -> DeleteReportDefinitionError {
+        DeleteReportDefinitionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteReportDefinitionError {
+    fn from(err: HttpDispatchError) -> DeleteReportDefinitionError {
+        DeleteReportDefinitionError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for DeleteReportDefinitionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteReportDefinitionError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteReportDefinitionError::InternalError(ref cause) => cause,
+            DeleteReportDefinitionError::Validation(ref cause) => cause,
+            DeleteReportDefinitionError::Credentials(ref err) => err.description(),
+            DeleteReportDefinitionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteReportDefinitionError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeReportDefinitions
+#[derive(Debug, PartialEq)]
+pub enum DescribeReportDefinitionsError {
+    ///This exception is thrown on a known dependency failure.
+    InternalError(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl DescribeReportDefinitionsError {
+    pub fn from_body(body: &str) -> DescribeReportDefinitionsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalErrorException" => {
+                        DescribeReportDefinitionsError::InternalError(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DescribeReportDefinitionsError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeReportDefinitionsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeReportDefinitionsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeReportDefinitionsError {
+    fn from(err: serde_json::error::Error) -> DescribeReportDefinitionsError {
+        DescribeReportDefinitionsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeReportDefinitionsError {
+    fn from(err: CredentialsError) -> DescribeReportDefinitionsError {
+        DescribeReportDefinitionsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeReportDefinitionsError {
+    fn from(err: HttpDispatchError) -> DescribeReportDefinitionsError {
+        DescribeReportDefinitionsError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for DescribeReportDefinitionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeReportDefinitionsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeReportDefinitionsError::InternalError(ref cause) => cause,
+            DescribeReportDefinitionsError::Validation(ref cause) => cause,
+            DescribeReportDefinitionsError::Credentials(ref err) => err.description(),
+            DescribeReportDefinitionsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeReportDefinitionsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by PutReportDefinition
+#[derive(Debug, PartialEq)]
+pub enum PutReportDefinitionError {
+    ///This exception is thrown when putting a report preference with a name that already exists.
+    DuplicateReportName(String),
+    ///This exception is thrown on a known dependency failure.
+    InternalError(String),
+    ///This exception is thrown when the number of report preference reaches max limit. The max number is 5.
+    ReportLimitReached(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl PutReportDefinitionError {
+    pub fn from_body(body: &str) -> PutReportDefinitionError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "DuplicateReportNameException" => {
+                        PutReportDefinitionError::DuplicateReportName(String::from(error_message))
+                    }
+                    "InternalErrorException" => {
+                        PutReportDefinitionError::InternalError(String::from(error_message))
+                    }
+                    "ReportLimitReachedException" => {
+                        PutReportDefinitionError::ReportLimitReached(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        PutReportDefinitionError::Validation(error_message.to_string())
+                    }
+                    _ => PutReportDefinitionError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => PutReportDefinitionError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for PutReportDefinitionError {
+    fn from(err: serde_json::error::Error) -> PutReportDefinitionError {
+        PutReportDefinitionError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for PutReportDefinitionError {
+    fn from(err: CredentialsError) -> PutReportDefinitionError {
+        PutReportDefinitionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for PutReportDefinitionError {
+    fn from(err: HttpDispatchError) -> PutReportDefinitionError {
+        PutReportDefinitionError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for PutReportDefinitionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutReportDefinitionError {
+    fn description(&self) -> &str {
+        match *self {
+            PutReportDefinitionError::DuplicateReportName(ref cause) => cause,
+            PutReportDefinitionError::InternalError(ref cause) => cause,
+            PutReportDefinitionError::ReportLimitReached(ref cause) => cause,
+            PutReportDefinitionError::Validation(ref cause) => cause,
+            PutReportDefinitionError::Credentials(ref err) => err.description(),
+            PutReportDefinitionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            PutReportDefinitionError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Trait representing the capabilities of the AWS Cost and Usage Report Service API. AWS Cost and Usage Report Service clients implement this trait.
+pub trait CostAndUsageReport {
+    #[doc="Delete a specified report definition"]
+    fn delete_report_definition
+        (&self,
+         input: &DeleteReportDefinitionRequest)
+         -> Result<DeleteReportDefinitionResponse, DeleteReportDefinitionError>;
+
+
+    #[doc="Describe a list of report definitions owned by the account"]
+    fn describe_report_definitions
+        (&self,
+         input: &DescribeReportDefinitionsRequest)
+         -> Result<DescribeReportDefinitionsResponse, DescribeReportDefinitionsError>;
+
+
+    #[doc="Create a new report definition"]
+    fn put_report_definition(&self,
+                             input: &PutReportDefinitionRequest)
+                             -> Result<PutReportDefinitionResponse, PutReportDefinitionError>;
+}
+/// A client for the AWS Cost and Usage Report Service API.
+pub struct CostAndUsageReportClient<P, D>
+    where P: ProvideAwsCredentials,
+          D: DispatchSignedRequest
+{
+    credentials_provider: P,
+    region: region::Region,
+    dispatcher: D,
+}
+
+impl<P, D> CostAndUsageReportClient<P, D>
+    where P: ProvideAwsCredentials,
+          D: DispatchSignedRequest
+{
+    pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
+        CostAndUsageReportClient {
+            credentials_provider: credentials_provider,
+            region: region,
+            dispatcher: request_dispatcher,
+        }
+    }
+}
+
+impl<P, D> CostAndUsageReport for CostAndUsageReportClient<P, D>
+    where P: ProvideAwsCredentials,
+          D: DispatchSignedRequest
+{
+    #[doc="Delete a specified report definition"]
+    fn delete_report_definition
+        (&self,
+         input: &DeleteReportDefinitionRequest)
+         -> Result<DeleteReportDefinitionResponse, DeleteReportDefinitionError> {
+        let mut request = SignedRequest::new("POST", "cur", self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target",
+                           "AWSOrigamiServiceGatewayService.DeleteReportDefinition");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                            Ok(serde_json::from_str::<DeleteReportDefinitionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                        }
+            _ => {
+                Err(DeleteReportDefinitionError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="Describe a list of report definitions owned by the account"]
+    fn describe_report_definitions
+        (&self,
+         input: &DescribeReportDefinitionsRequest)
+         -> Result<DescribeReportDefinitionsResponse, DescribeReportDefinitionsError> {
+        let mut request = SignedRequest::new("POST", "cur", self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target",
+                           "AWSOrigamiServiceGatewayService.DescribeReportDefinitions");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                            Ok(serde_json::from_str::<DescribeReportDefinitionsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                        }
+            _ => Err(DescribeReportDefinitionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        }
+    }
+
+
+    #[doc="Create a new report definition"]
+    fn put_report_definition(&self,
+                             input: &PutReportDefinitionRequest)
+                             -> Result<PutReportDefinitionResponse, PutReportDefinitionError> {
+        let mut request = SignedRequest::new("POST", "cur", self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target",
+                           "AWSOrigamiServiceGatewayService.PutReportDefinition");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                            Ok(serde_json::from_str::<PutReportDefinitionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                        }
+            _ => {
+                Err(PutReportDefinitionError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
+            }
+        }
+    }
+}
+
+#[cfg(test)]
+mod protocol_tests {}

@@ -15,6 +15,7 @@ members = [
     "services/codepipeline",
     "services/cognito-identity",
     "services/config",
+    "services/cur",
     "services/datapipeline",
     "services/devicefarm",
     "services/directconnect",
