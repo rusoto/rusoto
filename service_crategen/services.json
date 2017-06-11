@@ -321,6 +321,12 @@
     "protocolVersion": "2014-11-06",
     "baseTypeName": "Ssm"
   },
+  "stepfunctions": {
+    "version": "0.25.0",
+    "coreVersion": "0.25.0",
+    "protocolVersion": "2016-11-23",
+    "baseTypeName": "StepFunctions"
+  },
   "storagegateway": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",

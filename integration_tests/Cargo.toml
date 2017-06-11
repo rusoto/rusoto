@@ -227,6 +227,10 @@ path = "../rusoto/services/sqs"
 optional = true
 path = "../rusoto/services/ssm"
 
+[dependencies.rusoto_stepfunctions]
+optional = true
+path = "../rusoto/services/stepfunctions"
+
 [dependencies.rusoto_storagegateway]
 optional = true
 path = "../rusoto/services/storagegateway"
@@ -309,6 +313,7 @@ all = [
 	   	"sns",
 	   	"sqs",
 	   	"ssm",
+		"stepfunctions",
 	   	"storagegateway",
         "sts",
 	   	"swf",
@@ -368,6 +373,7 @@ snowball = ["rusoto_snowball"]
 sns = ["rusoto_sns"]
 sqs = ["rusoto_sqs"]
 ssm = ["rusoto_ssm"]
+stepfunctions = ["rusoto_stepfunctions"]
 storagegateway = ["rusoto_storagegateway"]
 sts = ["rusoto_sts"]
 swf = ["rusoto_swf"]

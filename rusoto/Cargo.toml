@@ -55,6 +55,7 @@ members = [
     "services/sns",
     "services/sqs",
     "services/ssm",
+    "services/stepfunctions",
     "services/storagegateway",
     "services/sts",
     "services/swf",
