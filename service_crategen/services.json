@@ -179,6 +179,12 @@
     "protocolVersion": "2015-08-04",
     "baseTypeName": "KinesisFirehose"
   },
+  "gamelift": {
+    "version": "0.25.0",
+    "coreVersion": "0.25.0",
+    "protocolVersion": "2015-10-01",
+    "baseTypeName": "GameLift"
+  },
   "iam": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
