@@ -209,6 +209,12 @@
     "protocolVersion": "2013-12-02",
     "baseTypeName": "Kinesis"
   },
+  "kinesisanalytics": {
+    "version": "0.25.0",
+    "coreVersion": "0.25.0",
+    "protocolVersion": "2015-08-14",
+    "baseTypeName": "KinesisAnalytics"
+  },
   "kms": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",

@@ -37,6 +37,7 @@ members = [
     "services/inspector",
     "services/iot",
     "services/kinesis",
+    "services/kinesisanalytics",
     "services/kms",
     "services/lambda",
     "services/lightsail",
