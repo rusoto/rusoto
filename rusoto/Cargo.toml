@@ -49,6 +49,7 @@ members = [
     "services/logs",
     "services/machinelearning",
     "services/marketplacecommerceanalytics",
+    "services/meteringmarketplace",
     "services/opsworks",
     "services/opsworkscm",
     "services/organizations",

@@ -281,6 +281,12 @@
     "protocolVersion": "2015-07-01",
     "baseTypeName": "MarketplaceCommerceAnalytics"
   },
+  "meteringmarketplace": {
+    "version": "0.25.0",
+    "coreVersion": "0.25.0",
+    "protocolVersion": "2016-01-14",
+    "baseTypeName": "MarketplaceMetering"
+  },
   "opsworks": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
