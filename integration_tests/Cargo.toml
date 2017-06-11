@@ -19,6 +19,10 @@ path = "../rusoto/core"
 optional = true
 path = "../rusoto/services/acm"
 
+[dependencies.rusoto_appstream]
+optional = true
+path = "../rusoto/services/appstream"
+
 [dependencies.rusoto_autoscaling]
 optional = true
 path = "../rusoto/services/autoscaling"
@@ -253,6 +257,7 @@ time = "0.1.37"
 [features]
 all = [
 		"acm",
+		"appstream",
 	   	"autoscaling",
 	   	"cloudformation",
 	   	"cloudfront",
@@ -311,6 +316,7 @@ all = [
 	   	"workspaces"
 	]
 acm = ["rusoto_acm"]
+appstream = ["rusoto_appstream"]
 autoscaling = ["rusoto_autoscaling"]
 cloudformation = ["rusoto_cloudformation"]
 cloudfront = ["rusoto_cloudfront"]
