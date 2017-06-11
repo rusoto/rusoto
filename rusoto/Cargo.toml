@@ -15,6 +15,7 @@ members = [
     "services/codedeploy",
     "services/codepipeline",
     "services/cognito-identity",
+    "services/cognito-idp",
     "services/config",
     "services/cur",
     "services/datapipeline",
