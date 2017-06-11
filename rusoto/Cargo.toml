@@ -3,6 +3,7 @@ members = [
     "core",
     "credential",
     "services/acm",
+    "services/appstream",
     "services/autoscaling",
     "services/cloudformation",
     "services/cloudfront",
