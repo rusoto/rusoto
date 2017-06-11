@@ -255,6 +255,10 @@ path = "../rusoto/services/servicecatalog"
 optional = true
 path = "../rusoto/services/ses"
 
+[dependencies.rusoto_sms]
+optional = true
+path = "../rusoto/services/sms"
+
 [dependencies.rusoto_snowball]
 optional = true
 path = "../rusoto/services/snowball"
@@ -372,6 +376,7 @@ all = [
 	   	"sdb",
 		"servicecatalog",
 	   	"ses",
+		"sms",
 		"snowball",
 	   	"sns",
 	   	"sqs",
@@ -445,6 +450,7 @@ s3 = ["rusoto_s3"]
 sdb = ["rusoto_sdb"]
 servicecatalog = ["rusoto_servicecatalog"]
 ses = ["rusoto_ses"]
+sms = ["rusoto_sms"]
 snowball = ["rusoto_snowball"]
 sns = ["rusoto_sns"]
 sqs = ["rusoto_sqs"]

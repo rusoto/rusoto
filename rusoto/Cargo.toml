@@ -62,6 +62,7 @@ members = [
     "services/sdb",
     "services/servicecatalog",
     "services/ses",
+    "services/sms",
     "services/snowball",
     "services/sns",
     "services/sqs",
