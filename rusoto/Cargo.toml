@@ -46,6 +46,7 @@ members = [
     "services/organizations",
     "services/rds",
     "services/redshift",
+    "services/rekognition",
     "services/route53",
     "services/route53domains",
     "services/s3",

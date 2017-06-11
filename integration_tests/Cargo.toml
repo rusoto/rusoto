@@ -187,6 +187,10 @@ path = "../rusoto/services/organizations"
 optional = true
 path = "../rusoto/services/redshift"
 
+[dependencies.rusoto_rekognition]
+optional = true
+path = "../rusoto/services/rekognition"
+
 [dependencies.rusoto_rds]
 optional = true
 path = "../rusoto/services/rds"
@@ -311,6 +315,7 @@ all = [
 	   	"opsworks",
       "organizations",
 	   	"redshift",
+		"rekognition",
 	   	"rds",
 	   	"route53",
 	   	"route53domains",
@@ -373,6 +378,7 @@ marketplacecommerceanalytics = ["rusoto_marketplacecommerceanalytics"]
 opsworks = ["rusoto_opsworks"]
 organizations = ["rusoto_organizations"]
 redshift = ["rusoto_redshift"]
+rekognition = ["rusoto_rekognition"]
 rds = ["rusoto_rds"]
 route53 = ["rusoto_route53"]
 route53domains = ["rusoto_route53domains"]
