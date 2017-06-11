@@ -348,6 +348,12 @@
     },
     "baseTypeName": "Sts"
   },
+  "support": {
+    "version": "0.25.0",
+    "coreVersion": "0.25.0",
+    "protocolVersion": "2013-04-15",
+    "baseTypeName": "AWSSupport"
+  },
   "swf": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",

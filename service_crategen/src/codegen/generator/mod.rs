@@ -212,6 +212,9 @@ fn mutate_type_name(type_name: &str) -> String {
         // EC2 has a CancelSpotFleetRequestsError struct, avoid collision with our error enum
         "CancelSpotFleetRequests" => "EC2CancelSpotFleetRequests".to_owned(),
 
+        // Support has a conveniently named "Result" type
+        "Result" => "SupportResult".to_owned(),
+
         // RDS has a conveniently named "Option" type
         "Option" => "RDSOption".to_owned(),
 
