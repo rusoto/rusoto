@@ -291,6 +291,12 @@
     "protocolVersion": "2009-04-15",
     "baseTypeName": "SimpleDb"
   },
+  "servicecatalog": {
+    "version": "0.25.0",
+    "coreVersion": "0.25.0",
+    "protocolVersion": "2015-12-10",
+    "baseTypeName": "ServiceCatalog"
+  },
   "ses": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
