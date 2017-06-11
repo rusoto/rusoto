@@ -10,6 +10,7 @@ members = [
     "services/cloudsearch",
     "services/cloudtrail",
     "services/cloudwatch",
+    "services/codebuild",
     "services/codecommit",
     "services/codedeploy",
     "services/codepipeline",

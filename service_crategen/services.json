@@ -47,6 +47,12 @@
     "protocolVersion": "2010-08-01",
     "baseTypeName": "CloudWatch"
   },
+  "codebuild": {
+    "version": "0.25.0",
+    "coreVersion": "0.25.0",
+    "protocolVersion": "2016-10-06",
+    "baseTypeName": "CodeBuild"
+  },
   "codecommit": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
