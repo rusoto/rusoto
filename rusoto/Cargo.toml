@@ -43,6 +43,7 @@ members = [
     "services/machinelearning",
     "services/marketplacecommerceanalytics",
     "services/opsworks",
+    "services/opsworkscm",
     "services/organizations",
     "services/rds",
     "services/redshift",
