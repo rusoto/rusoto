@@ -95,6 +95,12 @@
     "protocolVersion": "2012-10-25",
     "baseTypeName": "DirectConnect"
   },
+  "dms": {
+    "version": "0.25.0",
+    "coreVersion": "0.25.0",
+    "protocolVersion": "2016-01-01",
+    "baseTypeName": "DatabaseMigrationService"
+  },
   "ds": {
     "version": "0.25.0",
     "coreVersion": "0.25.0",
