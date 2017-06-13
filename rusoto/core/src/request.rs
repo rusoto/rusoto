@@ -97,7 +97,7 @@ impl DispatchSignedRequest for Client {
             hyper_headers.set_raw("user-agent".to_owned(), DEFAULT_USER_AGENT.clone());
         }
 
-        let mut final_uri = format!("https://{}{}", request.hostname(), request.canonical_path());
+        let mut final_uri = format!("{}://{}{}", request.scheme(), request.hostname(), request.canonical_path());
         if !request.canonical_query_string().is_empty() {
             final_uri = final_uri + &format!("?{}", request.canonical_query_string());
         }

@@ -31,6 +31,7 @@ pub struct SignedRequest {
     pub path: String,
     pub headers: BTreeMap<String, Vec<Vec<u8>>>,
     pub params: Params,
+    pub scheme: Option<String>,
     pub hostname: Option<String>,
     pub payload: Option<Vec<u8>>,
     pub canonical_query_string: String,
@@ -47,6 +48,7 @@ impl SignedRequest {
             path: path.to_string(),
             headers: BTreeMap::new(),
             params: Params::new(),
+            scheme: None,
             hostname: None,
             payload: None,
             canonical_query_string: String::new(),
@@ -91,6 +93,13 @@ impl SignedRequest {
 
     pub fn headers(&self) -> &BTreeMap<String, Vec<Vec<u8>>> {
         &self.headers
+    }
+
+    pub fn scheme(&self) -> String {
+        match self.scheme {
+            Some(ref p) => p.to_string(),
+            None => build_scheme(self.region)
+        }
     }
 
     pub fn hostname(&self) -> String {
@@ -391,17 +400,26 @@ fn to_hexdigest<T: AsRef<[u8]>>(t: T) -> String {
     h.as_ref().to_hex().to_string()
 }
 
+fn build_scheme(region: Region) -> String {
+    match region {
+        Region::Local(_) => "http".to_owned(),
+        _                => "https".to_owned()
+    }
+}
+
 fn build_hostname(service: &str, region: Region) -> String {
     //iam has only 1 endpoint, other services have region-based endpoints
     match service {
         "iam" => {
             match region {
+                Region::Local(hostname) => hostname.to_owned(),
                 Region::CnNorth1 => format!("{}.{}.amazonaws.com.cn", service, region),
                 _ => format!("{}.amazonaws.com", service),
             }
         }
         "s3" => {
             match region {
+                Region::Local(hostname) => hostname.to_owned(),
                 Region::UsEast1 => "s3.amazonaws.com".to_string(),
                 Region::CnNorth1 => format!("s3.{}.amazonaws.com.cn", region),
                 _ => format!("s3-{}.amazonaws.com", region),
@@ -409,6 +427,7 @@ fn build_hostname(service: &str, region: Region) -> String {
         }
         _ => {
             match region {
+                Region::Local(hostname) => hostname.to_owned(),
                 Region::CnNorth1 => format!("{}.{}.amazonaws.com.cn", service, region),
                 _ => format!("{}.{}.amazonaws.com", service, region),
             }
