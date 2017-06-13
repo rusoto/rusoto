@@ -68,7 +68,7 @@ impl GenerateProtocol for RestJsonGenerator {
 
                     {request_uri_formatter}
 
-                    let mut request = SignedRequest::new(\"{http_method}\", \"{endpoint_prefix}\", self.region, &request_uri);
+                    let mut request = SignedRequest::new(\"{http_method}\", \"{endpoint_prefix}\", &self.region, &request_uri);
                     request.set_content_type(\"application/x-amz-json-1.1\".to_owned());
                     {set_headers}
                     {modify_endpoint_prefix}

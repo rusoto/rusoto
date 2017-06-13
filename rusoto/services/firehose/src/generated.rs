@@ -1571,7 +1571,7 @@ impl<P, D> KinesisFirehose for KinesisFirehoseClient<P, D>
     fn create_delivery_stream(&self,
                               input: &CreateDeliveryStreamInput)
                               -> Result<CreateDeliveryStreamOutput, CreateDeliveryStreamError> {
-        let mut request = SignedRequest::new("POST", "firehose", self.region, "/");
+        let mut request = SignedRequest::new("POST", "firehose", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Firehose_20150804.CreateDeliveryStream");
@@ -1601,7 +1601,7 @@ impl<P, D> KinesisFirehose for KinesisFirehoseClient<P, D>
     fn delete_delivery_stream(&self,
                               input: &DeleteDeliveryStreamInput)
                               -> Result<DeleteDeliveryStreamOutput, DeleteDeliveryStreamError> {
-        let mut request = SignedRequest::new("POST", "firehose", self.region, "/");
+        let mut request = SignedRequest::new("POST", "firehose", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Firehose_20150804.DeleteDeliveryStream");
@@ -1632,7 +1632,7 @@ impl<P, D> KinesisFirehose for KinesisFirehoseClient<P, D>
         (&self,
          input: &DescribeDeliveryStreamInput)
          -> Result<DescribeDeliveryStreamOutput, DescribeDeliveryStreamError> {
-        let mut request = SignedRequest::new("POST", "firehose", self.region, "/");
+        let mut request = SignedRequest::new("POST", "firehose", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Firehose_20150804.DescribeDeliveryStream");
@@ -1662,7 +1662,7 @@ impl<P, D> KinesisFirehose for KinesisFirehoseClient<P, D>
     fn list_delivery_streams(&self,
                              input: &ListDeliveryStreamsInput)
                              -> Result<ListDeliveryStreamsOutput, ListDeliveryStreamsError> {
-        let mut request = SignedRequest::new("POST", "firehose", self.region, "/");
+        let mut request = SignedRequest::new("POST", "firehose", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Firehose_20150804.ListDeliveryStreams");
@@ -1690,7 +1690,7 @@ impl<P, D> KinesisFirehose for KinesisFirehoseClient<P, D>
 
     #[doc="<p>Writes a single data record into an Amazon Kinesis Firehose delivery stream. To write multiple data records into a delivery stream, use <a>PutRecordBatch</a>. Applications using these operations are referred to as producers.</p> <p>By default, each delivery stream can take in up to 2,000 transactions per second, 5,000 records per second, or 5 MB per second. Note that if you use <a>PutRecord</a> and <a>PutRecordBatch</a>, the limits are an aggregate across these two operations for each delivery stream. For more information about limits and how to request an increase, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/limits.html\">Amazon Kinesis Firehose Limits</a>. </p> <p>You must specify the name of the delivery stream and the data record when using <a>PutRecord</a>. The data record consists of a data blob that can be up to 1,000 KB in size, and any kind of data, for example, a segment from a log file, geographic location data, web site clickstream data, etc.</p> <p>Firehose buffers records before delivering them to the destination. To disambiguate the data blobs at the destination, a common solution is to use delimiters in the data, such as a newline (<code>\\n</code>) or some other character unique within the data. This allows the consumer application(s) to parse individual data items when reading the data from the destination.</p> <p>The <a>PutRecord</a> operation returns a <b>RecordId</b>, which is a unique string assigned to each record. Producer applications can use this ID for purposes such as auditability and investigation.</p> <p>If the <a>PutRecord</a> operation throws a <b>ServiceUnavailableException</b>, back off and retry. If the exception persists, it is possible that the throughput limits have been exceeded for the delivery stream. </p> <p>Data records sent to Firehose are stored for 24 hours from the time they are added to a delivery stream as it attempts to send the records to the destination. If the destination is unreachable for more than 24 hours, the data is no longer available.</p>"]
     fn put_record(&self, input: &PutRecordInput) -> Result<PutRecordOutput, PutRecordError> {
-        let mut request = SignedRequest::new("POST", "firehose", self.region, "/");
+        let mut request = SignedRequest::new("POST", "firehose", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Firehose_20150804.PutRecord");
@@ -1721,7 +1721,7 @@ impl<P, D> KinesisFirehose for KinesisFirehoseClient<P, D>
     fn put_record_batch(&self,
                         input: &PutRecordBatchInput)
                         -> Result<PutRecordBatchOutput, PutRecordBatchError> {
-        let mut request = SignedRequest::new("POST", "firehose", self.region, "/");
+        let mut request = SignedRequest::new("POST", "firehose", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Firehose_20150804.PutRecordBatch");
@@ -1753,7 +1753,7 @@ impl<P, D> KinesisFirehose for KinesisFirehoseClient<P, D>
     fn update_destination(&self,
                           input: &UpdateDestinationInput)
                           -> Result<UpdateDestinationOutput, UpdateDestinationError> {
-        let mut request = SignedRequest::new("POST", "firehose", self.region, "/");
+        let mut request = SignedRequest::new("POST", "firehose", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Firehose_20150804.UpdateDestination");

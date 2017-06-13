@@ -7117,7 +7117,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
     fn create_alias(&self,
                     input: &CreateAliasInput)
                     -> Result<CreateAliasOutput, CreateAliasError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.CreateAlias");
@@ -7149,7 +7149,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
     fn create_build(&self,
                     input: &CreateBuildInput)
                     -> Result<CreateBuildOutput, CreateBuildError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.CreateBuild");
@@ -7181,7 +7181,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
     fn create_fleet(&self,
                     input: &CreateFleetInput)
                     -> Result<CreateFleetOutput, CreateFleetError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.CreateFleet");
@@ -7213,7 +7213,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
     fn create_game_session(&self,
                            input: &CreateGameSessionInput)
                            -> Result<CreateGameSessionOutput, CreateGameSessionError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.CreateGameSession");
@@ -7246,7 +7246,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         (&self,
          input: &CreateGameSessionQueueInput)
          -> Result<CreateGameSessionQueueOutput, CreateGameSessionQueueError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.CreateGameSessionQueue");
@@ -7276,7 +7276,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
     fn create_player_session(&self,
                              input: &CreatePlayerSessionInput)
                              -> Result<CreatePlayerSessionOutput, CreatePlayerSessionError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.CreatePlayerSession");
@@ -7306,7 +7306,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
     fn create_player_sessions(&self,
                               input: &CreatePlayerSessionsInput)
                               -> Result<CreatePlayerSessionsOutput, CreatePlayerSessionsError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.CreatePlayerSessions");
@@ -7334,7 +7334,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
     #[doc="<p>Deletes a fleet alias. This action removes all record of the alias. Game clients attempting to access a server process using the deleted alias receive an error. To delete an alias, specify the alias ID to be deleted.</p>"]
     fn delete_alias(&self, input: &DeleteAliasInput) -> Result<(), DeleteAliasError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DeleteAlias");
@@ -7358,7 +7358,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
     #[doc="<p>Deletes a build. This action permanently deletes the build record and any uploaded build files.</p> <p>To delete a build, specify its ID. Deleting a build does not affect the status of any active fleets using the build, but you can no longer create new fleets with the deleted build.</p>"]
     fn delete_build(&self, input: &DeleteBuildInput) -> Result<(), DeleteBuildError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DeleteBuild");
@@ -7382,7 +7382,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
     #[doc="<p>Deletes everything related to a fleet. Before deleting a fleet, you must set the fleet's desired capacity to zero. See <a>UpdateFleetCapacity</a>.</p> <p>This action removes the fleet's resources and the fleet record. Once a fleet is deleted, you can no longer use that fleet.</p>"]
     fn delete_fleet(&self, input: &DeleteFleetInput) -> Result<(), DeleteFleetError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DeleteFleet");
@@ -7409,7 +7409,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         (&self,
          input: &DeleteGameSessionQueueInput)
          -> Result<DeleteGameSessionQueueOutput, DeleteGameSessionQueueError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DeleteGameSessionQueue");
@@ -7439,7 +7439,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
     fn delete_scaling_policy(&self,
                              input: &DeleteScalingPolicyInput)
                              -> Result<(), DeleteScalingPolicyError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DeleteScalingPolicy");
@@ -7465,7 +7465,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
     fn describe_alias(&self,
                       input: &DescribeAliasInput)
                       -> Result<DescribeAliasOutput, DescribeAliasError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribeAlias");
@@ -7497,7 +7497,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
     fn describe_build(&self,
                       input: &DescribeBuildInput)
                       -> Result<DescribeBuildOutput, DescribeBuildError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribeBuild");
@@ -7530,7 +7530,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         (&self,
          input: &DescribeEC2InstanceLimitsInput)
          -> Result<DescribeEC2InstanceLimitsOutput, DescribeEC2InstanceLimitsError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribeEC2InstanceLimits");
@@ -7562,7 +7562,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         (&self,
          input: &DescribeFleetAttributesInput)
          -> Result<DescribeFleetAttributesOutput, DescribeFleetAttributesError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribeFleetAttributes");
@@ -7594,7 +7594,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         (&self,
          input: &DescribeFleetCapacityInput)
          -> Result<DescribeFleetCapacityOutput, DescribeFleetCapacityError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribeFleetCapacity");
@@ -7624,7 +7624,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
     fn describe_fleet_events(&self,
                              input: &DescribeFleetEventsInput)
                              -> Result<DescribeFleetEventsOutput, DescribeFleetEventsError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribeFleetEvents");
@@ -7655,7 +7655,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         (&self,
          input: &DescribeFleetPortSettingsInput)
          -> Result<DescribeFleetPortSettingsOutput, DescribeFleetPortSettingsError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribeFleetPortSettings");
@@ -7687,7 +7687,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         (&self,
          input: &DescribeFleetUtilizationInput)
          -> Result<DescribeFleetUtilizationOutput, DescribeFleetUtilizationError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribeFleetUtilization");
@@ -7719,7 +7719,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         (&self,
          input: &DescribeGameSessionDetailsInput)
          -> Result<DescribeGameSessionDetailsOutput, DescribeGameSessionDetailsError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribeGameSessionDetails");
@@ -7751,7 +7751,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         (&self,
          input: &DescribeGameSessionPlacementInput)
          -> Result<DescribeGameSessionPlacementOutput, DescribeGameSessionPlacementError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribeGameSessionPlacement");
@@ -7783,7 +7783,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         (&self,
          input: &DescribeGameSessionQueuesInput)
          -> Result<DescribeGameSessionQueuesOutput, DescribeGameSessionQueuesError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribeGameSessionQueues");
@@ -7814,7 +7814,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
     fn describe_game_sessions(&self,
                               input: &DescribeGameSessionsInput)
                               -> Result<DescribeGameSessionsOutput, DescribeGameSessionsError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribeGameSessions");
@@ -7844,7 +7844,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
     fn describe_instances(&self,
                           input: &DescribeInstancesInput)
                           -> Result<DescribeInstancesOutput, DescribeInstancesError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribeInstances");
@@ -7877,7 +7877,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         (&self,
          input: &DescribePlayerSessionsInput)
          -> Result<DescribePlayerSessionsOutput, DescribePlayerSessionsError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribePlayerSessions");
@@ -7908,7 +7908,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         (&self,
          input: &DescribeRuntimeConfigurationInput)
          -> Result<DescribeRuntimeConfigurationOutput, DescribeRuntimeConfigurationError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribeRuntimeConfiguration");
@@ -7940,7 +7940,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         (&self,
          input: &DescribeScalingPoliciesInput)
          -> Result<DescribeScalingPoliciesOutput, DescribeScalingPoliciesError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribeScalingPolicies");
@@ -7972,7 +7972,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         (&self,
          input: &GetGameSessionLogUrlInput)
          -> Result<GetGameSessionLogUrlOutput, GetGameSessionLogUrlError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.GetGameSessionLogUrl");
@@ -8002,7 +8002,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
     fn get_instance_access(&self,
                            input: &GetInstanceAccessInput)
                            -> Result<GetInstanceAccessOutput, GetInstanceAccessError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.GetInstanceAccess");
@@ -8034,7 +8034,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
     fn list_aliases(&self,
                     input: &ListAliasesInput)
                     -> Result<ListAliasesOutput, ListAliasesError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.ListAliases");
@@ -8064,7 +8064,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
     #[doc="<p>Retrieves build records for all builds associated with the AWS account in use. You can limit results to builds that are in a specific status by using the <code>Status</code> parameter. Use the pagination parameters to retrieve results in a set of sequential pages. </p> <note> <p>Build records are not listed in any particular order.</p> </note>"]
     fn list_builds(&self, input: &ListBuildsInput) -> Result<ListBuildsOutput, ListBuildsError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.ListBuilds");
@@ -8094,7 +8094,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
 
     #[doc="<p>Retrieves a collection of fleet records for this AWS account. You can filter the result set by build ID. Use the pagination parameters to retrieve results in sequential pages.</p> <note> <p>Fleet records are not listed in any particular order.</p> </note>"]
     fn list_fleets(&self, input: &ListFleetsInput) -> Result<ListFleetsOutput, ListFleetsError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.ListFleets");
@@ -8126,7 +8126,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
     fn put_scaling_policy(&self,
                           input: &PutScalingPolicyInput)
                           -> Result<PutScalingPolicyOutput, PutScalingPolicyError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.PutScalingPolicy");
@@ -8159,7 +8159,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         (&self,
          input: &RequestUploadCredentialsInput)
          -> Result<RequestUploadCredentialsOutput, RequestUploadCredentialsError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.RequestUploadCredentials");
@@ -8190,7 +8190,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
     fn resolve_alias(&self,
                      input: &ResolveAliasInput)
                      -> Result<ResolveAliasOutput, ResolveAliasError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.ResolveAlias");
@@ -8222,7 +8222,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
     fn search_game_sessions(&self,
                             input: &SearchGameSessionsInput)
                             -> Result<SearchGameSessionsOutput, SearchGameSessionsError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.SearchGameSessions");
@@ -8255,7 +8255,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         (&self,
          input: &StartGameSessionPlacementInput)
          -> Result<StartGameSessionPlacementOutput, StartGameSessionPlacementError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.StartGameSessionPlacement");
@@ -8287,7 +8287,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         (&self,
          input: &StopGameSessionPlacementInput)
          -> Result<StopGameSessionPlacementOutput, StopGameSessionPlacementError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.StopGameSessionPlacement");
@@ -8318,7 +8318,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
     fn update_alias(&self,
                     input: &UpdateAliasInput)
                     -> Result<UpdateAliasOutput, UpdateAliasError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.UpdateAlias");
@@ -8350,7 +8350,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
     fn update_build(&self,
                     input: &UpdateBuildInput)
                     -> Result<UpdateBuildOutput, UpdateBuildError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.UpdateBuild");
@@ -8383,7 +8383,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         (&self,
          input: &UpdateFleetAttributesInput)
          -> Result<UpdateFleetAttributesOutput, UpdateFleetAttributesError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.UpdateFleetAttributes");
@@ -8413,7 +8413,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
     fn update_fleet_capacity(&self,
                              input: &UpdateFleetCapacityInput)
                              -> Result<UpdateFleetCapacityOutput, UpdateFleetCapacityError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.UpdateFleetCapacity");
@@ -8444,7 +8444,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         (&self,
          input: &UpdateFleetPortSettingsInput)
          -> Result<UpdateFleetPortSettingsOutput, UpdateFleetPortSettingsError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.UpdateFleetPortSettings");
@@ -8475,7 +8475,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
     fn update_game_session(&self,
                            input: &UpdateGameSessionInput)
                            -> Result<UpdateGameSessionOutput, UpdateGameSessionError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.UpdateGameSession");
@@ -8508,7 +8508,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         (&self,
          input: &UpdateGameSessionQueueInput)
          -> Result<UpdateGameSessionQueueOutput, UpdateGameSessionQueueError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.UpdateGameSessionQueue");
@@ -8539,7 +8539,7 @@ impl<P, D> GameLift for GameLiftClient<P, D>
         (&self,
          input: &UpdateRuntimeConfigurationInput)
          -> Result<UpdateRuntimeConfigurationOutput, UpdateRuntimeConfigurationError> {
-        let mut request = SignedRequest::new("POST", "gamelift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.UpdateRuntimeConfiguration");

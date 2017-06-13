@@ -304,7 +304,7 @@ impl<P, D> MarketplaceCommerceAnalytics for MarketplaceCommerceAnalyticsClient<P
                          input: &GenerateDataSetRequest)
                          -> Result<GenerateDataSetResult, GenerateDataSetError> {
         let mut request =
-            SignedRequest::new("POST", "marketplacecommerceanalytics", self.region, "/");
+            SignedRequest::new("POST", "marketplacecommerceanalytics", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -339,7 +339,7 @@ impl<P, D> MarketplaceCommerceAnalytics for MarketplaceCommerceAnalyticsClient<P
          input: &StartSupportDataExportRequest)
          -> Result<StartSupportDataExportResult, StartSupportDataExportError> {
         let mut request =
-            SignedRequest::new("POST", "marketplacecommerceanalytics", self.region, "/");
+            SignedRequest::new("POST", "marketplacecommerceanalytics", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",

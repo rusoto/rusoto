@@ -4817,7 +4817,7 @@ impl<P, D> Ecs for EcsClient<P, D>
     fn create_cluster(&self,
                       input: &CreateClusterRequest)
                       -> Result<CreateClusterResponse, CreateClusterError> {
-        let mut request = SignedRequest::new("POST", "ecs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -4850,7 +4850,7 @@ impl<P, D> Ecs for EcsClient<P, D>
     fn create_service(&self,
                       input: &CreateServiceRequest)
                       -> Result<CreateServiceResponse, CreateServiceError> {
-        let mut request = SignedRequest::new("POST", "ecs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -4883,7 +4883,7 @@ impl<P, D> Ecs for EcsClient<P, D>
     fn delete_attributes(&self,
                          input: &DeleteAttributesRequest)
                          -> Result<DeleteAttributesResponse, DeleteAttributesError> {
-        let mut request = SignedRequest::new("POST", "ecs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -4916,7 +4916,7 @@ impl<P, D> Ecs for EcsClient<P, D>
     fn delete_cluster(&self,
                       input: &DeleteClusterRequest)
                       -> Result<DeleteClusterResponse, DeleteClusterError> {
-        let mut request = SignedRequest::new("POST", "ecs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -4949,7 +4949,7 @@ impl<P, D> Ecs for EcsClient<P, D>
     fn delete_service(&self,
                       input: &DeleteServiceRequest)
                       -> Result<DeleteServiceResponse, DeleteServiceError> {
-        let mut request = SignedRequest::new("POST", "ecs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -4983,7 +4983,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         (&self,
          input: &DeregisterContainerInstanceRequest)
          -> Result<DeregisterContainerInstanceResponse, DeregisterContainerInstanceError> {
-        let mut request = SignedRequest::new("POST", "ecs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -5016,7 +5016,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         (&self,
          input: &DeregisterTaskDefinitionRequest)
          -> Result<DeregisterTaskDefinitionResponse, DeregisterTaskDefinitionError> {
-        let mut request = SignedRequest::new("POST", "ecs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -5048,7 +5048,7 @@ impl<P, D> Ecs for EcsClient<P, D>
     fn describe_clusters(&self,
                          input: &DescribeClustersRequest)
                          -> Result<DescribeClustersResponse, DescribeClustersError> {
-        let mut request = SignedRequest::new("POST", "ecs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -5082,7 +5082,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         (&self,
          input: &DescribeContainerInstancesRequest)
          -> Result<DescribeContainerInstancesResponse, DescribeContainerInstancesError> {
-        let mut request = SignedRequest::new("POST", "ecs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -5114,7 +5114,7 @@ impl<P, D> Ecs for EcsClient<P, D>
     fn describe_services(&self,
                          input: &DescribeServicesRequest)
                          -> Result<DescribeServicesResponse, DescribeServicesError> {
-        let mut request = SignedRequest::new("POST", "ecs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -5148,7 +5148,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         (&self,
          input: &DescribeTaskDefinitionRequest)
          -> Result<DescribeTaskDefinitionResponse, DescribeTaskDefinitionError> {
-        let mut request = SignedRequest::new("POST", "ecs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -5179,7 +5179,7 @@ impl<P, D> Ecs for EcsClient<P, D>
     fn describe_tasks(&self,
                       input: &DescribeTasksRequest)
                       -> Result<DescribeTasksResponse, DescribeTasksError> {
-        let mut request = SignedRequest::new("POST", "ecs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -5213,7 +5213,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         (&self,
          input: &DiscoverPollEndpointRequest)
          -> Result<DiscoverPollEndpointResponse, DiscoverPollEndpointError> {
-        let mut request = SignedRequest::new("POST", "ecs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -5244,7 +5244,7 @@ impl<P, D> Ecs for EcsClient<P, D>
     fn list_attributes(&self,
                        input: &ListAttributesRequest)
                        -> Result<ListAttributesResponse, ListAttributesError> {
-        let mut request = SignedRequest::new("POST", "ecs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -5277,7 +5277,7 @@ impl<P, D> Ecs for EcsClient<P, D>
     fn list_clusters(&self,
                      input: &ListClustersRequest)
                      -> Result<ListClustersResponse, ListClustersError> {
-        let mut request = SignedRequest::new("POST", "ecs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -5311,7 +5311,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         (&self,
          input: &ListContainerInstancesRequest)
          -> Result<ListContainerInstancesResponse, ListContainerInstancesError> {
-        let mut request = SignedRequest::new("POST", "ecs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -5342,7 +5342,7 @@ impl<P, D> Ecs for EcsClient<P, D>
     fn list_services(&self,
                      input: &ListServicesRequest)
                      -> Result<ListServicesResponse, ListServicesError> {
-        let mut request = SignedRequest::new("POST", "ecs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -5376,7 +5376,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         (&self,
          input: &ListTaskDefinitionFamiliesRequest)
          -> Result<ListTaskDefinitionFamiliesResponse, ListTaskDefinitionFamiliesError> {
-        let mut request = SignedRequest::new("POST", "ecs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -5408,7 +5408,7 @@ impl<P, D> Ecs for EcsClient<P, D>
     fn list_task_definitions(&self,
                              input: &ListTaskDefinitionsRequest)
                              -> Result<ListTaskDefinitionsResponse, ListTaskDefinitionsError> {
-        let mut request = SignedRequest::new("POST", "ecs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -5437,7 +5437,7 @@ impl<P, D> Ecs for EcsClient<P, D>
 
     #[doc="<p>Returns a list of tasks for a specified cluster. You can filter the results by family name, by a particular container instance, or by the desired status of the task with the <code>family</code>, <code>containerInstance</code>, and <code>desiredStatus</code> parameters.</p> <p>Recently-stopped tasks might appear in the returned results. Currently, stopped tasks appear in the returned results for at least one hour. </p>"]
     fn list_tasks(&self, input: &ListTasksRequest) -> Result<ListTasksResponse, ListTasksError> {
-        let mut request = SignedRequest::new("POST", "ecs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -5470,7 +5470,7 @@ impl<P, D> Ecs for EcsClient<P, D>
     fn put_attributes(&self,
                       input: &PutAttributesRequest)
                       -> Result<PutAttributesResponse, PutAttributesError> {
-        let mut request = SignedRequest::new("POST", "ecs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -5504,7 +5504,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         (&self,
          input: &RegisterContainerInstanceRequest)
          -> Result<RegisterContainerInstanceResponse, RegisterContainerInstanceError> {
-        let mut request = SignedRequest::new("POST", "ecs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -5537,7 +5537,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         (&self,
          input: &RegisterTaskDefinitionRequest)
          -> Result<RegisterTaskDefinitionResponse, RegisterTaskDefinitionError> {
-        let mut request = SignedRequest::new("POST", "ecs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -5566,7 +5566,7 @@ impl<P, D> Ecs for EcsClient<P, D>
 
     #[doc="<p>Starts a new task using the specified task definition.</p> <p>You can allow Amazon ECS to place tasks for you, or you can customize how Amazon ECS places tasks using placement constraints and placement strategies. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonECS/latest/developerguide/scheduling_tasks.html\">Scheduling Tasks</a> in the <i>Amazon EC2 Container Service Developer Guide</i>.</p> <p>Alternatively, you can use <a>StartTask</a> to use your own scheduler or place tasks manually on specific container instances.</p>"]
     fn run_task(&self, input: &RunTaskRequest) -> Result<RunTaskResponse, RunTaskError> {
-        let mut request = SignedRequest::new("POST", "ecs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonEC2ContainerServiceV20141113.RunTask");
@@ -5595,7 +5595,7 @@ impl<P, D> Ecs for EcsClient<P, D>
 
     #[doc="<p>Starts a new task from the specified task definition on the specified container instance or instances.</p> <p>Alternatively, you can use <a>RunTask</a> to place tasks for you. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonECS/latest/developerguide/scheduling_tasks.html\">Scheduling Tasks</a> in the <i>Amazon EC2 Container Service Developer Guide</i>.</p>"]
     fn start_task(&self, input: &StartTaskRequest) -> Result<StartTaskResponse, StartTaskError> {
-        let mut request = SignedRequest::new("POST", "ecs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -5626,7 +5626,7 @@ impl<P, D> Ecs for EcsClient<P, D>
 
     #[doc="<p>Stops a running task.</p> <p>When <a>StopTask</a> is called on a task, the equivalent of <code>docker stop</code> is issued to the containers running in the task. This results in a <code>SIGTERM</code> and a default 30-second timeout, after which <code>SIGKILL</code> is sent and the containers are forcibly stopped. If the container handles the <code>SIGTERM</code> gracefully and exits within 30 seconds from receiving it, no <code>SIGKILL</code> is sent.</p> <note> <p>The default 30-second timeout can be configured on the Amazon ECS container agent with the <code>ECS_CONTAINER_STOP_TIMEOUT</code> variable. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-config.html\">Amazon ECS Container Agent Configuration</a> in the <i>Amazon EC2 Container Service Developer Guide</i>.</p> </note>"]
     fn stop_task(&self, input: &StopTaskRequest) -> Result<StopTaskResponse, StopTaskError> {
-        let mut request = SignedRequest::new("POST", "ecs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -5660,7 +5660,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         (&self,
          input: &SubmitContainerStateChangeRequest)
          -> Result<SubmitContainerStateChangeResponse, SubmitContainerStateChangeError> {
-        let mut request = SignedRequest::new("POST", "ecs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -5693,7 +5693,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         (&self,
          input: &SubmitTaskStateChangeRequest)
          -> Result<SubmitTaskStateChangeResponse, SubmitTaskStateChangeError> {
-        let mut request = SignedRequest::new("POST", "ecs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -5725,7 +5725,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         (&self,
          input: &UpdateContainerAgentRequest)
          -> Result<UpdateContainerAgentResponse, UpdateContainerAgentError> {
-        let mut request = SignedRequest::new("POST", "ecs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -5757,7 +5757,7 @@ impl<P, D> Ecs for EcsClient<P, D>
         (&self,
          input: &UpdateContainerInstancesStateRequest)
          -> Result<UpdateContainerInstancesStateResponse, UpdateContainerInstancesStateError> {
-        let mut request = SignedRequest::new("POST", "ecs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -5789,7 +5789,7 @@ impl<P, D> Ecs for EcsClient<P, D>
     fn update_service(&self,
                       input: &UpdateServiceRequest)
                       -> Result<UpdateServiceResponse, UpdateServiceError> {
-        let mut request = SignedRequest::new("POST", "ecs", self.region, "/");
+        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",

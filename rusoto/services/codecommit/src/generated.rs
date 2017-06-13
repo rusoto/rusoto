@@ -2877,7 +2877,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
     fn batch_get_repositories(&self,
                               input: &BatchGetRepositoriesInput)
                               -> Result<BatchGetRepositoriesOutput, BatchGetRepositoriesError> {
-        let mut request = SignedRequest::new("POST", "codecommit", self.region, "/");
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.BatchGetRepositories");
@@ -2905,7 +2905,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
     #[doc="<p>Creates a new branch in a repository and points the branch to a commit.</p> <note> <p>Calling the create branch operation does not set a repository's default branch. To do this, call the update default branch operation.</p> </note>"]
     fn create_branch(&self, input: &CreateBranchInput) -> Result<(), CreateBranchError> {
-        let mut request = SignedRequest::new("POST", "codecommit", self.region, "/");
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.CreateBranch");
@@ -2931,7 +2931,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
     fn create_repository(&self,
                          input: &CreateRepositoryInput)
                          -> Result<CreateRepositoryOutput, CreateRepositoryError> {
-        let mut request = SignedRequest::new("POST", "codecommit", self.region, "/");
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.CreateRepository");
@@ -2963,7 +2963,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
     fn delete_repository(&self,
                          input: &DeleteRepositoryInput)
                          -> Result<DeleteRepositoryOutput, DeleteRepositoryError> {
-        let mut request = SignedRequest::new("POST", "codecommit", self.region, "/");
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.DeleteRepository");
@@ -2993,7 +2993,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
     #[doc="<p>Returns the base-64 encoded content of an individual blob within a repository.</p>"]
     fn get_blob(&self, input: &GetBlobInput) -> Result<GetBlobOutput, GetBlobError> {
-        let mut request = SignedRequest::new("POST", "codecommit", self.region, "/");
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetBlob");
@@ -3022,7 +3022,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
     #[doc="<p>Returns information about a repository branch, including its name and the last commit ID.</p>"]
     fn get_branch(&self, input: &GetBranchInput) -> Result<GetBranchOutput, GetBranchError> {
-        let mut request = SignedRequest::new("POST", "codecommit", self.region, "/");
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetBranch");
@@ -3051,7 +3051,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
 
     #[doc="<p>Returns information about a commit, including commit message and committer information.</p>"]
     fn get_commit(&self, input: &GetCommitInput) -> Result<GetCommitOutput, GetCommitError> {
-        let mut request = SignedRequest::new("POST", "codecommit", self.region, "/");
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetCommit");
@@ -3082,7 +3082,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
     fn get_differences(&self,
                        input: &GetDifferencesInput)
                        -> Result<GetDifferencesOutput, GetDifferencesError> {
-        let mut request = SignedRequest::new("POST", "codecommit", self.region, "/");
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetDifferences");
@@ -3114,7 +3114,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
     fn get_repository(&self,
                       input: &GetRepositoryInput)
                       -> Result<GetRepositoryOutput, GetRepositoryError> {
-        let mut request = SignedRequest::new("POST", "codecommit", self.region, "/");
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetRepository");
@@ -3147,7 +3147,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         (&self,
          input: &GetRepositoryTriggersInput)
          -> Result<GetRepositoryTriggersOutput, GetRepositoryTriggersError> {
-        let mut request = SignedRequest::new("POST", "codecommit", self.region, "/");
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetRepositoryTriggers");
@@ -3177,7 +3177,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
     fn list_branches(&self,
                      input: &ListBranchesInput)
                      -> Result<ListBranchesOutput, ListBranchesError> {
-        let mut request = SignedRequest::new("POST", "codecommit", self.region, "/");
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.ListBranches");
@@ -3209,7 +3209,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
     fn list_repositories(&self,
                          input: &ListRepositoriesInput)
                          -> Result<ListRepositoriesOutput, ListRepositoriesError> {
-        let mut request = SignedRequest::new("POST", "codecommit", self.region, "/");
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.ListRepositories");
@@ -3242,7 +3242,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         (&self,
          input: &PutRepositoryTriggersInput)
          -> Result<PutRepositoryTriggersOutput, PutRepositoryTriggersError> {
-        let mut request = SignedRequest::new("POST", "codecommit", self.region, "/");
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.PutRepositoryTriggers");
@@ -3273,7 +3273,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         (&self,
          input: &TestRepositoryTriggersInput)
          -> Result<TestRepositoryTriggersOutput, TestRepositoryTriggersError> {
-        let mut request = SignedRequest::new("POST", "codecommit", self.region, "/");
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.TestRepositoryTriggers");
@@ -3303,7 +3303,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
     fn update_default_branch(&self,
                              input: &UpdateDefaultBranchInput)
                              -> Result<(), UpdateDefaultBranchError> {
-        let mut request = SignedRequest::new("POST", "codecommit", self.region, "/");
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.UpdateDefaultBranch");
@@ -3329,7 +3329,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
     fn update_repository_description(&self,
                                      input: &UpdateRepositoryDescriptionInput)
                                      -> Result<(), UpdateRepositoryDescriptionError> {
-        let mut request = SignedRequest::new("POST", "codecommit", self.region, "/");
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -3357,7 +3357,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
     fn update_repository_name(&self,
                               input: &UpdateRepositoryNameInput)
                               -> Result<(), UpdateRepositoryNameError> {
-        let mut request = SignedRequest::new("POST", "codecommit", self.region, "/");
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.UpdateRepositoryName");

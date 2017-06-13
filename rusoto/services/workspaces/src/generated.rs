@@ -1902,7 +1902,7 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
 {
     #[doc="<p>Creates tags for a WorkSpace.</p>"]
     fn create_tags(&self, input: &CreateTagsRequest) -> Result<CreateTagsResult, CreateTagsError> {
-        let mut request = SignedRequest::new("POST", "workspaces", self.region, "/");
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.CreateTags");
@@ -1934,7 +1934,7 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
     fn create_workspaces(&self,
                          input: &CreateWorkspacesRequest)
                          -> Result<CreateWorkspacesResult, CreateWorkspacesError> {
-        let mut request = SignedRequest::new("POST", "workspaces", self.region, "/");
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.CreateWorkspaces");
@@ -1964,7 +1964,7 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
 
     #[doc="<p>Deletes tags from a WorkSpace.</p>"]
     fn delete_tags(&self, input: &DeleteTagsRequest) -> Result<DeleteTagsResult, DeleteTagsError> {
-        let mut request = SignedRequest::new("POST", "workspaces", self.region, "/");
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.DeleteTags");
@@ -1996,7 +1996,7 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
     fn describe_tags(&self,
                      input: &DescribeTagsRequest)
                      -> Result<DescribeTagsResult, DescribeTagsError> {
-        let mut request = SignedRequest::new("POST", "workspaces", self.region, "/");
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.DescribeTags");
@@ -2029,7 +2029,7 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
         (&self,
          input: &DescribeWorkspaceBundlesRequest)
          -> Result<DescribeWorkspaceBundlesResult, DescribeWorkspaceBundlesError> {
-        let mut request = SignedRequest::new("POST", "workspaces", self.region, "/");
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.DescribeWorkspaceBundles");
@@ -2061,7 +2061,7 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
         (&self,
          input: &DescribeWorkspaceDirectoriesRequest)
          -> Result<DescribeWorkspaceDirectoriesResult, DescribeWorkspaceDirectoriesError> {
-        let mut request = SignedRequest::new("POST", "workspaces", self.region, "/");
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -2093,7 +2093,7 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
     fn describe_workspaces(&self,
                            input: &DescribeWorkspacesRequest)
                            -> Result<DescribeWorkspacesResult, DescribeWorkspacesError> {
-        let mut request = SignedRequest::new("POST", "workspaces", self.region, "/");
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.DescribeWorkspaces");
@@ -2127,7 +2127,7 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
          input: &DescribeWorkspacesConnectionStatusRequest)
          -> Result<DescribeWorkspacesConnectionStatusResult,
                    DescribeWorkspacesConnectionStatusError> {
-        let mut request = SignedRequest::new("POST", "workspaces", self.region, "/");
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -2159,7 +2159,7 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
         (&self,
          input: &ModifyWorkspacePropertiesRequest)
          -> Result<ModifyWorkspacePropertiesResult, ModifyWorkspacePropertiesError> {
-        let mut request = SignedRequest::new("POST", "workspaces", self.region, "/");
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -2191,7 +2191,7 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
     fn reboot_workspaces(&self,
                          input: &RebootWorkspacesRequest)
                          -> Result<RebootWorkspacesResult, RebootWorkspacesError> {
-        let mut request = SignedRequest::new("POST", "workspaces", self.region, "/");
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.RebootWorkspaces");
@@ -2223,7 +2223,7 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
     fn rebuild_workspaces(&self,
                           input: &RebuildWorkspacesRequest)
                           -> Result<RebuildWorkspacesResult, RebuildWorkspacesError> {
-        let mut request = SignedRequest::new("POST", "workspaces", self.region, "/");
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.RebuildWorkspaces");
@@ -2255,7 +2255,7 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
     fn start_workspaces(&self,
                         input: &StartWorkspacesRequest)
                         -> Result<StartWorkspacesResult, StartWorkspacesError> {
-        let mut request = SignedRequest::new("POST", "workspaces", self.region, "/");
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.StartWorkspaces");
@@ -2287,7 +2287,7 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
     fn stop_workspaces(&self,
                        input: &StopWorkspacesRequest)
                        -> Result<StopWorkspacesResult, StopWorkspacesError> {
-        let mut request = SignedRequest::new("POST", "workspaces", self.region, "/");
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.StopWorkspaces");
@@ -2319,7 +2319,7 @@ impl<P, D> Workspaces for WorkspacesClient<P, D>
     fn terminate_workspaces(&self,
                             input: &TerminateWorkspacesRequest)
                             -> Result<TerminateWorkspacesResult, TerminateWorkspacesError> {
-        let mut request = SignedRequest::new("POST", "workspaces", self.region, "/");
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.TerminateWorkspaces");

@@ -9340,7 +9340,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 {
     #[doc="<p>Assign a registered instance to a layer.</p> <ul> <li> <p>You can assign registered on-premises instances to any layer type.</p> </li> <li> <p>You can assign registered Amazon EC2 instances only to custom layers.</p> </li> <li> <p>You cannot use this action with instances that were created with AWS OpsWorks Stacks.</p> </li> </ul> <p> <b>Required Permissions</b>: To use this action, an AWS Identity and Access Management (IAM) user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn assign_instance(&self, input: &AssignInstanceRequest) -> Result<(), AssignInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.AssignInstance");
@@ -9364,7 +9364,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
     #[doc="<p>Assigns one of the stack's registered Amazon EBS volumes to a specified instance. The volume must first be registered with the stack by calling <a>RegisterVolume</a>. After you register the volume, you must call <a>UpdateVolume</a> to specify a mount point before calling <code>AssignVolume</code>. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html\">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn assign_volume(&self, input: &AssignVolumeRequest) -> Result<(), AssignVolumeError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.AssignVolume");
@@ -9390,7 +9390,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn associate_elastic_ip(&self,
                             input: &AssociateElasticIpRequest)
                             -> Result<(), AssociateElasticIpError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.AssociateElasticIp");
@@ -9416,7 +9416,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn attach_elastic_load_balancer(&self,
                                     input: &AttachElasticLoadBalancerRequest)
                                     -> Result<(), AttachElasticLoadBalancerError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -9442,7 +9442,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
     #[doc="<p>Creates a clone of a specified stack. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workingstacks-cloning.html\">Clone a Stack</a>. By default, all parameters are set to the values used by the parent stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn clone_stack(&self, input: &CloneStackRequest) -> Result<CloneStackResult, CloneStackError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.CloneStack");
@@ -9472,7 +9472,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
     #[doc="<p>Creates an app for a specified stack. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workingapps-creating.html\">Creating Apps</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn create_app(&self, input: &CreateAppRequest) -> Result<CreateAppResult, CreateAppError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.CreateApp");
@@ -9503,7 +9503,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn create_deployment(&self,
                          input: &CreateDeploymentRequest)
                          -> Result<CreateDeploymentResult, CreateDeploymentError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.CreateDeployment");
@@ -9535,7 +9535,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn create_instance(&self,
                        input: &CreateInstanceRequest)
                        -> Result<CreateInstanceResult, CreateInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.CreateInstance");
@@ -9567,7 +9567,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn create_layer(&self,
                     input: &CreateLayerRequest)
                     -> Result<CreateLayerResult, CreateLayerError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.CreateLayer");
@@ -9599,7 +9599,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn create_stack(&self,
                     input: &CreateStackRequest)
                     -> Result<CreateStackResult, CreateStackError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.CreateStack");
@@ -9631,7 +9631,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn create_user_profile(&self,
                            input: &CreateUserProfileRequest)
                            -> Result<CreateUserProfileResult, CreateUserProfileError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.CreateUserProfile");
@@ -9661,7 +9661,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
     #[doc="<p>Deletes a specified app.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn delete_app(&self, input: &DeleteAppRequest) -> Result<(), DeleteAppError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DeleteApp");
@@ -9685,7 +9685,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
     #[doc="<p>Deletes a specified instance, which terminates the associated Amazon EC2 instance. You must stop an instance before you can delete it.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-delete.html\">Deleting Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn delete_instance(&self, input: &DeleteInstanceRequest) -> Result<(), DeleteInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DeleteInstance");
@@ -9709,7 +9709,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
     #[doc="<p>Deletes a specified layer. You must first stop and then delete all associated instances or unassign registered instances. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workinglayers-basics-delete.html\">How to Delete a Layer</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn delete_layer(&self, input: &DeleteLayerRequest) -> Result<(), DeleteLayerError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DeleteLayer");
@@ -9733,7 +9733,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
     #[doc="<p>Deletes a specified stack. You must first delete all instances, layers, and apps or deregister registered instances. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workingstacks-shutting.html\">Shut Down a Stack</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn delete_stack(&self, input: &DeleteStackRequest) -> Result<(), DeleteStackError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DeleteStack");
@@ -9759,7 +9759,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn delete_user_profile(&self,
                            input: &DeleteUserProfileRequest)
                            -> Result<(), DeleteUserProfileError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DeleteUserProfile");
@@ -9785,7 +9785,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn deregister_ecs_cluster(&self,
                               input: &DeregisterEcsClusterRequest)
                               -> Result<(), DeregisterEcsClusterError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DeregisterEcsCluster");
@@ -9811,7 +9811,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn deregister_elastic_ip(&self,
                              input: &DeregisterElasticIpRequest)
                              -> Result<(), DeregisterElasticIpError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DeregisterElasticIp");
@@ -9837,7 +9837,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn deregister_instance(&self,
                            input: &DeregisterInstanceRequest)
                            -> Result<(), DeregisterInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DeregisterInstance");
@@ -9863,7 +9863,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn deregister_rds_db_instance(&self,
                                   input: &DeregisterRdsDbInstanceRequest)
                                   -> Result<(), DeregisterRdsDbInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DeregisterRdsDbInstance");
@@ -9890,7 +9890,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn deregister_volume(&self,
                          input: &DeregisterVolumeRequest)
                          -> Result<(), DeregisterVolumeError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DeregisterVolume");
@@ -9917,7 +9917,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         (&self,
          input: &DescribeAgentVersionsRequest)
          -> Result<DescribeAgentVersionsResult, DescribeAgentVersionsError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeAgentVersions");
@@ -9947,7 +9947,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn describe_apps(&self,
                      input: &DescribeAppsRequest)
                      -> Result<DescribeAppsResult, DescribeAppsError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeApps");
@@ -9979,7 +9979,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn describe_commands(&self,
                          input: &DescribeCommandsRequest)
                          -> Result<DescribeCommandsResult, DescribeCommandsError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeCommands");
@@ -10011,7 +10011,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn describe_deployments(&self,
                             input: &DescribeDeploymentsRequest)
                             -> Result<DescribeDeploymentsResult, DescribeDeploymentsError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeDeployments");
@@ -10041,7 +10041,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn describe_ecs_clusters(&self,
                              input: &DescribeEcsClustersRequest)
                              -> Result<DescribeEcsClustersResult, DescribeEcsClustersError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeEcsClusters");
@@ -10071,7 +10071,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn describe_elastic_ips(&self,
                             input: &DescribeElasticIpsRequest)
                             -> Result<DescribeElasticIpsResult, DescribeElasticIpsError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeElasticIps");
@@ -10104,7 +10104,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         (&self,
          input: &DescribeElasticLoadBalancersRequest)
          -> Result<DescribeElasticLoadBalancersResult, DescribeElasticLoadBalancersError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -10136,7 +10136,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn describe_instances(&self,
                           input: &DescribeInstancesRequest)
                           -> Result<DescribeInstancesResult, DescribeInstancesError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeInstances");
@@ -10168,7 +10168,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn describe_layers(&self,
                        input: &DescribeLayersRequest)
                        -> Result<DescribeLayersResult, DescribeLayersError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeLayers");
@@ -10201,7 +10201,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         (&self,
          input: &DescribeLoadBasedAutoScalingRequest)
          -> Result<DescribeLoadBasedAutoScalingResult, DescribeLoadBasedAutoScalingError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -10233,7 +10233,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn describe_my_user_profile
         (&self)
          -> Result<DescribeMyUserProfileResult, DescribeMyUserProfileError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeMyUserProfile");
@@ -10262,7 +10262,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn describe_permissions(&self,
                             input: &DescribePermissionsRequest)
                             -> Result<DescribePermissionsResult, DescribePermissionsError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribePermissions");
@@ -10292,7 +10292,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn describe_raid_arrays(&self,
                             input: &DescribeRaidArraysRequest)
                             -> Result<DescribeRaidArraysResult, DescribeRaidArraysError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeRaidArrays");
@@ -10325,7 +10325,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         (&self,
          input: &DescribeRdsDbInstancesRequest)
          -> Result<DescribeRdsDbInstancesResult, DescribeRdsDbInstancesError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeRdsDbInstances");
@@ -10356,7 +10356,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         (&self,
          input: &DescribeServiceErrorsRequest)
          -> Result<DescribeServiceErrorsResult, DescribeServiceErrorsError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeServiceErrors");
@@ -10388,7 +10388,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
          input: &DescribeStackProvisioningParametersRequest)
          -> Result<DescribeStackProvisioningParametersResult,
                    DescribeStackProvisioningParametersError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -10419,7 +10419,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn describe_stack_summary(&self,
                               input: &DescribeStackSummaryRequest)
                               -> Result<DescribeStackSummaryResult, DescribeStackSummaryError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeStackSummary");
@@ -10449,7 +10449,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn describe_stacks(&self,
                        input: &DescribeStacksRequest)
                        -> Result<DescribeStacksResult, DescribeStacksError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeStacks");
@@ -10482,7 +10482,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         (&self,
          input: &DescribeTimeBasedAutoScalingRequest)
          -> Result<DescribeTimeBasedAutoScalingResult, DescribeTimeBasedAutoScalingError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -10514,7 +10514,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn describe_user_profiles(&self,
                               input: &DescribeUserProfilesRequest)
                               -> Result<DescribeUserProfilesResult, DescribeUserProfilesError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeUserProfiles");
@@ -10544,7 +10544,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn describe_volumes(&self,
                         input: &DescribeVolumesRequest)
                         -> Result<DescribeVolumesResult, DescribeVolumesError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeVolumes");
@@ -10576,7 +10576,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn detach_elastic_load_balancer(&self,
                                     input: &DetachElasticLoadBalancerRequest)
                                     -> Result<(), DetachElasticLoadBalancerError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -10604,7 +10604,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn disassociate_elastic_ip(&self,
                                input: &DisassociateElasticIpRequest)
                                -> Result<(), DisassociateElasticIpError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DisassociateElasticIp");
@@ -10631,7 +10631,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         (&self,
          input: &GetHostnameSuggestionRequest)
          -> Result<GetHostnameSuggestionResult, GetHostnameSuggestionError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.GetHostnameSuggestion");
@@ -10661,7 +10661,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn grant_access(&self,
                     input: &GrantAccessRequest)
                     -> Result<GrantAccessResult, GrantAccessError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.GrantAccess");
@@ -10691,7 +10691,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
     #[doc="<p>Returns a list of tags that are applied to the specified stack or layer.</p>"]
     fn list_tags(&self, input: &ListTagsRequest) -> Result<ListTagsResult, ListTagsError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.ListTags");
@@ -10720,7 +10720,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
     #[doc="<p>Reboots a specified instance. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-starting.html\">Starting, Stopping, and Rebooting Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn reboot_instance(&self, input: &RebootInstanceRequest) -> Result<(), RebootInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.RebootInstance");
@@ -10746,7 +10746,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn register_ecs_cluster(&self,
                             input: &RegisterEcsClusterRequest)
                             -> Result<RegisterEcsClusterResult, RegisterEcsClusterError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.RegisterEcsCluster");
@@ -10778,7 +10778,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn register_elastic_ip(&self,
                            input: &RegisterElasticIpRequest)
                            -> Result<RegisterElasticIpResult, RegisterElasticIpError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.RegisterElasticIp");
@@ -10810,7 +10810,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn register_instance(&self,
                          input: &RegisterInstanceRequest)
                          -> Result<RegisterInstanceResult, RegisterInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.RegisterInstance");
@@ -10842,7 +10842,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn register_rds_db_instance(&self,
                                 input: &RegisterRdsDbInstanceRequest)
                                 -> Result<(), RegisterRdsDbInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.RegisterRdsDbInstance");
@@ -10868,7 +10868,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn register_volume(&self,
                        input: &RegisterVolumeRequest)
                        -> Result<RegisterVolumeResult, RegisterVolumeError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.RegisterVolume");
@@ -10900,7 +10900,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn set_load_based_auto_scaling(&self,
                                    input: &SetLoadBasedAutoScalingRequest)
                                    -> Result<(), SetLoadBasedAutoScalingError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.SetLoadBasedAutoScaling");
@@ -10925,7 +10925,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
     #[doc="<p>Specifies a user's permissions. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workingsecurity.html\">Security and Permissions</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn set_permission(&self, input: &SetPermissionRequest) -> Result<(), SetPermissionError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.SetPermission");
@@ -10951,7 +10951,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn set_time_based_auto_scaling(&self,
                                    input: &SetTimeBasedAutoScalingRequest)
                                    -> Result<(), SetTimeBasedAutoScalingError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.SetTimeBasedAutoScaling");
@@ -10976,7 +10976,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
     #[doc="<p>Starts a specified instance. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-starting.html\">Starting, Stopping, and Rebooting Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn start_instance(&self, input: &StartInstanceRequest) -> Result<(), StartInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.StartInstance");
@@ -11000,7 +11000,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
     #[doc="<p>Starts a stack's instances.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn start_stack(&self, input: &StartStackRequest) -> Result<(), StartStackError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.StartStack");
@@ -11024,7 +11024,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
     #[doc="<p>Stops a specified instance. When you stop a standard instance, the data disappears and must be reinstalled when you restart the instance. You can stop an Amazon EBS-backed instance without losing data. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-starting.html\">Starting, Stopping, and Rebooting Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn stop_instance(&self, input: &StopInstanceRequest) -> Result<(), StopInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.StopInstance");
@@ -11048,7 +11048,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
     #[doc="<p>Stops a specified stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn stop_stack(&self, input: &StopStackRequest) -> Result<(), StopStackError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.StopStack");
@@ -11072,7 +11072,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
     #[doc="<p>Apply cost-allocation tags to a specified stack or layer in AWS OpsWorks Stacks. For more information about how tagging works, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/tagging.html\">Tags</a> in the AWS OpsWorks User Guide.</p>"]
     fn tag_resource(&self, input: &TagResourceRequest) -> Result<(), TagResourceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.TagResource");
@@ -11098,7 +11098,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn unassign_instance(&self,
                          input: &UnassignInstanceRequest)
                          -> Result<(), UnassignInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UnassignInstance");
@@ -11122,7 +11122,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
     #[doc="<p>Unassigns an assigned Amazon EBS volume. The volume remains registered with the stack. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html\">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn unassign_volume(&self, input: &UnassignVolumeRequest) -> Result<(), UnassignVolumeError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UnassignVolume");
@@ -11146,7 +11146,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
     #[doc="<p>Removes tags from a specified stack or layer.</p>"]
     fn untag_resource(&self, input: &UntagResourceRequest) -> Result<(), UntagResourceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UntagResource");
@@ -11170,7 +11170,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
     #[doc="<p>Updates a specified app.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Deploy or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn update_app(&self, input: &UpdateAppRequest) -> Result<(), UpdateAppError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UpdateApp");
@@ -11196,7 +11196,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn update_elastic_ip(&self,
                          input: &UpdateElasticIpRequest)
                          -> Result<(), UpdateElasticIpError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UpdateElasticIp");
@@ -11220,7 +11220,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
     #[doc="<p>Updates a specified instance.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn update_instance(&self, input: &UpdateInstanceRequest) -> Result<(), UpdateInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UpdateInstance");
@@ -11244,7 +11244,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
     #[doc="<p>Updates a specified layer.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn update_layer(&self, input: &UpdateLayerRequest) -> Result<(), UpdateLayerError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UpdateLayer");
@@ -11270,7 +11270,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn update_my_user_profile(&self,
                               input: &UpdateMyUserProfileRequest)
                               -> Result<(), UpdateMyUserProfileError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UpdateMyUserProfile");
@@ -11296,7 +11296,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn update_rds_db_instance(&self,
                               input: &UpdateRdsDbInstanceRequest)
                               -> Result<(), UpdateRdsDbInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UpdateRdsDbInstance");
@@ -11320,7 +11320,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
     #[doc="<p>Updates a specified stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn update_stack(&self, input: &UpdateStackRequest) -> Result<(), UpdateStackError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UpdateStack");
@@ -11346,7 +11346,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
     fn update_user_profile(&self,
                            input: &UpdateUserProfileRequest)
                            -> Result<(), UpdateUserProfileError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UpdateUserProfile");
@@ -11370,7 +11370,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
 
     #[doc="<p>Updates an Amazon EBS volume's name or mount point. For more information, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html\">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href=\"http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html\">Managing User Permissions</a>.</p>"]
     fn update_volume(&self, input: &UpdateVolumeRequest) -> Result<(), UpdateVolumeError> {
-        let mut request = SignedRequest::new("POST", "opsworks", self.region, "/");
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UpdateVolume");

@@ -1819,7 +1819,7 @@ impl<P, D> Sts for StsClient<P, D>
     fn assume_role(&self,
                    input: &AssumeRoleRequest)
                    -> Result<AssumeRoleResponse, AssumeRoleError> {
-        let mut request = SignedRequest::new("POST", "sts", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sts", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AssumeRole");
@@ -1866,7 +1866,7 @@ impl<P, D> Sts for StsClient<P, D>
     fn assume_role_with_saml(&self,
                              input: &AssumeRoleWithSAMLRequest)
                              -> Result<AssumeRoleWithSAMLResponse, AssumeRoleWithSAMLError> {
-        let mut request = SignedRequest::new("POST", "sts", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sts", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AssumeRoleWithSAML");
@@ -1914,7 +1914,7 @@ impl<P, D> Sts for StsClient<P, D>
         (&self,
          input: &AssumeRoleWithWebIdentityRequest)
          -> Result<AssumeRoleWithWebIdentityResponse, AssumeRoleWithWebIdentityError> {
-        let mut request = SignedRequest::new("POST", "sts", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sts", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AssumeRoleWithWebIdentity");
@@ -1962,7 +1962,7 @@ impl<P, D> Sts for StsClient<P, D>
         (&self,
          input: &DecodeAuthorizationMessageRequest)
          -> Result<DecodeAuthorizationMessageResponse, DecodeAuthorizationMessageError> {
-        let mut request = SignedRequest::new("POST", "sts", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sts", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DecodeAuthorizationMessage");
@@ -2009,7 +2009,7 @@ impl<P, D> Sts for StsClient<P, D>
     fn get_caller_identity(&self,
                            input: &GetCallerIdentityRequest)
                            -> Result<GetCallerIdentityResponse, GetCallerIdentityError> {
-        let mut request = SignedRequest::new("POST", "sts", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sts", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetCallerIdentity");
@@ -2056,7 +2056,7 @@ impl<P, D> Sts for StsClient<P, D>
     fn get_federation_token(&self,
                             input: &GetFederationTokenRequest)
                             -> Result<GetFederationTokenResponse, GetFederationTokenError> {
-        let mut request = SignedRequest::new("POST", "sts", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sts", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetFederationToken");
@@ -2103,7 +2103,7 @@ impl<P, D> Sts for StsClient<P, D>
     fn get_session_token(&self,
                          input: &GetSessionTokenRequest)
                          -> Result<GetSessionTokenResponse, GetSessionTokenError> {
-        let mut request = SignedRequest::new("POST", "sts", self.region, "/");
+        let mut request = SignedRequest::new("POST", "sts", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetSessionToken");

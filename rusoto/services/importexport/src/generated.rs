@@ -1977,8 +1977,10 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
 {
     #[doc="This operation cancels a specified job. Only the job owner can cancel it. The operation fails if the job has already started or is complete."]
     fn cancel_job(&self, input: &CancelJobInput) -> Result<CancelJobOutput, CancelJobError> {
-        let mut request =
-            SignedRequest::new("POST", "importexport", self.region, "/?Operation=CancelJob");
+        let mut request = SignedRequest::new("POST",
+                                             "importexport",
+                                             &self.region,
+                                             "/?Operation=CancelJob");
         let mut params = Params::new();
 
         params.put("Action", "CancelJob");
@@ -2023,8 +2025,10 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
 
     #[doc="This operation initiates the process of scheduling an upload or download of your data. You include in the request a manifest that describes the data transfer specifics. The response to the request includes a job ID, which you can use in other operations, a signature that you use to identify your storage device, and the address where you should ship your storage device."]
     fn create_job(&self, input: &CreateJobInput) -> Result<CreateJobOutput, CreateJobError> {
-        let mut request =
-            SignedRequest::new("POST", "importexport", self.region, "/?Operation=CreateJob");
+        let mut request = SignedRequest::new("POST",
+                                             "importexport",
+                                             &self.region,
+                                             "/?Operation=CreateJob");
         let mut params = Params::new();
 
         params.put("Action", "CreateJob");
@@ -2073,7 +2077,7 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
                           -> Result<GetShippingLabelOutput, GetShippingLabelError> {
         let mut request = SignedRequest::new("POST",
                                              "importexport",
-                                             self.region,
+                                             &self.region,
                                              "/?Operation=GetShippingLabel");
         let mut params = Params::new();
 
@@ -2119,8 +2123,10 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
 
     #[doc="This operation returns information about a job, including where the job is in the processing pipeline, the status of the results, and the signature value associated with the job. You can only return information about jobs you own."]
     fn get_status(&self, input: &GetStatusInput) -> Result<GetStatusOutput, GetStatusError> {
-        let mut request =
-            SignedRequest::new("POST", "importexport", self.region, "/?Operation=GetStatus");
+        let mut request = SignedRequest::new("POST",
+                                             "importexport",
+                                             &self.region,
+                                             "/?Operation=GetStatus");
         let mut params = Params::new();
 
         params.put("Action", "GetStatus");
@@ -2166,7 +2172,7 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
     #[doc="This operation returns the jobs associated with the requester. AWS Import/Export lists the jobs in reverse chronological order based on the date of creation. For example if Job Test1 was created 2009Dec30 and Test2 was created 2010Feb05, the ListJobs operation would return Test2 followed by Test1."]
     fn list_jobs(&self, input: &ListJobsInput) -> Result<ListJobsOutput, ListJobsError> {
         let mut request =
-            SignedRequest::new("POST", "importexport", self.region, "/?Operation=ListJobs");
+            SignedRequest::new("POST", "importexport", &self.region, "/?Operation=ListJobs");
         let mut params = Params::new();
 
         params.put("Action", "ListJobs");
@@ -2211,8 +2217,10 @@ impl<P, D> ImportExport for ImportExportClient<P, D>
 
     #[doc="You use this operation to change the parameters specified in the original manifest file by supplying a new manifest file. The manifest file attached to this request replaces the original manifest file. You can only use the operation after a CreateJob request but before the data transfer starts and you can only use it on jobs you own."]
     fn update_job(&self, input: &UpdateJobInput) -> Result<UpdateJobOutput, UpdateJobError> {
-        let mut request =
-            SignedRequest::new("POST", "importexport", self.region, "/?Operation=UpdateJob");
+        let mut request = SignedRequest::new("POST",
+                                             "importexport",
+                                             &self.region,
+                                             "/?Operation=UpdateJob");
         let mut params = Params::new();
 
         params.put("Action", "UpdateJob");

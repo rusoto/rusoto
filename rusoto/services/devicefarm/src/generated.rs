@@ -7160,7 +7160,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
     fn create_device_pool(&self,
                           input: &CreateDevicePoolRequest)
                           -> Result<CreateDevicePoolResult, CreateDevicePoolError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.CreateDevicePool");
@@ -7192,7 +7192,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
     fn create_network_profile(&self,
                               input: &CreateNetworkProfileRequest)
                               -> Result<CreateNetworkProfileResult, CreateNetworkProfileError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.CreateNetworkProfile");
@@ -7222,7 +7222,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
     fn create_project(&self,
                       input: &CreateProjectRequest)
                       -> Result<CreateProjectResult, CreateProjectError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.CreateProject");
@@ -7255,7 +7255,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         (&self,
          input: &CreateRemoteAccessSessionRequest)
          -> Result<CreateRemoteAccessSessionResult, CreateRemoteAccessSessionError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -7287,7 +7287,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
     fn create_upload(&self,
                      input: &CreateUploadRequest)
                      -> Result<CreateUploadResult, CreateUploadError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.CreateUpload");
@@ -7319,7 +7319,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
     fn delete_device_pool(&self,
                           input: &DeleteDevicePoolRequest)
                           -> Result<DeleteDevicePoolResult, DeleteDevicePoolError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.DeleteDevicePool");
@@ -7351,7 +7351,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
     fn delete_network_profile(&self,
                               input: &DeleteNetworkProfileRequest)
                               -> Result<DeleteNetworkProfileResult, DeleteNetworkProfileError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.DeleteNetworkProfile");
@@ -7381,7 +7381,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
     fn delete_project(&self,
                       input: &DeleteProjectRequest)
                       -> Result<DeleteProjectResult, DeleteProjectError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.DeleteProject");
@@ -7414,7 +7414,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         (&self,
          input: &DeleteRemoteAccessSessionRequest)
          -> Result<DeleteRemoteAccessSessionResult, DeleteRemoteAccessSessionError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -7444,7 +7444,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
     #[doc="<p>Deletes the run, given the run ARN.</p> <p> <b>Note</b> Deleting this resource does not stop an in-progress run.</p>"]
     fn delete_run(&self, input: &DeleteRunRequest) -> Result<DeleteRunResult, DeleteRunError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.DeleteRun");
@@ -7475,7 +7475,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
     fn delete_upload(&self,
                      input: &DeleteUploadRequest)
                      -> Result<DeleteUploadResult, DeleteUploadError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.DeleteUpload");
@@ -7505,7 +7505,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
     #[doc="<p>Returns the number of unmetered iOS and/or unmetered Android devices that have been purchased by the account.</p>"]
     fn get_account_settings(&self) -> Result<GetAccountSettingsResult, GetAccountSettingsError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetAccountSettings");
@@ -7534,7 +7534,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
     #[doc="<p>Gets information about a unique device type.</p>"]
     fn get_device(&self, input: &GetDeviceRequest) -> Result<GetDeviceResult, GetDeviceError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetDevice");
@@ -7565,7 +7565,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
     fn get_device_pool(&self,
                        input: &GetDevicePoolRequest)
                        -> Result<GetDevicePoolResult, GetDevicePoolError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetDevicePool");
@@ -7598,7 +7598,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         (&self,
          input: &GetDevicePoolCompatibilityRequest)
          -> Result<GetDevicePoolCompatibilityResult, GetDevicePoolCompatibilityError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -7628,7 +7628,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
     #[doc="<p>Gets information about a job.</p>"]
     fn get_job(&self, input: &GetJobRequest) -> Result<GetJobResult, GetJobError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetJob");
@@ -7659,7 +7659,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
     fn get_network_profile(&self,
                            input: &GetNetworkProfileRequest)
                            -> Result<GetNetworkProfileResult, GetNetworkProfileError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetNetworkProfile");
@@ -7691,7 +7691,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
     fn get_offering_status(&self,
                            input: &GetOfferingStatusRequest)
                            -> Result<GetOfferingStatusResult, GetOfferingStatusError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetOfferingStatus");
@@ -7721,7 +7721,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
     #[doc="<p>Gets information about a project.</p>"]
     fn get_project(&self, input: &GetProjectRequest) -> Result<GetProjectResult, GetProjectError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetProject");
@@ -7754,7 +7754,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         (&self,
          input: &GetRemoteAccessSessionRequest)
          -> Result<GetRemoteAccessSessionResult, GetRemoteAccessSessionError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetRemoteAccessSession");
@@ -7782,7 +7782,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
     #[doc="<p>Gets information about a run.</p>"]
     fn get_run(&self, input: &GetRunRequest) -> Result<GetRunResult, GetRunError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetRun");
@@ -7811,7 +7811,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
     #[doc="<p>Gets information about a suite.</p>"]
     fn get_suite(&self, input: &GetSuiteRequest) -> Result<GetSuiteResult, GetSuiteError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetSuite");
@@ -7840,7 +7840,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
     #[doc="<p>Gets information about a test.</p>"]
     fn get_test(&self, input: &GetTestRequest) -> Result<GetTestResult, GetTestError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetTest");
@@ -7869,7 +7869,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
     #[doc="<p>Gets information about an upload.</p>"]
     fn get_upload(&self, input: &GetUploadRequest) -> Result<GetUploadResult, GetUploadError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetUpload");
@@ -7901,7 +7901,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         (&self,
          input: &InstallToRemoteAccessSessionRequest)
          -> Result<InstallToRemoteAccessSessionResult, InstallToRemoteAccessSessionError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -7933,7 +7933,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
     fn list_artifacts(&self,
                       input: &ListArtifactsRequest)
                       -> Result<ListArtifactsResult, ListArtifactsError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListArtifacts");
@@ -7965,7 +7965,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
     fn list_device_pools(&self,
                          input: &ListDevicePoolsRequest)
                          -> Result<ListDevicePoolsResult, ListDevicePoolsError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListDevicePools");
@@ -7997,7 +7997,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
     fn list_devices(&self,
                     input: &ListDevicesRequest)
                     -> Result<ListDevicesResult, ListDevicesError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListDevices");
@@ -8027,7 +8027,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
     #[doc="<p>Gets information about jobs.</p>"]
     fn list_jobs(&self, input: &ListJobsRequest) -> Result<ListJobsResult, ListJobsError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListJobs");
@@ -8058,7 +8058,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
     fn list_network_profiles(&self,
                              input: &ListNetworkProfilesRequest)
                              -> Result<ListNetworkProfilesResult, ListNetworkProfilesError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListNetworkProfiles");
@@ -8089,7 +8089,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         (&self,
          input: &ListOfferingPromotionsRequest)
          -> Result<ListOfferingPromotionsResult, ListOfferingPromotionsError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListOfferingPromotions");
@@ -8120,7 +8120,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         (&self,
          input: &ListOfferingTransactionsRequest)
          -> Result<ListOfferingTransactionsResult, ListOfferingTransactionsError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -8152,7 +8152,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
     fn list_offerings(&self,
                       input: &ListOfferingsRequest)
                       -> Result<ListOfferingsResult, ListOfferingsError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListOfferings");
@@ -8184,7 +8184,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
     fn list_projects(&self,
                      input: &ListProjectsRequest)
                      -> Result<ListProjectsResult, ListProjectsError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListProjects");
@@ -8217,7 +8217,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         (&self,
          input: &ListRemoteAccessSessionsRequest)
          -> Result<ListRemoteAccessSessionsResult, ListRemoteAccessSessionsError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -8247,7 +8247,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
     #[doc="<p>Gets information about runs, given an AWS Device Farm project ARN.</p>"]
     fn list_runs(&self, input: &ListRunsRequest) -> Result<ListRunsResult, ListRunsError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListRuns");
@@ -8278,7 +8278,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
     fn list_samples(&self,
                     input: &ListSamplesRequest)
                     -> Result<ListSamplesResult, ListSamplesError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListSamples");
@@ -8308,7 +8308,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
     #[doc="<p>Gets information about suites.</p>"]
     fn list_suites(&self, input: &ListSuitesRequest) -> Result<ListSuitesResult, ListSuitesError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListSuites");
@@ -8338,7 +8338,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
     #[doc="<p>Gets information about tests.</p>"]
     fn list_tests(&self, input: &ListTestsRequest) -> Result<ListTestsResult, ListTestsError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListTests");
@@ -8369,7 +8369,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
     fn list_unique_problems(&self,
                             input: &ListUniqueProblemsRequest)
                             -> Result<ListUniqueProblemsResult, ListUniqueProblemsError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListUniqueProblems");
@@ -8401,7 +8401,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
     fn list_uploads(&self,
                     input: &ListUploadsRequest)
                     -> Result<ListUploadsResult, ListUploadsError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListUploads");
@@ -8433,7 +8433,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
     fn purchase_offering(&self,
                          input: &PurchaseOfferingRequest)
                          -> Result<PurchaseOfferingResult, PurchaseOfferingError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.PurchaseOffering");
@@ -8465,7 +8465,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
     fn renew_offering(&self,
                       input: &RenewOfferingRequest)
                       -> Result<RenewOfferingResult, RenewOfferingError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.RenewOffering");
@@ -8497,7 +8497,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
     fn schedule_run(&self,
                     input: &ScheduleRunRequest)
                     -> Result<ScheduleRunResult, ScheduleRunError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.ScheduleRun");
@@ -8530,7 +8530,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         (&self,
          input: &StopRemoteAccessSessionRequest)
          -> Result<StopRemoteAccessSessionResult, StopRemoteAccessSessionError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
@@ -8560,7 +8560,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
 
     #[doc="<p>Initiates a stop request for the current test run. AWS Device Farm will immediately stop the run on devices where tests have not started executing, and you will not be billed for these devices. On devices where tests have started executing, Setup Suite and Teardown Suite tests will run to completion before stopping execution on those devices. You will be billed for Setup, Teardown, and any tests that were in progress or already completed.</p>"]
     fn stop_run(&self, input: &StopRunRequest) -> Result<StopRunResult, StopRunError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.StopRun");
@@ -8591,7 +8591,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
     fn update_device_pool(&self,
                           input: &UpdateDevicePoolRequest)
                           -> Result<UpdateDevicePoolResult, UpdateDevicePoolError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.UpdateDevicePool");
@@ -8623,7 +8623,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
     fn update_network_profile(&self,
                               input: &UpdateNetworkProfileRequest)
                               -> Result<UpdateNetworkProfileResult, UpdateNetworkProfileError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.UpdateNetworkProfile");
@@ -8653,7 +8653,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
     fn update_project(&self,
                       input: &UpdateProjectRequest)
                       -> Result<UpdateProjectResult, UpdateProjectError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", self.region, "/");
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.UpdateProject");

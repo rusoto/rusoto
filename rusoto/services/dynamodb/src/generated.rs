@@ -3140,7 +3140,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
     fn batch_get_item(&self,
                       input: &BatchGetItemInput)
                       -> Result<BatchGetItemOutput, BatchGetItemError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", self.region, "/");
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.BatchGetItem");
@@ -3172,7 +3172,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
     fn batch_write_item(&self,
                         input: &BatchWriteItemInput)
                         -> Result<BatchWriteItemOutput, BatchWriteItemError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", self.region, "/");
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.BatchWriteItem");
@@ -3204,7 +3204,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
     fn create_table(&self,
                     input: &CreateTableInput)
                     -> Result<CreateTableOutput, CreateTableError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", self.region, "/");
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.CreateTable");
@@ -3234,7 +3234,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
     #[doc="<p>Deletes a single item in a table by primary key. You can perform a conditional delete operation that deletes the item if it exists, or if it has an expected attribute value.</p> <p>In addition to deleting an item, you can also return the item's attribute values in the same operation, using the <code>ReturnValues</code> parameter.</p> <p>Unless you specify conditions, the <code>DeleteItem</code> is an idempotent operation; running it multiple times on the same item or attribute does <i>not</i> result in an error response.</p> <p>Conditional deletes are useful for deleting items only if specific conditions are met. If those conditions are met, DynamoDB performs the delete. Otherwise, the item is not deleted.</p>"]
     fn delete_item(&self, input: &DeleteItemInput) -> Result<DeleteItemOutput, DeleteItemError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", self.region, "/");
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.DeleteItem");
@@ -3266,7 +3266,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
     fn delete_table(&self,
                     input: &DeleteTableInput)
                     -> Result<DeleteTableOutput, DeleteTableError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", self.region, "/");
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.DeleteTable");
@@ -3296,7 +3296,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
     #[doc="<p>Returns the current provisioned-capacity limits for your AWS account in a region, both for the region as a whole and for any one DynamoDB table that you create there.</p> <p>When you establish an AWS account, the account has initial limits on the maximum read capacity units and write capacity units that you can provision across all of your DynamoDB tables in a given region. Also, there are per-table limits that apply when you create a table there. For more information, see <a href=\"http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html\">Limits</a> page in the <i>Amazon DynamoDB Developer Guide</i>.</p> <p>Although you can increase these limits by filing a case at <a href=\"https://console.aws.amazon.com/support/home#/\">AWS Support Center</a>, obtaining the increase is not instantaneous. The <code>DescribeLimits</code> action lets you write code to compare the capacity you are currently using to those limits imposed by your account so that you have enough time to apply for an increase before you hit a limit.</p> <p>For example, you could use one of the AWS SDKs to do the following:</p> <ol> <li> <p>Call <code>DescribeLimits</code> for a particular region to obtain your current account limits on provisioned capacity there.</p> </li> <li> <p>Create a variable to hold the aggregate read capacity units provisioned for all your tables in that region, and one to hold the aggregate write capacity units. Zero them both.</p> </li> <li> <p>Call <code>ListTables</code> to obtain a list of all your DynamoDB tables.</p> </li> <li> <p>For each table name listed by <code>ListTables</code>, do the following:</p> <ul> <li> <p>Call <code>DescribeTable</code> with the table name.</p> </li> <li> <p>Use the data returned by <code>DescribeTable</code> to add the read capacity units and write capacity units provisioned for the table itself to your variables.</p> </li> <li> <p>If the table has one or more global secondary indexes (GSIs), loop over these GSIs and add their provisioned capacity values to your variables as well.</p> </li> </ul> </li> <li> <p>Report the account limits for that region returned by <code>DescribeLimits</code>, along with the total current provisioned capacity levels you have calculated.</p> </li> </ol> <p>This will let you see whether you are getting close to your account-level limits.</p> <p>The per-table limits apply only when you are creating a new table. They restrict the sum of the provisioned capacity of the new table itself and all its global secondary indexes.</p> <p>For existing tables and their GSIs, DynamoDB will not let you increase provisioned capacity extremely rapidly, but the only upper limit that applies is that the aggregate provisioned capacity over all your tables and GSIs cannot exceed either of the per-account limits.</p> <note> <p> <code>DescribeLimits</code> should only be called periodically. You can expect throttling errors if you call it more than once in a minute.</p> </note> <p>The <code>DescribeLimits</code> Request element has no content.</p>"]
     fn describe_limits(&self) -> Result<DescribeLimitsOutput, DescribeLimitsError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", self.region, "/");
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.DescribeLimits");
@@ -3327,7 +3327,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
     fn describe_table(&self,
                       input: &DescribeTableInput)
                       -> Result<DescribeTableOutput, DescribeTableError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", self.region, "/");
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.DescribeTable");
@@ -3359,7 +3359,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
     fn describe_time_to_live(&self,
                              input: &DescribeTimeToLiveInput)
                              -> Result<DescribeTimeToLiveOutput, DescribeTimeToLiveError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", self.region, "/");
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.DescribeTimeToLive");
@@ -3389,7 +3389,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
     #[doc="<p>The <code>GetItem</code> operation returns a set of attributes for the item with the given primary key. If there is no matching item, <code>GetItem</code> does not return any data and there will be no <code>Item</code> element in the response.</p> <p> <code>GetItem</code> provides an eventually consistent read by default. If your application requires a strongly consistent read, set <code>ConsistentRead</code> to <code>true</code>. Although a strongly consistent read might take more time than an eventually consistent read, it always returns the last updated value.</p>"]
     fn get_item(&self, input: &GetItemInput) -> Result<GetItemOutput, GetItemError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", self.region, "/");
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.GetItem");
@@ -3418,7 +3418,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
     #[doc="<p>Returns an array of table names associated with the current account and endpoint. The output from <code>ListTables</code> is paginated, with each page returning a maximum of 100 table names.</p>"]
     fn list_tables(&self, input: &ListTablesInput) -> Result<ListTablesOutput, ListTablesError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", self.region, "/");
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.ListTables");
@@ -3450,7 +3450,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
     fn list_tags_of_resource(&self,
                              input: &ListTagsOfResourceInput)
                              -> Result<ListTagsOfResourceOutput, ListTagsOfResourceError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", self.region, "/");
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.ListTagsOfResource");
@@ -3480,7 +3480,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
     #[doc="<p>Creates a new item, or replaces an old item with a new item. If an item that has the same primary key as the new item already exists in the specified table, the new item completely replaces the existing item. You can perform a conditional put operation (add a new item if one with the specified primary key doesn't exist), or replace an existing item if it has certain attribute values.</p> <p>In addition to putting an item, you can also return the item's attribute values in the same operation, using the <code>ReturnValues</code> parameter.</p> <p>When you add an item, the primary key attribute(s) are the only required attributes. Attribute values cannot be null. String and Binary type attributes must have lengths greater than zero. Set type attributes cannot be empty. Requests with empty values will be rejected with a <code>ValidationException</code> exception.</p> <note> <p>To prevent a new item from replacing an existing item, use a conditional expression that contains the <code>attribute_not_exists</code> function with the name of the attribute being used as the partition key for the table. Since every record must contain that attribute, the <code>attribute_not_exists</code> function will only succeed if no matching item exists.</p> </note> <p>For more information about <code>PutItem</code>, see <a href=\"http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithItems.html\">Working with Items</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>"]
     fn put_item(&self, input: &PutItemInput) -> Result<PutItemOutput, PutItemError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", self.region, "/");
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.PutItem");
@@ -3509,7 +3509,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
     #[doc="<p>A <code>Query</code> operation uses the primary key of a table or a secondary index to directly access items from that table or index.</p> <p>Use the <code>KeyConditionExpression</code> parameter to provide a specific value for the partition key. The <code>Query</code> operation will return all of the items from the table or index with that partition key value. You can optionally narrow the scope of the <code>Query</code> operation by specifying a sort key value and a comparison operator in <code>KeyConditionExpression</code>. You can use the <code>ScanIndexForward</code> parameter to get results in forward or reverse order, by sort key.</p> <p>Queries that do not return results consume the minimum number of read capacity units for that type of read operation.</p> <p>If the total number of items meeting the query criteria exceeds the result set size limit of 1 MB, the query stops and results are returned to the user with the <code>LastEvaluatedKey</code> element to continue the query in a subsequent operation. Unlike a <code>Scan</code> operation, a <code>Query</code> operation never returns both an empty result set and a <code>LastEvaluatedKey</code> value. <code>LastEvaluatedKey</code> is only provided if you have used the <code>Limit</code> parameter, or if the result set exceeds 1 MB (prior to applying a filter). </p> <p>You can query a table, a local secondary index, or a global secondary index. For a query on a table or on a local secondary index, you can set the <code>ConsistentRead</code> parameter to <code>true</code> and obtain a strongly consistent result. Global secondary indexes support eventually consistent reads only, so do not specify <code>ConsistentRead</code> when querying a global secondary index.</p>"]
     fn query(&self, input: &QueryInput) -> Result<QueryOutput, QueryError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", self.region, "/");
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.Query");
@@ -3538,7 +3538,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
     #[doc="<p>The <code>Scan</code> operation returns one or more items and item attributes by accessing every item in a table or a secondary index. To have DynamoDB return fewer items, you can provide a <code>FilterExpression</code> operation.</p> <p>If the total number of scanned items exceeds the maximum data set size limit of 1 MB, the scan stops and results are returned to the user as a <code>LastEvaluatedKey</code> value to continue the scan in a subsequent operation. The results also include the number of items exceeding the limit. A scan can result in no table data meeting the filter criteria. </p> <p>By default, <code>Scan</code> operations proceed sequentially; however, for faster performance on a large table or secondary index, applications can request a parallel <code>Scan</code> operation by providing the <code>Segment</code> and <code>TotalSegments</code> parameters. For more information, see <a href=\"http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/QueryAndScan.html#QueryAndScanParallelScan\">Parallel Scan</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p> <p>By default, <code>Scan</code> uses eventually consistent reads when accessing the data in a table; therefore, the result set might not include the changes to data in the table immediately before the operation began. If you need a consistent copy of the data, as of the time that the Scan begins, you can set the <code>ConsistentRead</code> parameter to <code>true</code>.</p>"]
     fn scan(&self, input: &ScanInput) -> Result<ScanOutput, ScanError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", self.region, "/");
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.Scan");
@@ -3567,7 +3567,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
     #[doc="<p>Associate a set of tags with an Amazon DynamoDB resource. You can then activate these user-defined tags so that they appear on the Billing and Cost Management console for cost allocation tracking. You can call TagResource up to 5 times per second, per account. </p> <p>For an overview on tagging DynamoDB resources, see <a href=\"http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Tagging.html\">Tagging for DynamoDB</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>"]
     fn tag_resource(&self, input: &TagResourceInput) -> Result<(), TagResourceError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", self.region, "/");
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.TagResource");
@@ -3591,7 +3591,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
     #[doc="<p>Removes the association of tags from an Amazon DynamoDB resource. You can call UntagResource up to 5 times per second, per account. </p> <p>For an overview on tagging DynamoDB resources, see <a href=\"http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Tagging.html\">Tagging for DynamoDB</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>"]
     fn untag_resource(&self, input: &UntagResourceInput) -> Result<(), UntagResourceError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", self.region, "/");
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.UntagResource");
@@ -3615,7 +3615,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
 
     #[doc="<p>Edits an existing item's attributes, or adds a new item to the table if it does not already exist. You can put, delete, or add attribute values. You can also perform a conditional update on an existing item (insert a new attribute name-value pair if it doesn't exist, or replace an existing name-value pair if it has certain expected attribute values).</p> <p>You can also return the item's attribute values in the same <code>UpdateItem</code> operation using the <code>ReturnValues</code> parameter.</p>"]
     fn update_item(&self, input: &UpdateItemInput) -> Result<UpdateItemOutput, UpdateItemError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", self.region, "/");
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.UpdateItem");
@@ -3647,7 +3647,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
     fn update_table(&self,
                     input: &UpdateTableInput)
                     -> Result<UpdateTableOutput, UpdateTableError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", self.region, "/");
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.UpdateTable");
@@ -3679,7 +3679,7 @@ impl<P, D> DynamoDb for DynamoDbClient<P, D>
     fn update_time_to_live(&self,
                            input: &UpdateTimeToLiveInput)
                            -> Result<UpdateTimeToLiveOutput, UpdateTimeToLiveError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", self.region, "/");
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.UpdateTimeToLive");

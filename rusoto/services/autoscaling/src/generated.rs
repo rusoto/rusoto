@@ -11545,7 +11545,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
 {
     #[doc="<p>Attaches one or more EC2 instances to the specified Auto Scaling group.</p> <p>When you attach instances, Auto Scaling increases the desired capacity of the group by the number of instances being attached. If the number of instances being attached plus the desired capacity of the group exceeds the maximum size of the group, the operation fails.</p> <p>If there is a Classic Load Balancer attached to your Auto Scaling group, the instances are also registered with the load balancer. If there are target groups attached to your Auto Scaling group, the instances are also registered with the target groups.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/attach-instance-asg.html\">Attach EC2 Instances to Your Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>"]
     fn attach_instances(&self, input: &AttachInstancesQuery) -> Result<(), AttachInstancesError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AttachInstances");
@@ -11574,7 +11574,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         (&self,
          input: &AttachLoadBalancerTargetGroupsType)
          -> Result<AttachLoadBalancerTargetGroupsResultType, AttachLoadBalancerTargetGroupsError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AttachLoadBalancerTargetGroups");
@@ -11621,7 +11621,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn attach_load_balancers(&self,
                              input: &AttachLoadBalancersType)
                              -> Result<AttachLoadBalancersResultType, AttachLoadBalancersError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AttachLoadBalancers");
@@ -11670,7 +11670,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         (&self,
          input: &CompleteLifecycleActionType)
          -> Result<CompleteLifecycleActionAnswer, CompleteLifecycleActionError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CompleteLifecycleAction");
@@ -11719,7 +11719,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn create_auto_scaling_group(&self,
                                  input: &CreateAutoScalingGroupType)
                                  -> Result<(), CreateAutoScalingGroupError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateAutoScalingGroup");
@@ -11747,7 +11747,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn create_launch_configuration(&self,
                                    input: &CreateLaunchConfigurationType)
                                    -> Result<(), CreateLaunchConfigurationError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateLaunchConfiguration");
@@ -11776,7 +11776,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn create_or_update_tags(&self,
                              input: &CreateOrUpdateTagsType)
                              -> Result<(), CreateOrUpdateTagsError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateOrUpdateTags");
@@ -11804,7 +11804,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn delete_auto_scaling_group(&self,
                                  input: &DeleteAutoScalingGroupType)
                                  -> Result<(), DeleteAutoScalingGroupError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteAutoScalingGroup");
@@ -11832,7 +11832,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn delete_launch_configuration(&self,
                                    input: &LaunchConfigurationNameType)
                                    -> Result<(), DeleteLaunchConfigurationError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteLaunchConfiguration");
@@ -11861,7 +11861,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn delete_lifecycle_hook(&self,
                              input: &DeleteLifecycleHookType)
                              -> Result<DeleteLifecycleHookAnswer, DeleteLifecycleHookError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteLifecycleHook");
@@ -11908,7 +11908,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn delete_notification_configuration(&self,
                                          input: &DeleteNotificationConfigurationType)
                                          -> Result<(), DeleteNotificationConfigurationError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteNotificationConfiguration");
@@ -11935,7 +11935,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
 
     #[doc="<p>Deletes the specified Auto Scaling policy.</p> <p>Deleting a policy deletes the underlying alarm action, but does not delete the alarm, even if it no longer has an associated action.</p>"]
     fn delete_policy(&self, input: &DeletePolicyType) -> Result<(), DeletePolicyError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeletePolicy");
@@ -11963,7 +11963,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn delete_scheduled_action(&self,
                                input: &DeleteScheduledActionType)
                                -> Result<(), DeleteScheduledActionError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteScheduledAction");
@@ -11989,7 +11989,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
 
     #[doc="<p>Deletes the specified tags.</p>"]
     fn delete_tags(&self, input: &DeleteTagsType) -> Result<(), DeleteTagsError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteTags");
@@ -12017,7 +12017,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn describe_account_limits
         (&self)
          -> Result<DescribeAccountLimitsAnswer, DescribeAccountLimitsError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeAccountLimits");
@@ -12064,7 +12064,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn describe_adjustment_types
         (&self)
          -> Result<DescribeAdjustmentTypesAnswer, DescribeAdjustmentTypesError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeAdjustmentTypes");
@@ -12114,7 +12114,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         (&self,
          input: &AutoScalingGroupNamesType)
          -> Result<AutoScalingGroupsType, DescribeAutoScalingGroupsError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeAutoScalingGroups");
@@ -12163,7 +12163,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         (&self,
          input: &DescribeAutoScalingInstancesType)
          -> Result<AutoScalingInstancesType, DescribeAutoScalingInstancesError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeAutoScalingInstances");
@@ -12212,7 +12212,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         (&self)
          -> Result<DescribeAutoScalingNotificationTypesAnswer,
                    DescribeAutoScalingNotificationTypesError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeAutoScalingNotificationTypes");
@@ -12259,7 +12259,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         (&self,
          input: &LaunchConfigurationNamesType)
          -> Result<LaunchConfigurationsType, DescribeLaunchConfigurationsError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeLaunchConfigurations");
@@ -12307,7 +12307,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn describe_lifecycle_hook_types
         (&self)
          -> Result<DescribeLifecycleHookTypesAnswer, DescribeLifecycleHookTypesError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeLifecycleHookTypes");
@@ -12357,7 +12357,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         (&self,
          input: &DescribeLifecycleHooksType)
          -> Result<DescribeLifecycleHooksAnswer, DescribeLifecycleHooksError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeLifecycleHooks");
@@ -12406,7 +12406,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         (&self,
          input: &DescribeLoadBalancerTargetGroupsRequest)
          -> Result<DescribeLoadBalancerTargetGroupsResponse, DescribeLoadBalancerTargetGroupsError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeLoadBalancerTargetGroups");
@@ -12453,7 +12453,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         (&self,
          input: &DescribeLoadBalancersRequest)
          -> Result<DescribeLoadBalancersResponse, DescribeLoadBalancersError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeLoadBalancers");
@@ -12501,7 +12501,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn describe_metric_collection_types
         (&self)
          -> Result<DescribeMetricCollectionTypesAnswer, DescribeMetricCollectionTypesError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeMetricCollectionTypes");
@@ -12550,7 +12550,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
          input: &DescribeNotificationConfigurationsType)
          -> Result<DescribeNotificationConfigurationsAnswer,
                    DescribeNotificationConfigurationsError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeNotificationConfigurations");
@@ -12596,7 +12596,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn describe_policies(&self,
                          input: &DescribePoliciesType)
                          -> Result<PoliciesType, DescribePoliciesError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribePolicies");
@@ -12643,7 +12643,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn describe_scaling_activities(&self,
                                    input: &DescribeScalingActivitiesType)
                                    -> Result<ActivitiesType, DescribeScalingActivitiesError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeScalingActivities");
@@ -12691,7 +12691,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn describe_scaling_process_types
         (&self)
          -> Result<ProcessesType, DescribeScalingProcessTypesError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeScalingProcessTypes");
@@ -12740,7 +12740,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         (&self,
          input: &DescribeScheduledActionsType)
          -> Result<ScheduledActionsType, DescribeScheduledActionsError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeScheduledActions");
@@ -12786,7 +12786,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
 
     #[doc="<p>Describes the specified tags.</p> <p>You can use filters to limit the results. For example, you can query for the tags for a specific Auto Scaling group. You can specify multiple values for a filter. A tag must match at least one of the specified values for it to be included in the results.</p> <p>You can also specify multiple filters. The result includes information for a particular tag only if it matches all the filters. If there's no match, no special message is returned.</p>"]
     fn describe_tags(&self, input: &DescribeTagsType) -> Result<TagsType, DescribeTagsError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeTags");
@@ -12833,7 +12833,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn describe_termination_policy_types
         (&self)
          -> Result<DescribeTerminationPolicyTypesAnswer, DescribeTerminationPolicyTypesError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeTerminationPolicyTypes");
@@ -12880,7 +12880,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn detach_instances(&self,
                         input: &DetachInstancesQuery)
                         -> Result<DetachInstancesAnswer, DetachInstancesError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DetachInstances");
@@ -12928,7 +12928,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         (&self,
          input: &DetachLoadBalancerTargetGroupsType)
          -> Result<DetachLoadBalancerTargetGroupsResultType, DetachLoadBalancerTargetGroupsError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DetachLoadBalancerTargetGroups");
@@ -12975,7 +12975,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn detach_load_balancers(&self,
                              input: &DetachLoadBalancersType)
                              -> Result<DetachLoadBalancersResultType, DetachLoadBalancersError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DetachLoadBalancers");
@@ -13023,7 +13023,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn disable_metrics_collection(&self,
                                   input: &DisableMetricsCollectionQuery)
                                   -> Result<(), DisableMetricsCollectionError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DisableMetricsCollection");
@@ -13052,7 +13052,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn enable_metrics_collection(&self,
                                  input: &EnableMetricsCollectionQuery)
                                  -> Result<(), EnableMetricsCollectionError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "EnableMetricsCollection");
@@ -13081,7 +13081,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn enter_standby(&self,
                      input: &EnterStandbyQuery)
                      -> Result<EnterStandbyAnswer, EnterStandbyError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "EnterStandby");
@@ -13126,7 +13126,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
 
     #[doc="<p>Executes the specified policy.</p>"]
     fn execute_policy(&self, input: &ExecutePolicyType) -> Result<(), ExecutePolicyError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ExecutePolicy");
@@ -13154,7 +13154,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn exit_standby(&self,
                     input: &ExitStandbyQuery)
                     -> Result<ExitStandbyAnswer, ExitStandbyError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ExitStandby");
@@ -13201,7 +13201,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn put_lifecycle_hook(&self,
                           input: &PutLifecycleHookType)
                           -> Result<PutLifecycleHookAnswer, PutLifecycleHookError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "PutLifecycleHook");
@@ -13248,7 +13248,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn put_notification_configuration(&self,
                                       input: &PutNotificationConfigurationType)
                                       -> Result<(), PutNotificationConfigurationError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "PutNotificationConfiguration");
@@ -13277,7 +13277,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn put_scaling_policy(&self,
                           input: &PutScalingPolicyType)
                           -> Result<PolicyARNType, PutScalingPolicyError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "PutScalingPolicy");
@@ -13324,7 +13324,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn put_scheduled_update_group_action(&self,
                                          input: &PutScheduledUpdateGroupActionType)
                                          -> Result<(), PutScheduledUpdateGroupActionError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "PutScheduledUpdateGroupAction");
@@ -13354,7 +13354,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         (&self,
          input: &RecordLifecycleActionHeartbeatType)
          -> Result<RecordLifecycleActionHeartbeatAnswer, RecordLifecycleActionHeartbeatError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RecordLifecycleActionHeartbeat");
@@ -13399,7 +13399,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
 
     #[doc="<p>Resumes the specified suspended Auto Scaling processes, or all suspended process, for the specified Auto Scaling group.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/as-suspend-resume-processes.html\">Suspending and Resuming Auto Scaling Processes</a> in the <i>Auto Scaling User Guide</i>.</p>"]
     fn resume_processes(&self, input: &ScalingProcessQuery) -> Result<(), ResumeProcessesError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ResumeProcesses");
@@ -13427,7 +13427,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn set_desired_capacity(&self,
                             input: &SetDesiredCapacityType)
                             -> Result<(), SetDesiredCapacityError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SetDesiredCapacity");
@@ -13455,7 +13455,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn set_instance_health(&self,
                            input: &SetInstanceHealthQuery)
                            -> Result<(), SetInstanceHealthError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SetInstanceHealth");
@@ -13484,7 +13484,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         (&self,
          input: &SetInstanceProtectionQuery)
          -> Result<SetInstanceProtectionAnswer, SetInstanceProtectionError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SetInstanceProtection");
@@ -13529,7 +13529,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
 
     #[doc="<p>Suspends the specified Auto Scaling processes, or all processes, for the specified Auto Scaling group.</p> <p>Note that if you suspend either the <code>Launch</code> or <code>Terminate</code> process types, it can prevent other process types from functioning properly.</p> <p>To resume processes that have been suspended, use <a>ResumeProcesses</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/as-suspend-resume-processes.html\">Suspending and Resuming Auto Scaling Processes</a> in the <i>Auto Scaling User Guide</i>.</p>"]
     fn suspend_processes(&self, input: &ScalingProcessQuery) -> Result<(), SuspendProcessesError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SuspendProcesses");
@@ -13558,7 +13558,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
         (&self,
          input: &TerminateInstanceInAutoScalingGroupType)
          -> Result<ActivityType, TerminateInstanceInAutoScalingGroupError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "TerminateInstanceInAutoScalingGroup");
@@ -13605,7 +13605,7 @@ impl<P, D> Autoscaling for AutoscalingClient<P, D>
     fn update_auto_scaling_group(&self,
                                  input: &UpdateAutoScalingGroupType)
                                  -> Result<(), UpdateAutoScalingGroupError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", self.region, "/");
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateAutoScalingGroup");

@@ -16262,7 +16262,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
          input: &AuthorizeClusterSecurityGroupIngressMessage)
          -> Result<AuthorizeClusterSecurityGroupIngressResult,
                    AuthorizeClusterSecurityGroupIngressError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AuthorizeClusterSecurityGroupIngress");
@@ -16309,7 +16309,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         (&self,
          input: &AuthorizeSnapshotAccessMessage)
          -> Result<AuthorizeSnapshotAccessResult, AuthorizeSnapshotAccessError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AuthorizeSnapshotAccess");
@@ -16358,7 +16358,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
     fn copy_cluster_snapshot(&self,
                              input: &CopyClusterSnapshotMessage)
                              -> Result<CopyClusterSnapshotResult, CopyClusterSnapshotError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CopyClusterSnapshot");
@@ -16405,7 +16405,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
     fn create_cluster(&self,
                       input: &CreateClusterMessage)
                       -> Result<CreateClusterResult, CreateClusterError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateCluster");
@@ -16453,7 +16453,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         (&self,
          input: &CreateClusterParameterGroupMessage)
          -> Result<CreateClusterParameterGroupResult, CreateClusterParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateClusterParameterGroup");
@@ -16501,7 +16501,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         (&self,
          input: &CreateClusterSecurityGroupMessage)
          -> Result<CreateClusterSecurityGroupResult, CreateClusterSecurityGroupError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateClusterSecurityGroup");
@@ -16551,7 +16551,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         (&self,
          input: &CreateClusterSnapshotMessage)
          -> Result<CreateClusterSnapshotResult, CreateClusterSnapshotError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateClusterSnapshot");
@@ -16599,7 +16599,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         (&self,
          input: &CreateClusterSubnetGroupMessage)
          -> Result<CreateClusterSubnetGroupResult, CreateClusterSubnetGroupError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateClusterSubnetGroup");
@@ -16649,7 +16649,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         (&self,
          input: &CreateEventSubscriptionMessage)
          -> Result<CreateEventSubscriptionResult, CreateEventSubscriptionError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateEventSubscription");
@@ -16699,7 +16699,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         (&self,
          input: &CreateHsmClientCertificateMessage)
          -> Result<CreateHsmClientCertificateResult, CreateHsmClientCertificateError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateHsmClientCertificate");
@@ -16749,7 +16749,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         (&self,
          input: &CreateHsmConfigurationMessage)
          -> Result<CreateHsmConfigurationResult, CreateHsmConfigurationError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateHsmConfiguration");
@@ -16798,7 +16798,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         (&self,
          input: &CreateSnapshotCopyGrantMessage)
          -> Result<CreateSnapshotCopyGrantResult, CreateSnapshotCopyGrantError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateSnapshotCopyGrant");
@@ -16845,7 +16845,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
     #[doc="<p>Adds one or more tags to a specified resource.</p> <p>A resource can have up to 10 tags. If you try to create more than 10 tags for a resource, you will receive an error and the attempt will fail.</p> <p>If you specify a key that already exists for the resource, the value for that key will be updated with the new value.</p>"]
     fn create_tags(&self, input: &CreateTagsMessage) -> Result<(), CreateTagsError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateTags");
@@ -16873,7 +16873,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
     fn delete_cluster(&self,
                       input: &DeleteClusterMessage)
                       -> Result<DeleteClusterResult, DeleteClusterError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteCluster");
@@ -16920,7 +16920,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
     fn delete_cluster_parameter_group(&self,
                                       input: &DeleteClusterParameterGroupMessage)
                                       -> Result<(), DeleteClusterParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteClusterParameterGroup");
@@ -16949,7 +16949,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
     fn delete_cluster_security_group(&self,
                                      input: &DeleteClusterSecurityGroupMessage)
                                      -> Result<(), DeleteClusterSecurityGroupError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteClusterSecurityGroup");
@@ -16979,7 +16979,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         (&self,
          input: &DeleteClusterSnapshotMessage)
          -> Result<DeleteClusterSnapshotResult, DeleteClusterSnapshotError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteClusterSnapshot");
@@ -17026,7 +17026,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
     fn delete_cluster_subnet_group(&self,
                                    input: &DeleteClusterSubnetGroupMessage)
                                    -> Result<(), DeleteClusterSubnetGroupError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteClusterSubnetGroup");
@@ -17055,7 +17055,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
     fn delete_event_subscription(&self,
                                  input: &DeleteEventSubscriptionMessage)
                                  -> Result<(), DeleteEventSubscriptionError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteEventSubscription");
@@ -17084,7 +17084,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
     fn delete_hsm_client_certificate(&self,
                                      input: &DeleteHsmClientCertificateMessage)
                                      -> Result<(), DeleteHsmClientCertificateError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteHsmClientCertificate");
@@ -17113,7 +17113,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
     fn delete_hsm_configuration(&self,
                                 input: &DeleteHsmConfigurationMessage)
                                 -> Result<(), DeleteHsmConfigurationError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteHsmConfiguration");
@@ -17141,7 +17141,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
     fn delete_snapshot_copy_grant(&self,
                                   input: &DeleteSnapshotCopyGrantMessage)
                                   -> Result<(), DeleteSnapshotCopyGrantError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteSnapshotCopyGrant");
@@ -17168,7 +17168,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
 
     #[doc="<p>Deletes a tag or tags from a resource. You must provide the ARN of the resource from which you want to delete the tag or tags.</p>"]
     fn delete_tags(&self, input: &DeleteTagsMessage) -> Result<(), DeleteTagsError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteTags");
@@ -17197,7 +17197,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         (&self,
          input: &DescribeClusterParameterGroupsMessage)
          -> Result<ClusterParameterGroupsMessage, DescribeClusterParameterGroupsError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeClusterParameterGroups");
@@ -17247,7 +17247,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         (&self,
          input: &DescribeClusterParametersMessage)
          -> Result<ClusterParameterGroupDetails, DescribeClusterParametersError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeClusterParameters");
@@ -17297,7 +17297,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         (&self,
          input: &DescribeClusterSecurityGroupsMessage)
          -> Result<ClusterSecurityGroupMessage, DescribeClusterSecurityGroupsError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeClusterSecurityGroups");
@@ -17345,7 +17345,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
     fn describe_cluster_snapshots(&self,
                                   input: &DescribeClusterSnapshotsMessage)
                                   -> Result<SnapshotMessage, DescribeClusterSnapshotsError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeClusterSnapshots");
@@ -17394,7 +17394,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         (&self,
          input: &DescribeClusterSubnetGroupsMessage)
          -> Result<ClusterSubnetGroupMessage, DescribeClusterSubnetGroupsError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeClusterSubnetGroups");
@@ -17443,7 +17443,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         (&self,
          input: &DescribeClusterVersionsMessage)
          -> Result<ClusterVersionsMessage, DescribeClusterVersionsError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeClusterVersions");
@@ -17491,7 +17491,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
     fn describe_clusters(&self,
                          input: &DescribeClustersMessage)
                          -> Result<ClustersMessage, DescribeClustersError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeClusters");
@@ -17539,7 +17539,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         (&self,
          input: &DescribeDefaultClusterParametersMessage)
          -> Result<DescribeDefaultClusterParametersResult, DescribeDefaultClusterParametersError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDefaultClusterParameters");
@@ -17586,7 +17586,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         (&self,
          input: &DescribeEventCategoriesMessage)
          -> Result<EventCategoriesMessage, DescribeEventCategoriesError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeEventCategories");
@@ -17635,7 +17635,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         (&self,
          input: &DescribeEventSubscriptionsMessage)
          -> Result<EventSubscriptionsMessage, DescribeEventSubscriptionsError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeEventSubscriptions");
@@ -17683,7 +17683,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
     fn describe_events(&self,
                        input: &DescribeEventsMessage)
                        -> Result<EventsMessage, DescribeEventsError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeEvents");
@@ -17731,7 +17731,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         (&self,
          input: &DescribeHsmClientCertificatesMessage)
          -> Result<HsmClientCertificateMessage, DescribeHsmClientCertificatesError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeHsmClientCertificates");
@@ -17780,7 +17780,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         (&self,
          input: &DescribeHsmConfigurationsMessage)
          -> Result<HsmConfigurationMessage, DescribeHsmConfigurationsError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeHsmConfigurations");
@@ -17828,7 +17828,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
     fn describe_logging_status(&self,
                                input: &DescribeLoggingStatusMessage)
                                -> Result<LoggingStatus, DescribeLoggingStatusError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeLoggingStatus");
@@ -17876,7 +17876,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         (&self,
          input: &DescribeOrderableClusterOptionsMessage)
          -> Result<OrderableClusterOptionsMessage, DescribeOrderableClusterOptionsError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeOrderableClusterOptions");
@@ -17926,7 +17926,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         (&self,
          input: &DescribeReservedNodeOfferingsMessage)
          -> Result<ReservedNodeOfferingsMessage, DescribeReservedNodeOfferingsError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeReservedNodeOfferings");
@@ -17975,7 +17975,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
     fn describe_reserved_nodes(&self,
                                input: &DescribeReservedNodesMessage)
                                -> Result<ReservedNodesMessage, DescribeReservedNodesError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeReservedNodes");
@@ -18022,7 +18022,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
     fn describe_resize(&self,
                        input: &DescribeResizeMessage)
                        -> Result<ResizeProgressMessage, DescribeResizeError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeResize");
@@ -18070,7 +18070,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         (&self,
          input: &DescribeSnapshotCopyGrantsMessage)
          -> Result<SnapshotCopyGrantMessage, DescribeSnapshotCopyGrantsError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeSnapshotCopyGrants");
@@ -18119,7 +18119,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         (&self,
          input: &DescribeTableRestoreStatusMessage)
          -> Result<TableRestoreStatusMessage, DescribeTableRestoreStatusError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeTableRestoreStatus");
@@ -18167,7 +18167,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
     fn describe_tags(&self,
                      input: &DescribeTagsMessage)
                      -> Result<TaggedResourceListMessage, DescribeTagsError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeTags");
@@ -18214,7 +18214,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
     fn disable_logging(&self,
                        input: &DisableLoggingMessage)
                        -> Result<LoggingStatus, DisableLoggingError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DisableLogging");
@@ -18261,7 +18261,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
     fn disable_snapshot_copy(&self,
                              input: &DisableSnapshotCopyMessage)
                              -> Result<DisableSnapshotCopyResult, DisableSnapshotCopyError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DisableSnapshotCopy");
@@ -18308,7 +18308,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
     fn enable_logging(&self,
                       input: &EnableLoggingMessage)
                       -> Result<LoggingStatus, EnableLoggingError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "EnableLogging");
@@ -18355,7 +18355,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
     fn enable_snapshot_copy(&self,
                             input: &EnableSnapshotCopyMessage)
                             -> Result<EnableSnapshotCopyResult, EnableSnapshotCopyError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "EnableSnapshotCopy");
@@ -18402,7 +18402,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
     fn get_cluster_credentials(&self,
                                input: &GetClusterCredentialsMessage)
                                -> Result<ClusterCredentials, GetClusterCredentialsError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetClusterCredentials");
@@ -18449,7 +18449,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
     fn modify_cluster(&self,
                       input: &ModifyClusterMessage)
                       -> Result<ModifyClusterResult, ModifyClusterError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyCluster");
@@ -18497,7 +18497,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         (&self,
          input: &ModifyClusterIamRolesMessage)
          -> Result<ModifyClusterIamRolesResult, ModifyClusterIamRolesError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyClusterIamRoles");
@@ -18545,7 +18545,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         (&self,
          input: &ModifyClusterParameterGroupMessage)
          -> Result<ClusterParameterGroupNameMessage, ModifyClusterParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyClusterParameterGroup");
@@ -18595,7 +18595,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         (&self,
          input: &ModifyClusterSubnetGroupMessage)
          -> Result<ModifyClusterSubnetGroupResult, ModifyClusterSubnetGroupError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyClusterSubnetGroup");
@@ -18645,7 +18645,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         (&self,
          input: &ModifyEventSubscriptionMessage)
          -> Result<ModifyEventSubscriptionResult, ModifyEventSubscriptionError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyEventSubscription");
@@ -18695,7 +18695,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         (&self,
          input: &ModifySnapshotCopyRetentionPeriodMessage)
          -> Result<ModifySnapshotCopyRetentionPeriodResult, ModifySnapshotCopyRetentionPeriodError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifySnapshotCopyRetentionPeriod");
@@ -18742,7 +18742,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         (&self,
          input: &PurchaseReservedNodeOfferingMessage)
          -> Result<PurchaseReservedNodeOfferingResult, PurchaseReservedNodeOfferingError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "PurchaseReservedNodeOffering");
@@ -18789,7 +18789,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
     fn reboot_cluster(&self,
                       input: &RebootClusterMessage)
                       -> Result<RebootClusterResult, RebootClusterError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RebootCluster");
@@ -18837,7 +18837,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         (&self,
          input: &ResetClusterParameterGroupMessage)
          -> Result<ClusterParameterGroupNameMessage, ResetClusterParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ResetClusterParameterGroup");
@@ -18887,7 +18887,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         (&self,
          input: &RestoreFromClusterSnapshotMessage)
          -> Result<RestoreFromClusterSnapshotResult, RestoreFromClusterSnapshotError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RestoreFromClusterSnapshot");
@@ -18937,7 +18937,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         (&self,
          input: &RestoreTableFromClusterSnapshotMessage)
          -> Result<RestoreTableFromClusterSnapshotResult, RestoreTableFromClusterSnapshotError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RestoreTableFromClusterSnapshot");
@@ -18985,7 +18985,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
         (&self,
          input: &RevokeClusterSecurityGroupIngressMessage)
          -> Result<RevokeClusterSecurityGroupIngressResult, RevokeClusterSecurityGroupIngressError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RevokeClusterSecurityGroupIngress");
@@ -19031,7 +19031,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
     fn revoke_snapshot_access(&self,
                               input: &RevokeSnapshotAccessMessage)
                               -> Result<RevokeSnapshotAccessResult, RevokeSnapshotAccessError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RevokeSnapshotAccess");
@@ -19078,7 +19078,7 @@ impl<P, D> Redshift for RedshiftClient<P, D>
     fn rotate_encryption_key(&self,
                              input: &RotateEncryptionKeyMessage)
                              -> Result<RotateEncryptionKeyResult, RotateEncryptionKeyError> {
-        let mut request = SignedRequest::new("POST", "redshift", self.region, "/");
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RotateEncryptionKey");

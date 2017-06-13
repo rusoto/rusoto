@@ -10269,7 +10269,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
 
 
-        let mut request = SignedRequest::new("POST", "cloudfront", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
 
 
 
@@ -10332,7 +10332,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
 
 
-        let mut request = SignedRequest::new("POST", "cloudfront", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
 
 
 
@@ -10400,7 +10400,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         params.put_key("WithTags");
 
 
-        let mut request = SignedRequest::new("POST", "cloudfront", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
 
 
 
@@ -10464,7 +10464,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
         request_uri = request_uri.replace("{DistributionId}", &input.distribution_id.to_string());
 
-        let mut request = SignedRequest::new("POST", "cloudfront", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
 
 
 
@@ -10528,7 +10528,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
 
 
-        let mut request = SignedRequest::new("POST", "cloudfront", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
 
 
 
@@ -10594,7 +10594,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         params.put_key("WithTags");
 
 
-        let mut request = SignedRequest::new("POST", "cloudfront", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
 
 
 
@@ -10658,7 +10658,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
         request_uri = request_uri.replace("{Id}", &input.id.to_string());
 
-        let mut request = SignedRequest::new("DELETE", "cloudfront", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
 
         if let Some(ref if_match) = input.if_match {
@@ -10699,7 +10699,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
         request_uri = request_uri.replace("{Id}", &input.id.to_string());
 
-        let mut request = SignedRequest::new("DELETE", "cloudfront", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
 
         if let Some(ref if_match) = input.if_match {
@@ -10740,7 +10740,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
         request_uri = request_uri.replace("{Id}", &input.id.to_string());
 
-        let mut request = SignedRequest::new("DELETE", "cloudfront", self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
 
         if let Some(ref if_match) = input.if_match {
@@ -10783,7 +10783,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
 
         request_uri = request_uri.replace("{Id}", &input.id.to_string());
 
-        let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
 
 
@@ -10838,7 +10838,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         request_uri = request_uri.replace("{Id}", &input.id.to_string());
 
-        let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
 
 
@@ -10894,7 +10894,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         request_uri = request_uri.replace("{Id}", &input.id.to_string());
 
-        let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
 
 
@@ -10952,7 +10952,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         request_uri = request_uri.replace("{Id}", &input.id.to_string());
 
-        let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
 
 
@@ -11010,7 +11010,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         request_uri = request_uri.replace("{DistributionId}", &input.distribution_id.to_string());
         request_uri = request_uri.replace("{Id}", &input.id.to_string());
 
-        let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
 
 
@@ -11065,7 +11065,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         request_uri = request_uri.replace("{Id}", &input.id.to_string());
 
-        let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
 
 
@@ -11123,7 +11123,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         request_uri = request_uri.replace("{Id}", &input.id.to_string());
 
-        let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
 
 
@@ -11182,7 +11182,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
 
 
-        let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
 
 
@@ -11242,7 +11242,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
 
 
-        let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
 
 
@@ -11305,7 +11305,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         request_uri = request_uri.replace("{WebACLId}", &input.web_acl_id.to_string());
 
-        let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
 
 
@@ -11366,7 +11366,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         request_uri = request_uri.replace("{DistributionId}", &input.distribution_id.to_string());
 
-        let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
 
 
@@ -11429,7 +11429,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
 
 
-        let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
 
 
@@ -11490,7 +11490,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
 
 
-        let mut request = SignedRequest::new("GET", "cloudfront", self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
 
         params.put("Resource", &input.resource);
@@ -11543,7 +11543,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         params.put("Operation", "Tag");
 
 
-        let mut request = SignedRequest::new("POST", "cloudfront", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
 
 
         params.put("Resource", &input.resource);
@@ -11582,7 +11582,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         params.put("Operation", "Untag");
 
 
-        let mut request = SignedRequest::new("POST", "cloudfront", self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
 
 
         params.put("Resource", &input.resource);
@@ -11626,7 +11626,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         request_uri = request_uri.replace("{Id}", &input.id.to_string());
 
-        let mut request = SignedRequest::new("PUT", "cloudfront", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
 
 
         if let Some(ref if_match) = input.if_match {
@@ -11688,7 +11688,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         request_uri = request_uri.replace("{Id}", &input.id.to_string());
 
-        let mut request = SignedRequest::new("PUT", "cloudfront", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
 
 
         if let Some(ref if_match) = input.if_match {
@@ -11755,7 +11755,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
 
         request_uri = request_uri.replace("{Id}", &input.id.to_string());
 
-        let mut request = SignedRequest::new("PUT", "cloudfront", self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
 
 
         if let Some(ref if_match) = input.if_match {

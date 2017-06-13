@@ -30,7 +30,7 @@ impl GenerateProtocol for QueryGenerator {
                      "
                 {documentation}
                 {method_signature} {{
-                    let mut request = SignedRequest::new(\"{http_method}\", \"{endpoint_prefix}\", self.region, \"{request_uri}\");
+                    let mut request = SignedRequest::new(\"{http_method}\", \"{endpoint_prefix}\", &self.region, \"{request_uri}\");
                     let mut params = Params::new();
 
                     params.put(\"Action\", \"{operation_name}\");
