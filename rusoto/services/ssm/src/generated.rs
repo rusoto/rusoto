@@ -11604,8 +11604,7 @@ pub trait Ssm {
 
     #[doc="<p>Retrieves the default patch baseline.</p>"]
     fn get_default_patch_baseline
-        (&self,
-         input: &GetDefaultPatchBaselineRequest)
+        (&self)
          -> Result<GetDefaultPatchBaselineResult, GetDefaultPatchBaselineError>;
 
 
@@ -12982,15 +12981,13 @@ fn describe_maintenance_window_execution_tasks(&self, input: &DescribeMaintenanc
 
     #[doc="<p>Retrieves the default patch baseline.</p>"]
     fn get_default_patch_baseline
-        (&self,
-         input: &GetDefaultPatchBaselineRequest)
+        (&self)
          -> Result<GetDefaultPatchBaselineResult, GetDefaultPatchBaselineError> {
         let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.GetDefaultPatchBaseline");
-        let encoded = serde_json::to_string(input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(b"{}".to_vec()));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 

@@ -5324,8 +5324,7 @@ pub trait DatabaseMigrationService {
 
     #[doc="<p>Lists all of the AWS DMS attributes for a customer account. The attributes include AWS DMS quotas for the account, such as the number of replication instances allowed. The description for a quota includes the quota name, current usage toward that quota, and the quota's maximum value.</p> <p>This command does not take any parameters.</p>"]
     fn describe_account_attributes
-        (&self,
-         input: &DescribeAccountAttributesMessage)
+        (&self)
          -> Result<DescribeAccountAttributesResponse, DescribeAccountAttributesError>;
 
 
@@ -5849,16 +5848,14 @@ impl<P, D> DatabaseMigrationService for DatabaseMigrationServiceClient<P, D>
 
     #[doc="<p>Lists all of the AWS DMS attributes for a customer account. The attributes include AWS DMS quotas for the account, such as the number of replication instances allowed. The description for a quota includes the quota name, current usage toward that quota, and the quota's maximum value.</p> <p>This command does not take any parameters.</p>"]
     fn describe_account_attributes
-        (&self,
-         input: &DescribeAccountAttributesMessage)
+        (&self)
          -> Result<DescribeAccountAttributesResponse, DescribeAccountAttributesError> {
         let mut request = SignedRequest::new("POST", "dms", self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
                            "AmazonDMSv20160101.DescribeAccountAttributes");
-        let encoded = serde_json::to_string(input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(b"{}".to_vec()));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 

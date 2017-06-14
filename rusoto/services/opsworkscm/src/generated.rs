@@ -1877,8 +1877,7 @@ pub trait OpsWorksCM {
 
     #[doc="<p> Describes your account attributes, and creates requests to increase limits before they are reached or exceeded. </p> <p> This operation is synchronous. </p>"]
     fn describe_account_attributes
-        (&self,
-         input: &DescribeAccountAttributesRequest)
+        (&self)
          -> Result<DescribeAccountAttributesResponse, DescribeAccountAttributesError>;
 
 
@@ -2096,16 +2095,14 @@ impl<P, D> OpsWorksCM for OpsWorksCMClient<P, D>
 
     #[doc="<p> Describes your account attributes, and creates requests to increase limits before they are reached or exceeded. </p> <p> This operation is synchronous. </p>"]
     fn describe_account_attributes
-        (&self,
-         input: &DescribeAccountAttributesRequest)
+        (&self)
          -> Result<DescribeAccountAttributesResponse, DescribeAccountAttributesError> {
         let mut request = SignedRequest::new("POST", "opsworks-cm", self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
                            "OpsWorksCM_V2016_11_01.DescribeAccountAttributes");
-        let encoded = serde_json::to_string(input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(b"{}".to_vec()));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 

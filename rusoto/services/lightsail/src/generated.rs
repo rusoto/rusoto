@@ -6929,8 +6929,7 @@ pub trait Lightsail {
 
     #[doc="<p>Downloads the default SSH key pair from the user's account.</p>"]
     fn download_default_key_pair
-        (&self,
-         input: &DownloadDefaultKeyPairRequest)
+        (&self)
          -> Result<DownloadDefaultKeyPairResult, DownloadDefaultKeyPairError>;
 
 
@@ -7061,9 +7060,7 @@ pub trait Lightsail {
 
 
     #[doc="<p>Returns a Boolean value indicating whether your Lightsail VPC is peered.</p>"]
-    fn is_vpc_peered(&self,
-                     input: &IsVpcPeeredRequest)
-                     -> Result<IsVpcPeeredResult, IsVpcPeeredError>;
+    fn is_vpc_peered(&self) -> Result<IsVpcPeeredResult, IsVpcPeeredError>;
 
 
     #[doc="<p>Adds public ports to an Amazon Lightsail instance.</p>"]
@@ -7074,7 +7071,7 @@ pub trait Lightsail {
 
 
     #[doc="<p>Tries to peer the Lightsail VPC with the user's default VPC.</p>"]
-    fn peer_vpc(&self, input: &PeerVpcRequest) -> Result<PeerVpcResult, PeerVpcError>;
+    fn peer_vpc(&self) -> Result<PeerVpcResult, PeerVpcError>;
 
 
     #[doc="<p>Sets the specified open ports for an Amazon Lightsail instance, and closes all ports for every protocol not included in the current request.</p>"]
@@ -7109,7 +7106,7 @@ pub trait Lightsail {
 
 
     #[doc="<p>Attempts to unpeer the Lightsail VPC from the user's default VPC.</p>"]
-    fn unpeer_vpc(&self, input: &UnpeerVpcRequest) -> Result<UnpeerVpcResult, UnpeerVpcError>;
+    fn unpeer_vpc(&self) -> Result<UnpeerVpcResult, UnpeerVpcError>;
 
 
     #[doc="<p>Updates a domain recordset after it is created.</p>"]
@@ -7547,15 +7544,13 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
     #[doc="<p>Downloads the default SSH key pair from the user's account.</p>"]
     fn download_default_key_pair
-        (&self,
-         input: &DownloadDefaultKeyPairRequest)
+        (&self)
          -> Result<DownloadDefaultKeyPairResult, DownloadDefaultKeyPairError> {
         let mut request = SignedRequest::new("POST", "lightsail", self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.DownloadDefaultKeyPair");
-        let encoded = serde_json::to_string(input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(b"{}".to_vec()));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
@@ -8130,15 +8125,12 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
 
     #[doc="<p>Returns a Boolean value indicating whether your Lightsail VPC is peered.</p>"]
-    fn is_vpc_peered(&self,
-                     input: &IsVpcPeeredRequest)
-                     -> Result<IsVpcPeeredResult, IsVpcPeeredError> {
+    fn is_vpc_peered(&self) -> Result<IsVpcPeeredResult, IsVpcPeeredError> {
         let mut request = SignedRequest::new("POST", "lightsail", self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.IsVpcPeered");
-        let encoded = serde_json::to_string(input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(b"{}".to_vec()));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
@@ -8179,13 +8171,12 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
 
     #[doc="<p>Tries to peer the Lightsail VPC with the user's default VPC.</p>"]
-    fn peer_vpc(&self, input: &PeerVpcRequest) -> Result<PeerVpcResult, PeerVpcError> {
+    fn peer_vpc(&self) -> Result<PeerVpcResult, PeerVpcError> {
         let mut request = SignedRequest::new("POST", "lightsail", self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.PeerVpc");
-        let encoded = serde_json::to_string(input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(b"{}".to_vec()));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
@@ -8337,13 +8328,12 @@ impl<P, D> Lightsail for LightsailClient<P, D>
 
 
     #[doc="<p>Attempts to unpeer the Lightsail VPC from the user's default VPC.</p>"]
-    fn unpeer_vpc(&self, input: &UnpeerVpcRequest) -> Result<UnpeerVpcResult, UnpeerVpcError> {
+    fn unpeer_vpc(&self) -> Result<UnpeerVpcResult, UnpeerVpcError> {
         let mut request = SignedRequest::new("POST", "lightsail", self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.UnpeerVpc");
-        let encoded = serde_json::to_string(input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(b"{}".to_vec()));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 

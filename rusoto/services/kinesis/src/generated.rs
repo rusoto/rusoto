@@ -2229,9 +2229,7 @@ pub trait Kinesis {
 
 
     #[doc="<p>Describes the shard limits and usage for the account.</p> <p>If you update your account limits, the old limits might be returned for a few minutes.</p> <p>This operation has a limit of 1 transaction per second per account.</p>"]
-    fn describe_limits(&self,
-                       input: &DescribeLimitsInput)
-                       -> Result<DescribeLimitsOutput, DescribeLimitsError>;
+    fn describe_limits(&self) -> Result<DescribeLimitsOutput, DescribeLimitsError>;
 
 
     #[doc="<p>Describes the specified Amazon Kinesis stream.</p> <p>The information returned includes the stream name, Amazon Resource Name (ARN), creation time, enhanced metric configuration, and shard map. The shard map is an array of shard objects. For each shard object, there is the hash key and sequence number ranges that the shard spans, and the IDs of any earlier shards that played in a role in creating the shard. Every record ingested in the stream is identified by a sequence number, which is assigned when the record is put into the stream.</p> <p>You can limit the number of shards returned by each call. For more information, see <a href=\"http://docs.aws.amazon.com/kinesis/latest/dev/kinesis-using-sdk-java-retrieve-shards.html\">Retrieving Shards from a Stream</a> in the <i>Amazon Kinesis Streams Developer Guide</i>.</p> <p>There are no guarantees about the chronological order shards returned. To process shards in chronological order, use the ID of the parent shard to track the lineage to the oldest shard.</p> <p>This operation has a limit of 10 transactions per second per account.</p>"]
@@ -2427,15 +2425,12 @@ impl<P, D> Kinesis for KinesisClient<P, D>
 
 
     #[doc="<p>Describes the shard limits and usage for the account.</p> <p>If you update your account limits, the old limits might be returned for a few minutes.</p> <p>This operation has a limit of 1 transaction per second per account.</p>"]
-    fn describe_limits(&self,
-                       input: &DescribeLimitsInput)
-                       -> Result<DescribeLimitsOutput, DescribeLimitsError> {
+    fn describe_limits(&self) -> Result<DescribeLimitsOutput, DescribeLimitsError> {
         let mut request = SignedRequest::new("POST", "kinesis", self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Kinesis_20131202.DescribeLimits");
-        let encoded = serde_json::to_string(input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(b"{}".to_vec()));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 

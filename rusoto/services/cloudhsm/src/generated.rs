@@ -2360,9 +2360,7 @@ pub trait CloudHsm {
 
 
     #[doc="<p>Lists the Availability Zones that have available AWS CloudHSM capacity.</p>"]
-    fn list_available_zones(&self,
-                            input: &ListAvailableZonesRequest)
-                            -> Result<ListAvailableZonesResponse, ListAvailableZonesError>;
+    fn list_available_zones(&self) -> Result<ListAvailableZonesResponse, ListAvailableZonesError>;
 
 
     #[doc="<p>Lists the high-availability partition groups for the account.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> member. If more results are available, the <i>NextToken</i> member of the response contains a token that you pass in the next call to <a>ListHapgs</a> to retrieve the next set of items.</p>"]
@@ -2707,15 +2705,12 @@ impl<P, D> CloudHsm for CloudHsmClient<P, D>
 
 
     #[doc="<p>Lists the Availability Zones that have available AWS CloudHSM capacity.</p>"]
-    fn list_available_zones(&self,
-                            input: &ListAvailableZonesRequest)
-                            -> Result<ListAvailableZonesResponse, ListAvailableZonesError> {
+    fn list_available_zones(&self) -> Result<ListAvailableZonesResponse, ListAvailableZonesError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.ListAvailableZones");
-        let encoded = serde_json::to_string(input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(b"{}".to_vec()));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
