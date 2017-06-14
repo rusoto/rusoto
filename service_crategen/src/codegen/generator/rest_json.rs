@@ -2,10 +2,9 @@ use std::io::Write;
 use inflector::Inflector;
 use regex::{Captures, Regex};
 use hyper::status::StatusCode;
-
 use ::Service;
 use codegen::botocore::{Member, Operation, Shape, ShapeType};
-use super::{GenerateProtocol, error_type_name, FileWriter, IoResult};
+use super::{GenerateProtocol, error_type_name, FileWriter, IoResult, rest_response_parser};
 
 pub struct RestJsonGenerator;
 
@@ -18,15 +17,16 @@ impl GenerateProtocol for RestJsonGenerator {
             // Retrieve the `Shape` for the input for this operation.
             let input_shape = &service.get_shape(input_type).unwrap();
 
-            writeln!(writer,"
+            writeln!(writer,
+                     "
                 {documentation}
-                {method_signature} -> Result<{output_type}, {error_type}>;
+                {method_signature} -> \
+                      Result<{output_type}, {error_type}>;
                 ",
-                documentation = generate_documentation(operation).unwrap_or("".to_owned()),
-                method_signature = generate_method_signature(operation, input_shape),
-                error_type = error_type_name(operation_name),
-                output_type = output_type
-            )?
+                     documentation = generate_documentation(operation).unwrap_or("".to_owned()),
+                     method_signature = generate_method_signature(operation, input_shape),
+                     error_type = error_type_name(operation_name),
+                     output_type = output_type)?
         }
         Ok(())
     }
@@ -74,24 +74,16 @@ impl GenerateProtocol for RestJsonGenerator {
 
                     request.sign(&try!(self.credentials_provider.credentials()));
 
-                    let result = try!(self.dispatcher.dispatch(&request));
-                    let mut body = result.body;
+                    let response = try!(self.dispatcher.dispatch(&request));
 
-                    // `serde-json` serializes field-less structs as \"null\", but AWS returns
-                    // \"{{}}\" for a field-less response, so we must check for this result
-                    // and convert it if necessary.
-                    if body == b\"{{}}\" {{
-                        body = b\"null\".to_vec();
-                    }}
-
-                    debug!(\"Response body: {{:?}}\", body);
-                    debug!(\"Response status: {{}}\", result.status);
-
-                    match result.status {{
+                    match response.status {{
                         {status_code} => {{
-                            {ok_response}
+                            {parse_body}
+                            {parse_headers}
+                            {parse_status_code}
+                            Ok(result)
                         }}
-                         _ => Err({error_type}::from_body(String::from_utf8_lossy(&body).as_ref())),
+                         _ => Err({error_type}::from_body(String::from_utf8_lossy(&response.body).as_ref())),
                     }}
                 }}
                 ",
@@ -102,8 +94,11 @@ impl GenerateProtocol for RestJsonGenerator {
                 http_method = operation.http.method,
                 error_type = error_type_name(operation_name),
                 status_code = http_code_to_status_code(operation.http.response_code),
-                ok_response = generate_ok_response(operation, output_type),
+                parse_body = generate_body_parser(operation, service),
+                parse_status_code = generate_status_code_parser(operation, service),
                 output_type = output_type,
+                parse_headers = rest_response_parser::generate_response_headers_parser(service, operation)
+                    .unwrap_or_else(|| "".to_owned()),
                 request_uri_formatter = generate_uri_formatter(
                     &generate_snake_case_uri(&operation.http.request_uri),
                     &member_uri_strings
@@ -126,10 +121,7 @@ impl GenerateProtocol for RestJsonGenerator {
 
     }
 
-    fn generate_struct_attributes(&self,
-                                  serialized: bool,
-                                  deserialized: bool)
-                                  -> String {
+    fn generate_struct_attributes(&self, serialized: bool, deserialized: bool) -> String {
         let mut derived = vec!["Default", "Debug", "Clone"];
 
         if serialized {
@@ -364,11 +356,110 @@ fn generate_documentation(operation: &Operation) -> Option<String> {
         .map(|docs| format!("#[doc=\"{}\"]", docs.replace("\"", "\\\"")))
 }
 
-fn generate_ok_response(operation: &Operation, output_type: &str) -> String {
-    if operation.output.is_some() {
-        format!("Ok(serde_json::from_str::<{}>(String::from_utf8_lossy(&body).as_ref()).unwrap())",
-                output_type)
-    } else {
-        "Ok(())".to_owned()
+/// Generate code to plumb the response status code into any fields
+/// in the output shape that specify it
+fn generate_status_code_parser(operation: &Operation, service: &Service) -> String {
+    if operation.output.is_none() {
+        return "".to_string();
     }
+
+    let shape_name = &operation.output.as_ref().unwrap().shape;
+    let output_shape = &service.shapes()[shape_name];
+
+    let mut status_code_parser = "".to_string();
+
+    for (member_name, member) in output_shape.members.as_ref().unwrap() {
+        if let Some(ref location) = member.location {
+            if location == "statusCode" {
+                if output_shape.required(member_name) {
+                    status_code_parser += &format!("result.{} = StatusCode::to_u16(&response.status);", member_name.to_snake_case());
+                } else {
+                    status_code_parser += &format!("result.{} = Some(StatusCode::to_u16(&response.status) as i64);", member_name.to_snake_case());
+                }
+            }
+        }
+    }
+
+    status_code_parser
+}
+
+
+/// Generate code to parse the http response body, either as a JSON object
+/// deserialized with serde, or as a raw payload that's assigned to one of
+/// the fields in the result object.
+///
+/// Needs to determine whether or not other fields in the result object
+/// will be set later (e.g. from headers), so the compiler won't spit out
+/// warnings about unnecessary mutability
+fn generate_body_parser(operation: &Operation, service: &Service) -> String {
+
+    if operation.output.is_none() {
+        return "let result = ();".to_string();
+    }
+
+    let shape_name = &operation.output.as_ref().unwrap().shape;
+    let output_shape = &service.shapes()[shape_name];
+
+    let mutable_result = output_shape.members
+                .as_ref()
+                .unwrap()
+                .iter()
+                .any(|(_, member)| member.location.is_some());
+
+    match output_shape.payload {
+        None => json_body_parser(shape_name, mutable_result),
+        Some(ref payload_member_name) => {
+            let payload_member_shape = &output_shape.members.as_ref().unwrap()[payload_member_name].shape;
+            let payload_shape = &service.shapes()[payload_member_shape];
+            match payload_shape.shape_type {
+                payload_type if payload_type == ShapeType::Blob ||
+                                payload_type == ShapeType::String => {
+                    payload_body_parser(payload_type, shape_name, payload_member_name, mutable_result)
+                }
+                _ => json_body_parser(shape_name, mutable_result),
+            }
+        }
+    }
+}
+
+/// Take the raw http response body and assign it to the payload field
+/// on the result object
+fn payload_body_parser(payload_type: ShapeType, output_shape: &str, payload_member: &str, mutable_result: bool) -> String {
+
+    let response_body = match payload_type {
+        ShapeType::Blob => "Some(response.body)",
+        _ => "Some(String::from_utf8_lossy(&response.body).into_owned())",
+    };
+
+    format!("
+        let {mutable} result = {output_shape}::default();
+        result.{payload_member} = {response_body};
+        ",
+        output_shape = output_shape,
+        payload_member = payload_member.to_snake_case(),
+        response_body = response_body,
+        mutable = if mutable_result { "mut" } else { "" }
+    )
+}
+
+/// Parse the http response body as a JSON object with serde, and use that
+/// as the result object
+fn json_body_parser(output_shape: &str, mutable_result: bool) -> String {
+    // `serde-json` serializes field-less structs as "null", but AWS returns
+    // "{{}}" for a field-less response, so we must check for this result
+    // and convert it if necessary.
+    format!("
+            let mut body = response.body;
+
+            if body == b\"{{}}\" {{
+                body = b\"null\".to_vec();
+            }}
+
+            debug!(\"Response body: {{:?}}\", body);
+            debug!(\"Response status: {{}}\", response.status);
+            let {mutable} result = serde_json::from_str::<{output_shape}>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+            ",
+            output_shape = output_shape,
+            mutable = if mutable_result { "mut" } else { "" }
+    )
 }

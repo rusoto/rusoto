@@ -3,6 +3,10 @@ use inflector::Inflector;
 use ::Service;
 use codegen::botocore::{Operation, Shape, ShapeType, Member};
 
+// Rest Response Parser
+//
+// Used by rest-json and rest-xml protocol codegen to generate
+// code to parse headers from the http response.
 pub fn generate_response_headers_parser(service: &Service,
                                         operation: &Operation)
                                         -> Option<String> {
