@@ -95,6 +95,12 @@ fn main() {
             .open(crate_dir.join("Cargo.toml"))
             .expect("Unable to write Cargo.toml");
 
+        // crates.io has a max of 20 chars for keywords, do an ugly truncate if needed:
+        let mut name_for_keyword = name.clone().to_string();
+        if name_for_keyword.len() >= 20 {
+            name_for_keyword = name_for_keyword[..20].to_string();
+        }
+
         let manifest = cargo::Manifest {
             package: cargo::Metadata {
                 authors: Some(vec![
@@ -105,7 +111,7 @@ fn main() {
                 ]),
                 description: Some(format!("AWS SDK for Rust - {} @ {}", service.full_name(), service.api_version())),
                 documentation: Some("https://rusoto.github.io/rusoto/rusoto_core/index.html".into()),
-                keywords: Some(vec!["AWS".into(), "Amazon".into(), name.clone()]),
+                keywords: Some(vec!["AWS".into(), "Amazon".into(), name_for_keyword]),
                 license: Some("MIT".into()),
                 name: crate_name.clone(),
                 readme: Some("README.md".into()),
