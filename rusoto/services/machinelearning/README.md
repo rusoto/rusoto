@@ -23,7 +23,7 @@ To use `rusoto_machinelearning` in your application, add it as a dependency in y
 
 ```toml
 [dependencies]
-rusoto_machinelearning = "0.25.0"
+rusoto_machinelearning = "0.26.0"
 ```
 
 ## Contributing

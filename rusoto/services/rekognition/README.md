@@ -23,7 +23,7 @@ To use `rusoto_rekognition` in your application, add it as a dependency in your 
 
 ```toml
 [dependencies]
-rusoto_rekognition = "0.25.0"
+rusoto_rekognition = "0.26.0"
 ```
 
 ## Contributing
