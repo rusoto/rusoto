@@ -581,27 +581,15 @@ pub struct InvocationRequest {
 }
 
 #[doc="<p>Upon success, returns an empty response. Otherwise, throws an exception.</p>"]
-#[derive(Default,Debug,Clone,Deserialize)]
+#[derive(Default,Debug,Clone)]
 pub struct InvocationResponse {
     #[doc="<p>Indicates whether an error occurred while executing the Lambda function. If an error occurred this field will have one of two values; <code>Handled</code> or <code>Unhandled</code>. <code>Handled</code> errors are errors that are reported by the function while the <code>Unhandled</code> errors are those detected and reported by AWS Lambda. Unhandled errors include out of memory errors and function timeouts. For information about how to report an <code>Handled</code> error, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/programming-model.html\">Programming Model</a>. </p>"]
-    #[serde(rename="FunctionError")]
-    #[serde(skip_serializing_if="Option::is_none")]
     pub function_error: Option<String>,
     #[doc="<p> It is the base64-encoded logs for the Lambda function invocation. This is present only if the invocation type is <code>RequestResponse</code> and the logs were requested. </p>"]
-    #[serde(rename="LogResult")]
-    #[serde(skip_serializing_if="Option::is_none")]
     pub log_result: Option<String>,
     #[doc="<p> It is the JSON representation of the object returned by the Lambda function. This is present only if the invocation type is <code>RequestResponse</code>. </p> <p>In the event of a function error this field contains a message describing the error. For the <code>Handled</code> errors the Lambda function will report this message. For <code>Unhandled</code> errors AWS Lambda reports the message. </p>"]
-    #[serde(rename="Payload")]
-    #[serde(
-                            deserialize_with="::rusoto_core::serialization::SerdeBlob::deserialize_blob",
-                            serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
-                            default,
-                        )]
     pub payload: Option<Blob>,
     #[doc="<p>The HTTP status code will be in the 200 range for successful request. For the <code>RequestResonse</code> invocation type this status code will be 200. For the <code>Event</code> invocation type this status code will be 202. For the <code>DryRun</code> invocation type the status code will be 204. </p>"]
-    #[serde(rename="StatusCode")]
-    #[serde(skip_serializing_if="Option::is_none")]
     pub status_code: Option<Integer>,
 }
 

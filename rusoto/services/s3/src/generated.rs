@@ -856,20 +856,6 @@ impl AnalyticsS3ExportFileFormatSerializer {
 }
 
 pub type Body = Vec<u8>;
-struct BodyDeserializer;
-impl BodyDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<Body, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack)).into_bytes();
-        try!(end_element(tag_name, stack));
-
-        Ok(obj)
-
-    }
-}
 
 pub struct BodySerializer;
 impl BodySerializer {
@@ -4355,47 +4341,6 @@ pub struct GetObjectOutput {
     pub website_redirect_location: Option<WebsiteRedirectLocation>,
 }
 
-struct GetObjectOutputDeserializer;
-impl GetObjectOutputDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<GetObjectOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
-        let mut obj = GetObjectOutput::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Body" => {
-                            obj.body = Some(try!(BodyDeserializer::deserialize("Body", stack)));
-                        }
-                        _ => skip_tree(stack),
-                    }
-                }
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
-            }
-        }
-
-        try!(end_element(tag_name, stack));
-
-        Ok(obj)
-
-    }
-}
 #[derive(Default,Clone,Debug)]
 pub struct GetObjectRequest {
     pub bucket: BucketName,
@@ -4495,47 +4440,6 @@ pub struct GetObjectTorrentOutput {
     pub request_charged: Option<RequestCharged>,
 }
 
-struct GetObjectTorrentOutputDeserializer;
-impl GetObjectTorrentOutputDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<GetObjectTorrentOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
-        let mut obj = GetObjectTorrentOutput::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Body" => {
-                            obj.body = Some(try!(BodyDeserializer::deserialize("Body", stack)));
-                        }
-                        _ => skip_tree(stack),
-                    }
-                }
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
-            }
-        }
-
-        try!(end_element(tag_name, stack));
-
-        Ok(obj)
-
-    }
-}
 #[derive(Default,Clone,Debug)]
 pub struct GetObjectTorrentRequest {
     pub bucket: BucketName,
