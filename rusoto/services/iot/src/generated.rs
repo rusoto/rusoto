@@ -8244,25 +8244,16 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
 
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
 
-        match result.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(AcceptCertificateTransferError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Ok(result)
             }
+            _ => Err(AcceptCertificateTransferError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
 
@@ -8284,23 +8275,18 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
 
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
 
-        match result.status {
-            StatusCode::Ok => Ok(()),
+                Ok(result)
+            }
             _ => {
-                Err(AttachPrincipalPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(AttachPrincipalPolicyError::from_body(String::from_utf8_lossy(&response.body)
+                                                              .as_ref()))
             }
         }
     }
@@ -8324,24 +8310,29 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<AttachThingPrincipalResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-            _ => Err(AttachThingPrincipalError::from_body(String::from_utf8_lossy(&body).as_ref())),
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let  result = serde_json::from_str::<AttachThingPrincipalResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+
+
+
+                Ok(result)
+            }
+            _ => {
+                Err(AttachThingPrincipalError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
+            }
         }
     }
 
@@ -8363,25 +8354,16 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
 
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
 
-        match result.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(CancelCertificateTransferError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Ok(result)
             }
+            _ => Err(CancelCertificateTransferError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
 
@@ -8407,27 +8389,26 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateCertificateFromCsrResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CreateCertificateFromCsrError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let  result = serde_json::from_str::<CreateCertificateFromCsrResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+
+
+
+                Ok(result)
             }
+            _ => Err(CreateCertificateFromCsrError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
 
@@ -8453,27 +8434,26 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreateKeysAndCertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(CreateKeysAndCertificateError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let  result = serde_json::from_str::<CreateKeysAndCertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+
+
+
+                Ok(result)
             }
+            _ => Err(CreateKeysAndCertificateError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
 
@@ -8494,26 +8474,31 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<CreatePolicyResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_str::<CreatePolicyResponse>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                            .unwrap();
+
+
+
+                Ok(result)
             }
-            _ => Err(CreatePolicyError::from_body(String::from_utf8_lossy(&body).as_ref())),
+            _ => {
+                Err(CreatePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+            }
         }
     }
 
@@ -8539,24 +8524,29 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<CreatePolicyVersionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-            _ => Err(CreatePolicyVersionError::from_body(String::from_utf8_lossy(&body).as_ref())),
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let  result = serde_json::from_str::<CreatePolicyVersionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+
+
+
+                Ok(result)
+            }
+            _ => {
+                Err(CreatePolicyVersionError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
+            }
         }
     }
 
@@ -8577,26 +8567,29 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<CreateThingResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_str::<CreateThingResponse>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                            .unwrap();
+
+
+
+                Ok(result)
             }
-            _ => Err(CreateThingError::from_body(String::from_utf8_lossy(&body).as_ref())),
+            _ => Err(CreateThingError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
 
@@ -8618,26 +8611,32 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<CreateThingTypeResponse>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_str::<CreateThingTypeResponse>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                            .unwrap();
+
+
+
+                Ok(result)
             }
-            _ => Err(CreateThingTypeError::from_body(String::from_utf8_lossy(&body).as_ref())),
+            _ => {
+                Err(CreateThingTypeError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
+            }
         }
     }
 
@@ -8658,22 +8657,19 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
 
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
 
-        match result.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(CreateTopicRuleError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                Ok(result)
+            }
+            _ => {
+                Err(CreateTopicRuleError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
+            }
         }
     }
 
@@ -8695,24 +8691,29 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteCACertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-            _ => Err(DeleteCACertificateError::from_body(String::from_utf8_lossy(&body).as_ref())),
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let  result = serde_json::from_str::<DeleteCACertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+
+
+
+                Ok(result)
+            }
+            _ => {
+                Err(DeleteCACertificateError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
+            }
         }
     }
 
@@ -8734,22 +8735,19 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
 
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
 
-        match result.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(DeleteCertificateError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                Ok(result)
+            }
+            _ => {
+                Err(DeleteCertificateError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
+            }
         }
     }
 
@@ -8768,22 +8766,18 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
 
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
 
-        match result.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(DeletePolicyError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                Ok(result)
+            }
+            _ => {
+                Err(DeletePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+            }
         }
     }
 
@@ -8806,22 +8800,19 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
 
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
 
-        match result.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(DeletePolicyVersionError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                Ok(result)
+            }
+            _ => {
+                Err(DeletePolicyVersionError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
+            }
         }
     }
 
@@ -8842,25 +8833,28 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeleteRegistrationCodeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let  result = serde_json::from_str::<DeleteRegistrationCodeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+
+
+
+                Ok(result)
+            }
             _ => {
-                Err(DeleteRegistrationCodeError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DeleteRegistrationCodeError::from_body(String::from_utf8_lossy(&response.body)
+                                                               .as_ref()))
             }
         }
     }
@@ -8886,26 +8880,29 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<DeleteThingResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_str::<DeleteThingResponse>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                            .unwrap();
+
+
+
+                Ok(result)
             }
-            _ => Err(DeleteThingError::from_body(String::from_utf8_lossy(&body).as_ref())),
+            _ => Err(DeleteThingError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
 
@@ -8927,26 +8924,32 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<DeleteThingTypeResponse>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                           .unwrap())
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_str::<DeleteThingTypeResponse>(String::from_utf8_lossy(&body)
+                                                                        .as_ref())
+                            .unwrap();
+
+
+
+                Ok(result)
             }
-            _ => Err(DeleteThingTypeError::from_body(String::from_utf8_lossy(&body).as_ref())),
+            _ => {
+                Err(DeleteThingTypeError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
+            }
         }
     }
 
@@ -8967,22 +8970,19 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
 
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
 
-        match result.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(DeleteTopicRuleError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                Ok(result)
+            }
+            _ => {
+                Err(DeleteTopicRuleError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
+            }
         }
     }
 
@@ -9004,24 +9004,29 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DeprecateThingTypeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-            _ => Err(DeprecateThingTypeError::from_body(String::from_utf8_lossy(&body).as_ref())),
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let  result = serde_json::from_str::<DeprecateThingTypeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+
+
+
+                Ok(result)
+            }
+            _ => {
+                Err(DeprecateThingTypeError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
+            }
         }
     }
 
@@ -9044,25 +9049,28 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeCACertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let  result = serde_json::from_str::<DescribeCACertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+
+
+
+                Ok(result)
+            }
             _ => {
-                Err(DescribeCACertificateError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DescribeCACertificateError::from_body(String::from_utf8_lossy(&response.body)
+                                                              .as_ref()))
             }
         }
     }
@@ -9085,24 +9093,29 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeCertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeCertificateError::from_body(String::from_utf8_lossy(&body).as_ref())),
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let  result = serde_json::from_str::<DescribeCertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+
+
+
+                Ok(result)
+            }
+            _ => {
+                Err(DescribeCertificateError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
+            }
         }
     }
 
@@ -9121,26 +9134,29 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<DescribeEndpointResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let  result = serde_json::from_str::<DescribeEndpointResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+
+
+
+                Ok(result)
             }
-            _ => Err(DescribeEndpointError::from_body(String::from_utf8_lossy(&body).as_ref())),
+            _ => {
+                Err(DescribeEndpointError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
+            }
         }
     }
 
@@ -9161,26 +9177,31 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<DescribeThingResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_str::<DescribeThingResponse>(String::from_utf8_lossy(&body)
+                                                                      .as_ref())
+                            .unwrap();
+
+
+
+                Ok(result)
             }
-            _ => Err(DescribeThingError::from_body(String::from_utf8_lossy(&body).as_ref())),
+            _ => {
+                Err(DescribeThingError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+            }
         }
     }
 
@@ -9202,24 +9223,29 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DescribeThingTypeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-            _ => Err(DescribeThingTypeError::from_body(String::from_utf8_lossy(&body).as_ref())),
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let  result = serde_json::from_str::<DescribeThingTypeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+
+
+
+                Ok(result)
+            }
+            _ => {
+                Err(DescribeThingTypeError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
+            }
         }
     }
 
@@ -9241,23 +9267,18 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
 
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
 
-        match result.status {
-            StatusCode::Ok => Ok(()),
+                Ok(result)
+            }
             _ => {
-                Err(DetachPrincipalPolicyError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(DetachPrincipalPolicyError::from_body(String::from_utf8_lossy(&response.body)
+                                                              .as_ref()))
             }
         }
     }
@@ -9281,24 +9302,29 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<DetachThingPrincipalResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-            _ => Err(DetachThingPrincipalError::from_body(String::from_utf8_lossy(&body).as_ref())),
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let  result = serde_json::from_str::<DetachThingPrincipalResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+
+
+
+                Ok(result)
+            }
+            _ => {
+                Err(DetachThingPrincipalError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
+            }
         }
     }
 
@@ -9319,22 +9345,19 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
 
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
 
-        match result.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(DisableTopicRuleError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                Ok(result)
+            }
+            _ => {
+                Err(DisableTopicRuleError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
+            }
         }
     }
 
@@ -9355,22 +9378,19 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
 
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
 
-        match result.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(EnableTopicRuleError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                Ok(result)
+            }
+            _ => {
+                Err(EnableTopicRuleError::from_body(String::from_utf8_lossy(&response.body)
+                                                        .as_ref()))
+            }
         }
     }
 
@@ -9389,24 +9409,29 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetLoggingOptionsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-            _ => Err(GetLoggingOptionsError::from_body(String::from_utf8_lossy(&body).as_ref())),
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let  result = serde_json::from_str::<GetLoggingOptionsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+
+
+
+                Ok(result)
+            }
+            _ => {
+                Err(GetLoggingOptionsError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
+            }
         }
     }
 
@@ -9425,26 +9450,29 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<GetPolicyResponse>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_str::<GetPolicyResponse>(String::from_utf8_lossy(&body)
+                                                                  .as_ref())
+                            .unwrap();
+
+
+
+                Ok(result)
             }
-            _ => Err(GetPolicyError::from_body(String::from_utf8_lossy(&body).as_ref())),
+            _ => Err(GetPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
 
@@ -9467,26 +9495,29 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<GetPolicyVersionResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let  result = serde_json::from_str::<GetPolicyVersionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+
+
+
+                Ok(result)
             }
-            _ => Err(GetPolicyVersionError::from_body(String::from_utf8_lossy(&body).as_ref())),
+            _ => {
+                Err(GetPolicyVersionError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
+            }
         }
     }
 
@@ -9506,24 +9537,29 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<GetRegistrationCodeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-            _ => Err(GetRegistrationCodeError::from_body(String::from_utf8_lossy(&body).as_ref())),
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let  result = serde_json::from_str::<GetRegistrationCodeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+
+
+
+                Ok(result)
+            }
+            _ => {
+                Err(GetRegistrationCodeError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
+            }
         }
     }
 
@@ -9544,26 +9580,31 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<GetTopicRuleResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_str::<GetTopicRuleResponse>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                            .unwrap();
+
+
+
+                Ok(result)
             }
-            _ => Err(GetTopicRuleError::from_body(String::from_utf8_lossy(&body).as_ref())),
+            _ => {
+                Err(GetTopicRuleError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+            }
         }
     }
 
@@ -9594,24 +9635,29 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListCACertificatesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-            _ => Err(ListCACertificatesError::from_body(String::from_utf8_lossy(&body).as_ref())),
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let  result = serde_json::from_str::<ListCACertificatesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+
+
+
+                Ok(result)
+            }
+            _ => {
+                Err(ListCACertificatesError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
+            }
         }
     }
 
@@ -9642,26 +9688,29 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<ListCertificatesResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let  result = serde_json::from_str::<ListCertificatesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+
+
+
+                Ok(result)
             }
-            _ => Err(ListCertificatesError::from_body(String::from_utf8_lossy(&body).as_ref())),
+            _ => {
+                Err(ListCertificatesError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
+            }
         }
     }
 
@@ -9694,24 +9743,29 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListCertificatesByCAResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-            _ => Err(ListCertificatesByCAError::from_body(String::from_utf8_lossy(&body).as_ref())),
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let  result = serde_json::from_str::<ListCertificatesByCAResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+
+
+
+                Ok(result)
+            }
+            _ => {
+                Err(ListCertificatesByCAError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
+            }
         }
     }
 
@@ -9743,27 +9797,26 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListOutgoingCertificatesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(ListOutgoingCertificatesError::from_body(String::from_utf8_lossy(&body)
-                                                                 .as_ref()))
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let  result = serde_json::from_str::<ListOutgoingCertificatesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+
+
+
+                Ok(result)
             }
+            _ => Err(ListOutgoingCertificatesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
 
@@ -9794,26 +9847,31 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<ListPoliciesResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_str::<ListPoliciesResponse>(String::from_utf8_lossy(&body)
+                                                                     .as_ref())
+                            .unwrap();
+
+
+
+                Ok(result)
             }
-            _ => Err(ListPoliciesError::from_body(String::from_utf8_lossy(&body).as_ref())),
+            _ => {
+                Err(ListPoliciesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+            }
         }
     }
 
@@ -9845,24 +9903,29 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListPolicyPrincipalsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-            _ => Err(ListPolicyPrincipalsError::from_body(String::from_utf8_lossy(&body).as_ref())),
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let  result = serde_json::from_str::<ListPolicyPrincipalsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+
+
+
+                Ok(result)
+            }
+            _ => {
+                Err(ListPolicyPrincipalsError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
+            }
         }
     }
 
@@ -9884,24 +9947,29 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListPolicyVersionsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-            _ => Err(ListPolicyVersionsError::from_body(String::from_utf8_lossy(&body).as_ref())),
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let  result = serde_json::from_str::<ListPolicyVersionsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+
+
+
+                Ok(result)
+            }
+            _ => {
+                Err(ListPolicyVersionsError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
+            }
         }
     }
 
@@ -9933,25 +10001,28 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListPrincipalPoliciesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let  result = serde_json::from_str::<ListPrincipalPoliciesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+
+
+
+                Ok(result)
+            }
             _ => {
-                Err(ListPrincipalPoliciesError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(ListPrincipalPoliciesError::from_body(String::from_utf8_lossy(&response.body)
+                                                              .as_ref()))
             }
         }
     }
@@ -9980,24 +10051,29 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListPrincipalThingsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-            _ => Err(ListPrincipalThingsError::from_body(String::from_utf8_lossy(&body).as_ref())),
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let  result = serde_json::from_str::<ListPrincipalThingsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+
+
+
+                Ok(result)
+            }
+            _ => {
+                Err(ListPrincipalThingsError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
+            }
         }
     }
 
@@ -10019,24 +10095,29 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListThingPrincipalsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-            _ => Err(ListThingPrincipalsError::from_body(String::from_utf8_lossy(&body).as_ref())),
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let  result = serde_json::from_str::<ListThingPrincipalsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+
+
+
+                Ok(result)
+            }
+            _ => {
+                Err(ListThingPrincipalsError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
+            }
         }
     }
 
@@ -10067,26 +10148,32 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<ListThingTypesResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_str::<ListThingTypesResponse>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                            .unwrap();
+
+
+
+                Ok(result)
             }
-            _ => Err(ListThingTypesError::from_body(String::from_utf8_lossy(&body).as_ref())),
+            _ => {
+                Err(ListThingTypesError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
+            }
         }
     }
 
@@ -10123,26 +10210,29 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<ListThingsResponse>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_str::<ListThingsResponse>(String::from_utf8_lossy(&body)
+                                                                   .as_ref())
+                            .unwrap();
+
+
+
+                Ok(result)
             }
-            _ => Err(ListThingsError::from_body(String::from_utf8_lossy(&body).as_ref())),
+            _ => Err(ListThingsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
 
@@ -10176,26 +10266,32 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<ListTopicRulesResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_str::<ListTopicRulesResponse>(String::from_utf8_lossy(&body)
+                                                                       .as_ref())
+                            .unwrap();
+
+
+
+                Ok(result)
             }
-            _ => Err(ListTopicRulesError::from_body(String::from_utf8_lossy(&body).as_ref())),
+            _ => {
+                Err(ListTopicRulesError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
+            }
         }
     }
 
@@ -10224,25 +10320,28 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RegisterCACertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let  result = serde_json::from_str::<RegisterCACertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+
+
+
+                Ok(result)
+            }
             _ => {
-                Err(RegisterCACertificateError::from_body(String::from_utf8_lossy(&body).as_ref()))
+                Err(RegisterCACertificateError::from_body(String::from_utf8_lossy(&response.body)
+                                                              .as_ref()))
             }
         }
     }
@@ -10264,24 +10363,29 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<RegisterCertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-            _ => Err(RegisterCertificateError::from_body(String::from_utf8_lossy(&body).as_ref())),
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let  result = serde_json::from_str::<RegisterCertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+
+
+
+                Ok(result)
+            }
+            _ => {
+                Err(RegisterCertificateError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
+            }
         }
     }
 
@@ -10303,25 +10407,16 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
 
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
 
-        match result.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(RejectCertificateTransferError::from_body(String::from_utf8_lossy(&body)
-                                                                  .as_ref()))
+                Ok(result)
             }
+            _ => Err(RejectCertificateTransferError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
 
@@ -10342,22 +10437,19 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
 
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
 
-        match result.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(ReplaceTopicRuleError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                Ok(result)
+            }
+            _ => {
+                Err(ReplaceTopicRuleError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
+            }
         }
     }
 
@@ -10380,25 +10472,16 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
 
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
 
-        match result.status {
-            StatusCode::Ok => Ok(()),
-            _ => {
-                Err(SetDefaultPolicyVersionError::from_body(String::from_utf8_lossy(&body)
-                                                                .as_ref()))
+                Ok(result)
             }
+            _ => Err(SetDefaultPolicyVersionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
 
@@ -10419,22 +10502,19 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
 
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
 
-        match result.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(SetLoggingOptionsError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                Ok(result)
+            }
+            _ => {
+                Err(SetLoggingOptionsError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
+            }
         }
     }
 
@@ -10458,24 +10538,29 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<TransferCertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-            _ => Err(TransferCertificateError::from_body(String::from_utf8_lossy(&body).as_ref())),
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let  result = serde_json::from_str::<TransferCertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+
+
+
+                Ok(result)
+            }
+            _ => {
+                Err(TransferCertificateError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
+            }
         }
     }
 
@@ -10504,22 +10589,19 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
 
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
 
-        match result.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(UpdateCACertificateError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                Ok(result)
+            }
+            _ => {
+                Err(UpdateCACertificateError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
+            }
         }
     }
 
@@ -10543,22 +10625,19 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
 
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
 
-        match result.status {
-            StatusCode::Ok => Ok(()),
-            _ => Err(UpdateCertificateError::from_body(String::from_utf8_lossy(&body).as_ref())),
+                Ok(result)
+            }
+            _ => {
+                Err(UpdateCertificateError::from_body(String::from_utf8_lossy(&response.body)
+                                                          .as_ref()))
+            }
         }
     }
 
@@ -10579,26 +10658,29 @@ impl<P, D> Iot for IotClient<P, D>
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = try!(self.dispatcher.dispatch(&request));
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<UpdateThingResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_str::<UpdateThingResponse>(String::from_utf8_lossy(&body)
+                                                                    .as_ref())
+                            .unwrap();
+
+
+
+                Ok(result)
             }
-            _ => Err(UpdateThingError::from_body(String::from_utf8_lossy(&body).as_ref())),
+            _ => Err(UpdateThingError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
 }
