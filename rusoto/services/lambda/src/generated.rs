@@ -3869,9 +3869,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
@@ -3884,10 +3884,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<AddPermissionResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<AddPermissionResponse>(&body).unwrap();
 
 
 
@@ -3915,9 +3912,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_payload(Some(encoded.into_bytes()));
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
@@ -3930,10 +3927,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<AliasConfiguration>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<AliasConfiguration>(&body).unwrap();
 
 
 
@@ -3959,9 +3953,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_payload(Some(encoded.into_bytes()));
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Accepted => {
@@ -3974,7 +3968,8 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<EventSourceMappingConfiguration>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<EventSourceMappingConfiguration>(&body)
+                    .unwrap();
 
 
 
@@ -3999,9 +3994,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_payload(Some(encoded.into_bytes()));
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
@@ -4014,10 +4009,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<FunctionConfiguration>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<FunctionConfiguration>(&body).unwrap();
 
 
 
@@ -4045,9 +4037,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::NoContent => {
@@ -4077,9 +4069,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Accepted => {
@@ -4092,7 +4084,8 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<EventSourceMappingConfiguration>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<EventSourceMappingConfiguration>(&body)
+                    .unwrap();
 
 
 
@@ -4120,9 +4113,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::NoContent => {
@@ -4151,9 +4144,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -4166,7 +4159,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<GetAccountSettingsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<GetAccountSettingsResponse>(&body).unwrap();
 
 
 
@@ -4194,9 +4187,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -4209,10 +4202,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<AliasConfiguration>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<AliasConfiguration>(&body).unwrap();
 
 
 
@@ -4239,9 +4229,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -4254,7 +4244,8 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<EventSourceMappingConfiguration>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<EventSourceMappingConfiguration>(&body)
+                    .unwrap();
 
 
 
@@ -4287,9 +4278,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -4302,10 +4293,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<GetFunctionResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<GetFunctionResponse>(&body).unwrap();
 
 
 
@@ -4336,9 +4324,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -4351,10 +4339,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<FunctionConfiguration>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<FunctionConfiguration>(&body).unwrap();
 
 
 
@@ -4382,9 +4367,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -4397,10 +4382,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<GetPolicyResponse>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<GetPolicyResponse>(&body).unwrap();
 
 
 
@@ -4428,9 +4410,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -4469,9 +4451,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_payload(Some(encoded.into_bytes()));
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Accepted => {
@@ -4484,10 +4466,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let mut result =
-                    serde_json::from_str::<InvokeAsyncResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                            .unwrap();
+                let mut result = serde_json::from_slice::<InvokeAsyncResponse>(&body).unwrap();
 
 
                 result.status = Some(StatusCode::to_u16(&response.status) as i64);
@@ -4523,9 +4502,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -4538,10 +4517,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<ListAliasesResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<ListAliasesResponse>(&body).unwrap();
 
 
 
@@ -4580,9 +4556,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -4595,7 +4571,8 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<ListEventSourceMappingsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<ListEventSourceMappingsResponse>(&body)
+                    .unwrap();
 
 
 
@@ -4627,9 +4604,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -4642,10 +4619,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<ListFunctionsResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<ListFunctionsResponse>(&body).unwrap();
 
 
 
@@ -4670,9 +4644,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -4685,10 +4659,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<ListTagsResponse>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<ListTagsResponse>(&body).unwrap();
 
 
 
@@ -4722,9 +4693,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -4737,7 +4708,8 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<ListVersionsByFunctionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<ListVersionsByFunctionResponse>(&body)
+                    .unwrap();
 
 
 
@@ -4766,9 +4738,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_payload(Some(encoded.into_bytes()));
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
@@ -4781,10 +4753,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<FunctionConfiguration>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<FunctionConfiguration>(&body).unwrap();
 
 
 
@@ -4818,9 +4787,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::NoContent => {
@@ -4849,9 +4818,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_payload(Some(encoded.into_bytes()));
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::NoContent => {
@@ -4881,9 +4850,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::NoContent => {
@@ -4915,9 +4884,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_payload(Some(encoded.into_bytes()));
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -4930,10 +4899,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<AliasConfiguration>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<AliasConfiguration>(&body).unwrap();
 
 
 
@@ -4960,9 +4926,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_payload(Some(encoded.into_bytes()));
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Accepted => {
@@ -4975,7 +4941,8 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<EventSourceMappingConfiguration>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<EventSourceMappingConfiguration>(&body)
+                    .unwrap();
 
 
 
@@ -5001,9 +4968,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_payload(Some(encoded.into_bytes()));
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -5016,10 +4983,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<FunctionConfiguration>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<FunctionConfiguration>(&body).unwrap();
 
 
 
@@ -5049,9 +5013,9 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_payload(Some(encoded.into_bytes()));
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -5064,10 +5028,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<FunctionConfiguration>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<FunctionConfiguration>(&body).unwrap();
 
 
 

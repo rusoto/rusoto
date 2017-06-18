@@ -8242,9 +8242,9 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -8273,9 +8273,9 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -8308,9 +8308,9 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -8323,7 +8323,7 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<AttachThingPrincipalResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<AttachThingPrincipalResponse>(&body).unwrap();
 
 
 
@@ -8352,9 +8352,9 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -8387,9 +8387,9 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -8402,7 +8402,8 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<CreateCertificateFromCsrResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<CreateCertificateFromCsrResponse>(&body)
+                    .unwrap();
 
 
 
@@ -8432,9 +8433,9 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -8447,7 +8448,8 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<CreateKeysAndCertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<CreateKeysAndCertificateResponse>(&body)
+                    .unwrap();
 
 
 
@@ -8472,9 +8474,9 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_payload(Some(encoded.into_bytes()));
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -8487,10 +8489,7 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<CreatePolicyResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<CreatePolicyResponse>(&body).unwrap();
 
 
 
@@ -8522,9 +8521,9 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -8537,7 +8536,7 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<CreatePolicyVersionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<CreatePolicyVersionResponse>(&body).unwrap();
 
 
 
@@ -8565,9 +8564,9 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_payload(Some(encoded.into_bytes()));
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -8580,10 +8579,7 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<CreateThingResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<CreateThingResponse>(&body).unwrap();
 
 
 
@@ -8609,9 +8605,9 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_payload(Some(encoded.into_bytes()));
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -8624,10 +8620,7 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<CreateThingTypeResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<CreateThingTypeResponse>(&body).unwrap();
 
 
 
@@ -8655,9 +8648,9 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_payload(Some(encoded.into_bytes()));
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -8689,9 +8682,9 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -8704,7 +8697,7 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<DeleteCACertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<DeleteCACertificateResponse>(&body).unwrap();
 
 
 
@@ -8733,9 +8726,9 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -8764,9 +8757,9 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -8798,9 +8791,9 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -8831,9 +8824,9 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -8846,7 +8839,8 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<DeleteRegistrationCodeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<DeleteRegistrationCodeResponse>(&body)
+                    .unwrap();
 
 
 
@@ -8878,9 +8872,9 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -8893,10 +8887,7 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<DeleteThingResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<DeleteThingResponse>(&body).unwrap();
 
 
 
@@ -8922,9 +8913,9 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -8937,10 +8928,7 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<DeleteThingTypeResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<DeleteThingTypeResponse>(&body).unwrap();
 
 
 
@@ -8968,9 +8956,9 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -9002,9 +8990,9 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_payload(Some(encoded.into_bytes()));
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -9017,7 +9005,7 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<DeprecateThingTypeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<DeprecateThingTypeResponse>(&body).unwrap();
 
 
 
@@ -9047,9 +9035,9 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -9062,7 +9050,8 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<DescribeCACertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<DescribeCACertificateResponse>(&body)
+                    .unwrap();
 
 
 
@@ -9091,9 +9080,9 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -9106,7 +9095,7 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<DescribeCertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<DescribeCertificateResponse>(&body).unwrap();
 
 
 
@@ -9132,9 +9121,9 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -9147,7 +9136,7 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<DescribeEndpointResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<DescribeEndpointResponse>(&body).unwrap();
 
 
 
@@ -9175,9 +9164,9 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -9190,10 +9179,7 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<DescribeThingResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<DescribeThingResponse>(&body).unwrap();
 
 
 
@@ -9221,9 +9207,9 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -9236,7 +9222,7 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<DescribeThingTypeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<DescribeThingTypeResponse>(&body).unwrap();
 
 
 
@@ -9265,9 +9251,9 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -9300,9 +9286,9 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -9315,7 +9301,7 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<DetachThingPrincipalResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<DetachThingPrincipalResponse>(&body).unwrap();
 
 
 
@@ -9343,9 +9329,9 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -9376,9 +9362,9 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -9407,9 +9393,9 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -9422,7 +9408,7 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<GetLoggingOptionsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<GetLoggingOptionsResponse>(&body).unwrap();
 
 
 
@@ -9448,9 +9434,9 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -9463,10 +9449,7 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<GetPolicyResponse>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<GetPolicyResponse>(&body).unwrap();
 
 
 
@@ -9493,9 +9476,9 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -9508,7 +9491,7 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<GetPolicyVersionResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<GetPolicyVersionResponse>(&body).unwrap();
 
 
 
@@ -9535,9 +9518,9 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -9550,7 +9533,7 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<GetRegistrationCodeResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<GetRegistrationCodeResponse>(&body).unwrap();
 
 
 
@@ -9578,9 +9561,9 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -9593,10 +9576,7 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<GetTopicRuleResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<GetTopicRuleResponse>(&body).unwrap();
 
 
 
@@ -9633,9 +9613,9 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -9648,7 +9628,7 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<ListCACertificatesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<ListCACertificatesResponse>(&body).unwrap();
 
 
 
@@ -9686,9 +9666,9 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -9701,7 +9681,7 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<ListCertificatesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<ListCertificatesResponse>(&body).unwrap();
 
 
 
@@ -9741,9 +9721,9 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -9756,7 +9736,7 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<ListCertificatesByCAResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<ListCertificatesByCAResponse>(&body).unwrap();
 
 
 
@@ -9795,9 +9775,9 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -9810,7 +9790,8 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<ListOutgoingCertificatesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<ListOutgoingCertificatesResponse>(&body)
+                    .unwrap();
 
 
 
@@ -9845,9 +9826,9 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -9860,10 +9841,7 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<ListPoliciesResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<ListPoliciesResponse>(&body).unwrap();
 
 
 
@@ -9901,9 +9879,9 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -9916,7 +9894,7 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<ListPolicyPrincipalsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<ListPolicyPrincipalsResponse>(&body).unwrap();
 
 
 
@@ -9945,9 +9923,9 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -9960,7 +9938,7 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<ListPolicyVersionsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<ListPolicyVersionsResponse>(&body).unwrap();
 
 
 
@@ -9999,9 +9977,9 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -10014,7 +9992,8 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<ListPrincipalPoliciesResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<ListPrincipalPoliciesResponse>(&body)
+                    .unwrap();
 
 
 
@@ -10049,9 +10028,9 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -10064,7 +10043,7 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<ListPrincipalThingsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<ListPrincipalThingsResponse>(&body).unwrap();
 
 
 
@@ -10093,9 +10072,9 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -10108,7 +10087,7 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<ListThingPrincipalsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<ListThingPrincipalsResponse>(&body).unwrap();
 
 
 
@@ -10146,9 +10125,9 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -10161,10 +10140,7 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<ListThingTypesResponse>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<ListThingTypesResponse>(&body).unwrap();
 
 
 
@@ -10208,9 +10184,9 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -10223,10 +10199,7 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<ListThingsResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<ListThingsResponse>(&body).unwrap();
 
 
 
@@ -10264,9 +10237,9 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -10279,10 +10252,7 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<ListTopicRulesResponse>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<ListTopicRulesResponse>(&body).unwrap();
 
 
 
@@ -10318,9 +10288,9 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -10333,7 +10303,8 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<RegisterCACertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<RegisterCACertificateResponse>(&body)
+                    .unwrap();
 
 
 
@@ -10361,9 +10332,9 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_payload(Some(encoded.into_bytes()));
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -10376,7 +10347,7 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<RegisterCertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<RegisterCertificateResponse>(&body).unwrap();
 
 
 
@@ -10405,9 +10376,9 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_payload(Some(encoded.into_bytes()));
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -10435,9 +10406,9 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_payload(Some(encoded.into_bytes()));
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -10470,9 +10441,9 @@ impl<P, D> Iot for IotClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -10500,9 +10471,9 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_payload(Some(encoded.into_bytes()));
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -10536,9 +10507,9 @@ impl<P, D> Iot for IotClient<P, D>
         params.put("targetAwsAccount", &input.target_aws_account);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -10551,7 +10522,7 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<TransferCertificateResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<TransferCertificateResponse>(&body).unwrap();
 
 
 
@@ -10587,9 +10558,9 @@ impl<P, D> Iot for IotClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -10623,9 +10594,9 @@ impl<P, D> Iot for IotClient<P, D>
         params.put("newStatus", &input.new_status);
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -10656,9 +10627,9 @@ impl<P, D> Iot for IotClient<P, D>
         request.set_payload(Some(encoded.into_bytes()));
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -10671,10 +10642,7 @@ impl<P, D> Iot for IotClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<UpdateThingResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<UpdateThingResponse>(&body).unwrap();
 
 
 

@@ -3194,9 +3194,9 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Accepted => {
@@ -3209,10 +3209,7 @@ impl<P, D> Ets for EtsClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<CancelJobResponse>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<CancelJobResponse>(&body).unwrap();
 
 
 
@@ -3236,9 +3233,9 @@ impl<P, D> Ets for EtsClient<P, D>
         request.set_payload(Some(encoded.into_bytes()));
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
@@ -3251,10 +3248,7 @@ impl<P, D> Ets for EtsClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<CreateJobResponse>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<CreateJobResponse>(&body).unwrap();
 
 
 
@@ -3280,9 +3274,9 @@ impl<P, D> Ets for EtsClient<P, D>
         request.set_payload(Some(encoded.into_bytes()));
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
@@ -3295,10 +3289,7 @@ impl<P, D> Ets for EtsClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<CreatePipelineResponse>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<CreatePipelineResponse>(&body).unwrap();
 
 
 
@@ -3327,9 +3318,9 @@ impl<P, D> Ets for EtsClient<P, D>
         request.set_payload(Some(encoded.into_bytes()));
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Created => {
@@ -3342,10 +3333,7 @@ impl<P, D> Ets for EtsClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<CreatePresetResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<CreatePresetResponse>(&body).unwrap();
 
 
 
@@ -3373,9 +3361,9 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Accepted => {
@@ -3388,10 +3376,7 @@ impl<P, D> Ets for EtsClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<DeletePipelineResponse>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<DeletePipelineResponse>(&body).unwrap();
 
 
 
@@ -3420,9 +3405,9 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Accepted => {
@@ -3435,10 +3420,7 @@ impl<P, D> Ets for EtsClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<DeletePresetResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<DeletePresetResponse>(&body).unwrap();
 
 
 
@@ -3473,9 +3455,9 @@ impl<P, D> Ets for EtsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -3488,7 +3470,7 @@ impl<P, D> Ets for EtsClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<ListJobsByPipelineResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<ListJobsByPipelineResponse>(&body).unwrap();
 
 
 
@@ -3523,9 +3505,9 @@ impl<P, D> Ets for EtsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -3538,7 +3520,7 @@ impl<P, D> Ets for EtsClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<ListJobsByStatusResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<ListJobsByStatusResponse>(&body).unwrap();
 
 
 
@@ -3573,9 +3555,9 @@ impl<P, D> Ets for EtsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -3588,10 +3570,7 @@ impl<P, D> Ets for EtsClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<ListPipelinesResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<ListPipelinesResponse>(&body).unwrap();
 
 
 
@@ -3625,9 +3604,9 @@ impl<P, D> Ets for EtsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -3640,10 +3619,7 @@ impl<P, D> Ets for EtsClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<ListPresetsResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<ListPresetsResponse>(&body).unwrap();
 
 
 
@@ -3666,9 +3642,9 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -3681,10 +3657,7 @@ impl<P, D> Ets for EtsClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<ReadJobResponse>(String::from_utf8_lossy(&body)
-                                                                .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<ReadJobResponse>(&body).unwrap();
 
 
 
@@ -3709,9 +3682,9 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -3724,10 +3697,7 @@ impl<P, D> Ets for EtsClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<ReadPipelineResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<ReadPipelineResponse>(&body).unwrap();
 
 
 
@@ -3754,9 +3724,9 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -3769,10 +3739,7 @@ impl<P, D> Ets for EtsClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<ReadPresetResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<ReadPresetResponse>(&body).unwrap();
 
 
 
@@ -3796,9 +3763,9 @@ impl<P, D> Ets for EtsClient<P, D>
         request.set_payload(Some(encoded.into_bytes()));
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -3811,10 +3778,7 @@ impl<P, D> Ets for EtsClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<TestRoleResponse>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<TestRoleResponse>(&body).unwrap();
 
 
 
@@ -3839,9 +3803,9 @@ impl<P, D> Ets for EtsClient<P, D>
         request.set_payload(Some(encoded.into_bytes()));
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -3854,10 +3818,7 @@ impl<P, D> Ets for EtsClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_str::<UpdatePipelineResponse>(String::from_utf8_lossy(&body)
-                                                                       .as_ref())
-                            .unwrap();
+                let result = serde_json::from_slice::<UpdatePipelineResponse>(&body).unwrap();
 
 
 
@@ -3887,9 +3848,9 @@ impl<P, D> Ets for EtsClient<P, D>
         request.set_payload(Some(encoded.into_bytes()));
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -3902,7 +3863,8 @@ impl<P, D> Ets for EtsClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<UpdatePipelineNotificationsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<UpdatePipelineNotificationsResponse>(&body)
+                    .unwrap();
 
 
 
@@ -3929,9 +3891,9 @@ impl<P, D> Ets for EtsClient<P, D>
         request.set_payload(Some(encoded.into_bytes()));
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let response = try!(self.dispatcher.dispatch(&request));
+        let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
             StatusCode::Ok => {
@@ -3944,7 +3906,7 @@ impl<P, D> Ets for EtsClient<P, D>
 
                 debug!("Response body: {:?}", body);
                 debug!("Response status: {}", response.status);
-                let  result = serde_json::from_str::<UpdatePipelineStatusResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+                let result = serde_json::from_slice::<UpdatePipelineStatusResponse>(&body).unwrap();
 
 
 
