@@ -1,9 +1,11 @@
 use std::io::Write;
+
 use inflector::Inflector;
 use regex::{Captures, Regex};
 use hyper::status::StatusCode;
-use ::Service;
+
 use codegen::botocore::{Member, Operation, Shape, ShapeType};
+use ::Service;
 use super::{GenerateProtocol, error_type_name, FileWriter, IoResult, rest_response_parser};
 
 pub struct RestJsonGenerator;
@@ -72,9 +74,9 @@ impl GenerateProtocol for RestJsonGenerator {
                     {load_payload}
                     {load_params}
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                    request.sign(&self.credentials_provider.credentials()?);
 
-                    let response = try!(self.dispatcher.dispatch(&request));
+                    let response = self.dispatcher.dispatch(&request)?;
 
                     match response.status {{
                         {status_code} => {{
@@ -360,11 +362,11 @@ fn generate_documentation(operation: &Operation) -> Option<String> {
 /// in the output shape that specify it
 fn generate_status_code_parser(operation: &Operation, service: &Service) -> String {
     if operation.output.is_none() {
-        return "".to_string();
+        return "".to_owned();
     }
 
     let shape_name = &operation.output.as_ref().unwrap().shape;
-    let output_shape = &service.shapes()[shape_name];
+    let output_shape = &service.get_shape(shape_name).expect("Shape missing from service definition");
 
     let mut status_code_parser = "".to_string();
 
@@ -398,7 +400,7 @@ fn generate_body_parser(operation: &Operation, service: &Service) -> String {
     }
 
     let shape_name = &operation.output.as_ref().unwrap().shape;
-    let output_shape = &service.shapes()[shape_name];
+    let output_shape = &service.get_shape(shape_name).expect("Shape missing from service definition");
 
     let mutable_result = output_shape.members
                 .as_ref()
@@ -410,7 +412,7 @@ fn generate_body_parser(operation: &Operation, service: &Service) -> String {
         None => json_body_parser(shape_name, mutable_result),
         Some(ref payload_member_name) => {
             let payload_member_shape = &output_shape.members.as_ref().unwrap()[payload_member_name].shape;
-            let payload_shape = &service.shapes()[payload_member_shape];
+            let payload_shape = &service.get_shape(payload_member_shape).expect("Shape missing from service definition");
             match payload_shape.shape_type {
                 payload_type if payload_type == ShapeType::Blob ||
                                 payload_type == ShapeType::String => {
@@ -457,7 +459,7 @@ fn json_body_parser(output_shape: &str, mutable_result: bool) -> String {
 
             debug!(\"Response body: {{:?}}\", body);
             debug!(\"Response status: {{}}\", response.status);
-            let {mutable} result = serde_json::from_str::<{output_shape}>(String::from_utf8_lossy(&body).as_ref()).unwrap();
+            let {mutable} result = serde_json::from_slice::<{output_shape}>(&body).unwrap();
             ",
             output_shape = output_shape,
             mutable = if mutable_result { "mut" } else { "" }
