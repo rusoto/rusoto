@@ -52,28 +52,18 @@ fn recurse_find_shapes(service: &Service, types: &mut BTreeSet<String>, shape_na
     }
 }
 
-// output shapes with a payload blob don't get deserialized
-// unless they have non-payload elements from the headers etc.
 fn can_skip_deserializer(service: &Service, output_shape: &Shape) -> bool {
-    match output_shape.payload {
-        None => false,
-        Some(ref payload_member) => {
-            let payload_shape_type = &output_shape.members.as_ref().unwrap()[payload_member].shape;
-            let payload_shape = service.get_shape(payload_shape_type).unwrap();
+    if let Some(ref payload_field) = output_shape.payload {
+        let payload_member = output_shape.members.as_ref().unwrap().get(payload_field).unwrap();
+        let payload_shape = service.get_shape(&payload_member.shape).unwrap();
 
-            let has_streaming_payload = payload_shape.shape_type == ShapeType::Blob ||
-                                        payload_shape.shape_type == ShapeType::String;
-
-            let mut has_other_members = false;
-
-            for member in output_shape.members.as_ref().unwrap().values() {
-                if member.location.is_some() {
-                    has_other_members = true;
-                    break;
-                }
-            }
-
-            has_streaming_payload && !has_other_members
-        }
+        // we can skip deserializer generation if the payload member in the output shape
+        // is explicitly flagged as streaming, or if the payload shape itself is
+        // a Blob or a String (in which case it will just be the raw response body)
+        payload_member.streaming() ||
+        payload_shape.shape_type == ShapeType::Blob ||
+        payload_shape.shape_type == ShapeType::String
+    } else {
+        false
     }
 }
