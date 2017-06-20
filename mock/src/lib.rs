@@ -56,8 +56,9 @@ impl MockRequestDispatcher {
         self
     }
 
-    pub fn with_header(mut self, key: String, value: String) -> MockRequestDispatcher {
-        self.mock_response.headers.insert(key, value);
+    pub fn with_header<S1, S2>(mut self, key: S1, value: S2) -> MockRequestDispatcher
+        where S1: Into<String>, S2: Into<String> {
+        self.mock_response.headers.insert(key.into(), value.into());
         self
     }
 }

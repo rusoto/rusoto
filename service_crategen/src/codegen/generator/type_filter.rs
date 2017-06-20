@@ -63,6 +63,7 @@ fn can_skip_deserializer(service: &Service, output_shape: &Shape) -> bool {
 
             let has_streaming_payload = payload_shape.shape_type == ShapeType::Blob ||
                                         payload_shape.shape_type == ShapeType::String;
+
             let mut has_other_members = false;
 
             for member in output_shape.members.as_ref().unwrap().values() {

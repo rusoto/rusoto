@@ -1442,8 +1442,7 @@ pub trait ServerMigrationService {
 
 
     #[doc="The DeleteServerCatalog API clears all servers from your server catalog. This means that these servers will no longer be accessible to the Server Migration Service."]
-    fn delete_server_catalog(&self,
-                             input: &DeleteServerCatalogRequest)
+    fn delete_server_catalog(&self)
                              -> Result<DeleteServerCatalogResponse, DeleteServerCatalogError>;
 
 
@@ -1479,8 +1478,7 @@ pub trait ServerMigrationService {
 
 
     #[doc="The ImportServerCatalog API is used to gather the complete list of on-premises servers on your premises. This API call requires connectors to be installed and monitoring all servers you would like imported. This API call returns immediately, but may take some time to retrieve all of the servers."]
-    fn import_server_catalog(&self,
-                             input: &ImportServerCatalogRequest)
+    fn import_server_catalog(&self)
                              -> Result<ImportServerCatalogResponse, ImportServerCatalogError>;
 
 
@@ -1583,16 +1581,14 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
 
 
     #[doc="The DeleteServerCatalog API clears all servers from your server catalog. This means that these servers will no longer be accessible to the Server Migration Service."]
-    fn delete_server_catalog(&self,
-                             input: &DeleteServerCatalogRequest)
+    fn delete_server_catalog(&self)
                              -> Result<DeleteServerCatalogResponse, DeleteServerCatalogError> {
         let mut request = SignedRequest::new("POST", "sms", self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
                            "AWSServerMigrationService_V2016_10_24.DeleteServerCatalog");
-        let encoded = serde_json::to_string(input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(b"{}".to_vec()));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 
@@ -1748,16 +1744,14 @@ impl<P, D> ServerMigrationService for ServerMigrationServiceClient<P, D>
 
 
     #[doc="The ImportServerCatalog API is used to gather the complete list of on-premises servers on your premises. This API call requires connectors to be installed and monitoring all servers you would like imported. This API call returns immediately, but may take some time to retrieve all of the servers."]
-    fn import_server_catalog(&self,
-                             input: &ImportServerCatalogRequest)
+    fn import_server_catalog(&self)
                              -> Result<ImportServerCatalogResponse, ImportServerCatalogError> {
         let mut request = SignedRequest::new("POST", "sms", self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target",
                            "AWSServerMigrationService_V2016_10_24.ImportServerCatalog");
-        let encoded = serde_json::to_string(input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
+        request.set_payload(Some(b"{}".to_vec()));
 
         request.sign(&try!(self.credentials_provider.credentials()));
 

@@ -3194,28 +3194,28 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = self.dispatcher.dispatch(&request)?;
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Accepted => {
-                Ok(serde_json::from_str::<CancelJobResponse>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<CancelJobResponse>(&body).unwrap();
+
+
+
+                Ok(result)
             }
-            _ => Err(CancelJobError::from_body(String::from_utf8_lossy(&body).as_ref())),
+            _ => Err(CancelJobError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
 
@@ -3233,28 +3233,28 @@ impl<P, D> Ets for EtsClient<P, D>
         request.set_payload(Some(encoded.into_bytes()));
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = self.dispatcher.dispatch(&request)?;
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Created => {
-                Ok(serde_json::from_str::<CreateJobResponse>(String::from_utf8_lossy(&body)
-                                                                 .as_ref())
-                           .unwrap())
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<CreateJobResponse>(&body).unwrap();
+
+
+
+                Ok(result)
             }
-            _ => Err(CreateJobError::from_body(String::from_utf8_lossy(&body).as_ref())),
+            _ => Err(CreateJobError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
 
@@ -3274,28 +3274,31 @@ impl<P, D> Ets for EtsClient<P, D>
         request.set_payload(Some(encoded.into_bytes()));
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = self.dispatcher.dispatch(&request)?;
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Created => {
-                Ok(serde_json::from_str::<CreatePipelineResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<CreatePipelineResponse>(&body).unwrap();
+
+
+
+                Ok(result)
             }
-            _ => Err(CreatePipelineError::from_body(String::from_utf8_lossy(&body).as_ref())),
+            _ => {
+                Err(CreatePipelineError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
+            }
         }
     }
 
@@ -3315,28 +3318,30 @@ impl<P, D> Ets for EtsClient<P, D>
         request.set_payload(Some(encoded.into_bytes()));
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = self.dispatcher.dispatch(&request)?;
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Created => {
-                Ok(serde_json::from_str::<CreatePresetResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<CreatePresetResponse>(&body).unwrap();
+
+
+
+                Ok(result)
             }
-            _ => Err(CreatePresetError::from_body(String::from_utf8_lossy(&body).as_ref())),
+            _ => {
+                Err(CreatePresetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+            }
         }
     }
 
@@ -3356,28 +3361,31 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = self.dispatcher.dispatch(&request)?;
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Accepted => {
-                Ok(serde_json::from_str::<DeletePipelineResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<DeletePipelineResponse>(&body).unwrap();
+
+
+
+                Ok(result)
             }
-            _ => Err(DeletePipelineError::from_body(String::from_utf8_lossy(&body).as_ref())),
+            _ => {
+                Err(DeletePipelineError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
+            }
         }
     }
 
@@ -3397,28 +3405,30 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = self.dispatcher.dispatch(&request)?;
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Accepted => {
-                Ok(serde_json::from_str::<DeletePresetResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<DeletePresetResponse>(&body).unwrap();
+
+
+
+                Ok(result)
             }
-            _ => Err(DeletePresetError::from_body(String::from_utf8_lossy(&body).as_ref())),
+            _ => {
+                Err(DeletePresetError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+            }
         }
     }
 
@@ -3445,26 +3455,31 @@ impl<P, D> Ets for EtsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = self.dispatcher.dispatch(&request)?;
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<ListJobsByPipelineResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-            _ => Err(ListJobsByPipelineError::from_body(String::from_utf8_lossy(&body).as_ref())),
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<ListJobsByPipelineResponse>(&body).unwrap();
+
+
+
+                Ok(result)
+            }
+            _ => {
+                Err(ListJobsByPipelineError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
+            }
         }
     }
 
@@ -3490,28 +3505,31 @@ impl<P, D> Ets for EtsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = self.dispatcher.dispatch(&request)?;
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<ListJobsByStatusResponse>(String::from_utf8_lossy(&body)
-                                                                        .as_ref())
-                           .unwrap())
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<ListJobsByStatusResponse>(&body).unwrap();
+
+
+
+                Ok(result)
             }
-            _ => Err(ListJobsByStatusError::from_body(String::from_utf8_lossy(&body).as_ref())),
+            _ => {
+                Err(ListJobsByStatusError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
+            }
         }
     }
 
@@ -3537,28 +3555,30 @@ impl<P, D> Ets for EtsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = self.dispatcher.dispatch(&request)?;
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<ListPipelinesResponse>(String::from_utf8_lossy(&body)
-                                                                     .as_ref())
-                           .unwrap())
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<ListPipelinesResponse>(&body).unwrap();
+
+
+
+                Ok(result)
             }
-            _ => Err(ListPipelinesError::from_body(String::from_utf8_lossy(&body).as_ref())),
+            _ => {
+                Err(ListPipelinesError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+            }
         }
     }
 
@@ -3584,28 +3604,28 @@ impl<P, D> Ets for EtsClient<P, D>
         }
         request.set_params(params);
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = self.dispatcher.dispatch(&request)?;
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<ListPresetsResponse>(String::from_utf8_lossy(&body)
-                                                                   .as_ref())
-                           .unwrap())
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<ListPresetsResponse>(&body).unwrap();
+
+
+
+                Ok(result)
             }
-            _ => Err(ListPresetsError::from_body(String::from_utf8_lossy(&body).as_ref())),
+            _ => Err(ListPresetsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
 
@@ -3622,27 +3642,28 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = self.dispatcher.dispatch(&request)?;
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<ReadJobResponse>(String::from_utf8_lossy(&body).as_ref())
-                       .unwrap())
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<ReadJobResponse>(&body).unwrap();
+
+
+
+                Ok(result)
             }
-            _ => Err(ReadJobError::from_body(String::from_utf8_lossy(&body).as_ref())),
+            _ => Err(ReadJobError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
 
@@ -3661,28 +3682,30 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = self.dispatcher.dispatch(&request)?;
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<ReadPipelineResponse>(String::from_utf8_lossy(&body)
-                                                                    .as_ref())
-                           .unwrap())
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<ReadPipelineResponse>(&body).unwrap();
+
+
+
+                Ok(result)
             }
-            _ => Err(ReadPipelineError::from_body(String::from_utf8_lossy(&body).as_ref())),
+            _ => {
+                Err(ReadPipelineError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+            }
         }
     }
 
@@ -3701,28 +3724,28 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = self.dispatcher.dispatch(&request)?;
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<ReadPresetResponse>(String::from_utf8_lossy(&body)
-                                                                  .as_ref())
-                           .unwrap())
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<ReadPresetResponse>(&body).unwrap();
+
+
+
+                Ok(result)
             }
-            _ => Err(ReadPresetError::from_body(String::from_utf8_lossy(&body).as_ref())),
+            _ => Err(ReadPresetError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
 
@@ -3740,28 +3763,28 @@ impl<P, D> Ets for EtsClient<P, D>
         request.set_payload(Some(encoded.into_bytes()));
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = self.dispatcher.dispatch(&request)?;
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<TestRoleResponse>(String::from_utf8_lossy(&body)
-                                                                .as_ref())
-                           .unwrap())
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<TestRoleResponse>(&body).unwrap();
+
+
+
+                Ok(result)
             }
-            _ => Err(TestRoleError::from_body(String::from_utf8_lossy(&body).as_ref())),
+            _ => Err(TestRoleError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
 
@@ -3780,28 +3803,31 @@ impl<P, D> Ets for EtsClient<P, D>
         request.set_payload(Some(encoded.into_bytes()));
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = self.dispatcher.dispatch(&request)?;
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                Ok(serde_json::from_str::<UpdatePipelineResponse>(String::from_utf8_lossy(&body)
-                                                                      .as_ref())
-                           .unwrap())
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<UpdatePipelineResponse>(&body).unwrap();
+
+
+
+                Ok(result)
             }
-            _ => Err(UpdatePipelineError::from_body(String::from_utf8_lossy(&body).as_ref())),
+            _ => {
+                Err(UpdatePipelineError::from_body(String::from_utf8_lossy(&response.body)
+                                                       .as_ref()))
+            }
         }
     }
 
@@ -3822,29 +3848,29 @@ impl<P, D> Ets for EtsClient<P, D>
         request.set_payload(Some(encoded.into_bytes()));
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = self.dispatcher.dispatch(&request)?;
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdatePipelineNotificationsResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-            _ => {
-                Err(UpdatePipelineNotificationsError::from_body(String::from_utf8_lossy(&body)
-                                                                    .as_ref()))
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<UpdatePipelineNotificationsResponse>(&body)
+                    .unwrap();
+
+
+
+                Ok(result)
             }
+            _ => Err(UpdatePipelineNotificationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
 
@@ -3865,26 +3891,31 @@ impl<P, D> Ets for EtsClient<P, D>
         request.set_payload(Some(encoded.into_bytes()));
 
 
-        request.sign(&try!(self.credentials_provider.credentials()));
+        request.sign(&self.credentials_provider.credentials()?);
 
-        let result = try!(self.dispatcher.dispatch(&request));
-        let mut body = result.body;
+        let response = self.dispatcher.dispatch(&request)?;
 
-        // `serde-json` serializes field-less structs as "null", but AWS returns
-        // "{}" for a field-less response, so we must check for this result
-        // and convert it if necessary.
-        if body == b"{}" {
-            body = b"null".to_vec();
-        }
-
-        debug!("Response body: {:?}", body);
-        debug!("Response status: {}", result.status);
-
-        match result.status {
+        match response.status {
             StatusCode::Ok => {
-                            Ok(serde_json::from_str::<UpdatePipelineStatusResponse>(String::from_utf8_lossy(&body).as_ref()).unwrap())
-                        }
-            _ => Err(UpdatePipelineStatusError::from_body(String::from_utf8_lossy(&body).as_ref())),
+
+                let mut body = response.body;
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<UpdatePipelineStatusResponse>(&body).unwrap();
+
+
+
+                Ok(result)
+            }
+            _ => {
+                Err(UpdatePipelineStatusError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
+            }
         }
     }
 }
