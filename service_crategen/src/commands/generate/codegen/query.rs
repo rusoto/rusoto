@@ -2,11 +2,11 @@ use std::io::Write;
 use inflector::Inflector;
 
 use ::Service;
-use codegen::botocore::{Operation, Shape, ShapeType, Member};
+use botocore::{Operation, Shape, ShapeType, Member};
+use util;
 
 use super::xml_payload_parser;
-use super::{IoResult, FileWriter, GenerateProtocol, error_type_name, capitalize_first,
-            generate_field_name};
+use super::{IoResult, FileWriter, GenerateProtocol, error_type_name, generate_field_name};
 
 pub struct QueryGenerator;
 
@@ -253,7 +253,7 @@ fn member_location(service: &Service, member: &Member, default: &str) -> String 
 
 fn capitalize_if_ec2(service: &Service, name: &str) -> String {
     match service.protocol() {
-        "ec2" => capitalize_first(name),
+        "ec2" => util::capitalize_first(name),
         _ => name.to_owned(),
     }
 }

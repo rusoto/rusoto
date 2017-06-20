@@ -2,10 +2,11 @@ use std::fs;
 use std::io::Write;
 use std::path::{Path, PathBuf};
 
-use super::{capitalize_first, FileWriter, IoResult};
+use super::{FileWriter, IoResult};
 use ::Service;
-use super::super::util::case_insensitive_btreemap_get;
+use self::util::case_insensitive_btreemap_get;
 use inflector::Inflector;
+use util;
 
 const BOTOCORE_ERROR_RESPONSE_TESTS_DIR: &'static str = concat!(env!("CARGO_MANIFEST_DIR"),
                                                  "/botocore/tests/unit/response_parsing/xml/errors/");
@@ -140,9 +141,9 @@ impl Response {
 
                 let file_name_parts: Vec<&str> = file_stem.split('-').collect();
 
-                let service_name = file_name_parts.get(0).map(|s| capitalize_first(*s));
+                let service_name = file_name_parts.get(0).map(|s| util::capitalize_first(*s));
 
-                let action = Some(file_name_parts.into_iter().skip(1).map(capitalize_first).collect());
+                let action = Some(file_name_parts.into_iter().skip(1).map(util::capitalize_first).collect());
 
                 service_name.and_then(|s| {
                     action.and_then(|a| {

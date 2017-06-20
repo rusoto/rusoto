@@ -2,7 +2,7 @@ use std::io::Write;
 use inflector::Inflector;
 
 use ::Service;
-use codegen::botocore::{Member, Operation, Shape, ShapeType};
+use botocore::{Member, Operation, Shape, ShapeType};
 use super::{xml_payload_parser, rest_response_parser, mutate_type_name};
 use super::{GenerateProtocol, generate_field_name, error_type_name};
 use super::{IoResult, FileWriter};

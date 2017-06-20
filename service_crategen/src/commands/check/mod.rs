@@ -1,0 +1,40 @@
+use std::collections::BTreeMap;
+
+use ::{ServiceDefinition, ServiceConfig};
+
+pub fn check(services: BTreeMap<String, ServiceConfig>) {
+    let definitions = ServiceDefinition::load_all().unwrap();
+
+    let mut missing = vec![];
+    let mut outdated = vec![];
+
+    for (name, definition) in definitions {
+        if let Some(config) = services.get(&name) {
+            if config.protocol_version != definition.metadata.api_version {
+                outdated.push((name, config, definition));
+            }
+        } else {
+            missing.push((name, definition));
+        }
+    }
+
+    if missing.len() > 0 {
+        println!();
+        println!("Missing Services");
+        println!("================");
+
+        for (name, definition) in missing {
+            println!("{} ({}, {})", &name, &definition.metadata.protocol, &definition.metadata.api_version);
+        }
+    }
+
+    if outdated.len() > 0 {
+        println!();
+        println!("Outdated Services");
+        println!("=================");
+
+        for (name, config, definition) in outdated {
+            println!("{} ({} => {})", &name, &config.protocol_version, &definition.metadata.api_version);
+        }
+    }
+}
