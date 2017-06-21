@@ -121,6 +121,7 @@ fn generate<P, E>(writer: &mut FileWriter,
         use std::fmt;
         use std::error::Error;
         use std::io;
+        use std::io::Read;
         use rusoto_core::request::HttpDispatchError;
         use rusoto_core::credential::{{CredentialsError, ProvideAwsCredentials}};
     ")?;
@@ -217,6 +218,21 @@ pub fn get_rust_type(service: &Service,
     }
 }
 
+fn has_streaming_member(name: &str, shape: &Shape) -> bool {
+    shape.shape_type == ShapeType::Structure &&
+    shape.members.is_some() &&
+    shape.members.as_ref()
+                 .unwrap()
+                 .iter()
+                 .any(|(_, member)| member.shape == name && member.streaming())
+}
+
+fn is_streaming_shape(service: &Service, name: &str) -> bool {
+    service.shapes()
+           .iter()
+           .any(|(_, shape)| has_streaming_member(name, shape))
+}
+
 // do any type name mutation needed to avoid collisions with Rust types
 fn mutate_type_name(type_name: &str) -> String {
     let capitalized = util::capitalize_first(type_name.to_owned());
@@ -237,6 +253,11 @@ fn mutate_type_name(type_name: &str) -> String {
         // otherwise make sure it's rust-idiomatic and capitalized
         _ => without_underscores,
     }
+}
+
+// For types that will be used for streaming
+fn mutate_type_name_for_streaming(type_name: &str) -> String {
+    format!("Streaming{}", type_name)
 }
 
 fn generate_types<P>(writer: &mut FileWriter, service: &Service, protocol_generator: &P) -> IoResult
@@ -275,6 +296,34 @@ fn generate_types<P>(writer: &mut FileWriter, service: &Service, protocol_genera
                                                 protocol_generator);
                 writeln!(writer, "{}", generated)?;
             }
+        }
+
+        if is_streaming_shape(service, &name) {
+            // Add a second type for streaming blobs, which are the only streaming type we can have
+            writeln!(writer,
+                     "pub struct {streaming_name}(Box<Read>);
+
+                     impl fmt::Debug for {streaming_name} {{
+                         fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {{
+                             write!(f, \"<{name}: streaming content>\")
+                         }}
+                     }}
+
+                     impl ::std::ops::Deref for {streaming_name} {{
+                         type Target = Box<Read>;
+
+                         fn deref(&self) -> &Box<Read> {{
+                             &self.0
+                         }}
+                     }}
+
+                     impl ::std::ops::DerefMut for {streaming_name} {{
+                         fn deref_mut(&mut self) -> &mut Box<Read> {{
+                             &mut self.0
+                         }}
+                     }}",
+                     name = type_name,
+                     streaming_name = mutate_type_name_for_streaming(&type_name))?;
         }
 
         if deserialized {
