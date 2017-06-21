@@ -21,7 +21,7 @@ travis-ci = { repository = "rusoto/rusoto", branch = "master" }
 appveyor = { repository = "rusoto/rusoto", branch = "master" }
 
 [build-dependencies]
-rustc_version = "0.1.7"
+rustc_version = "0.2.1"
 
 [dependencies]
 hyper = "0.10.0"
