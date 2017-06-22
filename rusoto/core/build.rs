@@ -10,7 +10,8 @@ use std::fs::File;
 /// This is used to create a User-Agent header string resembling
 /// `rusoto/x.y.z rust/x.y.z <os>`.
 fn generate_user_agent_vars(output_path: &Path) {
-    let rust_version = rustc_version::version();
+    let rust_version = rustc_version::version()
+        .expect("Could not retrieve rustc version");
     let mut f = File::create(&output_path.join("user_agent_vars.rs"))
         .expect("Could not create user agent file");
     f.write_all(format!("static RUST_VERSION: &'static str = \"{}\";", rust_version).as_bytes())
