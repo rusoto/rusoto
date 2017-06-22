@@ -11,20 +11,12 @@ For pre-1.0.0:
 
 Rusoto uses [semantic versioning 2.0.0](http://semver.org/).
 
-### Rusoto dependencies
-
-Rusoto depends on crates such as `rusoto_credential` and `rusoto_codegen`.  These are usually published before publishing
-the main Rusoto crate.
-
 ### Publishing walkthrough:
 
-1. Bump version numbers and versions required in cargo.toml files for: `rusoto_credential` (if needed), `rusoto_codegen` (if needed) and main `rusoto` crate.
-2. For credential and codegen crates, run `cargo publish --dry-run --allow-dirty` to simulate a publish. This will catch errors such as malformed Cargo.toml or missing required fields.
-3. If no errors, commit to master.
-4. Publish the credential and/or codegen crates with `cargo publish` in their directories.
-5. Last check for main crate, run from the root of the Rusoto project: `cargo publish --dry-run`
-6. If good, publish new version of Rusoto: `cargo publish`.
-7. Tag master, push tags to github.
+1. Make a pull request that bumps version numbers for `rusoto_core` if needed and each service that changed since previous release.  Make sure the README example gets updated with the new version.
+2. After new release PR has been merged, publish `rusoto_core` if it had changes since last release.
+3. Run `publish-services.sh` in the `rusoto/services` dir. *Warning*: takes 1.5 hours on a low end Macbook.
+4. Tag master with the new version.  Example: `git tag -a rusoto-v0.21.0 -m "Rusoto 0.21.0 release."` then `git push --tags origin`.
 
 ### Git tags
 
@@ -34,12 +26,6 @@ Examples:
 
 * `rusoto-v0.21.0`
 * `credentials-v0.3.0`
-* `codegen-v0.5.0`
-
-To release the main `rusoto` crate, version 0.4.0:
-
-1. Use an annotated tag on the commit with the version bump: `git tag -a rusoto-v0.21.0 -m "Rusoto 0.21.0 release."`
-2. Push changes, including tags, to Github: `git push --tags origin`.
 
 ### Release notes
 
