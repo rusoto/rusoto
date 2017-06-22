@@ -45,7 +45,7 @@ script:
       if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
         cargo doc --all --no-deps
       fi
-      after_success:
+after_success:
   # upload the documentation from the build if it's from Rust stable, Linux and not a pull request:
   - |
       if [[ "$TRAVIS_OS_NAME" == "linux" && "$TRAVIS_RUST_VERSION" == "stable" && "$TRAVIS_PULL_REQUEST" == false ]]; then
