@@ -25,10 +25,8 @@ install:
 
 build: off
 test_script:
-  - cd rusoto
   - cargo update
   - cargo test --all --lib -v
-  - cd ..
 
 branches:
   only:
