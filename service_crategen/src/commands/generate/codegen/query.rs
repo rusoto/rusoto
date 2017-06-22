@@ -99,7 +99,7 @@ impl GenerateProtocol for QueryGenerator {
             return None;
         }
 
-        let ty = get_rust_type(service, name, shape, self.timestamp_type());
+        let ty = get_rust_type(service, name, shape, false, self.timestamp_type());
         Some(format!("
             /// Serialize `{name}` contents to a `SignedRequest`.
             struct {name}Serializer;
@@ -119,7 +119,7 @@ impl GenerateProtocol for QueryGenerator {
                              shape: &Shape,
                              service: &Service)
                              -> Option<String> {
-        let ty = get_rust_type(service, name, shape, self.timestamp_type());
+        let ty = get_rust_type(service, name, shape, false, self.timestamp_type());
         Some(xml_payload_parser::generate_deserializer(name, &ty, shape, service))
     }
 

@@ -2,7 +2,7 @@ use inflector::Inflector;
 
 use ::Service;
 use botocore::{Member, Operation, Shape, ShapeType};
-use super::{generate_field_name, mutate_type_name};
+use super::{generate_field_name, mutate_type_name, mutate_type_name_for_streaming};
 
 pub fn generate_struct_attributes(_deserialized: bool) -> String {
     let derived = vec!["Default", "Debug", "Clone"];
@@ -21,6 +21,22 @@ pub fn generate_deserializer(name: &str, ty: &str, shape: &Shape, service: &Serv
             name = name,
             ty = ty,
             deserializer_body = generate_deserializer_body(name, shape, service))
+}
+
+fn has_streaming_payload(shape: &Shape) -> bool {
+    if let Some(ref payload) = shape.payload {
+       if let Some(ref members) = shape.members {
+           if let Some(ref member) = members.get(payload) {
+               member.streaming == Some(true)
+           } else {
+               false
+           }
+       } else {
+           false
+       }
+    } else {
+        false
+    }
 }
 
 pub fn generate_response_parser(service: &Service,
@@ -44,7 +60,7 @@ pub fn generate_response_parser(service: &Service,
             match payload_shape.shape_type {
                 payload_type if payload_type == ShapeType::Blob ||
                                 payload_type == ShapeType::String => {
-                    payload_body_parser(payload_type, shape_name, payload_member)
+                    payload_body_parser(payload_type, shape_name, payload_member, has_streaming_payload(output_shape))
                 }
                 _ => xml_body_parser(shape_name, result_wrapper, mutable_result),
             }
@@ -54,20 +70,29 @@ pub fn generate_response_parser(service: &Service,
 
 fn payload_body_parser(payload_type: ShapeType,
                        output_shape: &str,
-                       payload_member: &str)
+                       payload_member: &str,
+                       streaming: bool)
                        -> String {
+    let unpack = if !streaming {
+        "let mut body: Vec<u8> = Vec::new();
+        try!(response.body.read_to_end(&mut body));"
+    } else {
+        ""
+    };
+
     let response_body = match payload_type {
-        ShapeType::Blob => "Some(body)",
-        _ => "Some(String::from_utf8_lossy(&body).into_owned())",
+        ShapeType::Blob if !streaming => format!("body"),
+        ShapeType::Blob if streaming => format!("{}(response.body)", mutate_type_name_for_streaming(payload_member)),
+        _ => format!("String::from_utf8_lossy(&body).into_owned()"),
     };
 
     format!("
-        let mut body: Vec<u8> = Vec::new();
-        try!(response.body.read_to_end(&mut body));
+        {unpack}
 
         let mut result = {output_shape}::default();
-        result.{payload_member} = {response_body};
+        result.{payload_member} = Some({response_body});
         ",
+            unpack = unpack,
             output_shape = output_shape,
             payload_member = payload_member.to_snake_case(),
             response_body = response_body)
