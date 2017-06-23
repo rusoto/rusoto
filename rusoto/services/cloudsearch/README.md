@@ -23,7 +23,7 @@ To use `rusoto_cloudsearch` in your application, add it as a dependency in your 
 
 ```toml
 [dependencies]
-rusoto_cloudsearch = "0.26.0"
+rusoto_cloudsearch = "0.27.0"
 ```
 
 ## Contributing
