@@ -44,10 +44,16 @@ For example, to include only S3 and SQS:
 
 ``` toml
 [dependencies]
-rusoto_core = {version = "0.25.0"}
-rusoto_sqs = {version = "0.25.0"}
-rusoto_s3 = {version = "0.25.0"}
+rusoto_core = "0.26.0"
+rusoto_sqs = "0.26.0"
+rusoto_s3 = "0.26.0"
 ```
+
+## Migrating from Rusoto 0.24.0 to 0.25.0 or later
+
+As of Rusoto 0.25.0, the `rusoto` crate is deprecated.  This decision was made because the single crate implementing all AWS services was too large to compile, especially on TravisCI and Appveyor.  The new main crate is `rusoto_core` and all services now have their own crate.
+
+See the [Rusoto 0.25.0 release notes](https://github.com/rusoto/rusoto/releases/tag/rusoto-v0.25.0) for more information including how to migrate from Rusoto 0.24.0 to Rusoto 0.25.0.
 
 ## Usage
 
@@ -59,13 +65,12 @@ Consult the rustdoc documentation for full details by running `cargo doc` or vis
 A simple example of using Rusoto's DynamoDB API to list the names of all tables in a database:
 
 ```rust
-extern crate rusoto;
+extern crate rusoto_core;
+extern crate rusoto_dynamodb;
 
-use std::default::Default;
-
-use rusoto::{DefaultCredentialsProvider, Region};
-use rusoto::dynamodb::{DynamoDb, DynamoDbClient, ListTablesInput};
-use rusoto::default_tls_client;
+use rusoto_dynamodb::{DynamoDb, DynamoDbClient, ListTablesInput};
+use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_core::default_tls_client;
 
 fn main() {
   let provider = DefaultCredentialsProvider::new().unwrap();
