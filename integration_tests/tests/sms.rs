@@ -1,4 +1,4 @@
-#[cfg(feature = "sms")]
+#![cfg(feature = "sms")]
 
 extern crate rusoto_core;
 extern crate rusoto_sms;
