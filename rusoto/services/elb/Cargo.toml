@@ -7,7 +7,7 @@ license = "MIT"
 name = "rusoto_elb"
 readme = "README.md"
 repository = "https://github.com/rusoto/rusoto"
-version = "0.26.0"
+version = "0.27.0"
 homepage = "https://www.rusoto.org/"
 
 [build-dependencies]
@@ -17,7 +17,7 @@ hyper = "0.10.0"
 xml-rs = "0.6"
 
 [dependencies.rusoto_core]
-version = "0.26.0"
+version = "0.27.0"
 path = "../../core"
 [dev-dependencies.rusoto_mock]
 version = "0.25.0"

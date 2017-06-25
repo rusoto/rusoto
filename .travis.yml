@@ -39,7 +39,7 @@ script:
       ( cd service_crategen && \
         cargo run -- -c ./services.json -o ../rusoto/services && \
         cd .. )
-  - echo "Running Rusoto tests" && cd rusoto && cargo test --lib --all -v && cd ..
+  - echo "Running Rusoto tests" && cd rusoto && cargo update && cargo test --lib --all -v && cd ..
   - |
       echo "Running cargo docs on stable Rust on Linux" &&
       if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then

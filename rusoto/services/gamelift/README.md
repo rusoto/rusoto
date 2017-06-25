@@ -23,7 +23,7 @@ To use `rusoto_gamelift` in your application, add it as a dependency in your `Ca
 
 ```toml
 [dependencies]
-rusoto_gamelift = "0.26.0"
+rusoto_gamelift = "0.27.0"
 ```
 
 ## Contributing

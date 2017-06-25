@@ -23,7 +23,7 @@ To use `rusoto_cognito_identity` in your application, add it as a dependency in 
 
 ```toml
 [dependencies]
-rusoto_cognito_identity = "0.26.0"
+rusoto_cognito_identity = "0.27.0"
 ```
 
 ## Contributing

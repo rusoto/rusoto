@@ -23,7 +23,7 @@ To use `rusoto_events` in your application, add it as a dependency in your `Carg
 
 ```toml
 [dependencies]
-rusoto_events = "0.26.0"
+rusoto_events = "0.27.0"
 ```
 
 ## Contributing
