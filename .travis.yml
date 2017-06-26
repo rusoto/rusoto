@@ -39,11 +39,11 @@ script:
       ( cd service_crategen && \
         cargo run -- -c ./services.json -o ../rusoto/services && \
         cd .. )
-  - echo "Running Rusoto tests" && cd rusoto && cargo update && cargo test --lib --all -v && cd ..
+  - echo "Running Rusoto tests" && cargo update && cargo test --lib --all -v
   - |
       echo "Running cargo docs on stable Rust on Linux" &&
       if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-        cd rusoto && cargo doc --all --no-deps && cd ..
+        cargo doc --all --no-deps
       fi
 after_success:
   # upload the documentation from the build if it's from Rust stable, Linux and not a pull request:
