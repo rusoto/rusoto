@@ -63,6 +63,32 @@ pub struct BoundingBox {
     pub width: Option<Float>,
 }
 
+#[doc="<p>Provides information about a celebrity recognized by the operation.</p>"]
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct Celebrity {
+    #[doc="<p>Provides information about the celebrity's face, such as its location on the image.</p>"]
+    #[serde(rename="Face")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub face: Option<ComparedFace>,
+    #[doc="<p>A unique identifier for the celebrity. </p>"]
+    #[serde(rename="Id")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub id: Option<RekognitionUniqueId>,
+    #[doc="<p>The confidence, in percentage, that Rekognition has that the recognized face is the celebrity.</p>"]
+    #[serde(rename="MatchConfidence")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub match_confidence: Option<Percent>,
+    #[doc="<p>The name of the celebrity.</p>"]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub name: Option<String>,
+    #[doc="<p>An array of URLs pointing to additional information about the celebrity. If there is no additional information about the celebrity, this list is empty.</p>"]
+    #[serde(rename="Urls")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub urls: Option<Urls>,
+}
+
+pub type CelebrityList = Vec<Celebrity>;
 pub type CollectionId = String;
 pub type CollectionIdList = Vec<CollectionId>;
 #[doc="<p>Provides information about a face in a target image that matches the source image face analysed by <code>CompareFaces</code>. The <code>Face</code> property contains the bounding box of the face in the target image. The <code>Similarity</code> property is the confidence that the source image face matches the face in the bounding box.</p>"]
@@ -103,11 +129,11 @@ pub struct CompareFacesResponse {
     #[serde(rename="SourceImageFace")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub source_image_face: Option<ComparedSourceImageFace>,
-    #[doc="<p> The orientation of the source image (counterclockwise direction). If your application displays the source image, you can use this value to correct image orientation. The bounding box coordinates returned in <code>SourceImageFace</code> represent the location of the face before the image orientation is corrected. </p> <note> <p>If the source image is in .jpeg format, it might contain exchangeable image (Exif) metadata that includes the image's orientation. If the Exif metadata for the source image populates the orientation field, the value of <code>OrientationCorrection</code> is nil and the <code>SourceImageFace</code> bounding box coordinates represent the location of the face after Exif metadata is used to correct the orientation. Images in .png format don't contain Exif metadata.</p> </note>"]
+    #[doc="<p> The orientation of the source image (counterclockwise direction). If your application displays the source image, you can use this value to correct image orientation. The bounding box coordinates returned in <code>SourceImageFace</code> represent the location of the face before the image orientation is corrected. </p> <note> <p>If the source image is in .jpeg format, it might contain exchangeable image (Exif) metadata that includes the image's orientation. If the Exif metadata for the source image populates the orientation field, the value of <code>OrientationCorrection</code> is null and the <code>SourceImageFace</code> bounding box coordinates represent the location of the face after Exif metadata is used to correct the orientation. Images in .png format don't contain Exif metadata.</p> </note>"]
     #[serde(rename="SourceImageOrientationCorrection")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub source_image_orientation_correction: Option<OrientationCorrection>,
-    #[doc="<p> The orientation of the target image (in counterclockwise direction). If your application displays the target image, you can use this value to correct the orientation of the image. The bounding box coordinates returned in <code>FaceMatches</code> and <code>UnmatchedFaces</code> represent face locations before the image orientation is corrected. </p> <note> <p>If the target image is in .jpg format, it might contain Exif metadata that includes the orientation of the image. If the Exif metadata for the target image populates the orientation field, the value of <code>OrientationCorrection</code> is nil and the bounding box coordinates in <code>FaceMatches</code> and <code>UnmatchedFaces</code> represent the location of the face after Exif metadata is used to correct the orientation. Images in .png format don't contain Exif metadata.</p> </note>"]
+    #[doc="<p> The orientation of the target image (in counterclockwise direction). If your application displays the target image, you can use this value to correct the orientation of the image. The bounding box coordinates returned in <code>FaceMatches</code> and <code>UnmatchedFaces</code> represent face locations before the image orientation is corrected. </p> <note> <p>If the target image is in .jpg format, it might contain Exif metadata that includes the orientation of the image. If the Exif metadata for the target image populates the orientation field, the value of <code>OrientationCorrection</code> is null and the bounding box coordinates in <code>FaceMatches</code> and <code>UnmatchedFaces</code> represent the location of the face after Exif metadata is used to correct the orientation. Images in .png format don't contain Exif metadata.</p> </note>"]
     #[serde(rename="TargetImageOrientationCorrection")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub target_image_orientation_correction: Option<OrientationCorrection>,
@@ -118,9 +144,10 @@ pub struct CompareFacesResponse {
 }
 
 pub type CompareFacesUnmatchList = Vec<ComparedFace>;
-#[doc="<p>Provides face metadata for target image faces that are analysed by <code>CompareFaces</code>.</p>"]
+#[doc="<p>Provides face metadata for target image faces that are analysed by <code>CompareFaces</code> and <code>RecognizeCelebrities</code>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ComparedFace {
+    #[doc="<p>Bounding box of the face.</p>"]
     #[serde(rename="BoundingBox")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub bounding_box: Option<BoundingBox>,
@@ -142,9 +169,11 @@ pub struct ComparedFace {
     pub quality: Option<ImageQuality>,
 }
 
+pub type ComparedFaceList = Vec<ComparedFace>;
 #[doc="<p>Type that describes the face Amazon Rekognition chose to compare with the faces in the target. This contains a bounding box for the selected face and confidence level that the bounding box contains a face. Note that Amazon Rekognition selects the largest face in the source image for this comparison. </p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ComparedSourceImageFace {
+    #[doc="<p>Bounding box of the face.</p>"]
     #[serde(rename="BoundingBox")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub bounding_box: Option<BoundingBox>,
@@ -224,7 +253,7 @@ pub struct DetectFacesResponse {
     #[serde(rename="FaceDetails")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub face_details: Option<FaceDetailList>,
-    #[doc="<p> The orientation of the input image (counter-clockwise direction). If your application displays the image, you can use this value to correct image orientation. The bounding box coordinates returned in <code>FaceDetails</code> represent face locations before the image orientation is corrected. </p> <note> <p>If the source image is in .jpeg format, it might contain exchangeable image (Exif) metadata that includes the image's orientation. If so, and the Exif metadata for the source image populates the orientation field, the value of <code>OrientationCorrection</code> is nil and the <code>FaceDetails</code> bounding box coordinates represent face locations after Exif metadata is used to correct the image orientation. Images in .png format don't contain Exif metadata.</p> </note>"]
+    #[doc="<p> The orientation of the input image (counter-clockwise direction). If your application displays the image, you can use this value to correct image orientation. The bounding box coordinates returned in <code>FaceDetails</code> represent face locations before the image orientation is corrected. </p> <note> <p>If the input image is in .jpeg format, it might contain exchangeable image (Exif) metadata that includes the image's orientation. If so, and the Exif metadata for the input image populates the orientation field, the value of <code>OrientationCorrection</code> is null and the <code>FaceDetails</code> bounding box coordinates represent face locations after Exif metadata is used to correct the image orientation. Images in .png format don't contain Exif metadata.</p> </note>"]
     #[serde(rename="OrientationCorrection")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub orientation_correction: Option<OrientationCorrection>,
@@ -251,7 +280,7 @@ pub struct DetectLabelsResponse {
     #[serde(rename="Labels")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub labels: Option<Labels>,
-    #[doc="<p> The orientation of the input image (counter-clockwise direction). If your application displays the image, you can use this value to correct the orientation. If Amazon Rekognition detects that the input image was rotated (for example, by 90 degrees), it first corrects the orientation before detecting the labels. </p> <note> <p>If the source image Exif metadata populates the orientation field, Amazon Rekognition does not perform orientation correction and the value of OrientationCorrection will be nil.</p> </note>"]
+    #[doc="<p> The orientation of the input image (counter-clockwise direction). If your application displays the image, you can use this value to correct the orientation. If Amazon Rekognition detects that the input image was rotated (for example, by 90 degrees), it first corrects the orientation before detecting the labels. </p> <note> <p>If the input image Exif metadata populates the orientation field, Amazon Rekognition does not perform orientation correction and the value of OrientationCorrection will be null.</p> </note>"]
     #[serde(rename="OrientationCorrection")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub orientation_correction: Option<OrientationCorrection>,
@@ -259,6 +288,7 @@ pub struct DetectLabelsResponse {
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DetectModerationLabelsRequest {
+    #[doc="<p>The input image as bytes or an S3 object.</p>"]
     #[serde(rename="Image")]
     pub image: Image,
     #[doc="<p>Specifies the minimum confidence level for the labels to return. Amazon Rekognition doesn't return any labels with a confidence level lower than this specified value.</p> <p>If you don't specify <code>MinConfidence</code>, the operation returns labels with confidence values greater than or equal to 50 percent.</p>"]
@@ -317,9 +347,10 @@ pub struct Eyeglasses {
     pub value: Option<Boolean>,
 }
 
-#[doc="<p>Describes the face properties such as the bounding box, face ID, image ID of the source image, and external image ID that you assigned. </p>"]
+#[doc="<p>Describes the face properties such as the bounding box, face ID, image ID of the input image, and external image ID that you assigned. </p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Face {
+    #[doc="<p>Bounding box of the face.</p>"]
     #[serde(rename="BoundingBox")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub bounding_box: Option<BoundingBox>,
@@ -335,7 +366,7 @@ pub struct Face {
     #[serde(rename="FaceId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub face_id: Option<FaceId>,
-    #[doc="<p>Unique identifier that Amazon Rekognition assigns to the source image.</p>"]
+    #[doc="<p>Unique identifier that Amazon Rekognition assigns to the input image.</p>"]
     #[serde(rename="ImageId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub image_id: Option<ImageId>,
@@ -413,6 +444,7 @@ pub type FaceList = Vec<Face>;
 #[doc="<p>Provides face metadata. In addition, it also provides the confidence in the match of this face with the input face.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct FaceMatch {
+    #[doc="<p>Describes the face properties such as the bounding box, face ID, image ID of the source image, and external image ID that you assigned.</p>"]
     #[serde(rename="Face")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub face: Option<Face>,
@@ -426,9 +458,11 @@ pub type FaceMatchList = Vec<FaceMatch>;
 #[doc="<p>Object containing both the face metadata (stored in the back-end database) and facial attributes that are detected but aren't stored in the database.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct FaceRecord {
+    #[doc="<p>Describes the face properties such as the bounding box, face ID, image ID of the input image, and external image ID that you assigned. </p>"]
     #[serde(rename="Face")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub face: Option<Face>,
+    #[doc="<p>Structure containing attributes of the face that the algorithm detected.</p>"]
     #[serde(rename="FaceDetail")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub face_detail: Option<FaceDetail>,
@@ -450,7 +484,26 @@ pub struct Gender {
 }
 
 pub type GenderType = String;
-#[doc="<p>Provides the source image either as bytes or an S3 object.</p> <p>You pass image bytes to a Rekognition API operation by using the <code>Bytes</code> property. For example, you would use the <code>Bytes</code> property to pass an image loaded from a local file system. Image bytes passed by using the <code>Bytes</code> property must be base64-encoded. Your code may not need to encode image bytes if you are using an AWS SDK to call Rekognition API operations. For more information, see <a>example4</a>.</p> <p> You pass images stored in an S3 bucket to a Rekognition API operation by using the <code>S3Object</code> property. Images stored in an S3 bucket do not need to be base64-encoded.</p> <p>The region for the S3 bucket containing the S3 object must match the region you use for Amazon Rekognition operations.</p> <p>If you use the Amazon CLI to call Amazon Rekognition operations, passing image bytes using the Bytes property is not supported. You must first upload the image to an Amazon S3 bucket and then call the operation using the S3Object property.</p> <p>For Amazon Rekognition to process an S3 object, the user must have permission to access the S3 object. For more information, see <a>manage-access-resource-policies</a>. </p>"]
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct GetCelebrityInfoRequest {
+    #[doc="<p>The ID for the celebrity. You get the celebrity ID from a call to the operation, which recognizes celebrities in an image. </p>"]
+    #[serde(rename="Id")]
+    pub id: RekognitionUniqueId,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct GetCelebrityInfoResponse {
+    #[doc="<p>The name of the celebrity.</p>"]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub name: Option<String>,
+    #[doc="<p>An array of URLs pointing to additional celebrity information. </p>"]
+    #[serde(rename="Urls")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub urls: Option<Urls>,
+}
+
+#[doc="<p>Provides the input image either as bytes or an S3 object.</p> <p>You pass image bytes to a Rekognition API operation by using the <code>Bytes</code> property. For example, you would use the <code>Bytes</code> property to pass an image loaded from a local file system. Image bytes passed by using the <code>Bytes</code> property must be base64-encoded. Your code may not need to encode image bytes if you are using an AWS SDK to call Rekognition API operations. For more information, see <a>example4</a>.</p> <p> You pass images stored in an S3 bucket to a Rekognition API operation by using the <code>S3Object</code> property. Images stored in an S3 bucket do not need to be base64-encoded.</p> <p>The region for the S3 bucket containing the S3 object must match the region you use for Amazon Rekognition operations.</p> <p>If you use the Amazon CLI to call Amazon Rekognition operations, passing image bytes using the Bytes property is not supported. You must first upload the image to an Amazon S3 bucket and then call the operation using the S3Object property.</p> <p>For Amazon Rekognition to process an S3 object, the user must have permission to access the S3 object. For more information, see <a>manage-access-resource-policies</a>. </p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct Image {
     #[doc="<p>Blob of image bytes up to 5 MBs.</p>"]
@@ -495,6 +548,7 @@ pub struct IndexFacesRequest {
     #[serde(rename="ExternalImageId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub external_image_id: Option<ExternalImageId>,
+    #[doc="<p>The input image as bytes or an S3 object.</p>"]
     #[serde(rename="Image")]
     pub image: Image,
 }
@@ -505,7 +559,7 @@ pub struct IndexFacesResponse {
     #[serde(rename="FaceRecords")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub face_records: Option<FaceRecordList>,
-    #[doc="<p>The orientation of the input image (counterclockwise direction). If your application displays the image, you can use this value to correct image orientation. The bounding box coordinates returned in <code>FaceRecords</code> represent face locations before the image orientation is corrected. </p> <note> <p>If the source image is in jpeg format, it might contain exchangeable image (Exif) metadata. If so, and the Exif metadata populates the orientation field, the value of <code>OrientationCorrection</code> is nil and the bounding box coordinates in <code>FaceRecords</code> represent face locations after Exif metadata is used to correct the image orientation. Images in .png format don't contain Exif metadata.</p> </note>"]
+    #[doc="<p>The orientation of the input image (counterclockwise direction). If your application displays the image, you can use this value to correct image orientation. The bounding box coordinates returned in <code>FaceRecords</code> represent face locations before the image orientation is corrected. </p> <note> <p>If the input image is in jpeg format, it might contain exchangeable image (Exif) metadata. If so, and the Exif metadata populates the orientation field, the value of <code>OrientationCorrection</code> is null and the bounding box coordinates in <code>FaceRecords</code> represent face locations after Exif metadata is used to correct the image orientation. Images in .png format don't contain Exif metadata.</p> </note>"]
     #[serde(rename="OrientationCorrection")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub orientation_correction: Option<OrientationCorrection>,
@@ -596,7 +650,7 @@ pub struct ListFacesResponse {
 }
 
 pub type MaxFaces = i64;
-#[doc="<p>Provides information about a single type of moderated content found in an image. Each type of moderated content has a label within a hierarchical taxonomy. For more information, see <a>howitworks-moderateimage</a>.</p>"]
+#[doc="<p>Provides information about a single type of moderated content found in an image. Each type of moderated content has a label within a hierarchical taxonomy. For more information, see <a>image-moderation</a>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ModerationLabel {
     #[doc="<p>Specifies the confidence that Amazon Rekognition has that the label has been correctly identified.</p> <p>If you don't specify the <code>MinConfidence</code> parameter in the call to <code>DetectModerationLabels</code>, the operation returns labels with a confidence value greater than or equal to 50 percent.</p>"]
@@ -661,6 +715,30 @@ pub struct Pose {
     pub yaw: Option<Degree>,
 }
 
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct RecognizeCelebritiesRequest {
+    #[doc="<p>The input image to use for celebrity recognition.</p>"]
+    #[serde(rename="Image")]
+    pub image: Image,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct RecognizeCelebritiesResponse {
+    #[doc="<p>Details about each celebrity found in the image. Amazon Rekognition can detect a maximum of 15 celebrities in an image.</p>"]
+    #[serde(rename="CelebrityFaces")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub celebrity_faces: Option<CelebrityList>,
+    #[doc="<p>The orientation of the input image (counterclockwise direction). If your application displays the image, you can use this value to correct the orientation. The bounding box coordinates returned in <code>CelebrityFaces</code> and <code>UnrecognizedFaces</code> represent face locations before the image orientation is corrected. </p> <note> <p>If the input image is in .jpeg format, it might contain exchangeable image (Exif) metadata that includes the image's orientation. If so, and the Exif metadata for the input image populates the orientation field, the value of <code>OrientationCorrection</code> is null and the <code>CelebrityFaces</code> and <code>UnrecognizedFaces</code> bounding box coordinates represent face locations after Exif metadata is used to correct the image orientation. Images in .png format don't contain Exif metadata. </p> </note>"]
+    #[serde(rename="OrientationCorrection")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub orientation_correction: Option<OrientationCorrection>,
+    #[doc="<p>Details about each unrecognized face in the image.</p>"]
+    #[serde(rename="UnrecognizedFaces")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub unrecognized_faces: Option<ComparedFaceList>,
+}
+
+pub type RekognitionUniqueId = String;
 pub type S3Bucket = String;
 #[doc="<p>Provides the S3 bucket name and object name.</p> <p>The region for the S3 bucket containing the S3 object must match the region you use for Amazon Rekognition operations.</p> <p>For Amazon Rekognition to process an S3 object, the user must have permission to access the S3 object. For more information, see <a>manage-access-resource-policies</a>. </p>"]
 #[derive(Default,Debug,Clone,Serialize)]
@@ -690,6 +768,7 @@ pub struct SearchFacesByImageRequest {
     #[serde(rename="FaceMatchThreshold")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub face_match_threshold: Option<Percent>,
+    #[doc="<p>The input image as bytes or an S3 object.</p>"]
     #[serde(rename="Image")]
     pub image: Image,
     #[doc="<p>Maximum number of faces to return. The operation returns the maximum number of faces with the highest confidence in the match.</p>"]
@@ -771,6 +850,8 @@ pub struct Sunglasses {
 }
 
 pub type UInteger = i64;
+pub type Url = String;
+pub type Urls = Vec<Url>;
 /// Errors returned by CompareFaces
 #[derive(Debug, PartialEq)]
 pub enum CompareFacesError {
@@ -1537,6 +1618,108 @@ impl Error for DetectModerationLabelsError {
         }
     }
 }
+/// Errors returned by GetCelebrityInfo
+#[derive(Debug, PartialEq)]
+pub enum GetCelebrityInfoError {
+    ///<p>You are not authorized to perform the action.</p>
+    AccessDenied(String),
+    ///<p>Amazon Rekognition experienced a service issue. Try your call again.</p>
+    InternalServerError(String),
+    ///<p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
+    InvalidParameter(String),
+    ///<p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
+    ProvisionedThroughputExceeded(String),
+    ///<p>Collection specified in the request is not found.</p>
+    ResourceNotFound(String),
+    ///<p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl GetCelebrityInfoError {
+    pub fn from_body(body: &str) -> GetCelebrityInfoError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        GetCelebrityInfoError::AccessDenied(String::from(error_message))
+                    }
+                    "InternalServerError" => {
+                        GetCelebrityInfoError::InternalServerError(String::from(error_message))
+                    }
+                    "InvalidParameterException" => {
+                        GetCelebrityInfoError::InvalidParameter(String::from(error_message))
+                    }
+                    "ProvisionedThroughputExceededException" => GetCelebrityInfoError::ProvisionedThroughputExceeded(String::from(error_message)),
+                    "ResourceNotFoundException" => {
+                        GetCelebrityInfoError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        GetCelebrityInfoError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetCelebrityInfoError::Validation(error_message.to_string())
+                    }
+                    _ => GetCelebrityInfoError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetCelebrityInfoError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetCelebrityInfoError {
+    fn from(err: serde_json::error::Error) -> GetCelebrityInfoError {
+        GetCelebrityInfoError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetCelebrityInfoError {
+    fn from(err: CredentialsError) -> GetCelebrityInfoError {
+        GetCelebrityInfoError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetCelebrityInfoError {
+    fn from(err: HttpDispatchError) -> GetCelebrityInfoError {
+        GetCelebrityInfoError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for GetCelebrityInfoError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetCelebrityInfoError {
+    fn description(&self) -> &str {
+        match *self {
+            GetCelebrityInfoError::AccessDenied(ref cause) => cause,
+            GetCelebrityInfoError::InternalServerError(ref cause) => cause,
+            GetCelebrityInfoError::InvalidParameter(ref cause) => cause,
+            GetCelebrityInfoError::ProvisionedThroughputExceeded(ref cause) => cause,
+            GetCelebrityInfoError::ResourceNotFound(ref cause) => cause,
+            GetCelebrityInfoError::Throttling(ref cause) => cause,
+            GetCelebrityInfoError::Validation(ref cause) => cause,
+            GetCelebrityInfoError::Credentials(ref err) => err.description(),
+            GetCelebrityInfoError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetCelebrityInfoError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by IndexFaces
 #[derive(Debug, PartialEq)]
 pub enum IndexFacesError {
@@ -1873,6 +2056,122 @@ impl Error for ListFacesError {
         }
     }
 }
+/// Errors returned by RecognizeCelebrities
+#[derive(Debug, PartialEq)]
+pub enum RecognizeCelebritiesError {
+    ///<p>You are not authorized to perform the action.</p>
+    AccessDenied(String),
+    ///<p>The input image size exceeds the allowed limit. For more information, see <a>limits</a>. </p>
+    ImageTooLarge(String),
+    ///<p>Amazon Rekognition experienced a service issue. Try your call again.</p>
+    InternalServerError(String),
+    ///<p>The provided image format is not supported. </p>
+    InvalidImageFormat(String),
+    ///<p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
+    InvalidParameter(String),
+    ///<p>Amazon Rekognition is unable to access the S3 object specified in the request.</p>
+    InvalidS3Object(String),
+    ///<p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
+    ProvisionedThroughputExceeded(String),
+    ///<p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl RecognizeCelebritiesError {
+    pub fn from_body(body: &str) -> RecognizeCelebritiesError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        RecognizeCelebritiesError::AccessDenied(String::from(error_message))
+                    }
+                    "ImageTooLargeException" => {
+                        RecognizeCelebritiesError::ImageTooLarge(String::from(error_message))
+                    }
+                    "InternalServerError" => {
+                        RecognizeCelebritiesError::InternalServerError(String::from(error_message))
+                    }
+                    "InvalidImageFormatException" => {
+                        RecognizeCelebritiesError::InvalidImageFormat(String::from(error_message))
+                    }
+                    "InvalidParameterException" => {
+                        RecognizeCelebritiesError::InvalidParameter(String::from(error_message))
+                    }
+                    "InvalidS3ObjectException" => {
+                        RecognizeCelebritiesError::InvalidS3Object(String::from(error_message))
+                    }
+                    "ProvisionedThroughputExceededException" => RecognizeCelebritiesError::ProvisionedThroughputExceeded(String::from(error_message)),
+                    "ThrottlingException" => {
+                        RecognizeCelebritiesError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        RecognizeCelebritiesError::Validation(error_message.to_string())
+                    }
+                    _ => RecognizeCelebritiesError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => RecognizeCelebritiesError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for RecognizeCelebritiesError {
+    fn from(err: serde_json::error::Error) -> RecognizeCelebritiesError {
+        RecognizeCelebritiesError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for RecognizeCelebritiesError {
+    fn from(err: CredentialsError) -> RecognizeCelebritiesError {
+        RecognizeCelebritiesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for RecognizeCelebritiesError {
+    fn from(err: HttpDispatchError) -> RecognizeCelebritiesError {
+        RecognizeCelebritiesError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for RecognizeCelebritiesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for RecognizeCelebritiesError {
+    fn description(&self) -> &str {
+        match *self {
+            RecognizeCelebritiesError::AccessDenied(ref cause) => cause,
+            RecognizeCelebritiesError::ImageTooLarge(ref cause) => cause,
+            RecognizeCelebritiesError::InternalServerError(ref cause) => cause,
+            RecognizeCelebritiesError::InvalidImageFormat(ref cause) => cause,
+            RecognizeCelebritiesError::InvalidParameter(ref cause) => cause,
+            RecognizeCelebritiesError::InvalidS3Object(ref cause) => cause,
+            RecognizeCelebritiesError::ProvisionedThroughputExceeded(ref cause) => cause,
+            RecognizeCelebritiesError::Throttling(ref cause) => cause,
+            RecognizeCelebritiesError::Validation(ref cause) => cause,
+            RecognizeCelebritiesError::Credentials(ref err) => err.description(),
+            RecognizeCelebritiesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            RecognizeCelebritiesError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by SearchFaces
 #[derive(Debug, PartialEq)]
 pub enum SearchFacesError {
@@ -2137,14 +2436,20 @@ pub trait Rekognition {
                      -> Result<DetectLabelsResponse, DetectLabelsError>;
 
 
-    #[doc="<p>Detects explicit or suggestive adult content in a specified JPEG or PNG format image. Use <code>DetectModerationLabels</code> to moderate images depending on your requirements. For example, you might want to filter images that contain nudity, but not images containing suggestive content.</p> <p>To filter images, use the labels returned by <code>DetectModerationLabels</code> to determine which types of content are appropriate. For information about moderation labels, see <a>howitworks-moderateimage</a>.</p>"]
+    #[doc="<p>Detects explicit or suggestive adult content in a specified JPEG or PNG format image. Use <code>DetectModerationLabels</code> to moderate images depending on your requirements. For example, you might want to filter images that contain nudity, but not images containing suggestive content.</p> <p>To filter images, use the labels returned by <code>DetectModerationLabels</code> to determine which types of content are appropriate. For information about moderation labels, see <a>image-moderation</a>.</p>"]
     fn detect_moderation_labels
         (&self,
          input: &DetectModerationLabelsRequest)
          -> Result<DetectModerationLabelsResponse, DetectModerationLabelsError>;
 
 
-    #[doc="<p>Detects faces in the input image and adds them to the specified collection. </p> <p> Amazon Rekognition does not save the actual faces detected. Instead, the underlying detection algorithm first detects the faces in the input image, and for each face extracts facial features into a feature vector, and stores it in the back-end database. Amazon Rekognition uses feature vectors when performing face match and search operations using the and operations. </p> <p>If you provide the optional <code>externalImageID</code> for the input image you provided, Amazon Rekognition associates this ID with all faces that it detects. When you call the operation, the response returns the external ID. You can use this external image ID to create a client-side index to associate the faces with each image. You can then use the index to find all faces in an image. </p> <p>In response, the operation returns an array of metadata for all detected faces. This includes, the bounding box of the detected face, confidence value (indicating the bounding box contains a face), a face ID assigned by the service for each face that is detected and stored, and an image ID assigned by the service for the input image If you request all facial attributes (using the <code>detectionAttributes</code> parameter, Amazon Rekognition returns detailed facial attributes such as facial landmarks (for example, location of eye and mount) and other facial attributes such gender. If you provide the same image, specify the same collection, and use the same external ID in the <code>IndexFaces</code> operation, Amazon Rekognition doesn't save duplicate face metadata. </p> <p>For an example, see <a>example2</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:IndexFaces</code> action.</p>"]
+    #[doc="<p>Gets the name and additional information about a celebrity based on his or her Rekognition ID. The additional information is returned as an array of URLs. If there is no additional information about the celebrity, this list is empty. For more information, see <a>celebrity-recognition</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:GetCelebrityInfo</code> action. </p>"]
+    fn get_celebrity_info(&self,
+                          input: &GetCelebrityInfoRequest)
+                          -> Result<GetCelebrityInfoResponse, GetCelebrityInfoError>;
+
+
+    #[doc="<p>Detects faces in the input image and adds them to the specified collection. </p> <p> Amazon Rekognition does not save the actual faces detected. Instead, the underlying detection algorithm first detects the faces in the input image, and for each face extracts facial features into a feature vector, and stores it in the back-end database. Amazon Rekognition uses feature vectors when performing face match and search operations using the and operations. </p> <p>If you provide the optional <code>externalImageID</code> for the input image you provided, Amazon Rekognition associates this ID with all faces that it detects. When you call the operation, the response returns the external ID. You can use this external image ID to create a client-side index to associate the faces with each image. You can then use the index to find all faces in an image. </p> <p>In response, the operation returns an array of metadata for all detected faces. This includes, the bounding box of the detected face, confidence value (indicating the bounding box contains a face), a face ID assigned by the service for each face that is detected and stored, and an image ID assigned by the service for the input image. If you request all facial attributes (using the <code>detectionAttributes</code> parameter, Amazon Rekognition returns detailed facial attributes such as facial landmarks (for example, location of eye and mount) and other facial attributes such gender. If you provide the same image, specify the same collection, and use the same external ID in the <code>IndexFaces</code> operation, Amazon Rekognition doesn't save duplicate face metadata. </p> <p>For an example, see <a>example2</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:IndexFaces</code> action.</p>"]
     fn index_faces(&self,
                    input: &IndexFacesRequest)
                    -> Result<IndexFacesResponse, IndexFacesError>;
@@ -2158,6 +2463,12 @@ pub trait Rekognition {
 
     #[doc="<p>Returns metadata for faces in the specified collection. This metadata includes information such as the bounding box coordinates, the confidence (that the bounding box contains a face), and face ID. For an example, see <a>example3</a>. </p> <p>This operation requires permissions to perform the <code>rekognition:ListFaces</code> action.</p>"]
     fn list_faces(&self, input: &ListFacesRequest) -> Result<ListFacesResponse, ListFacesError>;
+
+
+    #[doc="<p>Returns an array of celebrities recognized in the input image. The image is passed either as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. The image must be either a PNG or JPEG formatted file. For more information, see <a>celebrity-recognition</a>. </p> <p> <code>RecognizeCelebrities</code> returns the 15 largest faces in the image. It lists recognized celebrities in the <code>CelebrityFaces</code> list and unrecognized faces in the <code>UnrecognizedFaces</code> list. The operation doesn't return celebrities whose face sizes are smaller than the largest 15 faces in the image.</p> <p>For each celebrity recognized, the API returns a <code>Celebrity</code> object. The <code>Celebrity</code> object contains the celebrity name, ID, URL links to additional information, match confidence, and a <code>ComparedFace</code> object that you can use to locate the celebrity's face on the image.</p> <p>Rekognition does not retain information about which images a celebrity has been recognized in. Your application must store this information and use the <code>Celebrity</code> ID property as a unique identifier for the celebrity. If you don't store the celebrity name or additional information URLs returned by <code>RecognizeCelebrities</code>, you will need the ID to identify the celebrity in a call to the operation.</p> <p>For an example, see <a>recognize-celebrities-tutorial</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:RecognizeCelebrities</code> operation.</p>"]
+    fn recognize_celebrities(&self,
+                             input: &RecognizeCelebritiesRequest)
+                             -> Result<RecognizeCelebritiesResponse, RecognizeCelebritiesError>;
 
 
     #[doc="<p>For a given input face ID, searches for matching faces in the collection the face belongs to. You get a face ID when you add a face to the collection using the <a>IndexFaces</a> operation. The operation compares the features of the input face with faces in the specified collection. </p> <note> <p>You can also search faces without indexing faces by using the <code>SearchFacesByImage</code> operation.</p> </note> <p> The operation response returns an array of faces that match, ordered by similarity score with the highest similarity first. More specifically, it is an array of metadata for each face match that is found. Along with the metadata, the response also includes a <code>confidence</code> value for each face match, indicating the confidence that the specific face matches the input face. </p> <p>For an example, see <a>example3</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:SearchFaces</code> action.</p>"]
@@ -2352,7 +2663,7 @@ impl<P, D> Rekognition for RekognitionClient<P, D>
     }
 
 
-    #[doc="<p>Detects explicit or suggestive adult content in a specified JPEG or PNG format image. Use <code>DetectModerationLabels</code> to moderate images depending on your requirements. For example, you might want to filter images that contain nudity, but not images containing suggestive content.</p> <p>To filter images, use the labels returned by <code>DetectModerationLabels</code> to determine which types of content are appropriate. For information about moderation labels, see <a>howitworks-moderateimage</a>.</p>"]
+    #[doc="<p>Detects explicit or suggestive adult content in a specified JPEG or PNG format image. Use <code>DetectModerationLabels</code> to moderate images depending on your requirements. For example, you might want to filter images that contain nudity, but not images containing suggestive content.</p> <p>To filter images, use the labels returned by <code>DetectModerationLabels</code> to determine which types of content are appropriate. For information about moderation labels, see <a>image-moderation</a>.</p>"]
     fn detect_moderation_labels
         (&self,
          input: &DetectModerationLabelsRequest)
@@ -2380,7 +2691,34 @@ impl<P, D> Rekognition for RekognitionClient<P, D>
     }
 
 
-    #[doc="<p>Detects faces in the input image and adds them to the specified collection. </p> <p> Amazon Rekognition does not save the actual faces detected. Instead, the underlying detection algorithm first detects the faces in the input image, and for each face extracts facial features into a feature vector, and stores it in the back-end database. Amazon Rekognition uses feature vectors when performing face match and search operations using the and operations. </p> <p>If you provide the optional <code>externalImageID</code> for the input image you provided, Amazon Rekognition associates this ID with all faces that it detects. When you call the operation, the response returns the external ID. You can use this external image ID to create a client-side index to associate the faces with each image. You can then use the index to find all faces in an image. </p> <p>In response, the operation returns an array of metadata for all detected faces. This includes, the bounding box of the detected face, confidence value (indicating the bounding box contains a face), a face ID assigned by the service for each face that is detected and stored, and an image ID assigned by the service for the input image If you request all facial attributes (using the <code>detectionAttributes</code> parameter, Amazon Rekognition returns detailed facial attributes such as facial landmarks (for example, location of eye and mount) and other facial attributes such gender. If you provide the same image, specify the same collection, and use the same external ID in the <code>IndexFaces</code> operation, Amazon Rekognition doesn't save duplicate face metadata. </p> <p>For an example, see <a>example2</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:IndexFaces</code> action.</p>"]
+    #[doc="<p>Gets the name and additional information about a celebrity based on his or her Rekognition ID. The additional information is returned as an array of URLs. If there is no additional information about the celebrity, this list is empty. For more information, see <a>celebrity-recognition</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:GetCelebrityInfo</code> action. </p>"]
+    fn get_celebrity_info(&self,
+                          input: &GetCelebrityInfoRequest)
+                          -> Result<GetCelebrityInfoResponse, GetCelebrityInfoError> {
+        let mut request = SignedRequest::new("POST", "rekognition", self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "RekognitionService.GetCelebrityInfo");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                            Ok(serde_json::from_str::<GetCelebrityInfoResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                        }
+            _ => {
+                Err(GetCelebrityInfoError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Detects faces in the input image and adds them to the specified collection. </p> <p> Amazon Rekognition does not save the actual faces detected. Instead, the underlying detection algorithm first detects the faces in the input image, and for each face extracts facial features into a feature vector, and stores it in the back-end database. Amazon Rekognition uses feature vectors when performing face match and search operations using the and operations. </p> <p>If you provide the optional <code>externalImageID</code> for the input image you provided, Amazon Rekognition associates this ID with all faces that it detects. When you call the operation, the response returns the external ID. You can use this external image ID to create a client-side index to associate the faces with each image. You can then use the index to find all faces in an image. </p> <p>In response, the operation returns an array of metadata for all detected faces. This includes, the bounding box of the detected face, confidence value (indicating the bounding box contains a face), a face ID assigned by the service for each face that is detected and stored, and an image ID assigned by the service for the input image. If you request all facial attributes (using the <code>detectionAttributes</code> parameter, Amazon Rekognition returns detailed facial attributes such as facial landmarks (for example, location of eye and mount) and other facial attributes such gender. If you provide the same image, specify the same collection, and use the same external ID in the <code>IndexFaces</code> operation, Amazon Rekognition doesn't save duplicate face metadata. </p> <p>For an example, see <a>example2</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:IndexFaces</code> action.</p>"]
     fn index_faces(&self,
                    input: &IndexFacesRequest)
                    -> Result<IndexFacesResponse, IndexFacesError> {
@@ -2449,6 +2787,33 @@ impl<P, D> Rekognition for RekognitionClient<P, D>
                             Ok(serde_json::from_str::<ListFacesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListFacesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
+        }
+    }
+
+
+    #[doc="<p>Returns an array of celebrities recognized in the input image. The image is passed either as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. The image must be either a PNG or JPEG formatted file. For more information, see <a>celebrity-recognition</a>. </p> <p> <code>RecognizeCelebrities</code> returns the 15 largest faces in the image. It lists recognized celebrities in the <code>CelebrityFaces</code> list and unrecognized faces in the <code>UnrecognizedFaces</code> list. The operation doesn't return celebrities whose face sizes are smaller than the largest 15 faces in the image.</p> <p>For each celebrity recognized, the API returns a <code>Celebrity</code> object. The <code>Celebrity</code> object contains the celebrity name, ID, URL links to additional information, match confidence, and a <code>ComparedFace</code> object that you can use to locate the celebrity's face on the image.</p> <p>Rekognition does not retain information about which images a celebrity has been recognized in. Your application must store this information and use the <code>Celebrity</code> ID property as a unique identifier for the celebrity. If you don't store the celebrity name or additional information URLs returned by <code>RecognizeCelebrities</code>, you will need the ID to identify the celebrity in a call to the operation.</p> <p>For an example, see <a>recognize-celebrities-tutorial</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:RecognizeCelebrities</code> operation.</p>"]
+    fn recognize_celebrities(&self,
+                             input: &RecognizeCelebritiesRequest)
+                             -> Result<RecognizeCelebritiesResponse, RecognizeCelebritiesError> {
+        let mut request = SignedRequest::new("POST", "rekognition", self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "RekognitionService.RecognizeCelebrities");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                            Ok(serde_json::from_str::<RecognizeCelebritiesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                        }
+            _ => {
+                Err(RecognizeCelebritiesError::from_body(String::from_utf8_lossy(&response.body)
+                                                             .as_ref()))
+            }
         }
     }
 

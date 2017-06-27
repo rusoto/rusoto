@@ -69,6 +69,10 @@ pub struct Action {
     #[serde(rename="s3")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub s_3: Option<S3Action>,
+    #[doc="<p>Send a message to a Salesforce IoT Cloud Input Stream.</p>"]
+    #[serde(rename="salesforce")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub salesforce: Option<SalesforceAction>,
     #[doc="<p>Publish to an Amazon SNS topic.</p>"]
     #[serde(rename="sns")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -113,7 +117,7 @@ pub type AttributeName = String;
 #[doc="<p>The attribute payload.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct AttributePayload {
-    #[doc="<p>A JSON string containing up to three key-value pair in JSON format. For example:</p> <p><code>{\\\"attributes\\\":{\\\"string1\\\":\\\"string2\\\"}})</code></p>"]
+    #[doc="<p>A JSON string containing up to three key-value pair in JSON format. For example:</p> <p> <code>{\\\"attributes\\\":{\\\"string1\\\":\\\"string2\\\"}}</code> </p>"]
     #[serde(rename="attributes")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub attributes: Option<Attributes>,
@@ -147,7 +151,7 @@ pub struct CACertificate {
     #[serde(rename="creationDate")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub creation_date: Option<DateType>,
-    #[doc="<p>The status of the CA certificate. </p> <p>The status value REGISTER_INACTIVE is deprecated and should not be used.</p>"]
+    #[doc="<p>The status of the CA certificate.</p> <p>The status value REGISTER_INACTIVE is deprecated and should not be used.</p>"]
     #[serde(rename="status")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<CACertificateStatus>,
@@ -441,7 +445,7 @@ pub struct CreatePolicyVersionResponse {
 #[doc="<p>The input for the CreateThing operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateThingRequest {
-    #[doc="<p>The attribute payload, which consists of up to three name/value pairs in a JSON document. For example:</p> <p><code>{\\\"attributes\\\":{\\\"string1\\\":\\\"string2\\\"}})</code></p>"]
+    #[doc="<p>The attribute payload, which consists of up to three name/value pairs in a JSON document. For example:</p> <p> <code>{\\\"attributes\\\":{\\\"string1\\\":\\\"string2\\\"}}</code> </p>"]
     #[serde(rename="attributePayload")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub attribute_payload: Option<AttributePayload>,
@@ -549,7 +553,7 @@ pub struct DeletePolicyVersionRequest {
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteRegistrationCodeRequest;
 
-#[doc="<p>The output for the DeleteRegistrationCode operation. </p>"]
+#[doc="<p>The output for the DeleteRegistrationCode operation.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DeleteRegistrationCodeResponse;
 
@@ -698,6 +702,7 @@ pub struct DescribeThingTypeRequest {
 #[doc="<p>The output for the DescribeThingType operation.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DescribeThingTypeResponse {
+    #[doc="<p>The ThingTypeMetadata contains additional information about the thing type including: creation date and time, a value indicating whether the thing type is deprecated, and a date and time when it was deprecated.</p>"]
     #[serde(rename="thingTypeMetadata")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub thing_type_metadata: Option<ThingTypeMetadata>,
@@ -746,7 +751,7 @@ pub struct DisableTopicRuleRequest {
     pub rule_name: RuleName,
 }
 
-#[doc="<p>Describes an action to write to a DynamoDB table.</p> <p>The <code>tableName</code>, <code>hashKeyField</code>, and <code>rangeKeyField</code> values must match the values used when you created the table.</p> <p>The <code>hashKeyValue</code> and <code>rangeKeyvalue</code> fields use a substitution template syntax. These templates provide data at runtime. The syntax is as follows: ${<i>sql-expression</i>}.</p> <p>You can specify any valid expression in a WHERE or SELECT clause, including JSON properties, comparisons, calculations, and functions. For example, the following field uses the third level of the topic:</p> <p><code>\"hashKeyValue\": \"${topic(3)}\"</code></p> <p>The following field uses the timestamp:</p> <p><code>\"rangeKeyValue\": \"${timestamp()}\"</code></p>"]
+#[doc="<p>Describes an action to write to a DynamoDB table.</p> <p>The <code>tableName</code>, <code>hashKeyField</code>, and <code>rangeKeyField</code> values must match the values used when you created the table.</p> <p>The <code>hashKeyValue</code> and <code>rangeKeyvalue</code> fields use a substitution template syntax. These templates provide data at runtime. The syntax is as follows: ${<i>sql-expression</i>}.</p> <p>You can specify any valid expression in a WHERE or SELECT clause, including JSON properties, comparisons, calculations, and functions. For example, the following field uses the third level of the topic:</p> <p> <code>\"hashKeyValue\": \"${topic(3)}\"</code> </p> <p>The following field uses the timestamp:</p> <p> <code>\"rangeKeyValue\": \"${timestamp()}\"</code> </p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DynamoDBAction {
     #[doc="<p>The hash key name.</p>"]
@@ -790,7 +795,7 @@ pub struct DynamoDBAction {
 #[doc="<p>Describes an action to write to a DynamoDB table.</p> <p>This DynamoDB action writes each attribute in the message payload into it's own column in the DynamoDB table.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DynamoDBv2Action {
-    #[doc="<p>Specifies the DynamoDB table to which the message data will be written. For example:</p> <p><code>{ \"dynamoDBv2\": { \"roleArn\": \"aws:iam:12341251:my-role\" \"putItem\": { \"tableName\": \"my-table\" } } }</code></p> <p>Each attribute in the message payload will be written to a separate column in the DynamoDB database.</p>"]
+    #[doc="<p>Specifies the DynamoDB table to which the message data will be written. For example:</p> <p> <code>{ \"dynamoDBv2\": { \"roleArn\": \"aws:iam:12341251:my-role\" \"putItem\": { \"tableName\": \"my-table\" } } }</code> </p> <p>Each attribute in the message payload will be written to a separate column in the DynamoDB database.</p>"]
     #[serde(rename="putItem")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub put_item: Option<PutItemInput>,
@@ -1048,7 +1053,7 @@ pub struct ListCertificatesByCARequest {
     #[serde(rename="ascendingOrder")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub ascending_order: Option<AscendingOrder>,
-    #[doc="<p>The ID of the CA certificate. This operation will list all registered device certificate that were signed by this CA certificate. </p>"]
+    #[doc="<p>The ID of the CA certificate. This operation will list all registered device certificate that were signed by this CA certificate.</p>"]
     #[serde(rename="caCertificateId")]
     pub ca_certificate_id: CertificateId,
     #[doc="<p>The marker for the next set of results.</p>"]
@@ -1253,7 +1258,7 @@ pub struct ListPrincipalThingsRequest {
     #[doc="<p>The maximum number of results to return in this operation.</p>"]
     #[serde(rename="maxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<MaxResults>,
+    pub max_results: Option<RegistryMaxResults>,
     #[doc="<p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1299,7 +1304,7 @@ pub struct ListThingTypesRequest {
     #[doc="<p>The maximum number of results to return in this operation.</p>"]
     #[serde(rename="maxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<MaxResults>,
+    pub max_results: Option<RegistryMaxResults>,
     #[doc="<p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1337,7 +1342,7 @@ pub struct ListThingsRequest {
     #[doc="<p>The maximum number of results to return in this operation.</p>"]
     #[serde(rename="maxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<MaxResults>,
+    pub max_results: Option<RegistryMaxResults>,
     #[doc="<p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1546,6 +1551,7 @@ pub struct RegisterCertificateRequest {
     #[doc="<p>The certificate data, in PEM format.</p>"]
     #[serde(rename="certificatePem")]
     pub certificate_pem: CertificatePem,
+    #[doc="<p>The status of the register certificate request.</p>"]
     #[serde(rename="status")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<CertificateStatus>,
@@ -1565,6 +1571,7 @@ pub struct RegisterCertificateResponse {
 }
 
 pub type RegistrationCode = String;
+pub type RegistryMaxResults = i64;
 #[doc="<p>The input for the RejectCertificateTransfer operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct RejectCertificateTransferRequest {
@@ -1623,6 +1630,19 @@ pub struct S3Action {
 }
 
 pub type SQL = String;
+#[doc="<p>Describes an action to write a message to a Salesforce IoT Cloud Input Stream.</p>"]
+#[derive(Default,Debug,Clone,Serialize,Deserialize)]
+pub struct SalesforceAction {
+    #[doc="<p>The token used to authenticate access to the Salesforce IoT Cloud Input Stream. The token is available from the Salesforce IoT Cloud platform after creation of the Input Stream.</p>"]
+    #[serde(rename="token")]
+    pub token: SalesforceToken,
+    #[doc="<p>The URL exposed by the Salesforce IoT Cloud Input Stream. The URL is available from the Salesforce IoT Cloud platform after creation of the Input Stream.</p>"]
+    #[serde(rename="url")]
+    pub url: SalesforceEndpoint,
+}
+
+pub type SalesforceEndpoint = String;
+pub type SalesforceToken = String;
 pub type SearchableAttributes = Vec<AttributeName>;
 pub type SetAsActive = bool;
 pub type SetAsActiveFlag = bool;
@@ -1649,7 +1669,7 @@ pub struct SetLoggingOptionsRequest {
 #[doc="<p>Describes an action to publish to an Amazon SNS topic.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SnsAction {
-    #[doc="<p>The message format of the message to publish. Optional. Accepted values are \"JSON\" and \"RAW\". The default value of the attribute is \"RAW\". SNS uses this setting to determine if the payload should be parsed and relevant platform-specific bits of the payload should be extracted. To read more about SNS message formats, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/json-formats.html\"></a> refer to their official documentation.</p>"]
+    #[doc="<p>The message format of the message to publish. Optional. Accepted values are \"JSON\" and \"RAW\". The default value of the attribute is \"RAW\". SNS uses this setting to determine if the payload should be parsed and relevant platform-specific bits of the payload should be extracted. To read more about SNS message formats, see <a href=\"http://docs.aws.amazon.com/sns/latest/dg/json-formats.html\">http://docs.aws.amazon.com/sns/latest/dg/json-formats.html</a> refer to their official documentation.</p>"]
     #[serde(rename="messageFormat")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub message_format: Option<MessageFormat>,
@@ -1709,6 +1729,7 @@ pub type ThingTypeArn = String;
 #[doc="<p>The definition of the thing type, including thing type name and description.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ThingTypeDefinition {
+    #[doc="<p>The ThingTypeMetadata contains additional information about the thing type including: creation date and time, a value indicating whether the thing type is deprecated, and a date and time when it was deprecated.</p>"]
     #[serde(rename="thingTypeMetadata")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub thing_type_metadata: Option<ThingTypeMetadata>,
@@ -1899,7 +1920,7 @@ pub struct UpdateCACertificateRequest {
     #[serde(rename="newAutoRegistrationStatus")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub new_auto_registration_status: Option<AutoRegistrationStatus>,
-    #[doc="<p>The updated status of the CA certificate.</p> <p><b>Note:</b> The status value REGISTER_INACTIVE is deprecated and should not be used.</p>"]
+    #[doc="<p>The updated status of the CA certificate.</p> <p> <b>Note:</b> The status value REGISTER_INACTIVE is deprecated and should not be used.</p>"]
     #[serde(rename="newStatus")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub new_status: Option<CACertificateStatus>,
@@ -1911,7 +1932,7 @@ pub struct UpdateCertificateRequest {
     #[doc="<p>The ID of the certificate.</p>"]
     #[serde(rename="certificateId")]
     pub certificate_id: CertificateId,
-    #[doc="<p>The new status.</p> <p><b>Note:</b> Setting the status to PENDING_TRANSFER will result in an exception being thrown. PENDING_TRANSFER is a status used internally by AWS IoT. It is not intended for developer use.</p> <p><b>Note:</b> The status value REGISTER_INACTIVE is deprecated and should not be used.</p>"]
+    #[doc="<p>The new status.</p> <p> <b>Note:</b> Setting the status to PENDING_TRANSFER will result in an exception being thrown. PENDING_TRANSFER is a status used internally by AWS IoT. It is not intended for developer use.</p> <p> <b>Note:</b> The status value REGISTER_INACTIVE is deprecated and should not be used.</p>"]
     #[serde(rename="newStatus")]
     pub new_status: CertificateStatus,
 }
@@ -1919,7 +1940,7 @@ pub struct UpdateCertificateRequest {
 #[doc="<p>The input for the UpdateThing operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateThingRequest {
-    #[doc="<p>A list of thing attributes, a JSON string containing name-value pairs. For example:</p> <p><code>{\\\"attributes\\\":{\\\"name1\\\":\\\"value2\\\"}})</code></p> <p>This data is used to add new attributes or update existing attributes.</p>"]
+    #[doc="<p>A list of thing attributes, a JSON string containing name-value pairs. For example:</p> <p> <code>{\\\"attributes\\\":{\\\"name1\\\":\\\"value2\\\"}}</code> </p> <p>This data is used to add new attributes or update existing attributes.</p>"]
     #[serde(rename="attributePayload")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub attribute_payload: Option<AttributePayload>,
@@ -1951,18 +1972,18 @@ pub type Version = i64;
 pub enum AcceptCertificateTransferError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
     ///<p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>You are not authorized to perform this operation.</p>
-    Unauthorized(String),
+    ///<p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You can't revert the certificate transfer because the transfer is already complete.</p>
     TransferAlreadyCompleted(String),
+    ///<p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1990,18 +2011,18 @@ impl AcceptCertificateTransferError {
                     "InternalFailureException" => {
                         AcceptCertificateTransferError::InternalFailure(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        AcceptCertificateTransferError::Throttling(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         AcceptCertificateTransferError::InvalidRequest(String::from(error_message))
                     }
-                    "ServiceUnavailableException" => AcceptCertificateTransferError::ServiceUnavailable(String::from(error_message)),
                     "ResourceNotFoundException" => AcceptCertificateTransferError::ResourceNotFound(String::from(error_message)),
+                    "ServiceUnavailableException" => AcceptCertificateTransferError::ServiceUnavailable(String::from(error_message)),
+                    "ThrottlingException" => {
+                        AcceptCertificateTransferError::Throttling(String::from(error_message))
+                    }
+                    "TransferAlreadyCompletedException" => AcceptCertificateTransferError::TransferAlreadyCompleted(String::from(error_message)),
                     "UnauthorizedException" => {
                         AcceptCertificateTransferError::Unauthorized(String::from(error_message))
                     }
-                    "TransferAlreadyCompletedException" => AcceptCertificateTransferError::TransferAlreadyCompleted(String::from(error_message)),
                     "ValidationException" => {
                         AcceptCertificateTransferError::Validation(error_message.to_string())
                     }
@@ -2037,12 +2058,12 @@ impl Error for AcceptCertificateTransferError {
     fn description(&self) -> &str {
         match *self {
             AcceptCertificateTransferError::InternalFailure(ref cause) => cause,
-            AcceptCertificateTransferError::Throttling(ref cause) => cause,
             AcceptCertificateTransferError::InvalidRequest(ref cause) => cause,
-            AcceptCertificateTransferError::ServiceUnavailable(ref cause) => cause,
             AcceptCertificateTransferError::ResourceNotFound(ref cause) => cause,
-            AcceptCertificateTransferError::Unauthorized(ref cause) => cause,
+            AcceptCertificateTransferError::ServiceUnavailable(ref cause) => cause,
+            AcceptCertificateTransferError::Throttling(ref cause) => cause,
             AcceptCertificateTransferError::TransferAlreadyCompleted(ref cause) => cause,
+            AcceptCertificateTransferError::Unauthorized(ref cause) => cause,
             AcceptCertificateTransferError::Validation(ref cause) => cause,
             AcceptCertificateTransferError::Credentials(ref err) => err.description(),
             AcceptCertificateTransferError::HttpDispatch(ref dispatch_error) => {
@@ -2057,16 +2078,16 @@ impl Error for AcceptCertificateTransferError {
 pub enum AttachPrincipalPolicyError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The number of attached entities exceeds the limit.</p>
-    LimitExceeded(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
+    ///<p>The number of attached entities exceeds the limit.</p>
+    LimitExceeded(String),
     ///<p>The specified resource does not exist.</p>
     ResourceNotFound(String),
+    ///<p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -2096,20 +2117,20 @@ impl AttachPrincipalPolicyError {
                     "InternalFailureException" => {
                         AttachPrincipalPolicyError::InternalFailure(String::from(error_message))
                     }
+                    "InvalidRequestException" => {
+                        AttachPrincipalPolicyError::InvalidRequest(String::from(error_message))
+                    }
                     "LimitExceededException" => {
                         AttachPrincipalPolicyError::LimitExceeded(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        AttachPrincipalPolicyError::Throttling(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        AttachPrincipalPolicyError::InvalidRequest(String::from(error_message))
+                    "ResourceNotFoundException" => {
+                        AttachPrincipalPolicyError::ResourceNotFound(String::from(error_message))
                     }
                     "ServiceUnavailableException" => {
                         AttachPrincipalPolicyError::ServiceUnavailable(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => {
-                        AttachPrincipalPolicyError::ResourceNotFound(String::from(error_message))
+                    "ThrottlingException" => {
+                        AttachPrincipalPolicyError::Throttling(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         AttachPrincipalPolicyError::Unauthorized(String::from(error_message))
@@ -2149,11 +2170,11 @@ impl Error for AttachPrincipalPolicyError {
     fn description(&self) -> &str {
         match *self {
             AttachPrincipalPolicyError::InternalFailure(ref cause) => cause,
-            AttachPrincipalPolicyError::LimitExceeded(ref cause) => cause,
-            AttachPrincipalPolicyError::Throttling(ref cause) => cause,
             AttachPrincipalPolicyError::InvalidRequest(ref cause) => cause,
-            AttachPrincipalPolicyError::ServiceUnavailable(ref cause) => cause,
+            AttachPrincipalPolicyError::LimitExceeded(ref cause) => cause,
             AttachPrincipalPolicyError::ResourceNotFound(ref cause) => cause,
+            AttachPrincipalPolicyError::ServiceUnavailable(ref cause) => cause,
+            AttachPrincipalPolicyError::Throttling(ref cause) => cause,
             AttachPrincipalPolicyError::Unauthorized(ref cause) => cause,
             AttachPrincipalPolicyError::Validation(ref cause) => cause,
             AttachPrincipalPolicyError::Credentials(ref err) => err.description(),
@@ -2169,14 +2190,14 @@ impl Error for AttachPrincipalPolicyError {
 pub enum AttachThingPrincipalError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
     ///<p>The specified resource does not exist.</p>
     ResourceNotFound(String),
+    ///<p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -2206,17 +2227,17 @@ impl AttachThingPrincipalError {
                     "InternalFailureException" => {
                         AttachThingPrincipalError::InternalFailure(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        AttachThingPrincipalError::Throttling(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         AttachThingPrincipalError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        AttachThingPrincipalError::ResourceNotFound(String::from(error_message))
                     }
                     "ServiceUnavailableException" => {
                         AttachThingPrincipalError::ServiceUnavailable(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => {
-                        AttachThingPrincipalError::ResourceNotFound(String::from(error_message))
+                    "ThrottlingException" => {
+                        AttachThingPrincipalError::Throttling(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         AttachThingPrincipalError::Unauthorized(String::from(error_message))
@@ -2256,10 +2277,10 @@ impl Error for AttachThingPrincipalError {
     fn description(&self) -> &str {
         match *self {
             AttachThingPrincipalError::InternalFailure(ref cause) => cause,
-            AttachThingPrincipalError::Throttling(ref cause) => cause,
             AttachThingPrincipalError::InvalidRequest(ref cause) => cause,
-            AttachThingPrincipalError::ServiceUnavailable(ref cause) => cause,
             AttachThingPrincipalError::ResourceNotFound(ref cause) => cause,
+            AttachThingPrincipalError::ServiceUnavailable(ref cause) => cause,
+            AttachThingPrincipalError::Throttling(ref cause) => cause,
             AttachThingPrincipalError::Unauthorized(ref cause) => cause,
             AttachThingPrincipalError::Validation(ref cause) => cause,
             AttachThingPrincipalError::Credentials(ref err) => err.description(),
@@ -2275,18 +2296,18 @@ impl Error for AttachThingPrincipalError {
 pub enum CancelCertificateTransferError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
     ///<p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>You are not authorized to perform this operation.</p>
-    Unauthorized(String),
+    ///<p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You can't revert the certificate transfer because the transfer is already complete.</p>
     TransferAlreadyCompleted(String),
+    ///<p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2314,18 +2335,18 @@ impl CancelCertificateTransferError {
                     "InternalFailureException" => {
                         CancelCertificateTransferError::InternalFailure(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        CancelCertificateTransferError::Throttling(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         CancelCertificateTransferError::InvalidRequest(String::from(error_message))
                     }
-                    "ServiceUnavailableException" => CancelCertificateTransferError::ServiceUnavailable(String::from(error_message)),
                     "ResourceNotFoundException" => CancelCertificateTransferError::ResourceNotFound(String::from(error_message)),
+                    "ServiceUnavailableException" => CancelCertificateTransferError::ServiceUnavailable(String::from(error_message)),
+                    "ThrottlingException" => {
+                        CancelCertificateTransferError::Throttling(String::from(error_message))
+                    }
+                    "TransferAlreadyCompletedException" => CancelCertificateTransferError::TransferAlreadyCompleted(String::from(error_message)),
                     "UnauthorizedException" => {
                         CancelCertificateTransferError::Unauthorized(String::from(error_message))
                     }
-                    "TransferAlreadyCompletedException" => CancelCertificateTransferError::TransferAlreadyCompleted(String::from(error_message)),
                     "ValidationException" => {
                         CancelCertificateTransferError::Validation(error_message.to_string())
                     }
@@ -2361,12 +2382,12 @@ impl Error for CancelCertificateTransferError {
     fn description(&self) -> &str {
         match *self {
             CancelCertificateTransferError::InternalFailure(ref cause) => cause,
-            CancelCertificateTransferError::Throttling(ref cause) => cause,
             CancelCertificateTransferError::InvalidRequest(ref cause) => cause,
-            CancelCertificateTransferError::ServiceUnavailable(ref cause) => cause,
             CancelCertificateTransferError::ResourceNotFound(ref cause) => cause,
-            CancelCertificateTransferError::Unauthorized(ref cause) => cause,
+            CancelCertificateTransferError::ServiceUnavailable(ref cause) => cause,
+            CancelCertificateTransferError::Throttling(ref cause) => cause,
             CancelCertificateTransferError::TransferAlreadyCompleted(ref cause) => cause,
+            CancelCertificateTransferError::Unauthorized(ref cause) => cause,
             CancelCertificateTransferError::Validation(ref cause) => cause,
             CancelCertificateTransferError::Credentials(ref err) => err.description(),
             CancelCertificateTransferError::HttpDispatch(ref dispatch_error) => {
@@ -2381,12 +2402,12 @@ impl Error for CancelCertificateTransferError {
 pub enum CreateCertificateFromCsrError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
     ///<p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -2416,13 +2437,13 @@ impl CreateCertificateFromCsrError {
                     "InternalFailureException" => {
                         CreateCertificateFromCsrError::InternalFailure(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        CreateCertificateFromCsrError::Throttling(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         CreateCertificateFromCsrError::InvalidRequest(String::from(error_message))
                     }
                     "ServiceUnavailableException" => CreateCertificateFromCsrError::ServiceUnavailable(String::from(error_message)),
+                    "ThrottlingException" => {
+                        CreateCertificateFromCsrError::Throttling(String::from(error_message))
+                    }
                     "UnauthorizedException" => {
                         CreateCertificateFromCsrError::Unauthorized(String::from(error_message))
                     }
@@ -2461,9 +2482,9 @@ impl Error for CreateCertificateFromCsrError {
     fn description(&self) -> &str {
         match *self {
             CreateCertificateFromCsrError::InternalFailure(ref cause) => cause,
-            CreateCertificateFromCsrError::Throttling(ref cause) => cause,
             CreateCertificateFromCsrError::InvalidRequest(ref cause) => cause,
             CreateCertificateFromCsrError::ServiceUnavailable(ref cause) => cause,
+            CreateCertificateFromCsrError::Throttling(ref cause) => cause,
             CreateCertificateFromCsrError::Unauthorized(ref cause) => cause,
             CreateCertificateFromCsrError::Validation(ref cause) => cause,
             CreateCertificateFromCsrError::Credentials(ref err) => err.description(),
@@ -2479,12 +2500,12 @@ impl Error for CreateCertificateFromCsrError {
 pub enum CreateKeysAndCertificateError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
     ///<p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -2514,13 +2535,13 @@ impl CreateKeysAndCertificateError {
                     "InternalFailureException" => {
                         CreateKeysAndCertificateError::InternalFailure(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        CreateKeysAndCertificateError::Throttling(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         CreateKeysAndCertificateError::InvalidRequest(String::from(error_message))
                     }
                     "ServiceUnavailableException" => CreateKeysAndCertificateError::ServiceUnavailable(String::from(error_message)),
+                    "ThrottlingException" => {
+                        CreateKeysAndCertificateError::Throttling(String::from(error_message))
+                    }
                     "UnauthorizedException" => {
                         CreateKeysAndCertificateError::Unauthorized(String::from(error_message))
                     }
@@ -2559,9 +2580,9 @@ impl Error for CreateKeysAndCertificateError {
     fn description(&self) -> &str {
         match *self {
             CreateKeysAndCertificateError::InternalFailure(ref cause) => cause,
-            CreateKeysAndCertificateError::Throttling(ref cause) => cause,
             CreateKeysAndCertificateError::InvalidRequest(ref cause) => cause,
             CreateKeysAndCertificateError::ServiceUnavailable(ref cause) => cause,
+            CreateKeysAndCertificateError::Throttling(ref cause) => cause,
             CreateKeysAndCertificateError::Unauthorized(ref cause) => cause,
             CreateKeysAndCertificateError::Validation(ref cause) => cause,
             CreateKeysAndCertificateError::Credentials(ref err) => err.description(),
@@ -2577,16 +2598,16 @@ impl Error for CreateKeysAndCertificateError {
 pub enum CreatePolicyError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The policy documentation is not valid.</p>
-    MalformedPolicy(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
+    ///<p>The policy documentation is not valid.</p>
+    MalformedPolicy(String),
     ///<p>The resource already exists.</p>
     ResourceAlreadyExists(String),
     ///<p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -2616,20 +2637,20 @@ impl CreatePolicyError {
                     "InternalFailureException" => {
                         CreatePolicyError::InternalFailure(String::from(error_message))
                     }
-                    "MalformedPolicyException" => {
-                        CreatePolicyError::MalformedPolicy(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        CreatePolicyError::Throttling(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         CreatePolicyError::InvalidRequest(String::from(error_message))
+                    }
+                    "MalformedPolicyException" => {
+                        CreatePolicyError::MalformedPolicy(String::from(error_message))
                     }
                     "ResourceAlreadyExistsException" => {
                         CreatePolicyError::ResourceAlreadyExists(String::from(error_message))
                     }
                     "ServiceUnavailableException" => {
                         CreatePolicyError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        CreatePolicyError::Throttling(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         CreatePolicyError::Unauthorized(String::from(error_message))
@@ -2669,11 +2690,11 @@ impl Error for CreatePolicyError {
     fn description(&self) -> &str {
         match *self {
             CreatePolicyError::InternalFailure(ref cause) => cause,
-            CreatePolicyError::MalformedPolicy(ref cause) => cause,
-            CreatePolicyError::Throttling(ref cause) => cause,
             CreatePolicyError::InvalidRequest(ref cause) => cause,
+            CreatePolicyError::MalformedPolicy(ref cause) => cause,
             CreatePolicyError::ResourceAlreadyExists(ref cause) => cause,
             CreatePolicyError::ServiceUnavailable(ref cause) => cause,
+            CreatePolicyError::Throttling(ref cause) => cause,
             CreatePolicyError::Unauthorized(ref cause) => cause,
             CreatePolicyError::Validation(ref cause) => cause,
             CreatePolicyError::Credentials(ref err) => err.description(),
@@ -2687,20 +2708,20 @@ impl Error for CreatePolicyError {
 pub enum CreatePolicyVersionError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The number of policy versions exceeds the limit.</p>
-    VersionsLimitExceeded(String),
-    ///<p>The policy documentation is not valid.</p>
-    MalformedPolicy(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
+    ///<p>The policy documentation is not valid.</p>
+    MalformedPolicy(String),
     ///<p>The specified resource does not exist.</p>
     ResourceNotFound(String),
+    ///<p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
+    ///<p>The number of policy versions exceeds the limit.</p>
+    VersionsLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2728,26 +2749,26 @@ impl CreatePolicyVersionError {
                     "InternalFailureException" => {
                         CreatePolicyVersionError::InternalFailure(String::from(error_message))
                     }
-                    "VersionsLimitExceededException" => {
-                        CreatePolicyVersionError::VersionsLimitExceeded(String::from(error_message))
+                    "InvalidRequestException" => {
+                        CreatePolicyVersionError::InvalidRequest(String::from(error_message))
                     }
                     "MalformedPolicyException" => {
                         CreatePolicyVersionError::MalformedPolicy(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        CreatePolicyVersionError::Throttling(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        CreatePolicyVersionError::InvalidRequest(String::from(error_message))
+                    "ResourceNotFoundException" => {
+                        CreatePolicyVersionError::ResourceNotFound(String::from(error_message))
                     }
                     "ServiceUnavailableException" => {
                         CreatePolicyVersionError::ServiceUnavailable(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => {
-                        CreatePolicyVersionError::ResourceNotFound(String::from(error_message))
+                    "ThrottlingException" => {
+                        CreatePolicyVersionError::Throttling(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         CreatePolicyVersionError::Unauthorized(String::from(error_message))
+                    }
+                    "VersionsLimitExceededException" => {
+                        CreatePolicyVersionError::VersionsLimitExceeded(String::from(error_message))
                     }
                     "ValidationException" => {
                         CreatePolicyVersionError::Validation(error_message.to_string())
@@ -2784,13 +2805,13 @@ impl Error for CreatePolicyVersionError {
     fn description(&self) -> &str {
         match *self {
             CreatePolicyVersionError::InternalFailure(ref cause) => cause,
-            CreatePolicyVersionError::VersionsLimitExceeded(ref cause) => cause,
-            CreatePolicyVersionError::MalformedPolicy(ref cause) => cause,
-            CreatePolicyVersionError::Throttling(ref cause) => cause,
             CreatePolicyVersionError::InvalidRequest(ref cause) => cause,
-            CreatePolicyVersionError::ServiceUnavailable(ref cause) => cause,
+            CreatePolicyVersionError::MalformedPolicy(ref cause) => cause,
             CreatePolicyVersionError::ResourceNotFound(ref cause) => cause,
+            CreatePolicyVersionError::ServiceUnavailable(ref cause) => cause,
+            CreatePolicyVersionError::Throttling(ref cause) => cause,
             CreatePolicyVersionError::Unauthorized(ref cause) => cause,
+            CreatePolicyVersionError::VersionsLimitExceeded(ref cause) => cause,
             CreatePolicyVersionError::Validation(ref cause) => cause,
             CreatePolicyVersionError::Credentials(ref err) => err.description(),
             CreatePolicyVersionError::HttpDispatch(ref dispatch_error) => {
@@ -2805,16 +2826,16 @@ impl Error for CreatePolicyVersionError {
 pub enum CreateThingError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
     ///<p>The resource already exists.</p>
     ResourceAlreadyExists(String),
-    ///<p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
     ///<p>The specified resource does not exist.</p>
     ResourceNotFound(String),
+    ///<p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -2844,20 +2865,20 @@ impl CreateThingError {
                     "InternalFailureException" => {
                         CreateThingError::InternalFailure(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        CreateThingError::Throttling(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         CreateThingError::InvalidRequest(String::from(error_message))
                     }
                     "ResourceAlreadyExistsException" => {
                         CreateThingError::ResourceAlreadyExists(String::from(error_message))
                     }
+                    "ResourceNotFoundException" => {
+                        CreateThingError::ResourceNotFound(String::from(error_message))
+                    }
                     "ServiceUnavailableException" => {
                         CreateThingError::ServiceUnavailable(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => {
-                        CreateThingError::ResourceNotFound(String::from(error_message))
+                    "ThrottlingException" => {
+                        CreateThingError::Throttling(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         CreateThingError::Unauthorized(String::from(error_message))
@@ -2897,11 +2918,11 @@ impl Error for CreateThingError {
     fn description(&self) -> &str {
         match *self {
             CreateThingError::InternalFailure(ref cause) => cause,
-            CreateThingError::Throttling(ref cause) => cause,
             CreateThingError::InvalidRequest(ref cause) => cause,
             CreateThingError::ResourceAlreadyExists(ref cause) => cause,
-            CreateThingError::ServiceUnavailable(ref cause) => cause,
             CreateThingError::ResourceNotFound(ref cause) => cause,
+            CreateThingError::ServiceUnavailable(ref cause) => cause,
+            CreateThingError::Throttling(ref cause) => cause,
             CreateThingError::Unauthorized(ref cause) => cause,
             CreateThingError::Validation(ref cause) => cause,
             CreateThingError::Credentials(ref err) => err.description(),
@@ -2915,14 +2936,14 @@ impl Error for CreateThingError {
 pub enum CreateThingTypeError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
     ///<p>The resource already exists.</p>
     ResourceAlreadyExists(String),
     ///<p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -2952,9 +2973,6 @@ impl CreateThingTypeError {
                     "InternalFailureException" => {
                         CreateThingTypeError::InternalFailure(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        CreateThingTypeError::Throttling(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         CreateThingTypeError::InvalidRequest(String::from(error_message))
                     }
@@ -2963,6 +2981,9 @@ impl CreateThingTypeError {
                     }
                     "ServiceUnavailableException" => {
                         CreateThingTypeError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        CreateThingTypeError::Throttling(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         CreateThingTypeError::Unauthorized(String::from(error_message))
@@ -3002,10 +3023,10 @@ impl Error for CreateThingTypeError {
     fn description(&self) -> &str {
         match *self {
             CreateThingTypeError::InternalFailure(ref cause) => cause,
-            CreateThingTypeError::Throttling(ref cause) => cause,
             CreateThingTypeError::InvalidRequest(ref cause) => cause,
             CreateThingTypeError::ResourceAlreadyExists(ref cause) => cause,
             CreateThingTypeError::ServiceUnavailable(ref cause) => cause,
+            CreateThingTypeError::Throttling(ref cause) => cause,
             CreateThingTypeError::Unauthorized(ref cause) => cause,
             CreateThingTypeError::Validation(ref cause) => cause,
             CreateThingTypeError::Credentials(ref err) => err.description(),
@@ -3019,14 +3040,14 @@ impl Error for CreateThingTypeError {
 pub enum CreateTopicRuleError {
     ///<p>An unexpected error has occurred.</p>
     Internal(String),
-    ///<p>The Rule-SQL expression can't be parsed correctly.</p>
-    SqlParse(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
     ///<p>The resource already exists.</p>
     ResourceAlreadyExists(String),
     ///<p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
+    ///<p>The Rule-SQL expression can't be parsed correctly.</p>
+    SqlParse(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -3054,9 +3075,6 @@ impl CreateTopicRuleError {
                     "InternalException" => {
                         CreateTopicRuleError::Internal(String::from(error_message))
                     }
-                    "SqlParseException" => {
-                        CreateTopicRuleError::SqlParse(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         CreateTopicRuleError::InvalidRequest(String::from(error_message))
                     }
@@ -3065,6 +3083,9 @@ impl CreateTopicRuleError {
                     }
                     "ServiceUnavailableException" => {
                         CreateTopicRuleError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "SqlParseException" => {
+                        CreateTopicRuleError::SqlParse(String::from(error_message))
                     }
                     "ValidationException" => {
                         CreateTopicRuleError::Validation(error_message.to_string())
@@ -3101,10 +3122,10 @@ impl Error for CreateTopicRuleError {
     fn description(&self) -> &str {
         match *self {
             CreateTopicRuleError::Internal(ref cause) => cause,
-            CreateTopicRuleError::SqlParse(ref cause) => cause,
             CreateTopicRuleError::InvalidRequest(ref cause) => cause,
             CreateTopicRuleError::ResourceAlreadyExists(ref cause) => cause,
             CreateTopicRuleError::ServiceUnavailable(ref cause) => cause,
+            CreateTopicRuleError::SqlParse(ref cause) => cause,
             CreateTopicRuleError::Validation(ref cause) => cause,
             CreateTopicRuleError::Credentials(ref err) => err.description(),
             CreateTopicRuleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -3115,18 +3136,18 @@ impl Error for CreateTopicRuleError {
 /// Errors returned by DeleteCACertificate
 #[derive(Debug, PartialEq)]
 pub enum DeleteCACertificateError {
-    ///<p>An unexpected error has occurred.</p>
-    InternalFailure(String),
     ///<p>The certificate operation is not allowed.</p>
     CertificateState(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
+    ///<p>An unexpected error has occurred.</p>
+    InternalFailure(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
     ///<p>The specified resource does not exist.</p>
     ResourceNotFound(String),
+    ///<p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -3153,23 +3174,23 @@ impl DeleteCACertificateError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalFailureException" => {
-                        DeleteCACertificateError::InternalFailure(String::from(error_message))
-                    }
                     "CertificateStateException" => {
                         DeleteCACertificateError::CertificateState(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        DeleteCACertificateError::Throttling(String::from(error_message))
+                    "InternalFailureException" => {
+                        DeleteCACertificateError::InternalFailure(String::from(error_message))
                     }
                     "InvalidRequestException" => {
                         DeleteCACertificateError::InvalidRequest(String::from(error_message))
                     }
+                    "ResourceNotFoundException" => {
+                        DeleteCACertificateError::ResourceNotFound(String::from(error_message))
+                    }
                     "ServiceUnavailableException" => {
                         DeleteCACertificateError::ServiceUnavailable(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => {
-                        DeleteCACertificateError::ResourceNotFound(String::from(error_message))
+                    "ThrottlingException" => {
+                        DeleteCACertificateError::Throttling(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         DeleteCACertificateError::Unauthorized(String::from(error_message))
@@ -3208,12 +3229,12 @@ impl fmt::Display for DeleteCACertificateError {
 impl Error for DeleteCACertificateError {
     fn description(&self) -> &str {
         match *self {
-            DeleteCACertificateError::InternalFailure(ref cause) => cause,
             DeleteCACertificateError::CertificateState(ref cause) => cause,
-            DeleteCACertificateError::Throttling(ref cause) => cause,
+            DeleteCACertificateError::InternalFailure(ref cause) => cause,
             DeleteCACertificateError::InvalidRequest(ref cause) => cause,
-            DeleteCACertificateError::ServiceUnavailable(ref cause) => cause,
             DeleteCACertificateError::ResourceNotFound(ref cause) => cause,
+            DeleteCACertificateError::ServiceUnavailable(ref cause) => cause,
+            DeleteCACertificateError::Throttling(ref cause) => cause,
             DeleteCACertificateError::Unauthorized(ref cause) => cause,
             DeleteCACertificateError::Validation(ref cause) => cause,
             DeleteCACertificateError::Credentials(ref err) => err.description(),
@@ -3227,22 +3248,22 @@ impl Error for DeleteCACertificateError {
 /// Errors returned by DeleteCertificate
 #[derive(Debug, PartialEq)]
 pub enum DeleteCertificateError {
-    ///<p>An unexpected error has occurred.</p>
-    InternalFailure(String),
     ///<p>The certificate operation is not allowed.</p>
     CertificateState(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
-    ///<p>The request is not valid.</p>
-    InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
-    ///<p>The specified resource does not exist.</p>
-    ResourceNotFound(String),
-    ///<p>You are not authorized to perform this operation.</p>
-    Unauthorized(String),
     ///<p>You can't delete the resource because it is attached to one or more resources.</p>
     DeleteConflict(String),
+    ///<p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    ///<p>The request is not valid.</p>
+    InvalidRequest(String),
+    ///<p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    ///<p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
+    ///<p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -3267,29 +3288,29 @@ impl DeleteCertificateError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalFailureException" => {
-                        DeleteCertificateError::InternalFailure(String::from(error_message))
-                    }
                     "CertificateStateException" => {
                         DeleteCertificateError::CertificateState(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        DeleteCertificateError::Throttling(String::from(error_message))
+                    "DeleteConflictException" => {
+                        DeleteCertificateError::DeleteConflict(String::from(error_message))
+                    }
+                    "InternalFailureException" => {
+                        DeleteCertificateError::InternalFailure(String::from(error_message))
                     }
                     "InvalidRequestException" => {
                         DeleteCertificateError::InvalidRequest(String::from(error_message))
                     }
-                    "ServiceUnavailableException" => {
-                        DeleteCertificateError::ServiceUnavailable(String::from(error_message))
-                    }
                     "ResourceNotFoundException" => {
                         DeleteCertificateError::ResourceNotFound(String::from(error_message))
                     }
+                    "ServiceUnavailableException" => {
+                        DeleteCertificateError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        DeleteCertificateError::Throttling(String::from(error_message))
+                    }
                     "UnauthorizedException" => {
                         DeleteCertificateError::Unauthorized(String::from(error_message))
-                    }
-                    "DeleteConflictException" => {
-                        DeleteCertificateError::DeleteConflict(String::from(error_message))
                     }
                     "ValidationException" => {
                         DeleteCertificateError::Validation(error_message.to_string())
@@ -3325,14 +3346,14 @@ impl fmt::Display for DeleteCertificateError {
 impl Error for DeleteCertificateError {
     fn description(&self) -> &str {
         match *self {
-            DeleteCertificateError::InternalFailure(ref cause) => cause,
             DeleteCertificateError::CertificateState(ref cause) => cause,
-            DeleteCertificateError::Throttling(ref cause) => cause,
-            DeleteCertificateError::InvalidRequest(ref cause) => cause,
-            DeleteCertificateError::ServiceUnavailable(ref cause) => cause,
-            DeleteCertificateError::ResourceNotFound(ref cause) => cause,
-            DeleteCertificateError::Unauthorized(ref cause) => cause,
             DeleteCertificateError::DeleteConflict(ref cause) => cause,
+            DeleteCertificateError::InternalFailure(ref cause) => cause,
+            DeleteCertificateError::InvalidRequest(ref cause) => cause,
+            DeleteCertificateError::ResourceNotFound(ref cause) => cause,
+            DeleteCertificateError::ServiceUnavailable(ref cause) => cause,
+            DeleteCertificateError::Throttling(ref cause) => cause,
+            DeleteCertificateError::Unauthorized(ref cause) => cause,
             DeleteCertificateError::Validation(ref cause) => cause,
             DeleteCertificateError::Credentials(ref err) => err.description(),
             DeleteCertificateError::HttpDispatch(ref dispatch_error) => {
@@ -3345,20 +3366,20 @@ impl Error for DeleteCertificateError {
 /// Errors returned by DeletePolicy
 #[derive(Debug, PartialEq)]
 pub enum DeletePolicyError {
-    ///<p>An unexpected error has occurred.</p>
-    InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
-    ///<p>The request is not valid.</p>
-    InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
-    ///<p>The specified resource does not exist.</p>
-    ResourceNotFound(String),
-    ///<p>You are not authorized to perform this operation.</p>
-    Unauthorized(String),
     ///<p>You can't delete the resource because it is attached to one or more resources.</p>
     DeleteConflict(String),
+    ///<p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    ///<p>The request is not valid.</p>
+    InvalidRequest(String),
+    ///<p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    ///<p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
+    ///<p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -3383,26 +3404,26 @@ impl DeletePolicyError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
+                    "DeleteConflictException" => {
+                        DeletePolicyError::DeleteConflict(String::from(error_message))
+                    }
                     "InternalFailureException" => {
                         DeletePolicyError::InternalFailure(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        DeletePolicyError::Throttling(String::from(error_message))
                     }
                     "InvalidRequestException" => {
                         DeletePolicyError::InvalidRequest(String::from(error_message))
                     }
-                    "ServiceUnavailableException" => {
-                        DeletePolicyError::ServiceUnavailable(String::from(error_message))
-                    }
                     "ResourceNotFoundException" => {
                         DeletePolicyError::ResourceNotFound(String::from(error_message))
                     }
+                    "ServiceUnavailableException" => {
+                        DeletePolicyError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        DeletePolicyError::Throttling(String::from(error_message))
+                    }
                     "UnauthorizedException" => {
                         DeletePolicyError::Unauthorized(String::from(error_message))
-                    }
-                    "DeleteConflictException" => {
-                        DeletePolicyError::DeleteConflict(String::from(error_message))
                     }
                     "ValidationException" => {
                         DeletePolicyError::Validation(error_message.to_string())
@@ -3438,13 +3459,13 @@ impl fmt::Display for DeletePolicyError {
 impl Error for DeletePolicyError {
     fn description(&self) -> &str {
         match *self {
-            DeletePolicyError::InternalFailure(ref cause) => cause,
-            DeletePolicyError::Throttling(ref cause) => cause,
-            DeletePolicyError::InvalidRequest(ref cause) => cause,
-            DeletePolicyError::ServiceUnavailable(ref cause) => cause,
-            DeletePolicyError::ResourceNotFound(ref cause) => cause,
-            DeletePolicyError::Unauthorized(ref cause) => cause,
             DeletePolicyError::DeleteConflict(ref cause) => cause,
+            DeletePolicyError::InternalFailure(ref cause) => cause,
+            DeletePolicyError::InvalidRequest(ref cause) => cause,
+            DeletePolicyError::ResourceNotFound(ref cause) => cause,
+            DeletePolicyError::ServiceUnavailable(ref cause) => cause,
+            DeletePolicyError::Throttling(ref cause) => cause,
+            DeletePolicyError::Unauthorized(ref cause) => cause,
             DeletePolicyError::Validation(ref cause) => cause,
             DeletePolicyError::Credentials(ref err) => err.description(),
             DeletePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -3455,20 +3476,20 @@ impl Error for DeletePolicyError {
 /// Errors returned by DeletePolicyVersion
 #[derive(Debug, PartialEq)]
 pub enum DeletePolicyVersionError {
-    ///<p>An unexpected error has occurred.</p>
-    InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
-    ///<p>The request is not valid.</p>
-    InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
-    ///<p>The specified resource does not exist.</p>
-    ResourceNotFound(String),
-    ///<p>You are not authorized to perform this operation.</p>
-    Unauthorized(String),
     ///<p>You can't delete the resource because it is attached to one or more resources.</p>
     DeleteConflict(String),
+    ///<p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    ///<p>The request is not valid.</p>
+    InvalidRequest(String),
+    ///<p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    ///<p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
+    ///<p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -3493,26 +3514,26 @@ impl DeletePolicyVersionError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
+                    "DeleteConflictException" => {
+                        DeletePolicyVersionError::DeleteConflict(String::from(error_message))
+                    }
                     "InternalFailureException" => {
                         DeletePolicyVersionError::InternalFailure(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        DeletePolicyVersionError::Throttling(String::from(error_message))
                     }
                     "InvalidRequestException" => {
                         DeletePolicyVersionError::InvalidRequest(String::from(error_message))
                     }
-                    "ServiceUnavailableException" => {
-                        DeletePolicyVersionError::ServiceUnavailable(String::from(error_message))
-                    }
                     "ResourceNotFoundException" => {
                         DeletePolicyVersionError::ResourceNotFound(String::from(error_message))
                     }
+                    "ServiceUnavailableException" => {
+                        DeletePolicyVersionError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        DeletePolicyVersionError::Throttling(String::from(error_message))
+                    }
                     "UnauthorizedException" => {
                         DeletePolicyVersionError::Unauthorized(String::from(error_message))
-                    }
-                    "DeleteConflictException" => {
-                        DeletePolicyVersionError::DeleteConflict(String::from(error_message))
                     }
                     "ValidationException" => {
                         DeletePolicyVersionError::Validation(error_message.to_string())
@@ -3548,13 +3569,13 @@ impl fmt::Display for DeletePolicyVersionError {
 impl Error for DeletePolicyVersionError {
     fn description(&self) -> &str {
         match *self {
-            DeletePolicyVersionError::InternalFailure(ref cause) => cause,
-            DeletePolicyVersionError::Throttling(ref cause) => cause,
-            DeletePolicyVersionError::InvalidRequest(ref cause) => cause,
-            DeletePolicyVersionError::ServiceUnavailable(ref cause) => cause,
-            DeletePolicyVersionError::ResourceNotFound(ref cause) => cause,
-            DeletePolicyVersionError::Unauthorized(ref cause) => cause,
             DeletePolicyVersionError::DeleteConflict(ref cause) => cause,
+            DeletePolicyVersionError::InternalFailure(ref cause) => cause,
+            DeletePolicyVersionError::InvalidRequest(ref cause) => cause,
+            DeletePolicyVersionError::ResourceNotFound(ref cause) => cause,
+            DeletePolicyVersionError::ServiceUnavailable(ref cause) => cause,
+            DeletePolicyVersionError::Throttling(ref cause) => cause,
+            DeletePolicyVersionError::Unauthorized(ref cause) => cause,
             DeletePolicyVersionError::Validation(ref cause) => cause,
             DeletePolicyVersionError::Credentials(ref err) => err.description(),
             DeletePolicyVersionError::HttpDispatch(ref dispatch_error) => {
@@ -3569,12 +3590,12 @@ impl Error for DeletePolicyVersionError {
 pub enum DeleteRegistrationCodeError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
-    ///<p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
     ///<p>The specified resource does not exist.</p>
     ResourceNotFound(String),
+    ///<p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -3604,14 +3625,14 @@ impl DeleteRegistrationCodeError {
                     "InternalFailureException" => {
                         DeleteRegistrationCodeError::InternalFailure(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        DeleteRegistrationCodeError::Throttling(String::from(error_message))
+                    "ResourceNotFoundException" => {
+                        DeleteRegistrationCodeError::ResourceNotFound(String::from(error_message))
                     }
                     "ServiceUnavailableException" => {
                         DeleteRegistrationCodeError::ServiceUnavailable(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => {
-                        DeleteRegistrationCodeError::ResourceNotFound(String::from(error_message))
+                    "ThrottlingException" => {
+                        DeleteRegistrationCodeError::Throttling(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         DeleteRegistrationCodeError::Unauthorized(String::from(error_message))
@@ -3651,9 +3672,9 @@ impl Error for DeleteRegistrationCodeError {
     fn description(&self) -> &str {
         match *self {
             DeleteRegistrationCodeError::InternalFailure(ref cause) => cause,
-            DeleteRegistrationCodeError::Throttling(ref cause) => cause,
-            DeleteRegistrationCodeError::ServiceUnavailable(ref cause) => cause,
             DeleteRegistrationCodeError::ResourceNotFound(ref cause) => cause,
+            DeleteRegistrationCodeError::ServiceUnavailable(ref cause) => cause,
+            DeleteRegistrationCodeError::Throttling(ref cause) => cause,
             DeleteRegistrationCodeError::Unauthorized(ref cause) => cause,
             DeleteRegistrationCodeError::Validation(ref cause) => cause,
             DeleteRegistrationCodeError::Credentials(ref err) => err.description(),
@@ -3667,20 +3688,20 @@ impl Error for DeleteRegistrationCodeError {
 /// Errors returned by DeleteThing
 #[derive(Debug, PartialEq)]
 pub enum DeleteThingError {
-    ///<p>An exception thrown when the version of a thing passed to a command is different than the version specified with the --version parameter. </p>
-    VersionConflict(String),
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
     ///<p>The specified resource does not exist.</p>
     ResourceNotFound(String),
+    ///<p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
+    ///<p>An exception thrown when the version of a thing passed to a command is different than the version specified with the --version parameter.</p>
+    VersionConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -3705,26 +3726,26 @@ impl DeleteThingError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "VersionConflictException" => {
-                        DeleteThingError::VersionConflict(String::from(error_message))
-                    }
                     "InternalFailureException" => {
                         DeleteThingError::InternalFailure(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        DeleteThingError::Throttling(String::from(error_message))
                     }
                     "InvalidRequestException" => {
                         DeleteThingError::InvalidRequest(String::from(error_message))
                     }
-                    "ServiceUnavailableException" => {
-                        DeleteThingError::ServiceUnavailable(String::from(error_message))
-                    }
                     "ResourceNotFoundException" => {
                         DeleteThingError::ResourceNotFound(String::from(error_message))
                     }
+                    "ServiceUnavailableException" => {
+                        DeleteThingError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        DeleteThingError::Throttling(String::from(error_message))
+                    }
                     "UnauthorizedException" => {
                         DeleteThingError::Unauthorized(String::from(error_message))
+                    }
+                    "VersionConflictException" => {
+                        DeleteThingError::VersionConflict(String::from(error_message))
                     }
                     "ValidationException" => {
                         DeleteThingError::Validation(error_message.to_string())
@@ -3760,13 +3781,13 @@ impl fmt::Display for DeleteThingError {
 impl Error for DeleteThingError {
     fn description(&self) -> &str {
         match *self {
-            DeleteThingError::VersionConflict(ref cause) => cause,
             DeleteThingError::InternalFailure(ref cause) => cause,
-            DeleteThingError::Throttling(ref cause) => cause,
             DeleteThingError::InvalidRequest(ref cause) => cause,
-            DeleteThingError::ServiceUnavailable(ref cause) => cause,
             DeleteThingError::ResourceNotFound(ref cause) => cause,
+            DeleteThingError::ServiceUnavailable(ref cause) => cause,
+            DeleteThingError::Throttling(ref cause) => cause,
             DeleteThingError::Unauthorized(ref cause) => cause,
+            DeleteThingError::VersionConflict(ref cause) => cause,
             DeleteThingError::Validation(ref cause) => cause,
             DeleteThingError::Credentials(ref err) => err.description(),
             DeleteThingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -3779,14 +3800,14 @@ impl Error for DeleteThingError {
 pub enum DeleteThingTypeError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
     ///<p>The specified resource does not exist.</p>
     ResourceNotFound(String),
+    ///<p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -3816,17 +3837,17 @@ impl DeleteThingTypeError {
                     "InternalFailureException" => {
                         DeleteThingTypeError::InternalFailure(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        DeleteThingTypeError::Throttling(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         DeleteThingTypeError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DeleteThingTypeError::ResourceNotFound(String::from(error_message))
                     }
                     "ServiceUnavailableException" => {
                         DeleteThingTypeError::ServiceUnavailable(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => {
-                        DeleteThingTypeError::ResourceNotFound(String::from(error_message))
+                    "ThrottlingException" => {
+                        DeleteThingTypeError::Throttling(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         DeleteThingTypeError::Unauthorized(String::from(error_message))
@@ -3866,10 +3887,10 @@ impl Error for DeleteThingTypeError {
     fn description(&self) -> &str {
         match *self {
             DeleteThingTypeError::InternalFailure(ref cause) => cause,
-            DeleteThingTypeError::Throttling(ref cause) => cause,
             DeleteThingTypeError::InvalidRequest(ref cause) => cause,
-            DeleteThingTypeError::ServiceUnavailable(ref cause) => cause,
             DeleteThingTypeError::ResourceNotFound(ref cause) => cause,
+            DeleteThingTypeError::ServiceUnavailable(ref cause) => cause,
+            DeleteThingTypeError::Throttling(ref cause) => cause,
             DeleteThingTypeError::Unauthorized(ref cause) => cause,
             DeleteThingTypeError::Validation(ref cause) => cause,
             DeleteThingTypeError::Credentials(ref err) => err.description(),
@@ -3975,14 +3996,14 @@ impl Error for DeleteTopicRuleError {
 pub enum DeprecateThingTypeError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
     ///<p>The specified resource does not exist.</p>
     ResourceNotFound(String),
+    ///<p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -4012,17 +4033,17 @@ impl DeprecateThingTypeError {
                     "InternalFailureException" => {
                         DeprecateThingTypeError::InternalFailure(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        DeprecateThingTypeError::Throttling(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         DeprecateThingTypeError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DeprecateThingTypeError::ResourceNotFound(String::from(error_message))
                     }
                     "ServiceUnavailableException" => {
                         DeprecateThingTypeError::ServiceUnavailable(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => {
-                        DeprecateThingTypeError::ResourceNotFound(String::from(error_message))
+                    "ThrottlingException" => {
+                        DeprecateThingTypeError::Throttling(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         DeprecateThingTypeError::Unauthorized(String::from(error_message))
@@ -4062,10 +4083,10 @@ impl Error for DeprecateThingTypeError {
     fn description(&self) -> &str {
         match *self {
             DeprecateThingTypeError::InternalFailure(ref cause) => cause,
-            DeprecateThingTypeError::Throttling(ref cause) => cause,
             DeprecateThingTypeError::InvalidRequest(ref cause) => cause,
-            DeprecateThingTypeError::ServiceUnavailable(ref cause) => cause,
             DeprecateThingTypeError::ResourceNotFound(ref cause) => cause,
+            DeprecateThingTypeError::ServiceUnavailable(ref cause) => cause,
+            DeprecateThingTypeError::Throttling(ref cause) => cause,
             DeprecateThingTypeError::Unauthorized(ref cause) => cause,
             DeprecateThingTypeError::Validation(ref cause) => cause,
             DeprecateThingTypeError::Credentials(ref err) => err.description(),
@@ -4081,14 +4102,14 @@ impl Error for DeprecateThingTypeError {
 pub enum DescribeCACertificateError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
     ///<p>The specified resource does not exist.</p>
     ResourceNotFound(String),
+    ///<p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -4118,17 +4139,17 @@ impl DescribeCACertificateError {
                     "InternalFailureException" => {
                         DescribeCACertificateError::InternalFailure(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        DescribeCACertificateError::Throttling(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         DescribeCACertificateError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DescribeCACertificateError::ResourceNotFound(String::from(error_message))
                     }
                     "ServiceUnavailableException" => {
                         DescribeCACertificateError::ServiceUnavailable(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => {
-                        DescribeCACertificateError::ResourceNotFound(String::from(error_message))
+                    "ThrottlingException" => {
+                        DescribeCACertificateError::Throttling(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         DescribeCACertificateError::Unauthorized(String::from(error_message))
@@ -4168,10 +4189,10 @@ impl Error for DescribeCACertificateError {
     fn description(&self) -> &str {
         match *self {
             DescribeCACertificateError::InternalFailure(ref cause) => cause,
-            DescribeCACertificateError::Throttling(ref cause) => cause,
             DescribeCACertificateError::InvalidRequest(ref cause) => cause,
-            DescribeCACertificateError::ServiceUnavailable(ref cause) => cause,
             DescribeCACertificateError::ResourceNotFound(ref cause) => cause,
+            DescribeCACertificateError::ServiceUnavailable(ref cause) => cause,
+            DescribeCACertificateError::Throttling(ref cause) => cause,
             DescribeCACertificateError::Unauthorized(ref cause) => cause,
             DescribeCACertificateError::Validation(ref cause) => cause,
             DescribeCACertificateError::Credentials(ref err) => err.description(),
@@ -4187,14 +4208,14 @@ impl Error for DescribeCACertificateError {
 pub enum DescribeCertificateError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
     ///<p>The specified resource does not exist.</p>
     ResourceNotFound(String),
+    ///<p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -4224,17 +4245,17 @@ impl DescribeCertificateError {
                     "InternalFailureException" => {
                         DescribeCertificateError::InternalFailure(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        DescribeCertificateError::Throttling(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         DescribeCertificateError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DescribeCertificateError::ResourceNotFound(String::from(error_message))
                     }
                     "ServiceUnavailableException" => {
                         DescribeCertificateError::ServiceUnavailable(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => {
-                        DescribeCertificateError::ResourceNotFound(String::from(error_message))
+                    "ThrottlingException" => {
+                        DescribeCertificateError::Throttling(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         DescribeCertificateError::Unauthorized(String::from(error_message))
@@ -4274,10 +4295,10 @@ impl Error for DescribeCertificateError {
     fn description(&self) -> &str {
         match *self {
             DescribeCertificateError::InternalFailure(ref cause) => cause,
-            DescribeCertificateError::Throttling(ref cause) => cause,
             DescribeCertificateError::InvalidRequest(ref cause) => cause,
-            DescribeCertificateError::ServiceUnavailable(ref cause) => cause,
             DescribeCertificateError::ResourceNotFound(ref cause) => cause,
+            DescribeCertificateError::ServiceUnavailable(ref cause) => cause,
+            DescribeCertificateError::Throttling(ref cause) => cause,
             DescribeCertificateError::Unauthorized(ref cause) => cause,
             DescribeCertificateError::Validation(ref cause) => cause,
             DescribeCertificateError::Credentials(ref err) => err.description(),
@@ -4379,14 +4400,14 @@ impl Error for DescribeEndpointError {
 pub enum DescribeThingError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
     ///<p>The specified resource does not exist.</p>
     ResourceNotFound(String),
+    ///<p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -4416,17 +4437,17 @@ impl DescribeThingError {
                     "InternalFailureException" => {
                         DescribeThingError::InternalFailure(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        DescribeThingError::Throttling(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         DescribeThingError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DescribeThingError::ResourceNotFound(String::from(error_message))
                     }
                     "ServiceUnavailableException" => {
                         DescribeThingError::ServiceUnavailable(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => {
-                        DescribeThingError::ResourceNotFound(String::from(error_message))
+                    "ThrottlingException" => {
+                        DescribeThingError::Throttling(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         DescribeThingError::Unauthorized(String::from(error_message))
@@ -4466,10 +4487,10 @@ impl Error for DescribeThingError {
     fn description(&self) -> &str {
         match *self {
             DescribeThingError::InternalFailure(ref cause) => cause,
-            DescribeThingError::Throttling(ref cause) => cause,
             DescribeThingError::InvalidRequest(ref cause) => cause,
-            DescribeThingError::ServiceUnavailable(ref cause) => cause,
             DescribeThingError::ResourceNotFound(ref cause) => cause,
+            DescribeThingError::ServiceUnavailable(ref cause) => cause,
+            DescribeThingError::Throttling(ref cause) => cause,
             DescribeThingError::Unauthorized(ref cause) => cause,
             DescribeThingError::Validation(ref cause) => cause,
             DescribeThingError::Credentials(ref err) => err.description(),
@@ -4483,14 +4504,14 @@ impl Error for DescribeThingError {
 pub enum DescribeThingTypeError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
     ///<p>The specified resource does not exist.</p>
     ResourceNotFound(String),
+    ///<p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -4520,17 +4541,17 @@ impl DescribeThingTypeError {
                     "InternalFailureException" => {
                         DescribeThingTypeError::InternalFailure(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        DescribeThingTypeError::Throttling(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         DescribeThingTypeError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DescribeThingTypeError::ResourceNotFound(String::from(error_message))
                     }
                     "ServiceUnavailableException" => {
                         DescribeThingTypeError::ServiceUnavailable(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => {
-                        DescribeThingTypeError::ResourceNotFound(String::from(error_message))
+                    "ThrottlingException" => {
+                        DescribeThingTypeError::Throttling(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         DescribeThingTypeError::Unauthorized(String::from(error_message))
@@ -4570,10 +4591,10 @@ impl Error for DescribeThingTypeError {
     fn description(&self) -> &str {
         match *self {
             DescribeThingTypeError::InternalFailure(ref cause) => cause,
-            DescribeThingTypeError::Throttling(ref cause) => cause,
             DescribeThingTypeError::InvalidRequest(ref cause) => cause,
-            DescribeThingTypeError::ServiceUnavailable(ref cause) => cause,
             DescribeThingTypeError::ResourceNotFound(ref cause) => cause,
+            DescribeThingTypeError::ServiceUnavailable(ref cause) => cause,
+            DescribeThingTypeError::Throttling(ref cause) => cause,
             DescribeThingTypeError::Unauthorized(ref cause) => cause,
             DescribeThingTypeError::Validation(ref cause) => cause,
             DescribeThingTypeError::Credentials(ref err) => err.description(),
@@ -4589,14 +4610,14 @@ impl Error for DescribeThingTypeError {
 pub enum DetachPrincipalPolicyError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
     ///<p>The specified resource does not exist.</p>
     ResourceNotFound(String),
+    ///<p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -4626,17 +4647,17 @@ impl DetachPrincipalPolicyError {
                     "InternalFailureException" => {
                         DetachPrincipalPolicyError::InternalFailure(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        DetachPrincipalPolicyError::Throttling(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         DetachPrincipalPolicyError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DetachPrincipalPolicyError::ResourceNotFound(String::from(error_message))
                     }
                     "ServiceUnavailableException" => {
                         DetachPrincipalPolicyError::ServiceUnavailable(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => {
-                        DetachPrincipalPolicyError::ResourceNotFound(String::from(error_message))
+                    "ThrottlingException" => {
+                        DetachPrincipalPolicyError::Throttling(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         DetachPrincipalPolicyError::Unauthorized(String::from(error_message))
@@ -4676,10 +4697,10 @@ impl Error for DetachPrincipalPolicyError {
     fn description(&self) -> &str {
         match *self {
             DetachPrincipalPolicyError::InternalFailure(ref cause) => cause,
-            DetachPrincipalPolicyError::Throttling(ref cause) => cause,
             DetachPrincipalPolicyError::InvalidRequest(ref cause) => cause,
-            DetachPrincipalPolicyError::ServiceUnavailable(ref cause) => cause,
             DetachPrincipalPolicyError::ResourceNotFound(ref cause) => cause,
+            DetachPrincipalPolicyError::ServiceUnavailable(ref cause) => cause,
+            DetachPrincipalPolicyError::Throttling(ref cause) => cause,
             DetachPrincipalPolicyError::Unauthorized(ref cause) => cause,
             DetachPrincipalPolicyError::Validation(ref cause) => cause,
             DetachPrincipalPolicyError::Credentials(ref err) => err.description(),
@@ -4695,14 +4716,14 @@ impl Error for DetachPrincipalPolicyError {
 pub enum DetachThingPrincipalError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
     ///<p>The specified resource does not exist.</p>
     ResourceNotFound(String),
+    ///<p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -4732,17 +4753,17 @@ impl DetachThingPrincipalError {
                     "InternalFailureException" => {
                         DetachThingPrincipalError::InternalFailure(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        DetachThingPrincipalError::Throttling(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         DetachThingPrincipalError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DetachThingPrincipalError::ResourceNotFound(String::from(error_message))
                     }
                     "ServiceUnavailableException" => {
                         DetachThingPrincipalError::ServiceUnavailable(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => {
-                        DetachThingPrincipalError::ResourceNotFound(String::from(error_message))
+                    "ThrottlingException" => {
+                        DetachThingPrincipalError::Throttling(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         DetachThingPrincipalError::Unauthorized(String::from(error_message))
@@ -4782,10 +4803,10 @@ impl Error for DetachThingPrincipalError {
     fn description(&self) -> &str {
         match *self {
             DetachThingPrincipalError::InternalFailure(ref cause) => cause,
-            DetachThingPrincipalError::Throttling(ref cause) => cause,
             DetachThingPrincipalError::InvalidRequest(ref cause) => cause,
-            DetachThingPrincipalError::ServiceUnavailable(ref cause) => cause,
             DetachThingPrincipalError::ResourceNotFound(ref cause) => cause,
+            DetachThingPrincipalError::ServiceUnavailable(ref cause) => cause,
+            DetachThingPrincipalError::Throttling(ref cause) => cause,
             DetachThingPrincipalError::Unauthorized(ref cause) => cause,
             DetachThingPrincipalError::Validation(ref cause) => cause,
             DetachThingPrincipalError::Credentials(ref err) => err.description(),
@@ -5073,14 +5094,14 @@ impl Error for GetLoggingOptionsError {
 pub enum GetPolicyError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
     ///<p>The specified resource does not exist.</p>
     ResourceNotFound(String),
+    ///<p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -5110,17 +5131,17 @@ impl GetPolicyError {
                     "InternalFailureException" => {
                         GetPolicyError::InternalFailure(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        GetPolicyError::Throttling(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         GetPolicyError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        GetPolicyError::ResourceNotFound(String::from(error_message))
                     }
                     "ServiceUnavailableException" => {
                         GetPolicyError::ServiceUnavailable(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => {
-                        GetPolicyError::ResourceNotFound(String::from(error_message))
+                    "ThrottlingException" => {
+                        GetPolicyError::Throttling(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         GetPolicyError::Unauthorized(String::from(error_message))
@@ -5158,10 +5179,10 @@ impl Error for GetPolicyError {
     fn description(&self) -> &str {
         match *self {
             GetPolicyError::InternalFailure(ref cause) => cause,
-            GetPolicyError::Throttling(ref cause) => cause,
             GetPolicyError::InvalidRequest(ref cause) => cause,
-            GetPolicyError::ServiceUnavailable(ref cause) => cause,
             GetPolicyError::ResourceNotFound(ref cause) => cause,
+            GetPolicyError::ServiceUnavailable(ref cause) => cause,
+            GetPolicyError::Throttling(ref cause) => cause,
             GetPolicyError::Unauthorized(ref cause) => cause,
             GetPolicyError::Validation(ref cause) => cause,
             GetPolicyError::Credentials(ref err) => err.description(),
@@ -5175,14 +5196,14 @@ impl Error for GetPolicyError {
 pub enum GetPolicyVersionError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
     ///<p>The specified resource does not exist.</p>
     ResourceNotFound(String),
+    ///<p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -5212,17 +5233,17 @@ impl GetPolicyVersionError {
                     "InternalFailureException" => {
                         GetPolicyVersionError::InternalFailure(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        GetPolicyVersionError::Throttling(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         GetPolicyVersionError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        GetPolicyVersionError::ResourceNotFound(String::from(error_message))
                     }
                     "ServiceUnavailableException" => {
                         GetPolicyVersionError::ServiceUnavailable(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => {
-                        GetPolicyVersionError::ResourceNotFound(String::from(error_message))
+                    "ThrottlingException" => {
+                        GetPolicyVersionError::Throttling(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         GetPolicyVersionError::Unauthorized(String::from(error_message))
@@ -5262,10 +5283,10 @@ impl Error for GetPolicyVersionError {
     fn description(&self) -> &str {
         match *self {
             GetPolicyVersionError::InternalFailure(ref cause) => cause,
-            GetPolicyVersionError::Throttling(ref cause) => cause,
             GetPolicyVersionError::InvalidRequest(ref cause) => cause,
-            GetPolicyVersionError::ServiceUnavailable(ref cause) => cause,
             GetPolicyVersionError::ResourceNotFound(ref cause) => cause,
+            GetPolicyVersionError::ServiceUnavailable(ref cause) => cause,
+            GetPolicyVersionError::Throttling(ref cause) => cause,
             GetPolicyVersionError::Unauthorized(ref cause) => cause,
             GetPolicyVersionError::Validation(ref cause) => cause,
             GetPolicyVersionError::Credentials(ref err) => err.description(),
@@ -5279,12 +5300,12 @@ impl Error for GetPolicyVersionError {
 pub enum GetRegistrationCodeError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
     ///<p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -5314,14 +5335,14 @@ impl GetRegistrationCodeError {
                     "InternalFailureException" => {
                         GetRegistrationCodeError::InternalFailure(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        GetRegistrationCodeError::Throttling(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         GetRegistrationCodeError::InvalidRequest(String::from(error_message))
                     }
                     "ServiceUnavailableException" => {
                         GetRegistrationCodeError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        GetRegistrationCodeError::Throttling(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         GetRegistrationCodeError::Unauthorized(String::from(error_message))
@@ -5361,9 +5382,9 @@ impl Error for GetRegistrationCodeError {
     fn description(&self) -> &str {
         match *self {
             GetRegistrationCodeError::InternalFailure(ref cause) => cause,
-            GetRegistrationCodeError::Throttling(ref cause) => cause,
             GetRegistrationCodeError::InvalidRequest(ref cause) => cause,
             GetRegistrationCodeError::ServiceUnavailable(ref cause) => cause,
+            GetRegistrationCodeError::Throttling(ref cause) => cause,
             GetRegistrationCodeError::Unauthorized(ref cause) => cause,
             GetRegistrationCodeError::Validation(ref cause) => cause,
             GetRegistrationCodeError::Credentials(ref err) => err.description(),
@@ -5469,12 +5490,12 @@ impl Error for GetTopicRuleError {
 pub enum ListCACertificatesError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
     ///<p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -5504,14 +5525,14 @@ impl ListCACertificatesError {
                     "InternalFailureException" => {
                         ListCACertificatesError::InternalFailure(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        ListCACertificatesError::Throttling(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         ListCACertificatesError::InvalidRequest(String::from(error_message))
                     }
                     "ServiceUnavailableException" => {
                         ListCACertificatesError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        ListCACertificatesError::Throttling(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         ListCACertificatesError::Unauthorized(String::from(error_message))
@@ -5551,9 +5572,9 @@ impl Error for ListCACertificatesError {
     fn description(&self) -> &str {
         match *self {
             ListCACertificatesError::InternalFailure(ref cause) => cause,
-            ListCACertificatesError::Throttling(ref cause) => cause,
             ListCACertificatesError::InvalidRequest(ref cause) => cause,
             ListCACertificatesError::ServiceUnavailable(ref cause) => cause,
+            ListCACertificatesError::Throttling(ref cause) => cause,
             ListCACertificatesError::Unauthorized(ref cause) => cause,
             ListCACertificatesError::Validation(ref cause) => cause,
             ListCACertificatesError::Credentials(ref err) => err.description(),
@@ -5569,12 +5590,12 @@ impl Error for ListCACertificatesError {
 pub enum ListCertificatesError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
     ///<p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -5604,14 +5625,14 @@ impl ListCertificatesError {
                     "InternalFailureException" => {
                         ListCertificatesError::InternalFailure(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        ListCertificatesError::Throttling(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         ListCertificatesError::InvalidRequest(String::from(error_message))
                     }
                     "ServiceUnavailableException" => {
                         ListCertificatesError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        ListCertificatesError::Throttling(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         ListCertificatesError::Unauthorized(String::from(error_message))
@@ -5651,9 +5672,9 @@ impl Error for ListCertificatesError {
     fn description(&self) -> &str {
         match *self {
             ListCertificatesError::InternalFailure(ref cause) => cause,
-            ListCertificatesError::Throttling(ref cause) => cause,
             ListCertificatesError::InvalidRequest(ref cause) => cause,
             ListCertificatesError::ServiceUnavailable(ref cause) => cause,
+            ListCertificatesError::Throttling(ref cause) => cause,
             ListCertificatesError::Unauthorized(ref cause) => cause,
             ListCertificatesError::Validation(ref cause) => cause,
             ListCertificatesError::Credentials(ref err) => err.description(),
@@ -5667,12 +5688,12 @@ impl Error for ListCertificatesError {
 pub enum ListCertificatesByCAError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
     ///<p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -5702,14 +5723,14 @@ impl ListCertificatesByCAError {
                     "InternalFailureException" => {
                         ListCertificatesByCAError::InternalFailure(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        ListCertificatesByCAError::Throttling(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         ListCertificatesByCAError::InvalidRequest(String::from(error_message))
                     }
                     "ServiceUnavailableException" => {
                         ListCertificatesByCAError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        ListCertificatesByCAError::Throttling(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         ListCertificatesByCAError::Unauthorized(String::from(error_message))
@@ -5749,9 +5770,9 @@ impl Error for ListCertificatesByCAError {
     fn description(&self) -> &str {
         match *self {
             ListCertificatesByCAError::InternalFailure(ref cause) => cause,
-            ListCertificatesByCAError::Throttling(ref cause) => cause,
             ListCertificatesByCAError::InvalidRequest(ref cause) => cause,
             ListCertificatesByCAError::ServiceUnavailable(ref cause) => cause,
+            ListCertificatesByCAError::Throttling(ref cause) => cause,
             ListCertificatesByCAError::Unauthorized(ref cause) => cause,
             ListCertificatesByCAError::Validation(ref cause) => cause,
             ListCertificatesByCAError::Credentials(ref err) => err.description(),
@@ -5767,12 +5788,12 @@ impl Error for ListCertificatesByCAError {
 pub enum ListOutgoingCertificatesError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
     ///<p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -5802,13 +5823,13 @@ impl ListOutgoingCertificatesError {
                     "InternalFailureException" => {
                         ListOutgoingCertificatesError::InternalFailure(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        ListOutgoingCertificatesError::Throttling(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         ListOutgoingCertificatesError::InvalidRequest(String::from(error_message))
                     }
                     "ServiceUnavailableException" => ListOutgoingCertificatesError::ServiceUnavailable(String::from(error_message)),
+                    "ThrottlingException" => {
+                        ListOutgoingCertificatesError::Throttling(String::from(error_message))
+                    }
                     "UnauthorizedException" => {
                         ListOutgoingCertificatesError::Unauthorized(String::from(error_message))
                     }
@@ -5847,9 +5868,9 @@ impl Error for ListOutgoingCertificatesError {
     fn description(&self) -> &str {
         match *self {
             ListOutgoingCertificatesError::InternalFailure(ref cause) => cause,
-            ListOutgoingCertificatesError::Throttling(ref cause) => cause,
             ListOutgoingCertificatesError::InvalidRequest(ref cause) => cause,
             ListOutgoingCertificatesError::ServiceUnavailable(ref cause) => cause,
+            ListOutgoingCertificatesError::Throttling(ref cause) => cause,
             ListOutgoingCertificatesError::Unauthorized(ref cause) => cause,
             ListOutgoingCertificatesError::Validation(ref cause) => cause,
             ListOutgoingCertificatesError::Credentials(ref err) => err.description(),
@@ -5865,12 +5886,12 @@ impl Error for ListOutgoingCertificatesError {
 pub enum ListPoliciesError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
     ///<p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -5900,14 +5921,14 @@ impl ListPoliciesError {
                     "InternalFailureException" => {
                         ListPoliciesError::InternalFailure(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        ListPoliciesError::Throttling(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         ListPoliciesError::InvalidRequest(String::from(error_message))
                     }
                     "ServiceUnavailableException" => {
                         ListPoliciesError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        ListPoliciesError::Throttling(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         ListPoliciesError::Unauthorized(String::from(error_message))
@@ -5947,9 +5968,9 @@ impl Error for ListPoliciesError {
     fn description(&self) -> &str {
         match *self {
             ListPoliciesError::InternalFailure(ref cause) => cause,
-            ListPoliciesError::Throttling(ref cause) => cause,
             ListPoliciesError::InvalidRequest(ref cause) => cause,
             ListPoliciesError::ServiceUnavailable(ref cause) => cause,
+            ListPoliciesError::Throttling(ref cause) => cause,
             ListPoliciesError::Unauthorized(ref cause) => cause,
             ListPoliciesError::Validation(ref cause) => cause,
             ListPoliciesError::Credentials(ref err) => err.description(),
@@ -5963,14 +5984,14 @@ impl Error for ListPoliciesError {
 pub enum ListPolicyPrincipalsError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
     ///<p>The specified resource does not exist.</p>
     ResourceNotFound(String),
+    ///<p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -6000,17 +6021,17 @@ impl ListPolicyPrincipalsError {
                     "InternalFailureException" => {
                         ListPolicyPrincipalsError::InternalFailure(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        ListPolicyPrincipalsError::Throttling(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         ListPolicyPrincipalsError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        ListPolicyPrincipalsError::ResourceNotFound(String::from(error_message))
                     }
                     "ServiceUnavailableException" => {
                         ListPolicyPrincipalsError::ServiceUnavailable(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => {
-                        ListPolicyPrincipalsError::ResourceNotFound(String::from(error_message))
+                    "ThrottlingException" => {
+                        ListPolicyPrincipalsError::Throttling(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         ListPolicyPrincipalsError::Unauthorized(String::from(error_message))
@@ -6050,10 +6071,10 @@ impl Error for ListPolicyPrincipalsError {
     fn description(&self) -> &str {
         match *self {
             ListPolicyPrincipalsError::InternalFailure(ref cause) => cause,
-            ListPolicyPrincipalsError::Throttling(ref cause) => cause,
             ListPolicyPrincipalsError::InvalidRequest(ref cause) => cause,
-            ListPolicyPrincipalsError::ServiceUnavailable(ref cause) => cause,
             ListPolicyPrincipalsError::ResourceNotFound(ref cause) => cause,
+            ListPolicyPrincipalsError::ServiceUnavailable(ref cause) => cause,
+            ListPolicyPrincipalsError::Throttling(ref cause) => cause,
             ListPolicyPrincipalsError::Unauthorized(ref cause) => cause,
             ListPolicyPrincipalsError::Validation(ref cause) => cause,
             ListPolicyPrincipalsError::Credentials(ref err) => err.description(),
@@ -6069,14 +6090,14 @@ impl Error for ListPolicyPrincipalsError {
 pub enum ListPolicyVersionsError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
     ///<p>The specified resource does not exist.</p>
     ResourceNotFound(String),
+    ///<p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -6106,17 +6127,17 @@ impl ListPolicyVersionsError {
                     "InternalFailureException" => {
                         ListPolicyVersionsError::InternalFailure(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        ListPolicyVersionsError::Throttling(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         ListPolicyVersionsError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        ListPolicyVersionsError::ResourceNotFound(String::from(error_message))
                     }
                     "ServiceUnavailableException" => {
                         ListPolicyVersionsError::ServiceUnavailable(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => {
-                        ListPolicyVersionsError::ResourceNotFound(String::from(error_message))
+                    "ThrottlingException" => {
+                        ListPolicyVersionsError::Throttling(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         ListPolicyVersionsError::Unauthorized(String::from(error_message))
@@ -6156,10 +6177,10 @@ impl Error for ListPolicyVersionsError {
     fn description(&self) -> &str {
         match *self {
             ListPolicyVersionsError::InternalFailure(ref cause) => cause,
-            ListPolicyVersionsError::Throttling(ref cause) => cause,
             ListPolicyVersionsError::InvalidRequest(ref cause) => cause,
-            ListPolicyVersionsError::ServiceUnavailable(ref cause) => cause,
             ListPolicyVersionsError::ResourceNotFound(ref cause) => cause,
+            ListPolicyVersionsError::ServiceUnavailable(ref cause) => cause,
+            ListPolicyVersionsError::Throttling(ref cause) => cause,
             ListPolicyVersionsError::Unauthorized(ref cause) => cause,
             ListPolicyVersionsError::Validation(ref cause) => cause,
             ListPolicyVersionsError::Credentials(ref err) => err.description(),
@@ -6175,14 +6196,14 @@ impl Error for ListPolicyVersionsError {
 pub enum ListPrincipalPoliciesError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
     ///<p>The specified resource does not exist.</p>
     ResourceNotFound(String),
+    ///<p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -6212,17 +6233,17 @@ impl ListPrincipalPoliciesError {
                     "InternalFailureException" => {
                         ListPrincipalPoliciesError::InternalFailure(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        ListPrincipalPoliciesError::Throttling(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         ListPrincipalPoliciesError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        ListPrincipalPoliciesError::ResourceNotFound(String::from(error_message))
                     }
                     "ServiceUnavailableException" => {
                         ListPrincipalPoliciesError::ServiceUnavailable(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => {
-                        ListPrincipalPoliciesError::ResourceNotFound(String::from(error_message))
+                    "ThrottlingException" => {
+                        ListPrincipalPoliciesError::Throttling(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         ListPrincipalPoliciesError::Unauthorized(String::from(error_message))
@@ -6262,10 +6283,10 @@ impl Error for ListPrincipalPoliciesError {
     fn description(&self) -> &str {
         match *self {
             ListPrincipalPoliciesError::InternalFailure(ref cause) => cause,
-            ListPrincipalPoliciesError::Throttling(ref cause) => cause,
             ListPrincipalPoliciesError::InvalidRequest(ref cause) => cause,
-            ListPrincipalPoliciesError::ServiceUnavailable(ref cause) => cause,
             ListPrincipalPoliciesError::ResourceNotFound(ref cause) => cause,
+            ListPrincipalPoliciesError::ServiceUnavailable(ref cause) => cause,
+            ListPrincipalPoliciesError::Throttling(ref cause) => cause,
             ListPrincipalPoliciesError::Unauthorized(ref cause) => cause,
             ListPrincipalPoliciesError::Validation(ref cause) => cause,
             ListPrincipalPoliciesError::Credentials(ref err) => err.description(),
@@ -6281,14 +6302,14 @@ impl Error for ListPrincipalPoliciesError {
 pub enum ListPrincipalThingsError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
     ///<p>The specified resource does not exist.</p>
     ResourceNotFound(String),
+    ///<p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -6318,17 +6339,17 @@ impl ListPrincipalThingsError {
                     "InternalFailureException" => {
                         ListPrincipalThingsError::InternalFailure(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        ListPrincipalThingsError::Throttling(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         ListPrincipalThingsError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        ListPrincipalThingsError::ResourceNotFound(String::from(error_message))
                     }
                     "ServiceUnavailableException" => {
                         ListPrincipalThingsError::ServiceUnavailable(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => {
-                        ListPrincipalThingsError::ResourceNotFound(String::from(error_message))
+                    "ThrottlingException" => {
+                        ListPrincipalThingsError::Throttling(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         ListPrincipalThingsError::Unauthorized(String::from(error_message))
@@ -6368,10 +6389,10 @@ impl Error for ListPrincipalThingsError {
     fn description(&self) -> &str {
         match *self {
             ListPrincipalThingsError::InternalFailure(ref cause) => cause,
-            ListPrincipalThingsError::Throttling(ref cause) => cause,
             ListPrincipalThingsError::InvalidRequest(ref cause) => cause,
-            ListPrincipalThingsError::ServiceUnavailable(ref cause) => cause,
             ListPrincipalThingsError::ResourceNotFound(ref cause) => cause,
+            ListPrincipalThingsError::ServiceUnavailable(ref cause) => cause,
+            ListPrincipalThingsError::Throttling(ref cause) => cause,
             ListPrincipalThingsError::Unauthorized(ref cause) => cause,
             ListPrincipalThingsError::Validation(ref cause) => cause,
             ListPrincipalThingsError::Credentials(ref err) => err.description(),
@@ -6387,14 +6408,14 @@ impl Error for ListPrincipalThingsError {
 pub enum ListThingPrincipalsError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
     ///<p>The specified resource does not exist.</p>
     ResourceNotFound(String),
+    ///<p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -6424,17 +6445,17 @@ impl ListThingPrincipalsError {
                     "InternalFailureException" => {
                         ListThingPrincipalsError::InternalFailure(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        ListThingPrincipalsError::Throttling(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         ListThingPrincipalsError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        ListThingPrincipalsError::ResourceNotFound(String::from(error_message))
                     }
                     "ServiceUnavailableException" => {
                         ListThingPrincipalsError::ServiceUnavailable(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => {
-                        ListThingPrincipalsError::ResourceNotFound(String::from(error_message))
+                    "ThrottlingException" => {
+                        ListThingPrincipalsError::Throttling(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         ListThingPrincipalsError::Unauthorized(String::from(error_message))
@@ -6474,10 +6495,10 @@ impl Error for ListThingPrincipalsError {
     fn description(&self) -> &str {
         match *self {
             ListThingPrincipalsError::InternalFailure(ref cause) => cause,
-            ListThingPrincipalsError::Throttling(ref cause) => cause,
             ListThingPrincipalsError::InvalidRequest(ref cause) => cause,
-            ListThingPrincipalsError::ServiceUnavailable(ref cause) => cause,
             ListThingPrincipalsError::ResourceNotFound(ref cause) => cause,
+            ListThingPrincipalsError::ServiceUnavailable(ref cause) => cause,
+            ListThingPrincipalsError::Throttling(ref cause) => cause,
             ListThingPrincipalsError::Unauthorized(ref cause) => cause,
             ListThingPrincipalsError::Validation(ref cause) => cause,
             ListThingPrincipalsError::Credentials(ref err) => err.description(),
@@ -6493,12 +6514,12 @@ impl Error for ListThingPrincipalsError {
 pub enum ListThingTypesError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
     ///<p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -6528,14 +6549,14 @@ impl ListThingTypesError {
                     "InternalFailureException" => {
                         ListThingTypesError::InternalFailure(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        ListThingTypesError::Throttling(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         ListThingTypesError::InvalidRequest(String::from(error_message))
                     }
                     "ServiceUnavailableException" => {
                         ListThingTypesError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        ListThingTypesError::Throttling(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         ListThingTypesError::Unauthorized(String::from(error_message))
@@ -6575,9 +6596,9 @@ impl Error for ListThingTypesError {
     fn description(&self) -> &str {
         match *self {
             ListThingTypesError::InternalFailure(ref cause) => cause,
-            ListThingTypesError::Throttling(ref cause) => cause,
             ListThingTypesError::InvalidRequest(ref cause) => cause,
             ListThingTypesError::ServiceUnavailable(ref cause) => cause,
+            ListThingTypesError::Throttling(ref cause) => cause,
             ListThingTypesError::Unauthorized(ref cause) => cause,
             ListThingTypesError::Validation(ref cause) => cause,
             ListThingTypesError::Credentials(ref err) => err.description(),
@@ -6591,12 +6612,12 @@ impl Error for ListThingTypesError {
 pub enum ListThingsError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
     ///<p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -6626,14 +6647,14 @@ impl ListThingsError {
                     "InternalFailureException" => {
                         ListThingsError::InternalFailure(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        ListThingsError::Throttling(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         ListThingsError::InvalidRequest(String::from(error_message))
                     }
                     "ServiceUnavailableException" => {
                         ListThingsError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        ListThingsError::Throttling(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         ListThingsError::Unauthorized(String::from(error_message))
@@ -6671,9 +6692,9 @@ impl Error for ListThingsError {
     fn description(&self) -> &str {
         match *self {
             ListThingsError::InternalFailure(ref cause) => cause,
-            ListThingsError::Throttling(ref cause) => cause,
             ListThingsError::InvalidRequest(ref cause) => cause,
             ListThingsError::ServiceUnavailable(ref cause) => cause,
+            ListThingsError::Throttling(ref cause) => cause,
             ListThingsError::Unauthorized(ref cause) => cause,
             ListThingsError::Validation(ref cause) => cause,
             ListThingsError::Credentials(ref err) => err.description(),
@@ -6771,22 +6792,22 @@ impl Error for ListTopicRulesError {
 /// Errors returned by RegisterCACertificate
 #[derive(Debug, PartialEq)]
 pub enum RegisterCACertificateError {
-    ///<p>An unexpected error has occurred.</p>
-    InternalFailure(String),
     ///<p>The certificate is invalid.</p>
     CertificateValidation(String),
-    ///<p>The number of attached entities exceeds the limit.</p>
-    LimitExceeded(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
-    ///<p>The registration code is invalid.</p>
-    RegistrationCodeValidation(String),
+    ///<p>An unexpected error has occurred.</p>
+    InternalFailure(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
+    ///<p>The number of attached entities exceeds the limit.</p>
+    LimitExceeded(String),
+    ///<p>The registration code is invalid.</p>
+    RegistrationCodeValidation(String),
     ///<p>The resource already exists.</p>
     ResourceAlreadyExists(String),
     ///<p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -6813,23 +6834,23 @@ impl RegisterCACertificateError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
+                    "CertificateValidationException" => RegisterCACertificateError::CertificateValidation(String::from(error_message)),
                     "InternalFailureException" => {
                         RegisterCACertificateError::InternalFailure(String::from(error_message))
                     }
-                    "CertificateValidationException" => RegisterCACertificateError::CertificateValidation(String::from(error_message)),
-                    "LimitExceededException" => {
-                        RegisterCACertificateError::LimitExceeded(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        RegisterCACertificateError::Throttling(String::from(error_message))
-                    }
-                    "RegistrationCodeValidationException" => RegisterCACertificateError::RegistrationCodeValidation(String::from(error_message)),
                     "InvalidRequestException" => {
                         RegisterCACertificateError::InvalidRequest(String::from(error_message))
                     }
+                    "LimitExceededException" => {
+                        RegisterCACertificateError::LimitExceeded(String::from(error_message))
+                    }
+                    "RegistrationCodeValidationException" => RegisterCACertificateError::RegistrationCodeValidation(String::from(error_message)),
                     "ResourceAlreadyExistsException" => RegisterCACertificateError::ResourceAlreadyExists(String::from(error_message)),
                     "ServiceUnavailableException" => {
                         RegisterCACertificateError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        RegisterCACertificateError::Throttling(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         RegisterCACertificateError::Unauthorized(String::from(error_message))
@@ -6868,14 +6889,14 @@ impl fmt::Display for RegisterCACertificateError {
 impl Error for RegisterCACertificateError {
     fn description(&self) -> &str {
         match *self {
-            RegisterCACertificateError::InternalFailure(ref cause) => cause,
             RegisterCACertificateError::CertificateValidation(ref cause) => cause,
-            RegisterCACertificateError::LimitExceeded(ref cause) => cause,
-            RegisterCACertificateError::Throttling(ref cause) => cause,
-            RegisterCACertificateError::RegistrationCodeValidation(ref cause) => cause,
+            RegisterCACertificateError::InternalFailure(ref cause) => cause,
             RegisterCACertificateError::InvalidRequest(ref cause) => cause,
+            RegisterCACertificateError::LimitExceeded(ref cause) => cause,
+            RegisterCACertificateError::RegistrationCodeValidation(ref cause) => cause,
             RegisterCACertificateError::ResourceAlreadyExists(ref cause) => cause,
             RegisterCACertificateError::ServiceUnavailable(ref cause) => cause,
+            RegisterCACertificateError::Throttling(ref cause) => cause,
             RegisterCACertificateError::Unauthorized(ref cause) => cause,
             RegisterCACertificateError::Validation(ref cause) => cause,
             RegisterCACertificateError::Credentials(ref err) => err.description(),
@@ -6889,22 +6910,22 @@ impl Error for RegisterCACertificateError {
 /// Errors returned by RegisterCertificate
 #[derive(Debug, PartialEq)]
 pub enum RegisterCertificateError {
-    ///<p>An unexpected error has occurred.</p>
-    InternalFailure(String),
-    ///<p>The certificate is invalid.</p>
-    CertificateValidation(String),
+    ///<p>Unable to verify the CA certificate used to sign the device certificate you are attempting to register. This is happens when you have registered more than one CA certificate that has the same subject field and public key.</p>
+    CertificateConflict(String),
     ///<p>The certificate operation is not allowed.</p>
     CertificateState(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
+    ///<p>The certificate is invalid.</p>
+    CertificateValidation(String),
+    ///<p>An unexpected error has occurred.</p>
+    InternalFailure(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
     ///<p>The resource already exists.</p>
     ResourceAlreadyExists(String),
     ///<p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
-    ///<p>Unable to verify the CA certificate used to sign the device certificate you are attempting to register. This is happens when you have registered more than one CA certificate that has the same subject field and public key.</p>
-    CertificateConflict(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -6931,17 +6952,17 @@ impl RegisterCertificateError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalFailureException" => {
-                        RegisterCertificateError::InternalFailure(String::from(error_message))
-                    }
-                    "CertificateValidationException" => {
-                        RegisterCertificateError::CertificateValidation(String::from(error_message))
+                    "CertificateConflictException" => {
+                        RegisterCertificateError::CertificateConflict(String::from(error_message))
                     }
                     "CertificateStateException" => {
                         RegisterCertificateError::CertificateState(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        RegisterCertificateError::Throttling(String::from(error_message))
+                    "CertificateValidationException" => {
+                        RegisterCertificateError::CertificateValidation(String::from(error_message))
+                    }
+                    "InternalFailureException" => {
+                        RegisterCertificateError::InternalFailure(String::from(error_message))
                     }
                     "InvalidRequestException" => {
                         RegisterCertificateError::InvalidRequest(String::from(error_message))
@@ -6952,8 +6973,8 @@ impl RegisterCertificateError {
                     "ServiceUnavailableException" => {
                         RegisterCertificateError::ServiceUnavailable(String::from(error_message))
                     }
-                    "CertificateConflictException" => {
-                        RegisterCertificateError::CertificateConflict(String::from(error_message))
+                    "ThrottlingException" => {
+                        RegisterCertificateError::Throttling(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         RegisterCertificateError::Unauthorized(String::from(error_message))
@@ -6992,14 +7013,14 @@ impl fmt::Display for RegisterCertificateError {
 impl Error for RegisterCertificateError {
     fn description(&self) -> &str {
         match *self {
-            RegisterCertificateError::InternalFailure(ref cause) => cause,
-            RegisterCertificateError::CertificateValidation(ref cause) => cause,
+            RegisterCertificateError::CertificateConflict(ref cause) => cause,
             RegisterCertificateError::CertificateState(ref cause) => cause,
-            RegisterCertificateError::Throttling(ref cause) => cause,
+            RegisterCertificateError::CertificateValidation(ref cause) => cause,
+            RegisterCertificateError::InternalFailure(ref cause) => cause,
             RegisterCertificateError::InvalidRequest(ref cause) => cause,
             RegisterCertificateError::ResourceAlreadyExists(ref cause) => cause,
             RegisterCertificateError::ServiceUnavailable(ref cause) => cause,
-            RegisterCertificateError::CertificateConflict(ref cause) => cause,
+            RegisterCertificateError::Throttling(ref cause) => cause,
             RegisterCertificateError::Unauthorized(ref cause) => cause,
             RegisterCertificateError::Validation(ref cause) => cause,
             RegisterCertificateError::Credentials(ref err) => err.description(),
@@ -7015,18 +7036,18 @@ impl Error for RegisterCertificateError {
 pub enum RejectCertificateTransferError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
     ///<p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>You are not authorized to perform this operation.</p>
-    Unauthorized(String),
+    ///<p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You can't revert the certificate transfer because the transfer is already complete.</p>
     TransferAlreadyCompleted(String),
+    ///<p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -7054,18 +7075,18 @@ impl RejectCertificateTransferError {
                     "InternalFailureException" => {
                         RejectCertificateTransferError::InternalFailure(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        RejectCertificateTransferError::Throttling(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         RejectCertificateTransferError::InvalidRequest(String::from(error_message))
                     }
-                    "ServiceUnavailableException" => RejectCertificateTransferError::ServiceUnavailable(String::from(error_message)),
                     "ResourceNotFoundException" => RejectCertificateTransferError::ResourceNotFound(String::from(error_message)),
+                    "ServiceUnavailableException" => RejectCertificateTransferError::ServiceUnavailable(String::from(error_message)),
+                    "ThrottlingException" => {
+                        RejectCertificateTransferError::Throttling(String::from(error_message))
+                    }
+                    "TransferAlreadyCompletedException" => RejectCertificateTransferError::TransferAlreadyCompleted(String::from(error_message)),
                     "UnauthorizedException" => {
                         RejectCertificateTransferError::Unauthorized(String::from(error_message))
                     }
-                    "TransferAlreadyCompletedException" => RejectCertificateTransferError::TransferAlreadyCompleted(String::from(error_message)),
                     "ValidationException" => {
                         RejectCertificateTransferError::Validation(error_message.to_string())
                     }
@@ -7101,12 +7122,12 @@ impl Error for RejectCertificateTransferError {
     fn description(&self) -> &str {
         match *self {
             RejectCertificateTransferError::InternalFailure(ref cause) => cause,
-            RejectCertificateTransferError::Throttling(ref cause) => cause,
             RejectCertificateTransferError::InvalidRequest(ref cause) => cause,
-            RejectCertificateTransferError::ServiceUnavailable(ref cause) => cause,
             RejectCertificateTransferError::ResourceNotFound(ref cause) => cause,
-            RejectCertificateTransferError::Unauthorized(ref cause) => cause,
+            RejectCertificateTransferError::ServiceUnavailable(ref cause) => cause,
+            RejectCertificateTransferError::Throttling(ref cause) => cause,
             RejectCertificateTransferError::TransferAlreadyCompleted(ref cause) => cause,
+            RejectCertificateTransferError::Unauthorized(ref cause) => cause,
             RejectCertificateTransferError::Validation(ref cause) => cause,
             RejectCertificateTransferError::Credentials(ref err) => err.description(),
             RejectCertificateTransferError::HttpDispatch(ref dispatch_error) => {
@@ -7121,12 +7142,12 @@ impl Error for RejectCertificateTransferError {
 pub enum ReplaceTopicRuleError {
     ///<p>An unexpected error has occurred.</p>
     Internal(String),
-    ///<p>The Rule-SQL expression can't be parsed correctly.</p>
-    SqlParse(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
     ///<p>The service is temporarily unavailable.</p>
     ServiceUnavailable(String),
+    ///<p>The Rule-SQL expression can't be parsed correctly.</p>
+    SqlParse(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -7156,14 +7177,14 @@ impl ReplaceTopicRuleError {
                     "InternalException" => {
                         ReplaceTopicRuleError::Internal(String::from(error_message))
                     }
-                    "SqlParseException" => {
-                        ReplaceTopicRuleError::SqlParse(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         ReplaceTopicRuleError::InvalidRequest(String::from(error_message))
                     }
                     "ServiceUnavailableException" => {
                         ReplaceTopicRuleError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "SqlParseException" => {
+                        ReplaceTopicRuleError::SqlParse(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         ReplaceTopicRuleError::Unauthorized(String::from(error_message))
@@ -7203,9 +7224,9 @@ impl Error for ReplaceTopicRuleError {
     fn description(&self) -> &str {
         match *self {
             ReplaceTopicRuleError::Internal(ref cause) => cause,
-            ReplaceTopicRuleError::SqlParse(ref cause) => cause,
             ReplaceTopicRuleError::InvalidRequest(ref cause) => cause,
             ReplaceTopicRuleError::ServiceUnavailable(ref cause) => cause,
+            ReplaceTopicRuleError::SqlParse(ref cause) => cause,
             ReplaceTopicRuleError::Unauthorized(ref cause) => cause,
             ReplaceTopicRuleError::Validation(ref cause) => cause,
             ReplaceTopicRuleError::Credentials(ref err) => err.description(),
@@ -7219,14 +7240,14 @@ impl Error for ReplaceTopicRuleError {
 pub enum SetDefaultPolicyVersionError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
     ///<p>The specified resource does not exist.</p>
     ResourceNotFound(String),
+    ///<p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -7256,15 +7277,15 @@ impl SetDefaultPolicyVersionError {
                     "InternalFailureException" => {
                         SetDefaultPolicyVersionError::InternalFailure(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        SetDefaultPolicyVersionError::Throttling(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         SetDefaultPolicyVersionError::InvalidRequest(String::from(error_message))
                     }
-                    "ServiceUnavailableException" => SetDefaultPolicyVersionError::ServiceUnavailable(String::from(error_message)),
                     "ResourceNotFoundException" => {
                         SetDefaultPolicyVersionError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => SetDefaultPolicyVersionError::ServiceUnavailable(String::from(error_message)),
+                    "ThrottlingException" => {
+                        SetDefaultPolicyVersionError::Throttling(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         SetDefaultPolicyVersionError::Unauthorized(String::from(error_message))
@@ -7304,10 +7325,10 @@ impl Error for SetDefaultPolicyVersionError {
     fn description(&self) -> &str {
         match *self {
             SetDefaultPolicyVersionError::InternalFailure(ref cause) => cause,
-            SetDefaultPolicyVersionError::Throttling(ref cause) => cause,
             SetDefaultPolicyVersionError::InvalidRequest(ref cause) => cause,
-            SetDefaultPolicyVersionError::ServiceUnavailable(ref cause) => cause,
             SetDefaultPolicyVersionError::ResourceNotFound(ref cause) => cause,
+            SetDefaultPolicyVersionError::ServiceUnavailable(ref cause) => cause,
+            SetDefaultPolicyVersionError::Throttling(ref cause) => cause,
             SetDefaultPolicyVersionError::Unauthorized(ref cause) => cause,
             SetDefaultPolicyVersionError::Validation(ref cause) => cause,
             SetDefaultPolicyVersionError::Credentials(ref err) => err.description(),
@@ -7409,22 +7430,22 @@ impl Error for SetLoggingOptionsError {
 /// Errors returned by TransferCertificate
 #[derive(Debug, PartialEq)]
 pub enum TransferCertificateError {
-    ///<p>An unexpected error has occurred.</p>
-    InternalFailure(String),
     ///<p>The certificate operation is not allowed.</p>
     CertificateState(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
+    ///<p>An unexpected error has occurred.</p>
+    InternalFailure(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
     ///<p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    ///<p>You are not authorized to perform this operation.</p>
-    Unauthorized(String),
+    ///<p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You can't transfer the certificate because authorization policies are still attached.</p>
     TransferConflict(String),
+    ///<p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -7449,29 +7470,29 @@ impl TransferCertificateError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalFailureException" => {
-                        TransferCertificateError::InternalFailure(String::from(error_message))
-                    }
                     "CertificateStateException" => {
                         TransferCertificateError::CertificateState(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        TransferCertificateError::Throttling(String::from(error_message))
+                    "InternalFailureException" => {
+                        TransferCertificateError::InternalFailure(String::from(error_message))
                     }
                     "InvalidRequestException" => {
                         TransferCertificateError::InvalidRequest(String::from(error_message))
                     }
-                    "ServiceUnavailableException" => {
-                        TransferCertificateError::ServiceUnavailable(String::from(error_message))
-                    }
                     "ResourceNotFoundException" => {
                         TransferCertificateError::ResourceNotFound(String::from(error_message))
                     }
-                    "UnauthorizedException" => {
-                        TransferCertificateError::Unauthorized(String::from(error_message))
+                    "ServiceUnavailableException" => {
+                        TransferCertificateError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        TransferCertificateError::Throttling(String::from(error_message))
                     }
                     "TransferConflictException" => {
                         TransferCertificateError::TransferConflict(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        TransferCertificateError::Unauthorized(String::from(error_message))
                     }
                     "ValidationException" => {
                         TransferCertificateError::Validation(error_message.to_string())
@@ -7507,14 +7528,14 @@ impl fmt::Display for TransferCertificateError {
 impl Error for TransferCertificateError {
     fn description(&self) -> &str {
         match *self {
-            TransferCertificateError::InternalFailure(ref cause) => cause,
             TransferCertificateError::CertificateState(ref cause) => cause,
-            TransferCertificateError::Throttling(ref cause) => cause,
+            TransferCertificateError::InternalFailure(ref cause) => cause,
             TransferCertificateError::InvalidRequest(ref cause) => cause,
-            TransferCertificateError::ServiceUnavailable(ref cause) => cause,
             TransferCertificateError::ResourceNotFound(ref cause) => cause,
-            TransferCertificateError::Unauthorized(ref cause) => cause,
+            TransferCertificateError::ServiceUnavailable(ref cause) => cause,
+            TransferCertificateError::Throttling(ref cause) => cause,
             TransferCertificateError::TransferConflict(ref cause) => cause,
+            TransferCertificateError::Unauthorized(ref cause) => cause,
             TransferCertificateError::Validation(ref cause) => cause,
             TransferCertificateError::Credentials(ref err) => err.description(),
             TransferCertificateError::HttpDispatch(ref dispatch_error) => {
@@ -7529,14 +7550,14 @@ impl Error for TransferCertificateError {
 pub enum UpdateCACertificateError {
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
     ///<p>The specified resource does not exist.</p>
     ResourceNotFound(String),
+    ///<p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -7566,17 +7587,17 @@ impl UpdateCACertificateError {
                     "InternalFailureException" => {
                         UpdateCACertificateError::InternalFailure(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        UpdateCACertificateError::Throttling(String::from(error_message))
-                    }
                     "InvalidRequestException" => {
                         UpdateCACertificateError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        UpdateCACertificateError::ResourceNotFound(String::from(error_message))
                     }
                     "ServiceUnavailableException" => {
                         UpdateCACertificateError::ServiceUnavailable(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => {
-                        UpdateCACertificateError::ResourceNotFound(String::from(error_message))
+                    "ThrottlingException" => {
+                        UpdateCACertificateError::Throttling(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         UpdateCACertificateError::Unauthorized(String::from(error_message))
@@ -7616,10 +7637,10 @@ impl Error for UpdateCACertificateError {
     fn description(&self) -> &str {
         match *self {
             UpdateCACertificateError::InternalFailure(ref cause) => cause,
-            UpdateCACertificateError::Throttling(ref cause) => cause,
             UpdateCACertificateError::InvalidRequest(ref cause) => cause,
-            UpdateCACertificateError::ServiceUnavailable(ref cause) => cause,
             UpdateCACertificateError::ResourceNotFound(ref cause) => cause,
+            UpdateCACertificateError::ServiceUnavailable(ref cause) => cause,
+            UpdateCACertificateError::Throttling(ref cause) => cause,
             UpdateCACertificateError::Unauthorized(ref cause) => cause,
             UpdateCACertificateError::Validation(ref cause) => cause,
             UpdateCACertificateError::Credentials(ref err) => err.description(),
@@ -7633,18 +7654,18 @@ impl Error for UpdateCACertificateError {
 /// Errors returned by UpdateCertificate
 #[derive(Debug, PartialEq)]
 pub enum UpdateCertificateError {
-    ///<p>An unexpected error has occurred.</p>
-    InternalFailure(String),
     ///<p>The certificate operation is not allowed.</p>
     CertificateState(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
+    ///<p>An unexpected error has occurred.</p>
+    InternalFailure(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
     ///<p>The specified resource does not exist.</p>
     ResourceNotFound(String),
+    ///<p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
@@ -7671,23 +7692,23 @@ impl UpdateCertificateError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalFailureException" => {
-                        UpdateCertificateError::InternalFailure(String::from(error_message))
-                    }
                     "CertificateStateException" => {
                         UpdateCertificateError::CertificateState(String::from(error_message))
                     }
-                    "ThrottlingException" => {
-                        UpdateCertificateError::Throttling(String::from(error_message))
+                    "InternalFailureException" => {
+                        UpdateCertificateError::InternalFailure(String::from(error_message))
                     }
                     "InvalidRequestException" => {
                         UpdateCertificateError::InvalidRequest(String::from(error_message))
                     }
+                    "ResourceNotFoundException" => {
+                        UpdateCertificateError::ResourceNotFound(String::from(error_message))
+                    }
                     "ServiceUnavailableException" => {
                         UpdateCertificateError::ServiceUnavailable(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => {
-                        UpdateCertificateError::ResourceNotFound(String::from(error_message))
+                    "ThrottlingException" => {
+                        UpdateCertificateError::Throttling(String::from(error_message))
                     }
                     "UnauthorizedException" => {
                         UpdateCertificateError::Unauthorized(String::from(error_message))
@@ -7726,12 +7747,12 @@ impl fmt::Display for UpdateCertificateError {
 impl Error for UpdateCertificateError {
     fn description(&self) -> &str {
         match *self {
-            UpdateCertificateError::InternalFailure(ref cause) => cause,
             UpdateCertificateError::CertificateState(ref cause) => cause,
-            UpdateCertificateError::Throttling(ref cause) => cause,
+            UpdateCertificateError::InternalFailure(ref cause) => cause,
             UpdateCertificateError::InvalidRequest(ref cause) => cause,
-            UpdateCertificateError::ServiceUnavailable(ref cause) => cause,
             UpdateCertificateError::ResourceNotFound(ref cause) => cause,
+            UpdateCertificateError::ServiceUnavailable(ref cause) => cause,
+            UpdateCertificateError::Throttling(ref cause) => cause,
             UpdateCertificateError::Unauthorized(ref cause) => cause,
             UpdateCertificateError::Validation(ref cause) => cause,
             UpdateCertificateError::Credentials(ref err) => err.description(),
@@ -7745,20 +7766,20 @@ impl Error for UpdateCertificateError {
 /// Errors returned by UpdateThing
 #[derive(Debug, PartialEq)]
 pub enum UpdateThingError {
-    ///<p>An exception thrown when the version of a thing passed to a command is different than the version specified with the --version parameter. </p>
-    VersionConflict(String),
     ///<p>An unexpected error has occurred.</p>
     InternalFailure(String),
-    ///<p>The rate exceeds the limit.</p>
-    Throttling(String),
     ///<p>The request is not valid.</p>
     InvalidRequest(String),
-    ///<p>The service is temporarily unavailable.</p>
-    ServiceUnavailable(String),
     ///<p>The specified resource does not exist.</p>
     ResourceNotFound(String),
+    ///<p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    ///<p>The rate exceeds the limit.</p>
+    Throttling(String),
     ///<p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
+    ///<p>An exception thrown when the version of a thing passed to a command is different than the version specified with the --version parameter.</p>
+    VersionConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -7783,26 +7804,26 @@ impl UpdateThingError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "VersionConflictException" => {
-                        UpdateThingError::VersionConflict(String::from(error_message))
-                    }
                     "InternalFailureException" => {
                         UpdateThingError::InternalFailure(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        UpdateThingError::Throttling(String::from(error_message))
                     }
                     "InvalidRequestException" => {
                         UpdateThingError::InvalidRequest(String::from(error_message))
                     }
-                    "ServiceUnavailableException" => {
-                        UpdateThingError::ServiceUnavailable(String::from(error_message))
-                    }
                     "ResourceNotFoundException" => {
                         UpdateThingError::ResourceNotFound(String::from(error_message))
                     }
+                    "ServiceUnavailableException" => {
+                        UpdateThingError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        UpdateThingError::Throttling(String::from(error_message))
+                    }
                     "UnauthorizedException" => {
                         UpdateThingError::Unauthorized(String::from(error_message))
+                    }
+                    "VersionConflictException" => {
+                        UpdateThingError::VersionConflict(String::from(error_message))
                     }
                     "ValidationException" => {
                         UpdateThingError::Validation(error_message.to_string())
@@ -7838,13 +7859,13 @@ impl fmt::Display for UpdateThingError {
 impl Error for UpdateThingError {
     fn description(&self) -> &str {
         match *self {
-            UpdateThingError::VersionConflict(ref cause) => cause,
             UpdateThingError::InternalFailure(ref cause) => cause,
-            UpdateThingError::Throttling(ref cause) => cause,
             UpdateThingError::InvalidRequest(ref cause) => cause,
-            UpdateThingError::ServiceUnavailable(ref cause) => cause,
             UpdateThingError::ResourceNotFound(ref cause) => cause,
+            UpdateThingError::ServiceUnavailable(ref cause) => cause,
+            UpdateThingError::Throttling(ref cause) => cause,
             UpdateThingError::Unauthorized(ref cause) => cause,
+            UpdateThingError::VersionConflict(ref cause) => cause,
             UpdateThingError::Validation(ref cause) => cause,
             UpdateThingError::Credentials(ref err) => err.description(),
             UpdateThingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -7873,20 +7894,20 @@ pub trait Iot {
          -> Result<AttachThingPrincipalResponse, AttachThingPrincipalError>;
 
 
-    #[doc="<p>Cancels a pending transfer for the specified certificate.</p> <p><b>Note</b> Only the transfer source account can use this operation to cancel a transfer. (Transfer destinations can use <a>RejectCertificateTransfer</a> instead.) After transfer, AWS IoT returns the certificate to the source account in the INACTIVE state. After the destination account has accepted the transfer, the transfer cannot be cancelled.</p> <p>After a certificate transfer is cancelled, the status of the certificate changes from PENDING_TRANSFER to INACTIVE.</p>"]
+    #[doc="<p>Cancels a pending transfer for the specified certificate.</p> <p> <b>Note</b> Only the transfer source account can use this operation to cancel a transfer. (Transfer destinations can use <a>RejectCertificateTransfer</a> instead.) After transfer, AWS IoT returns the certificate to the source account in the INACTIVE state. After the destination account has accepted the transfer, the transfer cannot be cancelled.</p> <p>After a certificate transfer is cancelled, the status of the certificate changes from PENDING_TRANSFER to INACTIVE.</p>"]
     fn cancel_certificate_transfer(&self,
                                    input: &CancelCertificateTransferRequest)
                                    -> Result<(), CancelCertificateTransferError>;
 
 
-    #[doc="<p>Creates an X.509 certificate using the specified certificate signing request.</p> <p><b>Note</b> Reusing the same certificate signing request (CSR) results in a distinct certificate.</p> <p>You can create multiple certificates in a batch by creating a directory, copying multiple .csr files into that directory, and then specifying that directory on the command line. The following commands show how to create a batch of certificates given a batch of CSRs. </p> <p>Assuming a set of CSRs are located inside of the directory my-csr-directory:</p> <p>On Linux and OS X, the command is:</p> <p>$ ls my-csr-directory/ | xargs -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p> This command lists all of the CSRs in my-csr-directory and pipes each CSR file name to the aws iot create-certificate-from-csr AWS CLI command to create a certificate for the corresponding CSR. </p> <p> The aws iot create-certificate-from-csr part of the command can also be run in parallel to speed up the certificate creation process: </p> <p> $ ls my-csr-directory/ | xargs -P 10 -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{} </p> <p> On Windows PowerShell, the command to create certificates for all CSRs in my-csr-directory is: </p> <p> &gt; ls -Name my-csr-directory | %{aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/$_} </p> <p> On a Windows command prompt, the command to create certificates for all CSRs in my-csr-directory is: </p> <p> &gt; forfiles /p my-csr-directory /c \"cmd /c aws iot create-certificate-from-csr --certificate-signing-request file://@path\"</p>"]
+    #[doc="<p>Creates an X.509 certificate using the specified certificate signing request.</p> <p> <b>Note:</b> The CSR must include a public key that is either an RSA key with a length of at least 2048 bits or an ECC key from NIST P-256 or NIST P-384 curves. </p> <p> <b>Note:</b> Reusing the same certificate signing request (CSR) results in a distinct certificate.</p> <p>You can create multiple certificates in a batch by creating a directory, copying multiple .csr files into that directory, and then specifying that directory on the command line. The following commands show how to create a batch of certificates given a batch of CSRs.</p> <p>Assuming a set of CSRs are located inside of the directory my-csr-directory:</p> <p>On Linux and OS X, the command is:</p> <p>$ ls my-csr-directory/ | xargs -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>This command lists all of the CSRs in my-csr-directory and pipes each CSR file name to the aws iot create-certificate-from-csr AWS CLI command to create a certificate for the corresponding CSR.</p> <p>The aws iot create-certificate-from-csr part of the command can also be run in parallel to speed up the certificate creation process:</p> <p>$ ls my-csr-directory/ | xargs -P 10 -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>On Windows PowerShell, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; ls -Name my-csr-directory | %{aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/$_}</p> <p>On a Windows command prompt, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; forfiles /p my-csr-directory /c \"cmd /c aws iot create-certificate-from-csr --certificate-signing-request file://@path\"</p>"]
     fn create_certificate_from_csr
         (&self,
          input: &CreateCertificateFromCsrRequest)
          -> Result<CreateCertificateFromCsrResponse, CreateCertificateFromCsrError>;
 
 
-    #[doc="<p>Creates a 2048-bit RSA key pair and issues an X.509 certificate using the issued public key.</p> <p><b>Note</b> This is the only time AWS IoT issues the private key for this certificate, so it is important to keep it in a secure location.</p>"]
+    #[doc="<p>Creates a 2048-bit RSA key pair and issues an X.509 certificate using the issued public key.</p> <p> <b>Note</b> This is the only time AWS IoT issues the private key for this certificate, so it is important to keep it in a secure location.</p>"]
     fn create_keys_and_certificate
         (&self,
          input: &CreateKeysAndCertificateRequest)
@@ -8136,7 +8157,7 @@ pub trait Iot {
                         -> Result<ListTopicRulesResponse, ListTopicRulesError>;
 
 
-    #[doc="<p>Registers a CA certificate with AWS IoT. This CA certificate can then be used to sign device certificates, which can be then registered with AWS IoT. You can register up to 10 CA certificates per AWS account that have the same subject field and public key. This enables you to have up to 10 certificate authorities sign your device certificates. If you have more than one CA certificate registered, make sure you pass the CA certificate when you register your device certificates with the RegisterCertificate API.</p>"]
+    #[doc="<p>Registers a CA certificate with AWS IoT. This CA certificate can then be used to sign device certificates, which can be then registered with AWS IoT. You can register up to 10 CA certificates per AWS account that have the same subject field. This enables you to have up to 10 certificate authorities sign your device certificates. If you have more than one CA certificate registered, make sure you pass the CA certificate when you register your device certificates with the RegisterCertificate API.</p>"]
     fn register_ca_certificate
         (&self,
          input: &RegisterCACertificateRequest)
@@ -8337,7 +8358,7 @@ impl<P, D> Iot for IotClient<P, D>
     }
 
 
-    #[doc="<p>Cancels a pending transfer for the specified certificate.</p> <p><b>Note</b> Only the transfer source account can use this operation to cancel a transfer. (Transfer destinations can use <a>RejectCertificateTransfer</a> instead.) After transfer, AWS IoT returns the certificate to the source account in the INACTIVE state. After the destination account has accepted the transfer, the transfer cannot be cancelled.</p> <p>After a certificate transfer is cancelled, the status of the certificate changes from PENDING_TRANSFER to INACTIVE.</p>"]
+    #[doc="<p>Cancels a pending transfer for the specified certificate.</p> <p> <b>Note</b> Only the transfer source account can use this operation to cancel a transfer. (Transfer destinations can use <a>RejectCertificateTransfer</a> instead.) After transfer, AWS IoT returns the certificate to the source account in the INACTIVE state. After the destination account has accepted the transfer, the transfer cannot be cancelled.</p> <p>After a certificate transfer is cancelled, the status of the certificate changes from PENDING_TRANSFER to INACTIVE.</p>"]
     fn cancel_certificate_transfer(&self,
                                    input: &CancelCertificateTransferRequest)
                                    -> Result<(), CancelCertificateTransferError> {
@@ -8368,7 +8389,7 @@ impl<P, D> Iot for IotClient<P, D>
     }
 
 
-    #[doc="<p>Creates an X.509 certificate using the specified certificate signing request.</p> <p><b>Note</b> Reusing the same certificate signing request (CSR) results in a distinct certificate.</p> <p>You can create multiple certificates in a batch by creating a directory, copying multiple .csr files into that directory, and then specifying that directory on the command line. The following commands show how to create a batch of certificates given a batch of CSRs. </p> <p>Assuming a set of CSRs are located inside of the directory my-csr-directory:</p> <p>On Linux and OS X, the command is:</p> <p>$ ls my-csr-directory/ | xargs -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p> This command lists all of the CSRs in my-csr-directory and pipes each CSR file name to the aws iot create-certificate-from-csr AWS CLI command to create a certificate for the corresponding CSR. </p> <p> The aws iot create-certificate-from-csr part of the command can also be run in parallel to speed up the certificate creation process: </p> <p> $ ls my-csr-directory/ | xargs -P 10 -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{} </p> <p> On Windows PowerShell, the command to create certificates for all CSRs in my-csr-directory is: </p> <p> &gt; ls -Name my-csr-directory | %{aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/$_} </p> <p> On a Windows command prompt, the command to create certificates for all CSRs in my-csr-directory is: </p> <p> &gt; forfiles /p my-csr-directory /c \"cmd /c aws iot create-certificate-from-csr --certificate-signing-request file://@path\"</p>"]
+    #[doc="<p>Creates an X.509 certificate using the specified certificate signing request.</p> <p> <b>Note:</b> The CSR must include a public key that is either an RSA key with a length of at least 2048 bits or an ECC key from NIST P-256 or NIST P-384 curves. </p> <p> <b>Note:</b> Reusing the same certificate signing request (CSR) results in a distinct certificate.</p> <p>You can create multiple certificates in a batch by creating a directory, copying multiple .csr files into that directory, and then specifying that directory on the command line. The following commands show how to create a batch of certificates given a batch of CSRs.</p> <p>Assuming a set of CSRs are located inside of the directory my-csr-directory:</p> <p>On Linux and OS X, the command is:</p> <p>$ ls my-csr-directory/ | xargs -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>This command lists all of the CSRs in my-csr-directory and pipes each CSR file name to the aws iot create-certificate-from-csr AWS CLI command to create a certificate for the corresponding CSR.</p> <p>The aws iot create-certificate-from-csr part of the command can also be run in parallel to speed up the certificate creation process:</p> <p>$ ls my-csr-directory/ | xargs -P 10 -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>On Windows PowerShell, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; ls -Name my-csr-directory | %{aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/$_}</p> <p>On a Windows command prompt, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; forfiles /p my-csr-directory /c \"cmd /c aws iot create-certificate-from-csr --certificate-signing-request file://@path\"</p>"]
     fn create_certificate_from_csr
         (&self,
          input: &CreateCertificateFromCsrRequest)
@@ -8414,7 +8435,7 @@ impl<P, D> Iot for IotClient<P, D>
     }
 
 
-    #[doc="<p>Creates a 2048-bit RSA key pair and issues an X.509 certificate using the issued public key.</p> <p><b>Note</b> This is the only time AWS IoT issues the private key for this certificate, so it is important to keep it in a secure location.</p>"]
+    #[doc="<p>Creates a 2048-bit RSA key pair and issues an X.509 certificate using the issued public key.</p> <p> <b>Note</b> This is the only time AWS IoT issues the private key for this certificate, so it is important to keep it in a secure location.</p>"]
     fn create_keys_and_certificate
         (&self,
          input: &CreateKeysAndCertificateRequest)
@@ -10266,7 +10287,7 @@ impl<P, D> Iot for IotClient<P, D>
     }
 
 
-    #[doc="<p>Registers a CA certificate with AWS IoT. This CA certificate can then be used to sign device certificates, which can be then registered with AWS IoT. You can register up to 10 CA certificates per AWS account that have the same subject field and public key. This enables you to have up to 10 certificate authorities sign your device certificates. If you have more than one CA certificate registered, make sure you pass the CA certificate when you register your device certificates with the RegisterCertificate API.</p>"]
+    #[doc="<p>Registers a CA certificate with AWS IoT. This CA certificate can then be used to sign device certificates, which can be then registered with AWS IoT. You can register up to 10 CA certificates per AWS account that have the same subject field. This enables you to have up to 10 certificate authorities sign your device certificates. If you have more than one CA certificate registered, make sure you pass the CA certificate when you register your device certificates with the RegisterCertificate API.</p>"]
     fn register_ca_certificate
         (&self,
          input: &RegisterCACertificateRequest)

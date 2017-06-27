@@ -1,6 +1,6 @@
 [package]
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
-description = "AWS SDK for Rust - Amazon CloudFront @ 2016-11-25"
+description = "AWS SDK for Rust - Amazon CloudFront @ 2017-03-25"
 documentation = "https://rusoto.github.io/rusoto/rusoto_core/index.html"
 keywords = ["AWS", "Amazon", "cloudfront"]
 license = "MIT"

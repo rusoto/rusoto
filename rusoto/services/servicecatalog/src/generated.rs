@@ -143,7 +143,7 @@ pub struct CreateConstraintInput {
     #[doc="<p>A token to disambiguate duplicate requests. You can create multiple resources using the same input in multiple requests, provided that you also specify a different idempotency token for each request.</p>"]
     #[serde(rename="IdempotencyToken")]
     pub idempotency_token: IdempotencyToken,
-    #[doc="<p>The constraint parameters.</p>"]
+    #[doc="<p>The constraint parameters. Expected values vary depending on which <b>Type</b> is specified. For examples, see the bottom of this topic.</p> <p>For Type <code>LAUNCH</code>, the <code>RoleArn</code> property is required. </p> <p>For Type <code>NOTIFICATION</code>, the <code>NotificationArns</code> property is required.</p> <p>For Type <code>TEMPLATE</code>, the <code>Rules</code> property is required.</p>"]
     #[serde(rename="Parameters")]
     pub parameters: ConstraintParameters,
     #[doc="<p>The portfolio identifier.</p>"]
@@ -152,7 +152,7 @@ pub struct CreateConstraintInput {
     #[doc="<p>The product identifier.</p>"]
     #[serde(rename="ProductId")]
     pub product_id: Id,
-    #[doc="<p>The type of the constraint.</p>"]
+    #[doc="<p>The type of the constraint. Case-sensitive valid values are: <code>LAUNCH</code>, <code>NOTIFICATION</code>, or <code>TEMPLATE</code>. </p>"]
     #[serde(rename="Type")]
     pub type_: ConstraintType,
 }
@@ -309,7 +309,7 @@ pub struct CreateProvisioningArtifactInput {
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct CreateProvisioningArtifactOutput {
-    #[doc="<p>Additional information about the provisioning artifact create request.</p>"]
+    #[doc="<p>Additional information about the creation request for the provisioning artifact.</p>"]
     #[serde(rename="Info")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub info: Option<ProvisioningArtifactInfo>,
@@ -394,7 +394,7 @@ pub struct DeleteProvisioningArtifactInput {
     #[doc="<p>The product identifier.</p>"]
     #[serde(rename="ProductId")]
     pub product_id: Id,
-    #[doc="<p>The identifier of the provisioning artifact for the delete request.</p>"]
+    #[doc="<p>The identifier of the provisioning artifact for the delete request. This is sometimes referred to as the product version.</p>"]
     #[serde(rename="ProvisioningArtifactId")]
     pub provisioning_artifact_id: Id,
 }
@@ -469,6 +469,10 @@ pub struct DescribeProductAsAdminOutput {
     #[serde(rename="ProductViewDetail")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub product_view_detail: Option<ProductViewDetail>,
+    #[doc="<p>A list of provisioning artifact summaries for the product.</p>"]
+    #[serde(rename="ProvisioningArtifactSummaries")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub provisioning_artifact_summaries: Option<ProvisioningArtifactSummaries>,
     #[doc="<p>Tags associated with the product.</p>"]
     #[serde(rename="Tags")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -522,6 +526,25 @@ pub struct DescribeProductViewOutput {
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
+pub struct DescribeProvisionedProductInput {
+    #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
+    #[serde(rename="AcceptLanguage")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub accept_language: Option<AcceptLanguage>,
+    #[doc="<p>The provisioned product identifier.</p>"]
+    #[serde(rename="Id")]
+    pub id: Id,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct DescribeProvisionedProductOutput {
+    #[doc="<p>Detailed provisioned product information.</p>"]
+    #[serde(rename="ProvisionedProductDetail")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub provisioned_product_detail: Option<ProvisionedProductDetail>,
+}
+
+#[derive(Default,Debug,Clone,Serialize)]
 pub struct DescribeProvisioningArtifactInput {
     #[doc="<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"]
     #[serde(rename="AcceptLanguage")]
@@ -530,9 +553,13 @@ pub struct DescribeProvisioningArtifactInput {
     #[doc="<p>The product identifier.</p>"]
     #[serde(rename="ProductId")]
     pub product_id: Id,
-    #[doc="<p>The identifier of the provisioning artifact.</p>"]
+    #[doc="<p>The identifier of the provisioning artifact. This is sometimes referred to as the product version.</p>"]
     #[serde(rename="ProvisioningArtifactId")]
     pub provisioning_artifact_id: Id,
+    #[doc="<p>Selects verbose results. If set to true, the CloudFormation template is returned.</p>"]
+    #[serde(rename="Verbose")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub verbose: Option<Verbose>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -564,7 +591,7 @@ pub struct DescribeProvisioningParametersInput {
     #[doc="<p>The product identifier.</p>"]
     #[serde(rename="ProductId")]
     pub product_id: Id,
-    #[doc="<p>The provisioning artifact identifier for this product.</p>"]
+    #[doc="<p>The provisioning artifact identifier for this product. This is sometimes referred to as the product version.</p>"]
     #[serde(rename="ProvisioningArtifactId")]
     pub provisioning_artifact_id: Id,
 }
@@ -1067,7 +1094,7 @@ pub struct ProductViewDetail {
     #[serde(rename="ProductViewSummary")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub product_view_summary: Option<ProductViewSummary>,
-    #[doc="<p>Current status of the product.</p>"]
+    #[doc="<p>Current status of the product.</p> <p> <code>AVAILABLE</code> - Product is available for use.</p> <p> <code>CREATING</code> - Creation of product started, not ready for use.</p> <p> <code>FAILED</code> - Action on product failed.</p>"]
     #[serde(rename="Status")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<Status>,
@@ -1128,7 +1155,7 @@ pub struct ProductViewSummary {
     #[serde(rename="SupportUrl")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub support_url: Option<SupportUrl>,
-    #[doc="<p>The product type. Contact the product administrator for the significance of this value.</p>"]
+    #[doc="<p>The product type. Contact the product administrator for the significance of this value. If this value is <code>MARKETPLACE</code>, the product was created by AWS Marketplace.</p>"]
     #[serde(rename="Type")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<ProductType>,
@@ -1158,7 +1185,7 @@ pub struct ProvisionProductInput {
     #[doc="<p>A user-friendly name to identify the ProvisionedProduct object. This value must be unique for the AWS account and cannot be updated after the product is provisioned.</p>"]
     #[serde(rename="ProvisionedProductName")]
     pub provisioned_product_name: ProvisionedProductName,
-    #[doc="<p>The provisioning artifact identifier for this product.</p>"]
+    #[doc="<p>The provisioning artifact identifier for this product. This is sometimes referred to as the product version.</p>"]
     #[serde(rename="ProvisioningArtifactId")]
     pub provisioning_artifact_id: Id,
     #[doc="<p>Parameters specified by the administrator that are required for provisioning the product.</p>"]
@@ -1206,10 +1233,10 @@ pub struct ProvisionedProductDetail {
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<ProvisionedProductNameOrArn>,
-    #[doc="<p>The current status of the ProvisionedProduct.</p>"]
+    #[doc="<p>The current status of the ProvisionedProduct.</p> <p> <code>AVAILABLE</code> - Stable state, ready to perform any operation. The most recent action request succeeded and completed.</p> <p> <code>UNDER_CHANGE</code> - Transitive state, operations performed may or may not have valid results. Wait for an <code>AVAILABLE</code> status before performing operations.</p> <p> <code>TAINTED</code> - Stable state, ready to perform any operation. The stack has completed the requested operation but is not exactly what was requested. For example, a request to update to a new version failed and the stack rolled back to the current version. </p> <p> <code>ERROR</code> - Something unexpected happened such that the provisioned product exists but the stack is not running. For example, CloudFormation received an invalid parameter value and could not launch the stack.</p>"]
     #[serde(rename="Status")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status: Option<RecordStatus>,
+    pub status: Option<ProvisionedProductStatus>,
     #[doc="<p>The current status message of the ProvisionedProduct.</p>"]
     #[serde(rename="StatusMessage")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1224,6 +1251,7 @@ pub type ProvisionedProductDetails = Vec<ProvisionedProductDetail>;
 pub type ProvisionedProductId = String;
 pub type ProvisionedProductName = String;
 pub type ProvisionedProductNameOrArn = String;
+pub type ProvisionedProductStatus = String;
 pub type ProvisionedProductStatusMessage = String;
 pub type ProvisionedProductType = String;
 #[doc="<p>Contains information indicating the ways in which a product can be provisioned.</p>"]
@@ -1237,7 +1265,7 @@ pub struct ProvisioningArtifact {
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<ProvisioningArtifactDescription>,
-    #[doc="<p>The identifier for the artifact.</p>"]
+    #[doc="<p>The identifier for the artifact. This is sometimes referred to as the product version.</p>"]
     #[serde(rename="Id")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<Id>,
@@ -1260,7 +1288,7 @@ pub struct ProvisioningArtifactDetail {
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<ProvisioningArtifactName>,
-    #[doc="<p>The identifier of the provisioning artifact.</p>"]
+    #[doc="<p>The identifier of the provisioning artifact. This is sometimes referred to as the product version.</p>"]
     #[serde(rename="Id")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub id: Option<Id>,
@@ -1268,7 +1296,7 @@ pub struct ProvisioningArtifactDetail {
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<ProvisioningArtifactName>,
-    #[doc="<p>The type of the provisioning artifact.</p>"]
+    #[doc="<p>The type of the provisioning artifact. The following provisioning artifact types are used by AWS Marketplace products:</p> <p> <code>MARKETPLACE_AMI</code> - AMI products.</p> <p> <code>MARKETPLACE_CAR</code> - CAR (Cluster and AWS Resources) products.</p>"]
     #[serde(rename="Type")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<ProvisioningArtifactType>,
@@ -1310,29 +1338,55 @@ pub struct ProvisioningArtifactParameter {
 }
 
 pub type ProvisioningArtifactParameters = Vec<ProvisioningArtifactParameter>;
-#[doc="<p>Provisioning artifact properties.</p>"]
+#[doc="<p>Provisioning artifact properties. For example request JSON, see <a>CreateProvisioningArtifact</a>.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ProvisioningArtifactProperties {
     #[doc="<p>The text description of the provisioning artifact properties.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<ProvisioningArtifactDescription>,
-    #[doc="<p>Additional information about the provisioning artifact properties.</p>"]
+    #[doc="<p>Additional information about the provisioning artifact properties. When using this element in a request, you must specify <code>LoadTemplateFromURL</code>. For more information, see <a>CreateProvisioningArtifact</a>.</p>"]
     #[serde(rename="Info")]
     pub info: ProvisioningArtifactInfo,
     #[doc="<p>The name assigned to the provisioning artifact properties.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<ProvisioningArtifactName>,
-    #[doc="<p>The type of the provisioning artifact properties.</p>"]
+    #[doc="<p>The type of the provisioning artifact properties. The following provisioning artifact property types are used by AWS Marketplace products:</p> <p> <code>MARKETPLACE_AMI</code> - AMI products.</p> <p> <code>MARKETPLACE_CAR</code> - CAR (Cluster and AWS Resources) products.</p>"]
     #[serde(rename="Type")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<ProvisioningArtifactType>,
 }
 
+pub type ProvisioningArtifactSummaries = Vec<ProvisioningArtifactSummary>;
+#[doc="<p>Summary information about a provisioning artifact.</p>"]
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct ProvisioningArtifactSummary {
+    #[doc="<p>The UTC timestamp of the creation time.</p>"]
+    #[serde(rename="CreatedTime")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub created_time: Option<ProvisioningArtifactCreatedTime>,
+    #[doc="<p>The provisioning artifact description.</p>"]
+    #[serde(rename="Description")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub description: Option<ProvisioningArtifactDescription>,
+    #[doc="<p>The provisioning artifact identifier.</p>"]
+    #[serde(rename="Id")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub id: Option<Id>,
+    #[doc="<p>The provisioning artifact name.</p>"]
+    #[serde(rename="Name")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub name: Option<ProvisioningArtifactName>,
+    #[doc="<p>The provisioning artifact metadata. This data is used with products created by AWS Marketplace.</p>"]
+    #[serde(rename="ProvisioningArtifactMetadata")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub provisioning_artifact_metadata: Option<ProvisioningArtifactInfo>,
+}
+
 pub type ProvisioningArtifactType = String;
 pub type ProvisioningArtifacts = Vec<ProvisioningArtifact>;
-#[doc="<p>The arameter key/value pairs used to provision a product.</p>"]
+#[doc="<p>The parameter key-value pairs used to provision a product.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ProvisioningParameter {
     #[doc="<p>The <code>ProvisioningArtifactParameter.ParameterKey</code> parameter from <a>DescribeProvisioningParameters</a>.</p>"]
@@ -1373,7 +1427,7 @@ pub struct RecordDetail {
     #[serde(rename="ProvisionedProductType")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub provisioned_product_type: Option<ProvisionedProductType>,
-    #[doc="<p>The provisioning artifact identifier for this product.</p>"]
+    #[doc="<p>The provisioning artifact identifier for this product. This is sometimes referred to as the product version.</p>"]
     #[serde(rename="ProvisioningArtifactId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub provisioning_artifact_id: Option<Id>,
@@ -1393,7 +1447,7 @@ pub struct RecordDetail {
     #[serde(rename="RecordType")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub record_type: Option<RecordType>,
-    #[doc="<p>The status of the ProvisionedProduct object.</p>"]
+    #[doc="<p>The status of the ProvisionedProduct object.</p> <p> <code>CREATED</code> - Request created but the operation has not yet started.</p> <p> <code>IN_PROGRESS</code> - The requested operation is in-progress.</p> <p> <code>IN_PROGRESS_IN_ERROR</code> - The provisioned product is under change but the requested operation failed and some remediation is occurring. For example, a roll-back.</p> <p> <code>SUCCEEDED</code> - The requested operation has successfully completed.</p> <p> <code>FAILED</code> - The requested operation has completed but has failed. Investigate using the error messages returned.</p>"]
     #[serde(rename="Status")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub status: Option<RecordStatus>,
@@ -1606,7 +1660,7 @@ pub struct Tag {
     #[doc="<p>The <code>ProvisioningArtifactParameter.TagKey</code> parameter from <a>DescribeProvisioningParameters</a>.</p>"]
     #[serde(rename="Key")]
     pub key: TagKey,
-    #[doc="<p>The esired value for this key.</p>"]
+    #[doc="<p>The desired value for this key.</p>"]
     #[serde(rename="Value")]
     pub value: TagValue,
 }
@@ -1625,11 +1679,11 @@ pub struct TerminateProvisionedProductInput {
     #[serde(rename="IgnoreErrors")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub ignore_errors: Option<IgnoreErrors>,
-    #[doc="<p>The identifier of the ProvisionedProduct object to terminate. You must specify either <code>ProvisionedProductName</code> or <code>ProvisionedProductId</code>, but not both.</p>"]
+    #[doc="<p>The identifier of the ProvisionedProduct object to terminate. Specify either <code>ProvisionedProductName</code> or <code>ProvisionedProductId</code>, but not both.</p>"]
     #[serde(rename="ProvisionedProductId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub provisioned_product_id: Option<Id>,
-    #[doc="<p>The name of the ProvisionedProduct object to terminate. You must specify either <code>ProvisionedProductName</code> or <code>ProvisionedProductId</code>, but not both.</p>"]
+    #[doc="<p>The name of the ProvisionedProduct object to terminate. Specify either <code>ProvisionedProductName</code> or <code>ProvisionedProductId</code>, but not both.</p>"]
     #[serde(rename="ProvisionedProductName")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub provisioned_product_name: Option<ProvisionedProductNameOrArn>,
@@ -1793,15 +1847,15 @@ pub struct UpdateProvisionedProductInput {
     #[serde(rename="ProductId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub product_id: Option<Id>,
-    #[doc="<p>The identifier of the ProvisionedProduct object to update. You must specify either <code>ProvisionedProductName</code> or <code>ProvisionedProductId</code>, but not both.</p>"]
+    #[doc="<p>The identifier of the ProvisionedProduct object to update. Specify either <code>ProvisionedProductName</code> or <code>ProvisionedProductId</code>, but not both.</p>"]
     #[serde(rename="ProvisionedProductId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub provisioned_product_id: Option<Id>,
-    #[doc="<p>The updated name of the ProvisionedProduct object . You must specify either <code>ProvisionedProductName</code> or <code>ProvisionedProductId</code>, but not both.</p>"]
+    #[doc="<p>The updated name of the ProvisionedProduct object. Specify either <code>ProvisionedProductName</code> or <code>ProvisionedProductId</code>, but not both.</p>"]
     #[serde(rename="ProvisionedProductName")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub provisioned_product_name: Option<ProvisionedProductNameOrArn>,
-    #[doc="<p>The provisioning artifact identifier for this product.</p>"]
+    #[doc="<p>The provisioning artifact identifier for this product. This is sometimes referred to as the product version.</p>"]
     #[serde(rename="ProvisioningArtifactId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub provisioning_artifact_id: Option<Id>,
@@ -1839,7 +1893,7 @@ pub struct UpdateProvisioningArtifactInput {
     #[doc="<p>The product identifier.</p>"]
     #[serde(rename="ProductId")]
     pub product_id: Id,
-    #[doc="<p>The identifier of the provisioning artifact for the update request.</p>"]
+    #[doc="<p>The identifier of the provisioning artifact for the update request. This is sometimes referred to as the product version.</p>"]
     #[serde(rename="ProvisioningArtifactId")]
     pub provisioning_artifact_id: Id,
 }
@@ -1860,7 +1914,7 @@ pub struct UpdateProvisioningArtifactOutput {
     pub status: Option<Status>,
 }
 
-#[doc="<p>The parameter key/value pair used to update a ProvisionedProduct object. If <code>UsePreviousValue</code> is set to true, <code>Value</code> is ignored and the value for <code>Key</code> is kept as previously set (current value).</p>"]
+#[doc="<p>The parameter key-value pair used to update a ProvisionedProduct object. If <code>UsePreviousValue</code> is set to true, <code>Value</code> is ignored and the value for <code>Key</code> is kept as previously set (current value).</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateProvisioningParameter {
     #[doc="<p>The <code>ProvisioningArtifactParameter.ParameterKey</code> parameter from <a>DescribeProvisioningParameters</a>.</p>"]
@@ -1894,6 +1948,7 @@ pub struct UsageInstruction {
 
 pub type UsageInstructions = Vec<UsageInstruction>;
 pub type UsePreviousValue = bool;
+pub type Verbose = bool;
 /// Errors returned by AcceptPortfolioShare
 #[derive(Debug, PartialEq)]
 pub enum AcceptPortfolioShareError {
@@ -3369,6 +3424,80 @@ impl Error for DescribeProductViewError {
                 dispatch_error.description()
             }
             DescribeProductViewError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeProvisionedProduct
+#[derive(Debug, PartialEq)]
+pub enum DescribeProvisionedProductError {
+    ///<p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl DescribeProvisionedProductError {
+    pub fn from_body(body: &str) -> DescribeProvisionedProductError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ResourceNotFoundException" => DescribeProvisionedProductError::ResourceNotFound(String::from(error_message)),
+                    "ValidationException" => {
+                        DescribeProvisionedProductError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeProvisionedProductError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeProvisionedProductError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeProvisionedProductError {
+    fn from(err: serde_json::error::Error) -> DescribeProvisionedProductError {
+        DescribeProvisionedProductError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeProvisionedProductError {
+    fn from(err: CredentialsError) -> DescribeProvisionedProductError {
+        DescribeProvisionedProductError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeProvisionedProductError {
+    fn from(err: HttpDispatchError) -> DescribeProvisionedProductError {
+        DescribeProvisionedProductError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for DescribeProvisionedProductError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeProvisionedProductError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeProvisionedProductError::ResourceNotFound(ref cause) => cause,
+            DescribeProvisionedProductError::Validation(ref cause) => cause,
+            DescribeProvisionedProductError::Credentials(ref err) => err.description(),
+            DescribeProvisionedProductError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeProvisionedProductError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -5343,7 +5472,7 @@ pub trait ServiceCatalog {
          -> Result<AssociateProductWithPortfolioOutput, AssociateProductWithPortfolioError>;
 
 
-    #[doc="<p>Creates a new constraint.</p>"]
+    #[doc="<p>Creates a new constraint. For more information, see <a href=\"http://docs.aws.amazon.com/servicecatalog/latest/adminguide/constraints.html\">Using Constraints</a>.</p>"]
     fn create_constraint(&self,
                          input: &CreateConstraintInput)
                          -> Result<CreateConstraintOutput, CreateConstraintError>;
@@ -5367,7 +5496,7 @@ pub trait ServiceCatalog {
                       -> Result<CreateProductOutput, CreateProductError>;
 
 
-    #[doc="<p>Create a new provisioning artifact for the specified product. This operation will not work with a product that has been shared with you.</p>"]
+    #[doc="<p>Create a new provisioning artifact for the specified product. This operation does not work with a product that has been shared with you.</p> <p>See the bottom of this topic for an example JSON request.</p>"]
     fn create_provisioning_artifact
         (&self,
          input: &CreateProvisioningArtifactInput)
@@ -5380,7 +5509,7 @@ pub trait ServiceCatalog {
                          -> Result<DeleteConstraintOutput, DeleteConstraintError>;
 
 
-    #[doc="<p>Deletes the specified portfolio. This operation will not work with a portfolio that has been shared with you or if it has products, users, constraints, or shared accounts associated with it.</p>"]
+    #[doc="<p>Deletes the specified portfolio. This operation does not work with a portfolio that has been shared with you or if it has products, users, constraints, or shared accounts associated with it.</p>"]
     fn delete_portfolio(&self,
                         input: &DeletePortfolioInput)
                         -> Result<DeletePortfolioOutput, DeletePortfolioError>;
@@ -5392,13 +5521,13 @@ pub trait ServiceCatalog {
                               -> Result<DeletePortfolioShareOutput, DeletePortfolioShareError>;
 
 
-    #[doc="<p>Deletes the specified product. This operation will not work with a product that has been shared with you or is associated with a portfolio. </p>"]
+    #[doc="<p>Deletes the specified product. This operation does not work with a product that has been shared with you or is associated with a portfolio. </p>"]
     fn delete_product(&self,
                       input: &DeleteProductInput)
                       -> Result<DeleteProductOutput, DeleteProductError>;
 
 
-    #[doc="<p>Deletes the specified provisioning artifact. This operation will not work on a provisioning artifact associated with a product that has been shared with you, or on the last provisioning artifact associated with a product (a product must have at least one provisioning artifact).</p>"]
+    #[doc="<p>Deletes the specified provisioning artifact. This operation does not work on a provisioning artifact associated with a product that has been shared with you, or on the last provisioning artifact associated with a product (a product must have at least one provisioning artifact).</p>"]
     fn delete_provisioning_artifact
         (&self,
          input: &DeleteProvisioningArtifactInput)
@@ -5434,6 +5563,13 @@ pub trait ServiceCatalog {
     fn describe_product_view(&self,
                              input: &DescribeProductViewInput)
                              -> Result<DescribeProductViewOutput, DescribeProductViewError>;
+
+
+    #[doc="<p>Retrieve detailed information about the provisioned product.</p>"]
+    fn describe_provisioned_product
+        (&self,
+         input: &DescribeProvisionedProductInput)
+         -> Result<DescribeProvisionedProductOutput, DescribeProvisionedProductError>;
 
 
     #[doc="<p>Retrieves detailed information about the specified provisioning artifact.</p>"]
@@ -5530,7 +5666,7 @@ pub trait ServiceCatalog {
                            -> Result<ListRecordHistoryOutput, ListRecordHistoryError>;
 
 
-    #[doc="<p>Requests a <i>Provision</i> of a specified product. A <i>ProvisionedProduct</i> is a resourced instance for a product. For example, provisioning a CloudFormation-template-backed product results in launching a CloudFormation stack and all the underlying resources that come with it. </p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation.</p>"]
+    #[doc="<p>Requests a <i>provision</i> of a specified product. A <i>provisioned product</i> is a resourced instance for a product. For example, provisioning a CloudFormation-template-backed product results in launching a CloudFormation stack and all the underlying resources that come with it. </p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation.</p>"]
     fn provision_product(&self,
                          input: &ProvisionProductInput)
                          -> Result<ProvisionProductOutput, ProvisionProductError>;
@@ -5575,7 +5711,7 @@ pub trait ServiceCatalog {
                          -> Result<UpdateConstraintOutput, UpdateConstraintError>;
 
 
-    #[doc="<p>Updates the specified portfolio's details. This operation will not work with a product that has been shared with you.</p>"]
+    #[doc="<p>Updates the specified portfolio's details. This operation does not work with a product that has been shared with you.</p>"]
     fn update_portfolio(&self,
                         input: &UpdatePortfolioInput)
                         -> Result<UpdatePortfolioOutput, UpdatePortfolioError>;
@@ -5594,7 +5730,7 @@ pub trait ServiceCatalog {
          -> Result<UpdateProvisionedProductOutput, UpdateProvisionedProductError>;
 
 
-    #[doc="<p>Updates an existing provisioning artifact's information. This operation will not work on a provisioning artifact associated with a product that has been shared with you.</p>"]
+    #[doc="<p>Updates an existing provisioning artifact's information. This operation does not work on a provisioning artifact associated with a product that has been shared with you.</p>"]
     fn update_provisioning_artifact
         (&self,
          input: &UpdateProvisioningArtifactInput)
@@ -5707,7 +5843,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
     }
 
 
-    #[doc="<p>Creates a new constraint.</p>"]
+    #[doc="<p>Creates a new constraint. For more information, see <a href=\"http://docs.aws.amazon.com/servicecatalog/latest/adminguide/constraints.html\">Using Constraints</a>.</p>"]
     fn create_constraint(&self,
                          input: &CreateConstraintInput)
                          -> Result<CreateConstraintOutput, CreateConstraintError> {
@@ -5817,7 +5953,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
     }
 
 
-    #[doc="<p>Create a new provisioning artifact for the specified product. This operation will not work with a product that has been shared with you.</p>"]
+    #[doc="<p>Create a new provisioning artifact for the specified product. This operation does not work with a product that has been shared with you.</p> <p>See the bottom of this topic for an example JSON request.</p>"]
     fn create_provisioning_artifact
         (&self,
          input: &CreateProvisioningArtifactInput)
@@ -5871,7 +6007,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
     }
 
 
-    #[doc="<p>Deletes the specified portfolio. This operation will not work with a portfolio that has been shared with you or if it has products, users, constraints, or shared accounts associated with it.</p>"]
+    #[doc="<p>Deletes the specified portfolio. This operation does not work with a portfolio that has been shared with you or if it has products, users, constraints, or shared accounts associated with it.</p>"]
     fn delete_portfolio(&self,
                         input: &DeletePortfolioInput)
                         -> Result<DeletePortfolioOutput, DeletePortfolioError> {
@@ -5927,7 +6063,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
     }
 
 
-    #[doc="<p>Deletes the specified product. This operation will not work with a product that has been shared with you or is associated with a portfolio. </p>"]
+    #[doc="<p>Deletes the specified product. This operation does not work with a product that has been shared with you or is associated with a portfolio. </p>"]
     fn delete_product(&self,
                       input: &DeleteProductInput)
                       -> Result<DeleteProductOutput, DeleteProductError> {
@@ -5953,7 +6089,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
     }
 
 
-    #[doc="<p>Deletes the specified provisioning artifact. This operation will not work on a provisioning artifact associated with a product that has been shared with you, or on the last provisioning artifact associated with a product (a product must have at least one provisioning artifact).</p>"]
+    #[doc="<p>Deletes the specified provisioning artifact. This operation does not work on a provisioning artifact associated with a product that has been shared with you, or on the last provisioning artifact associated with a product (a product must have at least one provisioning artifact).</p>"]
     fn delete_provisioning_artifact
         (&self,
          input: &DeleteProvisioningArtifactInput)
@@ -6116,6 +6252,32 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
                 Err(DescribeProductViewError::from_body(String::from_utf8_lossy(&response.body)
                                                             .as_ref()))
             }
+        }
+    }
+
+
+    #[doc="<p>Retrieve detailed information about the provisioned product.</p>"]
+    fn describe_provisioned_product
+        (&self,
+         input: &DescribeProvisionedProductInput)
+         -> Result<DescribeProvisionedProductOutput, DescribeProvisionedProductError> {
+        let mut request = SignedRequest::new("POST", "servicecatalog", self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target",
+                           "AWS242ServiceCatalogService.DescribeProvisionedProduct");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                            Ok(serde_json::from_str::<DescribeProvisionedProductOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                        }
+            _ => Err(DescribeProvisionedProductError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
 
@@ -6493,7 +6655,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
     }
 
 
-    #[doc="<p>Requests a <i>Provision</i> of a specified product. A <i>ProvisionedProduct</i> is a resourced instance for a product. For example, provisioning a CloudFormation-template-backed product results in launching a CloudFormation stack and all the underlying resources that come with it. </p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation.</p>"]
+    #[doc="<p>Requests a <i>provision</i> of a specified product. A <i>provisioned product</i> is a resourced instance for a product. For example, provisioning a CloudFormation-template-backed product results in launching a CloudFormation stack and all the underlying resources that come with it. </p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation.</p>"]
     fn provision_product(&self,
                          input: &ProvisionProductInput)
                          -> Result<ProvisionProductOutput, ProvisionProductError> {
@@ -6685,7 +6847,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
     }
 
 
-    #[doc="<p>Updates the specified portfolio's details. This operation will not work with a product that has been shared with you.</p>"]
+    #[doc="<p>Updates the specified portfolio's details. This operation does not work with a product that has been shared with you.</p>"]
     fn update_portfolio(&self,
                         input: &UpdatePortfolioInput)
                         -> Result<UpdatePortfolioOutput, UpdatePortfolioError> {
@@ -6765,7 +6927,7 @@ impl<P, D> ServiceCatalog for ServiceCatalogClient<P, D>
     }
 
 
-    #[doc="<p>Updates an existing provisioning artifact's information. This operation will not work on a provisioning artifact associated with a product that has been shared with you.</p>"]
+    #[doc="<p>Updates an existing provisioning artifact's information. This operation does not work on a provisioning artifact associated with a product that has been shared with you.</p>"]
     fn update_provisioning_artifact
         (&self,
          input: &UpdateProvisioningArtifactInput)

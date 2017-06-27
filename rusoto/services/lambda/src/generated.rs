@@ -200,7 +200,7 @@ pub struct CreateFunctionRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM role that Lambda assumes when it executes your function to access any other Amazon Web Services (AWS) resources. For more information, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/lambda-introduction.html\">AWS Lambda: How it Works</a>. </p>"]
     #[serde(rename="Role")]
     pub role: RoleArn,
-    #[doc="<p>The runtime environment for the Lambda function you are uploading.</p> <p>To use the Python runtime v3.6, set the value to \"python3.6\". To use the Python runtime v2.7, set the value to \"python2.7\". To use the Node.js runtime v6.10, set the value to \"nodejs6.10\". To use the Node.js runtime v4.3, set the value to \"nodejs4.3\".</p> <note> <p>You can no longer create functions using the v0.10.42 runtime version as of November, 2016. Existing functions will be supported until early 2017, but we recommend you migrate them to either nodejs6.10 or nodejs4.3 runtime version as soon as possible.</p> </note>"]
+    #[doc="<p>The runtime environment for the Lambda function you are uploading.</p> <p>To use the Python runtime v3.6, set the value to \"python3.6\". To use the Python runtime v2.7, set the value to \"python2.7\". To use the Node.js runtime v6.10, set the value to \"nodejs6.10\". To use the Node.js runtime v4.3, set the value to \"nodejs4.3\".</p> <note> <p>Node v0.10.42 is currently marked as deprecated. You must migrate existing functions to the newer Node.js runtime versions available on AWS Lambda (nodejs4.3 or nodejs6.10) as soon as possible. You can request a one-time extension until June 30, 2017 by going to the Lambda console and following the instructions provided. Failure to do so will result in an invalid parmaeter error being returned. Note that you will have to follow this procedure for each region that contains functions written in the Node v0.10.42 runtime.</p> </note>"]
     #[serde(rename="Runtime")]
     pub runtime: Runtime,
     #[doc="<p>The list of tags (key-value pairs) assigned to the new function.</p>"]
@@ -418,7 +418,7 @@ pub struct FunctionConfiguration {
     #[serde(rename="KMSKeyArn")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub kms_key_arn: Option<KMSKeyArn>,
-    #[doc="<p>The time stamp of the last time you updated the function.</p>"]
+    #[doc="<p>The time stamp of the last time you updated the function. The time stamp is conveyed as a string complying with ISO-8601 in this way YYYY-MM-DDThh:mm:ssTZD (e.g., 1997-07-16T19:20:30+01:00). For more information, see <a href=\"https://www.w3.org/TR/NOTE-datetime\">Date and Time Formats</a>.</p>"]
     #[serde(rename="LastModified")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub last_modified: Option<Timestamp>,
@@ -589,7 +589,7 @@ pub struct InvocationResponse {
     pub log_result: Option<String>,
     #[doc="<p> It is the JSON representation of the object returned by the Lambda function. This is present only if the invocation type is <code>RequestResponse</code>. </p> <p>In the event of a function error this field contains a message describing the error. For the <code>Handled</code> errors the Lambda function will report this message. For <code>Unhandled</code> errors AWS Lambda reports the message. </p>"]
     pub payload: Option<Blob>,
-    #[doc="<p>The HTTP status code will be in the 200 range for successful request. For the <code>RequestResonse</code> invocation type this status code will be 200. For the <code>Event</code> invocation type this status code will be 202. For the <code>DryRun</code> invocation type the status code will be 204. </p>"]
+    #[doc="<p>The HTTP status code will be in the 200 range for successful request. For the <code>RequestResponse</code> invocation type this status code will be 200. For the <code>Event</code> invocation type this status code will be 202. For the <code>DryRun</code> invocation type the status code will be 204. </p>"]
     pub status_code: Option<Integer>,
 }
 
@@ -959,7 +959,7 @@ pub struct UpdateFunctionConfigurationRequest {
     #[serde(rename="Role")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub role: Option<RoleArn>,
-    #[doc="<p>The runtime environment for the Lambda function.</p> <p>To use the Python runtime v3.6, set the value to \"python3.6\". To use the Python runtime v2.7, set the value to \"python2.7\". To use the Node.js runtime v6.10, set the value to \"nodejs6.10\". To use the Node.js runtime v4.3, set the value to \"nodejs4.3\". To use the Python runtime v3.6, set the value to \"python3.6\". To use the Python runtime v2.7, set the value to \"python2.7\".</p> <note> <p>You can no longer downgrade to the v0.10.42 runtime version. This version will no longer be supported as of early 2017.</p> </note>"]
+    #[doc="<p>The runtime environment for the Lambda function.</p> <p>To use the Python runtime v3.6, set the value to \"python3.6\". To use the Python runtime v2.7, set the value to \"python2.7\". To use the Node.js runtime v6.10, set the value to \"nodejs6.10\". To use the Node.js runtime v4.3, set the value to \"nodejs4.3\". To use the Python runtime v3.6, set the value to \"python3.6\". To use the Python runtime v2.7, set the value to \"python2.7\".</p> <note> <p>Node v0.10.42 is currently marked as deprecated. You must migrate existing functions to the newer Node.js runtime versions available on AWS Lambda (nodejs4.3 or nodejs6.10) as soon as possible. You can request a one-time extension until June 30, 2017 by going to the Lambda console and following the instructions provided. Failure to do so will result in an invalid parameter value error being returned. Note that you will have to follow this procedure for each region that contains functions written in the Node v0.10.42 runtime.</p> </note>"]
     #[serde(rename="Runtime")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub runtime: Option<Runtime>,
@@ -1011,7 +1011,7 @@ pub type VpcId = String;
 /// Errors returned by AddPermission
 #[derive(Debug, PartialEq)]
 pub enum AddPermissionError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. </p>
+    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
     ///<p>Lambda function access policy is limited to 20 KB.</p>
     PolicyLengthExceeded(String),
@@ -1113,7 +1113,7 @@ impl Error for AddPermissionError {
 /// Errors returned by CreateAlias
 #[derive(Debug, PartialEq)]
 pub enum CreateAliasError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. </p>
+    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
     ///<p>The resource already exists.</p>
     ResourceConflict(String),
@@ -1209,7 +1209,7 @@ impl Error for CreateAliasError {
 /// Errors returned by CreateEventSourceMapping
 #[derive(Debug, PartialEq)]
 pub enum CreateEventSourceMappingError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. </p>
+    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
     ///<p>The resource already exists.</p>
     ResourceConflict(String),
@@ -1309,7 +1309,7 @@ impl Error for CreateEventSourceMappingError {
 pub enum CreateFunctionError {
     ///<p>You have exceeded your maximum total code size per account. <a href="http://docs.aws.amazon.com/lambda/latest/dg/limits.html">Limits</a> </p>
     CodeStorageExceeded(String),
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. </p>
+    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
     ///<p>The resource already exists.</p>
     ResourceConflict(String),
@@ -1409,7 +1409,7 @@ impl Error for CreateFunctionError {
 /// Errors returned by DeleteAlias
 #[derive(Debug, PartialEq)]
 pub enum DeleteAliasError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. </p>
+    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
     ///<p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
@@ -1493,7 +1493,7 @@ impl Error for DeleteAliasError {
 /// Errors returned by DeleteEventSourceMapping
 #[derive(Debug, PartialEq)]
 pub enum DeleteEventSourceMappingError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. </p>
+    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
     ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
@@ -1585,7 +1585,7 @@ impl Error for DeleteEventSourceMappingError {
 /// Errors returned by DeleteFunction
 #[derive(Debug, PartialEq)]
 pub enum DeleteFunctionError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. </p>
+    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
     ///<p>The resource already exists.</p>
     ResourceConflict(String),
@@ -1763,7 +1763,7 @@ impl Error for GetAccountSettingsError {
 /// Errors returned by GetAlias
 #[derive(Debug, PartialEq)]
 pub enum GetAliasError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. </p>
+    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
     ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
@@ -1851,7 +1851,7 @@ impl Error for GetAliasError {
 /// Errors returned by GetEventSourceMapping
 #[derive(Debug, PartialEq)]
 pub enum GetEventSourceMappingError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. </p>
+    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
     ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
@@ -1943,7 +1943,7 @@ impl Error for GetEventSourceMappingError {
 /// Errors returned by GetFunction
 #[derive(Debug, PartialEq)]
 pub enum GetFunctionError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. </p>
+    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
     ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
@@ -2033,7 +2033,7 @@ impl Error for GetFunctionError {
 /// Errors returned by GetFunctionConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetFunctionConfigurationError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. </p>
+    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
     ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
@@ -2125,7 +2125,7 @@ impl Error for GetFunctionConfigurationError {
 /// Errors returned by GetPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetPolicyError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. </p>
+    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
     ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
@@ -2221,10 +2221,12 @@ pub enum InvokeError {
     EC2Unexpected(String),
     ///<p>AWS Lambda was not able to create an Elastic Network Interface (ENI) in the VPC, specified as part of Lambda function configuration, because the limit for network interfaces has been reached.</p>
     ENILimitReached(String),
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. </p>
+    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
     ///<p>The request body could not be parsed as JSON.</p>
     InvalidRequestContent(String),
+    ///<p>The runtime or runtime version specified is not supported.</p>
+    InvalidRuntime(String),
     ///<p>The Security Group ID provided in the Lambda function VPC configuration is invalid.</p>
     InvalidSecurityGroupID(String),
     ///<p>The Subnet ID provided in the Lambda function VPC configuration is invalid.</p>
@@ -2292,6 +2294,9 @@ impl InvokeError {
                     }
                     "InvalidRequestContentException" => {
                         InvokeError::InvalidRequestContent(String::from(error_message))
+                    }
+                    "InvalidRuntimeException" => {
+                        InvokeError::InvalidRuntime(String::from(error_message))
                     }
                     "InvalidSecurityGroupIDException" => {
                         InvokeError::InvalidSecurityGroupID(String::from(error_message))
@@ -2364,6 +2369,7 @@ impl Error for InvokeError {
             InvokeError::ENILimitReached(ref cause) => cause,
             InvokeError::InvalidParameterValue(ref cause) => cause,
             InvokeError::InvalidRequestContent(ref cause) => cause,
+            InvokeError::InvalidRuntime(ref cause) => cause,
             InvokeError::InvalidSecurityGroupID(ref cause) => cause,
             InvokeError::InvalidSubnetID(ref cause) => cause,
             InvokeError::InvalidZipFile(ref cause) => cause,
@@ -2389,6 +2395,8 @@ impl Error for InvokeError {
 pub enum InvokeAsyncError {
     ///<p>The request body could not be parsed as JSON.</p>
     InvalidRequestContent(String),
+    ///<p>The runtime or runtime version specified is not supported.</p>
+    InvalidRuntime(String),
     ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
     ///<p>The AWS Lambda service encountered an internal error.</p>
@@ -2419,6 +2427,9 @@ impl InvokeAsyncError {
                 match *error_type {
                     "InvalidRequestContentException" => {
                         InvokeAsyncError::InvalidRequestContent(String::from(error_message))
+                    }
+                    "InvalidRuntimeException" => {
+                        InvokeAsyncError::InvalidRuntime(String::from(error_message))
                     }
                     "ResourceNotFoundException" => {
                         InvokeAsyncError::ResourceNotFound(String::from(error_message))
@@ -2459,6 +2470,7 @@ impl Error for InvokeAsyncError {
     fn description(&self) -> &str {
         match *self {
             InvokeAsyncError::InvalidRequestContent(ref cause) => cause,
+            InvokeAsyncError::InvalidRuntime(ref cause) => cause,
             InvokeAsyncError::ResourceNotFound(ref cause) => cause,
             InvokeAsyncError::Service(ref cause) => cause,
             InvokeAsyncError::Validation(ref cause) => cause,
@@ -2471,7 +2483,7 @@ impl Error for InvokeAsyncError {
 /// Errors returned by ListAliases
 #[derive(Debug, PartialEq)]
 pub enum ListAliasesError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. </p>
+    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
     ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
@@ -2561,7 +2573,7 @@ impl Error for ListAliasesError {
 /// Errors returned by ListEventSourceMappings
 #[derive(Debug, PartialEq)]
 pub enum ListEventSourceMappingsError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. </p>
+    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
     ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
@@ -2731,7 +2743,7 @@ impl Error for ListFunctionsError {
 /// Errors returned by ListTags
 #[derive(Debug, PartialEq)]
 pub enum ListTagsError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. </p>
+    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
     ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
@@ -2819,7 +2831,7 @@ impl Error for ListTagsError {
 /// Errors returned by ListVersionsByFunction
 #[derive(Debug, PartialEq)]
 pub enum ListVersionsByFunctionError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. </p>
+    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
     ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
@@ -2913,7 +2925,7 @@ impl Error for ListVersionsByFunctionError {
 pub enum PublishVersionError {
     ///<p>You have exceeded your maximum total code size per account. <a href="http://docs.aws.amazon.com/lambda/latest/dg/limits.html">Limits</a> </p>
     CodeStorageExceeded(String),
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. </p>
+    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
     ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
@@ -3007,7 +3019,7 @@ impl Error for PublishVersionError {
 /// Errors returned by RemovePermission
 #[derive(Debug, PartialEq)]
 pub enum RemovePermissionError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. </p>
+    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
     ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
@@ -3099,7 +3111,7 @@ impl Error for RemovePermissionError {
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. </p>
+    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
     ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
@@ -3189,7 +3201,7 @@ impl Error for TagResourceError {
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. </p>
+    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
     ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
@@ -3279,7 +3291,7 @@ impl Error for UntagResourceError {
 /// Errors returned by UpdateAlias
 #[derive(Debug, PartialEq)]
 pub enum UpdateAliasError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. </p>
+    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
     ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
@@ -3369,7 +3381,7 @@ impl Error for UpdateAliasError {
 /// Errors returned by UpdateEventSourceMapping
 #[derive(Debug, PartialEq)]
 pub enum UpdateEventSourceMappingError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. </p>
+    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
     ///<p>The resource already exists.</p>
     ResourceConflict(String),
@@ -3469,7 +3481,7 @@ impl Error for UpdateEventSourceMappingError {
 pub enum UpdateFunctionCodeError {
     ///<p>You have exceeded your maximum total code size per account. <a href="http://docs.aws.amazon.com/lambda/latest/dg/limits.html">Limits</a> </p>
     CodeStorageExceeded(String),
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. </p>
+    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
     ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
@@ -3567,8 +3579,10 @@ impl Error for UpdateFunctionCodeError {
 /// Errors returned by UpdateFunctionConfiguration
 #[derive(Debug, PartialEq)]
 pub enum UpdateFunctionConfigurationError {
-    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. </p>
+    ///<p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception. You will also get this exception if you have selected a deprecated runtime, such as Node v0.10.42. </p>
     InvalidParameterValue(String),
+    ///<p>The resource already exists.</p>
+    ResourceConflict(String),
     ///<p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
     ///<p>The AWS Lambda service encountered an internal error.</p>
@@ -3600,6 +3614,7 @@ impl UpdateFunctionConfigurationError {
 
                 match *error_type {
                     "InvalidParameterValueException" => UpdateFunctionConfigurationError::InvalidParameterValue(String::from(error_message)),
+                    "ResourceConflictException" => UpdateFunctionConfigurationError::ResourceConflict(String::from(error_message)),
                     "ResourceNotFoundException" => UpdateFunctionConfigurationError::ResourceNotFound(String::from(error_message)),
                     "ServiceException" => {
                         UpdateFunctionConfigurationError::Service(String::from(error_message))
@@ -3640,6 +3655,7 @@ impl Error for UpdateFunctionConfigurationError {
     fn description(&self) -> &str {
         match *self {
             UpdateFunctionConfigurationError::InvalidParameterValue(ref cause) => cause,
+            UpdateFunctionConfigurationError::ResourceConflict(ref cause) => cause,
             UpdateFunctionConfigurationError::ResourceNotFound(ref cause) => cause,
             UpdateFunctionConfigurationError::Service(ref cause) => cause,
             UpdateFunctionConfigurationError::TooManyRequests(ref cause) => cause,
