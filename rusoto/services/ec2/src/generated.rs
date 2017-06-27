@@ -9139,6 +9139,116 @@ impl DescribeFlowLogsResultDeserializer {
     }
 }
 #[derive(Default,Debug,Clone)]
+pub struct DescribeFpgaImagesRequest {
+    #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
+    pub dry_run: Option<Boolean>,
+    #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>create-time</code> - The creation time of the AFI.</p> </li> <li> <p> <code>fpga-image-id</code> - The FPGA image identifier (AFI ID).</p> </li> <li> <p> <code>fpga-image-global-id</code> - The global FPGA image identifier (AGFI ID).</p> </li> <li> <p> <code>name</code> - The name of the AFI.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the AFI owner.</p> </li> <li> <p> <code>product-code</code> - The product code.</p> </li> <li> <p> <code>shell-version</code> - The version of the AWS Shell that was used to create the bitstream.</p> </li> <li> <p> <code>state</code> - The state of the AFI (<code>pending</code> | <code>failed</code> | <code>available</code> | <code>unavailable</code>).</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>update-time</code> - The time of the most recent update.</p> </li> </ul>"]
+    pub filters: Option<FilterList>,
+    #[doc="<p>One or more AFI IDs.</p>"]
+    pub fpga_image_ids: Option<FpgaImageIdList>,
+    #[doc="<p>The maximum number of results to return in a single call.</p>"]
+    pub max_results: Option<MaxResults>,
+    #[doc="<p>The token to retrieve the next page of results.</p>"]
+    pub next_token: Option<NextToken>,
+    #[doc="<p>Filters the AFI by owner. Specify an AWS account ID, <code>self</code> (owner is the sender of the request), or an AWS owner alias (valid values are <code>amazon</code> | <code>aws-marketplace</code>).</p>"]
+    pub owners: Option<OwnerStringList>,
+}
+
+
+/// Serialize `DescribeFpgaImagesRequest` contents to a `SignedRequest`.
+struct DescribeFpgaImagesRequestSerializer;
+impl DescribeFpgaImagesRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeFpgaImagesRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+        }
+        if let Some(ref field_value) = obj.filters {
+            FilterListSerializer::serialize(params,
+                                            &format!("{}{}", prefix, "Filter"),
+                                            field_value);
+        }
+        if let Some(ref field_value) = obj.fpga_image_ids {
+            FpgaImageIdListSerializer::serialize(params,
+                                                 &format!("{}{}", prefix, "FpgaImageId"),
+                                                 field_value);
+        }
+        if let Some(ref field_value) = obj.max_results {
+            params.put(&format!("{}{}", prefix, "MaxResults"),
+                       &field_value.to_string());
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+        }
+        if let Some(ref field_value) = obj.owners {
+            OwnerStringListSerializer::serialize(params,
+                                                 &format!("{}{}", prefix, "Owner"),
+                                                 field_value);
+        }
+
+    }
+}
+
+#[derive(Default,Debug,Clone)]
+pub struct DescribeFpgaImagesResult {
+    #[doc="<p>Information about one or more FPGA images.</p>"]
+    pub fpga_images: Option<FpgaImageList>,
+    #[doc="<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
+    pub next_token: Option<NextToken>,
+}
+
+struct DescribeFpgaImagesResultDeserializer;
+impl DescribeFpgaImagesResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<DescribeFpgaImagesResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = DescribeFpgaImagesResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "fpgaImageSet" => {
+                            obj.fpga_images =
+                                Some(try!(FpgaImageListDeserializer::deserialize("fpgaImageSet",
+                                                                                 stack)));
+                        }
+                        "nextToken" => {
+                            obj.next_token = Some(try!(NextTokenDeserializer::deserialize("nextToken",
+                                                                                          stack)));
+                        }
+                        _ => skip_tree(stack),
+                    }
+                }
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
+#[derive(Default,Debug,Clone)]
 pub struct DescribeHostReservationOfferingsRequest {
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>instance-family</code> - The instance family of the offering (e.g., <code>m4</code>).</p> </li> <li> <p> <code>payment-option</code> - The payment option (<code>NoUpfront</code> | <code>PartialUpfront</code> | <code>AllUpfront</code>).</p> </li> </ul>"]
     pub filter: Option<FilterList>,
@@ -16858,6 +16968,252 @@ impl FlowLogSetDeserializer {
     }
 }
 pub type FlowLogsResourceType = String;
+#[doc="<p>Describes an Amazon FPGA image (AFI).</p>"]
+#[derive(Default,Debug,Clone)]
+pub struct FpgaImage {
+    #[doc="<p>The date and time the AFI was created.</p>"]
+    pub create_time: Option<DateTime>,
+    #[doc="<p>The description of the AFI.</p>"]
+    pub description: Option<String>,
+    #[doc="<p>The global FPGA image identifier (AGFI ID).</p>"]
+    pub fpga_image_global_id: Option<String>,
+    #[doc="<p>The FPGA image identifier (AFI ID).</p>"]
+    pub fpga_image_id: Option<String>,
+    #[doc="<p>The name of the AFI.</p>"]
+    pub name: Option<String>,
+    #[doc="<p>The alias of the AFI owner. Possible values include <code>self</code>, <code>amazon</code>, and <code>aws-marketplace</code>.</p>"]
+    pub owner_alias: Option<String>,
+    #[doc="<p>The AWS account ID of the AFI owner.</p>"]
+    pub owner_id: Option<String>,
+    #[doc="<p>Information about the PCI bus.</p>"]
+    pub pci_id: Option<PciId>,
+    #[doc="<p>The product codes for the AFI.</p>"]
+    pub product_codes: Option<ProductCodeList>,
+    #[doc="<p>The version of the AWS Shell that was used to create the bitstream.</p>"]
+    pub shell_version: Option<String>,
+    #[doc="<p>Information about the state of the AFI.</p>"]
+    pub state: Option<FpgaImageState>,
+    #[doc="<p>Any tags assigned to the AFI.</p>"]
+    pub tags: Option<TagList>,
+    #[doc="<p>The time of the most recent update to the AFI.</p>"]
+    pub update_time: Option<DateTime>,
+}
+
+struct FpgaImageDeserializer;
+impl FpgaImageDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<FpgaImage, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = FpgaImage::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "createTime" => {
+                            obj.create_time = Some(try!(DateTimeDeserializer::deserialize("createTime",
+                                                                                          stack)));
+                        }
+                        "description" => {
+                            obj.description = Some(try!(StringDeserializer::deserialize("description",
+                                                                                        stack)));
+                        }
+                        "fpgaImageGlobalId" => {
+                            obj.fpga_image_global_id =
+                                Some(try!(StringDeserializer::deserialize("fpgaImageGlobalId",
+                                                                          stack)));
+                        }
+                        "fpgaImageId" => {
+                            obj.fpga_image_id = Some(try!(StringDeserializer::deserialize("fpgaImageId",
+                                                                                          stack)));
+                        }
+                        "name" => {
+                            obj.name = Some(try!(StringDeserializer::deserialize("name", stack)));
+                        }
+                        "ownerAlias" => {
+                            obj.owner_alias = Some(try!(StringDeserializer::deserialize("ownerAlias",
+                                                                                        stack)));
+                        }
+                        "ownerId" => {
+                            obj.owner_id = Some(try!(StringDeserializer::deserialize("ownerId",
+                                                                                     stack)));
+                        }
+                        "pciId" => {
+                            obj.pci_id = Some(try!(PciIdDeserializer::deserialize("pciId", stack)));
+                        }
+                        "productCodes" => {
+                            obj.product_codes =
+                                Some(try!(ProductCodeListDeserializer::deserialize("productCodes",
+                                                                                   stack)));
+                        }
+                        "shellVersion" => {
+                            obj.shell_version = Some(try!(StringDeserializer::deserialize("shellVersion",
+                                                                                          stack)));
+                        }
+                        "state" => {
+                            obj.state = Some(try!(FpgaImageStateDeserializer::deserialize("state",
+                                                                                          stack)));
+                        }
+                        "tags" => {
+                            obj.tags = Some(try!(TagListDeserializer::deserialize("tags", stack)));
+                        }
+                        "updateTime" => {
+                            obj.update_time = Some(try!(DateTimeDeserializer::deserialize("updateTime",
+                                                                                          stack)));
+                        }
+                        _ => skip_tree(stack),
+                    }
+                }
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
+pub type FpgaImageIdList = Vec<String>;
+
+/// Serialize `FpgaImageIdList` contents to a `SignedRequest`.
+struct FpgaImageIdListSerializer;
+impl FpgaImageIdListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &FpgaImageIdList) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
+}
+
+pub type FpgaImageList = Vec<FpgaImage>;
+struct FpgaImageListDeserializer;
+impl FpgaImageListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<FpgaImageList, XmlParseError> {
+
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "item" {
+                        obj.push(try!(FpgaImageDeserializer::deserialize("item", stack)));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+
+    }
+}
+#[doc="<p>Describes the state of the bitstream generation process for an Amazon FPGA image (AFI).</p>"]
+#[derive(Default,Debug,Clone)]
+pub struct FpgaImageState {
+    #[doc="<p>The state. The following are the possible values:</p> <ul> <li> <p> <code>pending</code> - AFI bitstream generation is in progress.</p> </li> <li> <p> <code>available</code> - The AFI is available for use.</p> </li> <li> <p> <code>failed</code> - AFI bitstream generation failed.</p> </li> <li> <p> <code>unavailable</code> - The AFI is no longer available for use.</p> </li> </ul>"]
+    pub code: Option<FpgaImageStateCode>,
+    #[doc="<p>If the state is <code>failed</code>, this is the error message.</p>"]
+    pub message: Option<String>,
+}
+
+struct FpgaImageStateDeserializer;
+impl FpgaImageStateDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<FpgaImageState, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = FpgaImageState::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "code" => {
+                            obj.code =
+                                Some(try!(FpgaImageStateCodeDeserializer::deserialize("code",
+                                                                                      stack)));
+                        }
+                        "message" => {
+                            obj.message = Some(try!(StringDeserializer::deserialize("message",
+                                                                                    stack)));
+                        }
+                        _ => skip_tree(stack),
+                    }
+                }
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
+pub type FpgaImageStateCode = String;
+struct FpgaImageStateCodeDeserializer;
+impl FpgaImageStateCodeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<FpgaImageStateCode, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
 pub type GatewayType = String;
 struct GatewayTypeDeserializer;
 impl GatewayTypeDeserializer {
@@ -27096,6 +27452,74 @@ impl PaymentOptionDeserializer {
 
     }
 }
+#[doc="<p>Describes the data that identifies an Amazon FPGA image (AFI) on the PCI bus.</p>"]
+#[derive(Default,Debug,Clone)]
+pub struct PciId {
+    #[doc="<p>The ID of the device.</p>"]
+    pub device_id: Option<String>,
+    #[doc="<p>The ID of the subsystem.</p>"]
+    pub subsystem_id: Option<String>,
+    #[doc="<p>The ID of the vendor for the subsystem.</p>"]
+    pub subsystem_vendor_id: Option<String>,
+    #[doc="<p>The ID of the vendor.</p>"]
+    pub vendor_id: Option<String>,
+}
+
+struct PciIdDeserializer;
+impl PciIdDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<PciId, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = PciId::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "DeviceId" => {
+                            obj.device_id = Some(try!(StringDeserializer::deserialize("DeviceId",
+                                                                                      stack)));
+                        }
+                        "SubsystemId" => {
+                            obj.subsystem_id = Some(try!(StringDeserializer::deserialize("SubsystemId",
+                                                                                         stack)));
+                        }
+                        "SubsystemVendorId" => {
+                            obj.subsystem_vendor_id =
+                                Some(try!(StringDeserializer::deserialize("SubsystemVendorId",
+                                                                          stack)));
+                        }
+                        "VendorId" => {
+                            obj.vendor_id = Some(try!(StringDeserializer::deserialize("VendorId",
+                                                                                      stack)));
+                        }
+                        _ => skip_tree(stack),
+                    }
+                }
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+
+    }
+}
 #[doc="<p>Describes the VPC peering connection options.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct PeeringConnectionOptions {
@@ -27223,6 +27647,8 @@ pub struct Placement {
     pub group_name: Option<String>,
     #[doc="<p>The ID of the Dedicated Host on which the instance resides. This parameter is not supported for the <a>ImportInstance</a> command.</p>"]
     pub host_id: Option<String>,
+    #[doc="<p>Reserved for future use.</p>"]
+    pub spread_domain: Option<String>,
     #[doc="<p>The tenancy of the instance (if the instance is running in a VPC). An instance with a tenancy of <code>dedicated</code> runs on single-tenant hardware. The <code>host</code> tenancy is not supported for the <a>ImportInstance</a> command.</p>"]
     pub tenancy: Option<Tenancy>,
 }
@@ -27266,6 +27692,10 @@ impl PlacementDeserializer {
                             obj.host_id = Some(try!(StringDeserializer::deserialize("hostId",
                                                                                     stack)));
                         }
+                        "spreadDomain" => {
+                            obj.spread_domain = Some(try!(StringDeserializer::deserialize("spreadDomain",
+                                                                                          stack)));
+                        }
                         "tenancy" => {
                             obj.tenancy = Some(try!(TenancyDeserializer::deserialize("tenancy",
                                                                                      stack)));
@@ -27307,6 +27737,9 @@ impl PlacementSerializer {
         }
         if let Some(ref field_value) = obj.host_id {
             params.put(&format!("{}{}", prefix, "HostId"), &field_value);
+        }
+        if let Some(ref field_value) = obj.spread_domain {
+            params.put(&format!("{}{}", prefix, "SpreadDomain"), &field_value);
         }
         if let Some(ref field_value) = obj.tenancy {
             params.put(&format!("{}{}", prefix, "Tenancy"), &field_value);
@@ -30216,6 +30649,7 @@ pub struct RequestSpotInstancesRequest {
     pub instance_count: Option<Integer>,
     #[doc="<p>The instance launch group. Launch groups are Spot instances that launch together and terminate together.</p> <p>Default: Instances are launched and terminated individually</p>"]
     pub launch_group: Option<String>,
+    #[doc="<p>The launch specification.</p>"]
     pub launch_specification: Option<RequestSpotLaunchSpecification>,
     #[doc="<p>The maximum hourly price (bid) for any Spot instance launched to fulfill the request.</p>"]
     pub spot_price: String,
@@ -30348,6 +30782,7 @@ pub struct RequestSpotLaunchSpecification {
     pub kernel_id: Option<String>,
     #[doc="<p>The name of the key pair.</p>"]
     pub key_name: Option<String>,
+    #[doc="<p>Indicates whether basic or detailed monitoring is enabled for the instance.</p> <p>Default: Disabled</p>"]
     pub monitoring: Option<RunInstancesMonitoringEnabled>,
     #[doc="<p>One or more network interfaces. If you specify a network interface, you must specify subnet IDs and security group IDs using the network interface.</p>"]
     pub network_interfaces: Option<InstanceNetworkInterfaceSpecificationList>,
@@ -30355,7 +30790,9 @@ pub struct RequestSpotLaunchSpecification {
     pub placement: Option<SpotPlacement>,
     #[doc="<p>The ID of the RAM disk.</p>"]
     pub ramdisk_id: Option<String>,
+    #[doc="<p>One or more security group IDs.</p>"]
     pub security_group_ids: Option<ValueStringList>,
+    #[doc="<p>One or more security groups. When requesting instances in a VPC, you must specify the IDs of the security groups. When requesting instances in EC2-Classic, you can specify the names or the IDs of the security groups.</p>"]
     pub security_groups: Option<ValueStringList>,
     #[doc="<p>The ID of the subnet in which to launch the instance.</p>"]
     pub subnet_id: Option<String>,
@@ -40510,11 +40947,11 @@ impl VpcListDeserializer {
 #[doc="<p>Describes a VPC peering connection.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct VpcPeeringConnection {
-    #[doc="<p>Information about the accepter VPC. CIDR block information is not returned when creating a VPC peering connection, or when describing a VPC peering connection that's in the <code>initiating-request</code> or <code>pending-acceptance</code> state.</p>"]
+    #[doc="<p>Information about the accepter VPC. CIDR block information is only returned when describing an active VPC peering connection.</p>"]
     pub accepter_vpc_info: Option<VpcPeeringConnectionVpcInfo>,
     #[doc="<p>The time that an unaccepted VPC peering connection will expire.</p>"]
     pub expiration_time: Option<DateTime>,
-    #[doc="<p>Information about the requester VPC.</p>"]
+    #[doc="<p>Information about the requester VPC. CIDR block information is only returned when describing an active VPC peering connection.</p>"]
     pub requester_vpc_info: Option<VpcPeeringConnectionVpcInfo>,
     #[doc="<p>The status of the VPC peering connection.</p>"]
     pub status: Option<VpcPeeringConnectionStateReason>,
@@ -47438,6 +47875,70 @@ impl Error for DescribeFlowLogsError {
             DescribeFlowLogsError::Credentials(ref err) => err.description(),
             DescribeFlowLogsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             DescribeFlowLogsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeFpgaImages
+#[derive(Debug, PartialEq)]
+pub enum DescribeFpgaImagesError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl DescribeFpgaImagesError {
+    pub fn from_body(body: &str) -> DescribeFpgaImagesError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let _response_envelope = stack.next();
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => {
+                match &parsed_error.code[..] {
+                    _ => DescribeFpgaImagesError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeFpgaImagesError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for DescribeFpgaImagesError {
+    fn from(err: XmlParseError) -> DescribeFpgaImagesError {
+        let XmlParseError(message) = err;
+        DescribeFpgaImagesError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DescribeFpgaImagesError {
+    fn from(err: CredentialsError) -> DescribeFpgaImagesError {
+        DescribeFpgaImagesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeFpgaImagesError {
+    fn from(err: HttpDispatchError) -> DescribeFpgaImagesError {
+        DescribeFpgaImagesError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for DescribeFpgaImagesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeFpgaImagesError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeFpgaImagesError::Validation(ref cause) => cause,
+            DescribeFpgaImagesError::Credentials(ref err) => err.description(),
+            DescribeFpgaImagesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeFpgaImagesError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -56004,7 +56505,7 @@ pub trait Ec2 {
          -> Result<ConfirmProductInstanceResult, ConfirmProductInstanceError>;
 
 
-    #[doc="<p>Initiates the copy of an AMI from the specified source region to the current region. You specify the destination region by using its endpoint when making the request.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/CopyingAMIs.html\">Copying AMIs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
+    #[doc="<p>Initiates the copy of an AMI from the specified source region to the current region. You specify the destination region by using its endpoint when making the request.</p> <p>For more information about the prerequisites and limits when copying an AMI, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/CopyingAMIs.html\">Copying an AMI</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
     fn copy_image(&self, input: &CopyImageRequest) -> Result<CopyImageResult, CopyImageError>;
 
 
@@ -56401,6 +56902,12 @@ pub trait Ec2 {
     fn describe_flow_logs(&self,
                           input: &DescribeFlowLogsRequest)
                           -> Result<DescribeFlowLogsResult, DescribeFlowLogsError>;
+
+
+    #[doc="<p>Describes one or more available Amazon FPGA Images (AFIs). These include public AFIs, private AFIs that you own, and AFIs owned by other AWS accounts for which you have load permissions.</p>"]
+    fn describe_fpga_images(&self,
+                            input: &DescribeFpgaImagesRequest)
+                            -> Result<DescribeFpgaImagesResult, DescribeFpgaImagesError>;
 
 
     #[doc="<p>Describes the Dedicated Host Reservations that are available to purchase.</p> <p>The results describe all the Dedicated Host Reservation offerings, including offerings that may not match the instance family and region of your Dedicated Hosts. When purchasing an offering, ensure that the the instance family and region of the offering matches that of the Dedicated Host/s it will be associated with. For an overview of supported instance types, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-overview.html\">Dedicated Hosts Overview</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. </p>"]
@@ -58305,7 +58812,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
     }
 
 
-    #[doc="<p>Initiates the copy of an AMI from the specified source region to the current region. You specify the destination region by using its endpoint when making the request.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/CopyingAMIs.html\">Copying AMIs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
+    #[doc="<p>Initiates the copy of an AMI from the specified source region to the current region. You specify the destination region by using its endpoint when making the request.</p> <p>For more information about the prerequisites and limits when copying an AMI, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/CopyingAMIs.html\">Copying an AMI</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
     fn copy_image(&self, input: &CopyImageRequest) -> Result<CopyImageResult, CopyImageError> {
         let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
         let mut params = Params::new();
@@ -60678,6 +61185,48 @@ impl<P, D> Ec2 for Ec2Client<P, D>
             _ => {
                 Err(DescribeFlowLogsError::from_body(String::from_utf8_lossy(&response.body)
                                                          .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Describes one or more available Amazon FPGA Images (AFIs). These include public AFIs, private AFIs that you own, and AFIs owned by other AWS accounts for which you have load permissions.</p>"]
+    fn describe_fpga_images(&self,
+                            input: &DescribeFpgaImagesRequest)
+                            -> Result<DescribeFpgaImagesResult, DescribeFpgaImagesError> {
+        let mut request = SignedRequest::new("POST", "ec2", self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeFpgaImages");
+        params.put("Version", "2016-11-15");
+        DescribeFpgaImagesRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+        let response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+
+                let result;
+
+                if response.body.is_empty() {
+                    result = DescribeFpgaImagesResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(response.body.as_slice(),
+                                                              ParserConfig::new()
+                                                                  .trim_whitespace(true));
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result =
+                        try!(DescribeFpgaImagesResultDeserializer::deserialize(&actual_tag_name,
+                                                                               &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                Err(DescribeFpgaImagesError::from_body(String::from_utf8_lossy(&response.body)
+                                                           .as_ref()))
             }
         }
     }

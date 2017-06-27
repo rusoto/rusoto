@@ -77,6 +77,7 @@ pub struct AddTagsToResourceRequest {
 pub struct AddTagsToResourceResult;
 
 pub type AgentErrorCode = String;
+pub type AllowedPattern = String;
 pub type ApproveAfterDays = i64;
 #[doc="<p>Describes an association of a Systems Manager document and an instance.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -415,7 +416,7 @@ pub struct Command {
     #[serde(rename="OutputS3KeyPrefix")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub output_s3_key_prefix: Option<S3KeyPrefix>,
-    #[doc="<p>The region where the Amazon Simple Storage Service (Amazon S3) output bucket is located. The default value is the region where Run Command is being called.</p>"]
+    #[doc="<p>(Deprecated) You can no longer specify this parameter. The system ignores it. Instead, Systems Manager automatically determines the Amazon S3 bucket region.</p>"]
     #[serde(rename="OutputS3Region")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub output_s3_region: Option<S3Region>,
@@ -452,10 +453,10 @@ pub struct Command {
 #[doc="<p>Describes a command filter.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CommandFilter {
-    #[doc="<p>The name of the filter. For example, requested date and time.</p>"]
+    #[doc="<p>The name of the filter.</p>"]
     #[serde(rename="key")]
     pub key: CommandFilterKey,
-    #[doc="<p>The filter value. For example: June 30, 2015.</p>"]
+    #[doc="<p>The filter value. </p>"]
     #[serde(rename="value")]
     pub value: CommandFilterValue,
 }
@@ -547,7 +548,7 @@ pub struct CommandPlugin {
     #[serde(rename="OutputS3KeyPrefix")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub output_s3_key_prefix: Option<S3KeyPrefix>,
-    #[doc="<p>The name of the region where the output is stored in Amazon S3.</p>"]
+    #[doc="<p>(Deprecated) You can no longer specify this parameter. The system ignores it. Instead, Systems Manager automatically determines the Amazon S3 bucket region.</p>"]
     #[serde(rename="OutputS3Region")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub output_s3_region: Option<S3Region>,
@@ -876,6 +877,25 @@ pub struct DeleteParameterRequest {
 pub struct DeleteParameterResult;
 
 #[derive(Default,Debug,Clone,Serialize)]
+pub struct DeleteParametersRequest {
+    #[doc="<p>The names of the parameters to delete.</p>"]
+    #[serde(rename="Names")]
+    pub names: ParameterNameList,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct DeleteParametersResult {
+    #[doc="<p>The names of the deleted parameters.</p>"]
+    #[serde(rename="DeletedParameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub deleted_parameters: Option<ParameterNameList>,
+    #[doc="<p>The names of parameters that weren't deleted because the parameters are not valid.</p>"]
+    #[serde(rename="InvalidParameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub invalid_parameters: Option<ParameterNameList>,
+}
+
+#[derive(Default,Debug,Clone,Serialize)]
 pub struct DeletePatchBaselineRequest {
     #[doc="<p>The ID of the patch baseline to delete.</p>"]
     #[serde(rename="BaselineId")]
@@ -1003,7 +1023,7 @@ pub struct DescribeActivationsResult {
     #[serde(rename="ActivationList")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub activation_list: Option<ActivationList>,
-    #[doc="<p> The token for the next set of items to return. Use this token to get the next set of results. </p>"]
+    #[doc="<p>The token for the next set of items to return. Use this token to get the next set of results. </p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
@@ -1529,6 +1549,10 @@ pub struct DescribeParametersRequest {
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<NextToken>,
+    #[doc="<p>Filters to limit the request results.</p>"]
+    #[serde(rename="ParameterFilters")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub parameter_filters: Option<ParameterStringFilterList>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -1914,11 +1938,11 @@ pub struct GetCommandInvocationResult {
     #[serde(rename="ExecutionElapsedTime")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub execution_elapsed_time: Option<StringDateTime>,
-    #[doc="<p>The date and time the plugin was finished executing. Date and time are written in ISO 8601 format. For example, August 28, 2016 is represented as 2016-08-28. If the plugin has not started to execute, the string is empty.</p>"]
+    #[doc="<p>The date and time the plugin was finished executing. Date and time are written in ISO 8601 format. For example, June 7, 2017 is represented as 2017-06-7. The following sample AWS CLI command uses the <code>InvokedAfter</code> filter.</p> <p> <code>aws ssm list-commands --filters key=InvokedAfter,value=2017-06-07T00:00:00Z</code> </p> <p>If the plugin has not started to execute, the string is empty.</p>"]
     #[serde(rename="ExecutionEndDateTime")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub execution_end_date_time: Option<StringDateTime>,
-    #[doc="<p>The date and time the plugin started executing. Date and time are written in ISO 8601 format. For example, August 28, 2016 is represented as 2016-08-28. If the plugin has not started to execute, the string is empty.</p>"]
+    #[doc="<p>The date and time the plugin started executing. Date and time are written in ISO 8601 format. For example, June 7, 2017 is represented as 2017-06-7. The following sample AWS CLI command uses the <code>InvokedBefore</code> filter.</p> <p> <code>aws ssm list-commands --filters key=InvokedBefore,value=2017-06-07T00:00:00Z</code> </p> <p>If the plugin has not started to execute, the string is empty.</p>"]
     #[serde(rename="ExecutionStartDateTime")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub execution_start_date_time: Option<StringDateTime>,
@@ -2266,6 +2290,65 @@ pub struct GetParameterHistoryResult {
     #[serde(rename="Parameters")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub parameters: Option<ParameterHistoryList>,
+}
+
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct GetParameterRequest {
+    #[doc="<p>The name of the parameter you want to query.</p>"]
+    #[serde(rename="Name")]
+    pub name: PSParameterName,
+    #[doc="<p>Return decrypted values for secure string parameters. This flag is ignored for String and StringList parameter types.</p>"]
+    #[serde(rename="WithDecryption")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub with_decryption: Option<Boolean>,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct GetParameterResult {
+    #[doc="<p>Information about a parameter.</p>"]
+    #[serde(rename="Parameter")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub parameter: Option<Parameter>,
+}
+
+pub type GetParametersByPathMaxResults = i64;
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct GetParametersByPathRequest {
+    #[doc="<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
+    #[serde(rename="MaxResults")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub max_results: Option<GetParametersByPathMaxResults>,
+    #[doc="<p>A token to start the list. Use this token to get the next set of results. </p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub next_token: Option<NextToken>,
+    #[doc="<p>Filters to limit the request results.</p>"]
+    #[serde(rename="ParameterFilters")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub parameter_filters: Option<ParameterStringFilterList>,
+    #[doc="<p>The hierarchy for the parameter. Hierarchies start with a forward slash (/) and end with the parameter name. A hierarchy can have a maximum of five levels. Examples: /Environment/Test/DBString003</p> <p>/Finance/Prod/IAD/OS/WinServ2016/license15</p>"]
+    #[serde(rename="Path")]
+    pub path: PSParameterName,
+    #[doc="<p>Retrieve all parameters within a hierarchy.</p>"]
+    #[serde(rename="Recursive")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub recursive: Option<Boolean>,
+    #[doc="<p>Retrieve all parameters in a hierarchy with their value decrypted.</p>"]
+    #[serde(rename="WithDecryption")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub with_decryption: Option<Boolean>,
+}
+
+#[derive(Default,Debug,Clone,Deserialize)]
+pub struct GetParametersByPathResult {
+    #[doc="<p>The token for the next set of items to return. Use this token to get the next set of results.</p>"]
+    #[serde(rename="NextToken")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub next_token: Option<NextToken>,
+    #[doc="<p>A list of parameters found in the specified hierarchy.</p>"]
+    #[serde(rename="Parameters")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub parameters: Option<ParameterList>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -3363,6 +3446,10 @@ pub type ParameterDescription = String;
 #[doc="<p>Information about parameter usage.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ParameterHistory {
+    #[doc="<p>Parameter names can include the following letters and symbols.</p> <p>a-zA-Z0-9_.-</p>"]
+    #[serde(rename="AllowedPattern")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub allowed_pattern: Option<AllowedPattern>,
     #[doc="<p>Information about the parameter.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -3399,6 +3486,10 @@ pub type ParameterList = Vec<Parameter>;
 #[doc="<p>Metada includes information like the ARN of the last user and the date/time the parameter was last used.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ParameterMetadata {
+    #[doc="<p>A parameter name can include only the following letters and symbols.</p> <p>a-zA-Z0-9_.-</p>"]
+    #[serde(rename="AllowedPattern")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub allowed_pattern: Option<AllowedPattern>,
     #[doc="<p>Description of the parameter actions.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -3428,6 +3519,27 @@ pub struct ParameterMetadata {
 pub type ParameterMetadataList = Vec<ParameterMetadata>;
 pub type ParameterName = String;
 pub type ParameterNameList = Vec<PSParameterName>;
+#[doc="<p>One or more filters. Use a filter to return a more specific list of results.</p>"]
+#[derive(Default,Debug,Clone,Serialize)]
+pub struct ParameterStringFilter {
+    #[doc="<p>The name of the filter.</p>"]
+    #[serde(rename="Key")]
+    pub key: ParameterStringFilterKey,
+    #[doc="<p>Valid options are Equals and BeginsWith. For Path filter, valid options are Recursive and OneLevel.</p>"]
+    #[serde(rename="Option")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub option: Option<ParameterStringQueryOption>,
+    #[doc="<p>The value you want to search for.</p>"]
+    #[serde(rename="Values")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub values: Option<ParameterStringFilterValueList>,
+}
+
+pub type ParameterStringFilterKey = String;
+pub type ParameterStringFilterList = Vec<ParameterStringFilter>;
+pub type ParameterStringFilterValue = String;
+pub type ParameterStringFilterValueList = Vec<ParameterStringFilterValue>;
+pub type ParameterStringQueryOption = String;
 pub type ParameterType = String;
 pub type ParameterValue = String;
 pub type ParameterValueList = Vec<ParameterValue>;
@@ -3437,8 +3549,7 @@ pub type Parameters = ::std::collections::HashMap<ParameterName, ParameterValueL
 pub struct ParametersFilter {
     #[doc="<p>The name of the filter.</p>"]
     #[serde(rename="Key")]
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub key: Option<ParametersFilterKey>,
+    pub key: ParametersFilterKey,
     #[doc="<p>The filter values.</p>"]
     #[serde(rename="Values")]
     pub values: ParametersFilterValueList,
@@ -3686,11 +3797,15 @@ pub struct PutInventoryResult;
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct PutParameterRequest {
+    #[doc="<p>A regular expression used to validate the parameter value. For example, for String types with values restricted to numbers, you can specify the following: AllowedPattern=^\\d+$ </p>"]
+    #[serde(rename="AllowedPattern")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub allowed_pattern: Option<AllowedPattern>,
     #[doc="<p>Information about the parameter that you want to add to the system</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<ParameterDescription>,
-    #[doc="<p>The parameter key ID that you want to add to the system.</p>"]
+    #[doc="<p>The KMS Key ID that you want to use to encrypt a parameter when you choose the SecureString data type. If you don't specify a key ID, the system uses the default key associated with your AWS account.</p>"]
     #[serde(rename="KeyId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub key_id: Option<ParameterKeyId>,
@@ -3871,7 +3986,7 @@ pub struct S3OutputLocation {
     #[serde(rename="OutputS3KeyPrefix")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub output_s3_key_prefix: Option<S3KeyPrefix>,
-    #[doc="<p>The Amazon S3 region where the association information is stored.</p>"]
+    #[doc="<p>(Deprecated) You can no longer specify this parameter. The system ignores it. Instead, Systems Manager automatically determines the Amazon S3 bucket region.</p>"]
     #[serde(rename="OutputS3Region")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub output_s3_region: Option<S3Region>,
@@ -3905,15 +4020,15 @@ pub struct SendCommandRequest {
     #[doc="<p>Required. The name of the Systems Manager document to execute. This can be a public document or a custom document.</p>"]
     #[serde(rename="DocumentName")]
     pub document_name: DocumentARN,
-    #[doc="<p>The instance IDs where the command should execute. You can specify a maximum of 50 IDs. If you prefer not to list individual instance IDs, you can instead send commands to a fleet of instances using the Targets parameter, which accepts EC2 tags.</p>"]
+    #[doc="<p>The instance IDs where the command should execute. You can specify a maximum of 50 IDs. If you prefer not to list individual instance IDs, you can instead send commands to a fleet of instances using the Targets parameter, which accepts EC2 tags. For more information about how to use Targets, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html\">Sending Commands to a Fleet</a>.</p>"]
     #[serde(rename="InstanceIds")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub instance_ids: Option<InstanceIdList>,
-    #[doc="<p>(Optional) The maximum number of instances that are allowed to execute the command at the same time. You can specify a number such as 10 or a percentage such as 10%. The default value is 50. For more information about how to use MaxConcurrency, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html\">Executing a Command Using Systems Manager Run Command</a>.</p>"]
+    #[doc="<p>(Optional) The maximum number of instances that are allowed to execute the command at the same time. You can specify a number such as 10 or a percentage such as 10%. The default value is 50. For more information about how to use MaxConcurrency, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-velocity.html\">Using Concurrency Controls</a>.</p>"]
     #[serde(rename="MaxConcurrency")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub max_concurrency: Option<MaxConcurrency>,
-    #[doc="<p>The maximum number of errors allowed without the command failing. When the command fails one more time beyond the value of MaxErrors, the systems stops sending the command to additional targets. You can specify a number like 10 or a percentage like 10%. The default value is 50. For more information about how to use MaxErrors, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html\">Executing a Command Using Systems Manager Run Command</a>.</p>"]
+    #[doc="<p>The maximum number of errors allowed without the command failing. When the command fails one more time beyond the value of MaxErrors, the systems stops sending the command to additional targets. You can specify a number like 10 or a percentage like 10%. The default value is 50. For more information about how to use MaxErrors, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-maxerrors.html\">Using Error Controls</a>.</p>"]
     #[serde(rename="MaxErrors")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub max_errors: Option<MaxErrors>,
@@ -3929,7 +4044,7 @@ pub struct SendCommandRequest {
     #[serde(rename="OutputS3KeyPrefix")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub output_s3_key_prefix: Option<S3KeyPrefix>,
-    #[doc="<p>(Optional) The region where the Amazon Simple Storage Service (Amazon S3) output bucket is located. The default value is the region where Run Command is being called.</p>"]
+    #[doc="<p>(Deprecated) You can no longer specify this parameter. The system ignores it. Instead, Systems Manager automatically determines the Amazon S3 bucket region.</p>"]
     #[serde(rename="OutputS3Region")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub output_s3_region: Option<S3Region>,
@@ -3941,7 +4056,7 @@ pub struct SendCommandRequest {
     #[serde(rename="ServiceRoleArn")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub service_role_arn: Option<ServiceRole>,
-    #[doc="<p>(Optional) An array of search criteria that targets instances using a Key,Value combination that you specify. Targets is required if you don't provide one or more instance IDs in the call. For more information about how to use Targets, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html\">Executing a Command Using Systems Manager Run Command</a>.</p>"]
+    #[doc="<p>(Optional) An array of search criteria that targets instances using a Key,Value combination that you specify. Targets is required if you don't provide one or more instance IDs in the call. For more information about how to use Targets, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html\">Sending Commands to a Fleet</a>.</p>"]
     #[serde(rename="Targets")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub targets: Option<Targets>,
@@ -4067,14 +4182,14 @@ pub struct Tag {
 pub type TagKey = String;
 pub type TagList = Vec<Tag>;
 pub type TagValue = String;
-#[doc="<p>An array of search criteria that targets instances using a Key,Value combination that you specify. Targets is required if you don't provide one or more instance IDs in the call.</p>"]
+#[doc="<p>An array of search criteria that targets instances using a Key,Value combination that you specify. <code>Targets</code> is required if you don't provide one or more instance IDs in the call.</p> <p/>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Target {
-    #[doc="<p>User-defined criteria for sending commands that target instances that meet the criteria. Key can be tag:&lt;Amazon EC2 tag&gt; or InstanceIds. For more information about how to send commands that target instances using Key,Value parameters, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html\">Executing a Command Using Systems Manager Run Command</a>.</p>"]
+    #[doc="<p>User-defined criteria for sending commands that target instances that meet the criteria. Key can be tag:&lt;Amazon EC2 tag&gt; or InstanceIds. For more information about how to send commands that target instances using Key,Value parameters, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html\">Executing a Command Using Systems Manager Run Command</a>.</p>"]
     #[serde(rename="Key")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub key: Option<TargetKey>,
-    #[doc="<p>User-defined criteria that maps to Key. For example, if you specified tag:ServerRole, you could specify value:WebServer to execute a command on instances that include Amazon EC2 tags of ServerRole,WebServer. For more information about how to send commands that target instances using Key,Value parameters, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html\">Executing a Command Using Systems Manager Run Command</a>.</p>"]
+    #[doc="<p>User-defined criteria that maps to Key. For example, if you specified tag:ServerRole, you could specify value:WebServer to execute a command on instances that include Amazon EC2 tags of ServerRole,WebServer. For more information about how to send commands that target instances using Key,Value parameters, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html\">Executing a Command Using Systems Manager Run Command</a>.</p>"]
     #[serde(rename="Values")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub values: Option<TargetValues>,
@@ -5550,6 +5665,80 @@ impl Error for DeleteParameterError {
             DeleteParameterError::Credentials(ref err) => err.description(),
             DeleteParameterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             DeleteParameterError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteParameters
+#[derive(Debug, PartialEq)]
+pub enum DeleteParametersError {
+    ///<p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl DeleteParametersError {
+    pub fn from_body(body: &str) -> DeleteParametersError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalServerError" => {
+                        DeleteParametersError::InternalServerError(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteParametersError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteParametersError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteParametersError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteParametersError {
+    fn from(err: serde_json::error::Error) -> DeleteParametersError {
+        DeleteParametersError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteParametersError {
+    fn from(err: CredentialsError) -> DeleteParametersError {
+        DeleteParametersError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteParametersError {
+    fn from(err: HttpDispatchError) -> DeleteParametersError {
+        DeleteParametersError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for DeleteParametersError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteParametersError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteParametersError::InternalServerError(ref cause) => cause,
+            DeleteParametersError::Validation(ref cause) => cause,
+            DeleteParametersError::Credentials(ref err) => err.description(),
+            DeleteParametersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DeleteParametersError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -7510,6 +7699,10 @@ impl Error for DescribeMaintenanceWindowsError {
 pub enum DescribeParametersError {
     ///<p>An error occurred on the server side.</p>
     InternalServerError(String),
+    ///<p>The specified key is not valid.</p>
+    InvalidFilterKey(String),
+    ///<p>The specified filter option is not valid. Valid options are Equals and BeginsWith. For Path filter, valid options are Recursive and OneLevel.</p>
+    InvalidFilterOption(String),
     ///<p>The filter value is not valid. Verify the value and try again.</p>
     InvalidFilterValue(String),
     ///<p>The specified token is not valid.</p>
@@ -7540,6 +7733,12 @@ impl DescribeParametersError {
                 match *error_type {
                     "InternalServerError" => {
                         DescribeParametersError::InternalServerError(String::from(error_message))
+                    }
+                    "InvalidFilterKey" => {
+                        DescribeParametersError::InvalidFilterKey(String::from(error_message))
+                    }
+                    "InvalidFilterOption" => {
+                        DescribeParametersError::InvalidFilterOption(String::from(error_message))
                     }
                     "InvalidFilterValue" => {
                         DescribeParametersError::InvalidFilterValue(String::from(error_message))
@@ -7582,6 +7781,8 @@ impl Error for DescribeParametersError {
     fn description(&self) -> &str {
         match *self {
             DescribeParametersError::InternalServerError(ref cause) => cause,
+            DescribeParametersError::InvalidFilterKey(ref cause) => cause,
+            DescribeParametersError::InvalidFilterOption(ref cause) => cause,
             DescribeParametersError::InvalidFilterValue(ref cause) => cause,
             DescribeParametersError::InvalidNextToken(ref cause) => cause,
             DescribeParametersError::Validation(ref cause) => cause,
@@ -8659,11 +8860,97 @@ impl Error for GetMaintenanceWindowExecutionTaskError {
         }
     }
 }
+/// Errors returned by GetParameter
+#[derive(Debug, PartialEq)]
+pub enum GetParameterError {
+    ///<p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    ///<p>The query key ID is not valid.</p>
+    InvalidKeyId(String),
+    ///<p>The parameter could not be found. Verify the name and try again.</p>
+    ParameterNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl GetParameterError {
+    pub fn from_body(body: &str) -> GetParameterError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalServerError" => {
+                        GetParameterError::InternalServerError(String::from(error_message))
+                    }
+                    "InvalidKeyId" => GetParameterError::InvalidKeyId(String::from(error_message)),
+                    "ParameterNotFound" => {
+                        GetParameterError::ParameterNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetParameterError::Validation(error_message.to_string())
+                    }
+                    _ => GetParameterError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetParameterError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetParameterError {
+    fn from(err: serde_json::error::Error) -> GetParameterError {
+        GetParameterError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetParameterError {
+    fn from(err: CredentialsError) -> GetParameterError {
+        GetParameterError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetParameterError {
+    fn from(err: HttpDispatchError) -> GetParameterError {
+        GetParameterError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for GetParameterError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetParameterError {
+    fn description(&self) -> &str {
+        match *self {
+            GetParameterError::InternalServerError(ref cause) => cause,
+            GetParameterError::InvalidKeyId(ref cause) => cause,
+            GetParameterError::ParameterNotFound(ref cause) => cause,
+            GetParameterError::Validation(ref cause) => cause,
+            GetParameterError::Credentials(ref err) => err.description(),
+            GetParameterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetParameterError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GetParameterHistory
 #[derive(Debug, PartialEq)]
 pub enum GetParameterHistoryError {
     ///<p>An error occurred on the server side.</p>
     InternalServerError(String),
+    ///<p>The query key ID is not valid.</p>
+    InvalidKeyId(String),
     ///<p>The specified token is not valid.</p>
     InvalidNextToken(String),
     ///<p>The parameter could not be found. Verify the name and try again.</p>
@@ -8694,6 +8981,9 @@ impl GetParameterHistoryError {
                 match *error_type {
                     "InternalServerError" => {
                         GetParameterHistoryError::InternalServerError(String::from(error_message))
+                    }
+                    "InvalidKeyId" => {
+                        GetParameterHistoryError::InvalidKeyId(String::from(error_message))
                     }
                     "InvalidNextToken" => {
                         GetParameterHistoryError::InvalidNextToken(String::from(error_message))
@@ -8736,6 +9026,7 @@ impl Error for GetParameterHistoryError {
     fn description(&self) -> &str {
         match *self {
             GetParameterHistoryError::InternalServerError(ref cause) => cause,
+            GetParameterHistoryError::InvalidKeyId(ref cause) => cause,
             GetParameterHistoryError::InvalidNextToken(ref cause) => cause,
             GetParameterHistoryError::ParameterNotFound(ref cause) => cause,
             GetParameterHistoryError::Validation(ref cause) => cause,
@@ -8752,6 +9043,8 @@ impl Error for GetParameterHistoryError {
 pub enum GetParametersError {
     ///<p>An error occurred on the server side.</p>
     InternalServerError(String),
+    ///<p>The query key ID is not valid.</p>
+    InvalidKeyId(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -8779,6 +9072,7 @@ impl GetParametersError {
                     "InternalServerError" => {
                         GetParametersError::InternalServerError(String::from(error_message))
                     }
+                    "InvalidKeyId" => GetParametersError::InvalidKeyId(String::from(error_message)),
                     "ValidationException" => {
                         GetParametersError::Validation(error_message.to_string())
                     }
@@ -8814,10 +9108,117 @@ impl Error for GetParametersError {
     fn description(&self) -> &str {
         match *self {
             GetParametersError::InternalServerError(ref cause) => cause,
+            GetParametersError::InvalidKeyId(ref cause) => cause,
             GetParametersError::Validation(ref cause) => cause,
             GetParametersError::Credentials(ref err) => err.description(),
             GetParametersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             GetParametersError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetParametersByPath
+#[derive(Debug, PartialEq)]
+pub enum GetParametersByPathError {
+    ///<p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    ///<p>The specified key is not valid.</p>
+    InvalidFilterKey(String),
+    ///<p>The specified filter option is not valid. Valid options are Equals and BeginsWith. For Path filter, valid options are Recursive and OneLevel.</p>
+    InvalidFilterOption(String),
+    ///<p>The filter value is not valid. Verify the value and try again.</p>
+    InvalidFilterValue(String),
+    ///<p>The query key ID is not valid.</p>
+    InvalidKeyId(String),
+    ///<p>The specified token is not valid.</p>
+    InvalidNextToken(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+
+impl GetParametersByPathError {
+    pub fn from_body(body: &str) -> GetParametersByPathError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalServerError" => {
+                        GetParametersByPathError::InternalServerError(String::from(error_message))
+                    }
+                    "InvalidFilterKey" => {
+                        GetParametersByPathError::InvalidFilterKey(String::from(error_message))
+                    }
+                    "InvalidFilterOption" => {
+                        GetParametersByPathError::InvalidFilterOption(String::from(error_message))
+                    }
+                    "InvalidFilterValue" => {
+                        GetParametersByPathError::InvalidFilterValue(String::from(error_message))
+                    }
+                    "InvalidKeyId" => {
+                        GetParametersByPathError::InvalidKeyId(String::from(error_message))
+                    }
+                    "InvalidNextToken" => {
+                        GetParametersByPathError::InvalidNextToken(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetParametersByPathError::Validation(error_message.to_string())
+                    }
+                    _ => GetParametersByPathError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetParametersByPathError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetParametersByPathError {
+    fn from(err: serde_json::error::Error) -> GetParametersByPathError {
+        GetParametersByPathError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetParametersByPathError {
+    fn from(err: CredentialsError) -> GetParametersByPathError {
+        GetParametersByPathError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetParametersByPathError {
+    fn from(err: HttpDispatchError) -> GetParametersByPathError {
+        GetParametersByPathError::HttpDispatch(err)
+    }
+}
+impl fmt::Display for GetParametersByPathError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetParametersByPathError {
+    fn description(&self) -> &str {
+        match *self {
+            GetParametersByPathError::InternalServerError(ref cause) => cause,
+            GetParametersByPathError::InvalidFilterKey(ref cause) => cause,
+            GetParametersByPathError::InvalidFilterOption(ref cause) => cause,
+            GetParametersByPathError::InvalidFilterValue(ref cause) => cause,
+            GetParametersByPathError::InvalidKeyId(ref cause) => cause,
+            GetParametersByPathError::InvalidNextToken(ref cause) => cause,
+            GetParametersByPathError::Validation(ref cause) => cause,
+            GetParametersByPathError::Credentials(ref err) => err.description(),
+            GetParametersByPathError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetParametersByPathError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -9832,14 +10233,22 @@ impl Error for PutInventoryError {
 /// Errors returned by PutParameter
 #[derive(Debug, PartialEq)]
 pub enum PutParameterError {
+    ///<p>A hierarchy can have a maximum of five levels. For example:</p> <p>/Finance/Prod/IAD/OS/WinServ2016/license15</p> <p>For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working-path.html">Develop a Parameter Hierarchy</a>. </p>
+    HierarchyLevelLimitExceeded(String),
+    ///<p>Parameter Store does not support changing a parameter type in a hierarchy. For example, you can't change a parameter from a String type to a SecureString type. You must create a new, unique parameter.</p>
+    HierarchyTypeMismatch(String),
     ///<p>An error occurred on the server side.</p>
     InternalServerError(String),
+    ///<p>The request does not meet the regular expression requirement.</p>
+    InvalidAllowedPattern(String),
     ///<p>The query key ID is not valid.</p>
     InvalidKeyId(String),
     ///<p>The parameter already exists. You can't create duplicate parameters.</p>
     ParameterAlreadyExists(String),
     ///<p>You have exceeded the number of parameters for this AWS account. Delete one or more parameters and try again.</p>
     ParameterLimitExceeded(String),
+    ///<p>The parameter name is not valid.</p>
+    ParameterPatternMismatch(String),
     ///<p>There are concurrent updates for a resource that supports one update at a time.</p>
     TooManyUpdates(String),
     ///<p>The parameter type is not supported.</p>
@@ -9868,8 +10277,17 @@ impl PutParameterError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
+                    "HierarchyLevelLimitExceededException" => {
+                        PutParameterError::HierarchyLevelLimitExceeded(String::from(error_message))
+                    }
+                    "HierarchyTypeMismatchException" => {
+                        PutParameterError::HierarchyTypeMismatch(String::from(error_message))
+                    }
                     "InternalServerError" => {
                         PutParameterError::InternalServerError(String::from(error_message))
+                    }
+                    "InvalidAllowedPatternException" => {
+                        PutParameterError::InvalidAllowedPattern(String::from(error_message))
                     }
                     "InvalidKeyId" => PutParameterError::InvalidKeyId(String::from(error_message)),
                     "ParameterAlreadyExists" => {
@@ -9877,6 +10295,9 @@ impl PutParameterError {
                     }
                     "ParameterLimitExceeded" => {
                         PutParameterError::ParameterLimitExceeded(String::from(error_message))
+                    }
+                    "ParameterPatternMismatchException" => {
+                        PutParameterError::ParameterPatternMismatch(String::from(error_message))
                     }
                     "TooManyUpdates" => {
                         PutParameterError::TooManyUpdates(String::from(error_message))
@@ -9918,10 +10339,14 @@ impl fmt::Display for PutParameterError {
 impl Error for PutParameterError {
     fn description(&self) -> &str {
         match *self {
+            PutParameterError::HierarchyLevelLimitExceeded(ref cause) => cause,
+            PutParameterError::HierarchyTypeMismatch(ref cause) => cause,
             PutParameterError::InternalServerError(ref cause) => cause,
+            PutParameterError::InvalidAllowedPattern(ref cause) => cause,
             PutParameterError::InvalidKeyId(ref cause) => cause,
             PutParameterError::ParameterAlreadyExists(ref cause) => cause,
             PutParameterError::ParameterLimitExceeded(ref cause) => cause,
+            PutParameterError::ParameterPatternMismatch(ref cause) => cause,
             PutParameterError::TooManyUpdates(ref cause) => cause,
             PutParameterError::UnsupportedParameterType(ref cause) => cause,
             PutParameterError::Validation(ref cause) => cause,
@@ -11413,6 +11838,12 @@ pub trait Ssm {
                         -> Result<DeleteParameterResult, DeleteParameterError>;
 
 
+    #[doc="<p>Delete a list of parameters.</p>"]
+    fn delete_parameters(&self,
+                         input: &DeleteParametersRequest)
+                         -> Result<DeleteParametersResult, DeleteParametersError>;
+
+
     #[doc="<p>Deletes a patch baseline.</p>"]
     fn delete_patch_baseline(&self,
                              input: &DeletePatchBaselineRequest)
@@ -11650,6 +12081,12 @@ pub trait Ssm {
          -> Result<GetMaintenanceWindowExecutionTaskResult, GetMaintenanceWindowExecutionTaskError>;
 
 
+    #[doc="<p>Get information about a parameter by using the parameter name. </p>"]
+    fn get_parameter(&self,
+                     input: &GetParameterRequest)
+                     -> Result<GetParameterResult, GetParameterError>;
+
+
     #[doc="<p>Query a list of all parameters used by the AWS account.</p>"]
     fn get_parameter_history(&self,
                              input: &GetParameterHistoryRequest)
@@ -11660,6 +12097,12 @@ pub trait Ssm {
     fn get_parameters(&self,
                       input: &GetParametersRequest)
                       -> Result<GetParametersResult, GetParametersError>;
+
+
+    #[doc="<p>Retrieve parameters in a specific hierarchy. For more information, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working-path.html\">Using Parameter Hierarchies</a>. </p>"]
+    fn get_parameters_by_path(&self,
+                              input: &GetParametersByPathRequest)
+                              -> Result<GetParametersByPathResult, GetParametersByPathError>;
 
 
     #[doc="<p>Retrieves information about a patch baseline.</p>"]
@@ -11731,7 +12174,7 @@ pub trait Ssm {
                      -> Result<PutInventoryResult, PutInventoryError>;
 
 
-    #[doc="<p>Add one or more paramaters to the system.</p>"]
+    #[doc="<p>Add one or more parameters to the system.</p>"]
     fn put_parameter(&self,
                      input: &PutParameterRequest)
                      -> Result<PutParameterResult, PutParameterError>;
@@ -11774,7 +12217,7 @@ pub trait Ssm {
          -> Result<RemoveTagsFromResourceResult, RemoveTagsFromResourceError>;
 
 
-    #[doc="<p>Executes commands on one or more remote instances.</p>"]
+    #[doc="<p>Executes commands on one or more managed instances.</p>"]
     fn send_command(&self,
                     input: &SendCommandRequest)
                     -> Result<SendCommandResult, SendCommandError>;
@@ -12208,6 +12651,33 @@ impl<P, D> Ssm for SsmClient<P, D>
             _ => {
                 Err(DeleteParameterError::from_body(String::from_utf8_lossy(&response.body)
                                                         .as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Delete a list of parameters.</p>"]
+    fn delete_parameters(&self,
+                         input: &DeleteParametersRequest)
+                         -> Result<DeleteParametersResult, DeleteParametersError> {
+        let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonSSM.DeleteParameters");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                            Ok(serde_json::from_str::<DeleteParametersResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                        }
+            _ => {
+                Err(DeleteParametersError::from_body(String::from_utf8_lossy(&response.body)
+                                                         .as_ref()))
             }
         }
     }
@@ -13180,6 +13650,32 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
     }
 
 
+    #[doc="<p>Get information about a parameter by using the parameter name. </p>"]
+    fn get_parameter(&self,
+                     input: &GetParameterRequest)
+                     -> Result<GetParameterResult, GetParameterError> {
+        let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonSSM.GetParameter");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                            Ok(serde_json::from_str::<GetParameterResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                        }
+            _ => {
+                Err(GetParameterError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+            }
+        }
+    }
+
+
     #[doc="<p>Query a list of all parameters used by the AWS account.</p>"]
     fn get_parameter_history(&self,
                              input: &GetParameterHistoryRequest)
@@ -13228,6 +13724,33 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
                         }
             _ => {
                 Err(GetParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+            }
+        }
+    }
+
+
+    #[doc="<p>Retrieve parameters in a specific hierarchy. For more information, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working-path.html\">Using Parameter Hierarchies</a>. </p>"]
+    fn get_parameters_by_path(&self,
+                              input: &GetParametersByPathRequest)
+                              -> Result<GetParametersByPathResult, GetParametersByPathError> {
+        let mut request = SignedRequest::new("POST", "ssm", self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonSSM.GetParametersByPath");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign(&try!(self.credentials_provider.credentials()));
+
+        let response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                            Ok(serde_json::from_str::<GetParametersByPathResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
+                        }
+            _ => {
+                Err(GetParametersByPathError::from_body(String::from_utf8_lossy(&response.body)
+                                                            .as_ref()))
             }
         }
     }
@@ -13524,7 +14047,7 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
     }
 
 
-    #[doc="<p>Add one or more paramaters to the system.</p>"]
+    #[doc="<p>Add one or more parameters to the system.</p>"]
     fn put_parameter(&self,
                      input: &PutParameterRequest)
                      -> Result<PutParameterResult, PutParameterError> {
@@ -13683,7 +14206,7 @@ fn get_deployable_patch_snapshot_for_instance(&self, input: &GetDeployablePatchS
     }
 
 
-    #[doc="<p>Executes commands on one or more remote instances.</p>"]
+    #[doc="<p>Executes commands on one or more managed instances.</p>"]
     fn send_command(&self,
                     input: &SendCommandRequest)
                     -> Result<SendCommandResult, SendCommandError> {

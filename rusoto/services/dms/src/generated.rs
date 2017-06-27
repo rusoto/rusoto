@@ -1119,6 +1119,10 @@ pub struct ImportCertificateMessage {
                             default,
                         )]
     pub certificate_wallet: Option<CertificateWallet>,
+    #[doc="<p>The tags associated with the certificate.</p>"]
+    #[serde(rename="Tags")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub tags: Option<TagList>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -1892,6 +1896,14 @@ pub struct TableStatistics {
     #[serde(rename="Deletes")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub deletes: Option<Long>,
+    #[doc="<p>The number of rows that failed conditional checks during the Full Load operation (valid only for DynamoDB as a target migrations).</p>"]
+    #[serde(rename="FullLoadCondtnlChkFailedRows")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub full_load_condtnl_chk_failed_rows: Option<Long>,
+    #[doc="<p>The number of rows that failed to load during the Full Load operation (valid only for DynamoDB as a target migrations).</p>"]
+    #[serde(rename="FullLoadErrorRows")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub full_load_error_rows: Option<Long>,
     #[doc="<p>The number of rows added during the Full Load operation.</p>"]
     #[serde(rename="FullLoadRows")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -2464,6 +2476,8 @@ impl Error for CreateReplicationSubnetGroupError {
 /// Errors returned by CreateReplicationTask
 #[derive(Debug, PartialEq)]
 pub enum CreateReplicationTaskError {
+    ///<p>AWS DMS was denied access to the endpoint.</p>
+    AccessDeniedFault(String),
     ///<p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
     ///<p>AWS DMS cannot access the KMS key.</p>
@@ -2498,6 +2512,9 @@ impl CreateReplicationTaskError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
+                    "AccessDeniedFault" => {
+                        CreateReplicationTaskError::AccessDeniedFault(String::from(error_message))
+                    }
                     "InvalidResourceStateFault" => CreateReplicationTaskError::InvalidResourceStateFault(String::from(error_message)),
                     "KMSKeyNotAccessibleFault" => CreateReplicationTaskError::KMSKeyNotAccessibleFault(String::from(error_message)),
                     "ResourceAlreadyExistsFault" => CreateReplicationTaskError::ResourceAlreadyExistsFault(String::from(error_message)),
@@ -2537,6 +2554,7 @@ impl fmt::Display for CreateReplicationTaskError {
 impl Error for CreateReplicationTaskError {
     fn description(&self) -> &str {
         match *self {
+            CreateReplicationTaskError::AccessDeniedFault(ref cause) => cause,
             CreateReplicationTaskError::InvalidResourceStateFault(ref cause) => cause,
             CreateReplicationTaskError::KMSKeyNotAccessibleFault(ref cause) => cause,
             CreateReplicationTaskError::ResourceAlreadyExistsFault(ref cause) => cause,

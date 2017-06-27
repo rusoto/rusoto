@@ -1896,8 +1896,12 @@ pub struct CustomOriginConfig {
     pub http_port: Integer,
     #[doc="<p>The HTTPS port the custom origin listens on.</p>"]
     pub https_port: Integer,
+    #[doc="<p>You can create a custom keep-alive timeout. All timeout units are in seconds. The default keep-alive timeout is 5 seconds, but you can configure custom timeout lengths using the CloudFront API. The minimum timeout length is 1 second; the maximum is 60 seconds.</p> <p>If you need to increase the maximum time limit, contact the <a href=\"https://console.aws.amazon.com/support/home#/\">AWS Support Center</a>.</p>"]
+    pub origin_keepalive_timeout: Option<Integer>,
     #[doc="<p>The origin protocol policy to apply to your origin.</p>"]
     pub origin_protocol_policy: OriginProtocolPolicy,
+    #[doc="<p>You can create a custom origin read timeout. All timeout units are in seconds. The default origin read timeout is 30 seconds, but you can configure custom timeout lengths using the CloudFront API. The minimum timeout length is 4 seconds; the maximum is 60 seconds.</p> <p>If you need to increase the maximum time limit, contact the <a href=\"https://console.aws.amazon.com/support/home#/\">AWS Support Center</a>.</p>"]
+    pub origin_read_timeout: Option<Integer>,
     #[doc="<p>The SSL/TLS protocols that you want CloudFront to use when communicating with your origin over HTTPS.</p>"]
     pub origin_ssl_protocols: Option<OriginSslProtocols>,
 }
@@ -1932,10 +1936,20 @@ impl CustomOriginConfigDeserializer {
                             obj.https_port = try!(IntegerDeserializer::deserialize("HTTPSPort",
                                                                                    stack));
                         }
+                        "OriginKeepaliveTimeout" => {
+                            obj.origin_keepalive_timeout =
+                                Some(try!(IntegerDeserializer::deserialize("OriginKeepaliveTimeout",
+                                                                           stack)));
+                        }
                         "OriginProtocolPolicy" => {
                             obj.origin_protocol_policy =
                                 try!(OriginProtocolPolicyDeserializer::deserialize("OriginProtocolPolicy",
                                                                                    stack));
+                        }
+                        "OriginReadTimeout" => {
+                            obj.origin_read_timeout =
+                                Some(try!(IntegerDeserializer::deserialize("OriginReadTimeout",
+                                                                           stack)));
                         }
                         "OriginSslProtocols" => {
                             obj.origin_ssl_protocols =
@@ -1966,8 +1980,16 @@ impl CustomOriginConfigSerializer {
         let mut serialized = format!("<{name}>", name = name);
         serialized += &format!("<HTTPPort>{value}</HTTPPort>", value = obj.http_port);
         serialized += &format!("<HTTPSPort>{value}</HTTPSPort>", value = obj.https_port);
+        if let Some(ref value) = obj.origin_keepalive_timeout {
+            serialized += &format!("<OriginKeepaliveTimeout>{value}</OriginKeepaliveTimeout>",
+                    value = value);
+        }
         serialized += &format!("<OriginProtocolPolicy>{value}</OriginProtocolPolicy>",
                 value = obj.origin_protocol_policy);
+        if let Some(ref value) = obj.origin_read_timeout {
+            serialized += &format!("<OriginReadTimeout>{value}</OriginReadTimeout>",
+                    value = value);
+        }
         if let Some(ref value) = obj.origin_ssl_protocols {
             serialized += &OriginSslProtocolsSerializer::serialize("OriginSslProtocols", value);
         }
@@ -2259,7 +2281,7 @@ pub struct DistributionConfig {
     pub default_cache_behavior: DefaultCacheBehavior,
     #[doc="<p>The object that you want CloudFront to request from your origin (for example, <code>index.html</code>) when a viewer requests the root URL for your distribution (<code>http://www.example.com</code>) instead of an object in your distribution (<code>http://www.example.com/product-description.html</code>). Specifying a default root object avoids exposing the contents of your distribution.</p> <p>Specify only the object name, for example, <code>index.html</code>. Do not add a <code>/</code> before the object name.</p> <p>If you don't want to specify a default root object when you create a distribution, include an empty <code>DefaultRootObject</code> element.</p> <p>To delete the default root object from an existing distribution, update the distribution configuration and include an empty <code>DefaultRootObject</code> element.</p> <p>To replace the default root object, update the distribution configuration and specify the new object.</p> <p>For more information about the default root object, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DefaultRootObject.html\">Creating a Default Root Object</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
     pub default_root_object: Option<String>,
-    #[doc="<p>Specifies whether you want CloudFront to save access logs to an Amazon S3 bucket.</p> <p>If you do not want to enable logging when you create a distribution, or if you want to disable logging for an existing distribution, specify <code>false</code> for <code>Enabled</code>, and specify empty <code>Bucket</code> and <code>Prefix</code> elements.</p> <p>If you specify <code>false</code> for <code>Enabled</code> but you specify values for <code>Bucket</code> and <code>Prefix</code>, the values are automatically deleted.</p>"]
+    #[doc="<p>From this field, you can enable or disable the selected distribution.</p> <p>If you specify <code>false</code> for <code>Enabled</code> but you specify values for <code>Bucket</code> and <code>Prefix</code>, the values are automatically deleted.</p>"]
     pub enabled: Boolean,
     #[doc="<p>(Optional) Specify the maximum HTTP version that you want viewers to use to communicate with CloudFront. The default value for new web distributions is http2. Viewers that don't support HTTP/2 automatically use an earlier HTTP version.</p> <p>For viewers and CloudFront to use HTTP/2, viewers must support TLS 1.2 or later, and must support Server Name Identification (SNI).</p> <p>In general, configuring CloudFront to communicate with viewers using HTTP/2 reduces latency. You can improve performance by optimizing for HTTP/2. For more information, do an Internet search for \"http/2 optimization.\" </p>"]
     pub http_version: Option<HttpVersion>,
@@ -5672,7 +5694,7 @@ impl S3OriginSerializer {
 #[doc="<p>A complex type that contains information about the Amazon S3 origin. If the origin is a custom origin, use the <code>CustomOriginConfig</code> element instead.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct S3OriginConfig {
-    #[doc="<p>The CloudFront origin access identity to associate with the origin. Use an origin access identity to configure the origin so that viewers can <i>only</i> access objects in an Amazon S3 bucket through CloudFront. The format of the value is:</p> <p>origin-access-identity/CloudFront/<i>ID-of-origin-access-identity</i> </p> <p>where <code> <i>ID-of-origin-access-identity</i> </code> is the value that CloudFront returned in the <code>ID</code> element when you created the origin access identity.</p> <p>If you want viewers to be able to access objects using either the CloudFront URL or the Amazon S3 URL, specify an empty <code>OriginAccessIdentity</code> element.</p> <p>To delete the origin access identity from an existing distribution, update the distribution configuration and include an empty <code>OriginAccessIdentity</code> element.</p> <p>To replace the origin access identity, update the distribution configuration and specify the new origin access identity.</p> <p>For more information about the origin access identity, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html\">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
+    #[doc="<p>The CloudFront origin access identity to associate with the origin. Use an origin access identity to configure the origin so that viewers can <i>only</i> access objects in an Amazon S3 bucket through CloudFront. The format of the value is:</p> <p>origin-access-identity/cloudfront/<i>ID-of-origin-access-identity</i> </p> <p>where <code> <i>ID-of-origin-access-identity</i> </code> is the value that CloudFront returned in the <code>ID</code> element when you created the origin access identity.</p> <p>If you want viewers to be able to access objects using either the CloudFront URL or the Amazon S3 URL, specify an empty <code>OriginAccessIdentity</code> element.</p> <p>To delete the origin access identity from an existing distribution, update the distribution configuration and include an empty <code>OriginAccessIdentity</code> element.</p> <p>To replace the origin access identity, update the distribution configuration and specify the new origin access identity.</p> <p>For more information about the origin access identity, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html\">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
     pub origin_access_identity: String,
 }
 
@@ -7072,7 +7094,7 @@ pub struct ViewerCertificate {
     pub iam_certificate_id: Option<String>,
     #[doc="<p>Specify the minimum version of the SSL/TLS protocol that you want CloudFront to use for HTTPS connections between viewers and CloudFront: <code>SSLv3</code> or <code>TLSv1</code>. CloudFront serves your objects only to viewers that support SSL/TLS version that you specify and later versions. The <code>TLSv1</code> protocol is more secure, so we recommend that you specify <code>SSLv3</code> only if your users are using browsers or devices that don't support <code>TLSv1</code>. Note the following:</p> <ul> <li> <p>If you specify &lt;CloudFrontDefaultCertificate&gt;true&lt;CloudFrontDefaultCertificate&gt;, the minimum SSL protocol version is <code>TLSv1</code> and can't be changed.</p> </li> <li> <p>If you're using a custom certificate (if you specify a value for <code>ACMCertificateArn</code> or for <code>IAMCertificateId</code>) and if you're using SNI (if you specify <code>sni-only</code> for <code>SSLSupportMethod</code>), you must specify <code>TLSv1</code> for <code>MinimumProtocolVersion</code>.</p> </li> </ul>"]
     pub minimum_protocol_version: Option<MinimumProtocolVersion>,
-    #[doc="<p>If you specify a value for <code>ACMCertificateArn</code> or for <code>IAMCertificateId</code>, you must also specify how you want CloudFront to serve HTTPS requests: using a method that works for all clients or one that works for most clients:</p> <ul> <li> <p> <code>vip</code>: CloudFront uses dedicated IP addresses for your content and can respond to HTTPS requests from any viewer. However, you must request permission to use this feature, and you incur additional monthly charges.</p> </li> <li> <p> <code>sni-only</code>: CloudFront can respond to HTTPS requests from viewers that support Server Name Indication (SNI). All modern browsers support SNI, but some browsers still in use don't support SNI. If some of your users' browsers don't support SNI, we recommend that you do one of the following:</p> <ul> <li> <p>Use the <code>vip</code> option (dedicated IP addresses) instead of <code>sni-only</code>.</p> </li> <li> <p>Use the CloudFront SSL/TLS certificate instead of a custom certificate. This requires that you use the CloudFront domain name of your distribution in the URLs for your objects, for example, <code>https://d111111abcdef8.cloudfront.net/logo.png</code>.</p> </li> <li> <p>If you can control which browser your users use, upgrade the browser to one that supports SNI.</p> </li> <li> <p>Use HTTP instead of HTTPS.</p> </li> </ul> </li> </ul> <p>Do not specify a value for <code>SSLSupportMethod</code> if you specified <code>&lt;CloudFrontDefaultCertificate&gt;true&lt;CloudFrontDefaultCertificate&gt;</code>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html#CNAMEsAndHTTPS.html\">Using Alternate Domain Names and HTTPS</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
+    #[doc="<p>If you specify a value for <code>ACMCertificateArn</code> or for <code>IAMCertificateId</code>, you must also specify how you want CloudFront to serve HTTPS requests: using a method that works for all clients or one that works for most clients:</p> <ul> <li> <p> <code>vip</code>: CloudFront uses dedicated IP addresses for your content and can respond to HTTPS requests from any viewer. However, you will incur additional monthly charges.</p> </li> <li> <p> <code>sni-only</code>: CloudFront can respond to HTTPS requests from viewers that support Server Name Indication (SNI). All modern browsers support SNI, but some browsers still in use don't support SNI. If some of your users' browsers don't support SNI, we recommend that you do one of the following:</p> <ul> <li> <p>Use the <code>vip</code> option (dedicated IP addresses) instead of <code>sni-only</code>.</p> </li> <li> <p>Use the CloudFront SSL/TLS certificate instead of a custom certificate. This requires that you use the CloudFront domain name of your distribution in the URLs for your objects, for example, <code>https://d111111abcdef8.cloudfront.net/logo.png</code>.</p> </li> <li> <p>If you can control which browser your users use, upgrade the browser to one that supports SNI.</p> </li> <li> <p>Use HTTP instead of HTTPS.</p> </li> </ul> </li> </ul> <p>Do not specify a value for <code>SSLSupportMethod</code> if you specified <code>&lt;CloudFrontDefaultCertificate&gt;true&lt;CloudFrontDefaultCertificate&gt;</code>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html#CNAMEsAndHTTPS.html\">Using Alternate Domain Names and HTTPS</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
     pub ssl_support_method: Option<SSLSupportMethod>,
 }
 
@@ -7313,6 +7335,10 @@ pub enum CreateDistributionError {
     InvalidOrigin(String),
     ///<p>The origin access identity is not valid or doesn't exist.</p>
     InvalidOriginAccessIdentity(String),
+    ///
+    InvalidOriginKeepaliveTimeout(String),
+    ///
+    InvalidOriginReadTimeout(String),
     ///<p>You cannot specify SSLv3 as the minimum protocol version if you only want to support only clients that support Server Name Indication (SNI).</p>
     InvalidProtocolSettings(String),
     ///
@@ -7400,6 +7426,8 @@ impl CreateDistributionError {
                         CreateDistributionError::InvalidOrigin(String::from(parsed_error.message))
                     }
                     "InvalidOriginAccessIdentity" => CreateDistributionError::InvalidOriginAccessIdentity(String::from(parsed_error.message)),
+                    "InvalidOriginKeepaliveTimeout" => CreateDistributionError::InvalidOriginKeepaliveTimeout(String::from(parsed_error.message)),
+                    "InvalidOriginReadTimeout" => CreateDistributionError::InvalidOriginReadTimeout(String::from(parsed_error.message)),
                     "InvalidProtocolSettings" => CreateDistributionError::InvalidProtocolSettings(String::from(parsed_error.message)),
                     "InvalidQueryStringParameters" => CreateDistributionError::InvalidQueryStringParameters(String::from(parsed_error.message)),
                     "InvalidRelativePath" => CreateDistributionError::InvalidRelativePath(String::from(parsed_error.message)),
@@ -7480,6 +7508,8 @@ impl Error for CreateDistributionError {
             CreateDistributionError::InvalidMinimumProtocolVersion(ref cause) => cause,
             CreateDistributionError::InvalidOrigin(ref cause) => cause,
             CreateDistributionError::InvalidOriginAccessIdentity(ref cause) => cause,
+            CreateDistributionError::InvalidOriginKeepaliveTimeout(ref cause) => cause,
+            CreateDistributionError::InvalidOriginReadTimeout(ref cause) => cause,
             CreateDistributionError::InvalidProtocolSettings(ref cause) => cause,
             CreateDistributionError::InvalidQueryStringParameters(ref cause) => cause,
             CreateDistributionError::InvalidRelativePath(ref cause) => cause,
@@ -7545,6 +7575,10 @@ pub enum CreateDistributionWithTagsError {
     InvalidOrigin(String),
     ///<p>The origin access identity is not valid or doesn't exist.</p>
     InvalidOriginAccessIdentity(String),
+    ///
+    InvalidOriginKeepaliveTimeout(String),
+    ///
+    InvalidOriginReadTimeout(String),
     ///<p>You cannot specify SSLv3 as the minimum protocol version if you only want to support only clients that support Server Name Indication (SNI).</p>
     InvalidProtocolSettings(String),
     ///
@@ -7628,6 +7662,8 @@ impl CreateDistributionWithTagsError {
                     "InvalidMinimumProtocolVersion" => CreateDistributionWithTagsError::InvalidMinimumProtocolVersion(String::from(parsed_error.message)),
                     "InvalidOrigin" => CreateDistributionWithTagsError::InvalidOrigin(String::from(parsed_error.message)),
                     "InvalidOriginAccessIdentity" => CreateDistributionWithTagsError::InvalidOriginAccessIdentity(String::from(parsed_error.message)),
+                    "InvalidOriginKeepaliveTimeout" => CreateDistributionWithTagsError::InvalidOriginKeepaliveTimeout(String::from(parsed_error.message)),
+                    "InvalidOriginReadTimeout" => CreateDistributionWithTagsError::InvalidOriginReadTimeout(String::from(parsed_error.message)),
                     "InvalidProtocolSettings" => CreateDistributionWithTagsError::InvalidProtocolSettings(String::from(parsed_error.message)),
                     "InvalidQueryStringParameters" => CreateDistributionWithTagsError::InvalidQueryStringParameters(String::from(parsed_error.message)),
                     "InvalidRelativePath" => CreateDistributionWithTagsError::InvalidRelativePath(String::from(parsed_error.message)),
@@ -7699,6 +7735,8 @@ impl Error for CreateDistributionWithTagsError {
             CreateDistributionWithTagsError::InvalidMinimumProtocolVersion(ref cause) => cause,
             CreateDistributionWithTagsError::InvalidOrigin(ref cause) => cause,
             CreateDistributionWithTagsError::InvalidOriginAccessIdentity(ref cause) => cause,
+            CreateDistributionWithTagsError::InvalidOriginKeepaliveTimeout(ref cause) => cause,
+            CreateDistributionWithTagsError::InvalidOriginReadTimeout(ref cause) => cause,
             CreateDistributionWithTagsError::InvalidProtocolSettings(ref cause) => cause,
             CreateDistributionWithTagsError::InvalidQueryStringParameters(ref cause) => cause,
             CreateDistributionWithTagsError::InvalidRelativePath(ref cause) => cause,
@@ -9584,6 +9622,10 @@ pub enum UpdateDistributionError {
     ///<p>The origin access identity is not valid or doesn't exist.</p>
     InvalidOriginAccessIdentity(String),
     ///
+    InvalidOriginKeepaliveTimeout(String),
+    ///
+    InvalidOriginReadTimeout(String),
+    ///
     InvalidQueryStringParameters(String),
     ///<p>The relative path is too big, is not URL-encoded, or does not begin with a slash (/).</p>
     InvalidRelativePath(String),
@@ -9670,6 +9712,8 @@ impl UpdateDistributionError {
                     "InvalidLocationCode" => UpdateDistributionError::InvalidLocationCode(String::from(parsed_error.message)),
                     "InvalidMinimumProtocolVersion" => UpdateDistributionError::InvalidMinimumProtocolVersion(String::from(parsed_error.message)),
                     "InvalidOriginAccessIdentity" => UpdateDistributionError::InvalidOriginAccessIdentity(String::from(parsed_error.message)),
+                    "InvalidOriginKeepaliveTimeout" => UpdateDistributionError::InvalidOriginKeepaliveTimeout(String::from(parsed_error.message)),
+                    "InvalidOriginReadTimeout" => UpdateDistributionError::InvalidOriginReadTimeout(String::from(parsed_error.message)),
                     "InvalidQueryStringParameters" => UpdateDistributionError::InvalidQueryStringParameters(String::from(parsed_error.message)),
                     "InvalidRelativePath" => UpdateDistributionError::InvalidRelativePath(String::from(parsed_error.message)),
                     "InvalidRequiredProtocol" => UpdateDistributionError::InvalidRequiredProtocol(String::from(parsed_error.message)),
@@ -9750,6 +9794,8 @@ impl Error for UpdateDistributionError {
             UpdateDistributionError::InvalidLocationCode(ref cause) => cause,
             UpdateDistributionError::InvalidMinimumProtocolVersion(ref cause) => cause,
             UpdateDistributionError::InvalidOriginAccessIdentity(ref cause) => cause,
+            UpdateDistributionError::InvalidOriginKeepaliveTimeout(ref cause) => cause,
+            UpdateDistributionError::InvalidOriginReadTimeout(ref cause) => cause,
             UpdateDistributionError::InvalidQueryStringParameters(ref cause) => cause,
             UpdateDistributionError::InvalidRelativePath(ref cause) => cause,
             UpdateDistributionError::InvalidRequiredProtocol(ref cause) => cause,
@@ -9910,7 +9956,7 @@ pub trait CloudFront {
                    CreateCloudFrontOriginAccessIdentityError>;
 
 
-    #[doc="<p>Creates a new web distribution. Send a <code>GET</code> request to the <code>/<i>CloudFront API version</i>/distribution</code>/<code>distribution ID</code> resource.</p>"]
+    #[doc="<p>Creates a new web distribution. Send a <code>POST</code> request to the <code>/<i>CloudFront API version</i>/distribution</code>/<code>distribution ID</code> resource.</p>"]
     fn create_distribution(&self,
                            input: &CreateDistributionRequest)
                            -> Result<CreateDistributionResult, CreateDistributionError>;
@@ -10063,7 +10109,7 @@ pub trait CloudFront {
                    UpdateCloudFrontOriginAccessIdentityError>;
 
 
-    #[doc="<p>Update a distribution. </p>"]
+    #[doc="<p>Updates the configuration for a web distribution. Perform the following steps.</p> <p>For information about updating a distribution using the CloudFront console, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-creating-console.html\">Creating or Updating a Web Distribution Using the CloudFront Console </a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p> <b>To update a web distribution using the CloudFront API</b> </p> <ol> <li> <p>Submit a <a>GetDistributionConfig</a> request to get the current configuration and an <code>Etag</code> header for the distribution.</p> <note> <p>If you update the distribution again, you need to get a new <code>Etag</code> header.</p> </note> </li> <li> <p>Update the XML document that was returned in the response to your <code>GetDistributionConfig</code> request to include the desired changes. You can't change the value of <code>CallerReference</code>. If you try to change this value, CloudFront returns an <code>IllegalUpdate</code> error.</p> <important> <p>The new configuration replaces the existing configuration; the values that you specify in an <code>UpdateDistribution</code> request are not merged into the existing configuration. When you add, delete, or replace values in an element that allows multiple values (for example, <code>CNAME</code>), you must specify all of the values that you want to appear in the updated distribution. In addition, you must update the corresponding <code>Quantity</code> element.</p> </important> </li> <li> <p>Submit an <code>UpdateDistribution</code> request to update the configuration for your distribution:</p> <ul> <li> <p>In the request body, include the XML document that you updated in Step 2. The request body must include an XML document with a <code>DistributionConfig</code> element.</p> </li> <li> <p>Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GetDistributionConfig</code> request in Step 1.</p> </li> </ul> </li> <li> <p>Review the response to the <code>UpdateDistribution</code> request to confirm that the configuration was successfully updated.</p> </li> <li> <p>Optional: Submit a <a>GetDistribution</a> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> <important> <p>Beginning with the 2012-05-05 version of the CloudFront API, we made substantial changes to the format of the XML document that you include in the request body when you create or update a distribution. With previous versions of the API, we discovered that it was too easy to accidentally delete one or more values for an element that accepts multiple values, for example, CNAMEs and trusted signers. Our changes for the 2012-05-05 release are intended to prevent these accidental deletions and to notify you when there's a mismatch between the number of values you say you're specifying in the <code>Quantity</code> element and the number of values you're actually specifying.</p> </important> </li> </ol>"]
     fn update_distribution(&self,
                            input: &UpdateDistributionRequest)
                            -> Result<UpdateDistributionResult, UpdateDistributionError>;
@@ -10110,7 +10156,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
          -> Result<CreateCloudFrontOriginAccessIdentityResult,
                    CreateCloudFrontOriginAccessIdentityError> {
         let mut params = Params::new();
-        let mut request_uri = "/2016-11-25/origin-access-identity/cloudfront".to_string();
+        let mut request_uri = "/2017-03-25/origin-access-identity/cloudfront".to_string();
 
 
 
@@ -10161,13 +10207,13 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         }
     }
 
-    #[doc="<p>Creates a new web distribution. Send a <code>GET</code> request to the <code>/<i>CloudFront API version</i>/distribution</code>/<code>distribution ID</code> resource.</p>"]
+    #[doc="<p>Creates a new web distribution. Send a <code>POST</code> request to the <code>/<i>CloudFront API version</i>/distribution</code>/<code>distribution ID</code> resource.</p>"]
     #[allow(unused_variables, warnings)]
     fn create_distribution(&self,
                            input: &CreateDistributionRequest)
                            -> Result<CreateDistributionResult, CreateDistributionError> {
         let mut params = Params::new();
-        let mut request_uri = "/2016-11-25/distribution".to_string();
+        let mut request_uri = "/2017-03-25/distribution".to_string();
 
 
 
@@ -10232,7 +10278,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
          input: &CreateDistributionWithTagsRequest)
          -> Result<CreateDistributionWithTagsResult, CreateDistributionWithTagsError> {
         let mut params = Params::new();
-        let mut request_uri = "/2016-11-25/distribution".to_string();
+        let mut request_uri = "/2017-03-25/distribution".to_string();
 
         params.put_key("WithTags");
 
@@ -10289,7 +10335,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
                            input: &CreateInvalidationRequest)
                            -> Result<CreateInvalidationResult, CreateInvalidationError> {
         let mut params = Params::new();
-        let mut request_uri = "/2016-11-25/distribution/{DistributionId}/invalidation".to_string();
+        let mut request_uri = "/2017-03-25/distribution/{DistributionId}/invalidation".to_string();
 
 
         request_uri = request_uri.replace("{DistributionId}", &input.distribution_id.to_string());
@@ -10350,7 +10396,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
          input: &CreateStreamingDistributionRequest)
          -> Result<CreateStreamingDistributionResult, CreateStreamingDistributionError> {
         let mut params = Params::new();
-        let mut request_uri = "/2016-11-25/streaming-distribution".to_string();
+        let mut request_uri = "/2017-03-25/streaming-distribution".to_string();
 
 
 
@@ -10409,7 +10455,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
          -> Result<CreateStreamingDistributionWithTagsResult,
                    CreateStreamingDistributionWithTagsError> {
         let mut params = Params::new();
-        let mut request_uri = "/2016-11-25/streaming-distribution".to_string();
+        let mut request_uri = "/2017-03-25/streaming-distribution".to_string();
 
         params.put_key("WithTags");
 
@@ -10467,7 +10513,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
          input: &DeleteCloudFrontOriginAccessIdentityRequest)
          -> Result<(), DeleteCloudFrontOriginAccessIdentityError> {
         let mut params = Params::new();
-        let mut request_uri = "/2016-11-25/origin-access-identity/cloudfront/{Id}".to_string();
+        let mut request_uri = "/2017-03-25/origin-access-identity/cloudfront/{Id}".to_string();
 
 
         request_uri = request_uri.replace("{Id}", &input.id.to_string());
@@ -10504,7 +10550,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
                            input: &DeleteDistributionRequest)
                            -> Result<(), DeleteDistributionError> {
         let mut params = Params::new();
-        let mut request_uri = "/2016-11-25/distribution/{Id}".to_string();
+        let mut request_uri = "/2017-03-25/distribution/{Id}".to_string();
 
 
         request_uri = request_uri.replace("{Id}", &input.id.to_string());
@@ -10544,7 +10590,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
                                      input: &DeleteStreamingDistributionRequest)
                                      -> Result<(), DeleteStreamingDistributionError> {
         let mut params = Params::new();
-        let mut request_uri = "/2016-11-25/streaming-distribution/{Id}".to_string();
+        let mut request_uri = "/2017-03-25/streaming-distribution/{Id}".to_string();
 
 
         request_uri = request_uri.replace("{Id}", &input.id.to_string());
@@ -10582,7 +10628,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
          input: &GetCloudFrontOriginAccessIdentityRequest)
          -> Result<GetCloudFrontOriginAccessIdentityResult, GetCloudFrontOriginAccessIdentityError> {
         let mut params = Params::new();
-        let mut request_uri = "/2016-11-25/origin-access-identity/cloudfront/{Id}".to_string();
+        let mut request_uri = "/2017-03-25/origin-access-identity/cloudfront/{Id}".to_string();
 
 
         request_uri = request_uri.replace("{Id}", &input.id.to_string());
@@ -10630,7 +10676,7 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
     #[allow(unused_variables, warnings)]
 fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOriginAccessIdentityConfigRequest) -> Result<GetCloudFrontOriginAccessIdentityConfigResult, GetCloudFrontOriginAccessIdentityConfigError>{
         let mut params = Params::new();
-        let mut request_uri = "/2016-11-25/origin-access-identity/cloudfront/{Id}/config"
+        let mut request_uri = "/2017-03-25/origin-access-identity/cloudfront/{Id}/config"
             .to_string();
 
 
@@ -10681,7 +10727,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                         input: &GetDistributionRequest)
                         -> Result<GetDistributionResult, GetDistributionError> {
         let mut params = Params::new();
-        let mut request_uri = "/2016-11-25/distribution/{Id}".to_string();
+        let mut request_uri = "/2017-03-25/distribution/{Id}".to_string();
 
 
         request_uri = request_uri.replace("{Id}", &input.id.to_string());
@@ -10736,7 +10782,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
          input: &GetDistributionConfigRequest)
          -> Result<GetDistributionConfigResult, GetDistributionConfigError> {
         let mut params = Params::new();
-        let mut request_uri = "/2016-11-25/distribution/{Id}/config".to_string();
+        let mut request_uri = "/2017-03-25/distribution/{Id}/config".to_string();
 
 
         request_uri = request_uri.replace("{Id}", &input.id.to_string());
@@ -10789,7 +10835,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                         input: &GetInvalidationRequest)
                         -> Result<GetInvalidationResult, GetInvalidationError> {
         let mut params = Params::new();
-        let mut request_uri = "/2016-11-25/distribution/{DistributionId}/invalidation/{Id}"
+        let mut request_uri = "/2017-03-25/distribution/{DistributionId}/invalidation/{Id}"
             .to_string();
 
 
@@ -10843,7 +10889,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
          input: &GetStreamingDistributionRequest)
          -> Result<GetStreamingDistributionResult, GetStreamingDistributionError> {
         let mut params = Params::new();
-        let mut request_uri = "/2016-11-25/streaming-distribution/{Id}".to_string();
+        let mut request_uri = "/2017-03-25/streaming-distribution/{Id}".to_string();
 
 
         request_uri = request_uri.replace("{Id}", &input.id.to_string());
@@ -10894,7 +10940,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
          input: &GetStreamingDistributionConfigRequest)
          -> Result<GetStreamingDistributionConfigResult, GetStreamingDistributionConfigError> {
         let mut params = Params::new();
-        let mut request_uri = "/2016-11-25/streaming-distribution/{Id}/config".to_string();
+        let mut request_uri = "/2017-03-25/streaming-distribution/{Id}/config".to_string();
 
 
         request_uri = request_uri.replace("{Id}", &input.id.to_string());
@@ -10946,7 +10992,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
          -> Result<ListCloudFrontOriginAccessIdentitiesResult,
                    ListCloudFrontOriginAccessIdentitiesError> {
         let mut params = Params::new();
-        let mut request_uri = "/2016-11-25/origin-access-identity/cloudfront".to_string();
+        let mut request_uri = "/2017-03-25/origin-access-identity/cloudfront".to_string();
 
 
 
@@ -11000,7 +11046,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                           input: &ListDistributionsRequest)
                           -> Result<ListDistributionsResult, ListDistributionsError> {
         let mut params = Params::new();
-        let mut request_uri = "/2016-11-25/distribution".to_string();
+        let mut request_uri = "/2017-03-25/distribution".to_string();
 
 
 
@@ -11060,7 +11106,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
          input: &ListDistributionsByWebACLIdRequest)
          -> Result<ListDistributionsByWebACLIdResult, ListDistributionsByWebACLIdError> {
         let mut params = Params::new();
-        let mut request_uri = "/2016-11-25/distributionsByWebACLId/{WebACLId}".to_string();
+        let mut request_uri = "/2017-03-25/distributionsByWebACLId/{WebACLId}".to_string();
 
 
         request_uri = request_uri.replace("{WebACLId}", &input.web_acl_id.to_string());
@@ -11114,7 +11160,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                           input: &ListInvalidationsRequest)
                           -> Result<ListInvalidationsResult, ListInvalidationsError> {
         let mut params = Params::new();
-        let mut request_uri = "/2016-11-25/distribution/{DistributionId}/invalidation".to_string();
+        let mut request_uri = "/2017-03-25/distribution/{DistributionId}/invalidation".to_string();
 
 
         request_uri = request_uri.replace("{DistributionId}", &input.distribution_id.to_string());
@@ -11174,7 +11220,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
          input: &ListStreamingDistributionsRequest)
          -> Result<ListStreamingDistributionsResult, ListStreamingDistributionsError> {
         let mut params = Params::new();
-        let mut request_uri = "/2016-11-25/streaming-distribution".to_string();
+        let mut request_uri = "/2017-03-25/streaming-distribution".to_string();
 
 
 
@@ -11228,7 +11274,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
                               input: &ListTagsForResourceRequest)
                               -> Result<ListTagsForResourceResult, ListTagsForResourceError> {
         let mut params = Params::new();
-        let mut request_uri = "/2016-11-25/tagging".to_string();
+        let mut request_uri = "/2017-03-25/tagging".to_string();
 
 
 
@@ -11278,7 +11324,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
     #[allow(unused_variables, warnings)]
     fn tag_resource(&self, input: &TagResourceRequest) -> Result<(), TagResourceError> {
         let mut params = Params::new();
-        let mut request_uri = "/2016-11-25/tagging".to_string();
+        let mut request_uri = "/2017-03-25/tagging".to_string();
 
         params.put("Operation", "Tag");
 
@@ -11313,7 +11359,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
     #[allow(unused_variables, warnings)]
     fn untag_resource(&self, input: &UntagResourceRequest) -> Result<(), UntagResourceError> {
         let mut params = Params::new();
-        let mut request_uri = "/2016-11-25/tagging".to_string();
+        let mut request_uri = "/2017-03-25/tagging".to_string();
 
         params.put("Operation", "Untag");
 
@@ -11354,7 +11400,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
          -> Result<UpdateCloudFrontOriginAccessIdentityResult,
                    UpdateCloudFrontOriginAccessIdentityError> {
         let mut params = Params::new();
-        let mut request_uri = "/2016-11-25/origin-access-identity/cloudfront/{Id}/config"
+        let mut request_uri = "/2017-03-25/origin-access-identity/cloudfront/{Id}/config"
             .to_string();
 
 
@@ -11405,13 +11451,13 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         }
     }
 
-    #[doc="<p>Update a distribution. </p>"]
+    #[doc="<p>Updates the configuration for a web distribution. Perform the following steps.</p> <p>For information about updating a distribution using the CloudFront console, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-creating-console.html\">Creating or Updating a Web Distribution Using the CloudFront Console </a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p> <b>To update a web distribution using the CloudFront API</b> </p> <ol> <li> <p>Submit a <a>GetDistributionConfig</a> request to get the current configuration and an <code>Etag</code> header for the distribution.</p> <note> <p>If you update the distribution again, you need to get a new <code>Etag</code> header.</p> </note> </li> <li> <p>Update the XML document that was returned in the response to your <code>GetDistributionConfig</code> request to include the desired changes. You can't change the value of <code>CallerReference</code>. If you try to change this value, CloudFront returns an <code>IllegalUpdate</code> error.</p> <important> <p>The new configuration replaces the existing configuration; the values that you specify in an <code>UpdateDistribution</code> request are not merged into the existing configuration. When you add, delete, or replace values in an element that allows multiple values (for example, <code>CNAME</code>), you must specify all of the values that you want to appear in the updated distribution. In addition, you must update the corresponding <code>Quantity</code> element.</p> </important> </li> <li> <p>Submit an <code>UpdateDistribution</code> request to update the configuration for your distribution:</p> <ul> <li> <p>In the request body, include the XML document that you updated in Step 2. The request body must include an XML document with a <code>DistributionConfig</code> element.</p> </li> <li> <p>Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GetDistributionConfig</code> request in Step 1.</p> </li> </ul> </li> <li> <p>Review the response to the <code>UpdateDistribution</code> request to confirm that the configuration was successfully updated.</p> </li> <li> <p>Optional: Submit a <a>GetDistribution</a> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> <important> <p>Beginning with the 2012-05-05 version of the CloudFront API, we made substantial changes to the format of the XML document that you include in the request body when you create or update a distribution. With previous versions of the API, we discovered that it was too easy to accidentally delete one or more values for an element that accepts multiple values, for example, CNAMEs and trusted signers. Our changes for the 2012-05-05 release are intended to prevent these accidental deletions and to notify you when there's a mismatch between the number of values you say you're specifying in the <code>Quantity</code> element and the number of values you're actually specifying.</p> </important> </li> </ol>"]
     #[allow(unused_variables, warnings)]
     fn update_distribution(&self,
                            input: &UpdateDistributionRequest)
                            -> Result<UpdateDistributionResult, UpdateDistributionError> {
         let mut params = Params::new();
-        let mut request_uri = "/2016-11-25/distribution/{Id}/config".to_string();
+        let mut request_uri = "/2017-03-25/distribution/{Id}/config".to_string();
 
 
         request_uri = request_uri.replace("{Id}", &input.id.to_string());
@@ -11475,7 +11521,7 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
          input: &UpdateStreamingDistributionRequest)
          -> Result<UpdateStreamingDistributionResult, UpdateStreamingDistributionError> {
         let mut params = Params::new();
-        let mut request_uri = "/2016-11-25/streaming-distribution/{Id}/config".to_string();
+        let mut request_uri = "/2017-03-25/streaming-distribution/{Id}/config".to_string();
 
 
         request_uri = request_uri.replace("{Id}", &input.id.to_string());

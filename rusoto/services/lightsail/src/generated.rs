@@ -272,10 +272,6 @@ pub struct CreateInstancesRequest {
     #[doc="<p>The bundle of specification information for your virtual private server (or <i>instance</i>), including the pricing plan (e.g., <code>micro_1_0</code>).</p>"]
     #[serde(rename="bundleId")]
     pub bundle_id: NonEmptyString,
-    #[doc="<p>The name for your custom image.</p>"]
-    #[serde(rename="customImageName")]
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub custom_image_name: Option<ResourceName>,
     #[doc="<p>The names to use for your new Lightsail instances. Separate multiple values using quotation marks and commas, for example: <code>[\"MyFirstInstance\",\"MySecondInstance\"]</code> </p>"]
     #[serde(rename="instanceNames")]
     pub instance_names: StringList,
@@ -882,10 +878,10 @@ pub struct GetOperationsForResourceRequest {
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GetOperationsForResourceResult {
-    #[doc="<p>Returns the number of pages of results that remain.</p>"]
-    #[serde(rename="nextPageCount")]
+    #[doc="<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"]
+    #[serde(rename="nextPageToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_page_count: Option<String>,
+    pub next_page_token: Option<String>,
     #[doc="<p>An array of key-value pairs containing information about the results of your get operations for resource request.</p>"]
     #[serde(rename="operations")]
     #[serde(skip_serializing_if="Option::is_none")]

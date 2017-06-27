@@ -409,6 +409,10 @@ pub struct Fleet {
     pub vpc_config: Option<VpcConfig>,
 }
 
+#[doc="<p>Fleet attribute.</p>"]
+pub type FleetAttribute = String;
+#[doc="<p>A list of fleet attributes.</p>"]
+pub type FleetAttributes = Vec<FleetAttribute>;
 #[doc="<p>The details of the fleet error.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct FleetError {
@@ -554,6 +558,8 @@ pub type Name = String;
 pub type PlatformType = String;
 #[doc="<p>The ARN of the resource.</p>"]
 pub type ResourceIdentifier = String;
+#[doc="<p>A list of security groups.</p>"]
+pub type SecurityGroupIdList = Vec<String>;
 #[doc="<p>Contains the parameters for a streaming session.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Session {
@@ -674,14 +680,14 @@ pub type SubnetIdList = Vec<String>;
 pub type Timestamp = f64;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateFleetRequest {
+    #[doc="<p>Fleet attributes to be deleted.</p>"]
+    #[serde(rename="AttributesToDelete")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub attributes_to_delete: Option<FleetAttributes>,
     #[doc="<p>The parameters for the capacity allocated to the fleet. </p>"]
     #[serde(rename="ComputeCapacity")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub compute_capacity: Option<ComputeCapacity>,
-    #[doc="<p>Delete the VPC association for the specified fleet.</p>"]
-    #[serde(rename="DeleteVpcConfig")]
-    #[serde(skip_serializing_if="Option::is_none")]
-    pub delete_vpc_config: Option<Boolean>,
     #[doc="<p>The description displayed to end users on the AppStream 2.0 portal.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -763,6 +769,10 @@ pub type VisibilityType = String;
 #[doc="<p>VPC configuration information.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VpcConfig {
+    #[doc="<p>Security groups associated with the fleet.</p>"]
+    #[serde(rename="SecurityGroupIds")]
+    #[serde(skip_serializing_if="Option::is_none")]
+    pub security_group_ids: Option<SecurityGroupIdList>,
     #[doc="<p>The list of subnets to which a network interface is established from the fleet instance.</p>"]
     #[serde(rename="SubnetIds")]
     #[serde(skip_serializing_if="Option::is_none")]
