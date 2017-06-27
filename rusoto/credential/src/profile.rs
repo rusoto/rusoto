@@ -172,6 +172,14 @@ fn parse_credentials_file(file_path: &Path) -> Result<HashMap<String, AwsCredent
             if !v.is_empty() {
                 token = Some(v[1].trim_matches(' ').to_string());
             }
+        } else if lower_case_line.contains("aws_security_token")
+        {
+            if token.is_none() {
+                let v: Vec<&str> = unwrapped_line.split('=').collect();
+                if !v.is_empty() {
+                    token = Some(v[1].trim_matches(' ').to_string());
+                }
+            }
         } else if lower_case_line.contains("region") ||
             lower_case_line.contains("output")
         {
