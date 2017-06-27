@@ -2,7 +2,7 @@ use std::io::Write;
 use inflector::Inflector;
 
 use ::Service;
-use codegen::botocore::Operation;
+use botocore::Operation;
 use super::{GenerateProtocol, error_type_name, IoResult, FileWriter};
 
 pub struct JsonGenerator;

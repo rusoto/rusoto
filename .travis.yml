@@ -37,7 +37,7 @@ script:
   - |
       echo "Generating service crates..." &&
       ( cd service_crategen && \
-        cargo run -- -c ./services.json -o ../rusoto/services && \
+        cargo run -- generate -c ./services.json -o ../rusoto/services && \
         cd .. )
   - echo "Running Rusoto tests" && cargo update && cargo test --lib --all -v
   - |

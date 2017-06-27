@@ -11,7 +11,7 @@ $ git submodule update --init
 Then, from the `service_crategen` directory, call:
 
 ```bash
-$ cargo run -- -c ./services.json -o ../rusoto/services
+$ cargo run -- generate -c ./services.json -o ../rusoto/services
 ```
 
 This will regenerate all services in the `rusoto/services` directory, updating them with the configuration defined in the `services.json` file and applying any code generation changes.
@@ -29,3 +29,12 @@ $ cargo test --all --lib
 ```
 
 This will tests service crates, in addition to the `rusoto_core` crate.
+
+## Checking Services (Missing & Outdated)
+The crate generator is also able to check for any missing or outdated services with the `check` command:
+
+```bash
+$ cargo run -- check -c ./services.json
+```
+
+If there are any missing or outdated services, they will be output in a formatted list along with useful information.

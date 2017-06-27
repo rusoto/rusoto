@@ -4,7 +4,7 @@ use inflector::Inflector;
 use regex::{Captures, Regex};
 use hyper::status::StatusCode;
 
-use codegen::botocore::{Member, Operation, Shape, ShapeType};
+use botocore::{Member, Operation, Shape, ShapeType};
 use ::Service;
 use super::{GenerateProtocol, error_type_name, FileWriter, IoResult, rest_response_parser};
 

@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 use std::io::Write;
 
 use ::Service;
-use codegen::botocore::{Operation};
+use botocore::Operation;
 use super::{IoResult, FileWriter, error_type_name};
 
 /// Examines the error types described in the botocore definition for an operation

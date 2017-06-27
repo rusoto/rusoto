@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use cargo;
 use config::ServiceConfig;
-use codegen::botocore::{ServiceDefinition, Value, Member, Shape, ShapeType, Operation};
+use botocore::{ServiceDefinition, Value, Member, Shape, ShapeType, Operation};
 
 #[derive(Debug)]
 pub struct Service {

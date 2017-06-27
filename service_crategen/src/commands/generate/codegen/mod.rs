@@ -4,7 +4,7 @@ use std::io::{Write, BufWriter};
 use inflector::Inflector;
 
 use ::Service;
-use codegen::botocore::{Shape, ShapeType};
+use botocore::{Shape, ShapeType};
 use self::json::JsonGenerator;
 use self::query::QueryGenerator;
 use self::rest_json::RestJsonGenerator;
@@ -12,6 +12,7 @@ use self::rest_xml::RestXmlGenerator;
 use self::error_types::{GenerateErrorTypes, JsonErrorTypes, XmlErrorTypes};
 use self::tests::generate_tests;
 use self::type_filter::filter_types;
+use util;
 
 mod error_types;
 mod json;
@@ -80,18 +81,6 @@ pub fn generate_field_name(member_name: &str) -> String {
         name + "_"
     } else {
         name
-    }
-}
-
-/// Capitalize the first character in the given string.
-/// If the input string is empty an empty string is returned.
-pub fn capitalize_first<S>(word: S) -> String
-    where S: Into<String> {
-    let s = word.into();
-    let mut chars = s.chars();
-    match chars.next() {
-        Some(c) => c.to_uppercase().collect::<String>() + chars.as_str(),
-        None => String::new(),
     }
 }
 
@@ -177,8 +166,8 @@ fn generate_map(name: &str, shape: &Shape) -> String {
     format!(
         "pub type {} = ::std::collections::HashMap<{}, {}>;",
         name,
-        capitalize_first(shape.key_type().to_string()),
-        capitalize_first(shape.value_type().to_string()),
+        util::capitalize_first(shape.key_type().to_string()),
+        util::capitalize_first(shape.value_type().to_string()),
     )
 }
 
@@ -200,7 +189,7 @@ fn generate_primitive_type(name: &str, shape_type: ShapeType, for_timestamps: &s
 
 // do any type name mutation needed to avoid collisions with Rust types
 fn mutate_type_name(type_name: &str) -> String {
-    let capitalized = capitalize_first(type_name.to_owned());
+    let capitalized = util::capitalize_first(type_name.to_owned());
 
     // some cloudfront types have underscoare that anger the lint checker
     let without_underscores = capitalized.replace("_", "");
@@ -369,11 +358,4 @@ fn generate_struct_fields(service: &Service, shape: &Shape, serde_attrs: bool) -
 fn error_type_name(name: &str) -> String {
     let type_name = mutate_type_name(name);
     format!("{}Error", type_name)
-}
-
-#[test]
-fn capitalize_first_test() {
-    assert_eq!(capitalize_first("a &str test"), "A &str test".to_owned());
-    assert_eq!(capitalize_first("a String test".to_owned()),
-               "A String test".to_owned());
 }

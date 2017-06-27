@@ -23,14 +23,14 @@ pub struct ServiceConfig {
 }
 
 impl ServiceConfig {
-    pub fn load_all<P: AsRef<Path>>(config_path: P) -> Result<Vec<(String, Self)>, io::Error> {
+    pub fn load_all<P: AsRef<Path>>(config_path: P) -> Result<BTreeMap<String, Self>, io::Error> {
         let contents = File::open(config_path).and_then(|mut f| {
             let mut contents = String::new();
             f.read_to_string(&mut contents).map(|_| contents)
         })?;
 
         let parsed: BTreeMap<String, ServiceConfig> = serde_json::from_str(&contents).expect("Unable to parse services configuration file.");
-        Ok(parsed.iter().map(|(k, v)| (k.clone(), v.clone())).collect())
+        Ok(parsed)
     }
 }
 

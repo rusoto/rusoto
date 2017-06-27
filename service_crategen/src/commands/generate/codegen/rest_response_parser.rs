@@ -1,7 +1,7 @@
 use inflector::Inflector;
 
 use ::Service;
-use codegen::botocore::{Operation, Shape, ShapeType, Member};
+use botocore::{Operation, Shape, ShapeType, Member};
 
 // Rest Response Parser
 //
