@@ -19,6 +19,10 @@ path = "../rusoto/core"
 optional = true
 path = "../rusoto/services/acm"
 
+[dependencies.rusoto_apigateway]
+optional = true
+path = "../rusoto/services/apigateway"
+
 [dependencies.rusoto_appstream]
 optional = true
 path = "../rusoto/services/appstream"
@@ -317,6 +321,7 @@ time = "0.1.37"
 [features]
 all = [
 		"acm",
+        "apigateway",
 		"appstream",
 	   	"autoscaling",
 	   	"cloudformation",
@@ -366,7 +371,7 @@ all = [
 	   	"marketplacecommerceanalytics",
 	   	"opsworks",
 		"opsworkscm",
-      "organizations",
+        "organizations",
 	   	"redshift",
 		"rekognition",
 	   	"rds",
@@ -391,6 +396,7 @@ all = [
 	   	"workspaces"
 	]
 acm = ["rusoto_acm"]
+apigateway = ["rusoto_apigateway"]
 appstream = ["rusoto_appstream"]
 autoscaling = ["rusoto_autoscaling"]
 cloudformation = ["rusoto_cloudformation"]
