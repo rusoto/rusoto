@@ -305,6 +305,12 @@
     "protocolVersion": "2016-01-14",
     "baseTypeName": "MarketplaceMetering"
   },
+  "mturk": {
+    "version": "0.27.0",
+    "coreVersion": "0.27.0",
+    "protocolVersion": "2017-01-17",
+    "baseTypeName": "MechanicalTurk"
+  },
   "opsworks": {
     "version": "0.27.0",
     "coreVersion": "0.27.0",

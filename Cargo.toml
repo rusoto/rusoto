@@ -53,6 +53,7 @@ members = [
     "rusoto/services/machinelearning",
     "rusoto/services/marketplacecommerceanalytics",
     "rusoto/services/meteringmarketplace",
+    "rusoto/services/mturk",
     "rusoto/services/opsworks",
     "rusoto/services/opsworkscm",
     "rusoto/services/organizations",
