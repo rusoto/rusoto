@@ -207,6 +207,9 @@ fn mutate_type_name(type_name: &str) -> String {
         // RDS has a conveniently named "Option" type
         "Option" => "RDSOption".to_owned(),
 
+        // API Gateway has a "StatusCode" type that collides with hyper
+        "StatusCode" => "ApiGatewayStatusCode".to_owned(),
+
         // otherwise make sure it's rust-idiomatic and capitalized
         _ => without_underscores,
     }

@@ -3,6 +3,7 @@ members = [
     "rusoto/core",
     "rusoto/credential",
     "rusoto/services/acm",
+    "rusoto/services/apigateway",
     "rusoto/services/appstream",
     "rusoto/services/autoscaling",
     "rusoto/services/cloudformation",

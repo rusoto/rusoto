@@ -6,7 +6,7 @@ use hyper::status::StatusCode;
 
 use botocore::{Member, Operation, Shape, ShapeType};
 use ::Service;
-use super::{GenerateProtocol, error_type_name, FileWriter, IoResult, rest_response_parser};
+use super::{GenerateProtocol, error_type_name, FileWriter, IoResult, rest_response_parser, generate_field_name};
 
 pub struct RestJsonGenerator;
 
@@ -246,6 +246,7 @@ fn generate_shape_member_param_strings(service: &Service, shape: &Shape) -> Vec<
 }
 
 fn generate_param_load_string(member_name: &str, member_shape: &Shape, is_required: bool) -> String {
+    let field_name = generate_field_name(member_name);
     match (member_shape.shape_type, is_required) {
         (ShapeType::List, true) => {
             format!(
@@ -253,7 +254,7 @@ fn generate_param_load_string(member_name: &str, member_shape: &Shape, is_requir
                     params.put(\"{member_name}\", item);
                 }}",
                 member_name = member_name,
-                field_name = member_name.to_snake_case())
+                field_name = field_name)
         },
         (ShapeType::List, false) => {
             format!(
@@ -263,7 +264,7 @@ fn generate_param_load_string(member_name: &str, member_shape: &Shape, is_requir
                     }}
                 }}",
                 member_name = member_name,
-                field_name = member_name.to_snake_case(),
+                field_name = field_name,
             )
         },
         (ShapeType::Map, true) => {
@@ -287,7 +288,7 @@ fn generate_param_load_string(member_name: &str, member_shape: &Shape, is_requir
             format!(
                 "params.put(\"{member_name}\", &input.{field_name});",
                 member_name = member_name,
-                field_name = member_name.to_snake_case())
+                field_name = field_name)
         },
         (_, false) => {
             format!(
@@ -295,7 +296,7 @@ fn generate_param_load_string(member_name: &str, member_shape: &Shape, is_requir
                     params.put(\"{member_name}\", x);
                 }}",
                 member_name = member_name,
-                field_name = member_name.to_snake_case(),
+                field_name = field_name,
             )
         }
     }
