@@ -211,6 +211,10 @@ path = "../rusoto/services/machinelearning"
 optional = true
 path = "../rusoto/services/marketplacecommerceanalytics"
 
+[dependencies.rusoto_mturk]
+optional = true
+path = "../rusoto/services/mturk"
+
 [dependencies.rusoto_opsworks]
 optional = true
 path = "../rusoto/services/opsworks"
@@ -369,6 +373,7 @@ all = [
 	   	"logs",
 	   	"machinelearning",
 	   	"marketplacecommerceanalytics",
+		"mturk",
 	   	"opsworks",
 		"opsworkscm",
         "organizations",
@@ -444,6 +449,7 @@ lightsail = ["rusoto_lightsail"]
 logs = ["rusoto_logs"]
 machinelearning = ["rusoto_machinelearning"]
 marketplacecommerceanalytics = ["rusoto_marketplacecommerceanalytics"]
+mturk = ["rusoto_mturk"]
 opsworks = ["rusoto_opsworks"]
 opsworkscm = ["rusoto_opsworkscm"]
 organizations = ["rusoto_organizations"]
