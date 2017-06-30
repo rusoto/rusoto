@@ -3,7 +3,7 @@ use inflector::Inflector;
 
 use ::Service;
 use botocore::{Member, Operation, Shape, ShapeType};
-use super::{xml_payload_parser, rest_response_parser, mutate_type_name};
+use super::{xml_payload_parser, rest_response_parser, mutate_type_name, get_rust_type};
 use super::{GenerateProtocol, generate_field_name, error_type_name};
 use super::{IoResult, FileWriter};
 
@@ -140,6 +140,7 @@ impl GenerateProtocol for RestXmlGenerator {
             return None;
         }
 
+        let ty = get_rust_type(service, name, shape, self.timestamp_type());
         Some(format!("
                 pub struct {name}Serializer;
                 impl {name}Serializer {{
@@ -150,7 +151,7 @@ impl GenerateProtocol for RestXmlGenerator {
                 ",
                 name = name,
                 serializer_body = generate_serializer_body(shape, service),
-                serializer_signature = generate_serializer_signature(name),
+                serializer_signature = generate_serializer_signature(&ty),
             ))
     }
 
@@ -159,7 +160,8 @@ impl GenerateProtocol for RestXmlGenerator {
                              shape: &Shape,
                              service: &Service)
                              -> Option<String> {
-        Some(xml_payload_parser::generate_deserializer(name, shape, service))
+        let ty = get_rust_type(service, name, shape, self.timestamp_type());
+        Some(xml_payload_parser::generate_deserializer(name, &ty, shape, service))
     }
 
     fn timestamp_type(&self) -> &'static str {
