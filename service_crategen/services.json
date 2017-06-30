@@ -329,6 +329,12 @@
     "protocolVersion": "2016-11-28",
     "baseTypeName": "Organizations"
   },
+  "polly": {
+    "version": "0.27.0",
+    "coreVersion": "0.27.0",
+    "protocolVersion": "2016-06-10",
+    "baseTypeName": "Polly"
+  },
   "rds": {
     "version": "0.27.0",
     "coreVersion": "0.27.0",
