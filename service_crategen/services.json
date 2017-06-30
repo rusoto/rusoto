@@ -221,6 +221,12 @@
     "protocolVersion": "2015-10-01",
     "baseTypeName": "GameLift"
   },
+  "glacier": {
+    "version": "0.27.0",
+    "coreVersion": "0.27.0",
+    "protocolVersion": "2012-06-01",
+    "baseTypeName": "Glacier"
+  },
   "health": {
     "version": "0.27.0",
     "coreVersion": "0.27.0",
