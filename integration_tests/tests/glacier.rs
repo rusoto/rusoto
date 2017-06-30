@@ -8,7 +8,7 @@ use rusoto_glacier::{Glacier, GlacierClient, ListVaultsInput};
 use rusoto_core::{DefaultCredentialsProvider, Region, default_tls_client};
 
 #[test]
-fn should_list_fleets() {
+fn should_list_vaults() {
     let _ = env_logger::init();
     let credentials = DefaultCredentialsProvider::new().unwrap();
     let client = GlacierClient::new(default_tls_client().unwrap(), credentials, Region::UsWest2);
