@@ -16,7 +16,7 @@ use hyper::Client;
 use rand::Rng;
 use rusoto_core::{ChainProvider, ProvideAwsCredentials, Region};
 use rusoto_elastictranscoder::{Ets, EtsClient};
-use rusoto_s3::{BucketName, S3, S3Client, CreateBucketRequest, DeleteBucketRequest};
+use rusoto_s3::{S3, S3Client, CreateBucketRequest, DeleteBucketRequest};
 use rusoto_core::default_tls_client;
 
 const AWS_ETS_WEB_PRESET_ID: &'static str = "1351620000001-100070";
@@ -32,8 +32,8 @@ struct TestEtsClient<P>
     client: EtsClient<P, Client>,
 
     s3_client: Option<S3Client<P, Client>>,
-    input_bucket: Option<BucketName>,
-    output_bucket: Option<BucketName>,
+    input_bucket: Option<String>,
+    output_bucket: Option<String>,
 }
 
 impl<P> TestEtsClient<P>
@@ -56,7 +56,7 @@ impl<P> TestEtsClient<P>
                                             self.region));
     }
 
-    fn create_bucket(&mut self) -> BucketName {
+    fn create_bucket(&mut self) -> String {
         let bucket_name = generate_unique_name("ets-bucket-1");
 
         let create_bucket_req =
