@@ -20,5 +20,5 @@ fn should_list_fleets() {
     };
 
     let result = client.list_vaults(&request).unwrap();
-	println!("{:#?}", result);
+    println!("{:#?}", result);
 }
