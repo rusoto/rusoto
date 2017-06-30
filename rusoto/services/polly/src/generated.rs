@@ -851,6 +851,7 @@ impl<P, D> Polly for PollyClient<P, D>
 
 
 
+
         request.sign(&self.credentials_provider.credentials()?);
 
         let response = self.dispatcher.dispatch(&request)?;
@@ -889,6 +890,7 @@ impl<P, D> Polly for PollyClient<P, D>
 
         let mut request = SignedRequest::new("GET", "polly", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
         let mut params = Params::new();
@@ -941,6 +943,7 @@ impl<P, D> Polly for PollyClient<P, D>
 
 
 
+
         request.sign(&self.credentials_provider.credentials()?);
 
         let response = self.dispatcher.dispatch(&request)?;
@@ -977,6 +980,7 @@ impl<P, D> Polly for PollyClient<P, D>
 
         let mut request = SignedRequest::new("GET", "polly", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
         let mut params = Params::new();
@@ -1022,6 +1026,7 @@ impl<P, D> Polly for PollyClient<P, D>
         let mut request = SignedRequest::new("PUT", "polly", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+
         request.set_payload(Some(encoded.into_bytes()));
 
 
@@ -1061,6 +1066,7 @@ impl<P, D> Polly for PollyClient<P, D>
 
         let mut request = SignedRequest::new("POST", "polly", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
         request.set_payload(Some(encoded.into_bytes()));
 

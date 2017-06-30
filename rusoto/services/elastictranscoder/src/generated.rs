@@ -3194,6 +3194,7 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
 
+
         request.sign(&self.credentials_provider.credentials()?);
 
         let response = self.dispatcher.dispatch(&request)?;
@@ -3229,6 +3230,7 @@ impl<P, D> Ets for EtsClient<P, D>
         let mut request =
             SignedRequest::new("POST", "elastictranscoder", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -3270,6 +3272,7 @@ impl<P, D> Ets for EtsClient<P, D>
         let mut request =
             SignedRequest::new("POST", "elastictranscoder", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -3315,6 +3318,7 @@ impl<P, D> Ets for EtsClient<P, D>
             SignedRequest::new("POST", "elastictranscoder", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+
         request.set_payload(Some(encoded.into_bytes()));
 
 
@@ -3357,6 +3361,7 @@ impl<P, D> Ets for EtsClient<P, D>
         let mut request =
             SignedRequest::new("DELETE", "elastictranscoder", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -3405,6 +3410,7 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
 
+
         request.sign(&self.credentials_provider.credentials()?);
 
         let response = self.dispatcher.dispatch(&request)?;
@@ -3444,6 +3450,7 @@ impl<P, D> Ets for EtsClient<P, D>
 
         let mut request = SignedRequest::new("GET", "elastictranscoder", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
         let mut params = Params::new();
@@ -3496,6 +3503,7 @@ impl<P, D> Ets for EtsClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
+
         let mut params = Params::new();
         if let Some(ref x) = input.ascending {
             params.put("Ascending", x);
@@ -3544,6 +3552,7 @@ impl<P, D> Ets for EtsClient<P, D>
 
         let mut request = SignedRequest::new("GET", "elastictranscoder", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
         let mut params = Params::new();
@@ -3595,6 +3604,7 @@ impl<P, D> Ets for EtsClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
+
         let mut params = Params::new();
         if let Some(ref x) = input.ascending {
             params.put("Ascending", x);
@@ -3642,6 +3652,7 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
 
+
         request.sign(&self.credentials_provider.credentials()?);
 
         let response = self.dispatcher.dispatch(&request)?;
@@ -3678,6 +3689,7 @@ impl<P, D> Ets for EtsClient<P, D>
 
         let mut request = SignedRequest::new("GET", "elastictranscoder", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -3724,6 +3736,7 @@ impl<P, D> Ets for EtsClient<P, D>
 
 
 
+
         request.sign(&self.credentials_provider.credentials()?);
 
         let response = self.dispatcher.dispatch(&request)?;
@@ -3759,6 +3772,7 @@ impl<P, D> Ets for EtsClient<P, D>
         let mut request =
             SignedRequest::new("POST", "elastictranscoder", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -3799,6 +3813,7 @@ impl<P, D> Ets for EtsClient<P, D>
 
         let mut request = SignedRequest::new("PUT", "elastictranscoder", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -3845,6 +3860,7 @@ impl<P, D> Ets for EtsClient<P, D>
             SignedRequest::new("POST", "elastictranscoder", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+
         request.set_payload(Some(encoded.into_bytes()));
 
 
@@ -3887,6 +3903,7 @@ impl<P, D> Ets for EtsClient<P, D>
         let mut request =
             SignedRequest::new("POST", "elastictranscoder", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
         request.set_payload(Some(encoded.into_bytes()));
 
