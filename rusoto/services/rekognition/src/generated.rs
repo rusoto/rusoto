@@ -32,48 +32,45 @@ pub struct AgeRange {
     #[doc="<p>The highest estimated age.</p>"]
     #[serde(rename="High")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub high: Option<UInteger>,
+    pub high: Option<i64>,
     #[doc="<p>The lowest estimated age.</p>"]
     #[serde(rename="Low")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub low: Option<UInteger>,
+    pub low: Option<i64>,
 }
 
-pub type Attribute = String;
-pub type Attributes = Vec<Attribute>;
 #[doc="<p>Indicates whether or not the face has a beard, and the confidence level in the determination.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Beard {
     #[doc="<p>Level of confidence in the determination.</p>"]
     #[serde(rename="Confidence")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub confidence: Option<Percent>,
+    pub confidence: Option<f32>,
     #[doc="<p>Boolean value that indicates whether the face has beard or not.</p>"]
     #[serde(rename="Value")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub value: Option<Boolean>,
+    pub value: Option<bool>,
 }
 
-pub type Boolean = bool;
 #[doc="<p>Identifies the bounding box around the object or face. The <code>left</code> (x-coordinate) and <code>top</code> (y-coordinate) are coordinates representing the top and left sides of the bounding box. Note that the upper-left corner of the image is the origin (0,0). </p> <p>The <code>top</code> and <code>left</code> values returned are ratios of the overall image size. For example, if the input image is 700x200 pixels, and the top-left coordinate of the bounding box is 350x50 pixels, the API returns a <code>left</code> value of 0.5 (350/700) and a <code>top</code> value of 0.25 (50/200).</p> <p> The <code>width</code> and <code>height</code> values represent the dimensions of the bounding box as a ratio of the overall image dimension. For example, if the input image is 700x200 pixels, and the bounding box width is 70 pixels, the width returned is 0.1. </p> <note> <p> The bounding box coordinates can have negative values. For example, if Amazon Rekognition is able to detect a face that is at the image edge and is only partially visible, the service can return coordinates that are outside the image bounds and, depending on the image edge, you might get negative values or values greater than 1 for the <code>left</code> or <code>top</code> values. </p> </note>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct BoundingBox {
     #[doc="<p>Height of the bounding box as a ratio of the overall image height.</p>"]
     #[serde(rename="Height")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub height: Option<Float>,
+    pub height: Option<f32>,
     #[doc="<p>Left coordinate of the bounding box as a ratio of overall image width.</p>"]
     #[serde(rename="Left")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub left: Option<Float>,
+    pub left: Option<f32>,
     #[doc="<p>Top coordinate of the bounding box as a ratio of overall image height.</p>"]
     #[serde(rename="Top")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub top: Option<Float>,
+    pub top: Option<f32>,
     #[doc="<p>Width of the bounding box as a ratio of the overall image width.</p>"]
     #[serde(rename="Width")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub width: Option<Float>,
+    pub width: Option<f32>,
 }
 
 #[doc="<p>Provides information about a celebrity recognized by the operation.</p>"]
@@ -86,11 +83,11 @@ pub struct Celebrity {
     #[doc="<p>A unique identifier for the celebrity. </p>"]
     #[serde(rename="Id")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub id: Option<RekognitionUniqueId>,
+    pub id: Option<String>,
     #[doc="<p>The confidence, in percentage, that Rekognition has that the recognized face is the celebrity.</p>"]
     #[serde(rename="MatchConfidence")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub match_confidence: Option<Percent>,
+    pub match_confidence: Option<f32>,
     #[doc="<p>The name of the celebrity.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -98,12 +95,9 @@ pub struct Celebrity {
     #[doc="<p>An array of URLs pointing to additional information about the celebrity. If there is no additional information about the celebrity, this list is empty.</p>"]
     #[serde(rename="Urls")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub urls: Option<Urls>,
+    pub urls: Option<Vec<String>>,
 }
 
-pub type CelebrityList = Vec<Celebrity>;
-pub type CollectionId = String;
-pub type CollectionIdList = Vec<CollectionId>;
 #[doc="<p>Provides information about a face in a target image that matches the source image face analysed by <code>CompareFaces</code>. The <code>Face</code> property contains the bounding box of the face in the target image. The <code>Similarity</code> property is the confidence that the source image face matches the face in the bounding box.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct CompareFacesMatch {
@@ -114,16 +108,15 @@ pub struct CompareFacesMatch {
     #[doc="<p>Level of confidence that the faces match.</p>"]
     #[serde(rename="Similarity")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub similarity: Option<Percent>,
+    pub similarity: Option<f32>,
 }
 
-pub type CompareFacesMatchList = Vec<CompareFacesMatch>;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CompareFacesRequest {
     #[doc="<p>The minimum level of confidence in the face matches that a match must meet to be included in the <code>FaceMatches</code> array.</p>"]
     #[serde(rename="SimilarityThreshold")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub similarity_threshold: Option<Percent>,
+    pub similarity_threshold: Option<f32>,
     #[doc="<p>The source image, either as bytes or as an S3 object.</p>"]
     #[serde(rename="SourceImage")]
     pub source_image: Image,
@@ -137,7 +130,7 @@ pub struct CompareFacesResponse {
     #[doc="<p>An array of faces in the target image that match the source image face. Each <code>CompareFacesMatch</code> object provides the bounding box, the confidence level that the bounding box contains a face, and the similarity score for the face in the bounding box and the face in the source image.</p>"]
     #[serde(rename="FaceMatches")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub face_matches: Option<CompareFacesMatchList>,
+    pub face_matches: Option<Vec<CompareFacesMatch>>,
     #[doc="<p>The face in the source image that was used for comparison.</p>"]
     #[serde(rename="SourceImageFace")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -145,18 +138,17 @@ pub struct CompareFacesResponse {
     #[doc="<p> The orientation of the source image (counterclockwise direction). If your application displays the source image, you can use this value to correct image orientation. The bounding box coordinates returned in <code>SourceImageFace</code> represent the location of the face before the image orientation is corrected. </p> <note> <p>If the source image is in .jpeg format, it might contain exchangeable image (Exif) metadata that includes the image's orientation. If the Exif metadata for the source image populates the orientation field, the value of <code>OrientationCorrection</code> is null and the <code>SourceImageFace</code> bounding box coordinates represent the location of the face after Exif metadata is used to correct the orientation. Images in .png format don't contain Exif metadata.</p> </note>"]
     #[serde(rename="SourceImageOrientationCorrection")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub source_image_orientation_correction: Option<OrientationCorrection>,
+    pub source_image_orientation_correction: Option<String>,
     #[doc="<p> The orientation of the target image (in counterclockwise direction). If your application displays the target image, you can use this value to correct the orientation of the image. The bounding box coordinates returned in <code>FaceMatches</code> and <code>UnmatchedFaces</code> represent face locations before the image orientation is corrected. </p> <note> <p>If the target image is in .jpg format, it might contain Exif metadata that includes the orientation of the image. If the Exif metadata for the target image populates the orientation field, the value of <code>OrientationCorrection</code> is null and the bounding box coordinates in <code>FaceMatches</code> and <code>UnmatchedFaces</code> represent the location of the face after Exif metadata is used to correct the orientation. Images in .png format don't contain Exif metadata.</p> </note>"]
     #[serde(rename="TargetImageOrientationCorrection")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub target_image_orientation_correction: Option<OrientationCorrection>,
+    pub target_image_orientation_correction: Option<String>,
     #[doc="<p>An array of faces in the target image that did not match the source image face.</p>"]
     #[serde(rename="UnmatchedFaces")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub unmatched_faces: Option<CompareFacesUnmatchList>,
+    pub unmatched_faces: Option<Vec<ComparedFace>>,
 }
 
-pub type CompareFacesUnmatchList = Vec<ComparedFace>;
 #[doc="<p>Provides face metadata for target image faces that are analysed by <code>CompareFaces</code> and <code>RecognizeCelebrities</code>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ComparedFace {
@@ -167,11 +159,11 @@ pub struct ComparedFace {
     #[doc="<p>Level of confidence that what the bounding box contains is a face.</p>"]
     #[serde(rename="Confidence")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub confidence: Option<Percent>,
+    pub confidence: Option<f32>,
     #[doc="<p>An array of facial landmarks.</p>"]
     #[serde(rename="Landmarks")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub landmarks: Option<Landmarks>,
+    pub landmarks: Option<Vec<Landmark>>,
     #[doc="<p>Indicates the pose of the face as determined by its pitch, roll, and yaw.</p>"]
     #[serde(rename="Pose")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -182,7 +174,6 @@ pub struct ComparedFace {
     pub quality: Option<ImageQuality>,
 }
 
-pub type ComparedFaceList = Vec<ComparedFace>;
 #[doc="<p>Type that describes the face Amazon Rekognition chose to compare with the faces in the target. This contains a bounding box for the selected face and confidence level that the bounding box contains a face. Note that Amazon Rekognition selects the largest face in the source image for this comparison. </p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ComparedSourceImageFace {
@@ -193,14 +184,14 @@ pub struct ComparedSourceImageFace {
     #[doc="<p>Confidence level that the selected bounding box contains a face.</p>"]
     #[serde(rename="Confidence")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub confidence: Option<Percent>,
+    pub confidence: Option<f32>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateCollectionRequest {
     #[doc="<p>ID for the collection that you are creating.</p>"]
     #[serde(rename="CollectionId")]
-    pub collection_id: CollectionId,
+    pub collection_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -212,15 +203,14 @@ pub struct CreateCollectionResponse {
     #[doc="<p>HTTP status code indicating the result of the operation.</p>"]
     #[serde(rename="StatusCode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status_code: Option<UInteger>,
+    pub status_code: Option<i64>,
 }
 
-pub type Degree = f32;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteCollectionRequest {
     #[doc="<p>ID of the collection to delete.</p>"]
     #[serde(rename="CollectionId")]
-    pub collection_id: CollectionId,
+    pub collection_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -228,17 +218,17 @@ pub struct DeleteCollectionResponse {
     #[doc="<p>HTTP status code that indicates the result of the operation.</p>"]
     #[serde(rename="StatusCode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status_code: Option<UInteger>,
+    pub status_code: Option<i64>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteFacesRequest {
     #[doc="<p>Collection from which to remove the specific faces.</p>"]
     #[serde(rename="CollectionId")]
-    pub collection_id: CollectionId,
+    pub collection_id: String,
     #[doc="<p>An array of face IDs to delete.</p>"]
     #[serde(rename="FaceIds")]
-    pub face_ids: FaceIdList,
+    pub face_ids: Vec<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -246,7 +236,7 @@ pub struct DeleteFacesResponse {
     #[doc="<p>An array of strings (face IDs) of the faces that were deleted.</p>"]
     #[serde(rename="DeletedFaces")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub deleted_faces: Option<FaceIdList>,
+    pub deleted_faces: Option<Vec<String>>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -254,7 +244,7 @@ pub struct DetectFacesRequest {
     #[doc="<p>An array of facial attributes you want to be returned. This can be the default list of attributes or all attributes. If you don't specify a value for <code>Attributes</code> or if you specify <code>[\"DEFAULT\"]</code>, the API returns the following subset of facial attributes: <code>BoundingBox</code>, <code>Confidence</code>, <code>Pose</code>, <code>Quality</code> and <code>Landmarks</code>. If you provide <code>[\"ALL\"]</code>, all facial attributes are returned but the operation will take longer to complete.</p> <p>If you provide both, <code>[\"ALL\", \"DEFAULT\"]</code>, the service uses a logical AND operator to determine which attributes to return (in this case, all attributes). </p>"]
     #[serde(rename="Attributes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub attributes: Option<Attributes>,
+    pub attributes: Option<Vec<String>>,
     #[doc="<p>The image in which you want to detect faces. You can specify a blob or an S3 object. </p>"]
     #[serde(rename="Image")]
     pub image: Image,
@@ -265,11 +255,11 @@ pub struct DetectFacesResponse {
     #[doc="<p>Details of each face found in the image. </p>"]
     #[serde(rename="FaceDetails")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub face_details: Option<FaceDetailList>,
+    pub face_details: Option<Vec<FaceDetail>>,
     #[doc="<p> The orientation of the input image (counter-clockwise direction). If your application displays the image, you can use this value to correct image orientation. The bounding box coordinates returned in <code>FaceDetails</code> represent face locations before the image orientation is corrected. </p> <note> <p>If the input image is in .jpeg format, it might contain exchangeable image (Exif) metadata that includes the image's orientation. If so, and the Exif metadata for the input image populates the orientation field, the value of <code>OrientationCorrection</code> is null and the <code>FaceDetails</code> bounding box coordinates represent face locations after Exif metadata is used to correct the image orientation. Images in .png format don't contain Exif metadata.</p> </note>"]
     #[serde(rename="OrientationCorrection")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub orientation_correction: Option<OrientationCorrection>,
+    pub orientation_correction: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -280,11 +270,11 @@ pub struct DetectLabelsRequest {
     #[doc="<p>Maximum number of labels you want the service to return in the response. The service returns the specified number of highest confidence labels. </p>"]
     #[serde(rename="MaxLabels")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_labels: Option<UInteger>,
+    pub max_labels: Option<i64>,
     #[doc="<p>Specifies the minimum confidence level for the labels to return. Amazon Rekognition doesn't return any labels with confidence lower than this specified value.</p> <p>If <code>MinConfidence</code> is not specified, the operation returns labels with a confidence values greater than or equal to 50 percent.</p>"]
     #[serde(rename="MinConfidence")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub min_confidence: Option<Percent>,
+    pub min_confidence: Option<f32>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -292,11 +282,11 @@ pub struct DetectLabelsResponse {
     #[doc="<p>An array of labels for the real-world objects detected. </p>"]
     #[serde(rename="Labels")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub labels: Option<Labels>,
+    pub labels: Option<Vec<Label>>,
     #[doc="<p> The orientation of the input image (counter-clockwise direction). If your application displays the image, you can use this value to correct the orientation. If Amazon Rekognition detects that the input image was rotated (for example, by 90 degrees), it first corrects the orientation before detecting the labels. </p> <note> <p>If the input image Exif metadata populates the orientation field, Amazon Rekognition does not perform orientation correction and the value of OrientationCorrection will be null.</p> </note>"]
     #[serde(rename="OrientationCorrection")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub orientation_correction: Option<OrientationCorrection>,
+    pub orientation_correction: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -307,7 +297,7 @@ pub struct DetectModerationLabelsRequest {
     #[doc="<p>Specifies the minimum confidence level for the labels to return. Amazon Rekognition doesn't return any labels with a confidence level lower than this specified value.</p> <p>If you don't specify <code>MinConfidence</code>, the operation returns labels with confidence values greater than or equal to 50 percent.</p>"]
     #[serde(rename="MinConfidence")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub min_confidence: Option<Percent>,
+    pub min_confidence: Option<f32>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -315,7 +305,7 @@ pub struct DetectModerationLabelsResponse {
     #[doc="<p>An array of labels for explicit or suggestive adult content found in the image. The list includes the top-level label and each child label detected in the image. This is useful for filtering specific categories of content. </p>"]
     #[serde(rename="ModerationLabels")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub moderation_labels: Option<ModerationLabels>,
+    pub moderation_labels: Option<Vec<ModerationLabel>>,
 }
 
 #[doc="<p>The emotions detected on the face, and the confidence level in the determination. For example, HAPPY, SAD, and ANGRY.</p>"]
@@ -324,27 +314,24 @@ pub struct Emotion {
     #[doc="<p>Level of confidence in the determination.</p>"]
     #[serde(rename="Confidence")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub confidence: Option<Percent>,
+    pub confidence: Option<f32>,
     #[doc="<p>Type of emotion detected.</p>"]
     #[serde(rename="Type")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub type_: Option<EmotionName>,
+    pub type_: Option<String>,
 }
 
-pub type EmotionName = String;
-pub type Emotions = Vec<Emotion>;
-pub type ExternalImageId = String;
 #[doc="<p>Indicates whether or not the eyes on the face are open, and the confidence level in the determination.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct EyeOpen {
     #[doc="<p>Level of confidence in the determination.</p>"]
     #[serde(rename="Confidence")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub confidence: Option<Percent>,
+    pub confidence: Option<f32>,
     #[doc="<p>Boolean value that indicates whether the eyes on the face are open.</p>"]
     #[serde(rename="Value")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub value: Option<Boolean>,
+    pub value: Option<bool>,
 }
 
 #[doc="<p>Indicates whether or not the face is wearing eye glasses, and the confidence level in the determination.</p>"]
@@ -353,11 +340,11 @@ pub struct Eyeglasses {
     #[doc="<p>Level of confidence in the determination.</p>"]
     #[serde(rename="Confidence")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub confidence: Option<Percent>,
+    pub confidence: Option<f32>,
     #[doc="<p>Boolean value that indicates whether the face is wearing eye glasses or not.</p>"]
     #[serde(rename="Value")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub value: Option<Boolean>,
+    pub value: Option<bool>,
 }
 
 #[doc="<p>Describes the face properties such as the bounding box, face ID, image ID of the input image, and external image ID that you assigned. </p>"]
@@ -370,19 +357,19 @@ pub struct Face {
     #[doc="<p>Confidence level that the bounding box contains a face (and not a different object such as a tree).</p>"]
     #[serde(rename="Confidence")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub confidence: Option<Percent>,
+    pub confidence: Option<f32>,
     #[doc="<p>Identifier that you assign to all the faces in the input image.</p>"]
     #[serde(rename="ExternalImageId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub external_image_id: Option<ExternalImageId>,
+    pub external_image_id: Option<String>,
     #[doc="<p>Unique identifier that Amazon Rekognition assigns to the face.</p>"]
     #[serde(rename="FaceId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub face_id: Option<FaceId>,
+    pub face_id: Option<String>,
     #[doc="<p>Unique identifier that Amazon Rekognition assigns to the input image.</p>"]
     #[serde(rename="ImageId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub image_id: Option<ImageId>,
+    pub image_id: Option<String>,
 }
 
 #[doc="<p>Structure containing attributes of the face that the algorithm detected.</p>"]
@@ -403,11 +390,11 @@ pub struct FaceDetail {
     #[doc="<p>Confidence level that the bounding box contains a face (and not a different object such as a tree).</p>"]
     #[serde(rename="Confidence")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub confidence: Option<Percent>,
+    pub confidence: Option<f32>,
     #[doc="<p>The emotions detected on the face, and the confidence level in the determination. For example, HAPPY, SAD, and ANGRY. </p>"]
     #[serde(rename="Emotions")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub emotions: Option<Emotions>,
+    pub emotions: Option<Vec<Emotion>>,
     #[doc="<p>Indicates whether or not the face is wearing eye glasses, and the confidence level in the determination.</p>"]
     #[serde(rename="Eyeglasses")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -423,7 +410,7 @@ pub struct FaceDetail {
     #[doc="<p>Indicates the location of landmarks on the face.</p>"]
     #[serde(rename="Landmarks")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub landmarks: Option<Landmarks>,
+    pub landmarks: Option<Vec<Landmark>>,
     #[doc="<p>Indicates whether or not the mouth on the face is open, and the confidence level in the determination.</p>"]
     #[serde(rename="MouthOpen")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -450,10 +437,6 @@ pub struct FaceDetail {
     pub sunglasses: Option<Sunglasses>,
 }
 
-pub type FaceDetailList = Vec<FaceDetail>;
-pub type FaceId = String;
-pub type FaceIdList = Vec<FaceId>;
-pub type FaceList = Vec<Face>;
 #[doc="<p>Provides face metadata. In addition, it also provides the confidence in the match of this face with the input face.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct FaceMatch {
@@ -464,10 +447,9 @@ pub struct FaceMatch {
     #[doc="<p>Confidence in the match of this face with the input face.</p>"]
     #[serde(rename="Similarity")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub similarity: Option<Percent>,
+    pub similarity: Option<f32>,
 }
 
-pub type FaceMatchList = Vec<FaceMatch>;
 #[doc="<p>Object containing both the face metadata (stored in the back-end database) and facial attributes that are detected but aren't stored in the database.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct FaceRecord {
@@ -481,27 +463,24 @@ pub struct FaceRecord {
     pub face_detail: Option<FaceDetail>,
 }
 
-pub type FaceRecordList = Vec<FaceRecord>;
-pub type Float = f32;
 #[doc="<p>Gender of the face and the confidence level in the determination.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Gender {
     #[doc="<p>Level of confidence in the determination.</p>"]
     #[serde(rename="Confidence")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub confidence: Option<Percent>,
+    pub confidence: Option<f32>,
     #[doc="<p>Gender of the face.</p>"]
     #[serde(rename="Value")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub value: Option<GenderType>,
+    pub value: Option<String>,
 }
 
-pub type GenderType = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetCelebrityInfoRequest {
     #[doc="<p>The ID for the celebrity. You get the celebrity ID from a call to the operation, which recognizes celebrities in an image. </p>"]
     #[serde(rename="Id")]
-    pub id: RekognitionUniqueId,
+    pub id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -513,7 +492,7 @@ pub struct GetCelebrityInfoResponse {
     #[doc="<p>An array of URLs pointing to additional celebrity information. </p>"]
     #[serde(rename="Urls")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub urls: Option<Urls>,
+    pub urls: Option<Vec<String>>,
 }
 
 #[doc="<p>Provides the input image either as bytes or an S3 object.</p> <p>You pass image bytes to a Rekognition API operation by using the <code>Bytes</code> property. For example, you would use the <code>Bytes</code> property to pass an image loaded from a local file system. Image bytes passed by using the <code>Bytes</code> property must be base64-encoded. Your code may not need to encode image bytes if you are using an AWS SDK to call Rekognition API operations. For more information, see <a>example4</a>.</p> <p> You pass images stored in an S3 bucket to a Rekognition API operation by using the <code>S3Object</code> property. Images stored in an S3 bucket do not need to be base64-encoded.</p> <p>The region for the S3 bucket containing the S3 object must match the region you use for Amazon Rekognition operations.</p> <p>If you use the Amazon CLI to call Amazon Rekognition operations, passing image bytes using the Bytes property is not supported. You must first upload the image to an Amazon S3 bucket and then call the operation using the S3Object property.</p> <p>For Amazon Rekognition to process an S3 object, the user must have permission to access the S3 object. For more information, see <a>manage-access-resource-policies</a>. </p>"]
@@ -526,41 +505,39 @@ pub struct Image {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub bytes: Option<ImageBlob>,
+    pub bytes: Option<Vec<u8>>,
     #[doc="<p>Identifies an S3 object as the image source.</p>"]
     #[serde(rename="S3Object")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub s3_object: Option<S3Object>,
 }
 
-pub type ImageBlob = Vec<u8>;
-pub type ImageId = String;
 #[doc="<p>Identifies face image brightness and sharpness. </p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ImageQuality {
     #[doc="<p>Value representing brightness of the face. The service returns a value between 0 and 100 (inclusive). A higher value indicates a brighter face image.</p>"]
     #[serde(rename="Brightness")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub brightness: Option<Float>,
+    pub brightness: Option<f32>,
     #[doc="<p>Value representing sharpness of the face. The service returns a value between 0 and 100 (inclusive). A higher value indicates a sharper face image.</p>"]
     #[serde(rename="Sharpness")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub sharpness: Option<Float>,
+    pub sharpness: Option<f32>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct IndexFacesRequest {
     #[doc="<p>The ID of an existing collection to which you want to add the faces that are detected in the input images.</p>"]
     #[serde(rename="CollectionId")]
-    pub collection_id: CollectionId,
+    pub collection_id: String,
     #[doc="<p>An array of facial attributes that you want to be returned. This can be the default list of attributes or all attributes. If you don't specify a value for <code>Attributes</code> or if you specify <code>[\"DEFAULT\"]</code>, the API returns the following subset of facial attributes: <code>BoundingBox</code>, <code>Confidence</code>, <code>Pose</code>, <code>Quality</code> and <code>Landmarks</code>. If you provide <code>[\"ALL\"]</code>, all facial attributes are returned but the operation will take longer to complete.</p> <p>If you provide both, <code>[\"ALL\", \"DEFAULT\"]</code>, the service uses a logical AND operator to determine which attributes to return (in this case, all attributes). </p>"]
     #[serde(rename="DetectionAttributes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub detection_attributes: Option<Attributes>,
+    pub detection_attributes: Option<Vec<String>>,
     #[doc="<p>ID you want to assign to all the faces detected in the image.</p>"]
     #[serde(rename="ExternalImageId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub external_image_id: Option<ExternalImageId>,
+    pub external_image_id: Option<String>,
     #[doc="<p>The input image as bytes or an S3 object.</p>"]
     #[serde(rename="Image")]
     pub image: Image,
@@ -571,11 +548,11 @@ pub struct IndexFacesResponse {
     #[doc="<p>An array of faces detected and added to the collection. For more information, see <a>howitworks-index-faces</a>. </p>"]
     #[serde(rename="FaceRecords")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub face_records: Option<FaceRecordList>,
+    pub face_records: Option<Vec<FaceRecord>>,
     #[doc="<p>The orientation of the input image (counterclockwise direction). If your application displays the image, you can use this value to correct image orientation. The bounding box coordinates returned in <code>FaceRecords</code> represent face locations before the image orientation is corrected. </p> <note> <p>If the input image is in jpeg format, it might contain exchangeable image (Exif) metadata. If so, and the Exif metadata populates the orientation field, the value of <code>OrientationCorrection</code> is null and the bounding box coordinates in <code>FaceRecords</code> represent face locations after Exif metadata is used to correct the image orientation. Images in .png format don't contain Exif metadata.</p> </note>"]
     #[serde(rename="OrientationCorrection")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub orientation_correction: Option<OrientationCorrection>,
+    pub orientation_correction: Option<String>,
 }
 
 #[doc="<p>Structure containing details about the detected label, including name, and level of confidence.</p>"]
@@ -584,43 +561,40 @@ pub struct Label {
     #[doc="<p>Level of confidence.</p>"]
     #[serde(rename="Confidence")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub confidence: Option<Percent>,
+    pub confidence: Option<f32>,
     #[doc="<p>The name (label) of the object.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
 }
 
-pub type Labels = Vec<Label>;
 #[doc="<p>Indicates the location of the landmark on the face.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Landmark {
     #[doc="<p>Type of the landmark.</p>"]
     #[serde(rename="Type")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub type_: Option<LandmarkType>,
+    pub type_: Option<String>,
     #[doc="<p>x-coordinate from the top left of the landmark expressed as the ration of the width of the image. For example, if the images is 700x200 and the x-coordinate of the landmark is at 350 pixels, this value is 0.5. </p>"]
     #[serde(rename="X")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub x: Option<Float>,
+    pub x: Option<f32>,
     #[doc="<p>y-coordinate from the top left of the landmark expressed as the ration of the height of the image. For example, if the images is 700x200 and the y-coordinate of the landmark is at 100 pixels, this value is 0.5.</p>"]
     #[serde(rename="Y")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub y: Option<Float>,
+    pub y: Option<f32>,
 }
 
-pub type LandmarkType = String;
-pub type Landmarks = Vec<Landmark>;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListCollectionsRequest {
     #[doc="<p>Maximum number of collection IDs to return.</p>"]
     #[serde(rename="MaxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<PageSize>,
+    pub max_results: Option<i64>,
     #[doc="<p>Pagination token from the previous response.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -628,26 +602,26 @@ pub struct ListCollectionsResponse {
     #[doc="<p>An array of collection IDs.</p>"]
     #[serde(rename="CollectionIds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub collection_ids: Option<CollectionIdList>,
+    pub collection_ids: Option<Vec<String>>,
     #[doc="<p>If the result is truncated, the response provides a <code>NextToken</code> that you can use in the subsequent request to fetch the next set of collection IDs.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListFacesRequest {
     #[doc="<p>ID of the collection from which to list the faces.</p>"]
     #[serde(rename="CollectionId")]
-    pub collection_id: CollectionId,
+    pub collection_id: String,
     #[doc="<p>Maximum number of faces to return.</p>"]
     #[serde(rename="MaxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<PageSize>,
+    pub max_results: Option<i64>,
     #[doc="<p>If the previous response was incomplete (because there is more data to retrieve), Amazon Rekognition returns a pagination token in the response. You can use this pagination token to retrieve the next set of faces.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -655,21 +629,20 @@ pub struct ListFacesResponse {
     #[doc="<p>An array of <code>Face</code> objects. </p>"]
     #[serde(rename="Faces")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub faces: Option<FaceList>,
+    pub faces: Option<Vec<Face>>,
     #[doc="<p>If the response is truncated, Amazon Rekognition returns this token that you can use in the subsequent request to retrieve the next set of faces.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
-pub type MaxFaces = i64;
 #[doc="<p>Provides information about a single type of moderated content found in an image. Each type of moderated content has a label within a hierarchical taxonomy. For more information, see <a>image-moderation</a>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ModerationLabel {
     #[doc="<p>Specifies the confidence that Amazon Rekognition has that the label has been correctly identified.</p> <p>If you don't specify the <code>MinConfidence</code> parameter in the call to <code>DetectModerationLabels</code>, the operation returns labels with a confidence value greater than or equal to 50 percent.</p>"]
     #[serde(rename="Confidence")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub confidence: Option<Percent>,
+    pub confidence: Option<f32>,
     #[doc="<p>The label name for the type of content detected in the image.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -680,18 +653,17 @@ pub struct ModerationLabel {
     pub parent_name: Option<String>,
 }
 
-pub type ModerationLabels = Vec<ModerationLabel>;
 #[doc="<p>Indicates whether or not the mouth on the face is open, and the confidence level in the determination.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct MouthOpen {
     #[doc="<p>Level of confidence in the determination.</p>"]
     #[serde(rename="Confidence")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub confidence: Option<Percent>,
+    pub confidence: Option<f32>,
     #[doc="<p>Boolean value that indicates whether the mouth on the face is open or not.</p>"]
     #[serde(rename="Value")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub value: Option<Boolean>,
+    pub value: Option<bool>,
 }
 
 #[doc="<p>Indicates whether or not the face has a mustache, and the confidence level in the determination.</p>"]
@@ -700,32 +672,28 @@ pub struct Mustache {
     #[doc="<p>Level of confidence in the determination.</p>"]
     #[serde(rename="Confidence")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub confidence: Option<Percent>,
+    pub confidence: Option<f32>,
     #[doc="<p>Boolean value that indicates whether the face has mustache or not.</p>"]
     #[serde(rename="Value")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub value: Option<Boolean>,
+    pub value: Option<bool>,
 }
 
-pub type OrientationCorrection = String;
-pub type PageSize = i64;
-pub type PaginationToken = String;
-pub type Percent = f32;
 #[doc="<p>Indicates the pose of the face as determined by its pitch, roll, and yaw.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Pose {
     #[doc="<p>Value representing the face rotation on the pitch axis.</p>"]
     #[serde(rename="Pitch")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub pitch: Option<Degree>,
+    pub pitch: Option<f32>,
     #[doc="<p>Value representing the face rotation on the roll axis.</p>"]
     #[serde(rename="Roll")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub roll: Option<Degree>,
+    pub roll: Option<f32>,
     #[doc="<p>Value representing the face rotation on the yaw axis.</p>"]
     #[serde(rename="Yaw")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub yaw: Option<Degree>,
+    pub yaw: Option<f32>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -740,54 +708,50 @@ pub struct RecognizeCelebritiesResponse {
     #[doc="<p>Details about each celebrity found in the image. Amazon Rekognition can detect a maximum of 15 celebrities in an image.</p>"]
     #[serde(rename="CelebrityFaces")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub celebrity_faces: Option<CelebrityList>,
+    pub celebrity_faces: Option<Vec<Celebrity>>,
     #[doc="<p>The orientation of the input image (counterclockwise direction). If your application displays the image, you can use this value to correct the orientation. The bounding box coordinates returned in <code>CelebrityFaces</code> and <code>UnrecognizedFaces</code> represent face locations before the image orientation is corrected. </p> <note> <p>If the input image is in .jpeg format, it might contain exchangeable image (Exif) metadata that includes the image's orientation. If so, and the Exif metadata for the input image populates the orientation field, the value of <code>OrientationCorrection</code> is null and the <code>CelebrityFaces</code> and <code>UnrecognizedFaces</code> bounding box coordinates represent face locations after Exif metadata is used to correct the image orientation. Images in .png format don't contain Exif metadata. </p> </note>"]
     #[serde(rename="OrientationCorrection")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub orientation_correction: Option<OrientationCorrection>,
+    pub orientation_correction: Option<String>,
     #[doc="<p>Details about each unrecognized face in the image.</p>"]
     #[serde(rename="UnrecognizedFaces")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub unrecognized_faces: Option<ComparedFaceList>,
+    pub unrecognized_faces: Option<Vec<ComparedFace>>,
 }
 
-pub type RekognitionUniqueId = String;
-pub type S3Bucket = String;
 #[doc="<p>Provides the S3 bucket name and object name.</p> <p>The region for the S3 bucket containing the S3 object must match the region you use for Amazon Rekognition operations.</p> <p>For Amazon Rekognition to process an S3 object, the user must have permission to access the S3 object. For more information, see <a>manage-access-resource-policies</a>. </p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct S3Object {
     #[doc="<p>Name of the S3 bucket.</p>"]
     #[serde(rename="Bucket")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub bucket: Option<S3Bucket>,
+    pub bucket: Option<String>,
     #[doc="<p>S3 object key name.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<S3ObjectName>,
+    pub name: Option<String>,
     #[doc="<p>If the bucket is versioning enabled, you can specify the object version. </p>"]
     #[serde(rename="Version")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub version: Option<S3ObjectVersion>,
+    pub version: Option<String>,
 }
 
-pub type S3ObjectName = String;
-pub type S3ObjectVersion = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct SearchFacesByImageRequest {
     #[doc="<p>ID of the collection to search.</p>"]
     #[serde(rename="CollectionId")]
-    pub collection_id: CollectionId,
+    pub collection_id: String,
     #[doc="<p>(Optional) Specifies the minimum confidence in the face match to return. For example, don't return any matches where confidence in matches is less than 70%.</p>"]
     #[serde(rename="FaceMatchThreshold")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub face_match_threshold: Option<Percent>,
+    pub face_match_threshold: Option<f32>,
     #[doc="<p>The input image as bytes or an S3 object.</p>"]
     #[serde(rename="Image")]
     pub image: Image,
     #[doc="<p>Maximum number of faces to return. The operation returns the maximum number of faces with the highest confidence in the match.</p>"]
     #[serde(rename="MaxFaces")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_faces: Option<MaxFaces>,
+    pub max_faces: Option<i64>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -795,7 +759,7 @@ pub struct SearchFacesByImageResponse {
     #[doc="<p>An array of faces that match the input face, along with the confidence in the match.</p>"]
     #[serde(rename="FaceMatches")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub face_matches: Option<FaceMatchList>,
+    pub face_matches: Option<Vec<FaceMatch>>,
     #[doc="<p>The bounding box around the face in the input image that Amazon Rekognition used for the search.</p>"]
     #[serde(rename="SearchedFaceBoundingBox")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -803,25 +767,25 @@ pub struct SearchFacesByImageResponse {
     #[doc="<p>The level of confidence that the <code>searchedFaceBoundingBox</code>, contains a face.</p>"]
     #[serde(rename="SearchedFaceConfidence")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub searched_face_confidence: Option<Percent>,
+    pub searched_face_confidence: Option<f32>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct SearchFacesRequest {
     #[doc="<p>ID of the collection the face belongs to.</p>"]
     #[serde(rename="CollectionId")]
-    pub collection_id: CollectionId,
+    pub collection_id: String,
     #[doc="<p>ID of a face to find matches for in the collection.</p>"]
     #[serde(rename="FaceId")]
-    pub face_id: FaceId,
+    pub face_id: String,
     #[doc="<p>Optional value specifying the minimum confidence in the face match to return. For example, don't return any matches where confidence in matches is less than 70%.</p>"]
     #[serde(rename="FaceMatchThreshold")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub face_match_threshold: Option<Percent>,
+    pub face_match_threshold: Option<f32>,
     #[doc="<p>Maximum number of faces to return. The operation returns the maximum number of faces with the highest confidence in the match.</p>"]
     #[serde(rename="MaxFaces")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_faces: Option<MaxFaces>,
+    pub max_faces: Option<i64>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -829,11 +793,11 @@ pub struct SearchFacesResponse {
     #[doc="<p>An array of faces that matched the input face, along with the confidence in the match.</p>"]
     #[serde(rename="FaceMatches")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub face_matches: Option<FaceMatchList>,
+    pub face_matches: Option<Vec<FaceMatch>>,
     #[doc="<p>ID of the face that was searched for matches in a collection.</p>"]
     #[serde(rename="SearchedFaceId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub searched_face_id: Option<FaceId>,
+    pub searched_face_id: Option<String>,
 }
 
 #[doc="<p>Indicates whether or not the face is smiling, and the confidence level in the determination.</p>"]
@@ -842,11 +806,11 @@ pub struct Smile {
     #[doc="<p>Level of confidence in the determination.</p>"]
     #[serde(rename="Confidence")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub confidence: Option<Percent>,
+    pub confidence: Option<f32>,
     #[doc="<p>Boolean value that indicates whether the face is smiling or not.</p>"]
     #[serde(rename="Value")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub value: Option<Boolean>,
+    pub value: Option<bool>,
 }
 
 #[doc="<p>Indicates whether or not the face is wearing sunglasses, and the confidence level in the determination.</p>"]
@@ -855,16 +819,13 @@ pub struct Sunglasses {
     #[doc="<p>Level of confidence in the determination.</p>"]
     #[serde(rename="Confidence")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub confidence: Option<Percent>,
+    pub confidence: Option<f32>,
     #[doc="<p>Boolean value that indicates whether the face is wearing sunglasses or not.</p>"]
     #[serde(rename="Value")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub value: Option<Boolean>,
+    pub value: Option<bool>,
 }
 
-pub type UInteger = i64;
-pub type Url = String;
-pub type Urls = Vec<Url>;
 /// Errors returned by CompareFaces
 #[derive(Debug, PartialEq)]
 pub enum CompareFacesError {

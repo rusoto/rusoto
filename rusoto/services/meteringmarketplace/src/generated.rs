@@ -31,10 +31,10 @@ use serde_json::from_str;
 pub struct BatchMeterUsageRequest {
     #[doc="<p>Product code is used to uniquely identify a product in AWS Marketplace. The product code should be the same as the one used during the publishing of a new product.</p>"]
     #[serde(rename="ProductCode")]
-    pub product_code: ProductCode,
+    pub product_code: String,
     #[doc="<p>The set of UsageRecords to submit. BatchMeterUsage accepts up to 25 UsageRecords at a time.</p>"]
     #[serde(rename="UsageRecords")]
-    pub usage_records: UsageRecordList,
+    pub usage_records: Vec<UsageRecord>,
 }
 
 #[doc="<p>Contains the UsageRecords processed by BatchMeterUsage and any records that have failed due to transient error.</p>"]
@@ -43,33 +43,30 @@ pub struct BatchMeterUsageResult {
     #[doc="<p>Contains all UsageRecords processed by BatchMeterUsage. These records were either honored by AWS Marketplace Metering Service or were invalid.</p>"]
     #[serde(rename="Results")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub results: Option<UsageRecordResultList>,
+    pub results: Option<Vec<UsageRecordResult>>,
     #[doc="<p>Contains all UsageRecords that were not processed by BatchMeterUsage. This is a list of UsageRecords. You can retry the failed request by making another BatchMeterUsage call with this list as input in the BatchMeterUsageRequest.</p>"]
     #[serde(rename="UnprocessedRecords")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub unprocessed_records: Option<UsageRecordList>,
+    pub unprocessed_records: Option<Vec<UsageRecord>>,
 }
 
-pub type Boolean = bool;
-pub type CustomerIdentifier = String;
-pub type ErrorMessage = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct MeterUsageRequest {
     #[doc="<p>Checks whether you have the permissions required for the action, but does not make the request. If you have the permissions, the request returns DryRunOperation; otherwise, it returns UnauthorizedException.</p>"]
     #[serde(rename="DryRun")]
-    pub dry_run: Boolean,
+    pub dry_run: bool,
     #[doc="<p>Product code is used to uniquely identify a product in AWS Marketplace. The product code should be the same as the one used during the publishing of a new product.</p>"]
     #[serde(rename="ProductCode")]
-    pub product_code: ProductCode,
+    pub product_code: String,
     #[doc="<p>Timestamp of the hour, recorded in UTC. The seconds and milliseconds portions of the timestamp will be ignored.</p>"]
     #[serde(rename="Timestamp")]
-    pub timestamp: Timestamp,
+    pub timestamp: f64,
     #[doc="<p>It will be one of the fcp dimension name provided during the publishing of the product.</p>"]
     #[serde(rename="UsageDimension")]
-    pub usage_dimension: UsageDimension,
+    pub usage_dimension: String,
     #[doc="<p>Consumption value for the hour.</p>"]
     #[serde(rename="UsageQuantity")]
-    pub usage_quantity: UsageQuantity,
+    pub usage_quantity: i64,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -79,14 +76,12 @@ pub struct MeterUsageResult {
     pub metering_record_id: Option<String>,
 }
 
-pub type NonEmptyString = String;
-pub type ProductCode = String;
 #[doc="<p>Contains input to the ResolveCustomer operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ResolveCustomerRequest {
     #[doc="<p>When a buyer visits your website during the registration process, the buyer submits a registration token through the browser. The registration token is resolved to obtain a CustomerIdentifier and product code.</p>"]
     #[serde(rename="RegistrationToken")]
-    pub registration_token: NonEmptyString,
+    pub registration_token: String,
 }
 
 #[doc="<p>The result of the ResolveCustomer operation. Contains the CustomerIdentifier and product code.</p>"]
@@ -95,34 +90,30 @@ pub struct ResolveCustomerResult {
     #[doc="<p>The CustomerIdentifier is used to identify an individual customer in your application. Calls to BatchMeterUsage require CustomerIdentifiers for each UsageRecord.</p>"]
     #[serde(rename="CustomerIdentifier")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub customer_identifier: Option<CustomerIdentifier>,
+    pub customer_identifier: Option<String>,
     #[doc="<p>The product code is returned to confirm that the buyer is registering for your product. Subsequent BatchMeterUsage calls should be made using this product code.</p>"]
     #[serde(rename="ProductCode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub product_code: Option<ProductCode>,
+    pub product_code: Option<String>,
 }
 
-pub type Timestamp = f64;
-pub type UsageDimension = String;
-pub type UsageQuantity = i64;
 #[doc="<p>A UsageRecord indicates a quantity of usage for a given product, customer, dimension and time.</p> <p>Multiple requests with the same UsageRecords as input will be deduplicated to prevent double charges.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UsageRecord {
     #[doc="<p>The CustomerIdentifier is obtained through the ResolveCustomer operation and represents an individual buyer in your application.</p>"]
     #[serde(rename="CustomerIdentifier")]
-    pub customer_identifier: CustomerIdentifier,
+    pub customer_identifier: String,
     #[doc="<p>During the process of registering a product on AWS Marketplace, up to eight dimensions are specified. These represent different units of value in your application.</p>"]
     #[serde(rename="Dimension")]
-    pub dimension: UsageDimension,
+    pub dimension: String,
     #[doc="<p>The quantity of usage consumed by the customer for the given dimension and time.</p>"]
     #[serde(rename="Quantity")]
-    pub quantity: UsageQuantity,
+    pub quantity: i64,
     #[doc="<p>Timestamp of the hour, recorded in UTC. The seconds and milliseconds portions of the timestamp will be ignored.</p> <p>Your application can meter usage for up to one hour in the past.</p>"]
     #[serde(rename="Timestamp")]
-    pub timestamp: Timestamp,
+    pub timestamp: f64,
 }
 
-pub type UsageRecordList = Vec<UsageRecord>;
 #[doc="<p>A UsageRecordResult indicates the status of a given UsageRecord processed by BatchMeterUsage.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct UsageRecordResult {
@@ -133,15 +124,13 @@ pub struct UsageRecordResult {
     #[doc="<p>The UsageRecordResult Status indicates the status of an individual UsageRecord processed by BatchMeterUsage.</p> <ul> <li> <p> <i>Success</i>- The UsageRecord was accepted and honored by BatchMeterUsage.</p> </li> <li> <p> <i>CustomerNotSubscribed</i>- The CustomerIdentifier specified is not subscribed to your product. The UsageRecord was not honored. Future UsageRecords for this customer will fail until the customer subscribes to your product.</p> </li> <li> <p> <i>DuplicateRecord</i>- Indicates that the UsageRecord was invalid and not honored. A previously metered UsageRecord had the same customer, dimension, and time, but a different quantity.</p> </li> </ul>"]
     #[serde(rename="Status")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status: Option<UsageRecordResultStatus>,
+    pub status: Option<String>,
     #[doc="<p>The UsageRecord that was part of the BatchMeterUsage request.</p>"]
     #[serde(rename="UsageRecord")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub usage_record: Option<UsageRecord>,
 }
 
-pub type UsageRecordResultList = Vec<UsageRecordResult>;
-pub type UsageRecordResultStatus = String;
 /// Errors returned by BatchMeterUsage
 #[derive(Debug, PartialEq)]
 pub enum BatchMeterUsageError {

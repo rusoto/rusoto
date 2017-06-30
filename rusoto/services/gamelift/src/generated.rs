@@ -32,51 +32,48 @@ pub struct Alias {
     #[doc="<p>Unique identifier for an alias; alias ARNs are unique across all regions.</p>"]
     #[serde(rename="AliasArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub alias_arn: Option<ArnStringModel>,
+    pub alias_arn: Option<String>,
     #[doc="<p>Unique identifier for an alias; alias IDs are unique within a region.</p>"]
     #[serde(rename="AliasId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub alias_id: Option<AliasId>,
+    pub alias_id: Option<String>,
     #[doc="<p>Time stamp indicating when this data object was created. Format is a number expressed in Unix time as milliseconds (for example \"1469498468.057\").</p>"]
     #[serde(rename="CreationTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub creation_time: Option<Timestamp>,
+    pub creation_time: Option<f64>,
     #[doc="<p>Human-readable description of an alias.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub description: Option<FreeText>,
+    pub description: Option<String>,
     #[doc="<p>Time stamp indicating when this data object was last modified. Format is a number expressed in Unix time as milliseconds (for example \"1469498468.057\").</p>"]
     #[serde(rename="LastUpdatedTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub last_updated_time: Option<Timestamp>,
+    pub last_updated_time: Option<f64>,
     #[doc="<p>Descriptive label that is associated with an alias. Alias names do not need to be unique.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<NonBlankAndLengthConstraintString>,
+    pub name: Option<String>,
     #[doc="<p>Alias configuration for the alias, including routing type and settings.</p>"]
     #[serde(rename="RoutingStrategy")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub routing_strategy: Option<RoutingStrategy>,
 }
 
-pub type AliasId = String;
-pub type AliasList = Vec<Alias>;
-pub type ArnStringModel = String;
 #[doc="<p>AWS access credentials sometimes used for uploading game build files to Amazon GameLift. They are valid for a limited time. If they expire before you upload your game build, get a new set by calling <a>RequestUploadCredentials</a>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct AwsCredentials {
     #[doc="<p>Access key for an AWS account.</p>"]
     #[serde(rename="AccessKeyId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub access_key_id: Option<NonEmptyString>,
+    pub access_key_id: Option<String>,
     #[doc="<p>Secret key for an AWS account.</p>"]
     #[serde(rename="SecretAccessKey")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub secret_access_key: Option<NonEmptyString>,
+    pub secret_access_key: Option<String>,
     #[doc="<p>Token specific to a build ID.</p>"]
     #[serde(rename="SessionToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub session_token: Option<NonEmptyString>,
+    pub session_token: Option<String>,
 }
 
 #[doc="<p>Properties describing a game build.</p> <p>Build-related operations include:</p> <ul> <li> <p> <a>CreateBuild</a> </p> </li> <li> <p> <a>ListBuilds</a> </p> </li> <li> <p> <a>DescribeBuild</a> </p> </li> <li> <p> <a>UpdateBuild</a> </p> </li> <li> <p> <a>DeleteBuild</a> </p> </li> </ul>"]
@@ -85,47 +82,43 @@ pub struct Build {
     #[doc="<p>Unique identifier for a build.</p>"]
     #[serde(rename="BuildId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub build_id: Option<BuildId>,
+    pub build_id: Option<String>,
     #[doc="<p>Time stamp indicating when this data object was created. Format is a number expressed in Unix time as milliseconds (for example \"1469498468.057\").</p>"]
     #[serde(rename="CreationTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub creation_time: Option<Timestamp>,
+    pub creation_time: Option<f64>,
     #[doc="<p>Descriptive label that is associated with a build. Build names do not need to be unique. It can be set using <a>CreateBuild</a> or <a>UpdateBuild</a>.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<FreeText>,
+    pub name: Option<String>,
     #[doc="<p>Operating system that the game server binaries are built to run on. This value determines the type of fleet resources that you can use for this build.</p>"]
     #[serde(rename="OperatingSystem")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub operating_system: Option<OperatingSystem>,
+    pub operating_system: Option<String>,
     #[doc="<p>File size of the uploaded game build, expressed in bytes. When the build status is <code>INITIALIZED</code>, this value is 0.</p>"]
     #[serde(rename="SizeOnDisk")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub size_on_disk: Option<PositiveLong>,
+    pub size_on_disk: Option<i64>,
     #[doc="<p>Current status of the build.</p> <p>Possible build statuses include the following:</p> <ul> <li> <p> <b>INITIALIZED</b> – A new build has been defined, but no files have been uploaded. You cannot create fleets for builds that are in this status. When a build is successfully created, the build status is set to this value. </p> </li> <li> <p> <b>READY</b> – The game build has been successfully uploaded. You can now create new fleets for this build.</p> </li> <li> <p> <b>FAILED</b> – The game build upload failed. You cannot create new fleets for this build. </p> </li> </ul>"]
     #[serde(rename="Status")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status: Option<BuildStatus>,
+    pub status: Option<String>,
     #[doc="<p>Version that is associated with this build. Version strings do not need to be unique. This value can be set using <a>CreateBuild</a> or <a>UpdateBuild</a>.</p>"]
     #[serde(rename="Version")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub version: Option<FreeText>,
+    pub version: Option<String>,
 }
 
-pub type BuildId = String;
-pub type BuildList = Vec<Build>;
-pub type BuildStatus = String;
-pub type ComparisonOperatorType = String;
 #[doc="<p>Represents the input for a request action.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateAliasInput {
     #[doc="<p>Human-readable description of an alias.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub description: Option<NonZeroAndMaxString>,
+    pub description: Option<String>,
     #[doc="<p>Descriptive label that is associated with an alias. Alias names do not need to be unique.</p>"]
     #[serde(rename="Name")]
-    pub name: NonBlankAndLengthConstraintString,
+    pub name: String,
     #[doc="<p>Object that specifies the fleet and routing type to use for the alias.</p>"]
     #[serde(rename="RoutingStrategy")]
     pub routing_strategy: RoutingStrategy,
@@ -146,11 +139,11 @@ pub struct CreateBuildInput {
     #[doc="<p>Descriptive label that is associated with a build. Build names do not need to be unique. You can use <a>UpdateBuild</a> to change this value later. </p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<NonZeroAndMaxString>,
+    pub name: Option<String>,
     #[doc="<p>Operating system that the game server binaries are built to run on. This value determines the type of fleet resources that you can use for this build. If your game build contains multiple executables, they all must run on the same operating system.</p>"]
     #[serde(rename="OperatingSystem")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub operating_system: Option<OperatingSystem>,
+    pub operating_system: Option<String>,
     #[doc="<p>Amazon S3 location of the game build files to be uploaded. The S3 bucket must be owned by the same AWS account that you're using to manage Amazon GameLift. It also must in the same region that you want to create a new build in. Before calling <code>CreateBuild</code> with this location, you must allow Amazon GameLift to access your Amazon S3 bucket (see <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-build-cli-uploading.html#gamelift-build-cli-uploading-create-build\">Create a Build with Files in Amazon S3</a>).</p>"]
     #[serde(rename="StorageLocation")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -158,7 +151,7 @@ pub struct CreateBuildInput {
     #[doc="<p>Version that is associated with this build. Version strings do not need to be unique. You can use <a>UpdateBuild</a> to change this value later. </p>"]
     #[serde(rename="Version")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub version: Option<NonZeroAndMaxString>,
+    pub version: Option<String>,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -183,33 +176,33 @@ pub struct CreateBuildOutput {
 pub struct CreateFleetInput {
     #[doc="<p>Unique identifier for a build to be deployed on the new fleet. The build must have been successfully uploaded to Amazon GameLift and be in a <code>READY</code> status. This fleet setting cannot be changed once the fleet is created.</p>"]
     #[serde(rename="BuildId")]
-    pub build_id: BuildId,
+    pub build_id: String,
     #[doc="<p>Human-readable description of a fleet.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub description: Option<NonZeroAndMaxString>,
+    pub description: Option<String>,
     #[doc="<p>Range of IP addresses and port settings that permit inbound traffic to access server processes running on the fleet. If no inbound permissions are set, including both IP address range and port range, the server processes in the fleet cannot accept connections. You can specify one or more sets of permissions for a fleet.</p>"]
     #[serde(rename="EC2InboundPermissions")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ec2_inbound_permissions: Option<IpPermissionsList>,
+    pub ec2_inbound_permissions: Option<Vec<IpPermission>>,
     #[doc="<p>Name of an EC2 instance type that is supported in Amazon GameLift. A fleet instance type determines the computing resources of each instance in the fleet, including CPU, memory, storage, and networking capacity. Amazon GameLift supports the following EC2 instance types. See <a href=\"http://aws.amazon.com/ec2/instance-types/\">Amazon EC2 Instance Types</a> for detailed descriptions.</p>"]
     #[serde(rename="EC2InstanceType")]
-    pub ec2_instance_type: EC2InstanceType,
+    pub ec2_instance_type: String,
     #[doc="<p>This parameter is no longer used. Instead, to specify where Amazon GameLift should store log files once a server process shuts down, use the Amazon GameLift server API <code>ProcessReady()</code> and specify one or more directory paths in <code>logParameters</code>. See more information in the <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api-ref.html#gamelift-sdk-server-api-ref-dataypes-process\">Server API Reference</a>. </p>"]
     #[serde(rename="LogPaths")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub log_paths: Option<StringList>,
+    pub log_paths: Option<Vec<String>>,
     #[doc="<p>Names of metric groups to add this fleet to. Use an existing metric group name to add this fleet to the group, or use a new name to create a new metric group. Currently, a fleet can only be included in one metric group at a time.</p>"]
     #[serde(rename="MetricGroups")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub metric_groups: Option<MetricGroupList>,
+    pub metric_groups: Option<Vec<String>>,
     #[doc="<p>Descriptive label that is associated with a fleet. Fleet names do not need to be unique.</p>"]
     #[serde(rename="Name")]
-    pub name: NonZeroAndMaxString,
+    pub name: String,
     #[doc="<p>Game session protection policy to apply to all instances in this fleet. If this parameter is not set, instances in this fleet default to no protection. You can change a fleet's protection policy using UpdateFleetAttributes, but this change will only affect sessions created after the policy change. You can also set protection for individual instances using <a>UpdateGameSession</a>.</p> <ul> <li> <p> <b>NoProtection</b> – The game session can be terminated during a scale-down event.</p> </li> <li> <p> <b>FullProtection</b> – If the game session is in an <code>ACTIVE</code> status, it cannot be terminated during a scale-down event.</p> </li> </ul>"]
     #[serde(rename="NewGameSessionProtectionPolicy")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub new_game_session_protection_policy: Option<ProtectionPolicy>,
+    pub new_game_session_protection_policy: Option<String>,
     #[doc="<p>Policy that limits the number of game sessions an individual player can create over a span of time for this fleet.</p>"]
     #[serde(rename="ResourceCreationLimitPolicy")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -221,11 +214,11 @@ pub struct CreateFleetInput {
     #[doc="<p>This parameter is no longer used. Instead, specify server launch parameters in the <code>RuntimeConfiguration</code> parameter. (Requests that specify a server launch path and launch parameters instead of a runtime configuration will continue to work.)</p>"]
     #[serde(rename="ServerLaunchParameters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub server_launch_parameters: Option<NonZeroAndMaxString>,
+    pub server_launch_parameters: Option<String>,
     #[doc="<p>This parameter is no longer used. Instead, specify a server launch path using the <code>RuntimeConfiguration</code> parameter. (Requests that specify a server launch path and launch parameters instead of a runtime configuration will continue to work.)</p>"]
     #[serde(rename="ServerLaunchPath")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub server_launch_path: Option<NonZeroAndMaxString>,
+    pub server_launch_path: Option<String>,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -243,34 +236,34 @@ pub struct CreateGameSessionInput {
     #[doc="<p>Unique identifier for an alias associated with the fleet to create a game session in. Each request must reference either a fleet ID or alias ID, but not both.</p>"]
     #[serde(rename="AliasId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub alias_id: Option<AliasId>,
+    pub alias_id: Option<String>,
     #[doc="<p>Unique identifier for a player or entity creating the game session. This ID is used to enforce a resource protection policy (if one exists) that limits the number of concurrent active game sessions one player can have.</p>"]
     #[serde(rename="CreatorId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub creator_id: Option<NonZeroAndMaxString>,
+    pub creator_id: Option<String>,
     #[doc="<p>Unique identifier for a fleet to create a game session in. Each request must reference either a fleet ID or alias ID, but not both.</p>"]
     #[serde(rename="FleetId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub fleet_id: Option<FleetId>,
+    pub fleet_id: Option<String>,
     #[doc="<p>Set of developer-defined properties for a game session. These properties are passed to the server process hosting the game session.</p>"]
     #[serde(rename="GameProperties")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub game_properties: Option<GamePropertyList>,
+    pub game_properties: Option<Vec<GameProperty>>,
     #[doc="<p> <i>This parameter is no longer preferred. Please use <code>IdempotencyToken</code> instead.</i> Custom string that uniquely identifies a request for a new game session. Maximum token length is 48 characters. If provided, this string is included in the new game session's ID. (A game session ID has the following format: <code>arn:aws:gamelift:&lt;region&gt;::gamesession/&lt;fleet ID&gt;/&lt;custom ID string or idempotency token&gt;</code>.) </p>"]
     #[serde(rename="GameSessionId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub game_session_id: Option<IdStringModel>,
+    pub game_session_id: Option<String>,
     #[doc="<p>Custom string that uniquely identifies a request for a new game session. Maximum token length is 48 characters. If provided, this string is included in the new game session's ID. (A game session ID has the following format: <code>arn:aws:gamelift:&lt;region&gt;::gamesession/&lt;fleet ID&gt;/&lt;custom ID string or idempotency token&gt;</code>.) </p>"]
     #[serde(rename="IdempotencyToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub idempotency_token: Option<IdStringModel>,
+    pub idempotency_token: Option<String>,
     #[doc="<p>Maximum number of players that can be connected simultaneously to the game session.</p>"]
     #[serde(rename="MaximumPlayerSessionCount")]
-    pub maximum_player_session_count: WholeNumber,
+    pub maximum_player_session_count: i64,
     #[doc="<p>Descriptive label that is associated with a game session. Session names do not need to be unique.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<NonZeroAndMaxString>,
+    pub name: Option<String>,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -288,18 +281,18 @@ pub struct CreateGameSessionQueueInput {
     #[doc="<p>List of fleets that can be used to fulfill game session placement requests in the queue. Fleets are identified by either a fleet ARN or a fleet alias ARN. Destinations are listed in default preference order.</p>"]
     #[serde(rename="Destinations")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub destinations: Option<GameSessionQueueDestinationList>,
+    pub destinations: Option<Vec<GameSessionQueueDestination>>,
     #[doc="<p>Descriptive label that is associated with queue. Queue names must be unique within each region.</p>"]
     #[serde(rename="Name")]
-    pub name: GameSessionQueueName,
+    pub name: String,
     #[doc="<p>Collection of latency policies to apply when processing game sessions placement requests with player latency information. Multiple policies are evaluated in order of the maximum latency value, starting with the lowest latency values. With just one policy, it is enforced at the start of the game session placement for the duration period. With multiple policies, each policy is enforced consecutively for its duration period. For example, a queue might enforce a 60-second policy followed by a 120-second policy, and then no policy for the remainder of the placement. A player latency policy must set a value for MaximumIndividualPlayerLatencyMilliseconds; if none is set, this API requests will fail.</p>"]
     #[serde(rename="PlayerLatencyPolicies")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub player_latency_policies: Option<PlayerLatencyPolicyList>,
+    pub player_latency_policies: Option<Vec<PlayerLatencyPolicy>>,
     #[doc="<p>Maximum time, in seconds, that a new game session placement request remains in the queue. When a request exceeds this time, the game session placement changes to a TIMED_OUT status.</p>"]
     #[serde(rename="TimeoutInSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub timeout_in_seconds: Option<WholeNumber>,
+    pub timeout_in_seconds: Option<i64>,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -316,14 +309,14 @@ pub struct CreateGameSessionQueueOutput {
 pub struct CreatePlayerSessionInput {
     #[doc="<p>Unique identifier for the game session to add a player to.</p>"]
     #[serde(rename="GameSessionId")]
-    pub game_session_id: ArnStringModel,
+    pub game_session_id: String,
     #[doc="<p>Developer-defined information related to a player. Amazon GameLift does not use this data, so it can be formatted as needed for use in the game.</p>"]
     #[serde(rename="PlayerData")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub player_data: Option<PlayerData>,
+    pub player_data: Option<String>,
     #[doc="<p>Unique identifier for a player. Player IDs are developer-defined.</p>"]
     #[serde(rename="PlayerId")]
-    pub player_id: NonZeroAndMaxString,
+    pub player_id: String,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -340,14 +333,14 @@ pub struct CreatePlayerSessionOutput {
 pub struct CreatePlayerSessionsInput {
     #[doc="<p>Unique identifier for the game session to add players to.</p>"]
     #[serde(rename="GameSessionId")]
-    pub game_session_id: ArnStringModel,
+    pub game_session_id: String,
     #[doc="<p>Map of string pairs, each specifying a player ID and a set of developer-defined information related to the player. Amazon GameLift does not use this data, so it can be formatted as needed for use in the game. Player data strings for player IDs not included in the <code>PlayerIds</code> parameter are ignored. </p>"]
     #[serde(rename="PlayerDataMap")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub player_data_map: Option<PlayerDataMap>,
+    pub player_data_map: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>List of unique identifiers for the players to be added.</p>"]
     #[serde(rename="PlayerIds")]
-    pub player_ids: PlayerIdList,
+    pub player_ids: Vec<String>,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -356,7 +349,7 @@ pub struct CreatePlayerSessionsOutput {
     #[doc="<p>Collection of player session objects created for the added players.</p>"]
     #[serde(rename="PlayerSessions")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub player_sessions: Option<PlayerSessionList>,
+    pub player_sessions: Option<Vec<PlayerSession>>,
 }
 
 #[doc="<p>Represents the input for a request action.</p>"]
@@ -364,7 +357,7 @@ pub struct CreatePlayerSessionsOutput {
 pub struct DeleteAliasInput {
     #[doc="<p>Unique identifier for a fleet alias. Specify the alias you want to delete.</p>"]
     #[serde(rename="AliasId")]
-    pub alias_id: AliasId,
+    pub alias_id: String,
 }
 
 #[doc="<p>Represents the input for a request action.</p>"]
@@ -372,7 +365,7 @@ pub struct DeleteAliasInput {
 pub struct DeleteBuildInput {
     #[doc="<p>Unique identifier for a build to delete.</p>"]
     #[serde(rename="BuildId")]
-    pub build_id: BuildId,
+    pub build_id: String,
 }
 
 #[doc="<p>Represents the input for a request action.</p>"]
@@ -380,7 +373,7 @@ pub struct DeleteBuildInput {
 pub struct DeleteFleetInput {
     #[doc="<p>Unique identifier for a fleet to be deleted.</p>"]
     #[serde(rename="FleetId")]
-    pub fleet_id: FleetId,
+    pub fleet_id: String,
 }
 
 #[doc="<p>Represents the input for a request action.</p>"]
@@ -388,7 +381,7 @@ pub struct DeleteFleetInput {
 pub struct DeleteGameSessionQueueInput {
     #[doc="<p>Descriptive label that is associated with queue. Queue names must be unique within each region.</p>"]
     #[serde(rename="Name")]
-    pub name: GameSessionQueueName,
+    pub name: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -399,10 +392,10 @@ pub struct DeleteGameSessionQueueOutput;
 pub struct DeleteScalingPolicyInput {
     #[doc="<p>Unique identifier for a fleet to be deleted.</p>"]
     #[serde(rename="FleetId")]
-    pub fleet_id: FleetId,
+    pub fleet_id: String,
     #[doc="<p>Descriptive label that is associated with a scaling policy. Policy names do not need to be unique.</p>"]
     #[serde(rename="Name")]
-    pub name: NonZeroAndMaxString,
+    pub name: String,
 }
 
 #[doc="<p>Represents the input for a request action.</p>"]
@@ -410,7 +403,7 @@ pub struct DeleteScalingPolicyInput {
 pub struct DescribeAliasInput {
     #[doc="<p>Unique identifier for a fleet alias. Specify the alias you want to retrieve.</p>"]
     #[serde(rename="AliasId")]
-    pub alias_id: AliasId,
+    pub alias_id: String,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -427,7 +420,7 @@ pub struct DescribeAliasOutput {
 pub struct DescribeBuildInput {
     #[doc="<p>Unique identifier for a build to retrieve properties for.</p>"]
     #[serde(rename="BuildId")]
-    pub build_id: BuildId,
+    pub build_id: String,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -445,7 +438,7 @@ pub struct DescribeEC2InstanceLimitsInput {
     #[doc="<p>Name of an EC2 instance type that is supported in Amazon GameLift. A fleet instance type determines the computing resources of each instance in the fleet, including CPU, memory, storage, and networking capacity. Amazon GameLift supports the following EC2 instance types. See <a href=\"http://aws.amazon.com/ec2/instance-types/\">Amazon EC2 Instance Types</a> for detailed descriptions. Leave this parameter blank to retrieve limits for all types.</p>"]
     #[serde(rename="EC2InstanceType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ec2_instance_type: Option<EC2InstanceType>,
+    pub ec2_instance_type: Option<String>,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -454,7 +447,7 @@ pub struct DescribeEC2InstanceLimitsOutput {
     #[doc="<p>Object that contains the maximum number of instances for the specified instance type.</p>"]
     #[serde(rename="EC2InstanceLimits")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ec2_instance_limits: Option<EC2InstanceLimitList>,
+    pub ec2_instance_limits: Option<Vec<EC2InstanceLimit>>,
 }
 
 #[doc="<p>Represents the input for a request action.</p>"]
@@ -463,15 +456,15 @@ pub struct DescribeFleetAttributesInput {
     #[doc="<p>Unique identifier for a fleet(s) to retrieve attributes for. To request attributes for all fleets, leave this parameter empty.</p>"]
     #[serde(rename="FleetIds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub fleet_ids: Option<FleetIdList>,
+    pub fleet_ids: Option<Vec<String>>,
     #[doc="<p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages. This parameter is ignored when the request specifies one or a list of fleet IDs.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<PositiveInteger>,
+    pub limit: Option<i64>,
     #[doc="<p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To specify the start of the result set, do not specify a value. This parameter is ignored when the request specifies one or a list of fleet IDs.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NonZeroAndMaxString>,
+    pub next_token: Option<String>,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -480,11 +473,11 @@ pub struct DescribeFleetAttributesOutput {
     #[doc="<p>Collection of objects containing attribute metadata for each requested fleet ID.</p>"]
     #[serde(rename="FleetAttributes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub fleet_attributes: Option<FleetAttributesList>,
+    pub fleet_attributes: Option<Vec<FleetAttributes>>,
     #[doc="<p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NonZeroAndMaxString>,
+    pub next_token: Option<String>,
 }
 
 #[doc="<p>Represents the input for a request action.</p>"]
@@ -493,15 +486,15 @@ pub struct DescribeFleetCapacityInput {
     #[doc="<p>Unique identifier for a fleet(s) to retrieve capacity information for. To request capacity information for all fleets, leave this parameter empty.</p>"]
     #[serde(rename="FleetIds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub fleet_ids: Option<FleetIdList>,
+    pub fleet_ids: Option<Vec<String>>,
     #[doc="<p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages. This parameter is ignored when the request specifies one or a list of fleet IDs.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<PositiveInteger>,
+    pub limit: Option<i64>,
     #[doc="<p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To specify the start of the result set, do not specify a value. This parameter is ignored when the request specifies one or a list of fleet IDs.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NonZeroAndMaxString>,
+    pub next_token: Option<String>,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -510,11 +503,11 @@ pub struct DescribeFleetCapacityOutput {
     #[doc="<p>Collection of objects containing capacity information for each requested fleet ID. Leave this parameter empty to retrieve capacity information for all fleets.</p>"]
     #[serde(rename="FleetCapacity")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub fleet_capacity: Option<FleetCapacityList>,
+    pub fleet_capacity: Option<Vec<FleetCapacity>>,
     #[doc="<p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NonZeroAndMaxString>,
+    pub next_token: Option<String>,
 }
 
 #[doc="<p>Represents the input for a request action.</p>"]
@@ -523,22 +516,22 @@ pub struct DescribeFleetEventsInput {
     #[doc="<p>Most recent date to retrieve event logs for. If no end time is specified, this call returns entries from the specified start time up to the present. Format is a number expressed in Unix time as milliseconds (ex: \"1469498468.057\").</p>"]
     #[serde(rename="EndTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub end_time: Option<Timestamp>,
+    pub end_time: Option<f64>,
     #[doc="<p>Unique identifier for a fleet to get event logs for.</p>"]
     #[serde(rename="FleetId")]
-    pub fleet_id: FleetId,
+    pub fleet_id: String,
     #[doc="<p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<PositiveInteger>,
+    pub limit: Option<i64>,
     #[doc="<p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To specify the start of the result set, do not specify a value.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NonZeroAndMaxString>,
+    pub next_token: Option<String>,
     #[doc="<p>Earliest date to retrieve event logs for. If no start time is specified, this call returns entries starting from when the fleet was created to the specified end time. Format is a number expressed in Unix time as milliseconds (ex: \"1469498468.057\").</p>"]
     #[serde(rename="StartTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub start_time: Option<Timestamp>,
+    pub start_time: Option<f64>,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -547,11 +540,11 @@ pub struct DescribeFleetEventsOutput {
     #[doc="<p>Collection of objects containing event log entries for the specified fleet.</p>"]
     #[serde(rename="Events")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub events: Option<EventList>,
+    pub events: Option<Vec<Event>>,
     #[doc="<p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NonZeroAndMaxString>,
+    pub next_token: Option<String>,
 }
 
 #[doc="<p>Represents the input for a request action.</p>"]
@@ -559,7 +552,7 @@ pub struct DescribeFleetEventsOutput {
 pub struct DescribeFleetPortSettingsInput {
     #[doc="<p>Unique identifier for a fleet to retrieve port settings for.</p>"]
     #[serde(rename="FleetId")]
-    pub fleet_id: FleetId,
+    pub fleet_id: String,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -568,7 +561,7 @@ pub struct DescribeFleetPortSettingsOutput {
     #[doc="<p>Object that contains port settings for the requested fleet ID.</p>"]
     #[serde(rename="InboundPermissions")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub inbound_permissions: Option<IpPermissionsList>,
+    pub inbound_permissions: Option<Vec<IpPermission>>,
 }
 
 #[doc="<p>Represents the input for a request action.</p>"]
@@ -577,15 +570,15 @@ pub struct DescribeFleetUtilizationInput {
     #[doc="<p>Unique identifier for a fleet(s) to retrieve utilization data for. To request utilization data for all fleets, leave this parameter empty.</p>"]
     #[serde(rename="FleetIds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub fleet_ids: Option<FleetIdList>,
+    pub fleet_ids: Option<Vec<String>>,
     #[doc="<p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages. This parameter is ignored when the request specifies one or a list of fleet IDs.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<PositiveInteger>,
+    pub limit: Option<i64>,
     #[doc="<p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To specify the start of the result set, do not specify a value. This parameter is ignored when the request specifies one or a list of fleet IDs.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NonZeroAndMaxString>,
+    pub next_token: Option<String>,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -594,11 +587,11 @@ pub struct DescribeFleetUtilizationOutput {
     #[doc="<p>Collection of objects containing utilization information for each requested fleet ID.</p>"]
     #[serde(rename="FleetUtilization")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub fleet_utilization: Option<FleetUtilizationList>,
+    pub fleet_utilization: Option<Vec<FleetUtilization>>,
     #[doc="<p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NonZeroAndMaxString>,
+    pub next_token: Option<String>,
 }
 
 #[doc="<p>Represents the input for a request action.</p>"]
@@ -607,27 +600,27 @@ pub struct DescribeGameSessionDetailsInput {
     #[doc="<p>Unique identifier for an alias associated with the fleet to retrieve all game sessions for.</p>"]
     #[serde(rename="AliasId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub alias_id: Option<AliasId>,
+    pub alias_id: Option<String>,
     #[doc="<p>Unique identifier for a fleet to retrieve all game sessions active on the fleet.</p>"]
     #[serde(rename="FleetId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub fleet_id: Option<FleetId>,
+    pub fleet_id: Option<String>,
     #[doc="<p>Unique identifier for the game session to retrieve.</p>"]
     #[serde(rename="GameSessionId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub game_session_id: Option<ArnStringModel>,
+    pub game_session_id: Option<String>,
     #[doc="<p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<PositiveInteger>,
+    pub limit: Option<i64>,
     #[doc="<p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To specify the start of the result set, do not specify a value.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NonZeroAndMaxString>,
+    pub next_token: Option<String>,
     #[doc="<p>Game session status to filter results on. Possible game session statuses include ACTIVE, <code>TERMINATED</code>, <code>ACTIVATING</code> and <code>TERMINATING</code> (the last two are transitory). </p>"]
     #[serde(rename="StatusFilter")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status_filter: Option<NonZeroAndMaxString>,
+    pub status_filter: Option<String>,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -636,11 +629,11 @@ pub struct DescribeGameSessionDetailsOutput {
     #[doc="<p>Collection of objects containing game session properties and the protection policy currently in force for each session matching the request.</p>"]
     #[serde(rename="GameSessionDetails")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub game_session_details: Option<GameSessionDetailList>,
+    pub game_session_details: Option<Vec<GameSessionDetail>>,
     #[doc="<p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NonZeroAndMaxString>,
+    pub next_token: Option<String>,
 }
 
 #[doc="<p>Represents the input for a request action.</p>"]
@@ -648,7 +641,7 @@ pub struct DescribeGameSessionDetailsOutput {
 pub struct DescribeGameSessionPlacementInput {
     #[doc="<p>Unique identifier for a game session placement to retrieve.</p>"]
     #[serde(rename="PlacementId")]
-    pub placement_id: IdStringModel,
+    pub placement_id: String,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -666,15 +659,15 @@ pub struct DescribeGameSessionQueuesInput {
     #[doc="<p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<PositiveInteger>,
+    pub limit: Option<i64>,
     #[doc="<p>List of queue names to retrieve information for. To request settings for all queues, leave this parameter empty.</p>"]
     #[serde(rename="Names")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub names: Option<GameSessionQueueNameList>,
+    pub names: Option<Vec<String>>,
     #[doc="<p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To specify the start of the result set, do not specify a value.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NonZeroAndMaxString>,
+    pub next_token: Option<String>,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -683,11 +676,11 @@ pub struct DescribeGameSessionQueuesOutput {
     #[doc="<p>Collection of objects that describes the requested game session queues.</p>"]
     #[serde(rename="GameSessionQueues")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub game_session_queues: Option<GameSessionQueueList>,
+    pub game_session_queues: Option<Vec<GameSessionQueue>>,
     #[doc="<p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NonZeroAndMaxString>,
+    pub next_token: Option<String>,
 }
 
 #[doc="<p>Represents the input for a request action.</p>"]
@@ -696,27 +689,27 @@ pub struct DescribeGameSessionsInput {
     #[doc="<p>Unique identifier for an alias associated with the fleet to retrieve all game sessions for. </p>"]
     #[serde(rename="AliasId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub alias_id: Option<AliasId>,
+    pub alias_id: Option<String>,
     #[doc="<p>Unique identifier for a fleet to retrieve all game sessions for.</p>"]
     #[serde(rename="FleetId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub fleet_id: Option<FleetId>,
+    pub fleet_id: Option<String>,
     #[doc="<p>Unique identifier for the game session to retrieve. You can use either a <code>GameSessionId</code> or <code>GameSessionArn</code> value. </p>"]
     #[serde(rename="GameSessionId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub game_session_id: Option<ArnStringModel>,
+    pub game_session_id: Option<String>,
     #[doc="<p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<PositiveInteger>,
+    pub limit: Option<i64>,
     #[doc="<p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To specify the start of the result set, do not specify a value.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NonZeroAndMaxString>,
+    pub next_token: Option<String>,
     #[doc="<p>Game session status to filter results on. Possible game session statuses include <code>ACTIVE</code>, <code>TERMINATED</code>, <code>ACTIVATING</code>, and <code>TERMINATING</code> (the last two are transitory). </p>"]
     #[serde(rename="StatusFilter")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status_filter: Option<NonZeroAndMaxString>,
+    pub status_filter: Option<String>,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -725,11 +718,11 @@ pub struct DescribeGameSessionsOutput {
     #[doc="<p>Collection of objects containing game session properties for each session matching the request.</p>"]
     #[serde(rename="GameSessions")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub game_sessions: Option<GameSessionList>,
+    pub game_sessions: Option<Vec<GameSession>>,
     #[doc="<p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NonZeroAndMaxString>,
+    pub next_token: Option<String>,
 }
 
 #[doc="<p>Represents the input for a request action.</p>"]
@@ -737,19 +730,19 @@ pub struct DescribeGameSessionsOutput {
 pub struct DescribeInstancesInput {
     #[doc="<p>Unique identifier for a fleet to retrieve instance information for.</p>"]
     #[serde(rename="FleetId")]
-    pub fleet_id: FleetId,
+    pub fleet_id: String,
     #[doc="<p>Unique identifier for an instance to retrieve. Specify an instance ID or leave blank to retrieve all instances in the fleet.</p>"]
     #[serde(rename="InstanceId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub instance_id: Option<InstanceId>,
+    pub instance_id: Option<String>,
     #[doc="<p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<PositiveInteger>,
+    pub limit: Option<i64>,
     #[doc="<p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To specify the start of the result set, do not specify a value.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NonZeroAndMaxString>,
+    pub next_token: Option<String>,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -758,11 +751,11 @@ pub struct DescribeInstancesOutput {
     #[doc="<p>Collection of objects containing properties for each instance returned.</p>"]
     #[serde(rename="Instances")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub instances: Option<InstanceList>,
+    pub instances: Option<Vec<Instance>>,
     #[doc="<p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NonZeroAndMaxString>,
+    pub next_token: Option<String>,
 }
 
 #[doc="<p>Represents the input for a request action.</p>"]
@@ -771,27 +764,27 @@ pub struct DescribePlayerSessionsInput {
     #[doc="<p>Unique identifier for the game session to retrieve player sessions for.</p>"]
     #[serde(rename="GameSessionId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub game_session_id: Option<ArnStringModel>,
+    pub game_session_id: Option<String>,
     #[doc="<p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages. If a player session ID is specified, this parameter is ignored.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<PositiveInteger>,
+    pub limit: Option<i64>,
     #[doc="<p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To specify the start of the result set, do not specify a value. If a player session ID is specified, this parameter is ignored.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NonZeroAndMaxString>,
+    pub next_token: Option<String>,
     #[doc="<p>Unique identifier for a player to retrieve player sessions for.</p>"]
     #[serde(rename="PlayerId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub player_id: Option<NonZeroAndMaxString>,
+    pub player_id: Option<String>,
     #[doc="<p>Unique identifier for a player session to retrieve.</p>"]
     #[serde(rename="PlayerSessionId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub player_session_id: Option<PlayerSessionId>,
+    pub player_session_id: Option<String>,
     #[doc="<p>Player session status to filter results on.</p> <p>Possible player session statuses include the following:</p> <ul> <li> <p> <b>RESERVED</b> – The player session request has been received, but the player has not yet connected to the server process and/or been validated. </p> </li> <li> <p> <b>ACTIVE</b> – The player has been validated by the server process and is currently connected.</p> </li> <li> <p> <b>COMPLETED</b> – The player connection has been dropped.</p> </li> <li> <p> <b>TIMEDOUT</b> – A player session request was received, but the player did not connect and/or was not validated within the time-out limit (60 seconds).</p> </li> </ul>"]
     #[serde(rename="PlayerSessionStatusFilter")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub player_session_status_filter: Option<NonZeroAndMaxString>,
+    pub player_session_status_filter: Option<String>,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -800,11 +793,11 @@ pub struct DescribePlayerSessionsOutput {
     #[doc="<p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NonZeroAndMaxString>,
+    pub next_token: Option<String>,
     #[doc="<p>Collection of objects containing properties for each player session that matches the request.</p>"]
     #[serde(rename="PlayerSessions")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub player_sessions: Option<PlayerSessionList>,
+    pub player_sessions: Option<Vec<PlayerSession>>,
 }
 
 #[doc="<p>Represents the input for a request action.</p>"]
@@ -812,7 +805,7 @@ pub struct DescribePlayerSessionsOutput {
 pub struct DescribeRuntimeConfigurationInput {
     #[doc="<p>Unique identifier for a fleet to get the runtime configuration for.</p>"]
     #[serde(rename="FleetId")]
-    pub fleet_id: FleetId,
+    pub fleet_id: String,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -829,19 +822,19 @@ pub struct DescribeRuntimeConfigurationOutput {
 pub struct DescribeScalingPoliciesInput {
     #[doc="<p>Unique identifier for a fleet to retrieve scaling policies for.</p>"]
     #[serde(rename="FleetId")]
-    pub fleet_id: FleetId,
+    pub fleet_id: String,
     #[doc="<p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<PositiveInteger>,
+    pub limit: Option<i64>,
     #[doc="<p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To specify the start of the result set, do not specify a value.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NonZeroAndMaxString>,
+    pub next_token: Option<String>,
     #[doc="<p>Scaling policy status to filter results on. A scaling policy is only in force when in an <code>ACTIVE</code> status.</p> <ul> <li> <p> <b>ACTIVE</b> – The scaling policy is currently in force.</p> </li> <li> <p> <b>UPDATEREQUESTED</b> – A request to update the scaling policy has been received.</p> </li> <li> <p> <b>UPDATING</b> – A change is being made to the scaling policy.</p> </li> <li> <p> <b>DELETEREQUESTED</b> – A request to delete the scaling policy has been received.</p> </li> <li> <p> <b>DELETING</b> – The scaling policy is being deleted.</p> </li> <li> <p> <b>DELETED</b> – The scaling policy has been deleted.</p> </li> <li> <p> <b>ERROR</b> – An error occurred in creating the policy. It should be removed and recreated.</p> </li> </ul>"]
     #[serde(rename="StatusFilter")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status_filter: Option<ScalingStatusType>,
+    pub status_filter: Option<String>,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -850,11 +843,11 @@ pub struct DescribeScalingPoliciesOutput {
     #[doc="<p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NonZeroAndMaxString>,
+    pub next_token: Option<String>,
     #[doc="<p>Collection of objects containing the scaling policies matching the request.</p>"]
     #[serde(rename="ScalingPolicies")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub scaling_policies: Option<ScalingPolicyList>,
+    pub scaling_policies: Option<Vec<ScalingPolicy>>,
 }
 
 #[doc="<p>Player information for use when creating player sessions using a game session placement request with <a>StartGameSessionPlacement</a>.</p>"]
@@ -863,46 +856,44 @@ pub struct DesiredPlayerSession {
     #[doc="<p>Developer-defined information related to a player. Amazon GameLift does not use this data, so it can be formatted as needed for use in the game.</p>"]
     #[serde(rename="PlayerData")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub player_data: Option<PlayerData>,
+    pub player_data: Option<String>,
     #[doc="<p>Unique identifier for a player to associate with the player session.</p>"]
     #[serde(rename="PlayerId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub player_id: Option<NonZeroAndMaxString>,
+    pub player_id: Option<String>,
 }
 
-pub type DesiredPlayerSessionList = Vec<DesiredPlayerSession>;
-pub type Double = f64;
 #[doc="<p>Current status of fleet capacity. The number of active instances should match or be in the process of matching the number of desired instances. Pending and terminating counts are non-zero only if fleet capacity is adjusting to an <a>UpdateFleetCapacity</a> request, or if access to resources is temporarily affected.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct EC2InstanceCounts {
     #[doc="<p>Actual number of active instances in the fleet.</p>"]
     #[serde(rename="ACTIVE")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub active: Option<WholeNumber>,
+    pub active: Option<i64>,
     #[doc="<p>Ideal number of active instances in the fleet.</p>"]
     #[serde(rename="DESIRED")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub desired: Option<WholeNumber>,
+    pub desired: Option<i64>,
     #[doc="<p>Number of active instances in the fleet that are not currently hosting a game session.</p>"]
     #[serde(rename="IDLE")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub idle: Option<WholeNumber>,
+    pub idle: Option<i64>,
     #[doc="<p>Maximum value allowed for the fleet's instance count.</p>"]
     #[serde(rename="MAXIMUM")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub maximum: Option<WholeNumber>,
+    pub maximum: Option<i64>,
     #[doc="<p>Minimum value allowed for the fleet's instance count.</p>"]
     #[serde(rename="MINIMUM")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub minimum: Option<WholeNumber>,
+    pub minimum: Option<i64>,
     #[doc="<p>Number of instances in the fleet that are starting but not yet active.</p>"]
     #[serde(rename="PENDING")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub pending: Option<WholeNumber>,
+    pub pending: Option<i64>,
     #[doc="<p>Number of instances in the fleet that are no longer active but haven't yet been terminated.</p>"]
     #[serde(rename="TERMINATING")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub terminating: Option<WholeNumber>,
+    pub terminating: Option<i64>,
 }
 
 #[doc="<p>Maximum number of instances allowed based on the Amazon Elastic Compute Cloud (Amazon EC2) instance type. Instance limits can be retrieved by calling <a>DescribeEC2InstanceLimits</a>.</p>"]
@@ -911,89 +902,85 @@ pub struct EC2InstanceLimit {
     #[doc="<p>Number of instances of the specified type that are currently in use by this AWS account.</p>"]
     #[serde(rename="CurrentInstances")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub current_instances: Option<WholeNumber>,
+    pub current_instances: Option<i64>,
     #[doc="<p>Name of an EC2 instance type that is supported in Amazon GameLift. A fleet instance type determines the computing resources of each instance in the fleet, including CPU, memory, storage, and networking capacity. Amazon GameLift supports the following EC2 instance types. See <a href=\"http://aws.amazon.com/ec2/instance-types/\">Amazon EC2 Instance Types</a> for detailed descriptions.</p>"]
     #[serde(rename="EC2InstanceType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ec2_instance_type: Option<EC2InstanceType>,
+    pub ec2_instance_type: Option<String>,
     #[doc="<p>Number of instances allowed.</p>"]
     #[serde(rename="InstanceLimit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub instance_limit: Option<WholeNumber>,
+    pub instance_limit: Option<i64>,
 }
 
-pub type EC2InstanceLimitList = Vec<EC2InstanceLimit>;
-pub type EC2InstanceType = String;
 #[doc="<p>Log entry describing an event involving Amazon GameLift resources (such as a fleet). In addition to tracking activity, event codes and messages can provide additional information for troubleshooting and debugging problems.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Event {
     #[doc="<p>Type of event being logged. </p>"]
     #[serde(rename="EventCode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub event_code: Option<EventCode>,
+    pub event_code: Option<String>,
     #[doc="<p>Unique identifier for a fleet event.</p>"]
     #[serde(rename="EventId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub event_id: Option<NonZeroAndMaxString>,
+    pub event_id: Option<String>,
     #[doc="<p>Time stamp indicating when this event occurred. Format is a number expressed in Unix time as milliseconds (for example \"1469498468.057\").</p>"]
     #[serde(rename="EventTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub event_time: Option<Timestamp>,
+    pub event_time: Option<f64>,
     #[doc="<p>Additional information related to the event.</p>"]
     #[serde(rename="Message")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub message: Option<NonEmptyString>,
+    pub message: Option<String>,
     #[doc="<p>Unique identifier for an event resource, such as a fleet ID.</p>"]
     #[serde(rename="ResourceId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub resource_id: Option<NonZeroAndMaxString>,
+    pub resource_id: Option<String>,
 }
 
-pub type EventCode = String;
-pub type EventList = Vec<Event>;
 #[doc="<p>General properties describing a fleet.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct FleetAttributes {
     #[doc="<p>Unique identifier for a build.</p>"]
     #[serde(rename="BuildId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub build_id: Option<BuildId>,
+    pub build_id: Option<String>,
     #[doc="<p>Time stamp indicating when this data object was created. Format is a number expressed in Unix time as milliseconds (for example \"1469498468.057\").</p>"]
     #[serde(rename="CreationTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub creation_time: Option<Timestamp>,
+    pub creation_time: Option<f64>,
     #[doc="<p>Human-readable description of the fleet.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub description: Option<NonZeroAndMaxString>,
+    pub description: Option<String>,
     #[doc="<p>Identifier for a fleet that is unique across all regions.</p>"]
     #[serde(rename="FleetArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub fleet_arn: Option<ArnStringModel>,
+    pub fleet_arn: Option<String>,
     #[doc="<p>Unique identifier for a fleet.</p>"]
     #[serde(rename="FleetId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub fleet_id: Option<FleetId>,
+    pub fleet_id: Option<String>,
     #[doc="<p>Location of default log files. When a server process is shut down, Amazon GameLift captures and stores any log files in this location. These logs are in addition to game session logs; see more on game session logs in the <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-api-server-code\">Amazon GameLift Developer Guide</a>. If no default log path for a fleet is specified, Amazon GameLift will automatically upload logs that are stored on each instance at <code>C:\\game\\logs</code> (for Windows) or <code>/local/game/logs</code> (for Linux). Use the Amazon GameLift console to access stored logs. </p>"]
     #[serde(rename="LogPaths")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub log_paths: Option<StringList>,
+    pub log_paths: Option<Vec<String>>,
     #[doc="<p>Names of metric groups that this fleet is included in. In Amazon CloudWatch, you can view metrics for an individual fleet or aggregated metrics for a fleets that are in a fleet metric group. Currently, a fleet can be included in only one metric group at a time.</p>"]
     #[serde(rename="MetricGroups")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub metric_groups: Option<MetricGroupList>,
+    pub metric_groups: Option<Vec<String>>,
     #[doc="<p>Descriptive label that is associated with a fleet. Fleet names do not need to be unique.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<NonZeroAndMaxString>,
+    pub name: Option<String>,
     #[doc="<p>Type of game session protection to set for all new instances started in the fleet.</p> <ul> <li> <p> <b>NoProtection</b> – The game session can be terminated during a scale-down event.</p> </li> <li> <p> <b>FullProtection</b> – If the game session is in an <code>ACTIVE</code> status, it cannot be terminated during a scale-down event.</p> </li> </ul>"]
     #[serde(rename="NewGameSessionProtectionPolicy")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub new_game_session_protection_policy: Option<ProtectionPolicy>,
+    pub new_game_session_protection_policy: Option<String>,
     #[doc="<p>Operating system of the fleet's computing resources. A fleet's operating system depends on the OS specified for the build that is deployed on this fleet.</p>"]
     #[serde(rename="OperatingSystem")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub operating_system: Option<OperatingSystem>,
+    pub operating_system: Option<String>,
     #[doc="<p>Fleet policy to limit the number of game sessions an individual player can create over a span of time.</p>"]
     #[serde(rename="ResourceCreationLimitPolicy")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1001,29 +988,28 @@ pub struct FleetAttributes {
     #[doc="<p>Game server launch parameters specified for fleets created prior to 2016-08-04 (or AWS SDK v. 0.12.16). Server launch parameters for fleets created after this date are specified in the fleet's <a>RuntimeConfiguration</a>.</p>"]
     #[serde(rename="ServerLaunchParameters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub server_launch_parameters: Option<NonZeroAndMaxString>,
+    pub server_launch_parameters: Option<String>,
     #[doc="<p>Path to a game server executable in the fleet's build, specified for fleets created prior to 2016-08-04 (or AWS SDK v. 0.12.16). Server launch paths for fleets created after this date are specified in the fleet's <a>RuntimeConfiguration</a>.</p>"]
     #[serde(rename="ServerLaunchPath")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub server_launch_path: Option<NonZeroAndMaxString>,
+    pub server_launch_path: Option<String>,
     #[doc="<p>Current status of the fleet.</p> <p>Possible fleet statuses include the following:</p> <ul> <li> <p> <b>NEW</b> – A new fleet has been defined and desired instances is set to 1. </p> </li> <li> <p> <b>DOWNLOADING/VALIDATING/BUILDING/ACTIVATING</b> – Amazon GameLift is setting up the new fleet, creating new instances with the game build and starting server processes.</p> </li> <li> <p> <b>ACTIVE</b> – Hosts can now accept game sessions.</p> </li> <li> <p> <b>ERROR</b> – An error occurred when downloading, validating, building, or activating the fleet.</p> </li> <li> <p> <b>DELETING</b> – Hosts are responding to a delete fleet request.</p> </li> <li> <p> <b>TERMINATED</b> – The fleet no longer exists.</p> </li> </ul>"]
     #[serde(rename="Status")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status: Option<FleetStatus>,
+    pub status: Option<String>,
     #[doc="<p>Time stamp indicating when this data object was terminated. Format is a number expressed in Unix time as milliseconds (for example \"1469498468.057\").</p>"]
     #[serde(rename="TerminationTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub termination_time: Option<Timestamp>,
+    pub termination_time: Option<f64>,
 }
 
-pub type FleetAttributesList = Vec<FleetAttributes>;
 #[doc="<p>Information about the fleet's capacity. Fleet capacity is measured in EC2 instances. By default, new fleets have a capacity of one instance, but can be updated as needed. The maximum number of instances for a fleet is determined by the fleet's instance type.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct FleetCapacity {
     #[doc="<p>Unique identifier for a fleet.</p>"]
     #[serde(rename="FleetId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub fleet_id: Option<FleetId>,
+    pub fleet_id: Option<String>,
     #[doc="<p>Current status of fleet capacity.</p>"]
     #[serde(rename="InstanceCounts")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1031,113 +1017,102 @@ pub struct FleetCapacity {
     #[doc="<p>Name of an EC2 instance type that is supported in Amazon GameLift. A fleet instance type determines the computing resources of each instance in the fleet, including CPU, memory, storage, and networking capacity. Amazon GameLift supports the following EC2 instance types. See <a href=\"http://aws.amazon.com/ec2/instance-types/\">Amazon EC2 Instance Types</a> for detailed descriptions.</p>"]
     #[serde(rename="InstanceType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub instance_type: Option<EC2InstanceType>,
+    pub instance_type: Option<String>,
 }
 
-pub type FleetCapacityList = Vec<FleetCapacity>;
-pub type FleetId = String;
-pub type FleetIdList = Vec<FleetId>;
-pub type FleetStatus = String;
 #[doc="<p>Current status of fleet utilization, including the number of game and player sessions being hosted.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct FleetUtilization {
     #[doc="<p>Number of active game sessions currently being hosted on all instances in the fleet.</p>"]
     #[serde(rename="ActiveGameSessionCount")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub active_game_session_count: Option<WholeNumber>,
+    pub active_game_session_count: Option<i64>,
     #[doc="<p>Number of server processes in an <code>ACTIVE</code> status currently running across all instances in the fleet</p>"]
     #[serde(rename="ActiveServerProcessCount")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub active_server_process_count: Option<WholeNumber>,
+    pub active_server_process_count: Option<i64>,
     #[doc="<p>Number of active player sessions currently being hosted on all instances in the fleet.</p>"]
     #[serde(rename="CurrentPlayerSessionCount")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub current_player_session_count: Option<WholeNumber>,
+    pub current_player_session_count: Option<i64>,
     #[doc="<p>Unique identifier for a fleet.</p>"]
     #[serde(rename="FleetId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub fleet_id: Option<FleetId>,
+    pub fleet_id: Option<String>,
     #[doc="<p>Maximum players allowed across all game sessions currently being hosted on all instances in the fleet.</p>"]
     #[serde(rename="MaximumPlayerSessionCount")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub maximum_player_session_count: Option<WholeNumber>,
+    pub maximum_player_session_count: Option<i64>,
 }
 
-pub type FleetUtilizationList = Vec<FleetUtilization>;
-pub type Float = f32;
-pub type FreeText = String;
 #[doc="<p>Set of key-value pairs containing information a server process requires to set up a game session. This object allows you to pass in any set of data needed for your game. For more information, see the <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/\">Amazon GameLift Developer Guide</a>.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct GameProperty {
     #[doc="<p>TBD</p>"]
     #[serde(rename="Key")]
-    pub key: GamePropertyKey,
+    pub key: String,
     #[doc="<p>TBD</p>"]
     #[serde(rename="Value")]
-    pub value: GamePropertyValue,
+    pub value: String,
 }
 
-pub type GamePropertyKey = String;
-pub type GamePropertyList = Vec<GameProperty>;
-pub type GamePropertyValue = String;
 #[doc="<p>Properties describing a game session.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GameSession {
     #[doc="<p>Time stamp indicating when this data object was created. Format is a number expressed in Unix time as milliseconds (for example \"1469498468.057\").</p>"]
     #[serde(rename="CreationTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub creation_time: Option<Timestamp>,
+    pub creation_time: Option<f64>,
     #[doc="<p>Unique identifier for a player. This ID is used to enforce a resource protection policy (if one exists), that limits the number of game sessions a player can create.</p>"]
     #[serde(rename="CreatorId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub creator_id: Option<NonZeroAndMaxString>,
+    pub creator_id: Option<String>,
     #[doc="<p>Number of players currently in the game session.</p>"]
     #[serde(rename="CurrentPlayerSessionCount")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub current_player_session_count: Option<WholeNumber>,
+    pub current_player_session_count: Option<i64>,
     #[doc="<p>Unique identifier for a fleet the game session is running on.</p>"]
     #[serde(rename="FleetId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub fleet_id: Option<FleetId>,
+    pub fleet_id: Option<String>,
     #[doc="<p>Set of developer-defined properties for a game session. These properties are passed to the server process hosting the game session.</p>"]
     #[serde(rename="GameProperties")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub game_properties: Option<GamePropertyList>,
+    pub game_properties: Option<Vec<GameProperty>>,
     #[doc="<p>Unique identifier for the game session. A game session ID has the following format: <code>arn:aws:gamelift:&lt;region&gt;::gamesession/&lt;fleet ID&gt;/&lt;custom ID string or idempotency token&gt;</code>.</p>"]
     #[serde(rename="GameSessionId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub game_session_id: Option<NonZeroAndMaxString>,
+    pub game_session_id: Option<String>,
     #[doc="<p>IP address of the game session. To connect to a Amazon GameLift game server, an app needs both the IP address and port number.</p>"]
     #[serde(rename="IpAddress")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ip_address: Option<IpAddress>,
+    pub ip_address: Option<String>,
     #[doc="<p>Maximum number of players that can be connected simultaneously to the game session.</p>"]
     #[serde(rename="MaximumPlayerSessionCount")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub maximum_player_session_count: Option<WholeNumber>,
+    pub maximum_player_session_count: Option<i64>,
     #[doc="<p>Descriptive label that is associated with a game session. Session names do not need to be unique.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<NonZeroAndMaxString>,
+    pub name: Option<String>,
     #[doc="<p>Indicates whether or not the game session is accepting new players.</p>"]
     #[serde(rename="PlayerSessionCreationPolicy")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub player_session_creation_policy: Option<PlayerSessionCreationPolicy>,
+    pub player_session_creation_policy: Option<String>,
     #[doc="<p>Port number for the game session. To connect to a Amazon GameLift game server, an app needs both the IP address and port number.</p>"]
     #[serde(rename="Port")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub port: Option<PortNumber>,
+    pub port: Option<i64>,
     #[doc="<p>Current status of the game session. A game session must have an <code>ACTIVE</code> status to have player sessions.</p>"]
     #[serde(rename="Status")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status: Option<GameSessionStatus>,
+    pub status: Option<String>,
     #[doc="<p>Time stamp indicating when this data object was terminated. Format is a number expressed in Unix time as milliseconds (for example \"1469498468.057\").</p>"]
     #[serde(rename="TerminationTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub termination_time: Option<Timestamp>,
+    pub termination_time: Option<f64>,
 }
 
-pub type GameSessionActivationTimeoutSeconds = i64;
 #[doc="<p>A game session's properties plus the protection policy currently in force.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GameSessionDetail {
@@ -1148,100 +1123,97 @@ pub struct GameSessionDetail {
     #[doc="<p>Current status of protection for the game session.</p> <ul> <li> <p> <b>NoProtection</b> – The game session can be terminated during a scale-down event.</p> </li> <li> <p> <b>FullProtection</b> – If the game session is in an <code>ACTIVE</code> status, it cannot be terminated during a scale-down event.</p> </li> </ul>"]
     #[serde(rename="ProtectionPolicy")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub protection_policy: Option<ProtectionPolicy>,
+    pub protection_policy: Option<String>,
 }
 
-pub type GameSessionDetailList = Vec<GameSessionDetail>;
-pub type GameSessionList = Vec<GameSession>;
 #[doc="<p>Object that describes a <a>StartGameSessionPlacement</a> request. This object includes the full details of the original request plus the current status and start/end time stamps.</p> <p>Game session placement-related operations include:</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GameSessionPlacement {
     #[doc="<p>Time stamp indicating when this request was completed, canceled, or timed out.</p>"]
     #[serde(rename="EndTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub end_time: Option<Timestamp>,
+    pub end_time: Option<f64>,
     #[doc="<p>Set of developer-defined properties for a game session. These properties are passed to the server process hosting the game session.</p>"]
     #[serde(rename="GameProperties")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub game_properties: Option<GamePropertyList>,
+    pub game_properties: Option<Vec<GameProperty>>,
     #[doc="<p>Identifier for the game session created by this placement request. This value is set once the new game session is placed (placement status is Fulfilled). This identifier is unique across all regions. You can use this value as a <code>GameSessionId</code> value as needed.</p>"]
     #[serde(rename="GameSessionArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub game_session_arn: Option<NonZeroAndMaxString>,
+    pub game_session_arn: Option<String>,
     #[doc="<p>Unique identifier for the game session. This value is set once the new game session is placed (placement status is Fulfilled).</p>"]
     #[serde(rename="GameSessionId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub game_session_id: Option<NonZeroAndMaxString>,
+    pub game_session_id: Option<String>,
     #[doc="<p>Descriptive label that is associated with a game session. Session names do not need to be unique.</p>"]
     #[serde(rename="GameSessionName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub game_session_name: Option<NonZeroAndMaxString>,
+    pub game_session_name: Option<String>,
     #[doc="<p>Descriptive label that is associated with queue. Queue names must be unique within each region.</p>"]
     #[serde(rename="GameSessionQueueName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub game_session_queue_name: Option<GameSessionQueueName>,
+    pub game_session_queue_name: Option<String>,
     #[doc="<p>Name of the region where the game session created by this placement request is running. This value is set once the new game session is placed (placement status is Fulfilled).</p>"]
     #[serde(rename="GameSessionRegion")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub game_session_region: Option<NonZeroAndMaxString>,
+    pub game_session_region: Option<String>,
     #[doc="<p>IP address of the game session. To connect to a Amazon GameLift game server, an app needs both the IP address and port number. This value is set once the new game session is placed (placement status is Fulfilled). </p>"]
     #[serde(rename="IpAddress")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ip_address: Option<IpAddress>,
+    pub ip_address: Option<String>,
     #[doc="<p>Maximum number of players that can be connected simultaneously to the game session.</p>"]
     #[serde(rename="MaximumPlayerSessionCount")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub maximum_player_session_count: Option<WholeNumber>,
+    pub maximum_player_session_count: Option<i64>,
     #[doc="<p>Collection of information on player sessions created in response to the game session placement request. These player sessions are created only once a new game session is successfully placed (placement status is Fulfilled). This information includes the player ID (as provided in the placement request) and the corresponding player session ID. Retrieve full player sessions by calling <a>DescribePlayerSessions</a> with the player session ID.</p>"]
     #[serde(rename="PlacedPlayerSessions")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub placed_player_sessions: Option<PlacedPlayerSessionList>,
+    pub placed_player_sessions: Option<Vec<PlacedPlayerSession>>,
     #[doc="<p>Unique identifier for a game session placement.</p>"]
     #[serde(rename="PlacementId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub placement_id: Option<IdStringModel>,
+    pub placement_id: Option<String>,
     #[doc="<p>Set of values, expressed in milliseconds, indicating the amount of latency that players are experiencing when connected to AWS regions.</p>"]
     #[serde(rename="PlayerLatencies")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub player_latencies: Option<PlayerLatencyList>,
+    pub player_latencies: Option<Vec<PlayerLatency>>,
     #[doc="<p>Port number for the game session. To connect to a Amazon GameLift game server, an app needs both the IP address and port number. This value is set once the new game session is placed (placement status is Fulfilled).</p>"]
     #[serde(rename="Port")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub port: Option<PortNumber>,
+    pub port: Option<i64>,
     #[doc="<p>Time stamp indicating when this request was placed in the queue. Format is a number expressed in Unix time as milliseconds (for example \"1469498468.057\").</p>"]
     #[serde(rename="StartTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub start_time: Option<Timestamp>,
+    pub start_time: Option<f64>,
     #[doc="<p>Current status of the game session placement request.</p> <ul> <li> <p> <b>PENDING</b> – The placement request is currently in the queue waiting to be processed.</p> </li> <li> <p> <b>FULFILLED</b> – A new game session and player sessions (if requested) have been successfully created. Values for <i>GameSessionArn</i> and <i>GameSessionRegion</i> are available. </p> </li> <li> <p> <b>CANCELLED</b> – The placement request was canceled with a call to <a>StopGameSessionPlacement</a>.</p> </li> <li> <p> <b>TIMED_OUT</b> – A new game session was not successfully created before the time limit expired. You can resubmit the placement request as needed.</p> </li> </ul>"]
     #[serde(rename="Status")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status: Option<GameSessionPlacementState>,
+    pub status: Option<String>,
 }
 
-pub type GameSessionPlacementState = String;
 #[doc="<p>Configuration of a queue that is used to process game session placement requests. The queue configuration identifies several game features:</p> <ul> <li> <p>The destinations where a new game session can potentially be hosted. Amazon GameLift tries these destinations in an order based on either the queue's default order or player latency information, if provided in a placement request. With latency information, Amazon GameLift can place game sessions where the majority of players are reporting the lowest possible latency. </p> </li> <li> <p>The length of time that placement requests can wait in the queue before timing out. </p> </li> <li> <p>A set of optional latency policies that protect individual players from high latencies, preventing game sessions from being placed where any individual player is reporting latency higher than a policy's maximum.</p> </li> </ul> <p>Queue-related operations include the following:</p> <ul> <li> <p> <a>CreateGameSessionQueue</a> </p> </li> <li> <p> <a>DescribeGameSessionQueues</a> </p> </li> <li> <p> <a>UpdateGameSessionQueue</a> </p> </li> <li> <p> <a>DeleteGameSessionQueue</a> </p> </li> </ul>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GameSessionQueue {
     #[doc="<p>List of fleets that can be used to fulfill game session placement requests in the queue. Fleets are identified by either a fleet ARN or a fleet alias ARN. Destinations are listed in default preference order.</p>"]
     #[serde(rename="Destinations")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub destinations: Option<GameSessionQueueDestinationList>,
+    pub destinations: Option<Vec<GameSessionQueueDestination>>,
     #[doc="<p>Amazon Resource Name (<a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-arn-format.html\">ARN</a>) that is assigned to a game session queue and uniquely identifies it. Format is <code>arn:aws:gamelift:&lt;region&gt;::fleet/fleet-a1234567-b8c9-0d1e-2fa3-b45c6d7e8912</code>.</p>"]
     #[serde(rename="GameSessionQueueArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub game_session_queue_arn: Option<ArnStringModel>,
+    pub game_session_queue_arn: Option<String>,
     #[doc="<p>Descriptive label that is associated with queue. Queue names must be unique within each region.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<GameSessionQueueName>,
+    pub name: Option<String>,
     #[doc="<p>Collection of latency policies to apply when processing game sessions placement requests with player latency information. Multiple policies are evaluated in order of the maximum latency value, starting with the lowest latency values. With just one policy, it is enforced at the start of the game session placement for the duration period. With multiple policies, each policy is enforced consecutively for its duration period. For example, a queue might enforce a 60-second policy followed by a 120-second policy, and then no policy for the remainder of the placement. </p>"]
     #[serde(rename="PlayerLatencyPolicies")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub player_latency_policies: Option<PlayerLatencyPolicyList>,
+    pub player_latency_policies: Option<Vec<PlayerLatencyPolicy>>,
     #[doc="<p>Maximum time, in seconds, that a new game session placement request remains in the queue. When a request exceeds this time, the game session placement changes to a TIMED_OUT status.</p>"]
     #[serde(rename="TimeoutInSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub timeout_in_seconds: Option<WholeNumber>,
+    pub timeout_in_seconds: Option<i64>,
 }
 
 #[doc="<p>Fleet designated in a game session queue. Requests for new game sessions in the queue are fulfilled by starting a new game session on any destination configured for a queue. </p>"]
@@ -1250,20 +1222,15 @@ pub struct GameSessionQueueDestination {
     #[doc="<p>Amazon Resource Name (ARN) assigned to fleet or fleet alias. ARNs, which include a fleet ID or alias ID and a region name, provide a unique identifier across all regions. </p>"]
     #[serde(rename="DestinationArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub destination_arn: Option<ArnStringModel>,
+    pub destination_arn: Option<String>,
 }
 
-pub type GameSessionQueueDestinationList = Vec<GameSessionQueueDestination>;
-pub type GameSessionQueueList = Vec<GameSessionQueue>;
-pub type GameSessionQueueName = String;
-pub type GameSessionQueueNameList = Vec<GameSessionQueueName>;
-pub type GameSessionStatus = String;
 #[doc="<p>Represents the input for a request action.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetGameSessionLogUrlInput {
     #[doc="<p>Unique identifier for the game session to get logs for.</p>"]
     #[serde(rename="GameSessionId")]
-    pub game_session_id: ArnStringModel,
+    pub game_session_id: String,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -1272,7 +1239,7 @@ pub struct GetGameSessionLogUrlOutput {
     #[doc="<p>Location of the requested game session logs, available for download.</p>"]
     #[serde(rename="PreSignedUrl")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub pre_signed_url: Option<NonZeroAndMaxString>,
+    pub pre_signed_url: Option<String>,
 }
 
 #[doc="<p>Represents the input for a request action.</p>"]
@@ -1280,10 +1247,10 @@ pub struct GetGameSessionLogUrlOutput {
 pub struct GetInstanceAccessInput {
     #[doc="<p>Unique identifier for a fleet that contains the instance you want access to. The fleet can be in any of the following statuses: <code>ACTIVATING</code>, <code>ACTIVE</code>, or <code>ERROR</code>. Fleets with an <code>ERROR</code> status may be accessible for a short time before they are deleted.</p>"]
     #[serde(rename="FleetId")]
-    pub fleet_id: FleetId,
+    pub fleet_id: String,
     #[doc="<p>Unique identifier for an instance you want to get access to. You can access an instance in any status.</p>"]
     #[serde(rename="InstanceId")]
-    pub instance_id: InstanceId,
+    pub instance_id: String,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -1295,38 +1262,37 @@ pub struct GetInstanceAccessOutput {
     pub instance_access: Option<InstanceAccess>,
 }
 
-pub type IdStringModel = String;
 #[doc="<p>Properties that describe an instance of a virtual computing resource that hosts one or more game servers. A fleet contains zero or more instances.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Instance {
     #[doc="<p>Time stamp indicating when this data object was created. Format is a number expressed in Unix time as milliseconds (for example \"1469498468.057\").</p>"]
     #[serde(rename="CreationTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub creation_time: Option<Timestamp>,
+    pub creation_time: Option<f64>,
     #[doc="<p>Unique identifier for a fleet that the instance is in.</p>"]
     #[serde(rename="FleetId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub fleet_id: Option<FleetId>,
+    pub fleet_id: Option<String>,
     #[doc="<p>Unique identifier for an instance.</p>"]
     #[serde(rename="InstanceId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub instance_id: Option<InstanceId>,
+    pub instance_id: Option<String>,
     #[doc="<p>IP address assigned to the instance.</p>"]
     #[serde(rename="IpAddress")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ip_address: Option<IpAddress>,
+    pub ip_address: Option<String>,
     #[doc="<p>Operating system that is running on this instance. </p>"]
     #[serde(rename="OperatingSystem")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub operating_system: Option<OperatingSystem>,
+    pub operating_system: Option<String>,
     #[doc="<p>Current status of the instance. Possible statuses include the following:</p> <ul> <li> <p> <b>PENDING</b> – The instance is in the process of being created and launching server processes as defined in the fleet's runtime configuration. </p> </li> <li> <p> <b>ACTIVE</b> – The instance has been successfully created and at least one server process has successfully launched and reported back to Amazon GameLift that it is ready to host a game session. The instance is now considered ready to host game sessions. </p> </li> <li> <p> <b>TERMINATING</b> – The instance is in the process of shutting down. This may happen to reduce capacity during a scaling down event or to recycle resources in the event of a problem.</p> </li> </ul>"]
     #[serde(rename="Status")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status: Option<InstanceStatus>,
+    pub status: Option<String>,
     #[doc="<p>EC2 instance type that defines the computing resources of this instance. </p>"]
     #[serde(rename="Type")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub type_: Option<EC2InstanceType>,
+    pub type_: Option<String>,
 }
 
 #[doc="<p>Information required to remotely connect to a fleet instance. Access is requested by calling <a>GetInstanceAccess</a>. </p>"]
@@ -1339,19 +1305,19 @@ pub struct InstanceAccess {
     #[doc="<p>Unique identifier for a fleet containing the instance being accessed.</p>"]
     #[serde(rename="FleetId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub fleet_id: Option<FleetId>,
+    pub fleet_id: Option<String>,
     #[doc="<p>Unique identifier for an instance being accessed.</p>"]
     #[serde(rename="InstanceId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub instance_id: Option<InstanceId>,
+    pub instance_id: Option<String>,
     #[doc="<p>IP address assigned to the instance.</p>"]
     #[serde(rename="IpAddress")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ip_address: Option<IpAddress>,
+    pub ip_address: Option<String>,
     #[doc="<p>Operating system that is running on the instance.</p>"]
     #[serde(rename="OperatingSystem")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub operating_system: Option<OperatingSystem>,
+    pub operating_system: Option<String>,
 }
 
 #[doc="<p>Set of credentials required to remotely access a fleet instance. Access credentials are requested by calling <a>GetInstanceAccess</a> and returned in an <a>InstanceAccess</a> object.</p>"]
@@ -1360,56 +1326,49 @@ pub struct InstanceCredentials {
     #[doc="<p>Secret string. For Windows instances, the secret is a password for use with Windows Remote Desktop. For Linux instances, it is a private key (which must be saved as a <code>.pem</code> file) for use with SSH.</p>"]
     #[serde(rename="Secret")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub secret: Option<NonEmptyString>,
+    pub secret: Option<String>,
     #[doc="<p>User login string.</p>"]
     #[serde(rename="UserName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub user_name: Option<NonEmptyString>,
+    pub user_name: Option<String>,
 }
 
-pub type InstanceId = String;
-pub type InstanceList = Vec<Instance>;
-pub type InstanceStatus = String;
-pub type Integer = i64;
-pub type IpAddress = String;
 #[doc="<p>A range of IP addresses and port settings that allow inbound traffic to connect to server processes on Amazon GameLift. Each game session hosted on a fleet is assigned a unique combination of IP address and port number, which must fall into the fleet's allowed ranges. This combination is included in the <a>GameSession</a> object. </p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct IpPermission {
     #[doc="<p>Starting value for a range of allowed port numbers.</p>"]
     #[serde(rename="FromPort")]
-    pub from_port: PortNumber,
+    pub from_port: i64,
     #[doc="<p>Range of allowed IP addresses. This value must be expressed in CIDR notation. Example: \"<code>000.000.000.000/[subnet mask]</code>\" or optionally the shortened version \"<code>0.0.0.0/[subnet mask]</code>\".</p>"]
     #[serde(rename="IpRange")]
-    pub ip_range: NonBlankString,
+    pub ip_range: String,
     #[doc="<p>Network communication protocol used by the fleet.</p>"]
     #[serde(rename="Protocol")]
-    pub protocol: IpProtocol,
+    pub protocol: String,
     #[doc="<p>Ending value for a range of allowed port numbers. Port numbers are end-inclusive. This value must be higher than <code>FromPort</code>.</p>"]
     #[serde(rename="ToPort")]
-    pub to_port: PortNumber,
+    pub to_port: i64,
 }
 
-pub type IpPermissionsList = Vec<IpPermission>;
-pub type IpProtocol = String;
 #[doc="<p>Represents the input for a request action.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListAliasesInput {
     #[doc="<p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<PositiveInteger>,
+    pub limit: Option<i64>,
     #[doc="<p>Descriptive label that is associated with an alias. Alias names do not need to be unique.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<NonEmptyString>,
+    pub name: Option<String>,
     #[doc="<p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To specify the start of the result set, do not specify a value.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NonEmptyString>,
+    pub next_token: Option<String>,
     #[doc="<p>Type of routing to filter results on. Use this parameter to retrieve only aliases of a certain type. To retrieve all aliases, leave this parameter empty.</p> <p>Possible routing types include the following:</p> <ul> <li> <p> <b>SIMPLE</b> – The alias resolves to one specific fleet. Use this type when routing to active fleets.</p> </li> <li> <p> <b>TERMINAL</b> – The alias does not resolve to a fleet but instead can be used to display a message to the user. A terminal alias throws a TerminalRoutingStrategyException with the <a>RoutingStrategy</a> message embedded.</p> </li> </ul>"]
     #[serde(rename="RoutingStrategyType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub routing_strategy_type: Option<RoutingStrategyType>,
+    pub routing_strategy_type: Option<String>,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -1418,11 +1377,11 @@ pub struct ListAliasesOutput {
     #[doc="<p>Collection of alias records that match the list request.</p>"]
     #[serde(rename="Aliases")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub aliases: Option<AliasList>,
+    pub aliases: Option<Vec<Alias>>,
     #[doc="<p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NonEmptyString>,
+    pub next_token: Option<String>,
 }
 
 #[doc="<p>Represents the input for a request action.</p>"]
@@ -1431,15 +1390,15 @@ pub struct ListBuildsInput {
     #[doc="<p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<PositiveInteger>,
+    pub limit: Option<i64>,
     #[doc="<p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To specify the start of the result set, do not specify a value.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NonEmptyString>,
+    pub next_token: Option<String>,
     #[doc="<p>Build status to filter results by. To retrieve all builds, leave this parameter empty.</p> <p>Possible build statuses include the following:</p> <ul> <li> <p> <b>INITIALIZED</b> – A new build has been defined, but no files have been uploaded. You cannot create fleets for builds that are in this status. When a build is successfully created, the build status is set to this value. </p> </li> <li> <p> <b>READY</b> – The game build has been successfully uploaded. You can now create new fleets for this build.</p> </li> <li> <p> <b>FAILED</b> – The game build upload failed. You cannot create new fleets for this build. </p> </li> </ul>"]
     #[serde(rename="Status")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status: Option<BuildStatus>,
+    pub status: Option<String>,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -1448,11 +1407,11 @@ pub struct ListBuildsOutput {
     #[doc="<p>Collection of build records that match the request.</p>"]
     #[serde(rename="Builds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub builds: Option<BuildList>,
+    pub builds: Option<Vec<Build>>,
     #[doc="<p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NonEmptyString>,
+    pub next_token: Option<String>,
 }
 
 #[doc="<p>Represents the input for a request action.</p>"]
@@ -1461,15 +1420,15 @@ pub struct ListFleetsInput {
     #[doc="<p>Unique identifier for a build to return fleets for. Use this parameter to return only fleets using the specified build. To retrieve all fleets, leave this parameter empty.</p>"]
     #[serde(rename="BuildId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub build_id: Option<BuildId>,
+    pub build_id: Option<String>,
     #[doc="<p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<PositiveInteger>,
+    pub limit: Option<i64>,
     #[doc="<p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To specify the start of the result set, do not specify a value.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NonZeroAndMaxString>,
+    pub next_token: Option<String>,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -1478,151 +1437,128 @@ pub struct ListFleetsOutput {
     #[doc="<p>Set of fleet IDs matching the list request. You can retrieve additional information about all returned fleets by passing this result set to a call to <a>DescribeFleetAttributes</a>, <a>DescribeFleetCapacity</a>, or <a>DescribeFleetUtilization</a>.</p>"]
     #[serde(rename="FleetIds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub fleet_ids: Option<FleetIdList>,
+    pub fleet_ids: Option<Vec<String>>,
     #[doc="<p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NonZeroAndMaxString>,
+    pub next_token: Option<String>,
 }
 
-pub type MaxConcurrentGameSessionActivations = i64;
-pub type MetricGroup = String;
-pub type MetricGroupList = Vec<MetricGroup>;
-pub type MetricName = String;
-pub type NonBlankAndLengthConstraintString = String;
-pub type NonBlankString = String;
-pub type NonEmptyString = String;
-pub type NonZeroAndMaxString = String;
-pub type OperatingSystem = String;
 #[doc="<p>Information about a player session that was created as part of a <a>StartGameSessionPlacement</a> request. This object contains only the player ID and player session ID. To retrieve full details on a player session, call <a>DescribePlayerSessions</a> with the player session ID.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct PlacedPlayerSession {
     #[doc="<p>Unique identifier for a player that is associated with this player session.</p>"]
     #[serde(rename="PlayerId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub player_id: Option<NonZeroAndMaxString>,
+    pub player_id: Option<String>,
     #[doc="<p>Unique identifier for a player session.</p>"]
     #[serde(rename="PlayerSessionId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub player_session_id: Option<PlayerSessionId>,
+    pub player_session_id: Option<String>,
 }
 
-pub type PlacedPlayerSessionList = Vec<PlacedPlayerSession>;
-pub type PlayerData = String;
-pub type PlayerDataMap = ::std::collections::HashMap<NonZeroAndMaxString, PlayerData>;
-pub type PlayerIdList = Vec<NonZeroAndMaxString>;
 #[doc="<p>Regional latency information for a player, used when requesting a new game session with <a>StartGameSessionPlacement</a>. This value indicates the amount of time lag that exists when the player is connected to a fleet in the specified region. The relative difference between a player's latency values for multiple regions are used to determine which fleets are best suited to place a new game session for the player. </p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PlayerLatency {
     #[doc="<p>Amount of time that represents the time lag experienced by the player when connected to the specified region.</p>"]
     #[serde(rename="LatencyInMilliseconds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub latency_in_milliseconds: Option<Float>,
+    pub latency_in_milliseconds: Option<f32>,
     #[doc="<p>Unique identifier for a player associated with the latency data.</p>"]
     #[serde(rename="PlayerId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub player_id: Option<NonZeroAndMaxString>,
+    pub player_id: Option<String>,
     #[doc="<p>Name of the region that is associated with the latency value.</p>"]
     #[serde(rename="RegionIdentifier")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub region_identifier: Option<NonZeroAndMaxString>,
+    pub region_identifier: Option<String>,
 }
 
-pub type PlayerLatencyList = Vec<PlayerLatency>;
 #[doc="<p>Queue setting that determines the highest latency allowed for individual players when placing a game session. When a latency policy is in force, a game session cannot be placed at any destination in a region where a player is reporting latency higher than the cap. Latency policies are only enforced when the placement request contains player latency information.</p> <p>Latency policy-related operations include:</p> <ul> <li> <p> <a>CreateGameSessionQueue</a> </p> </li> <li> <p> <a>UpdateGameSessionQueue</a> </p> </li> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> </ul>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PlayerLatencyPolicy {
     #[doc="<p>The maximum latency value that is allowed for any player, in milliseconds. All policies must have a value set for this property.</p>"]
     #[serde(rename="MaximumIndividualPlayerLatencyMilliseconds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub maximum_individual_player_latency_milliseconds: Option<WholeNumber>,
+    pub maximum_individual_player_latency_milliseconds: Option<i64>,
     #[doc="<p>The length of time, in seconds, that the policy is enforced while placing a new game session. A null value for this property means that the policy is enforced until the queue times out.</p>"]
     #[serde(rename="PolicyDurationSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub policy_duration_seconds: Option<WholeNumber>,
+    pub policy_duration_seconds: Option<i64>,
 }
 
-pub type PlayerLatencyPolicyList = Vec<PlayerLatencyPolicy>;
 #[doc="<p>Properties describing a player session. A player session represents either a player reservation for a game session or actual player activity in a game session. A player session object (including player data) is automatically passed to a game session when the player connects to the game session and is validated.</p> <p>Player session-related operations include:</p> <ul> <li> <p> <a>CreatePlayerSession</a> </p> </li> <li> <p> <a>CreatePlayerSessions</a> </p> </li> <li> <p> <a>DescribePlayerSessions</a> </p> </li> </ul>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct PlayerSession {
     #[doc="<p>Time stamp indicating when this data object was created. Format is a number expressed in Unix time as milliseconds (for example \"1469498468.057\").</p>"]
     #[serde(rename="CreationTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub creation_time: Option<Timestamp>,
+    pub creation_time: Option<f64>,
     #[doc="<p>Unique identifier for a fleet that the player's game session is running on.</p>"]
     #[serde(rename="FleetId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub fleet_id: Option<FleetId>,
+    pub fleet_id: Option<String>,
     #[doc="<p>Unique identifier for the game session that the player session is connected to.</p>"]
     #[serde(rename="GameSessionId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub game_session_id: Option<NonZeroAndMaxString>,
+    pub game_session_id: Option<String>,
     #[doc="<p>IP address of the game session. To connect to a Amazon GameLift game server, an app needs both the IP address and port number.</p>"]
     #[serde(rename="IpAddress")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ip_address: Option<IpAddress>,
+    pub ip_address: Option<String>,
     #[doc="<p>Developer-defined information related to a player. Amazon GameLift does not use this data, so it can be formatted as needed for use in the game. </p>"]
     #[serde(rename="PlayerData")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub player_data: Option<PlayerData>,
+    pub player_data: Option<String>,
     #[doc="<p>Unique identifier for a player that is associated with this player session.</p>"]
     #[serde(rename="PlayerId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub player_id: Option<NonZeroAndMaxString>,
+    pub player_id: Option<String>,
     #[doc="<p>Unique identifier for a player session.</p>"]
     #[serde(rename="PlayerSessionId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub player_session_id: Option<PlayerSessionId>,
+    pub player_session_id: Option<String>,
     #[doc="<p>Port number for the game session. To connect to a Amazon GameLift server process, an app needs both the IP address and port number.</p>"]
     #[serde(rename="Port")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub port: Option<PortNumber>,
+    pub port: Option<i64>,
     #[doc="<p>Current status of the player session.</p> <p>Possible player session statuses include the following:</p> <ul> <li> <p> <b>RESERVED</b> – The player session request has been received, but the player has not yet connected to the server process and/or been validated. </p> </li> <li> <p> <b>ACTIVE</b> – The player has been validated by the server process and is currently connected.</p> </li> <li> <p> <b>COMPLETED</b> – The player connection has been dropped.</p> </li> <li> <p> <b>TIMEDOUT</b> – A player session request was received, but the player did not connect and/or was not validated within the time-out limit (60 seconds).</p> </li> </ul>"]
     #[serde(rename="Status")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status: Option<PlayerSessionStatus>,
+    pub status: Option<String>,
     #[doc="<p>Time stamp indicating when this data object was terminated. Format is a number expressed in Unix time as milliseconds (for example \"1469498468.057\").</p>"]
     #[serde(rename="TerminationTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub termination_time: Option<Timestamp>,
+    pub termination_time: Option<f64>,
 }
 
-pub type PlayerSessionCreationPolicy = String;
-pub type PlayerSessionId = String;
-pub type PlayerSessionList = Vec<PlayerSession>;
-pub type PlayerSessionStatus = String;
-pub type PortNumber = i64;
-pub type PositiveInteger = i64;
-pub type PositiveLong = i64;
-pub type ProtectionPolicy = String;
 #[doc="<p>Represents the input for a request action.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct PutScalingPolicyInput {
     #[doc="<p>Comparison operator to use when measuring the metric against the threshold value.</p>"]
     #[serde(rename="ComparisonOperator")]
-    pub comparison_operator: ComparisonOperatorType,
+    pub comparison_operator: String,
     #[doc="<p>Length of time (in minutes) the metric must be at or beyond the threshold before a scaling event is triggered.</p>"]
     #[serde(rename="EvaluationPeriods")]
-    pub evaluation_periods: PositiveInteger,
+    pub evaluation_periods: i64,
     #[doc="<p>Unique identifier for a fleet to apply this policy to.</p>"]
     #[serde(rename="FleetId")]
-    pub fleet_id: FleetId,
+    pub fleet_id: String,
     #[doc="<p>Name of the Amazon GameLift-defined metric that is used to trigger an adjustment.</p> <ul> <li> <p> <b>ActivatingGameSessions</b> – number of game sessions in the process of being created (game session status = <code>ACTIVATING</code>).</p> </li> <li> <p> <b>ActiveGameSessions</b> – number of game sessions currently running (game session status = <code>ACTIVE</code>).</p> </li> <li> <p> <b>CurrentPlayerSessions</b> – number of active or reserved player sessions (player session status = <code>ACTIVE</code> or <code>RESERVED</code>). </p> </li> <li> <p> <b>AvailablePlayerSessions</b> – number of player session slots currently available in active game sessions across the fleet, calculated by subtracting a game session's current player session count from its maximum player session count. This number includes game sessions that are not currently accepting players (game session <code>PlayerSessionCreationPolicy</code> = <code>DENY_ALL</code>).</p> </li> <li> <p> <b>ActiveInstances</b> – number of instances currently running a game session.</p> </li> <li> <p> <b>IdleInstances</b> – number of instances not currently running a game session.</p> </li> </ul>"]
     #[serde(rename="MetricName")]
-    pub metric_name: MetricName,
+    pub metric_name: String,
     #[doc="<p>Descriptive label that is associated with a scaling policy. Policy names do not need to be unique. A fleet can have only one scaling policy with the same name.</p>"]
     #[serde(rename="Name")]
-    pub name: NonZeroAndMaxString,
+    pub name: String,
     #[doc="<p>Amount of adjustment to make, based on the scaling adjustment type.</p>"]
     #[serde(rename="ScalingAdjustment")]
-    pub scaling_adjustment: Integer,
+    pub scaling_adjustment: i64,
     #[doc="<p>Type of adjustment to make to a fleet's instance count (see <a>FleetCapacity</a>):</p> <ul> <li> <p> <b>ChangeInCapacity</b> – add (or subtract) the scaling adjustment value from the current instance count. Positive values scale up while negative values scale down.</p> </li> <li> <p> <b>ExactCapacity</b> – set the instance count to the scaling adjustment value.</p> </li> <li> <p> <b>PercentChangeInCapacity</b> – increase or reduce the current instance count by the scaling adjustment, read as a percentage. Positive values scale up while negative values scale down; for example, a value of \"-10\" scales the fleet down by 10%.</p> </li> </ul>"]
     #[serde(rename="ScalingAdjustmentType")]
-    pub scaling_adjustment_type: ScalingAdjustmentType,
+    pub scaling_adjustment_type: String,
     #[doc="<p>Metric value used to trigger a scaling event.</p>"]
     #[serde(rename="Threshold")]
-    pub threshold: Double,
+    pub threshold: f64,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -1631,7 +1567,7 @@ pub struct PutScalingPolicyOutput {
     #[doc="<p>Descriptive label that is associated with a scaling policy. Policy names do not need to be unique.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<NonZeroAndMaxString>,
+    pub name: Option<String>,
 }
 
 #[doc="<p>Represents the input for a request action.</p>"]
@@ -1639,7 +1575,7 @@ pub struct PutScalingPolicyOutput {
 pub struct RequestUploadCredentialsInput {
     #[doc="<p>Unique identifier for a build to get credentials for.</p>"]
     #[serde(rename="BuildId")]
-    pub build_id: BuildId,
+    pub build_id: String,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -1660,7 +1596,7 @@ pub struct RequestUploadCredentialsOutput {
 pub struct ResolveAliasInput {
     #[doc="<p>Unique identifier for the alias you want to resolve.</p>"]
     #[serde(rename="AliasId")]
-    pub alias_id: AliasId,
+    pub alias_id: String,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -1669,7 +1605,7 @@ pub struct ResolveAliasOutput {
     #[doc="<p>Fleet identifier that is associated with the requested alias.</p>"]
     #[serde(rename="FleetId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub fleet_id: Option<FleetId>,
+    pub fleet_id: Option<String>,
 }
 
 #[doc="<p>Policy that limits the number of game sessions a player can create on the same fleet. This optional policy gives game owners control over how players can consume available game server resources. A resource creation policy makes the following statement: \"An individual player can create a maximum number of new game sessions within a specified time period\".</p> <p>The policy is evaluated when a player tries to create a new game session. For example, with a policy of 10 new game sessions and a time period of 60 minutes, on receiving a <code>CreateGameSession</code> request, Amazon GameLift checks that the player (identified by <code>CreatorId</code>) has created fewer than 10 game sessions in the past 60 minutes.</p>"]
@@ -1678,11 +1614,11 @@ pub struct ResourceCreationLimitPolicy {
     #[doc="<p>Maximum number of game sessions that an individual can create during the policy period. </p>"]
     #[serde(rename="NewGameSessionsPerCreator")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub new_game_sessions_per_creator: Option<WholeNumber>,
+    pub new_game_sessions_per_creator: Option<i64>,
     #[doc="<p>Time span used in evaluating the resource creation limit policy. </p>"]
     #[serde(rename="PolicyPeriodInMinutes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub policy_period_in_minutes: Option<WholeNumber>,
+    pub policy_period_in_minutes: Option<i64>,
 }
 
 #[doc="<p>Routing configuration for a fleet alias.</p>"]
@@ -1691,33 +1627,32 @@ pub struct RoutingStrategy {
     #[doc="<p>Unique identifier for a fleet that the alias points to.</p>"]
     #[serde(rename="FleetId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub fleet_id: Option<FleetId>,
+    pub fleet_id: Option<String>,
     #[doc="<p>Message text to be used with a terminal routing strategy.</p>"]
     #[serde(rename="Message")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub message: Option<FreeText>,
+    pub message: Option<String>,
     #[doc="<p>Type of routing strategy.</p> <p>Possible routing types include the following:</p> <ul> <li> <p> <b>SIMPLE</b> – The alias resolves to one specific fleet. Use this type when routing to active fleets.</p> </li> <li> <p> <b>TERMINAL</b> – The alias does not resolve to a fleet but instead can be used to display a message to the user. A terminal alias throws a TerminalRoutingStrategyException with the <a>RoutingStrategy</a> message embedded.</p> </li> </ul>"]
     #[serde(rename="Type")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub type_: Option<RoutingStrategyType>,
+    pub type_: Option<String>,
 }
 
-pub type RoutingStrategyType = String;
 #[doc="<p>Collection of server process configurations that describe what processes should be run on each instance in a fleet. An instance can launch and maintain multiple server processes based on the runtime configuration; it regularly checks for an updated runtime configuration and starts new server processes to match the latest version.</p> <p>The key purpose of a runtime configuration with multiple server process configurations is to be able to run more than one kind of game server in a single fleet. You can include configurations for more than one server executable in order to run two or more different programs to run on the same instance. This option might be useful, for example, to run more than one version of your game server on the same fleet. Another option is to specify configurations for the same server executable but with different launch parameters.</p> <p>A Amazon GameLift instance is limited to 50 processes running simultaneously. To calculate the total number of processes specified in a runtime configuration, add the values of the <code>ConcurrentExecutions</code> parameter for each <code> <a>ServerProcess</a> </code> object in the runtime configuration.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RuntimeConfiguration {
     #[doc="<p>Maximum amount of time (in seconds) that a game session can remain in status ACTIVATING. If the game session is not active before the timeout, activation is terminated and the game session status is changed to TERMINATED.</p>"]
     #[serde(rename="GameSessionActivationTimeoutSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub game_session_activation_timeout_seconds: Option<GameSessionActivationTimeoutSeconds>,
+    pub game_session_activation_timeout_seconds: Option<i64>,
     #[doc="<p>Maximum number of game sessions with status ACTIVATING to allow on an instance simultaneously. This setting limits the amount of instance resources that can be used for new game activations at any one time.</p>"]
     #[serde(rename="MaxConcurrentGameSessionActivations")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_concurrent_game_session_activations: Option<MaxConcurrentGameSessionActivations>,
+    pub max_concurrent_game_session_activations: Option<i64>,
     #[doc="<p>Collection of server process configurations that describe which server processes to run on each instance in a fleet.</p>"]
     #[serde(rename="ServerProcesses")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub server_processes: Option<ServerProcessList>,
+    pub server_processes: Option<Vec<ServerProcess>>,
 }
 
 #[doc="<p>Location in Amazon Simple Storage Service (Amazon S3) where build files can be stored for access by Amazon GameLift. This location is specified in a <a>CreateBuild</a> request. For more details, see the <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-build-cli-uploading.html#gamelift-build-cli-uploading-create-build\">Create a Build with Files in Amazon S3</a>.</p>"]
@@ -1726,88 +1661,85 @@ pub struct S3Location {
     #[doc="<p>Amazon S3 bucket identifier. This is the name of your S3 bucket.</p>"]
     #[serde(rename="Bucket")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub bucket: Option<NonEmptyString>,
+    pub bucket: Option<String>,
     #[doc="<p>Name of the zip file containing your build files. </p>"]
     #[serde(rename="Key")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub key: Option<NonEmptyString>,
+    pub key: Option<String>,
     #[doc="<p>Amazon Resource Name (<a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-arn-format.html\">ARN</a>) for the access role that allows Amazon GameLift to access your S3 bucket.</p>"]
     #[serde(rename="RoleArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub role_arn: Option<NonEmptyString>,
+    pub role_arn: Option<String>,
 }
 
-pub type ScalingAdjustmentType = String;
 #[doc="<p>Rule that controls how a fleet is scaled. Scaling policies are uniquely identified by the combination of name and fleet ID.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ScalingPolicy {
     #[doc="<p>Comparison operator to use when measuring a metric against the threshold value.</p>"]
     #[serde(rename="ComparisonOperator")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub comparison_operator: Option<ComparisonOperatorType>,
+    pub comparison_operator: Option<String>,
     #[doc="<p>Length of time (in minutes) the metric must be at or beyond the threshold before a scaling event is triggered.</p>"]
     #[serde(rename="EvaluationPeriods")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub evaluation_periods: Option<PositiveInteger>,
+    pub evaluation_periods: Option<i64>,
     #[doc="<p>Unique identifier for a fleet that is associated with this scaling policy.</p>"]
     #[serde(rename="FleetId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub fleet_id: Option<FleetId>,
+    pub fleet_id: Option<String>,
     #[doc="<p>Name of the Amazon GameLift-defined metric that is used to trigger an adjustment.</p> <ul> <li> <p> <b>ActivatingGameSessions</b> – number of game sessions in the process of being created (game session status = <code>ACTIVATING</code>).</p> </li> <li> <p> <b>ActiveGameSessions</b> – number of game sessions currently running (game session status = <code>ACTIVE</code>).</p> </li> <li> <p> <b>CurrentPlayerSessions</b> – number of active or reserved player sessions (player session status = <code>ACTIVE</code> or <code>RESERVED</code>). </p> </li> <li> <p> <b>AvailablePlayerSessions</b> – number of player session slots currently available in active game sessions across the fleet, calculated by subtracting a game session's current player session count from its maximum player session count. This number does include game sessions that are not currently accepting players (game session <code>PlayerSessionCreationPolicy</code> = <code>DENY_ALL</code>).</p> </li> <li> <p> <b>ActiveInstances</b> – number of instances currently running a game session.</p> </li> <li> <p> <b>IdleInstances</b> – number of instances not currently running a game session.</p> </li> </ul>"]
     #[serde(rename="MetricName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub metric_name: Option<MetricName>,
+    pub metric_name: Option<String>,
     #[doc="<p>Descriptive label that is associated with a scaling policy. Policy names do not need to be unique.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<NonZeroAndMaxString>,
+    pub name: Option<String>,
     #[doc="<p>Amount of adjustment to make, based on the scaling adjustment type.</p>"]
     #[serde(rename="ScalingAdjustment")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub scaling_adjustment: Option<Integer>,
+    pub scaling_adjustment: Option<i64>,
     #[doc="<p>Type of adjustment to make to a fleet's instance count (see <a>FleetCapacity</a>):</p> <ul> <li> <p> <b>ChangeInCapacity</b> – add (or subtract) the scaling adjustment value from the current instance count. Positive values scale up while negative values scale down.</p> </li> <li> <p> <b>ExactCapacity</b> – set the instance count to the scaling adjustment value.</p> </li> <li> <p> <b>PercentChangeInCapacity</b> – increase or reduce the current instance count by the scaling adjustment, read as a percentage. Positive values scale up while negative values scale down.</p> </li> </ul>"]
     #[serde(rename="ScalingAdjustmentType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub scaling_adjustment_type: Option<ScalingAdjustmentType>,
+    pub scaling_adjustment_type: Option<String>,
     #[doc="<p>Current status of the scaling policy. The scaling policy is only in force when in an <code>ACTIVE</code> status.</p> <ul> <li> <p> <b>ACTIVE</b> – The scaling policy is currently in force.</p> </li> <li> <p> <b>UPDATE_REQUESTED</b> – A request to update the scaling policy has been received.</p> </li> <li> <p> <b>UPDATING</b> – A change is being made to the scaling policy.</p> </li> <li> <p> <b>DELETE_REQUESTED</b> – A request to delete the scaling policy has been received.</p> </li> <li> <p> <b>DELETING</b> – The scaling policy is being deleted.</p> </li> <li> <p> <b>DELETED</b> – The scaling policy has been deleted.</p> </li> <li> <p> <b>ERROR</b> – An error occurred in creating the policy. It should be removed and recreated.</p> </li> </ul>"]
     #[serde(rename="Status")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status: Option<ScalingStatusType>,
+    pub status: Option<String>,
     #[doc="<p>Metric value used to trigger a scaling event.</p>"]
     #[serde(rename="Threshold")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub threshold: Option<Double>,
+    pub threshold: Option<f64>,
 }
 
-pub type ScalingPolicyList = Vec<ScalingPolicy>;
-pub type ScalingStatusType = String;
 #[doc="<p>Represents the input for a request action.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct SearchGameSessionsInput {
     #[doc="<p>Unique identifier for an alias associated with the fleet to search for active game sessions. Each request must reference either a fleet ID or alias ID, but not both.</p>"]
     #[serde(rename="AliasId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub alias_id: Option<AliasId>,
+    pub alias_id: Option<String>,
     #[doc="<p>String containing the search criteria for the session search. If no filter expression is included, the request returns results for all game sessions in the fleet that are in <code>ACTIVE</code> status.</p> <p>A filter expression can contain one or multiple conditions. Each condition consists of the following:</p> <ul> <li> <p> <b>Operand</b> -- Name of a game session attribute. Valid values are <code>gameSessionName</code>, <code>gameSessionId</code>, <code>creationTimeMillis</code>, <code>playerSessionCount</code>, <code>maximumSessions</code>, <code>hasAvailablePlayerSessions</code>.</p> </li> <li> <p> <b>Comparator</b> -- Valid comparators are: <code>=</code>, <code>&lt;&gt;</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>. </p> </li> <li> <p> <b>Value</b> -- Value to be searched for. Values can be numbers, boolean values (true/false) or strings. String values are case sensitive, enclosed in single quotes. Special characters must be escaped. Boolean and string values can only be used with the comparators <code>=</code> and <code>&lt;&gt;</code>. For example, the following filter expression searches on <code>gameSessionName</code>: \"<code>FilterExpression\": \"gameSessionName = 'Matt\\\\'s Awesome Game 1'\"</code>. </p> </li> </ul> <p>To chain multiple conditions in a single expression, use the logical keywords <code>AND</code>, <code>OR</code>, and <code>NOT</code> and parentheses as needed. For example: <code>x AND y AND NOT z</code>, <code>NOT (x OR y)</code>.</p> <p>Session search evaluates conditions from left to right using the following precedence rules:</p> <ol> <li> <p> <code>=</code>, <code>&lt;&gt;</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code> </p> </li> <li> <p>Parentheses</p> </li> <li> <p>NOT</p> </li> <li> <p>AND</p> </li> <li> <p>OR</p> </li> </ol> <p>For example, this filter expression retrieves game sessions hosting at least ten players that have an open player slot: <code>\"maximumSessions&gt;=10 AND hasAvailablePlayerSessions=true\"</code>. </p>"]
     #[serde(rename="FilterExpression")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub filter_expression: Option<NonZeroAndMaxString>,
+    pub filter_expression: Option<String>,
     #[doc="<p>Unique identifier for a fleet to search for active game sessions. Each request must reference either a fleet ID or alias ID, but not both.</p>"]
     #[serde(rename="FleetId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub fleet_id: Option<FleetId>,
+    pub fleet_id: Option<String>,
     #[doc="<p>Maximum number of results to return. Use this parameter with <code>NextToken</code> to get results as a set of sequential pages. The maximum number of results returned is 20, even if this value is not set or is set higher than 20. </p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<PositiveInteger>,
+    pub limit: Option<i64>,
     #[doc="<p>Token that indicates the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To specify the start of the result set, do not specify a value.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NonZeroAndMaxString>,
+    pub next_token: Option<String>,
     #[doc="<p>Instructions on how to sort the search results. If no sort expression is included, the request returns results in random order. A sort expression consists of the following elements:</p> <ul> <li> <p> <b>Operand</b> -- Name of a game session attribute. Valid values are <code>gameSessionName</code>, <code>gameSessionId</code>, <code>creationTimeMillis</code>, <code>playerSessionCount</code>, <code>maximumSessions</code>, <code>hasAvailablePlayerSessions</code>.</p> </li> <li> <p> <b>Order</b> -- Valid sort orders are <code>ASC</code> (ascending) and <code>DESC</code> (descending).</p> </li> </ul> <p>For example, this sort expression returns the oldest active sessions first: <code>\"SortExpression\": \"creationTimeMillis ASC\"</code>. Results with a null value for the sort operand are returned at the end of the list.</p>"]
     #[serde(rename="SortExpression")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub sort_expression: Option<NonZeroAndMaxString>,
+    pub sort_expression: Option<String>,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -1816,11 +1748,11 @@ pub struct SearchGameSessionsOutput {
     #[doc="<p>Collection of objects containing game session properties for each session matching the request.</p>"]
     #[serde(rename="GameSessions")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub game_sessions: Option<GameSessionList>,
+    pub game_sessions: Option<Vec<GameSession>>,
     #[doc="<p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NonZeroAndMaxString>,
+    pub next_token: Option<String>,
 }
 
 #[doc="<p>A set of instructions for launching server processes on each instance in a fleet. Each instruction set identifies the location of the server executable, optional launch parameters, and the number of server processes with this configuration to maintain concurrently on the instance. Server process configurations make up a fleet's <code> <a>RuntimeConfiguration</a> </code>.</p>"]
@@ -1828,45 +1760,44 @@ pub struct SearchGameSessionsOutput {
 pub struct ServerProcess {
     #[doc="<p>Number of server processes using this configuration to run concurrently on an instance.</p>"]
     #[serde(rename="ConcurrentExecutions")]
-    pub concurrent_executions: PositiveInteger,
+    pub concurrent_executions: i64,
     #[doc="<p>Location of the server executable in a game build. All game builds are installed on instances at the root : for Windows instances <code>C:\\game</code>, and for Linux instances <code>/local/game</code>. A Windows game build with an executable file located at <code>MyGame\\latest\\server.exe</code> must have a launch path of \"<code>C:\\game\\MyGame\\latest\\server.exe</code>\". A Linux game build with an executable file located at <code>MyGame/latest/server.exe</code> must have a launch path of \"<code>/local/game/MyGame/latest/server.exe</code>\". </p>"]
     #[serde(rename="LaunchPath")]
-    pub launch_path: NonZeroAndMaxString,
+    pub launch_path: String,
     #[doc="<p>Optional list of parameters to pass to the server executable on launch.</p>"]
     #[serde(rename="Parameters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub parameters: Option<NonZeroAndMaxString>,
+    pub parameters: Option<String>,
 }
 
-pub type ServerProcessList = Vec<ServerProcess>;
 #[doc="<p>Represents the input for a request action.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct StartGameSessionPlacementInput {
     #[doc="<p>Set of information on each player to create a player session for.</p>"]
     #[serde(rename="DesiredPlayerSessions")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub desired_player_sessions: Option<DesiredPlayerSessionList>,
+    pub desired_player_sessions: Option<Vec<DesiredPlayerSession>>,
     #[doc="<p>Set of developer-defined properties for a game session. These properties are passed to the server process hosting the game session.</p>"]
     #[serde(rename="GameProperties")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub game_properties: Option<GamePropertyList>,
+    pub game_properties: Option<Vec<GameProperty>>,
     #[doc="<p>Descriptive label that is associated with a game session. Session names do not need to be unique.</p>"]
     #[serde(rename="GameSessionName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub game_session_name: Option<NonZeroAndMaxString>,
+    pub game_session_name: Option<String>,
     #[doc="<p>Name of the queue to use to place the new game session.</p>"]
     #[serde(rename="GameSessionQueueName")]
-    pub game_session_queue_name: GameSessionQueueName,
+    pub game_session_queue_name: String,
     #[doc="<p>Maximum number of players that can be connected simultaneously to the game session.</p>"]
     #[serde(rename="MaximumPlayerSessionCount")]
-    pub maximum_player_session_count: WholeNumber,
+    pub maximum_player_session_count: i64,
     #[doc="<p>Unique identifier to assign to the new game session placement. This value is developer-defined. The value must be unique across all regions and cannot be reused unless you are resubmitting a canceled or timed-out placement request.</p>"]
     #[serde(rename="PlacementId")]
-    pub placement_id: IdStringModel,
+    pub placement_id: String,
     #[doc="<p>Set of values, expressed in milliseconds, indicating the amount of latency that players are experiencing when connected to AWS regions. This information is used to try to place the new game session where it can offer the best possible gameplay experience for the players. </p>"]
     #[serde(rename="PlayerLatencies")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub player_latencies: Option<PlayerLatencyList>,
+    pub player_latencies: Option<Vec<PlayerLatency>>,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -1883,7 +1814,7 @@ pub struct StartGameSessionPlacementOutput {
 pub struct StopGameSessionPlacementInput {
     #[doc="<p>Unique identifier for a game session placement to cancel.</p>"]
     #[serde(rename="PlacementId")]
-    pub placement_id: IdStringModel,
+    pub placement_id: String,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -1895,22 +1826,20 @@ pub struct StopGameSessionPlacementOutput {
     pub game_session_placement: Option<GameSessionPlacement>,
 }
 
-pub type StringList = Vec<NonZeroAndMaxString>;
-pub type Timestamp = f64;
 #[doc="<p>Represents the input for a request action.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateAliasInput {
     #[doc="<p>Unique identifier for a fleet alias. Specify the alias you want to update.</p>"]
     #[serde(rename="AliasId")]
-    pub alias_id: AliasId,
+    pub alias_id: String,
     #[doc="<p>Human-readable description of an alias.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub description: Option<NonZeroAndMaxString>,
+    pub description: Option<String>,
     #[doc="<p>Descriptive label that is associated with an alias. Alias names do not need to be unique.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<NonBlankAndLengthConstraintString>,
+    pub name: Option<String>,
     #[doc="<p>Object that specifies the fleet and routing type to use for the alias.</p>"]
     #[serde(rename="RoutingStrategy")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1931,15 +1860,15 @@ pub struct UpdateAliasOutput {
 pub struct UpdateBuildInput {
     #[doc="<p>Unique identifier for a build to update.</p>"]
     #[serde(rename="BuildId")]
-    pub build_id: BuildId,
+    pub build_id: String,
     #[doc="<p>Descriptive label that is associated with a build. Build names do not need to be unique. </p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<NonZeroAndMaxString>,
+    pub name: Option<String>,
     #[doc="<p>Version that is associated with this build. Version strings do not need to be unique.</p>"]
     #[serde(rename="Version")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub version: Option<NonZeroAndMaxString>,
+    pub version: Option<String>,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -1957,22 +1886,22 @@ pub struct UpdateFleetAttributesInput {
     #[doc="<p>Human-readable description of a fleet.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub description: Option<NonZeroAndMaxString>,
+    pub description: Option<String>,
     #[doc="<p>Unique identifier for a fleet to update attribute metadata for.</p>"]
     #[serde(rename="FleetId")]
-    pub fleet_id: FleetId,
+    pub fleet_id: String,
     #[doc="<p>Names of metric groups to include this fleet with. A fleet metric group is used in Amazon CloudWatch to aggregate metrics from multiple fleets. Use an existing metric group name to add this fleet to the group, or use a new name to create a new metric group. Currently, a fleet can only be included in one metric group at a time.</p>"]
     #[serde(rename="MetricGroups")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub metric_groups: Option<MetricGroupList>,
+    pub metric_groups: Option<Vec<String>>,
     #[doc="<p>Descriptive label that is associated with a fleet. Fleet names do not need to be unique.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<NonZeroAndMaxString>,
+    pub name: Option<String>,
     #[doc="<p>Game session protection policy to apply to all new instances created in this fleet. Instances that already exist are not affected. You can set protection for individual instances using <a>UpdateGameSession</a>.</p> <ul> <li> <p> <b>NoProtection</b> – The game session can be terminated during a scale-down event.</p> </li> <li> <p> <b>FullProtection</b> – If the game session is in an <code>ACTIVE</code> status, it cannot be terminated during a scale-down event.</p> </li> </ul>"]
     #[serde(rename="NewGameSessionProtectionPolicy")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub new_game_session_protection_policy: Option<ProtectionPolicy>,
+    pub new_game_session_protection_policy: Option<String>,
     #[doc="<p>Policy that limits the number of game sessions an individual player can create over a span of time. </p>"]
     #[serde(rename="ResourceCreationLimitPolicy")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1985,7 +1914,7 @@ pub struct UpdateFleetAttributesOutput {
     #[doc="<p>Unique identifier for a fleet that was updated.</p>"]
     #[serde(rename="FleetId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub fleet_id: Option<FleetId>,
+    pub fleet_id: Option<String>,
 }
 
 #[doc="<p>Represents the input for a request action.</p>"]
@@ -1994,18 +1923,18 @@ pub struct UpdateFleetCapacityInput {
     #[doc="<p>Number of EC2 instances you want this fleet to host.</p>"]
     #[serde(rename="DesiredInstances")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub desired_instances: Option<WholeNumber>,
+    pub desired_instances: Option<i64>,
     #[doc="<p>Unique identifier for a fleet to update capacity for.</p>"]
     #[serde(rename="FleetId")]
-    pub fleet_id: FleetId,
+    pub fleet_id: String,
     #[doc="<p>Maximum value allowed for the fleet's instance count. Default if not set is 1.</p>"]
     #[serde(rename="MaxSize")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_size: Option<WholeNumber>,
+    pub max_size: Option<i64>,
     #[doc="<p>Minimum value allowed for the fleet's instance count. Default if not set is 0.</p>"]
     #[serde(rename="MinSize")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub min_size: Option<WholeNumber>,
+    pub min_size: Option<i64>,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -2014,7 +1943,7 @@ pub struct UpdateFleetCapacityOutput {
     #[doc="<p>Unique identifier for a fleet that was updated.</p>"]
     #[serde(rename="FleetId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub fleet_id: Option<FleetId>,
+    pub fleet_id: Option<String>,
 }
 
 #[doc="<p>Represents the input for a request action.</p>"]
@@ -2022,15 +1951,15 @@ pub struct UpdateFleetCapacityOutput {
 pub struct UpdateFleetPortSettingsInput {
     #[doc="<p>Unique identifier for a fleet to update port settings for.</p>"]
     #[serde(rename="FleetId")]
-    pub fleet_id: FleetId,
+    pub fleet_id: String,
     #[doc="<p>Collection of port settings to be added to the fleet record.</p>"]
     #[serde(rename="InboundPermissionAuthorizations")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub inbound_permission_authorizations: Option<IpPermissionsList>,
+    pub inbound_permission_authorizations: Option<Vec<IpPermission>>,
     #[doc="<p>Collection of port settings to be removed from the fleet record.</p>"]
     #[serde(rename="InboundPermissionRevocations")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub inbound_permission_revocations: Option<IpPermissionsList>,
+    pub inbound_permission_revocations: Option<Vec<IpPermission>>,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -2039,7 +1968,7 @@ pub struct UpdateFleetPortSettingsOutput {
     #[doc="<p>Unique identifier for a fleet that was updated.</p>"]
     #[serde(rename="FleetId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub fleet_id: Option<FleetId>,
+    pub fleet_id: Option<String>,
 }
 
 #[doc="<p>Represents the input for a request action.</p>"]
@@ -2047,23 +1976,23 @@ pub struct UpdateFleetPortSettingsOutput {
 pub struct UpdateGameSessionInput {
     #[doc="<p>Unique identifier for the game session to update.</p>"]
     #[serde(rename="GameSessionId")]
-    pub game_session_id: ArnStringModel,
+    pub game_session_id: String,
     #[doc="<p>Maximum number of players that can be connected simultaneously to the game session.</p>"]
     #[serde(rename="MaximumPlayerSessionCount")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub maximum_player_session_count: Option<WholeNumber>,
+    pub maximum_player_session_count: Option<i64>,
     #[doc="<p>Descriptive label that is associated with a game session. Session names do not need to be unique.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<NonZeroAndMaxString>,
+    pub name: Option<String>,
     #[doc="<p>Policy determining whether or not the game session accepts new players.</p>"]
     #[serde(rename="PlayerSessionCreationPolicy")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub player_session_creation_policy: Option<PlayerSessionCreationPolicy>,
+    pub player_session_creation_policy: Option<String>,
     #[doc="<p>Game session protection policy to apply to this game session only.</p> <ul> <li> <p> <b>NoProtection</b> – The game session can be terminated during a scale-down event.</p> </li> <li> <p> <b>FullProtection</b> – If the game session is in an <code>ACTIVE</code> status, it cannot be terminated during a scale-down event.</p> </li> </ul>"]
     #[serde(rename="ProtectionPolicy")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub protection_policy: Option<ProtectionPolicy>,
+    pub protection_policy: Option<String>,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -2081,18 +2010,18 @@ pub struct UpdateGameSessionQueueInput {
     #[doc="<p>List of fleets that can be used to fulfill game session placement requests in the queue. Fleets are identified by either a fleet ARN or a fleet alias ARN. Destinations are listed in default preference order. When updating this list, provide a complete list of destinations.</p>"]
     #[serde(rename="Destinations")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub destinations: Option<GameSessionQueueDestinationList>,
+    pub destinations: Option<Vec<GameSessionQueueDestination>>,
     #[doc="<p>Descriptive label that is associated with queue. Queue names must be unique within each region.</p>"]
     #[serde(rename="Name")]
-    pub name: GameSessionQueueName,
+    pub name: String,
     #[doc="<p>Collection of latency policies to apply when processing game sessions placement requests with player latency information. Multiple policies are evaluated in order of the maximum latency value, starting with the lowest latency values. With just one policy, it is enforced at the start of the game session placement for the duration period. With multiple policies, each policy is enforced consecutively for its duration period. For example, a queue might enforce a 60-second policy followed by a 120-second policy, and then no policy for the remainder of the placement. When updating policies, provide a complete collection of policies.</p>"]
     #[serde(rename="PlayerLatencyPolicies")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub player_latency_policies: Option<PlayerLatencyPolicyList>,
+    pub player_latency_policies: Option<Vec<PlayerLatencyPolicy>>,
     #[doc="<p>Maximum time, in seconds, that a new game session placement request remains in the queue. When a request exceeds this time, the game session placement changes to a TIMED_OUT status.</p>"]
     #[serde(rename="TimeoutInSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub timeout_in_seconds: Option<WholeNumber>,
+    pub timeout_in_seconds: Option<i64>,
 }
 
 #[doc="<p>Represents the returned data in response to a request action.</p>"]
@@ -2109,7 +2038,7 @@ pub struct UpdateGameSessionQueueOutput {
 pub struct UpdateRuntimeConfigurationInput {
     #[doc="<p>Unique identifier for a fleet to update runtime configuration for.</p>"]
     #[serde(rename="FleetId")]
-    pub fleet_id: FleetId,
+    pub fleet_id: String,
     #[doc="<p>Instructions for launching server processes on each instance in the fleet. The runtime configuration for a fleet has a collection of server process configurations, one for each type of server process to run on an instance. A server process configuration specifies the location of the server executable, launch parameters, and the number of concurrent processes with that configuration to maintain on each instance.</p>"]
     #[serde(rename="RuntimeConfiguration")]
     pub runtime_configuration: RuntimeConfiguration,
@@ -2124,7 +2053,6 @@ pub struct UpdateRuntimeConfigurationOutput {
     pub runtime_configuration: Option<RuntimeConfiguration>,
 }
 
-pub type WholeNumber = i64;
 /// Errors returned by CreateAlias
 #[derive(Debug, PartialEq)]
 pub enum CreateAliasError {

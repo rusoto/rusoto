@@ -27,19 +27,15 @@ use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
 #[doc="Region of customer S3 bucket."]
-pub type AWSRegion = String;
 #[doc="Enable support for Redshift and/or QuickSight."]
-pub type AdditionalArtifact = String;
 #[doc="A list of additional artifacts."]
-pub type AdditionalArtifactList = Vec<AdditionalArtifact>;
 #[doc="Preferred compression format for report."]
-pub type CompressionFormat = String;
 #[doc="Request of DeleteReportDefinition"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteReportDefinitionRequest {
     #[serde(rename="ReportName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub report_name: Option<ReportName>,
+    pub report_name: Option<String>,
 }
 
 #[doc="Response of DeleteReportDefinition"]
@@ -47,20 +43,19 @@ pub struct DeleteReportDefinitionRequest {
 pub struct DeleteReportDefinitionResponse {
     #[serde(rename="ResponseMessage")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub response_message: Option<DeleteResponseMessage>,
+    pub response_message: Option<String>,
 }
 
 #[doc="A message indicates if the deletion is successful."]
-pub type DeleteResponseMessage = String;
 #[doc="Request of DescribeReportDefinitions"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DescribeReportDefinitionsRequest {
     #[serde(rename="MaxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<MaxResults>,
+    pub max_results: Option<i64>,
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<GenericString>,
+    pub next_token: Option<String>,
 }
 
 #[doc="Response of DescribeReportDefinitions"]
@@ -68,18 +63,15 @@ pub struct DescribeReportDefinitionsRequest {
 pub struct DescribeReportDefinitionsResponse {
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<GenericString>,
+    pub next_token: Option<String>,
     #[serde(rename="ReportDefinitions")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub report_definitions: Option<ReportDefinitionList>,
+    pub report_definitions: Option<Vec<ReportDefinition>>,
 }
 
 #[doc="A message to show the detail of the exception."]
-pub type ErrorMessage = String;
 #[doc="A generic string."]
-pub type GenericString = String;
 #[doc="The max number of results returned by the operation."]
-pub type MaxResults = i64;
 #[doc="Request of PutReportDefinition"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct PutReportDefinitionRequest {
@@ -96,41 +88,33 @@ pub struct PutReportDefinitionResponse;
 pub struct ReportDefinition {
     #[serde(rename="AdditionalArtifacts")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub additional_artifacts: Option<AdditionalArtifactList>,
+    pub additional_artifacts: Option<Vec<String>>,
     #[serde(rename="AdditionalSchemaElements")]
-    pub additional_schema_elements: SchemaElementList,
+    pub additional_schema_elements: Vec<String>,
     #[serde(rename="Compression")]
-    pub compression: CompressionFormat,
+    pub compression: String,
     #[serde(rename="Format")]
-    pub format: ReportFormat,
+    pub format: String,
     #[serde(rename="ReportName")]
-    pub report_name: ReportName,
+    pub report_name: String,
     #[serde(rename="S3Bucket")]
-    pub s3_bucket: S3Bucket,
+    pub s3_bucket: String,
     #[serde(rename="S3Prefix")]
-    pub s3_prefix: S3Prefix,
+    pub s3_prefix: String,
     #[serde(rename="S3Region")]
-    pub s3_region: AWSRegion,
+    pub s3_region: String,
     #[serde(rename="TimeUnit")]
-    pub time_unit: TimeUnit,
+    pub time_unit: String,
 }
 
 #[doc="A list of report definitions."]
-pub type ReportDefinitionList = Vec<ReportDefinition>;
 #[doc="Preferred format for report."]
-pub type ReportFormat = String;
 #[doc="Preferred name for a report, it has to be unique. Must starts with a number/letter, case sensitive. Limited to 256 characters."]
-pub type ReportName = String;
 #[doc="Name of customer S3 bucket."]
-pub type S3Bucket = String;
 #[doc="Preferred report path prefix. Limited to 256 characters."]
-pub type S3Prefix = String;
 #[doc="Preference of including Resource IDs. You can include additional details about individual resource IDs in your report."]
-pub type SchemaElement = String;
 #[doc="A list of schema elements."]
-pub type SchemaElementList = Vec<SchemaElement>;
 #[doc="The frequency on which report data are measured and displayed."]
-pub type TimeUnit = String;
 /// Errors returned by DeleteReportDefinition
 #[derive(Debug, PartialEq)]
 pub enum DeleteReportDefinitionError {

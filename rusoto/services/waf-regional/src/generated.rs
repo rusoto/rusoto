@@ -26,7 +26,6 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-pub type Action = String;
 #[doc="<p>The <code>ActivatedRule</code> object in an <a>UpdateWebACL</a> request specifies a <code>Rule</code> that you want to insert or delete, the priority of the <code>Rule</code> in the <code>WebACL</code>, and the action that you want AWS WAF to take when a web request matches the <code>Rule</code> (<code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>).</p> <p>To specify whether to insert or delete a <code>Rule</code>, use the <code>Action</code> parameter in the <a>WebACLUpdate</a> data type.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ActivatedRule {
@@ -35,25 +34,24 @@ pub struct ActivatedRule {
     pub action: WafAction,
     #[doc="<p>Specifies the order in which the <code>Rules</code> in a <code>WebACL</code> are evaluated. Rules with a lower value for <code>Priority</code> are evaluated before <code>Rules</code> with a higher value. The value must be a unique integer. If you add multiple <code>Rules</code> to a <code>WebACL</code>, the values don't need to be consecutive.</p>"]
     #[serde(rename="Priority")]
-    pub priority: RulePriority,
+    pub priority: i64,
     #[doc="<p>The <code>RuleId</code> for a <code>Rule</code>. You use <code>RuleId</code> to get more information about a <code>Rule</code> (see <a>GetRule</a>), update a <code>Rule</code> (see <a>UpdateRule</a>), insert a <code>Rule</code> into a <code>WebACL</code> or delete a one from a <code>WebACL</code> (see <a>UpdateWebACL</a>), or delete a <code>Rule</code> from AWS WAF (see <a>DeleteRule</a>).</p> <p> <code>RuleId</code> is returned by <a>CreateRule</a> and by <a>ListRules</a>.</p>"]
     #[serde(rename="RuleId")]
-    pub rule_id: ResourceId,
+    pub rule_id: String,
     #[doc="<p>The rule type, either <code>REGULAR</code>, as defined by <a>Rule</a>, or <code>RATE_BASED</code>, as defined by <a>RateBasedRule</a>. The default is REGULAR. Although this field is optional, be aware that if you try to add a RATE_BASED rule to a web ACL without setting the type, the <a>UpdateWebACL</a> request will fail because the request tries to add a REGULAR rule with the specified ID, which does not exist. </p>"]
     #[serde(rename="Type")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub type_: Option<WafRuleType>,
+    pub type_: Option<String>,
 }
 
-pub type ActivatedRules = Vec<ActivatedRule>;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct AssociateWebACLRequest {
     #[doc="<p>The ARN (Amazon Resource Name) of the resource to be protected.</p>"]
     #[serde(rename="ResourceArn")]
-    pub resource_arn: ResourceArn,
+    pub resource_arn: String,
     #[doc="<p>A unique identifier (ID) for the web ACL.</p>"]
     #[serde(rename="WebACLId")]
-    pub web_acl_id: ResourceId,
+    pub web_acl_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -64,26 +62,25 @@ pub struct AssociateWebACLResponse;
 pub struct ByteMatchSet {
     #[doc="<p>The <code>ByteMatchSetId</code> for a <code>ByteMatchSet</code>. You use <code>ByteMatchSetId</code> to get information about a <code>ByteMatchSet</code> (see <a>GetByteMatchSet</a>), update a <code>ByteMatchSet</code> (see <a>UpdateByteMatchSet</a>), insert a <code>ByteMatchSet</code> into a <code>Rule</code> or delete one from a <code>Rule</code> (see <a>UpdateRule</a>), and delete a <code>ByteMatchSet</code> from AWS WAF (see <a>DeleteByteMatchSet</a>).</p> <p> <code>ByteMatchSetId</code> is returned by <a>CreateByteMatchSet</a> and by <a>ListByteMatchSets</a>.</p>"]
     #[serde(rename="ByteMatchSetId")]
-    pub byte_match_set_id: ResourceId,
+    pub byte_match_set_id: String,
     #[doc="<p>Specifies the bytes (typically a string that corresponds with ASCII characters) that you want AWS WAF to search for in web requests, the location in requests that you want AWS WAF to search, and other settings.</p>"]
     #[serde(rename="ByteMatchTuples")]
-    pub byte_match_tuples: ByteMatchTuples,
+    pub byte_match_tuples: Vec<ByteMatchTuple>,
     #[doc="<p>A friendly name or description of the <a>ByteMatchSet</a>. You can't change <code>Name</code> after you create a <code>ByteMatchSet</code>.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<ResourceName>,
+    pub name: Option<String>,
 }
 
-pub type ByteMatchSetSummaries = Vec<ByteMatchSetSummary>;
 #[doc="<p>Returned by <a>ListByteMatchSets</a>. Each <code>ByteMatchSetSummary</code> object includes the <code>Name</code> and <code>ByteMatchSetId</code> for one <a>ByteMatchSet</a>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ByteMatchSetSummary {
     #[doc="<p>The <code>ByteMatchSetId</code> for a <code>ByteMatchSet</code>. You use <code>ByteMatchSetId</code> to get information about a <code>ByteMatchSet</code>, update a <code>ByteMatchSet</code>, remove a <code>ByteMatchSet</code> from a <code>Rule</code>, and delete a <code>ByteMatchSet</code> from AWS WAF.</p> <p> <code>ByteMatchSetId</code> is returned by <a>CreateByteMatchSet</a> and by <a>ListByteMatchSets</a>.</p>"]
     #[serde(rename="ByteMatchSetId")]
-    pub byte_match_set_id: ResourceId,
+    pub byte_match_set_id: String,
     #[doc="<p>A friendly name or description of the <a>ByteMatchSet</a>. You can't change <code>Name</code> after you create a <code>ByteMatchSet</code>.</p>"]
     #[serde(rename="Name")]
-    pub name: ResourceName,
+    pub name: String,
 }
 
 #[doc="<p>In an <a>UpdateByteMatchSet</a> request, <code>ByteMatchSetUpdate</code> specifies whether to insert or delete a <a>ByteMatchTuple</a> and includes the settings for the <code>ByteMatchTuple</code>.</p>"]
@@ -91,14 +88,12 @@ pub struct ByteMatchSetSummary {
 pub struct ByteMatchSetUpdate {
     #[doc="<p>Specifies whether to insert or delete a <a>ByteMatchTuple</a>.</p>"]
     #[serde(rename="Action")]
-    pub action: ChangeAction,
+    pub action: String,
     #[doc="<p>Information about the part of a web request that you want AWS WAF to inspect and the value that you want AWS WAF to search for. If you specify <code>DELETE</code> for the value of <code>Action</code>, the <code>ByteMatchTuple</code> values must exactly match the values in the <code>ByteMatchTuple</code> that you want to delete from the <code>ByteMatchSet</code>.</p>"]
     #[serde(rename="ByteMatchTuple")]
     pub byte_match_tuple: ByteMatchTuple,
 }
 
-pub type ByteMatchSetUpdates = Vec<ByteMatchSetUpdate>;
-pub type ByteMatchTargetString = Vec<u8>;
 #[doc="<p>The bytes (typically a string that corresponds with ASCII characters) that you want AWS WAF to search for in web requests, the location in requests that you want AWS WAF to search, and other settings.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ByteMatchTuple {
@@ -107,7 +102,7 @@ pub struct ByteMatchTuple {
     pub field_to_match: FieldToMatch,
     #[doc="<p>Within the portion of a web request that you want to search (for example, in the query string, if any), specify where you want AWS WAF to search. Valid values include the following:</p> <p> <b>CONTAINS</b> </p> <p>The specified part of the web request must include the value of <code>TargetString</code>, but the location doesn't matter.</p> <p> <b>CONTAINS_WORD</b> </p> <p>The specified part of the web request must include the value of <code>TargetString</code>, and <code>TargetString</code> must contain only alphanumeric characters or underscore (A-Z, a-z, 0-9, or _). In addition, <code>TargetString</code> must be a word, which means one of the following:</p> <ul> <li> <p> <code>TargetString</code> exactly matches the value of the specified part of the web request, such as the value of a header.</p> </li> <li> <p> <code>TargetString</code> is at the beginning of the specified part of the web request and is followed by a character other than an alphanumeric character or underscore (_), for example, <code>BadBot;</code>.</p> </li> <li> <p> <code>TargetString</code> is at the end of the specified part of the web request and is preceded by a character other than an alphanumeric character or underscore (_), for example, <code>;BadBot</code>.</p> </li> <li> <p> <code>TargetString</code> is in the middle of the specified part of the web request and is preceded and followed by characters other than alphanumeric characters or underscore (_), for example, <code>-BadBot;</code>.</p> </li> </ul> <p> <b>EXACTLY</b> </p> <p>The value of the specified part of the web request must exactly match the value of <code>TargetString</code>.</p> <p> <b>STARTS_WITH</b> </p> <p>The value of <code>TargetString</code> must appear at the beginning of the specified part of the web request.</p> <p> <b>ENDS_WITH</b> </p> <p>The value of <code>TargetString</code> must appear at the end of the specified part of the web request.</p>"]
     #[serde(rename="PositionalConstraint")]
-    pub positional_constraint: PositionalConstraint,
+    pub positional_constraint: String,
     #[doc="<p>The value that you want AWS WAF to search for. AWS WAF searches for the specified string in the part of web requests that you specified in <code>FieldToMatch</code>. The maximum length of the value is 50 bytes.</p> <p>Valid values depend on the values that you specified for <code>FieldToMatch</code>:</p> <ul> <li> <p> <code>HEADER</code>: The value that you want AWS WAF to search for in the request header that you specified in <a>FieldToMatch</a>, for example, the value of the <code>User-Agent</code> or <code>Referer</code> header.</p> </li> <li> <p> <code>METHOD</code>: The HTTP method, which indicates the type of operation specified in the request. CloudFront supports the following methods: <code>DELETE</code>, <code>GET</code>, <code>HEAD</code>, <code>OPTIONS</code>, <code>PATCH</code>, <code>POST</code>, and <code>PUT</code>.</p> </li> <li> <p> <code>QUERY_STRING</code>: The value that you want AWS WAF to search for in the query string, which is the part of a URL that appears after a <code>?</code> character.</p> </li> <li> <p> <code>URI</code>: The value that you want AWS WAF to search for in the part of a URL that identifies a resource, for example, <code>/images/daily-ad.jpg</code>.</p> </li> <li> <p> <code>BODY</code>: The part of a request that contains any additional data that you want to send to your web server as the HTTP request body, such as data from a form. The request body immediately follows the request headers. Note that only the first <code>8192</code> bytes of the request body are forwarded to AWS WAF for inspection. To allow or block requests based on the length of the body, you can create a size constraint set. For more information, see <a>CreateSizeConstraintSet</a>. </p> </li> </ul> <p>If <code>TargetString</code> includes alphabetic characters A-Z and a-z, note that the value is case sensitive.</p> <p> <b>If you're using the AWS WAF API</b> </p> <p>Specify a base64-encoded version of the value. The maximum length of the value before you base64-encode it is 50 bytes.</p> <p>For example, suppose the value of <code>Type</code> is <code>HEADER</code> and the value of <code>Data</code> is <code>User-Agent</code>. If you want to search the <code>User-Agent</code> header for the value <code>BadBot</code>, you base64-encode <code>BadBot</code> using MIME base64 encoding and include the resulting value, <code>QmFkQm90</code>, in the value of <code>TargetString</code>.</p> <p> <b>If you're using the AWS CLI or one of the AWS SDKs</b> </p> <p>The value that you want AWS WAF to search for. The SDK automatically base64 encodes the value.</p>"]
     #[serde(rename="TargetString")]
     #[serde(
@@ -115,26 +110,20 @@ pub struct ByteMatchTuple {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub target_string: ByteMatchTargetString,
+    pub target_string: Vec<u8>,
     #[doc="<p>Text transformations eliminate some of the unusual formatting that attackers use in web requests in an effort to bypass AWS WAF. If you specify a transformation, AWS WAF performs the transformation on <code>TargetString</code> before inspecting a request for a match.</p> <p> <b>CMD_LINE</b> </p> <p>When you're concerned that attackers are injecting an operating system commandline command and using unusual formatting to disguise some or all of the command, use this option to perform the following transformations:</p> <ul> <li> <p>Delete the following characters: \\ \" ' ^</p> </li> <li> <p>Delete spaces before the following characters: / (</p> </li> <li> <p>Replace the following characters with a space: , ;</p> </li> <li> <p>Replace multiple spaces with one space</p> </li> <li> <p>Convert uppercase letters (A-Z) to lowercase (a-z)</p> </li> </ul> <p> <b>COMPRESS_WHITE_SPACE</b> </p> <p>Use this option to replace the following characters with a space character (decimal 32):</p> <ul> <li> <p>\\f, formfeed, decimal 12</p> </li> <li> <p>\\t, tab, decimal 9</p> </li> <li> <p>\\n, newline, decimal 10</p> </li> <li> <p>\\r, carriage return, decimal 13</p> </li> <li> <p>\\v, vertical tab, decimal 11</p> </li> <li> <p>non-breaking space, decimal 160</p> </li> </ul> <p> <code>COMPRESS_WHITE_SPACE</code> also replaces multiple spaces with one space.</p> <p> <b>HTML_ENTITY_DECODE</b> </p> <p>Use this option to replace HTML-encoded characters with unencoded characters. <code>HTML_ENTITY_DECODE</code> performs the following operations:</p> <ul> <li> <p>Replaces <code>(ampersand)quot;</code> with <code>\"</code> </p> </li> <li> <p>Replaces <code>(ampersand)nbsp;</code> with a non-breaking space, decimal 160</p> </li> <li> <p>Replaces <code>(ampersand)lt;</code> with a \"less than\" symbol</p> </li> <li> <p>Replaces <code>(ampersand)gt;</code> with <code>&gt;</code> </p> </li> <li> <p>Replaces characters that are represented in hexadecimal format, <code>(ampersand)#xhhhh;</code>, with the corresponding characters</p> </li> <li> <p>Replaces characters that are represented in decimal format, <code>(ampersand)#nnnn;</code>, with the corresponding characters</p> </li> </ul> <p> <b>LOWERCASE</b> </p> <p>Use this option to convert uppercase letters (A-Z) to lowercase (a-z).</p> <p> <b>URL_DECODE</b> </p> <p>Use this option to decode a URL-encoded value.</p> <p> <b>NONE</b> </p> <p>Specify <code>NONE</code> if you don't want to perform any text transformations.</p>"]
     #[serde(rename="TextTransformation")]
-    pub text_transformation: TextTransformation,
+    pub text_transformation: String,
 }
 
-pub type ByteMatchTuples = Vec<ByteMatchTuple>;
-pub type ChangeAction = String;
-pub type ChangeToken = String;
-pub type ChangeTokenStatus = String;
-pub type ComparisonOperator = String;
-pub type Country = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateByteMatchSetRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
-    pub change_token: ChangeToken,
+    pub change_token: String,
     #[doc="<p>A friendly name or description of the <a>ByteMatchSet</a>. You can't change <code>Name</code> after you create a <code>ByteMatchSet</code>.</p>"]
     #[serde(rename="Name")]
-    pub name: ResourceName,
+    pub name: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -146,17 +135,17 @@ pub struct CreateByteMatchSetResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>CreateByteMatchSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub change_token: Option<ChangeToken>,
+    pub change_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateIPSetRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
-    pub change_token: ChangeToken,
+    pub change_token: String,
     #[doc="<p>A friendly name or description of the <a>IPSet</a>. You can't change <code>Name</code> after you create the <code>IPSet</code>.</p>"]
     #[serde(rename="Name")]
-    pub name: ResourceName,
+    pub name: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -164,7 +153,7 @@ pub struct CreateIPSetResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>CreateIPSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub change_token: Option<ChangeToken>,
+    pub change_token: Option<String>,
     #[doc="<p>The <a>IPSet</a> returned in the <code>CreateIPSet</code> response.</p>"]
     #[serde(rename="IPSet")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -175,19 +164,19 @@ pub struct CreateIPSetResponse {
 pub struct CreateRateBasedRuleRequest {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>CreateRateBasedRule</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
-    pub change_token: ChangeToken,
+    pub change_token: String,
     #[doc="<p>A friendly name or description for the metrics for this <code>RateBasedRule</code>. The name can contain only alphanumeric characters (A-Z, a-z, 0-9); the name can't contain whitespace. You can't change the name of the metric after you create the <code>RateBasedRule</code>.</p>"]
     #[serde(rename="MetricName")]
-    pub metric_name: MetricName,
+    pub metric_name: String,
     #[doc="<p>A friendly name or description of the <a>RateBasedRule</a>. You can't change the name of a <code>RateBasedRule</code> after you create it.</p>"]
     #[serde(rename="Name")]
-    pub name: ResourceName,
+    pub name: String,
     #[doc="<p>The field that AWS WAF uses to determine if requests are likely arriving from a single source and thus subject to rate monitoring. The only valid value for <code>RateKey</code> is <code>IP</code>. <code>IP</code> indicates that requests that arrive from the same IP address are subject to the <code>RateLimit</code> that is specified in the <code>RateBasedRule</code>.</p>"]
     #[serde(rename="RateKey")]
-    pub rate_key: RateKey,
+    pub rate_key: String,
     #[doc="<p>The maximum number of requests, which have an identical value in the field that is specified by <code>RateKey</code>, allowed in a five-minute period. If the number of requests exceeds the <code>RateLimit</code> and the other predicates specified in the rule are also met, AWS WAF triggers the action that is specified for this rule.</p>"]
     #[serde(rename="RateLimit")]
-    pub rate_limit: RateLimit,
+    pub rate_limit: i64,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -195,7 +184,7 @@ pub struct CreateRateBasedRuleResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>CreateRateBasedRule</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub change_token: Option<ChangeToken>,
+    pub change_token: Option<String>,
     #[doc="<p>The <a>RateBasedRule</a> that is returned in the <code>CreateRateBasedRule</code> response.</p>"]
     #[serde(rename="Rule")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -206,13 +195,13 @@ pub struct CreateRateBasedRuleResponse {
 pub struct CreateRuleRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
-    pub change_token: ChangeToken,
+    pub change_token: String,
     #[doc="<p>A friendly name or description for the metrics for this <code>Rule</code>. The name can contain only alphanumeric characters (A-Z, a-z, 0-9); the name can't contain whitespace. You can't change the name of the metric after you create the <code>Rule</code>.</p>"]
     #[serde(rename="MetricName")]
-    pub metric_name: MetricName,
+    pub metric_name: String,
     #[doc="<p>A friendly name or description of the <a>Rule</a>. You can't change the name of a <code>Rule</code> after you create it.</p>"]
     #[serde(rename="Name")]
-    pub name: ResourceName,
+    pub name: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -220,7 +209,7 @@ pub struct CreateRuleResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>CreateRule</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub change_token: Option<ChangeToken>,
+    pub change_token: Option<String>,
     #[doc="<p>The <a>Rule</a> returned in the <code>CreateRule</code> response.</p>"]
     #[serde(rename="Rule")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -231,10 +220,10 @@ pub struct CreateRuleResponse {
 pub struct CreateSizeConstraintSetRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
-    pub change_token: ChangeToken,
+    pub change_token: String,
     #[doc="<p>A friendly name or description of the <a>SizeConstraintSet</a>. You can't change <code>Name</code> after you create a <code>SizeConstraintSet</code>.</p>"]
     #[serde(rename="Name")]
-    pub name: ResourceName,
+    pub name: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -242,7 +231,7 @@ pub struct CreateSizeConstraintSetResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>CreateSizeConstraintSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub change_token: Option<ChangeToken>,
+    pub change_token: Option<String>,
     #[doc="<p>A <a>SizeConstraintSet</a> that contains no <code>SizeConstraint</code> objects.</p>"]
     #[serde(rename="SizeConstraintSet")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -254,10 +243,10 @@ pub struct CreateSizeConstraintSetResponse {
 pub struct CreateSqlInjectionMatchSetRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
-    pub change_token: ChangeToken,
+    pub change_token: String,
     #[doc="<p>A friendly name or description for the <a>SqlInjectionMatchSet</a> that you're creating. You can't change <code>Name</code> after you create the <code>SqlInjectionMatchSet</code>.</p>"]
     #[serde(rename="Name")]
-    pub name: ResourceName,
+    pub name: String,
 }
 
 #[doc="<p>The response to a <code>CreateSqlInjectionMatchSet</code> request.</p>"]
@@ -266,7 +255,7 @@ pub struct CreateSqlInjectionMatchSetResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>CreateSqlInjectionMatchSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub change_token: Option<ChangeToken>,
+    pub change_token: Option<String>,
     #[doc="<p>A <a>SqlInjectionMatchSet</a>.</p>"]
     #[serde(rename="SqlInjectionMatchSet")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -277,16 +266,16 @@ pub struct CreateSqlInjectionMatchSetResponse {
 pub struct CreateWebACLRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
-    pub change_token: ChangeToken,
+    pub change_token: String,
     #[doc="<p>The action that you want AWS WAF to take when a request doesn't match the criteria specified in any of the <code>Rule</code> objects that are associated with the <code>WebACL</code>.</p>"]
     #[serde(rename="DefaultAction")]
     pub default_action: WafAction,
     #[doc="<p>A friendly name or description for the metrics for this <code>WebACL</code>. The name can contain only alphanumeric characters (A-Z, a-z, 0-9); the name can't contain whitespace. You can't change <code>MetricName</code> after you create the <code>WebACL</code>.</p>"]
     #[serde(rename="MetricName")]
-    pub metric_name: MetricName,
+    pub metric_name: String,
     #[doc="<p>A friendly name or description of the <a>WebACL</a>. You can't change <code>Name</code> after you create the <code>WebACL</code>.</p>"]
     #[serde(rename="Name")]
-    pub name: ResourceName,
+    pub name: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -294,7 +283,7 @@ pub struct CreateWebACLResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>CreateWebACL</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub change_token: Option<ChangeToken>,
+    pub change_token: Option<String>,
     #[doc="<p>The <a>WebACL</a> returned in the <code>CreateWebACL</code> response.</p>"]
     #[serde(rename="WebACL")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -306,10 +295,10 @@ pub struct CreateWebACLResponse {
 pub struct CreateXssMatchSetRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
-    pub change_token: ChangeToken,
+    pub change_token: String,
     #[doc="<p>A friendly name or description for the <a>XssMatchSet</a> that you're creating. You can't change <code>Name</code> after you create the <code>XssMatchSet</code>.</p>"]
     #[serde(rename="Name")]
-    pub name: ResourceName,
+    pub name: String,
 }
 
 #[doc="<p>The response to a <code>CreateXssMatchSet</code> request.</p>"]
@@ -318,7 +307,7 @@ pub struct CreateXssMatchSetResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>CreateXssMatchSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub change_token: Option<ChangeToken>,
+    pub change_token: Option<String>,
     #[doc="<p>An <a>XssMatchSet</a>.</p>"]
     #[serde(rename="XssMatchSet")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -329,10 +318,10 @@ pub struct CreateXssMatchSetResponse {
 pub struct DeleteByteMatchSetRequest {
     #[doc="<p>The <code>ByteMatchSetId</code> of the <a>ByteMatchSet</a> that you want to delete. <code>ByteMatchSetId</code> is returned by <a>CreateByteMatchSet</a> and by <a>ListByteMatchSets</a>.</p>"]
     #[serde(rename="ByteMatchSetId")]
-    pub byte_match_set_id: ResourceId,
+    pub byte_match_set_id: String,
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
-    pub change_token: ChangeToken,
+    pub change_token: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -340,17 +329,17 @@ pub struct DeleteByteMatchSetResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>DeleteByteMatchSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub change_token: Option<ChangeToken>,
+    pub change_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteIPSetRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
-    pub change_token: ChangeToken,
+    pub change_token: String,
     #[doc="<p>The <code>IPSetId</code> of the <a>IPSet</a> that you want to delete. <code>IPSetId</code> is returned by <a>CreateIPSet</a> and by <a>ListIPSets</a>.</p>"]
     #[serde(rename="IPSetId")]
-    pub ip_set_id: ResourceId,
+    pub ip_set_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -358,17 +347,17 @@ pub struct DeleteIPSetResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>DeleteIPSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub change_token: Option<ChangeToken>,
+    pub change_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteRateBasedRuleRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
-    pub change_token: ChangeToken,
+    pub change_token: String,
     #[doc="<p>The <code>RuleId</code> of the <a>RateBasedRule</a> that you want to delete. <code>RuleId</code> is returned by <a>CreateRateBasedRule</a> and by <a>ListRateBasedRules</a>.</p>"]
     #[serde(rename="RuleId")]
-    pub rule_id: ResourceId,
+    pub rule_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -376,17 +365,17 @@ pub struct DeleteRateBasedRuleResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>DeleteRateBasedRule</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub change_token: Option<ChangeToken>,
+    pub change_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteRuleRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
-    pub change_token: ChangeToken,
+    pub change_token: String,
     #[doc="<p>The <code>RuleId</code> of the <a>Rule</a> that you want to delete. <code>RuleId</code> is returned by <a>CreateRule</a> and by <a>ListRules</a>.</p>"]
     #[serde(rename="RuleId")]
-    pub rule_id: ResourceId,
+    pub rule_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -394,17 +383,17 @@ pub struct DeleteRuleResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>DeleteRule</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub change_token: Option<ChangeToken>,
+    pub change_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteSizeConstraintSetRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
-    pub change_token: ChangeToken,
+    pub change_token: String,
     #[doc="<p>The <code>SizeConstraintSetId</code> of the <a>SizeConstraintSet</a> that you want to delete. <code>SizeConstraintSetId</code> is returned by <a>CreateSizeConstraintSet</a> and by <a>ListSizeConstraintSets</a>.</p>"]
     #[serde(rename="SizeConstraintSetId")]
-    pub size_constraint_set_id: ResourceId,
+    pub size_constraint_set_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -412,7 +401,7 @@ pub struct DeleteSizeConstraintSetResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>DeleteSizeConstraintSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub change_token: Option<ChangeToken>,
+    pub change_token: Option<String>,
 }
 
 #[doc="<p>A request to delete a <a>SqlInjectionMatchSet</a> from AWS WAF.</p>"]
@@ -420,10 +409,10 @@ pub struct DeleteSizeConstraintSetResponse {
 pub struct DeleteSqlInjectionMatchSetRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
-    pub change_token: ChangeToken,
+    pub change_token: String,
     #[doc="<p>The <code>SqlInjectionMatchSetId</code> of the <a>SqlInjectionMatchSet</a> that you want to delete. <code>SqlInjectionMatchSetId</code> is returned by <a>CreateSqlInjectionMatchSet</a> and by <a>ListSqlInjectionMatchSets</a>.</p>"]
     #[serde(rename="SqlInjectionMatchSetId")]
-    pub sql_injection_match_set_id: ResourceId,
+    pub sql_injection_match_set_id: String,
 }
 
 #[doc="<p>The response to a request to delete a <a>SqlInjectionMatchSet</a> from AWS WAF.</p>"]
@@ -432,17 +421,17 @@ pub struct DeleteSqlInjectionMatchSetResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>DeleteSqlInjectionMatchSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub change_token: Option<ChangeToken>,
+    pub change_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteWebACLRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
-    pub change_token: ChangeToken,
+    pub change_token: String,
     #[doc="<p>The <code>WebACLId</code> of the <a>WebACL</a> that you want to delete. <code>WebACLId</code> is returned by <a>CreateWebACL</a> and by <a>ListWebACLs</a>.</p>"]
     #[serde(rename="WebACLId")]
-    pub web_acl_id: ResourceId,
+    pub web_acl_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -450,7 +439,7 @@ pub struct DeleteWebACLResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>DeleteWebACL</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub change_token: Option<ChangeToken>,
+    pub change_token: Option<String>,
 }
 
 #[doc="<p>A request to delete an <a>XssMatchSet</a> from AWS WAF.</p>"]
@@ -458,10 +447,10 @@ pub struct DeleteWebACLResponse {
 pub struct DeleteXssMatchSetRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
-    pub change_token: ChangeToken,
+    pub change_token: String,
     #[doc="<p>The <code>XssMatchSetId</code> of the <a>XssMatchSet</a> that you want to delete. <code>XssMatchSetId</code> is returned by <a>CreateXssMatchSet</a> and by <a>ListXssMatchSets</a>.</p>"]
     #[serde(rename="XssMatchSetId")]
-    pub xss_match_set_id: ResourceId,
+    pub xss_match_set_id: String,
 }
 
 #[doc="<p>The response to a request to delete an <a>XssMatchSet</a> from AWS WAF.</p>"]
@@ -470,37 +459,36 @@ pub struct DeleteXssMatchSetResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>DeleteXssMatchSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub change_token: Option<ChangeToken>,
+    pub change_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DisassociateWebACLRequest {
     #[doc="<p>The ARN (Amazon Resource Name) of the resource from which the web ACL is being removed.</p>"]
     #[serde(rename="ResourceArn")]
-    pub resource_arn: ResourceArn,
+    pub resource_arn: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DisassociateWebACLResponse;
 
-pub type ErrorMessage = String;
 #[doc="<p>Specifies where in a web request to look for <code>TargetString</code>.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct FieldToMatch {
     #[doc="<p>When the value of <code>Type</code> is <code>HEADER</code>, enter the name of the header that you want AWS WAF to search, for example, <code>User-Agent</code> or <code>Referer</code>. If the value of <code>Type</code> is any other value, omit <code>Data</code>.</p> <p>The name of the header is not case sensitive.</p>"]
     #[serde(rename="Data")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub data: Option<MatchFieldData>,
+    pub data: Option<String>,
     #[doc="<p>The part of the web request that you want AWS WAF to search for a specified string. Parts of a request that you can search include the following:</p> <ul> <li> <p> <code>HEADER</code>: A specified request header, for example, the value of the <code>User-Agent</code> or <code>Referer</code> header. If you choose <code>HEADER</code> for the type, specify the name of the header in <code>Data</code>.</p> </li> <li> <p> <code>METHOD</code>: The HTTP method, which indicated the type of operation that the request is asking the origin to perform. Amazon CloudFront supports the following methods: <code>DELETE</code>, <code>GET</code>, <code>HEAD</code>, <code>OPTIONS</code>, <code>PATCH</code>, <code>POST</code>, and <code>PUT</code>.</p> </li> <li> <p> <code>QUERY_STRING</code>: A query string, which is the part of a URL that appears after a <code>?</code> character, if any.</p> </li> <li> <p> <code>URI</code>: The part of a web request that identifies a resource, for example, <code>/images/daily-ad.jpg</code>.</p> </li> <li> <p> <code>BODY</code>: The part of a request that contains any additional data that you want to send to your web server as the HTTP request body, such as data from a form. The request body immediately follows the request headers. Note that only the first <code>8192</code> bytes of the request body are forwarded to AWS WAF for inspection. To allow or block requests based on the length of the body, you can create a size constraint set. For more information, see <a>CreateSizeConstraintSet</a>. </p> </li> </ul>"]
     #[serde(rename="Type")]
-    pub type_: MatchFieldType,
+    pub type_: String,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetByteMatchSetRequest {
     #[doc="<p>The <code>ByteMatchSetId</code> of the <a>ByteMatchSet</a> that you want to get. <code>ByteMatchSetId</code> is returned by <a>CreateByteMatchSet</a> and by <a>ListByteMatchSets</a>.</p>"]
     #[serde(rename="ByteMatchSetId")]
-    pub byte_match_set_id: ResourceId,
+    pub byte_match_set_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -519,14 +507,14 @@ pub struct GetChangeTokenResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used in the request. Use this value in a <code>GetChangeTokenStatus</code> request to get the current status of the request. </p>"]
     #[serde(rename="ChangeToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub change_token: Option<ChangeToken>,
+    pub change_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetChangeTokenStatusRequest {
     #[doc="<p>The change token for which you want to get the status. This change token was previously returned in the <code>GetChangeToken</code> response.</p>"]
     #[serde(rename="ChangeToken")]
-    pub change_token: ChangeToken,
+    pub change_token: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -534,14 +522,14 @@ pub struct GetChangeTokenStatusResponse {
     #[doc="<p>The status of the change token.</p>"]
     #[serde(rename="ChangeTokenStatus")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub change_token_status: Option<ChangeTokenStatus>,
+    pub change_token_status: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetIPSetRequest {
     #[doc="<p>The <code>IPSetId</code> of the <a>IPSet</a> that you want to get. <code>IPSetId</code> is returned by <a>CreateIPSet</a> and by <a>ListIPSets</a>.</p>"]
     #[serde(rename="IPSetId")]
-    pub ip_set_id: ResourceId,
+    pub ip_set_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -557,10 +545,10 @@ pub struct GetRateBasedRuleManagedKeysRequest {
     #[doc="<p>A null value and not currently used. Do not include this in your request.</p>"]
     #[serde(rename="NextMarker")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_marker: Option<NextMarker>,
+    pub next_marker: Option<String>,
     #[doc="<p>The <code>RuleId</code> of the <a>RateBasedRule</a> for which you want to get a list of <code>ManagedKeys</code>. <code>RuleId</code> is returned by <a>CreateRateBasedRule</a> and by <a>ListRateBasedRules</a>.</p>"]
     #[serde(rename="RuleId")]
-    pub rule_id: ResourceId,
+    pub rule_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -568,18 +556,18 @@ pub struct GetRateBasedRuleManagedKeysResponse {
     #[doc="<p>An array of IP addresses that currently are blocked by the specified <a>RateBasedRule</a>. </p>"]
     #[serde(rename="ManagedKeys")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub managed_keys: Option<ManagedKeys>,
+    pub managed_keys: Option<Vec<String>>,
     #[doc="<p>A null value and not currently used.</p>"]
     #[serde(rename="NextMarker")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_marker: Option<NextMarker>,
+    pub next_marker: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetRateBasedRuleRequest {
     #[doc="<p>The <code>RuleId</code> of the <a>RateBasedRule</a> that you want to get. <code>RuleId</code> is returned by <a>CreateRateBasedRule</a> and by <a>ListRateBasedRules</a>.</p>"]
     #[serde(rename="RuleId")]
-    pub rule_id: ResourceId,
+    pub rule_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -594,7 +582,7 @@ pub struct GetRateBasedRuleResponse {
 pub struct GetRuleRequest {
     #[doc="<p>The <code>RuleId</code> of the <a>Rule</a> that you want to get. <code>RuleId</code> is returned by <a>CreateRule</a> and by <a>ListRules</a>.</p>"]
     #[serde(rename="RuleId")]
-    pub rule_id: ResourceId,
+    pub rule_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -605,21 +593,20 @@ pub struct GetRuleResponse {
     pub rule: Option<Rule>,
 }
 
-pub type GetSampledRequestsMaxItems = i64;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetSampledRequestsRequest {
     #[doc="<p>The number of requests that you want AWS WAF to return from among the first 5,000 requests that your AWS resource received during the time range. If your resource received fewer requests than the value of <code>MaxItems</code>, <code>GetSampledRequests</code> returns information about all of them. </p>"]
     #[serde(rename="MaxItems")]
-    pub max_items: GetSampledRequestsMaxItems,
+    pub max_items: i64,
     #[doc="<p> <code>RuleId</code> is one of two values:</p> <ul> <li> <p>The <code>RuleId</code> of the <code>Rule</code> for which you want <code>GetSampledRequests</code> to return a sample of requests.</p> </li> <li> <p> <code>Default_Action</code>, which causes <code>GetSampledRequests</code> to return a sample of the requests that didn't match any of the rules in the specified <code>WebACL</code>.</p> </li> </ul>"]
     #[serde(rename="RuleId")]
-    pub rule_id: ResourceId,
+    pub rule_id: String,
     #[doc="<p>The start date and time and the end date and time of the range for which you want <code>GetSampledRequests</code> to return a sample of requests. Specify the date and time in the following format: <code>\"2016-09-27T14:50Z\"</code>. You can specify any time range in the previous three hours.</p>"]
     #[serde(rename="TimeWindow")]
     pub time_window: TimeWindow,
     #[doc="<p>The <code>WebACLId</code> of the <code>WebACL</code> for which you want <code>GetSampledRequests</code> to return a sample of requests.</p>"]
     #[serde(rename="WebAclId")]
-    pub web_acl_id: ResourceId,
+    pub web_acl_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -627,11 +614,11 @@ pub struct GetSampledRequestsResponse {
     #[doc="<p>The total number of requests from which <code>GetSampledRequests</code> got a sample of <code>MaxItems</code> requests. If <code>PopulationSize</code> is less than <code>MaxItems</code>, the sample includes every request that your AWS resource received during the specified time range.</p>"]
     #[serde(rename="PopulationSize")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub population_size: Option<PopulationSize>,
+    pub population_size: Option<i64>,
     #[doc="<p>A complex type that contains detailed information about each of the requests in the sample.</p>"]
     #[serde(rename="SampledRequests")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub sampled_requests: Option<SampledHTTPRequests>,
+    pub sampled_requests: Option<Vec<SampledHTTPRequest>>,
     #[doc="<p>Usually, <code>TimeWindow</code> is the time range that you specified in the <code>GetSampledRequests</code> request. However, if your AWS resource received more than 5,000 requests during the time range that you specified in the request, <code>GetSampledRequests</code> returns the time range for the first 5,000 requests.</p>"]
     #[serde(rename="TimeWindow")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -642,7 +629,7 @@ pub struct GetSampledRequestsResponse {
 pub struct GetSizeConstraintSetRequest {
     #[doc="<p>The <code>SizeConstraintSetId</code> of the <a>SizeConstraintSet</a> that you want to get. <code>SizeConstraintSetId</code> is returned by <a>CreateSizeConstraintSet</a> and by <a>ListSizeConstraintSets</a>.</p>"]
     #[serde(rename="SizeConstraintSetId")]
-    pub size_constraint_set_id: ResourceId,
+    pub size_constraint_set_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -658,7 +645,7 @@ pub struct GetSizeConstraintSetResponse {
 pub struct GetSqlInjectionMatchSetRequest {
     #[doc="<p>The <code>SqlInjectionMatchSetId</code> of the <a>SqlInjectionMatchSet</a> that you want to get. <code>SqlInjectionMatchSetId</code> is returned by <a>CreateSqlInjectionMatchSet</a> and by <a>ListSqlInjectionMatchSets</a>.</p>"]
     #[serde(rename="SqlInjectionMatchSetId")]
-    pub sql_injection_match_set_id: ResourceId,
+    pub sql_injection_match_set_id: String,
 }
 
 #[doc="<p>The response to a <a>GetSqlInjectionMatchSet</a> request.</p>"]
@@ -674,7 +661,7 @@ pub struct GetSqlInjectionMatchSetResponse {
 pub struct GetWebACLForResourceRequest {
     #[doc="<p>The ARN (Amazon Resource Name) of the resource for which to get the web ACL.</p>"]
     #[serde(rename="ResourceArn")]
-    pub resource_arn: ResourceArn,
+    pub resource_arn: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -689,7 +676,7 @@ pub struct GetWebACLForResourceResponse {
 pub struct GetWebACLRequest {
     #[doc="<p>The <code>WebACLId</code> of the <a>WebACL</a> that you want to get. <code>WebACLId</code> is returned by <a>CreateWebACL</a> and by <a>ListWebACLs</a>.</p>"]
     #[serde(rename="WebACLId")]
-    pub web_acl_id: ResourceId,
+    pub web_acl_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -705,7 +692,7 @@ pub struct GetWebACLResponse {
 pub struct GetXssMatchSetRequest {
     #[doc="<p>The <code>XssMatchSetId</code> of the <a>XssMatchSet</a> that you want to get. <code>XssMatchSetId</code> is returned by <a>CreateXssMatchSet</a> and by <a>ListXssMatchSets</a>.</p>"]
     #[serde(rename="XssMatchSetId")]
-    pub xss_match_set_id: ResourceId,
+    pub xss_match_set_id: String,
 }
 
 #[doc="<p>The response to a <a>GetXssMatchSet</a> request.</p>"]
@@ -723,60 +710,55 @@ pub struct HTTPHeader {
     #[doc="<p>The name of one of the headers in the sampled web request.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<HeaderName>,
+    pub name: Option<String>,
     #[doc="<p>The value of one of the headers in the sampled web request.</p>"]
     #[serde(rename="Value")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub value: Option<HeaderValue>,
+    pub value: Option<String>,
 }
 
-pub type HTTPHeaders = Vec<HTTPHeader>;
-pub type HTTPMethod = String;
 #[doc="<p>The response from a <a>GetSampledRequests</a> request includes an <code>HTTPRequest</code> complex type that appears as <code>Request</code> in the response syntax. <code>HTTPRequest</code> contains information about one of the web requests that were returned by <code>GetSampledRequests</code>. </p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct HTTPRequest {
     #[doc="<p>The IP address that the request originated from. If the <code>WebACL</code> is associated with a CloudFront distribution, this is the value of one of the following fields in CloudFront access logs:</p> <ul> <li> <p> <code>c-ip</code>, if the viewer did not use an HTTP proxy or a load balancer to send the request</p> </li> <li> <p> <code>x-forwarded-for</code>, if the viewer did use an HTTP proxy or a load balancer to send the request</p> </li> </ul>"]
     #[serde(rename="ClientIP")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub client_ip: Option<IPString>,
+    pub client_ip: Option<String>,
     #[doc="<p>The two-letter country code for the country that the request originated from. For a current list of country codes, see the Wikipedia entry <a href=\"https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2\">ISO 3166-1 alpha-2</a>.</p>"]
     #[serde(rename="Country")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub country: Option<Country>,
+    pub country: Option<String>,
     #[doc="<p>The HTTP version specified in the sampled web request, for example, <code>HTTP/1.1</code>.</p>"]
     #[serde(rename="HTTPVersion")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub http_version: Option<HTTPVersion>,
+    pub http_version: Option<String>,
     #[doc="<p>A complex type that contains two values for each header in the sampled web request: the name of the header and the value of the header.</p>"]
     #[serde(rename="Headers")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub headers: Option<HTTPHeaders>,
+    pub headers: Option<Vec<HTTPHeader>>,
     #[doc="<p>The HTTP method specified in the sampled web request. CloudFront supports the following methods: <code>DELETE</code>, <code>GET</code>, <code>HEAD</code>, <code>OPTIONS</code>, <code>PATCH</code>, <code>POST</code>, and <code>PUT</code>. </p>"]
     #[serde(rename="Method")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub method: Option<HTTPMethod>,
+    pub method: Option<String>,
     #[doc="<p>The part of a web request that identifies the resource, for example, <code>/images/daily-ad.jpg</code>.</p>"]
     #[serde(rename="URI")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub uri: Option<URIString>,
+    pub uri: Option<String>,
 }
 
-pub type HTTPVersion = String;
-pub type HeaderName = String;
-pub type HeaderValue = String;
 #[doc="<p>Contains one or more IP addresses or blocks of IP addresses specified in Classless Inter-Domain Routing (CIDR) notation. AWS WAF supports /8, /16, /24, and /32 IP address ranges for IPv4, and /24, /32, /48, /56, /64 and /128 for IPv6.</p> <p>To specify an individual IP address, you specify the four-part IP address followed by a <code>/32</code>, for example, 192.0.2.0/31. To block a range of IP addresses, you can specify a <code>/128</code>, <code>/64</code>, <code>/56</code>, <code>/48</code>, <code>/32</code>, <code>/24</code>, <code>/16</code>, or <code>/8</code> CIDR. For more information about CIDR notation, see the Wikipedia entry <a href=\"https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing\">Classless Inter-Domain Routing</a>. </p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct IPSet {
     #[doc="<p>The IP address type (<code>IPV4</code> or <code>IPV6</code>) and the IP address range (in CIDR notation) that web requests originate from. If the <code>WebACL</code> is associated with a CloudFront distribution and the viewer did not use an HTTP proxy or a load balancer to send the request, this is the value of the c-ip field in the CloudFront access logs.</p>"]
     #[serde(rename="IPSetDescriptors")]
-    pub ip_set_descriptors: IPSetDescriptors,
+    pub ip_set_descriptors: Vec<IPSetDescriptor>,
     #[doc="<p>The <code>IPSetId</code> for an <code>IPSet</code>. You use <code>IPSetId</code> to get information about an <code>IPSet</code> (see <a>GetIPSet</a>), update an <code>IPSet</code> (see <a>UpdateIPSet</a>), insert an <code>IPSet</code> into a <code>Rule</code> or delete one from a <code>Rule</code> (see <a>UpdateRule</a>), and delete an <code>IPSet</code> from AWS WAF (see <a>DeleteIPSet</a>).</p> <p> <code>IPSetId</code> is returned by <a>CreateIPSet</a> and by <a>ListIPSets</a>.</p>"]
     #[serde(rename="IPSetId")]
-    pub ip_set_id: ResourceId,
+    pub ip_set_id: String,
     #[doc="<p>A friendly name or description of the <a>IPSet</a>. You can't change the name of an <code>IPSet</code> after you create it.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<ResourceName>,
+    pub name: Option<String>,
 }
 
 #[doc="<p>Specifies the IP address type (<code>IPV4</code> or <code>IPV6</code>) and the IP address range (in CIDR format) that web requests originate from.</p>"]
@@ -784,25 +766,21 @@ pub struct IPSet {
 pub struct IPSetDescriptor {
     #[doc="<p>Specify <code>IPV4</code> or <code>IPV6</code>.</p>"]
     #[serde(rename="Type")]
-    pub type_: IPSetDescriptorType,
+    pub type_: String,
     #[doc="<p>Specify an IPv4 address by using CIDR notation. For example:</p> <ul> <li> <p>To configure AWS WAF to allow, block, or count requests that originated from the IP address 192.0.2.44, specify <code>192.0.2.44/32</code>.</p> </li> <li> <p>To configure AWS WAF to allow, block, or count requests that originated from IP addresses from 192.0.2.0 to 192.0.2.255, specify <code>192.0.2.0/24</code>.</p> </li> </ul> <p>For more information about CIDR notation, see the Wikipedia entry <a href=\"https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing\">Classless Inter-Domain Routing</a>.</p> <p>Specify an IPv6 address by using CIDR notation. For example:</p> <ul> <li> <p>To configure AWS WAF to allow, block, or count requests that originated from the IP address 1111:0000:0000:0000:0000:0000:0000:0111, specify <code>1111:0000:0000:0000:0000:0000:0000:0111/128</code>.</p> </li> <li> <p>To configure AWS WAF to allow, block, or count requests that originated from IP addresses 1111:0000:0000:0000:0000:0000:0000:0000 to 1111:0000:0000:0000:ffff:ffff:ffff:ffff, specify <code>1111:0000:0000:0000:0000:0000:0000:0000/64</code>.</p> </li> </ul>"]
     #[serde(rename="Value")]
-    pub value: IPSetDescriptorValue,
+    pub value: String,
 }
 
-pub type IPSetDescriptorType = String;
-pub type IPSetDescriptorValue = String;
-pub type IPSetDescriptors = Vec<IPSetDescriptor>;
-pub type IPSetSummaries = Vec<IPSetSummary>;
 #[doc="<p>Contains the identifier and the name of the <code>IPSet</code>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct IPSetSummary {
     #[doc="<p>The <code>IPSetId</code> for an <a>IPSet</a>. You can use <code>IPSetId</code> in a <a>GetIPSet</a> request to get detailed information about an <a>IPSet</a>.</p>"]
     #[serde(rename="IPSetId")]
-    pub ip_set_id: ResourceId,
+    pub ip_set_id: String,
     #[doc="<p>A friendly name or description of the <a>IPSet</a>. You can't change the name of an <code>IPSet</code> after you create it.</p>"]
     #[serde(rename="Name")]
-    pub name: ResourceName,
+    pub name: String,
 }
 
 #[doc="<p>Specifies the type of update to perform to an <a>IPSet</a> with <a>UpdateIPSet</a>.</p>"]
@@ -810,24 +788,22 @@ pub struct IPSetSummary {
 pub struct IPSetUpdate {
     #[doc="<p>Specifies whether to insert or delete an IP address with <a>UpdateIPSet</a>.</p>"]
     #[serde(rename="Action")]
-    pub action: ChangeAction,
+    pub action: String,
     #[doc="<p>The IP address type (<code>IPV4</code> or <code>IPV6</code>) and the IP address range (in CIDR notation) that web requests originate from.</p>"]
     #[serde(rename="IPSetDescriptor")]
     pub ip_set_descriptor: IPSetDescriptor,
 }
 
-pub type IPSetUpdates = Vec<IPSetUpdate>;
-pub type IPString = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListByteMatchSetsRequest {
     #[doc="<p>Specifies the number of <code>ByteMatchSet</code> objects that you want AWS WAF to return for this request. If you have more <code>ByteMatchSets</code> objects than the number you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>ByteMatchSet</code> objects.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<PaginationLimit>,
+    pub limit: Option<i64>,
     #[doc="<p>If you specify a value for <code>Limit</code> and you have more <code>ByteMatchSets</code> than the value of <code>Limit</code>, AWS WAF returns a <code>NextMarker</code> value in the response that allows you to list another group of <code>ByteMatchSets</code>. For the second and subsequent <code>ListByteMatchSets</code> requests, specify the value of <code>NextMarker</code> from the previous response to get information about another batch of <code>ByteMatchSets</code>.</p>"]
     #[serde(rename="NextMarker")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_marker: Option<NextMarker>,
+    pub next_marker: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -835,11 +811,11 @@ pub struct ListByteMatchSetsResponse {
     #[doc="<p>An array of <a>ByteMatchSetSummary</a> objects.</p>"]
     #[serde(rename="ByteMatchSets")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub byte_match_sets: Option<ByteMatchSetSummaries>,
+    pub byte_match_sets: Option<Vec<ByteMatchSetSummary>>,
     #[doc="<p>If you have more <code>ByteMatchSet</code> objects than the number that you specified for <code>Limit</code> in the request, the response includes a <code>NextMarker</code> value. To list more <code>ByteMatchSet</code> objects, submit another <code>ListByteMatchSets</code> request, and specify the <code>NextMarker</code> value from the response in the <code>NextMarker</code> value in the next request.</p>"]
     #[serde(rename="NextMarker")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_marker: Option<NextMarker>,
+    pub next_marker: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -847,11 +823,11 @@ pub struct ListIPSetsRequest {
     #[doc="<p>Specifies the number of <code>IPSet</code> objects that you want AWS WAF to return for this request. If you have more <code>IPSet</code> objects than the number you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>IPSet</code> objects.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<PaginationLimit>,
+    pub limit: Option<i64>,
     #[doc="<p>If you specify a value for <code>Limit</code> and you have more <code>IPSets</code> than the value of <code>Limit</code>, AWS WAF returns a <code>NextMarker</code> value in the response that allows you to list another group of <code>IPSets</code>. For the second and subsequent <code>ListIPSets</code> requests, specify the value of <code>NextMarker</code> from the previous response to get information about another batch of <code>ByteMatchSets</code>.</p>"]
     #[serde(rename="NextMarker")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_marker: Option<NextMarker>,
+    pub next_marker: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -859,11 +835,11 @@ pub struct ListIPSetsResponse {
     #[doc="<p>An array of <a>IPSetSummary</a> objects.</p>"]
     #[serde(rename="IPSets")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ip_sets: Option<IPSetSummaries>,
+    pub ip_sets: Option<Vec<IPSetSummary>>,
     #[doc="<p>If you have more <code>IPSet</code> objects than the number that you specified for <code>Limit</code> in the request, the response includes a <code>NextMarker</code> value. To list more <code>IPSet</code> objects, submit another <code>ListIPSets</code> request, and specify the <code>NextMarker</code> value from the response in the <code>NextMarker</code> value in the next request.</p>"]
     #[serde(rename="NextMarker")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_marker: Option<NextMarker>,
+    pub next_marker: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -871,11 +847,11 @@ pub struct ListRateBasedRulesRequest {
     #[doc="<p>Specifies the number of <code>Rules</code> that you want AWS WAF to return for this request. If you have more <code>Rules</code> than the number that you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>Rules</code>.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<PaginationLimit>,
+    pub limit: Option<i64>,
     #[doc="<p>If you specify a value for <code>Limit</code> and you have more <code>Rules</code> than the value of <code>Limit</code>, AWS WAF returns a <code>NextMarker</code> value in the response that allows you to list another group of <code>Rules</code>. For the second and subsequent <code>ListRateBasedRules</code> requests, specify the value of <code>NextMarker</code> from the previous response to get information about another batch of <code>Rules</code>.</p>"]
     #[serde(rename="NextMarker")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_marker: Option<NextMarker>,
+    pub next_marker: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -883,18 +859,18 @@ pub struct ListRateBasedRulesResponse {
     #[doc="<p>If you have more <code>Rules</code> than the number that you specified for <code>Limit</code> in the request, the response includes a <code>NextMarker</code> value. To list more <code>Rules</code>, submit another <code>ListRateBasedRules</code> request, and specify the <code>NextMarker</code> value from the response in the <code>NextMarker</code> value in the next request.</p>"]
     #[serde(rename="NextMarker")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_marker: Option<NextMarker>,
+    pub next_marker: Option<String>,
     #[doc="<p>An array of <a>RuleSummary</a> objects.</p>"]
     #[serde(rename="Rules")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub rules: Option<RuleSummaries>,
+    pub rules: Option<Vec<RuleSummary>>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListResourcesForWebACLRequest {
     #[doc="<p>The unique identifier (ID) of the web ACL for which to list the associated resources.</p>"]
     #[serde(rename="WebACLId")]
-    pub web_acl_id: ResourceId,
+    pub web_acl_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -902,7 +878,7 @@ pub struct ListResourcesForWebACLResponse {
     #[doc="<p>An array of ARNs (Amazon Resource Names) of the resources associated with the specified web ACL. An array with zero elements is returned if there are no resources associated with the web ACL.</p>"]
     #[serde(rename="ResourceArns")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub resource_arns: Option<ResourceArns>,
+    pub resource_arns: Option<Vec<String>>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -910,11 +886,11 @@ pub struct ListRulesRequest {
     #[doc="<p>Specifies the number of <code>Rules</code> that you want AWS WAF to return for this request. If you have more <code>Rules</code> than the number that you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>Rules</code>.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<PaginationLimit>,
+    pub limit: Option<i64>,
     #[doc="<p>If you specify a value for <code>Limit</code> and you have more <code>Rules</code> than the value of <code>Limit</code>, AWS WAF returns a <code>NextMarker</code> value in the response that allows you to list another group of <code>Rules</code>. For the second and subsequent <code>ListRules</code> requests, specify the value of <code>NextMarker</code> from the previous response to get information about another batch of <code>Rules</code>.</p>"]
     #[serde(rename="NextMarker")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_marker: Option<NextMarker>,
+    pub next_marker: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -922,11 +898,11 @@ pub struct ListRulesResponse {
     #[doc="<p>If you have more <code>Rules</code> than the number that you specified for <code>Limit</code> in the request, the response includes a <code>NextMarker</code> value. To list more <code>Rules</code>, submit another <code>ListRules</code> request, and specify the <code>NextMarker</code> value from the response in the <code>NextMarker</code> value in the next request.</p>"]
     #[serde(rename="NextMarker")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_marker: Option<NextMarker>,
+    pub next_marker: Option<String>,
     #[doc="<p>An array of <a>RuleSummary</a> objects.</p>"]
     #[serde(rename="Rules")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub rules: Option<RuleSummaries>,
+    pub rules: Option<Vec<RuleSummary>>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -934,11 +910,11 @@ pub struct ListSizeConstraintSetsRequest {
     #[doc="<p>Specifies the number of <code>SizeConstraintSet</code> objects that you want AWS WAF to return for this request. If you have more <code>SizeConstraintSets</code> objects than the number you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>SizeConstraintSet</code> objects.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<PaginationLimit>,
+    pub limit: Option<i64>,
     #[doc="<p>If you specify a value for <code>Limit</code> and you have more <code>SizeConstraintSets</code> than the value of <code>Limit</code>, AWS WAF returns a <code>NextMarker</code> value in the response that allows you to list another group of <code>SizeConstraintSets</code>. For the second and subsequent <code>ListSizeConstraintSets</code> requests, specify the value of <code>NextMarker</code> from the previous response to get information about another batch of <code>SizeConstraintSets</code>.</p>"]
     #[serde(rename="NextMarker")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_marker: Option<NextMarker>,
+    pub next_marker: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -946,11 +922,11 @@ pub struct ListSizeConstraintSetsResponse {
     #[doc="<p>If you have more <code>SizeConstraintSet</code> objects than the number that you specified for <code>Limit</code> in the request, the response includes a <code>NextMarker</code> value. To list more <code>SizeConstraintSet</code> objects, submit another <code>ListSizeConstraintSets</code> request, and specify the <code>NextMarker</code> value from the response in the <code>NextMarker</code> value in the next request.</p>"]
     #[serde(rename="NextMarker")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_marker: Option<NextMarker>,
+    pub next_marker: Option<String>,
     #[doc="<p>An array of <a>SizeConstraintSetSummary</a> objects.</p>"]
     #[serde(rename="SizeConstraintSets")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub size_constraint_sets: Option<SizeConstraintSetSummaries>,
+    pub size_constraint_sets: Option<Vec<SizeConstraintSetSummary>>,
 }
 
 #[doc="<p>A request to list the <a>SqlInjectionMatchSet</a> objects created by the current AWS account.</p>"]
@@ -959,11 +935,11 @@ pub struct ListSqlInjectionMatchSetsRequest {
     #[doc="<p>Specifies the number of <a>SqlInjectionMatchSet</a> objects that you want AWS WAF to return for this request. If you have more <code>SqlInjectionMatchSet</code> objects than the number you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>Rules</code>.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<PaginationLimit>,
+    pub limit: Option<i64>,
     #[doc="<p>If you specify a value for <code>Limit</code> and you have more <a>SqlInjectionMatchSet</a> objects than the value of <code>Limit</code>, AWS WAF returns a <code>NextMarker</code> value in the response that allows you to list another group of <code>SqlInjectionMatchSets</code>. For the second and subsequent <code>ListSqlInjectionMatchSets</code> requests, specify the value of <code>NextMarker</code> from the previous response to get information about another batch of <code>SqlInjectionMatchSets</code>.</p>"]
     #[serde(rename="NextMarker")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_marker: Option<NextMarker>,
+    pub next_marker: Option<String>,
 }
 
 #[doc="<p>The response to a <a>ListSqlInjectionMatchSets</a> request.</p>"]
@@ -972,11 +948,11 @@ pub struct ListSqlInjectionMatchSetsResponse {
     #[doc="<p>If you have more <a>SqlInjectionMatchSet</a> objects than the number that you specified for <code>Limit</code> in the request, the response includes a <code>NextMarker</code> value. To list more <code>SqlInjectionMatchSet</code> objects, submit another <code>ListSqlInjectionMatchSets</code> request, and specify the <code>NextMarker</code> value from the response in the <code>NextMarker</code> value in the next request.</p>"]
     #[serde(rename="NextMarker")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_marker: Option<NextMarker>,
+    pub next_marker: Option<String>,
     #[doc="<p>An array of <a>SqlInjectionMatchSetSummary</a> objects.</p>"]
     #[serde(rename="SqlInjectionMatchSets")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub sql_injection_match_sets: Option<SqlInjectionMatchSetSummaries>,
+    pub sql_injection_match_sets: Option<Vec<SqlInjectionMatchSetSummary>>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -984,11 +960,11 @@ pub struct ListWebACLsRequest {
     #[doc="<p>Specifies the number of <code>WebACL</code> objects that you want AWS WAF to return for this request. If you have more <code>WebACL</code> objects than the number that you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>WebACL</code> objects.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<PaginationLimit>,
+    pub limit: Option<i64>,
     #[doc="<p>If you specify a value for <code>Limit</code> and you have more <code>WebACL</code> objects than the number that you specify for <code>Limit</code>, AWS WAF returns a <code>NextMarker</code> value in the response that allows you to list another group of <code>WebACL</code> objects. For the second and subsequent <code>ListWebACLs</code> requests, specify the value of <code>NextMarker</code> from the previous response to get information about another batch of <code>WebACL</code> objects.</p>"]
     #[serde(rename="NextMarker")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_marker: Option<NextMarker>,
+    pub next_marker: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -996,11 +972,11 @@ pub struct ListWebACLsResponse {
     #[doc="<p>If you have more <code>WebACL</code> objects than the number that you specified for <code>Limit</code> in the request, the response includes a <code>NextMarker</code> value. To list more <code>WebACL</code> objects, submit another <code>ListWebACLs</code> request, and specify the <code>NextMarker</code> value from the response in the <code>NextMarker</code> value in the next request.</p>"]
     #[serde(rename="NextMarker")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_marker: Option<NextMarker>,
+    pub next_marker: Option<String>,
     #[doc="<p>An array of <a>WebACLSummary</a> objects.</p>"]
     #[serde(rename="WebACLs")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub web_ac_ls: Option<WebACLSummaries>,
+    pub web_ac_ls: Option<Vec<WebACLSummary>>,
 }
 
 #[doc="<p>A request to list the <a>XssMatchSet</a> objects created by the current AWS account.</p>"]
@@ -1009,11 +985,11 @@ pub struct ListXssMatchSetsRequest {
     #[doc="<p>Specifies the number of <a>XssMatchSet</a> objects that you want AWS WAF to return for this request. If you have more <code>XssMatchSet</code> objects than the number you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>Rules</code>.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<PaginationLimit>,
+    pub limit: Option<i64>,
     #[doc="<p>If you specify a value for <code>Limit</code> and you have more <a>XssMatchSet</a> objects than the value of <code>Limit</code>, AWS WAF returns a <code>NextMarker</code> value in the response that allows you to list another group of <code>XssMatchSets</code>. For the second and subsequent <code>ListXssMatchSets</code> requests, specify the value of <code>NextMarker</code> from the previous response to get information about another batch of <code>XssMatchSets</code>.</p>"]
     #[serde(rename="NextMarker")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_marker: Option<NextMarker>,
+    pub next_marker: Option<String>,
 }
 
 #[doc="<p>The response to a <a>ListXssMatchSets</a> request.</p>"]
@@ -1022,103 +998,80 @@ pub struct ListXssMatchSetsResponse {
     #[doc="<p>If you have more <a>XssMatchSet</a> objects than the number that you specified for <code>Limit</code> in the request, the response includes a <code>NextMarker</code> value. To list more <code>XssMatchSet</code> objects, submit another <code>ListXssMatchSets</code> request, and specify the <code>NextMarker</code> value from the response in the <code>NextMarker</code> value in the next request.</p>"]
     #[serde(rename="NextMarker")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_marker: Option<NextMarker>,
+    pub next_marker: Option<String>,
     #[doc="<p>An array of <a>XssMatchSetSummary</a> objects.</p>"]
     #[serde(rename="XssMatchSets")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub xss_match_sets: Option<XssMatchSetSummaries>,
+    pub xss_match_sets: Option<Vec<XssMatchSetSummary>>,
 }
 
-pub type ManagedKey = String;
-pub type ManagedKeys = Vec<ManagedKey>;
-pub type MatchFieldData = String;
-pub type MatchFieldType = String;
-pub type MetricName = String;
-pub type Negated = bool;
-pub type NextMarker = String;
-pub type PaginationLimit = i64;
-pub type ParameterExceptionField = String;
-pub type ParameterExceptionParameter = String;
-pub type ParameterExceptionReason = String;
-pub type PopulationSize = i64;
-pub type PositionalConstraint = String;
 #[doc="<p>Specifies the <a>ByteMatchSet</a>, <a>IPSet</a>, <a>SqlInjectionMatchSet</a>, <a>XssMatchSet</a>, and <a>SizeConstraintSet</a> objects that you want to add to a <code>Rule</code> and, for each object, indicates whether you want to negate the settings, for example, requests that do NOT originate from the IP address 192.0.2.44. </p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Predicate {
     #[doc="<p>A unique identifier for a predicate in a <code>Rule</code>, such as <code>ByteMatchSetId</code> or <code>IPSetId</code>. The ID is returned by the corresponding <code>Create</code> or <code>List</code> command.</p>"]
     #[serde(rename="DataId")]
-    pub data_id: ResourceId,
+    pub data_id: String,
     #[doc="<p>Set <code>Negated</code> to <code>False</code> if you want AWS WAF to allow, block, or count requests based on the settings in the specified <a>ByteMatchSet</a>, <a>IPSet</a>, <a>SqlInjectionMatchSet</a>, <a>XssMatchSet</a>, or <a>SizeConstraintSet</a>. For example, if an <code>IPSet</code> includes the IP address <code>192.0.2.44</code>, AWS WAF will allow or block requests based on that IP address.</p> <p>Set <code>Negated</code> to <code>True</code> if you want AWS WAF to allow or block a request based on the negation of the settings in the <a>ByteMatchSet</a>, <a>IPSet</a>, <a>SqlInjectionMatchSet</a>, <a>XssMatchSet</a>, or <a>SizeConstraintSet</a>. For example, if an <code>IPSet</code> includes the IP address <code>192.0.2.44</code>, AWS WAF will allow, block, or count requests based on all IP addresses <i>except</i> <code>192.0.2.44</code>.</p>"]
     #[serde(rename="Negated")]
-    pub negated: Negated,
+    pub negated: bool,
     #[doc="<p>The type of predicate in a <code>Rule</code>, such as <code>ByteMatchSet</code> or <code>IPSet</code>.</p>"]
     #[serde(rename="Type")]
-    pub type_: PredicateType,
+    pub type_: String,
 }
 
-pub type PredicateType = String;
-pub type Predicates = Vec<Predicate>;
 #[doc="<p>A <code>RateBasedRule</code> is identical to a regular <a>Rule</a>, with one addition: a <code>RateBasedRule</code> counts the number of requests that arrive from a specified IP address every five minutes. For example, based on recent requests that you've seen from an attacker, you might create a <code>RateBasedRule</code> that includes the following conditions: </p> <ul> <li> <p>The requests come from 192.0.2.44.</p> </li> <li> <p>They contain the value <code>BadBot</code> in the <code>User-Agent</code> header.</p> </li> </ul> <p>In the rule, you also define the rate limit as 15,000.</p> <p>Requests that meet both of these conditions and exceed 15,000 requests every five minutes trigger the rule's action (block or count), which is defined in the web ACL.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct RateBasedRule {
     #[doc="<p>The <code>Predicates</code> object contains one <code>Predicate</code> element for each <a>ByteMatchSet</a>, <a>IPSet</a>, or <a>SqlInjectionMatchSet</a> object that you want to include in a <code>RateBasedRule</code>.</p>"]
     #[serde(rename="MatchPredicates")]
-    pub match_predicates: Predicates,
+    pub match_predicates: Vec<Predicate>,
     #[doc="<p>A friendly name or description for the metrics for a <code>RateBasedRule</code>. The name can contain only alphanumeric characters (A-Z, a-z, 0-9); the name can't contain whitespace. You can't change the name of the metric after you create the <code>RateBasedRule</code>.</p>"]
     #[serde(rename="MetricName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub metric_name: Option<MetricName>,
+    pub metric_name: Option<String>,
     #[doc="<p>A friendly name or description for a <code>RateBasedRule</code>. You can't change the name of a <code>RateBasedRule</code> after you create it.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<ResourceName>,
+    pub name: Option<String>,
     #[doc="<p>The field that AWS WAF uses to determine if requests are likely arriving from single source and thus subject to rate monitoring. The only valid value for <code>RateKey</code> is <code>IP</code>. <code>IP</code> indicates that requests arriving from the same IP address are subject to the <code>RateLimit</code> that is specified in the <code>RateBasedRule</code>.</p>"]
     #[serde(rename="RateKey")]
-    pub rate_key: RateKey,
+    pub rate_key: String,
     #[doc="<p>The maximum number of requests, which have an identical value in the field specified by the <code>RateKey</code>, allowed in a five-minute period. If the number of requests exceeds the <code>RateLimit</code> and the other predicates specified in the rule are also met, AWS WAF triggers the action that is specified for this rule.</p>"]
     #[serde(rename="RateLimit")]
-    pub rate_limit: RateLimit,
+    pub rate_limit: i64,
     #[doc="<p>A unique identifier for a <code>RateBasedRule</code>. You use <code>RuleId</code> to get more information about a <code>RateBasedRule</code> (see <a>GetRateBasedRule</a>), update a <code>RateBasedRule</code> (see <a>UpdateRateBasedRule</a>), insert a <code>RateBasedRule</code> into a <code>WebACL</code> or delete one from a <code>WebACL</code> (see <a>UpdateWebACL</a>), or delete a <code>RateBasedRule</code> from AWS WAF (see <a>DeleteRateBasedRule</a>).</p>"]
     #[serde(rename="RuleId")]
-    pub rule_id: ResourceId,
+    pub rule_id: String,
 }
 
-pub type RateKey = String;
-pub type RateLimit = i64;
-pub type ResourceArn = String;
-pub type ResourceArns = Vec<ResourceArn>;
-pub type ResourceId = String;
-pub type ResourceName = String;
 #[doc="<p>A combination of <a>ByteMatchSet</a>, <a>IPSet</a>, and/or <a>SqlInjectionMatchSet</a> objects that identify the web requests that you want to allow, block, or count. For example, you might create a <code>Rule</code> that includes the following predicates:</p> <ul> <li> <p>An <code>IPSet</code> that causes AWS WAF to search for web requests that originate from the IP address <code>192.0.2.44</code> </p> </li> <li> <p>A <code>ByteMatchSet</code> that causes AWS WAF to search for web requests for which the value of the <code>User-Agent</code> header is <code>BadBot</code>.</p> </li> </ul> <p>To match the settings in this <code>Rule</code>, a request must originate from <code>192.0.2.44</code> AND include a <code>User-Agent</code> header for which the value is <code>BadBot</code>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Rule {
     #[doc="<p>A friendly name or description for the metrics for this <code>Rule</code>. The name can contain only alphanumeric characters (A-Z, a-z, 0-9); the name can't contain whitespace. You can't change <code>MetricName</code> after you create the <code>Rule</code>.</p>"]
     #[serde(rename="MetricName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub metric_name: Option<MetricName>,
+    pub metric_name: Option<String>,
     #[doc="<p>The friendly name or description for the <code>Rule</code>. You can't change the name of a <code>Rule</code> after you create it.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<ResourceName>,
+    pub name: Option<String>,
     #[doc="<p>The <code>Predicates</code> object contains one <code>Predicate</code> element for each <a>ByteMatchSet</a>, <a>IPSet</a>, or <a>SqlInjectionMatchSet</a> object that you want to include in a <code>Rule</code>.</p>"]
     #[serde(rename="Predicates")]
-    pub predicates: Predicates,
+    pub predicates: Vec<Predicate>,
     #[doc="<p>A unique identifier for a <code>Rule</code>. You use <code>RuleId</code> to get more information about a <code>Rule</code> (see <a>GetRule</a>), update a <code>Rule</code> (see <a>UpdateRule</a>), insert a <code>Rule</code> into a <code>WebACL</code> or delete a one from a <code>WebACL</code> (see <a>UpdateWebACL</a>), or delete a <code>Rule</code> from AWS WAF (see <a>DeleteRule</a>).</p> <p> <code>RuleId</code> is returned by <a>CreateRule</a> and by <a>ListRules</a>.</p>"]
     #[serde(rename="RuleId")]
-    pub rule_id: ResourceId,
+    pub rule_id: String,
 }
 
-pub type RulePriority = i64;
-pub type RuleSummaries = Vec<RuleSummary>;
 #[doc="<p>Contains the identifier and the friendly name or description of the <code>Rule</code>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct RuleSummary {
     #[doc="<p>A friendly name or description of the <a>Rule</a>. You can't change the name of a <code>Rule</code> after you create it.</p>"]
     #[serde(rename="Name")]
-    pub name: ResourceName,
+    pub name: String,
     #[doc="<p>A unique identifier for a <code>Rule</code>. You use <code>RuleId</code> to get more information about a <code>Rule</code> (see <a>GetRule</a>), update a <code>Rule</code> (see <a>UpdateRule</a>), insert a <code>Rule</code> into a <code>WebACL</code> or delete one from a <code>WebACL</code> (see <a>UpdateWebACL</a>), or delete a <code>Rule</code> from AWS WAF (see <a>DeleteRule</a>).</p> <p> <code>RuleId</code> is returned by <a>CreateRule</a> and by <a>ListRules</a>.</p>"]
     #[serde(rename="RuleId")]
-    pub rule_id: ResourceId,
+    pub rule_id: String,
 }
 
 #[doc="<p>Specifies a <code>Predicate</code> (such as an <code>IPSet</code>) and indicates whether you want to add it to a <code>Rule</code> or delete it from a <code>Rule</code>.</p>"]
@@ -1126,50 +1079,46 @@ pub struct RuleSummary {
 pub struct RuleUpdate {
     #[doc="<p>Specify <code>INSERT</code> to add a <code>Predicate</code> to a <code>Rule</code>. Use <code>DELETE</code> to remove a <code>Predicate</code> from a <code>Rule</code>.</p>"]
     #[serde(rename="Action")]
-    pub action: ChangeAction,
+    pub action: String,
     #[doc="<p>The ID of the <code>Predicate</code> (such as an <code>IPSet</code>) that you want to add to a <code>Rule</code>.</p>"]
     #[serde(rename="Predicate")]
     pub predicate: Predicate,
 }
 
-pub type RuleUpdates = Vec<RuleUpdate>;
-pub type SampleWeight = i64;
 #[doc="<p>The response from a <a>GetSampledRequests</a> request includes a <code>SampledHTTPRequests</code> complex type that appears as <code>SampledRequests</code> in the response syntax. <code>SampledHTTPRequests</code> contains one <code>SampledHTTPRequest</code> object for each web request that is returned by <code>GetSampledRequests</code>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct SampledHTTPRequest {
     #[doc="<p>The action for the <code>Rule</code> that the request matched: <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p>"]
     #[serde(rename="Action")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub action: Option<Action>,
+    pub action: Option<String>,
     #[doc="<p>A complex type that contains detailed information about the request.</p>"]
     #[serde(rename="Request")]
     pub request: HTTPRequest,
     #[doc="<p>The time at which AWS WAF received the request from your AWS resource, in Unix time format (in seconds).</p>"]
     #[serde(rename="Timestamp")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub timestamp: Option<Timestamp>,
+    pub timestamp: Option<f64>,
     #[doc="<p>A value that indicates how one result in the response relates proportionally to other results in the response. A result that has a weight of <code>2</code> represents roughly twice as many CloudFront web requests as a result that has a weight of <code>1</code>.</p>"]
     #[serde(rename="Weight")]
-    pub weight: SampleWeight,
+    pub weight: i64,
 }
 
-pub type SampledHTTPRequests = Vec<SampledHTTPRequest>;
-pub type Size = i64;
 #[doc="<p>Specifies a constraint on the size of a part of the web request. AWS WAF uses the <code>Size</code>, <code>ComparisonOperator</code>, and <code>FieldToMatch</code> to build an expression in the form of \"<code>Size</code> <code>ComparisonOperator</code> size in bytes of <code>FieldToMatch</code>\". If that expression is true, the <code>SizeConstraint</code> is considered to match.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SizeConstraint {
     #[doc="<p>The type of comparison you want AWS WAF to perform. AWS WAF uses this in combination with the provided <code>Size</code> and <code>FieldToMatch</code> to build an expression in the form of \"<code>Size</code> <code>ComparisonOperator</code> size in bytes of <code>FieldToMatch</code>\". If that expression is true, the <code>SizeConstraint</code> is considered to match.</p> <p> <b>EQ</b>: Used to test if the <code>Size</code> is equal to the size of the <code>FieldToMatch</code> </p> <p> <b>NE</b>: Used to test if the <code>Size</code> is not equal to the size of the <code>FieldToMatch</code> </p> <p> <b>LE</b>: Used to test if the <code>Size</code> is less than or equal to the size of the <code>FieldToMatch</code> </p> <p> <b>LT</b>: Used to test if the <code>Size</code> is strictly less than the size of the <code>FieldToMatch</code> </p> <p> <b>GE</b>: Used to test if the <code>Size</code> is greater than or equal to the size of the <code>FieldToMatch</code> </p> <p> <b>GT</b>: Used to test if the <code>Size</code> is strictly greater than the size of the <code>FieldToMatch</code> </p>"]
     #[serde(rename="ComparisonOperator")]
-    pub comparison_operator: ComparisonOperator,
+    pub comparison_operator: String,
     #[doc="<p>Specifies where in a web request to look for the size constraint.</p>"]
     #[serde(rename="FieldToMatch")]
     pub field_to_match: FieldToMatch,
     #[doc="<p>The size in bytes that you want AWS WAF to compare against the size of the specified <code>FieldToMatch</code>. AWS WAF uses this in combination with <code>ComparisonOperator</code> and <code>FieldToMatch</code> to build an expression in the form of \"<code>Size</code> <code>ComparisonOperator</code> size in bytes of <code>FieldToMatch</code>\". If that expression is true, the <code>SizeConstraint</code> is considered to match.</p> <p>Valid values for size are 0 - 21474836480 bytes (0 - 20 GB).</p> <p>If you specify <code>URI</code> for the value of <code>Type</code>, the / in the URI counts as one character. For example, the URI <code>/logo.jpg</code> is nine characters long.</p>"]
     #[serde(rename="Size")]
-    pub size: Size,
+    pub size: i64,
     #[doc="<p>Text transformations eliminate some of the unusual formatting that attackers use in web requests in an effort to bypass AWS WAF. If you specify a transformation, AWS WAF performs the transformation on <code>FieldToMatch</code> before inspecting a request for a match.</p> <p>Note that if you choose <code>BODY</code> for the value of <code>Type</code>, you must choose <code>NONE</code> for <code>TextTransformation</code> because CloudFront forwards only the first 8192 bytes for inspection. </p> <p> <b>NONE</b> </p> <p>Specify <code>NONE</code> if you don't want to perform any text transformations.</p> <p> <b>CMD_LINE</b> </p> <p>When you're concerned that attackers are injecting an operating system command line command and using unusual formatting to disguise some or all of the command, use this option to perform the following transformations:</p> <ul> <li> <p>Delete the following characters: \\ \" ' ^</p> </li> <li> <p>Delete spaces before the following characters: / (</p> </li> <li> <p>Replace the following characters with a space: , ;</p> </li> <li> <p>Replace multiple spaces with one space</p> </li> <li> <p>Convert uppercase letters (A-Z) to lowercase (a-z)</p> </li> </ul> <p> <b>COMPRESS_WHITE_SPACE</b> </p> <p>Use this option to replace the following characters with a space character (decimal 32):</p> <ul> <li> <p>\\f, formfeed, decimal 12</p> </li> <li> <p>\\t, tab, decimal 9</p> </li> <li> <p>\\n, newline, decimal 10</p> </li> <li> <p>\\r, carriage return, decimal 13</p> </li> <li> <p>\\v, vertical tab, decimal 11</p> </li> <li> <p>non-breaking space, decimal 160</p> </li> </ul> <p> <code>COMPRESS_WHITE_SPACE</code> also replaces multiple spaces with one space.</p> <p> <b>HTML_ENTITY_DECODE</b> </p> <p>Use this option to replace HTML-encoded characters with unencoded characters. <code>HTML_ENTITY_DECODE</code> performs the following operations:</p> <ul> <li> <p>Replaces <code>(ampersand)quot;</code> with <code>\"</code> </p> </li> <li> <p>Replaces <code>(ampersand)nbsp;</code> with a non-breaking space, decimal 160</p> </li> <li> <p>Replaces <code>(ampersand)lt;</code> with a \"less than\" symbol</p> </li> <li> <p>Replaces <code>(ampersand)gt;</code> with <code>&gt;</code> </p> </li> <li> <p>Replaces characters that are represented in hexadecimal format, <code>(ampersand)#xhhhh;</code>, with the corresponding characters</p> </li> <li> <p>Replaces characters that are represented in decimal format, <code>(ampersand)#nnnn;</code>, with the corresponding characters</p> </li> </ul> <p> <b>LOWERCASE</b> </p> <p>Use this option to convert uppercase letters (A-Z) to lowercase (a-z).</p> <p> <b>URL_DECODE</b> </p> <p>Use this option to decode a URL-encoded value.</p>"]
     #[serde(rename="TextTransformation")]
-    pub text_transformation: TextTransformation,
+    pub text_transformation: String,
 }
 
 #[doc="<p>A complex type that contains <code>SizeConstraint</code> objects, which specify the parts of web requests that you want AWS WAF to inspect the size of. If a <code>SizeConstraintSet</code> contains more than one <code>SizeConstraint</code> object, a request only needs to match one constraint to be considered a match.</p>"]
@@ -1178,25 +1127,24 @@ pub struct SizeConstraintSet {
     #[doc="<p>The name, if any, of the <code>SizeConstraintSet</code>.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<ResourceName>,
+    pub name: Option<String>,
     #[doc="<p>A unique identifier for a <code>SizeConstraintSet</code>. You use <code>SizeConstraintSetId</code> to get information about a <code>SizeConstraintSet</code> (see <a>GetSizeConstraintSet</a>), update a <code>SizeConstraintSet</code> (see <a>UpdateSizeConstraintSet</a>), insert a <code>SizeConstraintSet</code> into a <code>Rule</code> or delete one from a <code>Rule</code> (see <a>UpdateRule</a>), and delete a <code>SizeConstraintSet</code> from AWS WAF (see <a>DeleteSizeConstraintSet</a>).</p> <p> <code>SizeConstraintSetId</code> is returned by <a>CreateSizeConstraintSet</a> and by <a>ListSizeConstraintSets</a>.</p>"]
     #[serde(rename="SizeConstraintSetId")]
-    pub size_constraint_set_id: ResourceId,
+    pub size_constraint_set_id: String,
     #[doc="<p>Specifies the parts of web requests that you want to inspect the size of.</p>"]
     #[serde(rename="SizeConstraints")]
-    pub size_constraints: SizeConstraints,
+    pub size_constraints: Vec<SizeConstraint>,
 }
 
-pub type SizeConstraintSetSummaries = Vec<SizeConstraintSetSummary>;
 #[doc="<p>The <code>Id</code> and <code>Name</code> of a <code>SizeConstraintSet</code>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct SizeConstraintSetSummary {
     #[doc="<p>The name of the <code>SizeConstraintSet</code>, if any.</p>"]
     #[serde(rename="Name")]
-    pub name: ResourceName,
+    pub name: String,
     #[doc="<p>A unique identifier for a <code>SizeConstraintSet</code>. You use <code>SizeConstraintSetId</code> to get information about a <code>SizeConstraintSet</code> (see <a>GetSizeConstraintSet</a>), update a <code>SizeConstraintSet</code> (see <a>UpdateSizeConstraintSet</a>), insert a <code>SizeConstraintSet</code> into a <code>Rule</code> or delete one from a <code>Rule</code> (see <a>UpdateRule</a>), and delete a <code>SizeConstraintSet</code> from AWS WAF (see <a>DeleteSizeConstraintSet</a>).</p> <p> <code>SizeConstraintSetId</code> is returned by <a>CreateSizeConstraintSet</a> and by <a>ListSizeConstraintSets</a>.</p>"]
     #[serde(rename="SizeConstraintSetId")]
-    pub size_constraint_set_id: ResourceId,
+    pub size_constraint_set_id: String,
 }
 
 #[doc="<p>Specifies the part of a web request that you want to inspect the size of and indicates whether you want to add the specification to a <a>SizeConstraintSet</a> or delete it from a <code>SizeConstraintSet</code>.</p>"]
@@ -1204,39 +1152,36 @@ pub struct SizeConstraintSetSummary {
 pub struct SizeConstraintSetUpdate {
     #[doc="<p>Specify <code>INSERT</code> to add a <a>SizeConstraintSetUpdate</a> to a <a>SizeConstraintSet</a>. Use <code>DELETE</code> to remove a <code>SizeConstraintSetUpdate</code> from a <code>SizeConstraintSet</code>.</p>"]
     #[serde(rename="Action")]
-    pub action: ChangeAction,
+    pub action: String,
     #[doc="<p>Specifies a constraint on the size of a part of the web request. AWS WAF uses the <code>Size</code>, <code>ComparisonOperator</code>, and <code>FieldToMatch</code> to build an expression in the form of \"<code>Size</code> <code>ComparisonOperator</code> size in bytes of <code>FieldToMatch</code>\". If that expression is true, the <code>SizeConstraint</code> is considered to match.</p>"]
     #[serde(rename="SizeConstraint")]
     pub size_constraint: SizeConstraint,
 }
 
-pub type SizeConstraintSetUpdates = Vec<SizeConstraintSetUpdate>;
-pub type SizeConstraints = Vec<SizeConstraint>;
 #[doc="<p>A complex type that contains <code>SqlInjectionMatchTuple</code> objects, which specify the parts of web requests that you want AWS WAF to inspect for snippets of malicious SQL code and, if you want AWS WAF to inspect a header, the name of the header. If a <code>SqlInjectionMatchSet</code> contains more than one <code>SqlInjectionMatchTuple</code> object, a request needs to include snippets of SQL code in only one of the specified parts of the request to be considered a match.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct SqlInjectionMatchSet {
     #[doc="<p>The name, if any, of the <code>SqlInjectionMatchSet</code>.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<ResourceName>,
+    pub name: Option<String>,
     #[doc="<p>A unique identifier for a <code>SqlInjectionMatchSet</code>. You use <code>SqlInjectionMatchSetId</code> to get information about a <code>SqlInjectionMatchSet</code> (see <a>GetSqlInjectionMatchSet</a>), update a <code>SqlInjectionMatchSet</code> (see <a>UpdateSqlInjectionMatchSet</a>), insert a <code>SqlInjectionMatchSet</code> into a <code>Rule</code> or delete one from a <code>Rule</code> (see <a>UpdateRule</a>), and delete a <code>SqlInjectionMatchSet</code> from AWS WAF (see <a>DeleteSqlInjectionMatchSet</a>).</p> <p> <code>SqlInjectionMatchSetId</code> is returned by <a>CreateSqlInjectionMatchSet</a> and by <a>ListSqlInjectionMatchSets</a>.</p>"]
     #[serde(rename="SqlInjectionMatchSetId")]
-    pub sql_injection_match_set_id: ResourceId,
+    pub sql_injection_match_set_id: String,
     #[doc="<p>Specifies the parts of web requests that you want to inspect for snippets of malicious SQL code.</p>"]
     #[serde(rename="SqlInjectionMatchTuples")]
-    pub sql_injection_match_tuples: SqlInjectionMatchTuples,
+    pub sql_injection_match_tuples: Vec<SqlInjectionMatchTuple>,
 }
 
-pub type SqlInjectionMatchSetSummaries = Vec<SqlInjectionMatchSetSummary>;
 #[doc="<p>The <code>Id</code> and <code>Name</code> of a <code>SqlInjectionMatchSet</code>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct SqlInjectionMatchSetSummary {
     #[doc="<p>The name of the <code>SqlInjectionMatchSet</code>, if any, specified by <code>Id</code>.</p>"]
     #[serde(rename="Name")]
-    pub name: ResourceName,
+    pub name: String,
     #[doc="<p>A unique identifier for a <code>SqlInjectionMatchSet</code>. You use <code>SqlInjectionMatchSetId</code> to get information about a <code>SqlInjectionMatchSet</code> (see <a>GetSqlInjectionMatchSet</a>), update a <code>SqlInjectionMatchSet</code> (see <a>UpdateSqlInjectionMatchSet</a>), insert a <code>SqlInjectionMatchSet</code> into a <code>Rule</code> or delete one from a <code>Rule</code> (see <a>UpdateRule</a>), and delete a <code>SqlInjectionMatchSet</code> from AWS WAF (see <a>DeleteSqlInjectionMatchSet</a>).</p> <p> <code>SqlInjectionMatchSetId</code> is returned by <a>CreateSqlInjectionMatchSet</a> and by <a>ListSqlInjectionMatchSets</a>.</p>"]
     #[serde(rename="SqlInjectionMatchSetId")]
-    pub sql_injection_match_set_id: ResourceId,
+    pub sql_injection_match_set_id: String,
 }
 
 #[doc="<p>Specifies the part of a web request that you want to inspect for snippets of malicious SQL code and indicates whether you want to add the specification to a <a>SqlInjectionMatchSet</a> or delete it from a <code>SqlInjectionMatchSet</code>.</p>"]
@@ -1244,13 +1189,12 @@ pub struct SqlInjectionMatchSetSummary {
 pub struct SqlInjectionMatchSetUpdate {
     #[doc="<p>Specify <code>INSERT</code> to add a <a>SqlInjectionMatchSetUpdate</a> to a <a>SqlInjectionMatchSet</a>. Use <code>DELETE</code> to remove a <code>SqlInjectionMatchSetUpdate</code> from a <code>SqlInjectionMatchSet</code>.</p>"]
     #[serde(rename="Action")]
-    pub action: ChangeAction,
+    pub action: String,
     #[doc="<p>Specifies the part of a web request that you want AWS WAF to inspect for snippets of malicious SQL code and, if you want AWS WAF to inspect a header, the name of the header.</p>"]
     #[serde(rename="SqlInjectionMatchTuple")]
     pub sql_injection_match_tuple: SqlInjectionMatchTuple,
 }
 
-pub type SqlInjectionMatchSetUpdates = Vec<SqlInjectionMatchSetUpdate>;
 #[doc="<p>Specifies the part of a web request that you want AWS WAF to inspect for snippets of malicious SQL code and, if you want AWS WAF to inspect a header, the name of the header.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SqlInjectionMatchTuple {
@@ -1259,35 +1203,31 @@ pub struct SqlInjectionMatchTuple {
     pub field_to_match: FieldToMatch,
     #[doc="<p>Text transformations eliminate some of the unusual formatting that attackers use in web requests in an effort to bypass AWS WAF. If you specify a transformation, AWS WAF performs the transformation on <code>FieldToMatch</code> before inspecting a request for a match.</p> <p> <b>CMD_LINE</b> </p> <p>When you're concerned that attackers are injecting an operating system commandline command and using unusual formatting to disguise some or all of the command, use this option to perform the following transformations:</p> <ul> <li> <p>Delete the following characters: \\ \" ' ^</p> </li> <li> <p>Delete spaces before the following characters: / (</p> </li> <li> <p>Replace the following characters with a space: , ;</p> </li> <li> <p>Replace multiple spaces with one space</p> </li> <li> <p>Convert uppercase letters (A-Z) to lowercase (a-z)</p> </li> </ul> <p> <b>COMPRESS_WHITE_SPACE</b> </p> <p>Use this option to replace the following characters with a space character (decimal 32):</p> <ul> <li> <p>\\f, formfeed, decimal 12</p> </li> <li> <p>\\t, tab, decimal 9</p> </li> <li> <p>\\n, newline, decimal 10</p> </li> <li> <p>\\r, carriage return, decimal 13</p> </li> <li> <p>\\v, vertical tab, decimal 11</p> </li> <li> <p>non-breaking space, decimal 160</p> </li> </ul> <p> <code>COMPRESS_WHITE_SPACE</code> also replaces multiple spaces with one space.</p> <p> <b>HTML_ENTITY_DECODE</b> </p> <p>Use this option to replace HTML-encoded characters with unencoded characters. <code>HTML_ENTITY_DECODE</code> performs the following operations:</p> <ul> <li> <p>Replaces <code>(ampersand)quot;</code> with <code>\"</code> </p> </li> <li> <p>Replaces <code>(ampersand)nbsp;</code> with a non-breaking space, decimal 160</p> </li> <li> <p>Replaces <code>(ampersand)lt;</code> with a \"less than\" symbol</p> </li> <li> <p>Replaces <code>(ampersand)gt;</code> with <code>&gt;</code> </p> </li> <li> <p>Replaces characters that are represented in hexadecimal format, <code>(ampersand)#xhhhh;</code>, with the corresponding characters</p> </li> <li> <p>Replaces characters that are represented in decimal format, <code>(ampersand)#nnnn;</code>, with the corresponding characters</p> </li> </ul> <p> <b>LOWERCASE</b> </p> <p>Use this option to convert uppercase letters (A-Z) to lowercase (a-z).</p> <p> <b>URL_DECODE</b> </p> <p>Use this option to decode a URL-encoded value.</p> <p> <b>NONE</b> </p> <p>Specify <code>NONE</code> if you don't want to perform any text transformations.</p>"]
     #[serde(rename="TextTransformation")]
-    pub text_transformation: TextTransformation,
+    pub text_transformation: String,
 }
 
-pub type SqlInjectionMatchTuples = Vec<SqlInjectionMatchTuple>;
-pub type TextTransformation = String;
 #[doc="<p>In a <a>GetSampledRequests</a> request, the <code>StartTime</code> and <code>EndTime</code> objects specify the time range for which you want AWS WAF to return a sample of web requests.</p> <p>In a <a>GetSampledRequests</a> response, the <code>StartTime</code> and <code>EndTime</code> objects specify the time range for which AWS WAF actually returned a sample of web requests. AWS WAF gets the specified number of requests from among the first 5,000 requests that your AWS resource receives during the specified time period. If your resource receives more than 5,000 requests during that period, AWS WAF stops sampling after the 5,000th request. In that case, <code>EndTime</code> is the time that AWS WAF received the 5,000th request. </p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct TimeWindow {
     #[doc="<p>The end of the time range from which you want <code>GetSampledRequests</code> to return a sample of the requests that your AWS resource received. Specify the date and time in the following format: <code>\"2016-09-27T14:50Z\"</code>. You can specify any time range in the previous three hours.</p>"]
     #[serde(rename="EndTime")]
-    pub end_time: Timestamp,
+    pub end_time: f64,
     #[doc="<p>The beginning of the time range from which you want <code>GetSampledRequests</code> to return a sample of the requests that your AWS resource received. Specify the date and time in the following format: <code>\"2016-09-27T14:50Z\"</code>. You can specify any time range in the previous three hours.</p>"]
     #[serde(rename="StartTime")]
-    pub start_time: Timestamp,
+    pub start_time: f64,
 }
 
-pub type Timestamp = f64;
-pub type URIString = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateByteMatchSetRequest {
     #[doc="<p>The <code>ByteMatchSetId</code> of the <a>ByteMatchSet</a> that you want to update. <code>ByteMatchSetId</code> is returned by <a>CreateByteMatchSet</a> and by <a>ListByteMatchSets</a>.</p>"]
     #[serde(rename="ByteMatchSetId")]
-    pub byte_match_set_id: ResourceId,
+    pub byte_match_set_id: String,
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
-    pub change_token: ChangeToken,
+    pub change_token: String,
     #[doc="<p>An array of <code>ByteMatchSetUpdate</code> objects that you want to insert into or delete from a <a>ByteMatchSet</a>. For more information, see the applicable data types:</p> <ul> <li> <p> <a>ByteMatchSetUpdate</a>: Contains <code>Action</code> and <code>ByteMatchTuple</code> </p> </li> <li> <p> <a>ByteMatchTuple</a>: Contains <code>FieldToMatch</code>, <code>PositionalConstraint</code>, <code>TargetString</code>, and <code>TextTransformation</code> </p> </li> <li> <p> <a>FieldToMatch</a>: Contains <code>Data</code> and <code>Type</code> </p> </li> </ul>"]
     #[serde(rename="Updates")]
-    pub updates: ByteMatchSetUpdates,
+    pub updates: Vec<ByteMatchSetUpdate>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -1295,20 +1235,20 @@ pub struct UpdateByteMatchSetResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>UpdateByteMatchSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub change_token: Option<ChangeToken>,
+    pub change_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateIPSetRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
-    pub change_token: ChangeToken,
+    pub change_token: String,
     #[doc="<p>The <code>IPSetId</code> of the <a>IPSet</a> that you want to update. <code>IPSetId</code> is returned by <a>CreateIPSet</a> and by <a>ListIPSets</a>.</p>"]
     #[serde(rename="IPSetId")]
-    pub ip_set_id: ResourceId,
+    pub ip_set_id: String,
     #[doc="<p>An array of <code>IPSetUpdate</code> objects that you want to insert into or delete from an <a>IPSet</a>. For more information, see the applicable data types:</p> <ul> <li> <p> <a>IPSetUpdate</a>: Contains <code>Action</code> and <code>IPSetDescriptor</code> </p> </li> <li> <p> <a>IPSetDescriptor</a>: Contains <code>Type</code> and <code>Value</code> </p> </li> </ul>"]
     #[serde(rename="Updates")]
-    pub updates: IPSetUpdates,
+    pub updates: Vec<IPSetUpdate>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -1316,23 +1256,23 @@ pub struct UpdateIPSetResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>UpdateIPSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub change_token: Option<ChangeToken>,
+    pub change_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateRateBasedRuleRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
-    pub change_token: ChangeToken,
+    pub change_token: String,
     #[doc="<p>The maximum number of requests, which have an identical value in the field specified by the <code>RateKey</code>, allowed in a five-minute period. If the number of requests exceeds the <code>RateLimit</code> and the other predicates specified in the rule are also met, AWS WAF triggers the action that is specified for this rule.</p>"]
     #[serde(rename="RateLimit")]
-    pub rate_limit: RateLimit,
+    pub rate_limit: i64,
     #[doc="<p>The <code>RuleId</code> of the <code>RateBasedRule</code> that you want to update. <code>RuleId</code> is returned by <code>CreateRateBasedRule</code> and by <a>ListRateBasedRules</a>.</p>"]
     #[serde(rename="RuleId")]
-    pub rule_id: ResourceId,
+    pub rule_id: String,
     #[doc="<p>An array of <code>RuleUpdate</code> objects that you want to insert into or delete from a <a>RateBasedRule</a>. </p>"]
     #[serde(rename="Updates")]
-    pub updates: RuleUpdates,
+    pub updates: Vec<RuleUpdate>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -1340,20 +1280,20 @@ pub struct UpdateRateBasedRuleResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>UpdateRateBasedRule</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub change_token: Option<ChangeToken>,
+    pub change_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateRuleRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
-    pub change_token: ChangeToken,
+    pub change_token: String,
     #[doc="<p>The <code>RuleId</code> of the <code>Rule</code> that you want to update. <code>RuleId</code> is returned by <code>CreateRule</code> and by <a>ListRules</a>.</p>"]
     #[serde(rename="RuleId")]
-    pub rule_id: ResourceId,
+    pub rule_id: String,
     #[doc="<p>An array of <code>RuleUpdate</code> objects that you want to insert into or delete from a <a>Rule</a>. For more information, see the applicable data types:</p> <ul> <li> <p> <a>RuleUpdate</a>: Contains <code>Action</code> and <code>Predicate</code> </p> </li> <li> <p> <a>Predicate</a>: Contains <code>DataId</code>, <code>Negated</code>, and <code>Type</code> </p> </li> <li> <p> <a>FieldToMatch</a>: Contains <code>Data</code> and <code>Type</code> </p> </li> </ul>"]
     #[serde(rename="Updates")]
-    pub updates: RuleUpdates,
+    pub updates: Vec<RuleUpdate>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -1361,20 +1301,20 @@ pub struct UpdateRuleResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>UpdateRule</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub change_token: Option<ChangeToken>,
+    pub change_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateSizeConstraintSetRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
-    pub change_token: ChangeToken,
+    pub change_token: String,
     #[doc="<p>The <code>SizeConstraintSetId</code> of the <a>SizeConstraintSet</a> that you want to update. <code>SizeConstraintSetId</code> is returned by <a>CreateSizeConstraintSet</a> and by <a>ListSizeConstraintSets</a>.</p>"]
     #[serde(rename="SizeConstraintSetId")]
-    pub size_constraint_set_id: ResourceId,
+    pub size_constraint_set_id: String,
     #[doc="<p>An array of <code>SizeConstraintSetUpdate</code> objects that you want to insert into or delete from a <a>SizeConstraintSet</a>. For more information, see the applicable data types:</p> <ul> <li> <p> <a>SizeConstraintSetUpdate</a>: Contains <code>Action</code> and <code>SizeConstraint</code> </p> </li> <li> <p> <a>SizeConstraint</a>: Contains <code>FieldToMatch</code>, <code>TextTransformation</code>, <code>ComparisonOperator</code>, and <code>Size</code> </p> </li> <li> <p> <a>FieldToMatch</a>: Contains <code>Data</code> and <code>Type</code> </p> </li> </ul>"]
     #[serde(rename="Updates")]
-    pub updates: SizeConstraintSetUpdates,
+    pub updates: Vec<SizeConstraintSetUpdate>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -1382,7 +1322,7 @@ pub struct UpdateSizeConstraintSetResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>UpdateSizeConstraintSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub change_token: Option<ChangeToken>,
+    pub change_token: Option<String>,
 }
 
 #[doc="<p>A request to update a <a>SqlInjectionMatchSet</a>.</p>"]
@@ -1390,13 +1330,13 @@ pub struct UpdateSizeConstraintSetResponse {
 pub struct UpdateSqlInjectionMatchSetRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
-    pub change_token: ChangeToken,
+    pub change_token: String,
     #[doc="<p>The <code>SqlInjectionMatchSetId</code> of the <code>SqlInjectionMatchSet</code> that you want to update. <code>SqlInjectionMatchSetId</code> is returned by <a>CreateSqlInjectionMatchSet</a> and by <a>ListSqlInjectionMatchSets</a>.</p>"]
     #[serde(rename="SqlInjectionMatchSetId")]
-    pub sql_injection_match_set_id: ResourceId,
+    pub sql_injection_match_set_id: String,
     #[doc="<p>An array of <code>SqlInjectionMatchSetUpdate</code> objects that you want to insert into or delete from a <a>SqlInjectionMatchSet</a>. For more information, see the applicable data types:</p> <ul> <li> <p> <a>SqlInjectionMatchSetUpdate</a>: Contains <code>Action</code> and <code>SqlInjectionMatchTuple</code> </p> </li> <li> <p> <a>SqlInjectionMatchTuple</a>: Contains <code>FieldToMatch</code> and <code>TextTransformation</code> </p> </li> <li> <p> <a>FieldToMatch</a>: Contains <code>Data</code> and <code>Type</code> </p> </li> </ul>"]
     #[serde(rename="Updates")]
-    pub updates: SqlInjectionMatchSetUpdates,
+    pub updates: Vec<SqlInjectionMatchSetUpdate>,
 }
 
 #[doc="<p>The response to an <a>UpdateSqlInjectionMatchSets</a> request.</p>"]
@@ -1405,14 +1345,14 @@ pub struct UpdateSqlInjectionMatchSetResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>UpdateSqlInjectionMatchSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub change_token: Option<ChangeToken>,
+    pub change_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateWebACLRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
-    pub change_token: ChangeToken,
+    pub change_token: String,
     #[doc="<p>A default action for the web ACL, either ALLOW or BLOCK. AWS WAF performs the default action if a request doesn't match the criteria in any of the rules in a web ACL.</p>"]
     #[serde(rename="DefaultAction")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1420,10 +1360,10 @@ pub struct UpdateWebACLRequest {
     #[doc="<p>An array of updates to make to the <a>WebACL</a>.</p> <p>An array of <code>WebACLUpdate</code> objects that you want to insert into or delete from a <a>WebACL</a>. For more information, see the applicable data types:</p> <ul> <li> <p> <a>WebACLUpdate</a>: Contains <code>Action</code> and <code>ActivatedRule</code> </p> </li> <li> <p> <a>ActivatedRule</a>: Contains <code>Action</code>, <code>Priority</code>, <code>RuleId</code>, and <code>Type</code> </p> </li> <li> <p> <a>WafAction</a>: Contains <code>Type</code> </p> </li> </ul>"]
     #[serde(rename="Updates")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub updates: Option<WebACLUpdates>,
+    pub updates: Option<Vec<WebACLUpdate>>,
     #[doc="<p>The <code>WebACLId</code> of the <a>WebACL</a> that you want to update. <code>WebACLId</code> is returned by <a>CreateWebACL</a> and by <a>ListWebACLs</a>.</p>"]
     #[serde(rename="WebACLId")]
-    pub web_acl_id: ResourceId,
+    pub web_acl_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -1431,7 +1371,7 @@ pub struct UpdateWebACLResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>UpdateWebACL</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub change_token: Option<ChangeToken>,
+    pub change_token: Option<String>,
 }
 
 #[doc="<p>A request to update an <a>XssMatchSet</a>.</p>"]
@@ -1439,13 +1379,13 @@ pub struct UpdateWebACLResponse {
 pub struct UpdateXssMatchSetRequest {
     #[doc="<p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>"]
     #[serde(rename="ChangeToken")]
-    pub change_token: ChangeToken,
+    pub change_token: String,
     #[doc="<p>An array of <code>XssMatchSetUpdate</code> objects that you want to insert into or delete from a <a>XssMatchSet</a>. For more information, see the applicable data types:</p> <ul> <li> <p> <a>XssMatchSetUpdate</a>: Contains <code>Action</code> and <code>XssMatchTuple</code> </p> </li> <li> <p> <a>XssMatchTuple</a>: Contains <code>FieldToMatch</code> and <code>TextTransformation</code> </p> </li> <li> <p> <a>FieldToMatch</a>: Contains <code>Data</code> and <code>Type</code> </p> </li> </ul>"]
     #[serde(rename="Updates")]
-    pub updates: XssMatchSetUpdates,
+    pub updates: Vec<XssMatchSetUpdate>,
     #[doc="<p>The <code>XssMatchSetId</code> of the <code>XssMatchSet</code> that you want to update. <code>XssMatchSetId</code> is returned by <a>CreateXssMatchSet</a> and by <a>ListXssMatchSets</a>.</p>"]
     #[serde(rename="XssMatchSetId")]
-    pub xss_match_set_id: ResourceId,
+    pub xss_match_set_id: String,
 }
 
 #[doc="<p>The response to an <a>UpdateXssMatchSets</a> request.</p>"]
@@ -1454,7 +1394,7 @@ pub struct UpdateXssMatchSetResponse {
     #[doc="<p>The <code>ChangeToken</code> that you used to submit the <code>UpdateXssMatchSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>"]
     #[serde(rename="ChangeToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub change_token: Option<ChangeToken>,
+    pub change_token: Option<String>,
 }
 
 #[doc="<p>For the action that is associated with a rule in a <code>WebACL</code>, specifies the action that you want AWS WAF to perform when a web request matches all of the conditions in a rule. For the default action in a <code>WebACL</code>, specifies the action that you want AWS WAF to take when a web request doesn't match all of the conditions in any of the rules in a <code>WebACL</code>. </p>"]
@@ -1462,11 +1402,9 @@ pub struct UpdateXssMatchSetResponse {
 pub struct WafAction {
     #[doc="<p>Specifies how you want AWS WAF to respond to requests that match the settings in a <code>Rule</code>. Valid settings include the following:</p> <ul> <li> <p> <code>ALLOW</code>: AWS WAF allows requests</p> </li> <li> <p> <code>BLOCK</code>: AWS WAF blocks requests</p> </li> <li> <p> <code>COUNT</code>: AWS WAF increments a counter of the requests that match all of the conditions in the rule. AWS WAF then continues to inspect the web request based on the remaining rules in the web ACL. You can't specify <code>COUNT</code> for the default action for a <code>WebACL</code>.</p> </li> </ul>"]
     #[serde(rename="Type")]
-    pub type_: WafActionType,
+    pub type_: String,
 }
 
-pub type WafActionType = String;
-pub type WafRuleType = String;
 #[doc="<p>Contains the <code>Rules</code> that identify the requests that you want to allow, block, or count. In a <code>WebACL</code>, you also specify a default action (<code>ALLOW</code> or <code>BLOCK</code>), and the action for each <code>Rule</code> that you add to a <code>WebACL</code>, for example, block requests from specified IP addresses or block requests from specified referrers. You also associate the <code>WebACL</code> with a CloudFront distribution to identify the requests that you want AWS WAF to filter. If you add more than one <code>Rule</code> to a <code>WebACL</code>, a request needs to match only one of the specifications to be allowed, blocked, or counted. For more information, see <a>UpdateWebACL</a>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct WebACL {
@@ -1476,29 +1414,28 @@ pub struct WebACL {
     #[doc="<p>A friendly name or description for the metrics for this <code>WebACL</code>. The name can contain only alphanumeric characters (A-Z, a-z, 0-9); the name can't contain whitespace. You can't change <code>MetricName</code> after you create the <code>WebACL</code>.</p>"]
     #[serde(rename="MetricName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub metric_name: Option<MetricName>,
+    pub metric_name: Option<String>,
     #[doc="<p>A friendly name or description of the <code>WebACL</code>. You can't change the name of a <code>WebACL</code> after you create it.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<ResourceName>,
+    pub name: Option<String>,
     #[doc="<p>An array that contains the action for each <code>Rule</code> in a <code>WebACL</code>, the priority of the <code>Rule</code>, and the ID of the <code>Rule</code>.</p>"]
     #[serde(rename="Rules")]
-    pub rules: ActivatedRules,
+    pub rules: Vec<ActivatedRule>,
     #[doc="<p>A unique identifier for a <code>WebACL</code>. You use <code>WebACLId</code> to get information about a <code>WebACL</code> (see <a>GetWebACL</a>), update a <code>WebACL</code> (see <a>UpdateWebACL</a>), and delete a <code>WebACL</code> from AWS WAF (see <a>DeleteWebACL</a>).</p> <p> <code>WebACLId</code> is returned by <a>CreateWebACL</a> and by <a>ListWebACLs</a>.</p>"]
     #[serde(rename="WebACLId")]
-    pub web_acl_id: ResourceId,
+    pub web_acl_id: String,
 }
 
-pub type WebACLSummaries = Vec<WebACLSummary>;
 #[doc="<p>Contains the identifier and the name or description of the <a>WebACL</a>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct WebACLSummary {
     #[doc="<p>A friendly name or description of the <a>WebACL</a>. You can't change the name of a <code>WebACL</code> after you create it.</p>"]
     #[serde(rename="Name")]
-    pub name: ResourceName,
+    pub name: String,
     #[doc="<p>A unique identifier for a <code>WebACL</code>. You use <code>WebACLId</code> to get information about a <code>WebACL</code> (see <a>GetWebACL</a>), update a <code>WebACL</code> (see <a>UpdateWebACL</a>), and delete a <code>WebACL</code> from AWS WAF (see <a>DeleteWebACL</a>).</p> <p> <code>WebACLId</code> is returned by <a>CreateWebACL</a> and by <a>ListWebACLs</a>.</p>"]
     #[serde(rename="WebACLId")]
-    pub web_acl_id: ResourceId,
+    pub web_acl_id: String,
 }
 
 #[doc="<p>Specifies whether to insert a <code>Rule</code> into or delete a <code>Rule</code> from a <code>WebACL</code>.</p>"]
@@ -1506,38 +1443,36 @@ pub struct WebACLSummary {
 pub struct WebACLUpdate {
     #[doc="<p>Specifies whether to insert a <code>Rule</code> into or delete a <code>Rule</code> from a <code>WebACL</code>.</p>"]
     #[serde(rename="Action")]
-    pub action: ChangeAction,
+    pub action: String,
     #[doc="<p>The <code>ActivatedRule</code> object in an <a>UpdateWebACL</a> request specifies a <code>Rule</code> that you want to insert or delete, the priority of the <code>Rule</code> in the <code>WebACL</code>, and the action that you want AWS WAF to take when a web request matches the <code>Rule</code> (<code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>).</p>"]
     #[serde(rename="ActivatedRule")]
     pub activated_rule: ActivatedRule,
 }
 
-pub type WebACLUpdates = Vec<WebACLUpdate>;
 #[doc="<p>A complex type that contains <code>XssMatchTuple</code> objects, which specify the parts of web requests that you want AWS WAF to inspect for cross-site scripting attacks and, if you want AWS WAF to inspect a header, the name of the header. If a <code>XssMatchSet</code> contains more than one <code>XssMatchTuple</code> object, a request needs to include cross-site scripting attacks in only one of the specified parts of the request to be considered a match.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct XssMatchSet {
     #[doc="<p>The name, if any, of the <code>XssMatchSet</code>.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<ResourceName>,
+    pub name: Option<String>,
     #[doc="<p>A unique identifier for an <code>XssMatchSet</code>. You use <code>XssMatchSetId</code> to get information about an <code>XssMatchSet</code> (see <a>GetXssMatchSet</a>), update an <code>XssMatchSet</code> (see <a>UpdateXssMatchSet</a>), insert an <code>XssMatchSet</code> into a <code>Rule</code> or delete one from a <code>Rule</code> (see <a>UpdateRule</a>), and delete an <code>XssMatchSet</code> from AWS WAF (see <a>DeleteXssMatchSet</a>).</p> <p> <code>XssMatchSetId</code> is returned by <a>CreateXssMatchSet</a> and by <a>ListXssMatchSets</a>.</p>"]
     #[serde(rename="XssMatchSetId")]
-    pub xss_match_set_id: ResourceId,
+    pub xss_match_set_id: String,
     #[doc="<p>Specifies the parts of web requests that you want to inspect for cross-site scripting attacks.</p>"]
     #[serde(rename="XssMatchTuples")]
-    pub xss_match_tuples: XssMatchTuples,
+    pub xss_match_tuples: Vec<XssMatchTuple>,
 }
 
-pub type XssMatchSetSummaries = Vec<XssMatchSetSummary>;
 #[doc="<p>The <code>Id</code> and <code>Name</code> of an <code>XssMatchSet</code>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct XssMatchSetSummary {
     #[doc="<p>The name of the <code>XssMatchSet</code>, if any, specified by <code>Id</code>.</p>"]
     #[serde(rename="Name")]
-    pub name: ResourceName,
+    pub name: String,
     #[doc="<p>A unique identifier for an <code>XssMatchSet</code>. You use <code>XssMatchSetId</code> to get information about a <code>XssMatchSet</code> (see <a>GetXssMatchSet</a>), update an <code>XssMatchSet</code> (see <a>UpdateXssMatchSet</a>), insert an <code>XssMatchSet</code> into a <code>Rule</code> or delete one from a <code>Rule</code> (see <a>UpdateRule</a>), and delete an <code>XssMatchSet</code> from AWS WAF (see <a>DeleteXssMatchSet</a>).</p> <p> <code>XssMatchSetId</code> is returned by <a>CreateXssMatchSet</a> and by <a>ListXssMatchSets</a>.</p>"]
     #[serde(rename="XssMatchSetId")]
-    pub xss_match_set_id: ResourceId,
+    pub xss_match_set_id: String,
 }
 
 #[doc="<p>Specifies the part of a web request that you want to inspect for cross-site scripting attacks and indicates whether you want to add the specification to an <a>XssMatchSet</a> or delete it from an <code>XssMatchSet</code>.</p>"]
@@ -1545,13 +1480,12 @@ pub struct XssMatchSetSummary {
 pub struct XssMatchSetUpdate {
     #[doc="<p>Specify <code>INSERT</code> to add a <a>XssMatchSetUpdate</a> to an <a>XssMatchSet</a>. Use <code>DELETE</code> to remove a <code>XssMatchSetUpdate</code> from an <code>XssMatchSet</code>.</p>"]
     #[serde(rename="Action")]
-    pub action: ChangeAction,
+    pub action: String,
     #[doc="<p>Specifies the part of a web request that you want AWS WAF to inspect for cross-site scripting attacks and, if you want AWS WAF to inspect a header, the name of the header.</p>"]
     #[serde(rename="XssMatchTuple")]
     pub xss_match_tuple: XssMatchTuple,
 }
 
-pub type XssMatchSetUpdates = Vec<XssMatchSetUpdate>;
 #[doc="<p>Specifies the part of a web request that you want AWS WAF to inspect for cross-site scripting attacks and, if you want AWS WAF to inspect a header, the name of the header.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct XssMatchTuple {
@@ -1560,10 +1494,9 @@ pub struct XssMatchTuple {
     pub field_to_match: FieldToMatch,
     #[doc="<p>Text transformations eliminate some of the unusual formatting that attackers use in web requests in an effort to bypass AWS WAF. If you specify a transformation, AWS WAF performs the transformation on <code>FieldToMatch</code> before inspecting a request for a match.</p> <p> <b>CMD_LINE</b> </p> <p>When you're concerned that attackers are injecting an operating system commandline command and using unusual formatting to disguise some or all of the command, use this option to perform the following transformations:</p> <ul> <li> <p>Delete the following characters: \\ \" ' ^</p> </li> <li> <p>Delete spaces before the following characters: / (</p> </li> <li> <p>Replace the following characters with a space: , ;</p> </li> <li> <p>Replace multiple spaces with one space</p> </li> <li> <p>Convert uppercase letters (A-Z) to lowercase (a-z)</p> </li> </ul> <p> <b>COMPRESS_WHITE_SPACE</b> </p> <p>Use this option to replace the following characters with a space character (decimal 32):</p> <ul> <li> <p>\\f, formfeed, decimal 12</p> </li> <li> <p>\\t, tab, decimal 9</p> </li> <li> <p>\\n, newline, decimal 10</p> </li> <li> <p>\\r, carriage return, decimal 13</p> </li> <li> <p>\\v, vertical tab, decimal 11</p> </li> <li> <p>non-breaking space, decimal 160</p> </li> </ul> <p> <code>COMPRESS_WHITE_SPACE</code> also replaces multiple spaces with one space.</p> <p> <b>HTML_ENTITY_DECODE</b> </p> <p>Use this option to replace HTML-encoded characters with unencoded characters. <code>HTML_ENTITY_DECODE</code> performs the following operations:</p> <ul> <li> <p>Replaces <code>(ampersand)quot;</code> with <code>\"</code> </p> </li> <li> <p>Replaces <code>(ampersand)nbsp;</code> with a non-breaking space, decimal 160</p> </li> <li> <p>Replaces <code>(ampersand)lt;</code> with a \"less than\" symbol</p> </li> <li> <p>Replaces <code>(ampersand)gt;</code> with <code>&gt;</code> </p> </li> <li> <p>Replaces characters that are represented in hexadecimal format, <code>(ampersand)#xhhhh;</code>, with the corresponding characters</p> </li> <li> <p>Replaces characters that are represented in decimal format, <code>(ampersand)#nnnn;</code>, with the corresponding characters</p> </li> </ul> <p> <b>LOWERCASE</b> </p> <p>Use this option to convert uppercase letters (A-Z) to lowercase (a-z).</p> <p> <b>URL_DECODE</b> </p> <p>Use this option to decode a URL-encoded value.</p> <p> <b>NONE</b> </p> <p>Specify <code>NONE</code> if you don't want to perform any text transformations.</p>"]
     #[serde(rename="TextTransformation")]
-    pub text_transformation: TextTransformation,
+    pub text_transformation: String,
 }
 
-pub type XssMatchTuples = Vec<XssMatchTuple>;
 /// Errors returned by AssociateWebACL
 #[derive(Debug, PartialEq)]
 pub enum AssociateWebACLError {

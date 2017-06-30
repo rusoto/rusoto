@@ -33,19 +33,19 @@ pub struct AccountLimit {
     #[doc="<p>Size, in bytes, of code/dependencies that you can zip into a deployment package (uncompressed zip/jar size) for uploading. The default limit is 250 MB.</p>"]
     #[serde(rename="CodeSizeUnzipped")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub code_size_unzipped: Option<Long>,
+    pub code_size_unzipped: Option<i64>,
     #[doc="<p>Size, in bytes, of a single zipped code/dependencies package you can upload for your Lambda function(.zip/.jar file). Try using Amazon S3 for uploading larger files. Default limit is 50 MB.</p>"]
     #[serde(rename="CodeSizeZipped")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub code_size_zipped: Option<Long>,
+    pub code_size_zipped: Option<i64>,
     #[doc="<p>Number of simultaneous executions of your function per region. For more information or to request a limit increase for concurrent executions, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/concurrent-executions.html\">Lambda Function Concurrent Executions</a>. The default limit is 100.</p>"]
     #[serde(rename="ConcurrentExecutions")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub concurrent_executions: Option<Integer>,
+    pub concurrent_executions: Option<i64>,
     #[doc="<p>Maximum size, in bytes, of a code package you can upload per region. The default size is 75 GB. </p>"]
     #[serde(rename="TotalCodeSize")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub total_code_size: Option<Long>,
+    pub total_code_size: Option<i64>,
 }
 
 #[doc="<p>Provides code size usage and function count associated with the current account and region.</p>"]
@@ -54,45 +54,44 @@ pub struct AccountUsage {
     #[doc="<p>The number of your account's existing functions per region.</p>"]
     #[serde(rename="FunctionCount")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub function_count: Option<Long>,
+    pub function_count: Option<i64>,
     #[doc="<p>Total size, in bytes, of the account's deployment packages per region.</p>"]
     #[serde(rename="TotalCodeSize")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub total_code_size: Option<Long>,
+    pub total_code_size: Option<i64>,
 }
 
-pub type Action = String;
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct AddPermissionRequest {
     #[doc="<p>The AWS Lambda action you want to allow in this statement. Each Lambda action is a string starting with <code>lambda:</code> followed by the API name . For example, <code>lambda:CreateFunction</code>. You can use wildcard (<code>lambda:*</code>) to grant permission for all AWS Lambda actions. </p>"]
     #[serde(rename="Action")]
-    pub action: Action,
+    pub action: String,
     #[doc="<p>A unique token that must be supplied by the principal invoking the function. This is currently only used for Alexa Smart Home functions.</p>"]
     #[serde(rename="EventSourceToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub event_source_token: Option<EventSourceToken>,
+    pub event_source_token: Option<String>,
     #[doc="<p>Name of the Lambda function whose resource policy you are updating by adding a new permission.</p> <p> You can specify a function name (for example, <code>Thumbnail</code>) or you can specify Amazon Resource Name (ARN) of the function (for example, <code>arn:aws:lambda:us-west-2:account-id:function:ThumbNail</code>). AWS Lambda also allows you to specify partial ARN (for example, <code>account-id:Thumbnail</code>). Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length. </p>"]
     #[serde(rename="FunctionName")]
-    pub function_name: FunctionName,
+    pub function_name: String,
     #[doc="<p>The principal who is getting this permission. It can be Amazon S3 service Principal (<code>s3.amazonaws.com</code>) if you want Amazon S3 to invoke the function, an AWS account ID if you are granting cross-account permission, or any valid AWS service principal such as <code>sns.amazonaws.com</code>. For example, you might want to allow a custom application in another AWS account to push events to AWS Lambda by invoking your function. </p>"]
     #[serde(rename="Principal")]
-    pub principal: Principal,
+    pub principal: String,
     #[doc="<p>You can use this optional query parameter to describe a qualified ARN using a function version or an alias name. The permission will then apply to the specific qualified ARN. For example, if you specify function version 2 as the qualifier, then permission applies only when request is made using qualified function ARN:</p> <p> <code>arn:aws:lambda:aws-region:acct-id:function:function-name:2</code> </p> <p>If you specify an alias name, for example <code>PROD</code>, then the permission is valid only for requests made using the alias ARN:</p> <p> <code>arn:aws:lambda:aws-region:acct-id:function:function-name:PROD</code> </p> <p>If the qualifier is not specified, the permission is valid only when requests is made using unqualified function ARN.</p> <p> <code>arn:aws:lambda:aws-region:acct-id:function:function-name</code> </p>"]
     #[serde(rename="Qualifier")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub qualifier: Option<Qualifier>,
+    pub qualifier: Option<String>,
     #[doc="<p>This parameter is used for S3 and SES. The AWS account ID (without a hyphen) of the source owner. For example, if the <code>SourceArn</code> identifies a bucket, then this is the bucket owner's account ID. You can use this additional condition to ensure the bucket you specify is owned by a specific account (it is possible the bucket owner deleted the bucket and some other AWS account created the bucket). You can also use this condition to specify all sources (that is, you don't specify the <code>SourceArn</code>) owned by a specific account. </p>"]
     #[serde(rename="SourceAccount")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub source_account: Option<SourceOwner>,
+    pub source_account: Option<String>,
     #[doc="<p>This is optional; however, when granting permission to invoke your function, you should specify this field with the Amazon Resource Name (ARN) as its value. This ensures that only events generated from the specified source can invoke the function.</p> <important> <p>If you add a permission without providing the source ARN, any AWS account that creates a mapping to your function ARN can send events to invoke your Lambda function.</p> </important>"]
     #[serde(rename="SourceArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub source_arn: Option<Arn>,
+    pub source_arn: Option<String>,
     #[doc="<p>A unique statement identifier.</p>"]
     #[serde(rename="StatementId")]
-    pub statement_id: StatementId,
+    pub statement_id: String,
 }
 
 #[doc="<p/>"]
@@ -104,49 +103,42 @@ pub struct AddPermissionResponse {
     pub statement: Option<String>,
 }
 
-pub type Alias = String;
 #[doc="<p>Provides configuration information about a Lambda function version alias.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct AliasConfiguration {
     #[doc="<p>Lambda function ARN that is qualified using the alias name as the suffix. For example, if you create an alias called <code>BETA</code> that points to a helloworld function version, the ARN is <code>arn:aws:lambda:aws-regions:acct-id:function:helloworld:BETA</code>.</p>"]
     #[serde(rename="AliasArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub alias_arn: Option<FunctionArn>,
+    pub alias_arn: Option<String>,
     #[doc="<p>Alias description.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[doc="<p>Function version to which the alias points.</p>"]
     #[serde(rename="FunctionVersion")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub function_version: Option<Version>,
+    pub function_version: Option<String>,
     #[doc="<p>Alias name.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<Alias>,
+    pub name: Option<String>,
 }
 
-pub type AliasList = Vec<AliasConfiguration>;
-pub type Arn = String;
-pub type BatchSize = i64;
-pub type Blob = Vec<u8>;
-pub type BlobStream = Vec<u8>;
-pub type Boolean = bool;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateAliasRequest {
     #[doc="<p>Description of the alias.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[doc="<p>Name of the Lambda function for which you want to create an alias. Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length.</p>"]
     #[serde(rename="FunctionName")]
-    pub function_name: FunctionName,
+    pub function_name: String,
     #[doc="<p>Lambda function version for which you are creating the alias.</p>"]
     #[serde(rename="FunctionVersion")]
-    pub function_version: Version,
+    pub function_version: String,
     #[doc="<p>Name for the alias you are creating.</p>"]
     #[serde(rename="Name")]
-    pub name: Alias,
+    pub name: String,
 }
 
 #[doc="<p/>"]
@@ -155,24 +147,24 @@ pub struct CreateEventSourceMappingRequest {
     #[doc="<p>The largest number of records that AWS Lambda will retrieve from your event source at the time of invoking your function. Your function receives an event with all the retrieved records. The default is 100 records.</p>"]
     #[serde(rename="BatchSize")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub batch_size: Option<BatchSize>,
+    pub batch_size: Option<i64>,
     #[doc="<p>Indicates whether AWS Lambda should begin polling the event source. By default, <code>Enabled</code> is true. </p>"]
     #[serde(rename="Enabled")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub enabled: Option<Enabled>,
+    pub enabled: Option<bool>,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon Kinesis or the Amazon DynamoDB stream that is the event source. Any record added to this stream could cause AWS Lambda to invoke your Lambda function, it depends on the <code>BatchSize</code>. AWS Lambda POSTs the Amazon Kinesis event, containing records, to your Lambda function as JSON.</p>"]
     #[serde(rename="EventSourceArn")]
-    pub event_source_arn: Arn,
+    pub event_source_arn: String,
     #[doc="<p>The Lambda function to invoke when AWS Lambda detects an event on the stream.</p> <p> You can specify the function name (for example, <code>Thumbnail</code>) or you can specify Amazon Resource Name (ARN) of the function (for example, <code>arn:aws:lambda:us-west-2:account-id:function:ThumbNail</code>). </p> <p> If you are using versioning, you can also provide a qualified function ARN (ARN that is qualified with function version or alias name as suffix). For more information about versioning, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a> </p> <p>AWS Lambda also allows you to specify only the function name with the account ID qualifier (for example, <code>account-id:Thumbnail</code>). </p> <p>Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length.</p>"]
     #[serde(rename="FunctionName")]
-    pub function_name: FunctionName,
+    pub function_name: String,
     #[doc="<p>The position in the stream where AWS Lambda should start reading. Valid only for Kinesis streams. For more information, see <a href=\"http://docs.aws.amazon.com/kinesis/latest/APIReference/API_GetShardIterator.html#Kinesis-GetShardIterator-request-ShardIteratorType\">ShardIteratorType</a> in the <i>Amazon Kinesis API Reference</i>. </p>"]
     #[serde(rename="StartingPosition")]
-    pub starting_position: EventSourcePosition,
+    pub starting_position: String,
     #[doc="<p>The timestamp of the data record from which to start reading. Used with <a href=\"http://docs.aws.amazon.com/kinesis/latest/APIReference/API_GetShardIterator.html#Kinesis-GetShardIterator-request-ShardIteratorType\">shard iterator type</a> AT_TIMESTAMP. If a record with this exact timestamp does not exist, the iterator returned is for the next (later) record. If the timestamp is older than the current trim horizon, the iterator returned is for the oldest untrimmed data record (TRIM_HORIZON). Valid only for Kinesis streams. </p>"]
     #[serde(rename="StartingPositionTimestamp")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub starting_position_timestamp: Option<Date>,
+    pub starting_position_timestamp: Option<f64>,
 }
 
 #[doc="<p/>"]
@@ -188,42 +180,42 @@ pub struct CreateFunctionRequest {
     #[doc="<p>A short, user-defined function description. Lambda does not use this value. Assign a meaningful description as you see fit.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[serde(rename="Environment")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub environment: Option<Environment>,
     #[doc="<p>The name you want to assign to the function you are uploading. The function names appear in the console and are returned in the <a>ListFunctions</a> API. Function names are used to specify functions to other AWS Lambda API operations, such as <a>Invoke</a>. Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length. </p>"]
     #[serde(rename="FunctionName")]
-    pub function_name: FunctionName,
+    pub function_name: String,
     #[doc="<p>The function within your code that Lambda calls to begin execution. For Node.js, it is the <i>module-name</i>.<i>export</i> value in your function. For Java, it can be <code>package.class-name::handler</code> or <code>package.class-name</code>. For more information, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/java-programming-model-handler-types.html\">Lambda Function Handler (Java)</a>. </p>"]
     #[serde(rename="Handler")]
-    pub handler: Handler,
+    pub handler: String,
     #[doc="<p>The Amazon Resource Name (ARN) of the KMS key used to encrypt your function's environment variables. If not provided, AWS Lambda will use a default service key.</p>"]
     #[serde(rename="KMSKeyArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub kms_key_arn: Option<KMSKeyArn>,
+    pub kms_key_arn: Option<String>,
     #[doc="<p>The amount of memory, in MB, your Lambda function is given. Lambda uses this memory size to infer the amount of CPU and memory allocated to your function. Your function use-case determines your CPU and memory requirements. For example, a database operation might need less memory compared to an image processing function. The default value is 128 MB. The value must be a multiple of 64 MB.</p>"]
     #[serde(rename="MemorySize")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub memory_size: Option<MemorySize>,
+    pub memory_size: Option<i64>,
     #[doc="<p>This boolean parameter can be used to request AWS Lambda to create the Lambda function and publish a version as an atomic operation.</p>"]
     #[serde(rename="Publish")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub publish: Option<Boolean>,
+    pub publish: Option<bool>,
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM role that Lambda assumes when it executes your function to access any other Amazon Web Services (AWS) resources. For more information, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/lambda-introduction.html\">AWS Lambda: How it Works</a>. </p>"]
     #[serde(rename="Role")]
-    pub role: RoleArn,
+    pub role: String,
     #[doc="<p>The runtime environment for the Lambda function you are uploading.</p> <p>To use the Python runtime v3.6, set the value to \"python3.6\". To use the Python runtime v2.7, set the value to \"python2.7\". To use the Node.js runtime v6.10, set the value to \"nodejs6.10\". To use the Node.js runtime v4.3, set the value to \"nodejs4.3\".</p> <note> <p>Node v0.10.42 is currently marked as deprecated. You must migrate existing functions to the newer Node.js runtime versions available on AWS Lambda (nodejs4.3 or nodejs6.10) as soon as possible. You can request a one-time extension until June 30, 2017 by going to the Lambda console and following the instructions provided. Failure to do so will result in an invalid parmaeter error being returned. Note that you will have to follow this procedure for each region that contains functions written in the Node v0.10.42 runtime.</p> </note>"]
     #[serde(rename="Runtime")]
-    pub runtime: Runtime,
+    pub runtime: String,
     #[doc="<p>The list of tags (key-value pairs) assigned to the new function.</p>"]
     #[serde(rename="Tags")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub tags: Option<Tags>,
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>The function execution time at which Lambda should terminate the function. Because the execution time has cost implications, we recommend you set this value based on your expected execution time. The default is 3 seconds.</p>"]
     #[serde(rename="Timeout")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub timeout: Option<Timeout>,
+    pub timeout: Option<i64>,
     #[doc="<p>The parent object that contains your function's tracing settings.</p>"]
     #[serde(rename="TracingConfig")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -234,24 +226,23 @@ pub struct CreateFunctionRequest {
     pub vpc_config: Option<VpcConfig>,
 }
 
-pub type Date = f64;
 #[doc="<p>The parent object that contains the target ARN (Amazon Resource Name) of an Amazon SQS queue or Amazon SNS topic.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DeadLetterConfig {
     #[doc="<p>The Amazon Resource Name (ARN) of an Amazon SQS queue or Amazon SNS topic you specify as your Dead Letter Queue (DLQ).</p>"]
     #[serde(rename="TargetArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub target_arn: Option<ResourceArn>,
+    pub target_arn: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteAliasRequest {
     #[doc="<p>The Lambda function name for which the alias is created. Deleting an alias does not delete the function version to which it is pointing. Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length.</p>"]
     #[serde(rename="FunctionName")]
-    pub function_name: FunctionName,
+    pub function_name: String,
     #[doc="<p>Name of the alias to delete.</p>"]
     #[serde(rename="Name")]
-    pub name: Alias,
+    pub name: String,
 }
 
 #[doc="<p/>"]
@@ -266,22 +257,20 @@ pub struct DeleteEventSourceMappingRequest {
 pub struct DeleteFunctionRequest {
     #[doc="<p>The Lambda function to delete.</p> <p> You can specify the function name (for example, <code>Thumbnail</code>) or you can specify Amazon Resource Name (ARN) of the function (for example, <code>arn:aws:lambda:us-west-2:account-id:function:ThumbNail</code>). If you are using versioning, you can also provide a qualified function ARN (ARN that is qualified with function version or alias name as suffix). AWS Lambda also allows you to specify only the function name with the account ID qualifier (for example, <code>account-id:Thumbnail</code>). Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length. </p>"]
     #[serde(rename="FunctionName")]
-    pub function_name: FunctionName,
+    pub function_name: String,
     #[doc="<p>Using this optional parameter you can specify a function version (but not the <code>$LATEST</code> version) to direct AWS Lambda to delete a specific function version. If the function version has one or more aliases pointing to it, you will get an error because you cannot have aliases pointing to it. You can delete any function version but not the <code>$LATEST</code>, that is, you cannot specify <code>$LATEST</code> as the value of this parameter. The <code>$LATEST</code> version can be deleted only when you want to delete all the function versions and aliases.</p> <p>You can only specify a function version, not an alias name, using this parameter. You cannot delete a function version using its alias.</p> <p>If you don't specify this parameter, AWS Lambda will delete the function, including all of its versions and aliases.</p>"]
     #[serde(rename="Qualifier")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub qualifier: Option<Qualifier>,
+    pub qualifier: Option<String>,
 }
 
-pub type Description = String;
-pub type Enabled = bool;
 #[doc="<p>The parent object that contains your environment's configuration settings.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct Environment {
     #[doc="<p>The key-value pairs that represent your environment's configuration settings.</p>"]
     #[serde(rename="Variables")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub variables: Option<EnvironmentVariables>,
+    pub variables: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[doc="<p>The parent object that contains error information associated with your configuration settings.</p>"]
@@ -294,7 +283,7 @@ pub struct EnvironmentError {
     #[doc="<p>The message returned by the environment error object.</p>"]
     #[serde(rename="Message")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub message: Option<SensitiveString>,
+    pub message: Option<String>,
 }
 
 #[doc="<p>The parent object returned that contains your environment's configuration settings or any error information associated with your configuration settings.</p>"]
@@ -306,32 +295,28 @@ pub struct EnvironmentResponse {
     #[doc="<p>The key-value pairs returned that represent your environment's configuration settings or error information.</p>"]
     #[serde(rename="Variables")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub variables: Option<EnvironmentVariables>,
+    pub variables: Option<::std::collections::HashMap<String, String>>,
 }
 
-pub type EnvironmentVariableName = String;
-pub type EnvironmentVariableValue = String;
-pub type EnvironmentVariables = ::std::collections::HashMap<EnvironmentVariableName,
-                                                            EnvironmentVariableValue>;
 #[doc="<p>Describes mapping between an Amazon Kinesis stream and a Lambda function.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct EventSourceMappingConfiguration {
     #[doc="<p>The largest number of records that AWS Lambda will retrieve from your event source at the time of invoking your function. Your function receives an event with all the retrieved records.</p>"]
     #[serde(rename="BatchSize")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub batch_size: Option<BatchSize>,
+    pub batch_size: Option<i64>,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon Kinesis stream that is the source of events.</p>"]
     #[serde(rename="EventSourceArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub event_source_arn: Option<Arn>,
+    pub event_source_arn: Option<String>,
     #[doc="<p>The Lambda function to invoke when AWS Lambda detects an event on the stream.</p>"]
     #[serde(rename="FunctionArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub function_arn: Option<FunctionArn>,
+    pub function_arn: Option<String>,
     #[doc="<p>The UTC time string indicating the last time the event mapping was updated.</p>"]
     #[serde(rename="LastModified")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub last_modified: Option<Date>,
+    pub last_modified: Option<f64>,
     #[doc="<p>The result of the last AWS Lambda invocation of your Lambda function.</p>"]
     #[serde(rename="LastProcessingResult")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -350,25 +335,21 @@ pub struct EventSourceMappingConfiguration {
     pub uuid: Option<String>,
 }
 
-pub type EventSourceMappingsList = Vec<EventSourceMappingConfiguration>;
-pub type EventSourcePosition = String;
-pub type EventSourceToken = String;
-pub type FunctionArn = String;
 #[doc="<p>The code for the Lambda function.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct FunctionCode {
     #[doc="<p>Amazon S3 bucket name where the .zip file containing your deployment package is stored. This bucket must reside in the same AWS region where you are creating the Lambda function.</p>"]
     #[serde(rename="S3Bucket")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub s3_bucket: Option<S3Bucket>,
+    pub s3_bucket: Option<String>,
     #[doc="<p>The Amazon S3 object (the deployment package) key name you want to upload.</p>"]
     #[serde(rename="S3Key")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub s3_key: Option<S3Key>,
+    pub s3_key: Option<String>,
     #[doc="<p>The Amazon S3 object (the deployment package) version you want to upload.</p>"]
     #[serde(rename="S3ObjectVersion")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub s3_object_version: Option<S3ObjectVersion>,
+    pub s3_object_version: Option<String>,
     #[doc="<p>The contents of your zip file containing your deployment package. If you are using the web API directly, the contents of the zip file must be base64-encoded. If you are using the AWS SDKs or the AWS CLI, the SDKs or CLI will do the encoding for you. For more information about creating a .zip file, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/intro-permission-model.html#lambda-intro-execution-role.html\">Execution Permissions</a> in the <i>AWS Lambda Developer Guide</i>. </p>"]
     #[serde(rename="ZipFile")]
     #[serde(
@@ -376,7 +357,7 @@ pub struct FunctionCode {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub zip_file: Option<Blob>,
+    pub zip_file: Option<Vec<u8>>,
 }
 
 #[doc="<p>The object for the Lambda function location.</p>"]
@@ -402,7 +383,7 @@ pub struct FunctionConfiguration {
     #[doc="<p>The size, in bytes, of the function .zip file you uploaded.</p>"]
     #[serde(rename="CodeSize")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub code_size: Option<Long>,
+    pub code_size: Option<i64>,
     #[doc="<p>The parent object that contains the target ARN (Amazon Resource Name) of an Amazon SQS queue or Amazon SNS topic.</p>"]
     #[serde(rename="DeadLetterConfig")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -410,7 +391,7 @@ pub struct FunctionConfiguration {
     #[doc="<p>The user-provided description.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[doc="<p>The parent object that contains your environment's configuration settings.</p>"]
     #[serde(rename="Environment")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -418,39 +399,39 @@ pub struct FunctionConfiguration {
     #[doc="<p>The Amazon Resource Name (ARN) assigned to the function.</p>"]
     #[serde(rename="FunctionArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub function_arn: Option<FunctionArn>,
+    pub function_arn: Option<String>,
     #[doc="<p>The name of the function. Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length.</p>"]
     #[serde(rename="FunctionName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub function_name: Option<FunctionName>,
+    pub function_name: Option<String>,
     #[doc="<p>The function Lambda calls to begin executing your function.</p>"]
     #[serde(rename="Handler")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub handler: Option<Handler>,
+    pub handler: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the KMS key used to encrypt your function's environment variables. If empty, it means you are using the AWS Lambda default service key.</p>"]
     #[serde(rename="KMSKeyArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub kms_key_arn: Option<KMSKeyArn>,
+    pub kms_key_arn: Option<String>,
     #[doc="<p>The time stamp of the last time you updated the function. The time stamp is conveyed as a string complying with ISO-8601 in this way YYYY-MM-DDThh:mm:ssTZD (e.g., 1997-07-16T19:20:30+01:00). For more information, see <a href=\"https://www.w3.org/TR/NOTE-datetime\">Date and Time Formats</a>.</p>"]
     #[serde(rename="LastModified")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub last_modified: Option<Timestamp>,
+    pub last_modified: Option<String>,
     #[doc="<p>The memory size, in MB, you configured for the function. Must be a multiple of 64 MB.</p>"]
     #[serde(rename="MemorySize")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub memory_size: Option<MemorySize>,
+    pub memory_size: Option<i64>,
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM role that Lambda assumes when it executes your function to access any other Amazon Web Services (AWS) resources.</p>"]
     #[serde(rename="Role")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub role: Option<RoleArn>,
+    pub role: Option<String>,
     #[doc="<p>The runtime environment for the Lambda function.</p>"]
     #[serde(rename="Runtime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub runtime: Option<Runtime>,
+    pub runtime: Option<String>,
     #[doc="<p>The function execution time at which Lambda should terminate the function. Because the execution time has cost implications, we recommend you set this value based on your expected execution time. The default is 3 seconds.</p>"]
     #[serde(rename="Timeout")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub timeout: Option<Timeout>,
+    pub timeout: Option<i64>,
     #[doc="<p>The parent object that contains your function's tracing settings.</p>"]
     #[serde(rename="TracingConfig")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -458,15 +439,13 @@ pub struct FunctionConfiguration {
     #[doc="<p>The version of the Lambda function.</p>"]
     #[serde(rename="Version")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub version: Option<Version>,
+    pub version: Option<String>,
     #[doc="<p>VPC configuration associated with your Lambda function.</p>"]
     #[serde(rename="VpcConfig")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_config: Option<VpcConfigResponse>,
 }
 
-pub type FunctionList = Vec<FunctionConfiguration>;
-pub type FunctionName = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetAccountSettingsRequest;
 
@@ -484,10 +463,10 @@ pub struct GetAccountSettingsResponse {
 pub struct GetAliasRequest {
     #[doc="<p>Function name for which the alias is created. An alias is a subresource that exists only in the context of an existing Lambda function so you must specify the function name. Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length.</p>"]
     #[serde(rename="FunctionName")]
-    pub function_name: FunctionName,
+    pub function_name: String,
     #[doc="<p>Name of the alias for which you want to retrieve information.</p>"]
     #[serde(rename="Name")]
-    pub name: Alias,
+    pub name: String,
 }
 
 #[doc="<p/>"]
@@ -503,11 +482,11 @@ pub struct GetEventSourceMappingRequest {
 pub struct GetFunctionConfigurationRequest {
     #[doc="<p>The name of the Lambda function for which you want to retrieve the configuration information.</p> <p> You can specify a function name (for example, <code>Thumbnail</code>) or you can specify Amazon Resource Name (ARN) of the function (for example, <code>arn:aws:lambda:us-west-2:account-id:function:ThumbNail</code>). AWS Lambda also allows you to specify a partial ARN (for example, <code>account-id:Thumbnail</code>). Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length. </p>"]
     #[serde(rename="FunctionName")]
-    pub function_name: FunctionName,
+    pub function_name: String,
     #[doc="<p>Using this optional parameter you can specify a function version or an alias name. If you specify function version, the API uses qualified function ARN and returns information about the specific function version. If you specify an alias name, the API uses the alias ARN and returns information about the function version to which the alias points.</p> <p>If you don't specify this parameter, the API uses unqualified function ARN, and returns information about the <code>$LATEST</code> function version.</p>"]
     #[serde(rename="Qualifier")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub qualifier: Option<Qualifier>,
+    pub qualifier: Option<String>,
 }
 
 #[doc="<p/>"]
@@ -515,11 +494,11 @@ pub struct GetFunctionConfigurationRequest {
 pub struct GetFunctionRequest {
     #[doc="<p>The Lambda function name.</p> <p> You can specify a function name (for example, <code>Thumbnail</code>) or you can specify Amazon Resource Name (ARN) of the function (for example, <code>arn:aws:lambda:us-west-2:account-id:function:ThumbNail</code>). AWS Lambda also allows you to specify a partial ARN (for example, <code>account-id:Thumbnail</code>). Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length. </p>"]
     #[serde(rename="FunctionName")]
-    pub function_name: FunctionName,
+    pub function_name: String,
     #[doc="<p>Using this optional parameter to specify a function version or an alias name. If you specify function version, the API uses qualified function ARN for the request and returns information about the specific Lambda function version. If you specify an alias name, the API uses the alias ARN and returns information about the function version to which the alias points. If you don't provide this parameter, the API uses unqualified function ARN and returns information about the <code>$LATEST</code> version of the Lambda function.</p>"]
     #[serde(rename="Qualifier")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub qualifier: Option<Qualifier>,
+    pub qualifier: Option<String>,
 }
 
 #[doc="<p>This response contains the object for the Lambda function location (see <a>FunctionCodeLocation</a>.</p>"]
@@ -534,7 +513,7 @@ pub struct GetFunctionResponse {
     #[doc="<p>Returns the list of tags associated with the function.</p>"]
     #[serde(rename="Tags")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub tags: Option<Tags>,
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[doc="<p/>"]
@@ -542,11 +521,11 @@ pub struct GetFunctionResponse {
 pub struct GetPolicyRequest {
     #[doc="<p>Function name whose resource policy you want to retrieve.</p> <p> You can specify the function name (for example, <code>Thumbnail</code>) or you can specify Amazon Resource Name (ARN) of the function (for example, <code>arn:aws:lambda:us-west-2:account-id:function:ThumbNail</code>). If you are using versioning, you can also provide a qualified function ARN (ARN that is qualified with function version or alias name as suffix). AWS Lambda also allows you to specify only the function name with the account ID qualifier (for example, <code>account-id:Thumbnail</code>). Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length. </p>"]
     #[serde(rename="FunctionName")]
-    pub function_name: FunctionName,
+    pub function_name: String,
     #[doc="<p>You can specify this optional query parameter to specify a function version or an alias name in which case this API will return all permissions associated with the specific qualified ARN. If you don't provide this parameter, the API will return permissions that apply to the unqualified function ARN.</p>"]
     #[serde(rename="Qualifier")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub qualifier: Option<Qualifier>,
+    pub qualifier: Option<String>,
 }
 
 #[doc="<p/>"]
@@ -558,9 +537,6 @@ pub struct GetPolicyResponse {
     pub policy: Option<String>,
 }
 
-pub type Handler = String;
-pub type HttpStatus = i64;
-pub type Integer = i64;
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct InvocationRequest {
@@ -570,15 +546,15 @@ pub struct InvocationRequest {
     pub client_context: Option<String>,
     #[doc="<p>The Lambda function name.</p> <p> You can specify a function name (for example, <code>Thumbnail</code>) or you can specify Amazon Resource Name (ARN) of the function (for example, <code>arn:aws:lambda:us-west-2:account-id:function:ThumbNail</code>). AWS Lambda also allows you to specify a partial ARN (for example, <code>account-id:Thumbnail</code>). Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length. </p>"]
     #[serde(rename="FunctionName")]
-    pub function_name: FunctionName,
+    pub function_name: String,
     #[doc="<p>By default, the <code>Invoke</code> API assumes <code>RequestResponse</code> invocation type. You can optionally request asynchronous execution by specifying <code>Event</code> as the <code>InvocationType</code>. You can also use this parameter to request AWS Lambda to not execute the function but do some verification, such as if the caller is authorized to invoke the function and if the inputs are valid. You request this by specifying <code>DryRun</code> as the <code>InvocationType</code>. This is useful in a cross-account scenario when you want to verify access to a function without running it. </p>"]
     #[serde(rename="InvocationType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub invocation_type: Option<InvocationType>,
+    pub invocation_type: Option<String>,
     #[doc="<p>You can set this optional parameter to <code>Tail</code> in the request only if you specify the <code>InvocationType</code> parameter with value <code>RequestResponse</code>. In this case, AWS Lambda returns the base64-encoded last 4 KB of log data produced by your Lambda function in the <code>x-amz-log-result</code> header. </p>"]
     #[serde(rename="LogType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub log_type: Option<LogType>,
+    pub log_type: Option<String>,
     #[doc="<p>JSON that you want to provide to your Lambda function as input.</p>"]
     #[serde(rename="Payload")]
     #[serde(
@@ -586,11 +562,11 @@ pub struct InvocationRequest {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub payload: Option<Blob>,
+    pub payload: Option<Vec<u8>>,
     #[doc="<p>You can use this optional parameter to specify a Lambda function version or alias name. If you specify a function version, the API uses the qualified function ARN to invoke a specific Lambda function. If you specify an alias name, the API uses the alias ARN to invoke the Lambda function version to which the alias points.</p> <p>If you don't provide this parameter, then the API uses unqualified function ARN which results in invocation of the <code>$LATEST</code> version.</p>"]
     #[serde(rename="Qualifier")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub qualifier: Option<Qualifier>,
+    pub qualifier: Option<String>,
 }
 
 #[doc="<p>Upon success, returns an empty response. Otherwise, throws an exception.</p>"]
@@ -601,18 +577,17 @@ pub struct InvocationResponse {
     #[doc="<p> It is the base64-encoded logs for the Lambda function invocation. This is present only if the invocation type is <code>RequestResponse</code> and the logs were requested. </p>"]
     pub log_result: Option<String>,
     #[doc="<p> It is the JSON representation of the object returned by the Lambda function. This is present only if the invocation type is <code>RequestResponse</code>. </p> <p>In the event of a function error this field contains a message describing the error. For the <code>Handled</code> errors the Lambda function will report this message. For <code>Unhandled</code> errors AWS Lambda reports the message. </p>"]
-    pub payload: Option<Blob>,
+    pub payload: Option<Vec<u8>>,
     #[doc="<p>The HTTP status code will be in the 200 range for successful request. For the <code>RequestResponse</code> invocation type this status code will be 200. For the <code>Event</code> invocation type this status code will be 202. For the <code>DryRun</code> invocation type the status code will be 204. </p>"]
-    pub status_code: Option<Integer>,
+    pub status_code: Option<i64>,
 }
 
-pub type InvocationType = String;
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct InvokeAsyncRequest {
     #[doc="<p>The Lambda function name. Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length.</p>"]
     #[serde(rename="FunctionName")]
-    pub function_name: FunctionName,
+    pub function_name: String,
     #[doc="<p>JSON that you want to provide to your Lambda function as input.</p>"]
     #[serde(rename="InvokeArgs")]
     #[serde(
@@ -620,7 +595,7 @@ pub struct InvokeAsyncRequest {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub invoke_args: BlobStream,
+    pub invoke_args: Vec<u8>,
 }
 
 #[doc="<p>Upon success, it returns empty response. Otherwise, throws an exception.</p>"]
@@ -629,19 +604,18 @@ pub struct InvokeAsyncResponse {
     #[doc="<p>It will be 202 upon success.</p>"]
     #[serde(rename="Status")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status: Option<HttpStatus>,
+    pub status: Option<i64>,
 }
 
-pub type KMSKeyArn = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListAliasesRequest {
     #[doc="<p>Lambda function name for which the alias is created. Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length.</p>"]
     #[serde(rename="FunctionName")]
-    pub function_name: FunctionName,
+    pub function_name: String,
     #[doc="<p>If you specify this optional parameter, the API returns only the aliases that are pointing to the specific Lambda function version, otherwise the API returns all of the aliases created for the Lambda function.</p>"]
     #[serde(rename="FunctionVersion")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub function_version: Option<Version>,
+    pub function_version: Option<String>,
     #[doc="<p>Optional string. An opaque pagination token returned from a previous <code>ListAliases</code> operation. If present, indicates where to continue the listing.</p>"]
     #[serde(rename="Marker")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -649,7 +623,7 @@ pub struct ListAliasesRequest {
     #[doc="<p>Optional integer. Specifies the maximum number of aliases to return in response. This parameter value must be greater than 0.</p>"]
     #[serde(rename="MaxItems")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_items: Option<MaxListItems>,
+    pub max_items: Option<i64>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -657,7 +631,7 @@ pub struct ListAliasesResponse {
     #[doc="<p>A list of aliases.</p>"]
     #[serde(rename="Aliases")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub aliases: Option<AliasList>,
+    pub aliases: Option<Vec<AliasConfiguration>>,
     #[doc="<p>A string, present if there are more aliases.</p>"]
     #[serde(rename="NextMarker")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -670,11 +644,11 @@ pub struct ListEventSourceMappingsRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon Kinesis stream. (This parameter is optional.)</p>"]
     #[serde(rename="EventSourceArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub event_source_arn: Option<Arn>,
+    pub event_source_arn: Option<String>,
     #[doc="<p>The name of the Lambda function.</p> <p> You can specify the function name (for example, <code>Thumbnail</code>) or you can specify Amazon Resource Name (ARN) of the function (for example, <code>arn:aws:lambda:us-west-2:account-id:function:ThumbNail</code>). If you are using versioning, you can also provide a qualified function ARN (ARN that is qualified with function version or alias name as suffix). AWS Lambda also allows you to specify only the function name with the account ID qualifier (for example, <code>account-id:Thumbnail</code>). Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length. </p>"]
     #[serde(rename="FunctionName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub function_name: Option<FunctionName>,
+    pub function_name: Option<String>,
     #[doc="<p>Optional string. An opaque pagination token returned from a previous <code>ListEventSourceMappings</code> operation. If present, specifies to continue the list from where the returning call left off. </p>"]
     #[serde(rename="Marker")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -682,7 +656,7 @@ pub struct ListEventSourceMappingsRequest {
     #[doc="<p>Optional integer. Specifies the maximum number of event sources to return in response. This value must be greater than 0.</p>"]
     #[serde(rename="MaxItems")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_items: Option<MaxListItems>,
+    pub max_items: Option<i64>,
 }
 
 #[doc="<p>Contains a list of event sources (see <a>EventSourceMappingConfiguration</a>)</p>"]
@@ -691,7 +665,7 @@ pub struct ListEventSourceMappingsResponse {
     #[doc="<p>An array of <code>EventSourceMappingConfiguration</code> objects.</p>"]
     #[serde(rename="EventSourceMappings")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub event_source_mappings: Option<EventSourceMappingsList>,
+    pub event_source_mappings: Option<Vec<EventSourceMappingConfiguration>>,
     #[doc="<p>A string, present if there are more event source mappings.</p>"]
     #[serde(rename="NextMarker")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -708,7 +682,7 @@ pub struct ListFunctionsRequest {
     #[doc="<p>Optional integer. Specifies the maximum number of AWS Lambda functions to return in response. This parameter value must be greater than 0.</p>"]
     #[serde(rename="MaxItems")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_items: Option<MaxListItems>,
+    pub max_items: Option<i64>,
 }
 
 #[doc="<p>Contains a list of AWS Lambda function configurations (see <a>FunctionConfiguration</a>.</p>"]
@@ -717,7 +691,7 @@ pub struct ListFunctionsResponse {
     #[doc="<p>A list of Lambda functions.</p>"]
     #[serde(rename="Functions")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub functions: Option<FunctionList>,
+    pub functions: Option<Vec<FunctionConfiguration>>,
     #[doc="<p>A string, present if there are more functions.</p>"]
     #[serde(rename="NextMarker")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -728,7 +702,7 @@ pub struct ListFunctionsResponse {
 pub struct ListTagsRequest {
     #[doc="<p>The ARN (Amazon Resource Name) of the function.</p>"]
     #[serde(rename="Resource")]
-    pub resource: FunctionArn,
+    pub resource: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -736,7 +710,7 @@ pub struct ListTagsResponse {
     #[doc="<p>The list of tags assigned to the function.</p>"]
     #[serde(rename="Tags")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub tags: Option<Tags>,
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[doc="<p/>"]
@@ -744,7 +718,7 @@ pub struct ListTagsResponse {
 pub struct ListVersionsByFunctionRequest {
     #[doc="<p>Function name whose versions to list. You can specify a function name (for example, <code>Thumbnail</code>) or you can specify Amazon Resource Name (ARN) of the function (for example, <code>arn:aws:lambda:us-west-2:account-id:function:ThumbNail</code>). AWS Lambda also allows you to specify a partial ARN (for example, <code>account-id:Thumbnail</code>). Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length. </p>"]
     #[serde(rename="FunctionName")]
-    pub function_name: FunctionName,
+    pub function_name: String,
     #[doc="<p> Optional string. An opaque pagination token returned from a previous <code>ListVersionsByFunction</code> operation. If present, indicates where to continue the listing. </p>"]
     #[serde(rename="Marker")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -752,7 +726,7 @@ pub struct ListVersionsByFunctionRequest {
     #[doc="<p>Optional integer. Specifies the maximum number of AWS Lambda function versions to return in response. This parameter value must be greater than 0.</p>"]
     #[serde(rename="MaxItems")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_items: Option<MaxListItems>,
+    pub max_items: Option<i64>,
 }
 
 #[doc="<p/>"]
@@ -765,14 +739,9 @@ pub struct ListVersionsByFunctionResponse {
     #[doc="<p>A list of Lambda function versions.</p>"]
     #[serde(rename="Versions")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub versions: Option<FunctionList>,
+    pub versions: Option<Vec<FunctionConfiguration>>,
 }
 
-pub type LogType = String;
-pub type Long = i64;
-pub type MaxListItems = i64;
-pub type MemorySize = i64;
-pub type Principal = String;
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct PublishVersionRequest {
@@ -783,65 +752,44 @@ pub struct PublishVersionRequest {
     #[doc="<p>The description for the version you are publishing. If not provided, AWS Lambda copies the description from the $LATEST version.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[doc="<p>The Lambda function name. You can specify a function name (for example, <code>Thumbnail</code>) or you can specify Amazon Resource Name (ARN) of the function (for example, <code>arn:aws:lambda:us-west-2:account-id:function:ThumbNail</code>). AWS Lambda also allows you to specify a partial ARN (for example, <code>account-id:Thumbnail</code>). Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length. </p>"]
     #[serde(rename="FunctionName")]
-    pub function_name: FunctionName,
+    pub function_name: String,
 }
 
-pub type Qualifier = String;
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct RemovePermissionRequest {
     #[doc="<p>Lambda function whose resource policy you want to remove a permission from.</p> <p> You can specify a function name (for example, <code>Thumbnail</code>) or you can specify Amazon Resource Name (ARN) of the function (for example, <code>arn:aws:lambda:us-west-2:account-id:function:ThumbNail</code>). AWS Lambda also allows you to specify a partial ARN (for example, <code>account-id:Thumbnail</code>). Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length. </p>"]
     #[serde(rename="FunctionName")]
-    pub function_name: FunctionName,
+    pub function_name: String,
     #[doc="<p>You can specify this optional parameter to remove permission associated with a specific function version or function alias. If you don't specify this parameter, the API removes permission associated with the unqualified function ARN.</p>"]
     #[serde(rename="Qualifier")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub qualifier: Option<Qualifier>,
+    pub qualifier: Option<String>,
     #[doc="<p>Statement ID of the permission to remove.</p>"]
     #[serde(rename="StatementId")]
-    pub statement_id: StatementId,
+    pub statement_id: String,
 }
 
-pub type ResourceArn = String;
-pub type RoleArn = String;
-pub type Runtime = String;
-pub type S3Bucket = String;
-pub type S3Key = String;
-pub type S3ObjectVersion = String;
-pub type SecurityGroupId = String;
-pub type SecurityGroupIds = Vec<SecurityGroupId>;
-pub type SensitiveString = String;
-pub type SourceOwner = String;
-pub type StatementId = String;
-pub type SubnetId = String;
-pub type SubnetIds = Vec<SubnetId>;
-pub type TagKey = String;
-pub type TagKeyList = Vec<TagKey>;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct TagResourceRequest {
     #[doc="<p>The ARN (Amazon Resource Name) of the Lambda function.</p>"]
     #[serde(rename="Resource")]
-    pub resource: FunctionArn,
+    pub resource: String,
     #[doc="<p>The list of tags (key-value pairs) you are assigning to the Lambda function.</p>"]
     #[serde(rename="Tags")]
-    pub tags: Tags,
+    pub tags: ::std::collections::HashMap<String, String>,
 }
 
-pub type TagValue = String;
-pub type Tags = ::std::collections::HashMap<TagKey, TagValue>;
-pub type ThrottleReason = String;
-pub type Timeout = i64;
-pub type Timestamp = String;
 #[doc="<p>The parent object that contains your function's tracing settings.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct TracingConfig {
     #[doc="<p>Can be either PassThrough or Active. If PassThrough, Lambda will only trace the request from an upstream service if it contains a tracing header with \"sampled=1\". If Active, Lambda will respect any tracing header it receives from an upstream service. If no tracing header is received, Lambda will call X-Ray for a tracing decision.</p>"]
     #[serde(rename="Mode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub mode: Option<TracingMode>,
+    pub mode: Option<String>,
 }
 
 #[doc="<p>Parent object of the tracing information associated with your Lambda function.</p>"]
@@ -850,18 +798,17 @@ pub struct TracingConfigResponse {
     #[doc="<p>The tracing mode associated with your Lambda function.</p>"]
     #[serde(rename="Mode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub mode: Option<TracingMode>,
+    pub mode: Option<String>,
 }
 
-pub type TracingMode = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UntagResourceRequest {
     #[doc="<p>The ARN (Amazon Resource Name) of the function.</p>"]
     #[serde(rename="Resource")]
-    pub resource: FunctionArn,
+    pub resource: String,
     #[doc="<p>The list of tag keys to be deleted from the function.</p>"]
     #[serde(rename="TagKeys")]
-    pub tag_keys: TagKeyList,
+    pub tag_keys: Vec<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -869,17 +816,17 @@ pub struct UpdateAliasRequest {
     #[doc="<p>You can change the description of the alias using this parameter.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[doc="<p>The function name for which the alias is created. Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length.</p>"]
     #[serde(rename="FunctionName")]
-    pub function_name: FunctionName,
+    pub function_name: String,
     #[doc="<p>Using this parameter you can change the Lambda function version to which the alias points.</p>"]
     #[serde(rename="FunctionVersion")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub function_version: Option<Version>,
+    pub function_version: Option<String>,
     #[doc="<p>The alias name.</p>"]
     #[serde(rename="Name")]
-    pub name: Alias,
+    pub name: String,
 }
 
 #[doc="<p/>"]
@@ -888,15 +835,15 @@ pub struct UpdateEventSourceMappingRequest {
     #[doc="<p>The maximum number of stream records that can be sent to your Lambda function for a single invocation.</p>"]
     #[serde(rename="BatchSize")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub batch_size: Option<BatchSize>,
+    pub batch_size: Option<i64>,
     #[doc="<p>Specifies whether AWS Lambda should actively poll the stream or not. If disabled, AWS Lambda will not poll the stream.</p>"]
     #[serde(rename="Enabled")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub enabled: Option<Enabled>,
+    pub enabled: Option<bool>,
     #[doc="<p>The Lambda function to which you want the stream records sent.</p> <p> You can specify a function name (for example, <code>Thumbnail</code>) or you can specify Amazon Resource Name (ARN) of the function (for example, <code>arn:aws:lambda:us-west-2:account-id:function:ThumbNail</code>). AWS Lambda also allows you to specify a partial ARN (for example, <code>account-id:Thumbnail</code>). Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length. </p> <p>If you are using versioning, you can also provide a qualified function ARN (ARN that is qualified with function version or alias name as suffix). For more information about versioning, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html\">AWS Lambda Function Versioning and Aliases</a> </p> <p>Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 character in length.</p>"]
     #[serde(rename="FunctionName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub function_name: Option<FunctionName>,
+    pub function_name: Option<String>,
     #[doc="<p>The event source mapping identifier.</p>"]
     #[serde(rename="UUID")]
     pub uuid: String,
@@ -908,26 +855,26 @@ pub struct UpdateFunctionCodeRequest {
     #[doc="<p>This boolean parameter can be used to test your request to AWS Lambda to update the Lambda function and publish a version as an atomic operation. It will do all necessary computation and validation of your code but will not upload it or a publish a version. Each time this operation is invoked, the <code>CodeSha256</code> hash value the provided code will also be computed and returned in the response.</p>"]
     #[serde(rename="DryRun")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The existing Lambda function name whose code you want to replace.</p> <p> You can specify a function name (for example, <code>Thumbnail</code>) or you can specify Amazon Resource Name (ARN) of the function (for example, <code>arn:aws:lambda:us-west-2:account-id:function:ThumbNail</code>). AWS Lambda also allows you to specify a partial ARN (for example, <code>account-id:Thumbnail</code>). Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length. </p>"]
     #[serde(rename="FunctionName")]
-    pub function_name: FunctionName,
+    pub function_name: String,
     #[doc="<p>This boolean parameter can be used to request AWS Lambda to update the Lambda function and publish a version as an atomic operation.</p>"]
     #[serde(rename="Publish")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub publish: Option<Boolean>,
+    pub publish: Option<bool>,
     #[doc="<p>Amazon S3 bucket name where the .zip file containing your deployment package is stored. This bucket must reside in the same AWS Region where you are creating the Lambda function.</p>"]
     #[serde(rename="S3Bucket")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub s3_bucket: Option<S3Bucket>,
+    pub s3_bucket: Option<String>,
     #[doc="<p>The Amazon S3 object (the deployment package) key name you want to upload.</p>"]
     #[serde(rename="S3Key")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub s3_key: Option<S3Key>,
+    pub s3_key: Option<String>,
     #[doc="<p>The Amazon S3 object (the deployment package) version you want to upload.</p>"]
     #[serde(rename="S3ObjectVersion")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub s3_object_version: Option<S3ObjectVersion>,
+    pub s3_object_version: Option<String>,
     #[doc="<p>The contents of your zip file containing your deployment package. If you are using the web API directly, the contents of the zip file must be base64-encoded. If you are using the AWS SDKs or the AWS CLI, the SDKs or CLI will do the encoding for you. For more information about creating a .zip file, see <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/intro-permission-model.html#lambda-intro-execution-role.html\">Execution Permissions</a> in the <i>AWS Lambda Developer Guide</i>. </p>"]
     #[serde(rename="ZipFile")]
     #[serde(
@@ -935,7 +882,7 @@ pub struct UpdateFunctionCodeRequest {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub zip_file: Option<Blob>,
+    pub zip_file: Option<Vec<u8>>,
 }
 
 #[doc="<p/>"]
@@ -948,38 +895,38 @@ pub struct UpdateFunctionConfigurationRequest {
     #[doc="<p>A short user-defined function description. AWS Lambda does not use this value. Assign a meaningful description as you see fit.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[doc="<p>The parent object that contains your environment's configuration settings.</p>"]
     #[serde(rename="Environment")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub environment: Option<Environment>,
     #[doc="<p>The name of the Lambda function.</p> <p> You can specify a function name (for example, <code>Thumbnail</code>) or you can specify Amazon Resource Name (ARN) of the function (for example, <code>arn:aws:lambda:us-west-2:account-id:function:ThumbNail</code>). AWS Lambda also allows you to specify a partial ARN (for example, <code>account-id:Thumbnail</code>). Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 character in length. </p>"]
     #[serde(rename="FunctionName")]
-    pub function_name: FunctionName,
+    pub function_name: String,
     #[doc="<p>The function that Lambda calls to begin executing your function. For Node.js, it is the <code>module-name.export</code> value in your function. </p>"]
     #[serde(rename="Handler")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub handler: Option<Handler>,
+    pub handler: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the KMS key used to encrypt your function's environment variables. If you elect to use the AWS Lambda default service key, pass in an empty string (\"\") for this parameter.</p>"]
     #[serde(rename="KMSKeyArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub kms_key_arn: Option<KMSKeyArn>,
+    pub kms_key_arn: Option<String>,
     #[doc="<p>The amount of memory, in MB, your Lambda function is given. AWS Lambda uses this memory size to infer the amount of CPU allocated to your function. Your function use-case determines your CPU and memory requirements. For example, a database operation might need less memory compared to an image processing function. The default value is 128 MB. The value must be a multiple of 64 MB.</p>"]
     #[serde(rename="MemorySize")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub memory_size: Option<MemorySize>,
+    pub memory_size: Option<i64>,
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM role that Lambda will assume when it executes your function.</p>"]
     #[serde(rename="Role")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub role: Option<RoleArn>,
+    pub role: Option<String>,
     #[doc="<p>The runtime environment for the Lambda function.</p> <p>To use the Python runtime v3.6, set the value to \"python3.6\". To use the Python runtime v2.7, set the value to \"python2.7\". To use the Node.js runtime v6.10, set the value to \"nodejs6.10\". To use the Node.js runtime v4.3, set the value to \"nodejs4.3\". To use the Python runtime v3.6, set the value to \"python3.6\". To use the Python runtime v2.7, set the value to \"python2.7\".</p> <note> <p>Node v0.10.42 is currently marked as deprecated. You must migrate existing functions to the newer Node.js runtime versions available on AWS Lambda (nodejs4.3 or nodejs6.10) as soon as possible. You can request a one-time extension until June 30, 2017 by going to the Lambda console and following the instructions provided. Failure to do so will result in an invalid parameter value error being returned. Note that you will have to follow this procedure for each region that contains functions written in the Node v0.10.42 runtime.</p> </note>"]
     #[serde(rename="Runtime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub runtime: Option<Runtime>,
+    pub runtime: Option<String>,
     #[doc="<p>The function execution time at which AWS Lambda should terminate the function. Because the execution time has cost implications, we recommend you set this value based on your expected execution time. The default is 3 seconds.</p>"]
     #[serde(rename="Timeout")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub timeout: Option<Timeout>,
+    pub timeout: Option<i64>,
     #[doc="<p>The parent object that contains your function's tracing settings.</p>"]
     #[serde(rename="TracingConfig")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -989,18 +936,17 @@ pub struct UpdateFunctionConfigurationRequest {
     pub vpc_config: Option<VpcConfig>,
 }
 
-pub type Version = String;
 #[doc="<p>If your Lambda function accesses resources in a VPC, you provide this parameter identifying the list of security group IDs and subnet IDs. These must belong to the same VPC. You must provide at least one security group and one subnet ID.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct VpcConfig {
     #[doc="<p>A list of one or more security groups IDs in your VPC.</p>"]
     #[serde(rename="SecurityGroupIds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub security_group_ids: Option<SecurityGroupIds>,
+    pub security_group_ids: Option<Vec<String>>,
     #[doc="<p>A list of one or more subnet IDs in your VPC.</p>"]
     #[serde(rename="SubnetIds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub subnet_ids: Option<SubnetIds>,
+    pub subnet_ids: Option<Vec<String>>,
 }
 
 #[doc="<p>VPC configuration associated with your Lambda function.</p>"]
@@ -1009,18 +955,17 @@ pub struct VpcConfigResponse {
     #[doc="<p>A list of security group IDs associated with the Lambda function.</p>"]
     #[serde(rename="SecurityGroupIds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub security_group_ids: Option<SecurityGroupIds>,
+    pub security_group_ids: Option<Vec<String>>,
     #[doc="<p>A list of subnet IDs associated with the Lambda function.</p>"]
     #[serde(rename="SubnetIds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub subnet_ids: Option<SubnetIds>,
+    pub subnet_ids: Option<Vec<String>>,
     #[doc="<p>The VPC ID associated with you Lambda function.</p>"]
     #[serde(rename="VpcId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub vpc_id: Option<VpcId>,
+    pub vpc_id: Option<String>,
 }
 
-pub type VpcId = String;
 /// Errors returned by AddPermission
 #[derive(Debug, PartialEq)]
 pub enum AddPermissionError {

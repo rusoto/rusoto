@@ -32,7 +32,7 @@ pub struct AccountAttribute {
     #[doc="<p> The maximum allowed value. </p>"]
     #[serde(rename="Maximum")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub maximum: Option<Integer>,
+    pub maximum: Option<i64>,
     #[doc="<p> The attribute name. The following are supported attribute names. </p> <ul> <li> <p> <i>ServerLimit:</i> The number of current servers/maximum number of servers allowed. By default, you can have a maximum of 10 servers. </p> </li> <li> <p> <i>ManualBackupLimit:</i> The number of current manual backups/maximum number of backups allowed. By default, you can have a maximum of 50 manual backups saved. </p> </li> </ul>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -40,22 +40,21 @@ pub struct AccountAttribute {
     #[doc="<p> The current usage, such as the current number of servers that are associated with the account. </p>"]
     #[serde(rename="Used")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub used: Option<Integer>,
+    pub used: Option<i64>,
 }
 
 #[doc="<p> A list of individual account attributes. </p>"]
-pub type AccountAttributes = Vec<AccountAttribute>;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct AssociateNodeRequest {
     #[doc="<p>Engine attributes used for associating the node. </p> <p class=\"title\"> <b>Attributes accepted in a AssociateNode request:</b> </p> <ul> <li> <p> <code>CHEF_ORGANIZATION</code>: The Chef organization with which the node is associated. By default only one organization named <code>default</code> can exist. </p> </li> <li> <p> <code>CHEF_NODE_PUBLIC_KEY</code>: A PEM-formatted public key. This key is required for the <code>chef-client</code> agent to access the Chef API. </p> </li> </ul>"]
     #[serde(rename="EngineAttributes")]
-    pub engine_attributes: EngineAttributes,
+    pub engine_attributes: Vec<EngineAttribute>,
     #[doc="<p>The name of the Chef client node. </p>"]
     #[serde(rename="NodeName")]
-    pub node_name: NodeName,
+    pub node_name: String,
     #[doc="<p>The name of the server with which to associate the node. </p>"]
     #[serde(rename="ServerName")]
-    pub server_name: ServerName,
+    pub server_name: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -63,11 +62,9 @@ pub struct AssociateNodeResponse {
     #[doc="<p>Contains a token which can be passed to the <code>DescribeNodeAssociationStatus</code> API call to get the status of the association request. </p>"]
     #[serde(rename="NodeAssociationStatusToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub node_association_status_token: Option<NodeAssociationStatusToken>,
+    pub node_association_status_token: Option<String>,
 }
 
-pub type AttributeName = String;
-pub type AttributeValue = String;
 #[doc="<p>Describes a single backup. </p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Backup {
@@ -78,15 +75,15 @@ pub struct Backup {
     #[doc="<p> The generated ID of the backup. Example: <code>myServerName-yyyyMMddHHmmssSSS</code> </p>"]
     #[serde(rename="BackupId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub backup_id: Option<BackupId>,
+    pub backup_id: Option<String>,
     #[doc="<p> The backup type. Valid values are <code>automated</code> or <code>manual</code>. </p>"]
     #[serde(rename="BackupType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub backup_type: Option<BackupType>,
+    pub backup_type: Option<String>,
     #[doc="<p> The time stamp when the backup was created in the database. Example: <code>2016-07-29T13:38:47.520Z</code> </p>"]
     #[serde(rename="CreatedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_at: Option<Timestamp>,
+    pub created_at: Option<f64>,
     #[doc="<p> A user-provided description for a manual backup. This field is empty for automated backups. </p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -118,11 +115,11 @@ pub struct Backup {
     #[doc="<p> The preferred backup period that is obtained from the server when the backup is created. </p>"]
     #[serde(rename="PreferredBackupWindow")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub preferred_backup_window: Option<TimeWindowDefinition>,
+    pub preferred_backup_window: Option<String>,
     #[doc="<p> The preferred maintenance period that is obtained from the server when the backup is created. </p>"]
     #[serde(rename="PreferredMaintenanceWindow")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub preferred_maintenance_window: Option<TimeWindowDefinition>,
+    pub preferred_maintenance_window: Option<String>,
     #[doc="<p> The Amazon S3 URL of the backup's log file. </p>"]
     #[serde(rename="S3LogUrl")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -130,11 +127,11 @@ pub struct Backup {
     #[doc="<p> The security group IDs that are obtained from the server when the backup is created. </p>"]
     #[serde(rename="SecurityGroupIds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub security_group_ids: Option<Strings>,
+    pub security_group_ids: Option<Vec<String>>,
     #[doc="<p> The name of the server from which the backup was made. </p>"]
     #[serde(rename="ServerName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub server_name: Option<ServerName>,
+    pub server_name: Option<String>,
     #[doc="<p> The service role ARN that is obtained from the server when the backup is created. </p>"]
     #[serde(rename="ServiceRoleArn")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -142,7 +139,7 @@ pub struct Backup {
     #[doc="<p>The status of a backup while in progress. </p>"]
     #[serde(rename="Status")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status: Option<BackupStatus>,
+    pub status: Option<String>,
     #[doc="<p> An informational message about backup status. </p>"]
     #[serde(rename="StatusDescription")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -150,7 +147,7 @@ pub struct Backup {
     #[doc="<p> The subnet IDs that are obtained from the server when the backup is created. </p>"]
     #[serde(rename="SubnetIds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub subnet_ids: Option<Strings>,
+    pub subnet_ids: Option<Vec<String>>,
     #[doc="<p> The version of AWS OpsWorks for Chef Automate-specific tools that is obtained from the server when the backup is created. </p>"]
     #[serde(rename="ToolsVersion")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -161,12 +158,6 @@ pub struct Backup {
     pub user_arn: Option<String>,
 }
 
-pub type BackupId = String;
-pub type BackupRetentionCountDefinition = i64;
-pub type BackupStatus = String;
-pub type BackupType = String;
-pub type Backups = Vec<Backup>;
-pub type Boolean = bool;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateBackupRequest {
     #[doc="<p> A user-defined description of the backup. </p>"]
@@ -175,7 +166,7 @@ pub struct CreateBackupRequest {
     pub description: Option<String>,
     #[doc="<p>The name of the server that you want to back up. </p>"]
     #[serde(rename="ServerName")]
-    pub server_name: ServerName,
+    pub server_name: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -191,19 +182,19 @@ pub struct CreateServerRequest {
     #[doc="<p> Associate a public IP address with a server that you are launching. Valid values are <code>true</code> or <code>false</code>. The default value is <code>true</code>. </p>"]
     #[serde(rename="AssociatePublicIpAddress")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub associate_public_ip_address: Option<Boolean>,
+    pub associate_public_ip_address: Option<bool>,
     #[doc="<p> If you specify this field, AWS OpsWorks for Chef Automate creates the server by using the backup represented by BackupId. </p>"]
     #[serde(rename="BackupId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub backup_id: Option<BackupId>,
+    pub backup_id: Option<String>,
     #[doc="<p> The number of automated backups that you want to keep. Whenever a new backup is created, AWS OpsWorks for Chef Automate deletes the oldest backups if this number is exceeded. The default value is <code>1</code>. </p>"]
     #[serde(rename="BackupRetentionCount")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub backup_retention_count: Option<BackupRetentionCountDefinition>,
+    pub backup_retention_count: Option<i64>,
     #[doc="<p> Enable or disable scheduled backups. Valid values are <code>true</code> or <code>false</code>. The default value is <code>true</code>. </p>"]
     #[serde(rename="DisableAutomatedBackup")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub disable_automated_backup: Option<Boolean>,
+    pub disable_automated_backup: Option<bool>,
     #[doc="<p> The configuration management engine to use. Valid values include <code>Chef</code>. </p>"]
     #[serde(rename="Engine")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -211,7 +202,7 @@ pub struct CreateServerRequest {
     #[doc="<p>Optional engine attributes on a specified server. </p> <p class=\"title\"> <b>Attributes accepted in a createServer request:</b> </p> <ul> <li> <p> <code>CHEF_PIVOTAL_KEY</code>: A base64-encoded RSA private key that is not stored by AWS OpsWorks for Chef. This private key is required to access the Chef API. When no CHEF_PIVOTAL_KEY is set, one is generated and returned in the response. </p> </li> <li> <p> <code>CHEF_DELIVERY_ADMIN_PASSWORD</code>: The password for the administrative user in the Chef Automate GUI. The password length is a minimum of eight characters, and a maximum of 32. The password can contain letters, numbers, and special characters (!/@#$%^&amp;+=_). The password must contain at least one lower case letter, one upper case letter, one number, and one special character. When no CHEF_DELIVERY_ADMIN_PASSWORD is set, one is generated and returned in the response.</p> </li> </ul>"]
     #[serde(rename="EngineAttributes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub engine_attributes: Option<EngineAttributes>,
+    pub engine_attributes: Option<Vec<EngineAttribute>>,
     #[doc="<p> The engine model, or option. Valid values include <code>Single</code>. </p>"]
     #[serde(rename="EngineModel")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -222,36 +213,36 @@ pub struct CreateServerRequest {
     pub engine_version: Option<String>,
     #[doc="<p> The ARN of the instance profile that your Amazon EC2 instances use. Although the AWS OpsWorks console typically creates the instance profile for you, if you are using API commands instead, run the service-role-creation.yaml AWS CloudFormation template, located at https://s3.amazonaws.com/opsworks-cm-us-east-1-prod-default-assets/misc/opsworks-cm-roles.yaml. This template creates a CloudFormation stack that includes the instance profile you need. </p>"]
     #[serde(rename="InstanceProfileArn")]
-    pub instance_profile_arn: InstanceProfileArn,
+    pub instance_profile_arn: String,
     #[doc="<p> The Amazon EC2 instance type to use. Valid values must be specified in the following format: <code>^([cm][34]|t2).*</code> For example, <code>m4.large</code>. Valid values are <code>t2.medium</code>, <code>m4.large</code>, or <code>m4.2xlarge</code>. </p>"]
     #[serde(rename="InstanceType")]
     pub instance_type: String,
     #[doc="<p> The Amazon EC2 key pair to set for the instance. This parameter is optional; if desired, you may specify this parameter to connect to your instances by using SSH. </p>"]
     #[serde(rename="KeyPair")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub key_pair: Option<KeyPair>,
+    pub key_pair: Option<String>,
     #[doc="<p> The start time for a one-hour period during which AWS OpsWorks for Chef Automate backs up application-level data on your server if automated backups are enabled. Valid values must be specified in one of the following formats: </p> <ul> <li> <p> <code>HH:MM</code> for daily backups</p> </li> <li> <p> <code>DDD:HH:MM</code> for weekly backups</p> </li> </ul> <p>The specified time is in coordinated universal time (UTC). The default value is a random, daily start time.</p> <p> <b>Example:</b> <code>08:00</code>, which represents a daily start time of 08:00 UTC.</p> <p> <b>Example:</b> <code>Mon:08:00</code>, which represents a start time of every Monday at 08:00 UTC. (8:00 a.m.)</p>"]
     #[serde(rename="PreferredBackupWindow")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub preferred_backup_window: Option<TimeWindowDefinition>,
+    pub preferred_backup_window: Option<String>,
     #[doc="<p> The start time for a one-hour period each week during which AWS OpsWorks for Chef Automate performs maintenance on the instance. Valid values must be specified in the following format: <code>DDD:HH:MM</code>. The specified time is in coordinated universal time (UTC). The default value is a random one-hour period on Tuesday, Wednesday, or Friday. See <code>TimeWindowDefinition</code> for more information. </p> <p> <b>Example:</b> <code>Mon:08:00</code>, which represents a start time of every Monday at 08:00 UTC. (8:00 a.m.) </p>"]
     #[serde(rename="PreferredMaintenanceWindow")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub preferred_maintenance_window: Option<TimeWindowDefinition>,
+    pub preferred_maintenance_window: Option<String>,
     #[doc="<p> A list of security group IDs to attach to the Amazon EC2 instance. If you add this parameter, the specified security groups must be within the VPC that is specified by <code>SubnetIds</code>. </p> <p> If you do not specify this parameter, AWS OpsWorks for Chef Automate creates one new security group that uses TCP ports 22 and 443, open to 0.0.0.0/0 (everyone). </p>"]
     #[serde(rename="SecurityGroupIds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub security_group_ids: Option<Strings>,
+    pub security_group_ids: Option<Vec<String>>,
     #[doc="<p> The name of the server. The server name must be unique within your AWS account, within each region. Server names must start with a letter; then letters, numbers, or hyphens (-) are allowed, up to a maximum of 40 characters. </p>"]
     #[serde(rename="ServerName")]
-    pub server_name: ServerName,
+    pub server_name: String,
     #[doc="<p> The service role that the AWS OpsWorks for Chef Automate service backend uses to work with your account. Although the AWS OpsWorks management console typically creates the service role for you, if you are using the AWS CLI or API commands, run the service-role-creation.yaml AWS CloudFormation template, located at https://s3.amazonaws.com/opsworks-stuff/latest/service-role-creation.yaml. This template creates a CloudFormation stack that includes the service role that you need. </p>"]
     #[serde(rename="ServiceRoleArn")]
-    pub service_role_arn: ServiceRoleArn,
+    pub service_role_arn: String,
     #[doc="<p> The IDs of subnets in which to launch the server EC2 instance. </p> <p> Amazon EC2-Classic customers: This field is required. All servers must run within a VPC. The VPC must have \"Auto Assign Public IP\" enabled. </p> <p> EC2-VPC customers: This field is optional. If you do not specify subnet IDs, your EC2 instances are created in a default subnet that is selected by Amazon EC2. If you specify subnet IDs, the VPC must have \"Auto Assign Public IP\" enabled. </p> <p>For more information about supported Amazon EC2 platforms, see <a href=\"http://docs.aws.amazon.com/https:/docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-supported-platforms.html\">Supported Platforms</a>.</p>"]
     #[serde(rename="SubnetIds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub subnet_ids: Option<Strings>,
+    pub subnet_ids: Option<Vec<String>>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -266,7 +257,7 @@ pub struct CreateServerResponse {
 pub struct DeleteBackupRequest {
     #[doc="<p>The ID of the backup to delete. Run the DescribeBackups command to get a list of backup IDs. Backup IDs are in the format <code>ServerName-yyyyMMddHHmmssSSS</code>. </p>"]
     #[serde(rename="BackupId")]
-    pub backup_id: BackupId,
+    pub backup_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -276,7 +267,7 @@ pub struct DeleteBackupResponse;
 pub struct DeleteServerRequest {
     #[doc="<p>The ID of the server to delete.</p>"]
     #[serde(rename="ServerName")]
-    pub server_name: ServerName,
+    pub server_name: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -290,7 +281,7 @@ pub struct DescribeAccountAttributesResponse {
     #[doc="<p> The attributes that are currently set for the account. </p>"]
     #[serde(rename="Attributes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub attributes: Option<AccountAttributes>,
+    pub attributes: Option<Vec<AccountAttribute>>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -298,19 +289,19 @@ pub struct DescribeBackupsRequest {
     #[doc="<p>Describes a single backup. </p>"]
     #[serde(rename="BackupId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub backup_id: Option<BackupId>,
+    pub backup_id: Option<String>,
     #[doc="<p>To receive a paginated response, use this parameter to specify the maximum number of results to be returned with a single call. If the number of available results exceeds this maximum, the response includes a <code>NextToken</code> value that you can assign to the <code>NextToken</code> request parameter to get the next set of results. </p>"]
     #[serde(rename="MaxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<MaxResults>,
+    pub max_results: Option<i64>,
     #[doc="<p>NextToken is a string that is returned in some command responses. It indicates that not all entries have been returned, and that you must run at least one more request to get remaining items. To get remaining results, call <code>DescribeBackups</code> again, and assign the token from the previous results as the value of the <code>nextToken</code> parameter. If there are no more results, the response object's <code>nextToken</code> parameter value is <code>null</code>. Setting a <code>nextToken</code> value that was not returned in your previous results causes an <code>InvalidNextTokenException</code> to occur.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
     #[doc="<p>Returns backups for the server with the specified ServerName. </p>"]
     #[serde(rename="ServerName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub server_name: Option<ServerName>,
+    pub server_name: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -318,7 +309,7 @@ pub struct DescribeBackupsResponse {
     #[doc="<p>Contains the response to a <code>DescribeBackups</code> request. </p>"]
     #[serde(rename="Backups")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub backups: Option<Backups>,
+    pub backups: Option<Vec<Backup>>,
     #[doc="<p>NextToken is a string that is returned in some command responses. It indicates that not all entries have been returned, and that you must run at least one more request to get remaining items. To get remaining results, call <code>DescribeBackups</code> again, and assign the token from the previous results as the value of the <code>nextToken</code> parameter. If there are no more results, the response object's <code>nextToken</code> parameter value is <code>null</code>. Setting a <code>nextToken</code> value that was not returned in your previous results causes an <code>InvalidNextTokenException</code> to occur. </p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -330,14 +321,14 @@ pub struct DescribeEventsRequest {
     #[doc="<p>To receive a paginated response, use this parameter to specify the maximum number of results to be returned with a single call. If the number of available results exceeds this maximum, the response includes a <code>NextToken</code> value that you can assign to the <code>NextToken</code> request parameter to get the next set of results. </p>"]
     #[serde(rename="MaxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<MaxResults>,
+    pub max_results: Option<i64>,
     #[doc="<p>NextToken is a string that is returned in some command responses. It indicates that not all entries have been returned, and that you must run at least one more request to get remaining items. To get remaining results, call <code>DescribeEvents</code> again, and assign the token from the previous results as the value of the <code>nextToken</code> parameter. If there are no more results, the response object's <code>nextToken</code> parameter value is <code>null</code>. Setting a <code>nextToken</code> value that was not returned in your previous results causes an <code>InvalidNextTokenException</code> to occur. </p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
     #[doc="<p>The name of the server for which you want to view events.</p>"]
     #[serde(rename="ServerName")]
-    pub server_name: ServerName,
+    pub server_name: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -349,16 +340,16 @@ pub struct DescribeEventsResponse {
     #[doc="<p>Contains the response to a <code>DescribeEvents</code> request. </p>"]
     #[serde(rename="ServerEvents")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub server_events: Option<ServerEvents>,
+    pub server_events: Option<Vec<ServerEvent>>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DescribeNodeAssociationStatusRequest {
     #[serde(rename="NodeAssociationStatusToken")]
-    pub node_association_status_token: NodeAssociationStatusToken,
+    pub node_association_status_token: String,
     #[doc="<p>The name of the server from which to disassociate the node. </p>"]
     #[serde(rename="ServerName")]
-    pub server_name: ServerName,
+    pub server_name: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -366,7 +357,7 @@ pub struct DescribeNodeAssociationStatusResponse {
     #[doc="<p>The status of the association or disassociation request. </p> <p class=\"title\"> <b>Possible values:</b> </p> <ul> <li> <p> <code>SUCCESS</code>: The association or disassociation succeeded. </p> </li> <li> <p> <code>FAILED</code>: The association or disassociation failed. </p> </li> <li> <p> <code>IN_PROGRESS</code>: The association or disassociation is still in progress. </p> </li> </ul>"]
     #[serde(rename="NodeAssociationStatus")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub node_association_status: Option<NodeAssociationStatus>,
+    pub node_association_status: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -374,15 +365,15 @@ pub struct DescribeServersRequest {
     #[doc="<p>To receive a paginated response, use this parameter to specify the maximum number of results to be returned with a single call. If the number of available results exceeds this maximum, the response includes a <code>NextToken</code> value that you can assign to the <code>NextToken</code> request parameter to get the next set of results. </p>"]
     #[serde(rename="MaxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<MaxResults>,
+    pub max_results: Option<i64>,
     #[doc="<p>NextToken is a string that is returned in some command responses. It indicates that not all entries have been returned, and that you must run at least one more request to get remaining items. To get remaining results, call <code>DescribeServers</code> again, and assign the token from the previous results as the value of the <code>nextToken</code> parameter. If there are no more results, the response object's <code>nextToken</code> parameter value is <code>null</code>. Setting a <code>nextToken</code> value that was not returned in your previous results causes an <code>InvalidNextTokenException</code> to occur. </p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
     #[doc="<p>Describes the server with the specified ServerName.</p>"]
     #[serde(rename="ServerName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub server_name: Option<ServerName>,
+    pub server_name: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -394,7 +385,7 @@ pub struct DescribeServersResponse {
     #[doc="<p>Contains the response to a <code>DescribeServers</code> request. </p>"]
     #[serde(rename="Servers")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub servers: Option<Servers>,
+    pub servers: Option<Vec<Server>>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -402,13 +393,13 @@ pub struct DisassociateNodeRequest {
     #[doc="<p>Engine attributes used for disassociating the node. </p> <p class=\"title\"> <b>Attributes accepted in a DisassociateNode request:</b> </p> <ul> <li> <p> <code>CHEF_ORGANIZATION</code>: The Chef organization with which the node was associated. By default only one organization named <code>default</code> can exist. </p> </li> </ul>"]
     #[serde(rename="EngineAttributes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub engine_attributes: Option<EngineAttributes>,
+    pub engine_attributes: Option<Vec<EngineAttribute>>,
     #[doc="<p>The name of the Chef client node. </p>"]
     #[serde(rename="NodeName")]
-    pub node_name: NodeName,
+    pub node_name: String,
     #[doc="<p>The name of the server from which to disassociate the node. </p>"]
     #[serde(rename="ServerName")]
-    pub server_name: ServerName,
+    pub server_name: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -416,7 +407,7 @@ pub struct DisassociateNodeResponse {
     #[doc="<p>Contains a token which can be passed to the <code>DescribeNodeAssociationStatus</code> API call to get the status of the disassociation request. </p>"]
     #[serde(rename="NodeAssociationStatusToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub node_association_status_token: Option<NodeAssociationStatusToken>,
+    pub node_association_status_token: Option<String>,
 }
 
 #[doc="<p>A name and value pair that is specific to the engine of the server. </p>"]
@@ -425,32 +416,20 @@ pub struct EngineAttribute {
     #[doc="<p>The name of the engine attribute. </p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<EngineAttributeName>,
+    pub name: Option<String>,
     #[doc="<p>The value of the engine attribute. </p>"]
     #[serde(rename="Value")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub value: Option<EngineAttributeValue>,
+    pub value: Option<String>,
 }
 
-pub type EngineAttributeName = String;
-pub type EngineAttributeValue = String;
-pub type EngineAttributes = Vec<EngineAttribute>;
-pub type InstanceProfileArn = String;
-pub type Integer = i64;
-pub type KeyPair = String;
-pub type MaintenanceStatus = String;
-pub type MaxResults = i64;
-pub type NextToken = String;
 #[doc="<p>The status of the association or disassociation request. </p> <p class=\"title\"> <b>Possible values:</b> </p> <ul> <li> <p> <code>SUCCESS</code>: The association or disassociation succeeded. </p> </li> <li> <p> <code>FAILED</code>: The association or disassociation failed. </p> </li> <li> <p> <code>IN_PROGRESS</code>: The association or disassociation is still in progress. </p> </li> </ul>"]
-pub type NodeAssociationStatus = String;
-pub type NodeAssociationStatusToken = String;
 #[doc="<p>The node name that is used by <code>chef-client</code> for a new node. For more information, see the <a href=\"http://docs.aws.amazon.com/https:/docs.chef.io/nodes.html#about-node-names\">Chef Documentation</a>. </p>"]
-pub type NodeName = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct RestoreServerRequest {
     #[doc="<p> The ID of the backup that you want to use to restore a server. </p>"]
     #[serde(rename="BackupId")]
-    pub backup_id: BackupId,
+    pub backup_id: String,
     #[doc="<p> The type of the instance to create. Valid values must be specified in the following format: <code>^([cm][34]|t2).*</code> For example, <code>m4.large</code>. Valid values are <code>t2.medium</code>, <code>m4.large</code>, and <code>m4.2xlarge</code>. If you do not specify this parameter, RestoreServer uses the instance type from the specified backup. </p>"]
     #[serde(rename="InstanceType")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -458,10 +437,10 @@ pub struct RestoreServerRequest {
     #[doc="<p> The name of the key pair to set on the new EC2 instance. This can be helpful if the administrator no longer has the SSH key. </p>"]
     #[serde(rename="KeyPair")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub key_pair: Option<KeyPair>,
+    pub key_pair: Option<String>,
     #[doc="<p> The name of the server that you want to restore. </p>"]
     #[serde(rename="ServerName")]
-    pub server_name: ServerName,
+    pub server_name: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -473,11 +452,11 @@ pub struct Server {
     #[doc="<p>Associate a public IP address with a server that you are launching. </p>"]
     #[serde(rename="AssociatePublicIpAddress")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub associate_public_ip_address: Option<Boolean>,
+    pub associate_public_ip_address: Option<bool>,
     #[doc="<p>The number of automated backups to keep. </p>"]
     #[serde(rename="BackupRetentionCount")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub backup_retention_count: Option<Integer>,
+    pub backup_retention_count: Option<i64>,
     #[doc="<p>The ARN of the CloudFormation stack that was used to create the server. </p>"]
     #[serde(rename="CloudFormationStackArn")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -485,11 +464,11 @@ pub struct Server {
     #[doc="<p>Time stamp of server creation. Example <code>2016-07-29T13:38:47.520Z</code> </p>"]
     #[serde(rename="CreatedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_at: Option<Timestamp>,
+    pub created_at: Option<f64>,
     #[doc="<p>Disables automated backups. The number of stored backups is dependent on the value of PreferredBackupCount. </p>"]
     #[serde(rename="DisableAutomatedBackup")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub disable_automated_backup: Option<Boolean>,
+    pub disable_automated_backup: Option<bool>,
     #[doc="<p> A DNS name that can be used to access the engine. Example: <code>myserver-asdfghjkl.us-east-1.opsworks.io</code> </p>"]
     #[serde(rename="Endpoint")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -501,7 +480,7 @@ pub struct Server {
     #[doc="<p>The response of a createServer() request returns the master credential to access the server in EngineAttributes. These credentials are not stored by AWS OpsWorks for Chef Automate; they are returned only as part of the result of createServer(). </p> <p class=\"title\"> <b>Attributes returned in a createServer response:</b> </p> <ul> <li> <p> <code>CHEF_PIVOTAL_KEY</code>: A base64-encoded RSA private key that is generated by AWS OpsWorks for Chef Automate. This private key is required to access the Chef API.</p> </li> <li> <p> <code>CHEF_STARTER_KIT</code>: A base64-encoded ZIP file. The ZIP file contains a Chef starter kit, which includes a README, a configuration file, and the required RSA private key. Save this file, unzip it, and then change to the directory where you've unzipped the file contents. From this directory, you can run Knife commands.</p> </li> </ul>"]
     #[serde(rename="EngineAttributes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub engine_attributes: Option<EngineAttributes>,
+    pub engine_attributes: Option<Vec<EngineAttribute>>,
     #[doc="<p>The engine model of the server. The valid value in this release is <code>Single</code>. </p>"]
     #[serde(rename="EngineModel")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -525,19 +504,19 @@ pub struct Server {
     #[doc="<p>The status of the most recent server maintenance run. Shows <code>SUCCESS</code> or <code>FAILED</code>. </p>"]
     #[serde(rename="MaintenanceStatus")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub maintenance_status: Option<MaintenanceStatus>,
+    pub maintenance_status: Option<String>,
     #[doc="<p>The preferred backup period specified for the server. </p>"]
     #[serde(rename="PreferredBackupWindow")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub preferred_backup_window: Option<TimeWindowDefinition>,
+    pub preferred_backup_window: Option<String>,
     #[doc="<p>The preferred maintenance period specified for the server. </p>"]
     #[serde(rename="PreferredMaintenanceWindow")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub preferred_maintenance_window: Option<TimeWindowDefinition>,
+    pub preferred_maintenance_window: Option<String>,
     #[doc="<p> The security group IDs for the server, as specified in the CloudFormation stack. These might not be the same security groups that are shown in the EC2 console. </p>"]
     #[serde(rename="SecurityGroupIds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub security_group_ids: Option<Strings>,
+    pub security_group_ids: Option<Vec<String>>,
     #[doc="<p>The ARN of the server. </p>"]
     #[serde(rename="ServerArn")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -553,7 +532,7 @@ pub struct Server {
     #[doc="<p> The server's status. This field displays the states of actions in progress, such as creating, running, or backing up the server, as well as the server's health state. </p>"]
     #[serde(rename="Status")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status: Option<ServerStatus>,
+    pub status: Option<String>,
     #[doc="<p> Depending on the server status, this field has either a human-readable message (such as a create or backup error), or an escaped block of JSON (used for health check results). </p>"]
     #[serde(rename="StatusReason")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -561,7 +540,7 @@ pub struct Server {
     #[doc="<p> The subnet IDs specified in a CreateServer request. </p>"]
     #[serde(rename="SubnetIds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub subnet_ids: Option<Strings>,
+    pub subnet_ids: Option<Vec<String>>,
 }
 
 #[doc="<p>An event that is related to the server, such as the start of maintenance or backup. </p>"]
@@ -570,7 +549,7 @@ pub struct ServerEvent {
     #[doc="<p>The time when the event occurred. </p>"]
     #[serde(rename="CreatedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_at: Option<Timestamp>,
+    pub created_at: Option<f64>,
     #[doc="<p>The Amazon S3 URL of the event's log file.</p>"]
     #[serde(rename="LogUrl")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -585,16 +564,11 @@ pub struct ServerEvent {
     pub server_name: Option<String>,
 }
 
-pub type ServerEvents = Vec<ServerEvent>;
-pub type ServerName = String;
-pub type ServerStatus = String;
-pub type Servers = Vec<Server>;
-pub type ServiceRoleArn = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct StartMaintenanceRequest {
     #[doc="<p>The name of the server on which to run maintenance. </p>"]
     #[serde(rename="ServerName")]
-    pub server_name: ServerName,
+    pub server_name: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -605,22 +579,19 @@ pub struct StartMaintenanceResponse {
     pub server: Option<Server>,
 }
 
-pub type Strings = Vec<String>;
 #[doc="<p> <code>DDD:HH:MM</code> (weekly start time) or <code>HH:MM</code> (daily start time). </p> <p> Time windows always use coordinated universal time (UTC). Valid strings for day of week (<code>DDD</code>) are: <code>Mon</code>, <code>Tue</code>, <code>Wed</code>, <code>Thr</code>, <code>Fri</code>, <code>Sat</code>, or <code>Sun</code>.</p>"]
-pub type TimeWindowDefinition = String;
-pub type Timestamp = f64;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateServerEngineAttributesRequest {
     #[doc="<p>The name of the engine attribute to update. </p>"]
     #[serde(rename="AttributeName")]
-    pub attribute_name: AttributeName,
+    pub attribute_name: String,
     #[doc="<p>The value to set for the attribute. </p>"]
     #[serde(rename="AttributeValue")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub attribute_value: Option<AttributeValue>,
+    pub attribute_value: Option<String>,
     #[doc="<p>The name of the server to update. </p>"]
     #[serde(rename="ServerName")]
-    pub server_name: ServerName,
+    pub server_name: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -636,20 +607,20 @@ pub struct UpdateServerRequest {
     #[doc="<p>Sets the number of automated backups that you want to keep. </p>"]
     #[serde(rename="BackupRetentionCount")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub backup_retention_count: Option<Integer>,
+    pub backup_retention_count: Option<i64>,
     #[doc="<p>Setting DisableAutomatedBackup to <code>true</code> disables automated or scheduled backups. Automated backups are enabled by default. </p>"]
     #[serde(rename="DisableAutomatedBackup")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub disable_automated_backup: Option<Boolean>,
+    pub disable_automated_backup: Option<bool>,
     #[serde(rename="PreferredBackupWindow")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub preferred_backup_window: Option<TimeWindowDefinition>,
+    pub preferred_backup_window: Option<String>,
     #[serde(rename="PreferredMaintenanceWindow")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub preferred_maintenance_window: Option<TimeWindowDefinition>,
+    pub preferred_maintenance_window: Option<String>,
     #[doc="<p>The name of the server to update. </p>"]
     #[serde(rename="ServerName")]
-    pub server_name: ServerName,
+    pub server_name: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]

@@ -27,27 +27,25 @@ use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
 #[doc="<p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p> <p>Example: 65000</p>"]
-pub type ASN = i64;
 #[doc="<p>Indicates the address family for the BGP peer.</p> <ul> <li> <p> <b>ipv4</b>: IPv4 address family</p> </li> <li> <p> <b>ipv6</b>: IPv6 address family</p> </li> </ul>"]
-pub type AddressFamily = String;
 #[doc="<p>Container for the parameters to the AllocateConnectionOnInterconnect operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct AllocateConnectionOnInterconnectRequest {
     #[doc="<p>Bandwidth of the connection.</p> <p>Example: \"<i>500Mbps</i>\"</p> <p>Default: None</p> <p>Values: 50Mbps, 100Mbps, 200Mbps, 300Mbps, 400Mbps, or 500Mbps</p>"]
     #[serde(rename="bandwidth")]
-    pub bandwidth: Bandwidth,
+    pub bandwidth: String,
     #[doc="<p>Name of the provisioned connection.</p> <p>Example: \"<i>500M Connection to AWS</i>\"</p> <p>Default: None</p>"]
     #[serde(rename="connectionName")]
-    pub connection_name: ConnectionName,
+    pub connection_name: String,
     #[doc="<p>ID of the interconnect on which the connection will be provisioned.</p> <p>Example: dxcon-456abc78</p> <p>Default: None</p>"]
     #[serde(rename="interconnectId")]
-    pub interconnect_id: InterconnectId,
+    pub interconnect_id: String,
     #[doc="<p>Numeric account Id of the customer for whom the connection will be provisioned.</p> <p>Example: 123443215678</p> <p>Default: None</p>"]
     #[serde(rename="ownerAccount")]
-    pub owner_account: OwnerAccount,
+    pub owner_account: String,
     #[doc="<p>The dedicated VLAN provisioned to the connection.</p> <p>Example: 101</p> <p>Default: None</p>"]
     #[serde(rename="vlan")]
-    pub vlan: VLAN,
+    pub vlan: i64,
 }
 
 #[doc="<p>Container for the parameters to theHostedConnection operation.</p>"]
@@ -55,19 +53,19 @@ pub struct AllocateConnectionOnInterconnectRequest {
 pub struct AllocateHostedConnectionRequest {
     #[doc="<p>The bandwidth of the connection.</p> <p>Example: <code>500Mbps</code> </p> <p>Default: None</p> <p>Values: 50Mbps, 100Mbps, 200Mbps, 300Mbps, 400Mbps, or 500Mbps</p>"]
     #[serde(rename="bandwidth")]
-    pub bandwidth: Bandwidth,
+    pub bandwidth: String,
     #[doc="<p>The ID of the interconnect or LAG on which the connection will be provisioned.</p> <p>Example: dxcon-456abc78 or dxlag-abc123</p> <p>Default: None</p>"]
     #[serde(rename="connectionId")]
-    pub connection_id: ConnectionId,
+    pub connection_id: String,
     #[doc="<p>The name of the provisioned connection.</p> <p>Example: \"<code>500M Connection to AWS</code>\"</p> <p>Default: None</p>"]
     #[serde(rename="connectionName")]
-    pub connection_name: ConnectionName,
+    pub connection_name: String,
     #[doc="<p>The numeric account ID of the customer for whom the connection will be provisioned.</p> <p>Example: 123443215678</p> <p>Default: None</p>"]
     #[serde(rename="ownerAccount")]
-    pub owner_account: OwnerAccount,
+    pub owner_account: String,
     #[doc="<p>The dedicated VLAN provisioned to the hosted connection.</p> <p>Example: 101</p> <p>Default: None</p>"]
     #[serde(rename="vlan")]
-    pub vlan: VLAN,
+    pub vlan: i64,
 }
 
 #[doc="<p>Container for the parameters to the AllocatePrivateVirtualInterface operation.</p>"]
@@ -75,13 +73,13 @@ pub struct AllocateHostedConnectionRequest {
 pub struct AllocatePrivateVirtualInterfaceRequest {
     #[doc="<p>The connection ID on which the private virtual interface is provisioned.</p> <p>Default: None</p>"]
     #[serde(rename="connectionId")]
-    pub connection_id: ConnectionId,
+    pub connection_id: String,
     #[doc="<p>Detailed information for the private virtual interface to be provisioned.</p> <p>Default: None</p>"]
     #[serde(rename="newPrivateVirtualInterfaceAllocation")]
     pub new_private_virtual_interface_allocation: NewPrivateVirtualInterfaceAllocation,
     #[doc="<p>The AWS account that will own the new private virtual interface.</p> <p>Default: None</p>"]
     #[serde(rename="ownerAccount")]
-    pub owner_account: OwnerAccount,
+    pub owner_account: String,
 }
 
 #[doc="<p>Container for the parameters to the AllocatePublicVirtualInterface operation.</p>"]
@@ -89,26 +87,25 @@ pub struct AllocatePrivateVirtualInterfaceRequest {
 pub struct AllocatePublicVirtualInterfaceRequest {
     #[doc="<p>The connection ID on which the public virtual interface is provisioned.</p> <p>Default: None</p>"]
     #[serde(rename="connectionId")]
-    pub connection_id: ConnectionId,
+    pub connection_id: String,
     #[doc="<p>Detailed information for the public virtual interface to be provisioned.</p> <p>Default: None</p>"]
     #[serde(rename="newPublicVirtualInterfaceAllocation")]
     pub new_public_virtual_interface_allocation: NewPublicVirtualInterfaceAllocation,
     #[doc="<p>The AWS account that will own the new public virtual interface.</p> <p>Default: None</p>"]
     #[serde(rename="ownerAccount")]
-    pub owner_account: OwnerAccount,
+    pub owner_account: String,
 }
 
 #[doc="<p>IP address assigned to the Amazon interface.</p> <p>Example: 192.168.1.1/30 or 2001:db8::1/125</p>"]
-pub type AmazonAddress = String;
 #[doc="<p>Container for the parameters to the AssociateConnectionWithLag operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct AssociateConnectionWithLagRequest {
     #[doc="<p>The ID of the connection.</p> <p>Example: dxcon-abc123</p> <p>Default: None</p>"]
     #[serde(rename="connectionId")]
-    pub connection_id: ConnectionId,
+    pub connection_id: String,
     #[doc="<p>The ID of the LAG with which to associate the connection.</p> <p>Example: dxlag-abc123</p> <p>Default: None</p>"]
     #[serde(rename="lagId")]
-    pub lag_id: LagId,
+    pub lag_id: String,
 }
 
 #[doc="<p>Container for the parameters to the AssociateHostedConnection operation.</p>"]
@@ -116,10 +113,10 @@ pub struct AssociateConnectionWithLagRequest {
 pub struct AssociateHostedConnectionRequest {
     #[doc="<p>The ID of the hosted connection.</p> <p>Example: dxcon-abc123</p> <p>Default: None</p>"]
     #[serde(rename="connectionId")]
-    pub connection_id: ConnectionId,
+    pub connection_id: String,
     #[doc="<p>The ID of the interconnect or the LAG.</p> <p>Example: dxcon-abc123 or dxlag-abc123</p> <p>Default: None</p>"]
     #[serde(rename="parentConnectionId")]
-    pub parent_connection_id: ConnectionId,
+    pub parent_connection_id: String,
 }
 
 #[doc="<p>Container for the parameters to the AssociateVirtualInterface operation.</p>"]
@@ -127,57 +124,49 @@ pub struct AssociateHostedConnectionRequest {
 pub struct AssociateVirtualInterfaceRequest {
     #[doc="<p>The ID of the LAG or connection with which to associate the virtual interface.</p> <p>Example: dxlag-abc123 or dxcon-abc123</p> <p>Default: None</p>"]
     #[serde(rename="connectionId")]
-    pub connection_id: ConnectionId,
+    pub connection_id: String,
     #[doc="<p>The ID of the virtual interface.</p> <p>Example: dxvif-123dfg56</p> <p>Default: None</p>"]
     #[serde(rename="virtualInterfaceId")]
-    pub virtual_interface_id: VirtualInterfaceId,
+    pub virtual_interface_id: String,
 }
 
 #[doc="<p>An abstract ID for the physical Direct Connect endpoint.</p> <p>Example: EQC50-abcdef123456</p>"]
-pub type AwsDevice = String;
 #[doc="<p>The authentication key for BGP configuration.</p> <p>Example: asdf34example</p>"]
-pub type BGPAuthKey = String;
 #[doc="<p>A structure containing information about a BGP peer.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct BGPPeer {
     #[serde(rename="addressFamily")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub address_family: Option<AddressFamily>,
+    pub address_family: Option<String>,
     #[serde(rename="amazonAddress")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub amazon_address: Option<AmazonAddress>,
+    pub amazon_address: Option<String>,
     #[serde(rename="asn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub asn: Option<ASN>,
+    pub asn: Option<i64>,
     #[serde(rename="authKey")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub auth_key: Option<BGPAuthKey>,
+    pub auth_key: Option<String>,
     #[serde(rename="bgpPeerState")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub bgp_peer_state: Option<BGPPeerState>,
+    pub bgp_peer_state: Option<String>,
     #[serde(rename="bgpStatus")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub bgp_status: Option<BGPStatus>,
+    pub bgp_status: Option<String>,
     #[serde(rename="customerAddress")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub customer_address: Option<CustomerAddress>,
+    pub customer_address: Option<String>,
 }
 
 #[doc="<p>A list of the BGP peers configured on this virtual interface.</p>"]
-pub type BGPPeerList = Vec<BGPPeer>;
 #[doc="<p>The state of the BGP peer.</p> <ul> <li> <p> <b>Verifying</b>: The BGP peering addresses or ASN require validation before the BGP peer can be created. This state only applies to BGP peers on a public virtual interface. </p> </li> <li> <p> <b>Pending</b>: The BGP peer has been created, and is in this state until it is ready to be established.</p> </li> <li> <p> <b>Available</b>: The BGP peer can be established.</p> </li> <li> <p> <b>Deleting</b>: The BGP peer is in the process of being deleted.</p> </li> <li> <p> <b>Deleted</b>: The BGP peer has been deleted and cannot be established.</p> </li> </ul>"]
-pub type BGPPeerState = String;
 #[doc="<p>The Up/Down state of the BGP peer.</p> <ul> <li> <p> <b>Up</b>: The BGP peer is established.</p> </li> <li> <p> <b>Down</b>: The BGP peer is down.</p> </li> </ul>"]
-pub type BGPStatus = String;
 #[doc="<p>Bandwidth of the connection.</p> <p>Example: 1Gbps</p> <p>Default: None</p>"]
-pub type Bandwidth = String;
-pub type BooleanFlag = bool;
-pub type CIDR = String;
 #[doc="<p>Container for the parameters to the ConfirmConnection operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ConfirmConnectionRequest {
     #[serde(rename="connectionId")]
-    pub connection_id: ConnectionId,
+    pub connection_id: String,
 }
 
 #[doc="<p>The response received when ConfirmConnection is called.</p>"]
@@ -185,7 +174,7 @@ pub struct ConfirmConnectionRequest {
 pub struct ConfirmConnectionResponse {
     #[serde(rename="connectionState")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub connection_state: Option<ConnectionState>,
+    pub connection_state: Option<String>,
 }
 
 #[doc="<p>Container for the parameters to the ConfirmPrivateVirtualInterface operation.</p>"]
@@ -193,9 +182,9 @@ pub struct ConfirmConnectionResponse {
 pub struct ConfirmPrivateVirtualInterfaceRequest {
     #[doc="<p>ID of the virtual private gateway that will be attached to the virtual interface.</p> <p> A virtual private gateway can be managed via the Amazon Virtual Private Cloud (VPC) console or the <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-CreateVpnGateway.html\">EC2 CreateVpnGateway</a> action.</p> <p>Default: None</p>"]
     #[serde(rename="virtualGatewayId")]
-    pub virtual_gateway_id: VirtualGatewayId,
+    pub virtual_gateway_id: String,
     #[serde(rename="virtualInterfaceId")]
-    pub virtual_interface_id: VirtualInterfaceId,
+    pub virtual_interface_id: String,
 }
 
 #[doc="<p>The response received when ConfirmPrivateVirtualInterface is called.</p>"]
@@ -203,14 +192,14 @@ pub struct ConfirmPrivateVirtualInterfaceRequest {
 pub struct ConfirmPrivateVirtualInterfaceResponse {
     #[serde(rename="virtualInterfaceState")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub virtual_interface_state: Option<VirtualInterfaceState>,
+    pub virtual_interface_state: Option<String>,
 }
 
 #[doc="<p>Container for the parameters to the ConfirmPublicVirtualInterface operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ConfirmPublicVirtualInterfaceRequest {
     #[serde(rename="virtualInterfaceId")]
-    pub virtual_interface_id: VirtualInterfaceId,
+    pub virtual_interface_id: String,
 }
 
 #[doc="<p>The response received when ConfirmPublicVirtualInterface is called.</p>"]
@@ -218,7 +207,7 @@ pub struct ConfirmPublicVirtualInterfaceRequest {
 pub struct ConfirmPublicVirtualInterfaceResponse {
     #[serde(rename="virtualInterfaceState")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub virtual_interface_state: Option<VirtualInterfaceState>,
+    pub virtual_interface_state: Option<String>,
 }
 
 #[doc="<p>A connection represents the physical network connection between the AWS Direct Connect location and the customer.</p>"]
@@ -227,64 +216,59 @@ pub struct Connection {
     #[doc="<p>The Direct Connection endpoint which the physical connection terminates on.</p>"]
     #[serde(rename="awsDevice")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub aws_device: Option<AwsDevice>,
+    pub aws_device: Option<String>,
     #[doc="<p>Bandwidth of the connection.</p> <p>Example: 1Gbps (for regular connections), or 500Mbps (for hosted connections)</p> <p>Default: None</p>"]
     #[serde(rename="bandwidth")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub bandwidth: Option<Bandwidth>,
+    pub bandwidth: Option<String>,
     #[serde(rename="connectionId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub connection_id: Option<ConnectionId>,
+    pub connection_id: Option<String>,
     #[serde(rename="connectionName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub connection_name: Option<ConnectionName>,
+    pub connection_name: Option<String>,
     #[serde(rename="connectionState")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub connection_state: Option<ConnectionState>,
+    pub connection_state: Option<String>,
     #[serde(rename="lagId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub lag_id: Option<LagId>,
+    pub lag_id: Option<String>,
     #[doc="<p>The time of the most recent call to <a>DescribeLoa</a> for this connection.</p>"]
     #[serde(rename="loaIssueTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub loa_issue_time: Option<LoaIssueTime>,
+    pub loa_issue_time: Option<f64>,
     #[serde(rename="location")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub location: Option<LocationCode>,
+    pub location: Option<String>,
     #[doc="<p>The AWS account that will own the new connection.</p>"]
     #[serde(rename="ownerAccount")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub owner_account: Option<OwnerAccount>,
+    pub owner_account: Option<String>,
     #[doc="<p>The name of the AWS Direct Connect service provider associated with the connection.</p>"]
     #[serde(rename="partnerName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub partner_name: Option<PartnerName>,
+    pub partner_name: Option<String>,
     #[serde(rename="region")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub region: Option<Region>,
+    pub region: Option<String>,
     #[serde(rename="vlan")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub vlan: Option<VLAN>,
+    pub vlan: Option<i64>,
 }
 
 #[doc="<p>The ID of the connection. This field is also used as the ID type for operations that use multiple connection types (LAG, interconnect, and/or connection).</p> <p>Example: dxcon-fg5678gh</p> <p>Default: None</p>"]
-pub type ConnectionId = String;
 #[doc="<p>A list of connections.</p>"]
-pub type ConnectionList = Vec<Connection>;
 #[doc="<p>The name of the connection.</p> <p>Example: \"<i>My Connection to AWS</i>\"</p> <p>Default: None</p>"]
-pub type ConnectionName = String;
 #[doc="<p>State of the connection.</p> <ul> <li> <p> <b>Ordering</b>: The initial state of a hosted connection provisioned on an interconnect. The connection stays in the ordering state until the owner of the hosted connection confirms or declines the connection order.</p> </li> <li> <p> <b>Requested</b>: The initial state of a standard connection. The connection stays in the requested state until the Letter of Authorization (LOA) is sent to the customer.</p> </li> <li> <p> <b>Pending</b>: The connection has been approved, and is being initialized.</p> </li> <li> <p> <b>Available</b>: The network link is up, and the connection is ready for use.</p> </li> <li> <p> <b>Down</b>: The network link is down.</p> </li> <li> <p> <b>Deleting</b>: The connection is in the process of being deleted.</p> </li> <li> <p> <b>Deleted</b>: The connection has been deleted.</p> </li> <li> <p> <b>Rejected</b>: A hosted connection in the 'Ordering' state will enter the 'Rejected' state if it is deleted by the end customer.</p> </li> </ul>"]
-pub type ConnectionState = String;
 #[doc="<p>A structure containing a list of connections.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Connections {
     #[doc="<p>A list of connections.</p>"]
     #[serde(rename="connections")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub connections: Option<ConnectionList>,
+    pub connections: Option<Vec<Connection>>,
 }
 
-pub type Count = i64;
 #[doc="<p>Container for the parameters to the CreateBGPPeer operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateBGPPeerRequest {
@@ -295,7 +279,7 @@ pub struct CreateBGPPeerRequest {
     #[doc="<p>The ID of the virtual interface on which the BGP peer will be provisioned.</p> <p>Example: dxvif-456abc78</p> <p>Default: None</p>"]
     #[serde(rename="virtualInterfaceId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub virtual_interface_id: Option<VirtualInterfaceId>,
+    pub virtual_interface_id: Option<String>,
 }
 
 #[doc="<p>The response received when CreateBGPPeer is called.</p>"]
@@ -310,14 +294,14 @@ pub struct CreateBGPPeerResponse {
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateConnectionRequest {
     #[serde(rename="bandwidth")]
-    pub bandwidth: Bandwidth,
+    pub bandwidth: String,
     #[serde(rename="connectionName")]
-    pub connection_name: ConnectionName,
+    pub connection_name: String,
     #[serde(rename="lagId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub lag_id: Option<LagId>,
+    pub lag_id: Option<String>,
     #[serde(rename="location")]
-    pub location: LocationCode,
+    pub location: String,
 }
 
 #[doc="<p>Container for the parameters to the CreateInterconnect operation.</p>"]
@@ -325,16 +309,16 @@ pub struct CreateConnectionRequest {
 pub struct CreateInterconnectRequest {
     #[doc="<p>The port bandwidth</p> <p>Example: 1Gbps</p> <p>Default: None</p> <p>Available values: 1Gbps,10Gbps</p>"]
     #[serde(rename="bandwidth")]
-    pub bandwidth: Bandwidth,
+    pub bandwidth: String,
     #[doc="<p>The name of the interconnect.</p> <p>Example: \"<i>1G Interconnect to AWS</i>\"</p> <p>Default: None</p>"]
     #[serde(rename="interconnectName")]
-    pub interconnect_name: InterconnectName,
+    pub interconnect_name: String,
     #[serde(rename="lagId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub lag_id: Option<LagId>,
+    pub lag_id: Option<String>,
     #[doc="<p>Where the interconnect is located</p> <p>Example: EqSV5</p> <p>Default: None</p>"]
     #[serde(rename="location")]
-    pub location: LocationCode,
+    pub location: String,
 }
 
 #[doc="<p>Container for the parameters to the CreateLag operation.</p>"]
@@ -343,26 +327,26 @@ pub struct CreateLagRequest {
     #[doc="<p>The ID of an existing connection to migrate to the LAG.</p> <p>Default: None</p>"]
     #[serde(rename="connectionId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub connection_id: Option<ConnectionId>,
+    pub connection_id: Option<String>,
     #[doc="<p>The bandwidth of the individual physical connections bundled by the LAG.</p> <p>Default: None</p> <p>Available values: 1Gbps, 10Gbps</p>"]
     #[serde(rename="connectionsBandwidth")]
-    pub connections_bandwidth: Bandwidth,
+    pub connections_bandwidth: String,
     #[doc="<p>The name of the LAG.</p> <p>Example: \"<code>3x10G LAG to AWS</code>\"</p> <p>Default: None</p>"]
     #[serde(rename="lagName")]
-    pub lag_name: LagName,
+    pub lag_name: String,
     #[doc="<p>The AWS Direct Connect location in which the LAG should be allocated.</p> <p>Example: EqSV5</p> <p>Default: None</p>"]
     #[serde(rename="location")]
-    pub location: LocationCode,
+    pub location: String,
     #[doc="<p>The number of physical connections initially provisioned and bundled by the LAG.</p> <p>Default: None</p>"]
     #[serde(rename="numberOfConnections")]
-    pub number_of_connections: Count,
+    pub number_of_connections: i64,
 }
 
 #[doc="<p>Container for the parameters to the CreatePrivateVirtualInterface operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreatePrivateVirtualInterfaceRequest {
     #[serde(rename="connectionId")]
-    pub connection_id: ConnectionId,
+    pub connection_id: String,
     #[doc="<p>Detailed information for the private virtual interface to be created.</p> <p>Default: None</p>"]
     #[serde(rename="newPrivateVirtualInterface")]
     pub new_private_virtual_interface: NewPrivateVirtualInterface,
@@ -372,27 +356,26 @@ pub struct CreatePrivateVirtualInterfaceRequest {
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreatePublicVirtualInterfaceRequest {
     #[serde(rename="connectionId")]
-    pub connection_id: ConnectionId,
+    pub connection_id: String,
     #[doc="<p>Detailed information for the public virtual interface to be created.</p> <p>Default: None</p>"]
     #[serde(rename="newPublicVirtualInterface")]
     pub new_public_virtual_interface: NewPublicVirtualInterface,
 }
 
 #[doc="<p>IP address assigned to the customer interface.</p> <p>Example: 192.168.1.2/30 or 2001:db8::2/125</p>"]
-pub type CustomerAddress = String;
 #[doc="<p>Container for the parameters to the DeleteBGPPeer operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteBGPPeerRequest {
     #[serde(rename="asn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub asn: Option<ASN>,
+    pub asn: Option<i64>,
     #[serde(rename="customerAddress")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub customer_address: Option<CustomerAddress>,
+    pub customer_address: Option<String>,
     #[doc="<p>The ID of the virtual interface from which the BGP peer will be deleted.</p> <p>Example: dxvif-456abc78</p> <p>Default: None</p>"]
     #[serde(rename="virtualInterfaceId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub virtual_interface_id: Option<VirtualInterfaceId>,
+    pub virtual_interface_id: Option<String>,
 }
 
 #[doc="<p>The response received when DeleteBGPPeer is called.</p>"]
@@ -407,14 +390,14 @@ pub struct DeleteBGPPeerResponse {
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteConnectionRequest {
     #[serde(rename="connectionId")]
-    pub connection_id: ConnectionId,
+    pub connection_id: String,
 }
 
 #[doc="<p>Container for the parameters to the DeleteInterconnect operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteInterconnectRequest {
     #[serde(rename="interconnectId")]
-    pub interconnect_id: InterconnectId,
+    pub interconnect_id: String,
 }
 
 #[doc="<p>The response received when DeleteInterconnect is called.</p>"]
@@ -422,7 +405,7 @@ pub struct DeleteInterconnectRequest {
 pub struct DeleteInterconnectResponse {
     #[serde(rename="interconnectState")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub interconnect_state: Option<InterconnectState>,
+    pub interconnect_state: Option<String>,
 }
 
 #[doc="<p>Container for the parameters to the DeleteLag operation.</p>"]
@@ -430,14 +413,14 @@ pub struct DeleteInterconnectResponse {
 pub struct DeleteLagRequest {
     #[doc="<p>The ID of the LAG to delete.</p> <p>Example: dxlag-abc123</p> <p>Default: None</p>"]
     #[serde(rename="lagId")]
-    pub lag_id: LagId,
+    pub lag_id: String,
 }
 
 #[doc="<p>Container for the parameters to the DeleteVirtualInterface operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteVirtualInterfaceRequest {
     #[serde(rename="virtualInterfaceId")]
-    pub virtual_interface_id: VirtualInterfaceId,
+    pub virtual_interface_id: String,
 }
 
 #[doc="<p>The response received when DeleteVirtualInterface is called.</p>"]
@@ -445,21 +428,21 @@ pub struct DeleteVirtualInterfaceRequest {
 pub struct DeleteVirtualInterfaceResponse {
     #[serde(rename="virtualInterfaceState")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub virtual_interface_state: Option<VirtualInterfaceState>,
+    pub virtual_interface_state: Option<String>,
 }
 
 #[doc="<p>Container for the parameters to the DescribeConnectionLoa operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DescribeConnectionLoaRequest {
     #[serde(rename="connectionId")]
-    pub connection_id: ConnectionId,
+    pub connection_id: String,
     #[serde(rename="loaContentType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub loa_content_type: Option<LoaContentType>,
+    pub loa_content_type: Option<String>,
     #[doc="<p>The name of the APN partner or service provider who establishes connectivity on your behalf. If you supply this parameter, the LOA-CFA lists the provider name alongside your company name as the requester of the cross connect.</p> <p>Default: None</p>"]
     #[serde(rename="providerName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub provider_name: Option<ProviderName>,
+    pub provider_name: Option<String>,
 }
 
 #[doc="<p>The response received when DescribeConnectionLoa is called.</p>"]
@@ -475,7 +458,7 @@ pub struct DescribeConnectionLoaResponse {
 pub struct DescribeConnectionsOnInterconnectRequest {
     #[doc="<p>ID of the interconnect on which a list of connection is provisioned.</p> <p>Example: dxcon-abc123</p> <p>Default: None</p>"]
     #[serde(rename="interconnectId")]
-    pub interconnect_id: InterconnectId,
+    pub interconnect_id: String,
 }
 
 #[doc="<p>Container for the parameters to the DescribeConnections operation.</p>"]
@@ -483,7 +466,7 @@ pub struct DescribeConnectionsOnInterconnectRequest {
 pub struct DescribeConnectionsRequest {
     #[serde(rename="connectionId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub connection_id: Option<ConnectionId>,
+    pub connection_id: Option<String>,
 }
 
 #[doc="<p>Container for the parameters to the DescribeHostedConnections operation.</p>"]
@@ -491,21 +474,21 @@ pub struct DescribeConnectionsRequest {
 pub struct DescribeHostedConnectionsRequest {
     #[doc="<p>The ID of the interconnect or LAG on which the hosted connections are provisioned.</p> <p>Example: dxcon-abc123 or dxlag-abc123</p> <p>Default: None</p>"]
     #[serde(rename="connectionId")]
-    pub connection_id: ConnectionId,
+    pub connection_id: String,
 }
 
 #[doc="<p>Container for the parameters to the DescribeInterconnectLoa operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DescribeInterconnectLoaRequest {
     #[serde(rename="interconnectId")]
-    pub interconnect_id: InterconnectId,
+    pub interconnect_id: String,
     #[serde(rename="loaContentType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub loa_content_type: Option<LoaContentType>,
+    pub loa_content_type: Option<String>,
     #[doc="<p>The name of the service provider who establishes connectivity on your behalf. If you supply this parameter, the LOA-CFA lists the provider name alongside your company name as the requester of the cross connect.</p> <p>Default: None</p>"]
     #[serde(rename="providerName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub provider_name: Option<ProviderName>,
+    pub provider_name: Option<String>,
 }
 
 #[doc="<p>The response received when DescribeInterconnectLoa is called.</p>"]
@@ -521,7 +504,7 @@ pub struct DescribeInterconnectLoaResponse {
 pub struct DescribeInterconnectsRequest {
     #[serde(rename="interconnectId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub interconnect_id: Option<InterconnectId>,
+    pub interconnect_id: Option<String>,
 }
 
 #[doc="<p>Container for the parameters to the DescribeLags operation.</p>"]
@@ -530,7 +513,7 @@ pub struct DescribeLagsRequest {
     #[doc="<p>The ID of the LAG.</p> <p>Example: dxlag-abc123</p> <p>Default: None</p>"]
     #[serde(rename="lagId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub lag_id: Option<LagId>,
+    pub lag_id: Option<String>,
 }
 
 #[doc="<p>Container for the parameters to the DescribeLoa operation.</p>"]
@@ -538,15 +521,15 @@ pub struct DescribeLagsRequest {
 pub struct DescribeLoaRequest {
     #[doc="<p>The ID of a connection, LAG, or interconnect for which to get the LOA-CFA information.</p> <p>Example: dxcon-abc123 or dxlag-abc123</p> <p>Default: None</p>"]
     #[serde(rename="connectionId")]
-    pub connection_id: ConnectionId,
+    pub connection_id: String,
     #[doc="<p>A standard media type indicating the content type of the LOA-CFA document. Currently, the only supported value is \"application/pdf\".</p> <p>Default: application/pdf</p>"]
     #[serde(rename="loaContentType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub loa_content_type: Option<LoaContentType>,
+    pub loa_content_type: Option<String>,
     #[doc="<p>The name of the service provider who establishes connectivity on your behalf. If you supply this parameter, the LOA-CFA lists the provider name alongside your company name as the requester of the cross connect.</p> <p>Default: None</p>"]
     #[serde(rename="providerName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub provider_name: Option<ProviderName>,
+    pub provider_name: Option<String>,
 }
 
 #[doc="<p>Container for the parameters to the DescribeTags operation.</p>"]
@@ -554,7 +537,7 @@ pub struct DescribeLoaRequest {
 pub struct DescribeTagsRequest {
     #[doc="<p>The Amazon Resource Names (ARNs) of the Direct Connect resources.</p>"]
     #[serde(rename="resourceArns")]
-    pub resource_arns: ResourceArnList,
+    pub resource_arns: Vec<String>,
 }
 
 #[doc="<p>The response received when DescribeTags is called.</p>"]
@@ -563,7 +546,7 @@ pub struct DescribeTagsResponse {
     #[doc="<p>Information about the tags.</p>"]
     #[serde(rename="resourceTags")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub resource_tags: Option<ResourceTagList>,
+    pub resource_tags: Option<Vec<ResourceTag>>,
 }
 
 #[doc="<p>Container for the parameters to the DescribeVirtualInterfaces operation.</p>"]
@@ -571,10 +554,10 @@ pub struct DescribeTagsResponse {
 pub struct DescribeVirtualInterfacesRequest {
     #[serde(rename="connectionId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub connection_id: Option<ConnectionId>,
+    pub connection_id: Option<String>,
     #[serde(rename="virtualInterfaceId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub virtual_interface_id: Option<VirtualInterfaceId>,
+    pub virtual_interface_id: Option<String>,
 }
 
 #[doc="<p>Container for the parameters to the DisassociateConnectionFromLag operation.</p>"]
@@ -582,62 +565,57 @@ pub struct DescribeVirtualInterfacesRequest {
 pub struct DisassociateConnectionFromLagRequest {
     #[doc="<p>The ID of the connection to disassociate from the LAG.</p> <p>Example: dxcon-abc123</p> <p>Default: None</p>"]
     #[serde(rename="connectionId")]
-    pub connection_id: ConnectionId,
+    pub connection_id: String,
     #[doc="<p>The ID of the LAG.</p> <p>Example: dxlag-abc123</p> <p>Default: None</p>"]
     #[serde(rename="lagId")]
-    pub lag_id: LagId,
+    pub lag_id: String,
 }
 
-pub type ErrorMessage = String;
 #[doc="<p>An interconnect is a connection that can host other connections.</p> <p>Like a standard AWS Direct Connect connection, an interconnect represents the physical connection between an AWS Direct Connect partner's network and a specific Direct Connect location. An AWS Direct Connect partner who owns an interconnect can provision hosted connections on the interconnect for their end customers, thereby providing the end customers with connectivity to AWS services.</p> <p>The resources of the interconnect, including bandwidth and VLAN numbers, are shared by all of the hosted connections on the interconnect, and the owner of the interconnect determines how these resources are assigned.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Interconnect {
     #[doc="<p>The Direct Connection endpoint which the physical connection terminates on.</p>"]
     #[serde(rename="awsDevice")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub aws_device: Option<AwsDevice>,
+    pub aws_device: Option<String>,
     #[serde(rename="bandwidth")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub bandwidth: Option<Bandwidth>,
+    pub bandwidth: Option<String>,
     #[serde(rename="interconnectId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub interconnect_id: Option<InterconnectId>,
+    pub interconnect_id: Option<String>,
     #[serde(rename="interconnectName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub interconnect_name: Option<InterconnectName>,
+    pub interconnect_name: Option<String>,
     #[serde(rename="interconnectState")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub interconnect_state: Option<InterconnectState>,
+    pub interconnect_state: Option<String>,
     #[serde(rename="lagId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub lag_id: Option<LagId>,
+    pub lag_id: Option<String>,
     #[doc="<p>The time of the most recent call to DescribeInterconnectLoa for this Interconnect.</p>"]
     #[serde(rename="loaIssueTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub loa_issue_time: Option<LoaIssueTime>,
+    pub loa_issue_time: Option<f64>,
     #[serde(rename="location")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub location: Option<LocationCode>,
+    pub location: Option<String>,
     #[serde(rename="region")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub region: Option<Region>,
+    pub region: Option<String>,
 }
 
 #[doc="<p>The ID of the interconnect.</p> <p>Example: dxcon-abc123</p>"]
-pub type InterconnectId = String;
 #[doc="<p>A list of interconnects.</p>"]
-pub type InterconnectList = Vec<Interconnect>;
 #[doc="<p>The name of the interconnect.</p> <p>Example: \"<i>1G Interconnect to AWS</i>\"</p>"]
-pub type InterconnectName = String;
 #[doc="<p>State of the interconnect.</p> <ul> <li> <p> <b>Requested</b>: The initial state of an interconnect. The interconnect stays in the requested state until the Letter of Authorization (LOA) is sent to the customer.</p> </li> <li> <p> <b>Pending</b>: The interconnect has been approved, and is being initialized.</p> </li> <li> <p> <b>Available</b>: The network link is up, and the interconnect is ready for use.</p> </li> <li> <p> <b>Down</b>: The network link is down.</p> </li> <li> <p> <b>Deleting</b>: The interconnect is in the process of being deleted.</p> </li> <li> <p> <b>Deleted</b>: The interconnect has been deleted.</p> </li> </ul>"]
-pub type InterconnectState = String;
 #[doc="<p>A structure containing a list of interconnects.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Interconnects {
     #[doc="<p>A list of interconnects.</p>"]
     #[serde(rename="interconnects")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub interconnects: Option<InterconnectList>,
+    pub interconnects: Option<Vec<Interconnect>>,
 }
 
 #[doc="<p>Describes a link aggregation group (LAG). A LAG is a connection that uses the Link Aggregation Control Protocol (LACP) to logically aggregate a bundle of physical connections. Like an interconnect, it can host other connections. All connections in a LAG must terminate on the same physical AWS Direct Connect endpoint, and must be the same bandwidth.</p>"]
@@ -646,63 +624,59 @@ pub struct Lag {
     #[doc="<p>Indicates whether the LAG can host other connections.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>"]
     #[serde(rename="allowsHostedConnections")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub allows_hosted_connections: Option<BooleanFlag>,
+    pub allows_hosted_connections: Option<bool>,
     #[doc="<p>The AWS Direct Connection endpoint that hosts the LAG.</p>"]
     #[serde(rename="awsDevice")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub aws_device: Option<AwsDevice>,
+    pub aws_device: Option<String>,
     #[doc="<p>A list of connections bundled by this LAG.</p>"]
     #[serde(rename="connections")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub connections: Option<ConnectionList>,
+    pub connections: Option<Vec<Connection>>,
     #[doc="<p>The individual bandwidth of the physical connections bundled by the LAG.</p> <p>Available values: 1Gbps, 10Gbps</p>"]
     #[serde(rename="connectionsBandwidth")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub connections_bandwidth: Option<Bandwidth>,
+    pub connections_bandwidth: Option<String>,
     #[serde(rename="lagId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub lag_id: Option<LagId>,
+    pub lag_id: Option<String>,
     #[doc="<p>The name of the LAG.</p>"]
     #[serde(rename="lagName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub lag_name: Option<LagName>,
+    pub lag_name: Option<String>,
     #[serde(rename="lagState")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub lag_state: Option<LagState>,
+    pub lag_state: Option<String>,
     #[serde(rename="location")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub location: Option<LocationCode>,
+    pub location: Option<String>,
     #[doc="<p>The minimum number of physical connections that must be operational for the LAG itself to be operational. If the number of operational connections drops below this setting, the LAG state changes to <code>down</code>. This value can help to ensure that a LAG is not overutilized if a significant number of its bundled connections go down.</p>"]
     #[serde(rename="minimumLinks")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub minimum_links: Option<Count>,
+    pub minimum_links: Option<i64>,
     #[doc="<p>The number of physical connections bundled by the LAG, up to a maximum of 10.</p>"]
     #[serde(rename="numberOfConnections")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub number_of_connections: Option<Count>,
+    pub number_of_connections: Option<i64>,
     #[doc="<p>The owner of the LAG.</p>"]
     #[serde(rename="ownerAccount")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub owner_account: Option<OwnerAccount>,
+    pub owner_account: Option<String>,
     #[serde(rename="region")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub region: Option<Region>,
+    pub region: Option<String>,
 }
 
 #[doc="<p>The ID of the LAG.</p> <p>Example: dxlag-fg5678gh</p>"]
-pub type LagId = String;
 #[doc="<p>A list of LAGs.</p>"]
-pub type LagList = Vec<Lag>;
-pub type LagName = String;
 #[doc="<p>The state of the LAG.</p> <ul> <li> <p> <b>Requested</b>: The initial state of a LAG. The LAG stays in the requested state until the Letter of Authorization (LOA) is available.</p> </li> <li> <p> <b>Pending</b>: The LAG has been approved, and is being initialized.</p> </li> <li> <p> <b>Available</b>: The network link is established, and the LAG is ready for use.</p> </li> <li> <p> <b>Down</b>: The network link is down.</p> </li> <li> <p> <b>Deleting</b>: The LAG is in the process of being deleted.</p> </li> <li> <p> <b>Deleted</b>: The LAG has been deleted.</p> </li> </ul>"]
-pub type LagState = String;
 #[doc="<p>A structure containing a list of LAGs.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Lags {
     #[doc="<p>A list of LAGs.</p>"]
     #[serde(rename="lags")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub lags: Option<LagList>,
+    pub lags: Option<Vec<Lag>>,
 }
 
 #[doc="<p>A structure containing the Letter of Authorization - Connecting Facility Assignment (LOA-CFA) for a connection.</p>"]
@@ -714,41 +688,35 @@ pub struct Loa {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub loa_content: Option<LoaContent>,
+    pub loa_content: Option<Vec<u8>>,
     #[serde(rename="loaContentType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub loa_content_type: Option<LoaContentType>,
+    pub loa_content_type: Option<String>,
 }
 
 #[doc="<p>The binary contents of the LOA-CFA document.</p>"]
-pub type LoaContent = Vec<u8>;
 #[doc="<p>A standard media type indicating the content type of the LOA-CFA document. Currently, the only supported value is \"application/pdf\".</p> <p>Default: application/pdf</p>"]
-pub type LoaContentType = String;
-pub type LoaIssueTime = f64;
 #[doc="<p>An AWS Direct Connect location where connections and interconnects can be requested.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Location {
     #[doc="<p>The code used to indicate the AWS Direct Connect location.</p>"]
     #[serde(rename="locationCode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub location_code: Option<LocationCode>,
+    pub location_code: Option<String>,
     #[doc="<p>The name of the AWS Direct Connect location. The name includes the colocation partner name and the physical site of the lit building.</p>"]
     #[serde(rename="locationName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub location_name: Option<LocationName>,
+    pub location_name: Option<String>,
 }
 
 #[doc="<p>Where the connection is located.</p> <p>Example: EqSV5</p> <p>Default: None</p>"]
-pub type LocationCode = String;
-pub type LocationList = Vec<Location>;
-pub type LocationName = String;
 #[doc="<p>A location is a network facility where AWS Direct Connect routers are available to be connected. Generally, these are colocation hubs where many network providers have equipment, and where cross connects can be delivered. Locations include a name and facility code, and must be provided when creating a connection.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Locations {
     #[doc="<p>A list of colocation hubs where network providers have equipment. Most regions have multiple locations available.</p>"]
     #[serde(rename="locations")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub locations: Option<LocationList>,
+    pub locations: Option<Vec<Location>>,
 }
 
 #[doc="<p>A structure containing information about a new BGP peer.</p>"]
@@ -756,19 +724,19 @@ pub struct Locations {
 pub struct NewBGPPeer {
     #[serde(rename="addressFamily")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub address_family: Option<AddressFamily>,
+    pub address_family: Option<String>,
     #[serde(rename="amazonAddress")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub amazon_address: Option<AmazonAddress>,
+    pub amazon_address: Option<String>,
     #[serde(rename="asn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub asn: Option<ASN>,
+    pub asn: Option<i64>,
     #[serde(rename="authKey")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub auth_key: Option<BGPAuthKey>,
+    pub auth_key: Option<String>,
     #[serde(rename="customerAddress")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub customer_address: Option<CustomerAddress>,
+    pub customer_address: Option<String>,
 }
 
 #[doc="<p>A structure containing information about a new private virtual interface.</p>"]
@@ -776,24 +744,24 @@ pub struct NewBGPPeer {
 pub struct NewPrivateVirtualInterface {
     #[serde(rename="addressFamily")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub address_family: Option<AddressFamily>,
+    pub address_family: Option<String>,
     #[serde(rename="amazonAddress")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub amazon_address: Option<AmazonAddress>,
+    pub amazon_address: Option<String>,
     #[serde(rename="asn")]
-    pub asn: ASN,
+    pub asn: i64,
     #[serde(rename="authKey")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub auth_key: Option<BGPAuthKey>,
+    pub auth_key: Option<String>,
     #[serde(rename="customerAddress")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub customer_address: Option<CustomerAddress>,
+    pub customer_address: Option<String>,
     #[serde(rename="virtualGatewayId")]
-    pub virtual_gateway_id: VirtualGatewayId,
+    pub virtual_gateway_id: String,
     #[serde(rename="virtualInterfaceName")]
-    pub virtual_interface_name: VirtualInterfaceName,
+    pub virtual_interface_name: String,
     #[serde(rename="vlan")]
-    pub vlan: VLAN,
+    pub vlan: i64,
 }
 
 #[doc="<p>A structure containing information about a private virtual interface that will be provisioned on a connection.</p>"]
@@ -801,22 +769,22 @@ pub struct NewPrivateVirtualInterface {
 pub struct NewPrivateVirtualInterfaceAllocation {
     #[serde(rename="addressFamily")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub address_family: Option<AddressFamily>,
+    pub address_family: Option<String>,
     #[serde(rename="amazonAddress")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub amazon_address: Option<AmazonAddress>,
+    pub amazon_address: Option<String>,
     #[serde(rename="asn")]
-    pub asn: ASN,
+    pub asn: i64,
     #[serde(rename="authKey")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub auth_key: Option<BGPAuthKey>,
+    pub auth_key: Option<String>,
     #[serde(rename="customerAddress")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub customer_address: Option<CustomerAddress>,
+    pub customer_address: Option<String>,
     #[serde(rename="virtualInterfaceName")]
-    pub virtual_interface_name: VirtualInterfaceName,
+    pub virtual_interface_name: String,
     #[serde(rename="vlan")]
-    pub vlan: VLAN,
+    pub vlan: i64,
 }
 
 #[doc="<p>A structure containing information about a new public virtual interface.</p>"]
@@ -824,25 +792,25 @@ pub struct NewPrivateVirtualInterfaceAllocation {
 pub struct NewPublicVirtualInterface {
     #[serde(rename="addressFamily")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub address_family: Option<AddressFamily>,
+    pub address_family: Option<String>,
     #[serde(rename="amazonAddress")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub amazon_address: Option<AmazonAddress>,
+    pub amazon_address: Option<String>,
     #[serde(rename="asn")]
-    pub asn: ASN,
+    pub asn: i64,
     #[serde(rename="authKey")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub auth_key: Option<BGPAuthKey>,
+    pub auth_key: Option<String>,
     #[serde(rename="customerAddress")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub customer_address: Option<CustomerAddress>,
+    pub customer_address: Option<String>,
     #[serde(rename="routeFilterPrefixes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub route_filter_prefixes: Option<RouteFilterPrefixList>,
+    pub route_filter_prefixes: Option<Vec<RouteFilterPrefix>>,
     #[serde(rename="virtualInterfaceName")]
-    pub virtual_interface_name: VirtualInterfaceName,
+    pub virtual_interface_name: String,
     #[serde(rename="vlan")]
-    pub vlan: VLAN,
+    pub vlan: i64,
 }
 
 #[doc="<p>A structure containing information about a public virtual interface that will be provisioned on a connection.</p>"]
@@ -850,100 +818,87 @@ pub struct NewPublicVirtualInterface {
 pub struct NewPublicVirtualInterfaceAllocation {
     #[serde(rename="addressFamily")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub address_family: Option<AddressFamily>,
+    pub address_family: Option<String>,
     #[serde(rename="amazonAddress")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub amazon_address: Option<AmazonAddress>,
+    pub amazon_address: Option<String>,
     #[serde(rename="asn")]
-    pub asn: ASN,
+    pub asn: i64,
     #[serde(rename="authKey")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub auth_key: Option<BGPAuthKey>,
+    pub auth_key: Option<String>,
     #[serde(rename="customerAddress")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub customer_address: Option<CustomerAddress>,
+    pub customer_address: Option<String>,
     #[serde(rename="routeFilterPrefixes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub route_filter_prefixes: Option<RouteFilterPrefixList>,
+    pub route_filter_prefixes: Option<Vec<RouteFilterPrefix>>,
     #[serde(rename="virtualInterfaceName")]
-    pub virtual_interface_name: VirtualInterfaceName,
+    pub virtual_interface_name: String,
     #[serde(rename="vlan")]
-    pub vlan: VLAN,
+    pub vlan: i64,
 }
 
-pub type OwnerAccount = String;
-pub type PartnerName = String;
-pub type ProviderName = String;
 #[doc="<p>The AWS region where the connection is located.</p> <p>Example: us-east-1</p> <p>Default: None</p>"]
-pub type Region = String;
-pub type ResourceArn = String;
-pub type ResourceArnList = Vec<ResourceArn>;
 #[doc="<p>The tags associated with a Direct Connect resource.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ResourceTag {
     #[doc="<p>The Amazon Resource Name (ARN) of the Direct Connect resource.</p>"]
     #[serde(rename="resourceArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub resource_arn: Option<ResourceArn>,
+    pub resource_arn: Option<String>,
     #[doc="<p>The tags.</p>"]
     #[serde(rename="tags")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
-pub type ResourceTagList = Vec<ResourceTag>;
 #[doc="<p>A route filter prefix that the customer can advertise through Border Gateway Protocol (BGP) over a public virtual interface.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RouteFilterPrefix {
     #[doc="<p>CIDR notation for the advertised route. Multiple routes are separated by commas.</p> <p>IPv6 CIDRs must be at least a /64 or shorter</p> <p>Example: 10.10.10.0/24,10.10.11.0/24,2001:db8::/64</p>"]
     #[serde(rename="cidr")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub cidr: Option<CIDR>,
+    pub cidr: Option<String>,
 }
 
 #[doc="<p>A list of routes to be advertised to the AWS network in this region (public virtual interface).</p>"]
-pub type RouteFilterPrefixList = Vec<RouteFilterPrefix>;
-pub type RouterConfig = String;
 #[doc="<p>Information about a tag.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Tag {
     #[doc="<p>The key of the tag.</p>"]
     #[serde(rename="key")]
-    pub key: TagKey,
+    pub key: String,
     #[doc="<p>The value of the tag.</p>"]
     #[serde(rename="value")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub value: Option<TagValue>,
+    pub value: Option<String>,
 }
 
-pub type TagKey = String;
-pub type TagKeyList = Vec<TagKey>;
-pub type TagList = Vec<Tag>;
 #[doc="<p>Container for the parameters to the TagResource operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct TagResourceRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the Direct Connect resource.</p> <p>Example: arn:aws:directconnect:us-east-1:123456789012:dxcon/dxcon-fg5678gh</p>"]
     #[serde(rename="resourceArn")]
-    pub resource_arn: ResourceArn,
+    pub resource_arn: String,
     #[doc="<p>The list of tags to add.</p>"]
     #[serde(rename="tags")]
-    pub tags: TagList,
+    pub tags: Vec<Tag>,
 }
 
 #[doc="<p>The response received when TagResource is called.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct TagResourceResponse;
 
-pub type TagValue = String;
 #[doc="<p>Container for the parameters to the UntagResource operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UntagResourceRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the Direct Connect resource.</p>"]
     #[serde(rename="resourceArn")]
-    pub resource_arn: ResourceArn,
+    pub resource_arn: String,
     #[doc="<p>The list of tag keys to remove.</p>"]
     #[serde(rename="tagKeys")]
-    pub tag_keys: TagKeyList,
+    pub tag_keys: Vec<String>,
 }
 
 #[doc="<p>The response received when UntagResource is called.</p>"]
@@ -955,43 +910,39 @@ pub struct UntagResourceResponse;
 pub struct UpdateLagRequest {
     #[doc="<p>The ID of the LAG to update.</p> <p>Example: dxlag-abc123</p> <p>Default: None</p>"]
     #[serde(rename="lagId")]
-    pub lag_id: LagId,
+    pub lag_id: String,
     #[doc="<p>The name for the LAG.</p> <p>Example: \"<code>3x10G LAG to AWS</code>\"</p> <p>Default: None</p>"]
     #[serde(rename="lagName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub lag_name: Option<LagName>,
+    pub lag_name: Option<String>,
     #[doc="<p>The minimum number of physical connections that must be operational for the LAG itself to be operational.</p> <p>Default: None</p>"]
     #[serde(rename="minimumLinks")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub minimum_links: Option<Count>,
+    pub minimum_links: Option<i64>,
 }
 
 #[doc="<p>The VLAN ID.</p> <p>Example: 101</p>"]
-pub type VLAN = i64;
 #[doc="<p>You can create one or more AWS Direct Connect private virtual interfaces linking to your virtual private gateway.</p> <p>Virtual private gateways can be managed using the Amazon Virtual Private Cloud (Amazon VPC) console or the <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-CreateVpnGateway.html\">Amazon EC2 CreateVpnGateway action</a>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct VirtualGateway {
     #[serde(rename="virtualGatewayId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub virtual_gateway_id: Option<VirtualGatewayId>,
+    pub virtual_gateway_id: Option<String>,
     #[serde(rename="virtualGatewayState")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub virtual_gateway_state: Option<VirtualGatewayState>,
+    pub virtual_gateway_state: Option<String>,
 }
 
 #[doc="<p>The ID of the virtual private gateway to a VPC. This only applies to private virtual interfaces.</p> <p>Example: vgw-123er56</p>"]
-pub type VirtualGatewayId = String;
 #[doc="<p>A list of virtual private gateways.</p>"]
-pub type VirtualGatewayList = Vec<VirtualGateway>;
 #[doc="<p>State of the virtual private gateway.</p> <ul> <li> <p> <b>Pending</b>: This is the initial state after calling <i>CreateVpnGateway</i>.</p> </li> <li> <p> <b>Available</b>: Ready for use by a private virtual interface.</p> </li> <li> <p> <b>Deleting</b>: This is the initial state after calling <i>DeleteVpnGateway</i>.</p> </li> <li> <p> <b>Deleted</b>: In this state, a private virtual interface is unable to send traffic over this gateway.</p> </li> </ul>"]
-pub type VirtualGatewayState = String;
 #[doc="<p>A structure containing a list of virtual private gateways.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct VirtualGateways {
     #[doc="<p>A list of virtual private gateways.</p>"]
     #[serde(rename="virtualGateways")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub virtual_gateways: Option<VirtualGatewayList>,
+    pub virtual_gateways: Option<Vec<VirtualGateway>>,
 }
 
 #[doc="<p>A virtual interface (VLAN) transmits the traffic between the AWS Direct Connect location and the customer.</p>"]
@@ -999,76 +950,71 @@ pub struct VirtualGateways {
 pub struct VirtualInterface {
     #[serde(rename="addressFamily")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub address_family: Option<AddressFamily>,
+    pub address_family: Option<String>,
     #[serde(rename="amazonAddress")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub amazon_address: Option<AmazonAddress>,
+    pub amazon_address: Option<String>,
     #[serde(rename="asn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub asn: Option<ASN>,
+    pub asn: Option<i64>,
     #[serde(rename="authKey")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub auth_key: Option<BGPAuthKey>,
+    pub auth_key: Option<String>,
     #[serde(rename="bgpPeers")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub bgp_peers: Option<BGPPeerList>,
+    pub bgp_peers: Option<Vec<BGPPeer>>,
     #[serde(rename="connectionId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub connection_id: Option<ConnectionId>,
+    pub connection_id: Option<String>,
     #[serde(rename="customerAddress")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub customer_address: Option<CustomerAddress>,
+    pub customer_address: Option<String>,
     #[doc="<p>Information for generating the customer router configuration.</p>"]
     #[serde(rename="customerRouterConfig")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub customer_router_config: Option<RouterConfig>,
+    pub customer_router_config: Option<String>,
     #[serde(rename="location")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub location: Option<LocationCode>,
+    pub location: Option<String>,
     #[doc="<p>The AWS account that will own the new virtual interface.</p>"]
     #[serde(rename="ownerAccount")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub owner_account: Option<OwnerAccount>,
+    pub owner_account: Option<String>,
     #[serde(rename="routeFilterPrefixes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub route_filter_prefixes: Option<RouteFilterPrefixList>,
+    pub route_filter_prefixes: Option<Vec<RouteFilterPrefix>>,
     #[serde(rename="virtualGatewayId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub virtual_gateway_id: Option<VirtualGatewayId>,
+    pub virtual_gateway_id: Option<String>,
     #[serde(rename="virtualInterfaceId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub virtual_interface_id: Option<VirtualInterfaceId>,
+    pub virtual_interface_id: Option<String>,
     #[serde(rename="virtualInterfaceName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub virtual_interface_name: Option<VirtualInterfaceName>,
+    pub virtual_interface_name: Option<String>,
     #[serde(rename="virtualInterfaceState")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub virtual_interface_state: Option<VirtualInterfaceState>,
+    pub virtual_interface_state: Option<String>,
     #[serde(rename="virtualInterfaceType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub virtual_interface_type: Option<VirtualInterfaceType>,
+    pub virtual_interface_type: Option<String>,
     #[serde(rename="vlan")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub vlan: Option<VLAN>,
+    pub vlan: Option<i64>,
 }
 
 #[doc="<p>The ID of the virtual interface.</p> <p>Example: dxvif-123dfg56</p> <p>Default: None</p>"]
-pub type VirtualInterfaceId = String;
 #[doc="<p>A list of virtual interfaces.</p>"]
-pub type VirtualInterfaceList = Vec<VirtualInterface>;
 #[doc="<p>The name of the virtual interface assigned by the customer.</p> <p>Example: \"My VPC\"</p>"]
-pub type VirtualInterfaceName = String;
 #[doc="<p>State of the virtual interface.</p> <ul> <li> <p> <b>Confirming</b>: The creation of the virtual interface is pending confirmation from the virtual interface owner. If the owner of the virtual interface is different from the owner of the connection on which it is provisioned, then the virtual interface will remain in this state until it is confirmed by the virtual interface owner.</p> </li> <li> <p> <b>Verifying</b>: This state only applies to public virtual interfaces. Each public virtual interface needs validation before the virtual interface can be created.</p> </li> <li> <p> <b>Pending</b>: A virtual interface is in this state from the time that it is created until the virtual interface is ready to forward traffic.</p> </li> <li> <p> <b>Available</b>: A virtual interface that is able to forward traffic.</p> </li> <li> <p> <b>Down</b>: A virtual interface that is BGP down.</p> </li> <li> <p> <b>Deleting</b>: A virtual interface is in this state immediately after calling <a>DeleteVirtualInterface</a> until it can no longer forward traffic.</p> </li> <li> <p> <b>Deleted</b>: A virtual interface that cannot forward traffic.</p> </li> <li> <p> <b>Rejected</b>: The virtual interface owner has declined creation of the virtual interface. If a virtual interface in the 'Confirming' state is deleted by the virtual interface owner, the virtual interface will enter the 'Rejected' state.</p> </li> </ul>"]
-pub type VirtualInterfaceState = String;
 #[doc="<p>The type of virtual interface.</p> <p>Example: private (Amazon VPC) or public (Amazon S3, Amazon DynamoDB, and so on.)</p>"]
-pub type VirtualInterfaceType = String;
 #[doc="<p>A structure containing a list of virtual interfaces.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct VirtualInterfaces {
     #[doc="<p>A list of virtual interfaces.</p>"]
     #[serde(rename="virtualInterfaces")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub virtual_interfaces: Option<VirtualInterfaceList>,
+    pub virtual_interfaces: Option<Vec<VirtualInterface>>,
 }
 
 /// Errors returned by AllocateConnectionOnInterconnect

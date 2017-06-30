@@ -26,58 +26,52 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-pub type AccountId = String;
 #[doc="<p>Information about an entity that is affected by a Health event.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct AffectedEntity {
     #[doc="<p>The 12-digit AWS account number that contains the affected entity.</p>"]
     #[serde(rename="awsAccountId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub aws_account_id: Option<AccountId>,
+    pub aws_account_id: Option<String>,
     #[doc="<p>The unique identifier for the entity. Format: <code>arn:aws:health:<i>entity-region</i>:<i>aws-account</i>:entity/<i>entity-id</i> </code>. Example: <code>arn:aws:health:us-east-1:111222333444:entity/AVh5GGT7ul1arKr1sE1K</code> </p>"]
     #[serde(rename="entityArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub entity_arn: Option<EntityArn>,
+    pub entity_arn: Option<String>,
     #[doc="<p>The ID of the affected entity.</p>"]
     #[serde(rename="entityValue")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub entity_value: Option<EntityValue>,
+    pub entity_value: Option<String>,
     #[doc="<p>The unique identifier for the event. Format: <code>arn:aws:health:<i>event-region</i>::event/<i>EVENT_TYPE_PLUS_ID</i> </code>. Example: <code>arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331</code> </p>"]
     #[serde(rename="eventArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub event_arn: Option<EventArn>,
+    pub event_arn: Option<String>,
     #[doc="<p>The most recent time that the entity was updated.</p>"]
     #[serde(rename="lastUpdatedTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub last_updated_time: Option<Timestamp>,
+    pub last_updated_time: Option<f64>,
     #[doc="<p>The most recent status of the entity affected by the event. The possible values are <code>IMPAIRED</code>, <code>UNIMPAIRED</code>, and <code>UNKNOWN</code>.</p>"]
     #[serde(rename="statusCode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status_code: Option<EntityStatusCode>,
+    pub status_code: Option<String>,
     #[doc="<p>A map of entity tags attached to the affected entity.</p>"]
     #[serde(rename="tags")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub tags: Option<TagSet>,
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-pub type AggregateValue = String;
-pub type AvailabilityZone = String;
-pub type AvailabilityZones = Vec<AvailabilityZone>;
-pub type Count = i64;
 #[doc="<p>A range of dates and times that is used by the <a>EventFilter</a> and <a>EntityFilter</a> objects. If <code>from</code> is set and <code>to</code> is set: match items where the timestamp (<code>startTime</code>, <code>endTime</code>, or <code>lastUpdatedTime</code>) is between <code>from</code> and <code>to</code> inclusive. If <code>from</code> is set and <code>to</code> is not set: match items where the timestamp value is equal to or after <code>from</code>. If <code>from</code> is not set and <code>to</code> is set: match items where the timestamp value is equal to or before <code>to</code>.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DateTimeRange {
     #[doc="<p>The starting date and time of a time range.</p>"]
     #[serde(rename="from")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub from: Option<Timestamp>,
+    pub from: Option<f64>,
     #[doc="<p>The ending date and time of a time range.</p>"]
     #[serde(rename="to")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub to: Option<Timestamp>,
+    pub to: Option<f64>,
 }
 
-pub type DateTimeRangeList = Vec<DateTimeRange>;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DescribeAffectedEntitiesRequest {
     #[doc="<p>Values to narrow the results returned. At least one event ARN is required. </p>"]
@@ -86,15 +80,15 @@ pub struct DescribeAffectedEntitiesRequest {
     #[doc="<p>The locale (language) to return information in. English (en) is the default and the only supported value at this time.</p>"]
     #[serde(rename="locale")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub locale: Option<Locale>,
+    pub locale: Option<String>,
     #[doc="<p>The maximum number of items to return in one batch, between 10 and 100, inclusive.</p>"]
     #[serde(rename="maxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<MaxResults>,
+    pub max_results: Option<i64>,
     #[doc="<p>If the results of a search are large, only a portion of the results are returned, and a <code>nextToken</code> pagination token is returned in the response. To retrieve the next batch of results, reissue the search request and include the returned token. When all results have been returned, the response does not contain a pagination token value.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -102,11 +96,11 @@ pub struct DescribeAffectedEntitiesResponse {
     #[doc="<p>The entities that match the filter criteria.</p>"]
     #[serde(rename="entities")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub entities: Option<EntityList>,
+    pub entities: Option<Vec<AffectedEntity>>,
     #[doc="<p>If the results of a search are large, only a portion of the results are returned, and a <code>nextToken</code> pagination token is returned in the response. To retrieve the next batch of results, reissue the search request and include the returned token. When all results have been returned, the response does not contain a pagination token value.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -114,7 +108,7 @@ pub struct DescribeEntityAggregatesRequest {
     #[doc="<p>A list of event ARNs (unique identifiers). For example: <code>\"arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331\", \"arn:aws:health:us-west-1::event/AWS_EBS_LOST_VOLUME_xyz\"</code> </p>"]
     #[serde(rename="eventArns")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub event_arns: Option<EventArnsList>,
+    pub event_arns: Option<Vec<String>>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -122,14 +116,14 @@ pub struct DescribeEntityAggregatesResponse {
     #[doc="<p>The number of entities that are affected by each of the specified events.</p>"]
     #[serde(rename="entityAggregates")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub entity_aggregates: Option<EntityAggregateList>,
+    pub entity_aggregates: Option<Vec<EntityAggregate>>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DescribeEventAggregatesRequest {
     #[doc="<p>The only currently supported value is <code>eventTypeCategory</code>.</p>"]
     #[serde(rename="aggregateField")]
-    pub aggregate_field: EventAggregateField,
+    pub aggregate_field: String,
     #[doc="<p>Values to narrow the results returned.</p>"]
     #[serde(rename="filter")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -137,11 +131,11 @@ pub struct DescribeEventAggregatesRequest {
     #[doc="<p>The maximum number of items to return in one batch, between 10 and 100, inclusive.</p>"]
     #[serde(rename="maxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<MaxResults>,
+    pub max_results: Option<i64>,
     #[doc="<p>If the results of a search are large, only a portion of the results are returned, and a <code>nextToken</code> pagination token is returned in the response. To retrieve the next batch of results, reissue the search request and include the returned token. When all results have been returned, the response does not contain a pagination token value.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -149,23 +143,22 @@ pub struct DescribeEventAggregatesResponse {
     #[doc="<p>The number of events in each category that meet the optional filter criteria.</p>"]
     #[serde(rename="eventAggregates")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub event_aggregates: Option<EventAggregateList>,
+    pub event_aggregates: Option<Vec<EventAggregate>>,
     #[doc="<p>If the results of a search are large, only a portion of the results are returned, and a <code>nextToken</code> pagination token is returned in the response. To retrieve the next batch of results, reissue the search request and include the returned token. When all results have been returned, the response does not contain a pagination token value.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
-pub type DescribeEventDetailsFailedSet = Vec<EventDetailsErrorItem>;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DescribeEventDetailsRequest {
     #[doc="<p>A list of event ARNs (unique identifiers). For example: <code>\"arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331\", \"arn:aws:health:us-west-1::event/AWS_EBS_LOST_VOLUME_xyz\"</code> </p>"]
     #[serde(rename="eventArns")]
-    pub event_arns: EventArnList,
+    pub event_arns: Vec<String>,
     #[doc="<p>The locale (language) to return information in. English (en) is the default and the only supported value at this time.</p>"]
     #[serde(rename="locale")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub locale: Option<Locale>,
+    pub locale: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -173,14 +166,13 @@ pub struct DescribeEventDetailsResponse {
     #[doc="<p>Error messages for any events that could not be retrieved.</p>"]
     #[serde(rename="failedSet")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub failed_set: Option<DescribeEventDetailsFailedSet>,
+    pub failed_set: Option<Vec<EventDetailsErrorItem>>,
     #[doc="<p>Information about the events that could be retrieved.</p>"]
     #[serde(rename="successfulSet")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub successful_set: Option<DescribeEventDetailsSuccessfulSet>,
+    pub successful_set: Option<Vec<EventDetails>>,
 }
 
-pub type DescribeEventDetailsSuccessfulSet = Vec<EventDetails>;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DescribeEventTypesRequest {
     #[doc="<p>Values to narrow the results returned.</p>"]
@@ -190,15 +182,15 @@ pub struct DescribeEventTypesRequest {
     #[doc="<p>The locale (language) to return information in. English (en) is the default and the only supported value at this time.</p>"]
     #[serde(rename="locale")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub locale: Option<Locale>,
+    pub locale: Option<String>,
     #[doc="<p>The maximum number of items to return in one batch, between 10 and 100, inclusive.</p>"]
     #[serde(rename="maxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<MaxResults>,
+    pub max_results: Option<i64>,
     #[doc="<p>If the results of a search are large, only a portion of the results are returned, and a <code>nextToken</code> pagination token is returned in the response. To retrieve the next batch of results, reissue the search request and include the returned token. When all results have been returned, the response does not contain a pagination token value.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -206,11 +198,11 @@ pub struct DescribeEventTypesResponse {
     #[doc="<p>A list of event types that match the filter criteria. Event types have a category (<code>issue</code>, <code>accountNotification</code>, or <code>scheduledChange</code>), a service (for example, <code>EC2</code>, <code>RDS</code>, <code>DATAPIPELINE</code>, <code>BILLING</code>), and a code (in the format <code>AWS_<i>SERVICE</i>_<i>DESCRIPTION</i> </code>; for example, <code>AWS_EC2_SYSTEM_MAINTENANCE_EVENT</code>).</p>"]
     #[serde(rename="eventTypes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub event_types: Option<EventTypeList>,
+    pub event_types: Option<Vec<String>>,
     #[doc="<p>If the results of a search are large, only a portion of the results are returned, and a <code>nextToken</code> pagination token is returned in the response. To retrieve the next batch of results, reissue the search request and include the returned token. When all results have been returned, the response does not contain a pagination token value.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -222,15 +214,15 @@ pub struct DescribeEventsRequest {
     #[doc="<p>The locale (language) to return information in. English (en) is the default and the only supported value at this time.</p>"]
     #[serde(rename="locale")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub locale: Option<Locale>,
+    pub locale: Option<String>,
     #[doc="<p>The maximum number of items to return in one batch, between 10 and 100, inclusive.</p>"]
     #[serde(rename="maxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<MaxResults>,
+    pub max_results: Option<i64>,
     #[doc="<p>If the results of a search are large, only a portion of the results are returned, and a <code>nextToken</code> pagination token is returned in the response. To retrieve the next batch of results, reissue the search request and include the returned token. When all results have been returned, the response does not contain a pagination token value.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -238,11 +230,11 @@ pub struct DescribeEventsResponse {
     #[doc="<p>The events that match the specified filter criteria.</p>"]
     #[serde(rename="events")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub events: Option<EventList>,
+    pub events: Option<Vec<Event>>,
     #[doc="<p>If the results of a search are large, only a portion of the results are returned, and a <code>nextToken</code> pagination token is returned in the response. To retrieve the next batch of results, reissue the search request and include the returned token. When all results have been returned, the response does not contain a pagination token value.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
 #[doc="<p>The number of entities that are affected by one or more events. Returned by the <a>DescribeEntityAggregates</a> operation.</p>"]
@@ -251,92 +243,84 @@ pub struct EntityAggregate {
     #[doc="<p>The number entities that match the criteria for the specified events.</p>"]
     #[serde(rename="count")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub count: Option<Count>,
+    pub count: Option<i64>,
     #[doc="<p>The unique identifier for the event. Format: <code>arn:aws:health:<i>event-region</i>::event/<i>EVENT_TYPE_PLUS_ID</i> </code>. Example: <code>arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331</code> </p>"]
     #[serde(rename="eventArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub event_arn: Option<EventArn>,
+    pub event_arn: Option<String>,
 }
 
-pub type EntityAggregateList = Vec<EntityAggregate>;
-pub type EntityArn = String;
-pub type EntityArnList = Vec<EntityArn>;
 #[doc="<p>The values to use to filter results from the <a>DescribeAffectedEntities</a> operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct EntityFilter {
     #[doc="<p>A list of entity ARNs (unique identifiers).</p>"]
     #[serde(rename="entityArns")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub entity_arns: Option<EntityArnList>,
+    pub entity_arns: Option<Vec<String>>,
     #[doc="<p>A list of IDs for affected entities.</p>"]
     #[serde(rename="entityValues")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub entity_values: Option<EntityValueList>,
+    pub entity_values: Option<Vec<String>>,
     #[doc="<p>A list of event ARNs (unique identifiers). For example: <code>\"arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331\", \"arn:aws:health:us-west-1::event/AWS_EBS_LOST_VOLUME_xyz\"</code> </p>"]
     #[serde(rename="eventArns")]
-    pub event_arns: EventArnList,
+    pub event_arns: Vec<String>,
     #[doc="<p>A list of the most recent dates and times that the entity was updated.</p>"]
     #[serde(rename="lastUpdatedTimes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub last_updated_times: Option<DateTimeRangeList>,
+    pub last_updated_times: Option<Vec<DateTimeRange>>,
     #[doc="<p>A list of entity status codes (<code>IMPAIRED</code>, <code>UNIMPAIRED</code>, or <code>UNKNOWN</code>).</p>"]
     #[serde(rename="statusCodes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status_codes: Option<EntityStatusCodeList>,
+    pub status_codes: Option<Vec<String>>,
     #[doc="<p>A map of entity tags attached to the affected entity.</p>"]
     #[serde(rename="tags")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub tags: Option<TagFilter>,
+    pub tags: Option<Vec<::std::collections::HashMap<String, String>>>,
 }
 
-pub type EntityList = Vec<AffectedEntity>;
-pub type EntityStatusCode = String;
-pub type EntityStatusCodeList = Vec<EntityStatusCode>;
-pub type EntityValue = String;
-pub type EntityValueList = Vec<EntityValue>;
 #[doc="<p>Summary information about an event, returned by the <a>DescribeEvents</a> operation. The <a>DescribeEventDetails</a> operation also returns this information, as well as the <a>EventDescription</a> and additional event metadata.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Event {
     #[doc="<p>The unique identifier for the event. Format: <code>arn:aws:health:<i>event-region</i>::event/<i>EVENT_TYPE_PLUS_ID</i> </code>. Example: <code>arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331</code> </p>"]
     #[serde(rename="arn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub arn: Option<EventArn>,
+    pub arn: Option<String>,
     #[doc="<p>The AWS Availability Zone of the event. For example, us-east-1a.</p>"]
     #[serde(rename="availabilityZone")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub availability_zone: Option<AvailabilityZone>,
+    pub availability_zone: Option<String>,
     #[doc="<p>The date and time that the event ended.</p>"]
     #[serde(rename="endTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub end_time: Option<Timestamp>,
+    pub end_time: Option<f64>,
     #[doc="<p>The </p>"]
     #[serde(rename="eventTypeCategory")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub event_type_category: Option<EventTypeCategory>,
+    pub event_type_category: Option<String>,
     #[doc="<p>The unique identifier for the event type. The format is <code>AWS_<i>SERVICE</i>_<i>DESCRIPTION</i> </code>; for example, <code>AWS_EC2_SYSTEM_MAINTENANCE_EVENT</code>.</p>"]
     #[serde(rename="eventTypeCode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub event_type_code: Option<EventTypeCode>,
+    pub event_type_code: Option<String>,
     #[doc="<p>The most recent date and time that the event was updated.</p>"]
     #[serde(rename="lastUpdatedTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub last_updated_time: Option<Timestamp>,
+    pub last_updated_time: Option<f64>,
     #[doc="<p>The AWS region name of the event.</p>"]
     #[serde(rename="region")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub region: Option<Region>,
+    pub region: Option<String>,
     #[doc="<p>The AWS service that is affected by the event. For example, <code>EC2</code>, <code>RDS</code>.</p>"]
     #[serde(rename="service")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub service: Option<Service>,
+    pub service: Option<String>,
     #[doc="<p>The date and time that the event began.</p>"]
     #[serde(rename="startTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub start_time: Option<Timestamp>,
+    pub start_time: Option<f64>,
     #[doc="<p>The most recent status of the event. Possible values are <code>open</code>, <code>closed</code>, and <code>upcoming</code>.</p>"]
     #[serde(rename="statusCode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status_code: Option<EventStatusCode>,
+    pub status_code: Option<String>,
 }
 
 #[doc="<p>The number of events of each issue type. Returned by the <a>DescribeEventAggregates</a> operation.</p>"]
@@ -345,19 +329,13 @@ pub struct EventAggregate {
     #[doc="<p>The issue type for the associated count.</p>"]
     #[serde(rename="aggregateValue")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub aggregate_value: Option<AggregateValue>,
+    pub aggregate_value: Option<String>,
     #[doc="<p>The number of events of the associated issue type.</p>"]
     #[serde(rename="count")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub count: Option<Count>,
+    pub count: Option<i64>,
 }
 
-pub type EventAggregateField = String;
-pub type EventAggregateList = Vec<EventAggregate>;
-pub type EventArn = String;
-pub type EventArnList = Vec<EventArn>;
-pub type EventArnsList = Vec<EventArn>;
-pub type EventDescription = String;
 #[doc="<p>Detailed information about an event. A combination of an <a>Event</a> object, an <a>EventDescription</a> object, and additional metadata about the event. Returned by the <a>DescribeEventDetails</a> operation.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct EventDetails {
@@ -368,11 +346,11 @@ pub struct EventDetails {
     #[doc="<p>The most recent description of the event.</p>"]
     #[serde(rename="eventDescription")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub event_description: Option<EventDescription>,
+    pub event_description: Option<String>,
     #[doc="<p>Additional metadata about the event.</p>"]
     #[serde(rename="eventMetadata")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub event_metadata: Option<EventMetadata>,
+    pub event_metadata: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[doc="<p>Error information returned when a <a>DescribeEventDetails</a> operation cannot find a specified event.</p>"]
@@ -389,7 +367,7 @@ pub struct EventDetailsErrorItem {
     #[doc="<p>The unique identifier for the event. Format: <code>arn:aws:health:<i>event-region</i>::event/<i>EVENT_TYPE_PLUS_ID</i> </code>. Example: <code>arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331</code> </p>"]
     #[serde(rename="eventArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub event_arn: Option<EventArn>,
+    pub event_arn: Option<String>,
 }
 
 #[doc="<p>The values to use to filter results from the <a>DescribeEvents</a> and <a>DescribeEventAggregates</a> operations.</p>"]
@@ -398,98 +376,74 @@ pub struct EventFilter {
     #[doc="<p>A list of AWS availability zones.</p>"]
     #[serde(rename="availabilityZones")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub availability_zones: Option<AvailabilityZones>,
+    pub availability_zones: Option<Vec<String>>,
     #[doc="<p>A list of dates and times that the event ended.</p>"]
     #[serde(rename="endTimes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub end_times: Option<DateTimeRangeList>,
+    pub end_times: Option<Vec<DateTimeRange>>,
     #[doc="<p>A list of entity ARNs (unique identifiers).</p>"]
     #[serde(rename="entityArns")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub entity_arns: Option<EntityArnList>,
+    pub entity_arns: Option<Vec<String>>,
     #[doc="<p>A list of entity identifiers, such as EC2 instance IDs (<code>i-34ab692e</code>) or EBS volumes (<code>vol-426ab23e</code>).</p>"]
     #[serde(rename="entityValues")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub entity_values: Option<EntityValueList>,
+    pub entity_values: Option<Vec<String>>,
     #[doc="<p>A list of event ARNs (unique identifiers). For example: <code>\"arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331\", \"arn:aws:health:us-west-1::event/AWS_EBS_LOST_VOLUME_xyz\"</code> </p>"]
     #[serde(rename="eventArns")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub event_arns: Option<EventArnList>,
+    pub event_arns: Option<Vec<String>>,
     #[doc="<p>A list of event status codes.</p>"]
     #[serde(rename="eventStatusCodes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub event_status_codes: Option<EventStatusCodeList>,
+    pub event_status_codes: Option<Vec<String>>,
     #[doc="<p>A list of event type category codes (<code>issue</code>, <code>scheduledChange</code>, or <code>accountNotification</code>).</p>"]
     #[serde(rename="eventTypeCategories")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub event_type_categories: Option<EventTypeCategoryList>,
+    pub event_type_categories: Option<Vec<String>>,
     #[doc="<p>A list of unique identifiers for event types. For example, <code>\"AWS_EC2_SYSTEM_MAINTENANCE_EVENT\",\"AWS_RDS_MAINTENANCE_SCHEDULED\"</code> </p>"]
     #[serde(rename="eventTypeCodes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub event_type_codes: Option<EventTypeList>,
+    pub event_type_codes: Option<Vec<String>>,
     #[doc="<p>A list of dates and times that the event was last updated.</p>"]
     #[serde(rename="lastUpdatedTimes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub last_updated_times: Option<DateTimeRangeList>,
+    pub last_updated_times: Option<Vec<DateTimeRange>>,
     #[doc="<p>A list of AWS regions.</p>"]
     #[serde(rename="regions")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub regions: Option<RegionList>,
+    pub regions: Option<Vec<String>>,
     #[doc="<p>The AWS services associated with the event. For example, <code>EC2</code>, <code>RDS</code>.</p>"]
     #[serde(rename="services")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub services: Option<ServiceList>,
+    pub services: Option<Vec<String>>,
     #[doc="<p>A list of dates and times that the event began.</p>"]
     #[serde(rename="startTimes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub start_times: Option<DateTimeRangeList>,
+    pub start_times: Option<Vec<DateTimeRange>>,
     #[doc="<p>A map of entity tags attached to the affected entity.</p>"]
     #[serde(rename="tags")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub tags: Option<TagFilter>,
+    pub tags: Option<Vec<::std::collections::HashMap<String, String>>>,
 }
 
-pub type EventList = Vec<Event>;
-pub type EventMetadata = ::std::collections::HashMap<MetadataKey, MetadataValue>;
-pub type EventStatusCode = String;
-pub type EventStatusCodeList = Vec<EventStatusCode>;
-pub type EventType = String;
-pub type EventTypeCategory = String;
-pub type EventTypeCategoryList = Vec<EventTypeCategory>;
-pub type EventTypeCode = String;
-pub type EventTypeCodeList = Vec<EventTypeCode>;
 #[doc="<p>The values to use to filter results from the <a>DescribeEventTypes</a> operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct EventTypeFilter {
     #[doc="<p>A list of event type category codes (<code>issue</code>, <code>scheduledChange</code>, or <code>accountNotification</code>).</p>"]
     #[serde(rename="eventTypeCategories")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub event_type_categories: Option<EventTypeCategoryList>,
+    pub event_type_categories: Option<Vec<String>>,
     #[doc="<p>A list of event type codes.</p>"]
     #[serde(rename="eventTypeCodes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub event_type_codes: Option<EventTypeCodeList>,
+    pub event_type_codes: Option<Vec<String>>,
     #[doc="<p>The AWS services associated with the event. For example, <code>EC2</code>, <code>RDS</code>.</p>"]
     #[serde(rename="services")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub services: Option<ServiceList>,
+    pub services: Option<Vec<String>>,
 }
 
-pub type EventTypeList = Vec<EventType>;
-pub type Locale = String;
-pub type MaxResults = i64;
-pub type MetadataKey = String;
-pub type MetadataValue = String;
-pub type NextToken = String;
-pub type Region = String;
-pub type RegionList = Vec<Region>;
-pub type Service = String;
-pub type ServiceList = Vec<Service>;
-pub type TagFilter = Vec<TagSet>;
-pub type TagKey = String;
-pub type TagSet = ::std::collections::HashMap<TagKey, TagValue>;
-pub type TagValue = String;
-pub type Timestamp = f64;
 /// Errors returned by DescribeAffectedEntities
 #[derive(Debug, PartialEq)]
 pub enum DescribeAffectedEntitiesError {

@@ -26,34 +26,28 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-pub type AWSAccountIdType = String;
-pub type AlgorithmSpec = String;
-pub type AliasList = Vec<AliasListEntry>;
 #[doc="<p>Contains information about an alias.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct AliasListEntry {
     #[doc="<p>String that contains the key ARN.</p>"]
     #[serde(rename="AliasArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub alias_arn: Option<ArnType>,
+    pub alias_arn: Option<String>,
     #[doc="<p>String that contains the alias.</p>"]
     #[serde(rename="AliasName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub alias_name: Option<AliasNameType>,
+    pub alias_name: Option<String>,
     #[doc="<p>String that contains the key identifier referred to by the alias.</p>"]
     #[serde(rename="TargetKeyId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub target_key_id: Option<KeyIdType>,
+    pub target_key_id: Option<String>,
 }
 
-pub type AliasNameType = String;
-pub type ArnType = String;
-pub type BooleanType = bool;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CancelKeyDeletionRequest {
     #[doc="<p>The unique identifier for the customer master key (CMK) for which to cancel deletion.</p> <p>To specify this value, use the unique key ID or the Amazon Resource Name (ARN) of the CMK. Examples:</p> <ul> <li> <p>Unique key ID: 1234abcd-12ab-34cd-56ef-1234567890ab</p> </li> <li> <p>Key ARN: arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</p> </li> </ul> <p>To obtain the unique key ID and key ARN for a given CMK, use <a>ListKeys</a> or <a>DescribeKey</a>.</p>"]
     #[serde(rename="KeyId")]
-    pub key_id: KeyIdType,
+    pub key_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -61,18 +55,17 @@ pub struct CancelKeyDeletionResponse {
     #[doc="<p>The unique identifier of the master key for which deletion is canceled.</p>"]
     #[serde(rename="KeyId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub key_id: Option<KeyIdType>,
+    pub key_id: Option<String>,
 }
 
-pub type CiphertextType = Vec<u8>;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateAliasRequest {
     #[doc="<p>String that contains the display name. The name must start with the word \"alias\" followed by a forward slash (alias/). Aliases that begin with \"alias/AWS\" are reserved.</p>"]
     #[serde(rename="AliasName")]
-    pub alias_name: AliasNameType,
+    pub alias_name: String,
     #[doc="<p>An identifier of the key for which you are creating the alias. This value cannot be another alias but can be a globally unique identifier or a fully specified ARN to a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul>"]
     #[serde(rename="TargetKeyId")]
-    pub target_key_id: KeyIdType,
+    pub target_key_id: String,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -84,25 +77,25 @@ pub struct CreateGrantRequest {
     #[doc="<p>A list of grant tokens.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#grant_token\">Grant Tokens</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
     #[serde(rename="GrantTokens")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub grant_tokens: Option<GrantTokenList>,
+    pub grant_tokens: Option<Vec<String>>,
     #[doc="<p>The principal that is given permission to perform the operations that the grant permits.</p> <p>To specify the principal, use the <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Name (ARN)</a> of an AWS principal. Valid AWS principals include AWS accounts (root), IAM users, IAM roles, federated users, and assumed role users. For examples of the ARN syntax to use for specifying a principal, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-iam\">AWS Identity and Access Management (IAM)</a> in the Example ARNs section of the <i>AWS General Reference</i>.</p>"]
     #[serde(rename="GranteePrincipal")]
-    pub grantee_principal: PrincipalIdType,
+    pub grantee_principal: String,
     #[doc="<p>The unique identifier for the customer master key (CMK) that the grant applies to.</p> <p>To specify this value, use the globally unique key ID or the Amazon Resource Name (ARN) of the key. Examples:</p> <ul> <li> <p>Globally unique key ID: 12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Key ARN: arn:aws:kms:us-west-2:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> </ul>"]
     #[serde(rename="KeyId")]
-    pub key_id: KeyIdType,
+    pub key_id: String,
     #[doc="<p>A friendly name for identifying the grant. Use this value to prevent unintended creation of duplicate grants when retrying this request.</p> <p>When this value is absent, all <code>CreateGrant</code> requests result in a new grant with a unique <code>GrantId</code> even if all the supplied parameters are identical. This can result in unintended duplicates when you retry the <code>CreateGrant</code> request.</p> <p>When this value is present, you can retry a <code>CreateGrant</code> request with identical parameters; if the grant already exists, the original <code>GrantId</code> is returned without creating a new grant. Note that the returned grant token is unique with every <code>CreateGrant</code> request, even when a duplicate <code>GrantId</code> is returned. All grant tokens obtained in this way can be used interchangeably.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<GrantNameType>,
+    pub name: Option<String>,
     #[doc="<p>A list of operations that the grant permits.</p>"]
     #[serde(rename="Operations")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub operations: Option<GrantOperationList>,
+    pub operations: Option<Vec<String>>,
     #[doc="<p>The principal that is given permission to retire the grant by using <a>RetireGrant</a> operation.</p> <p>To specify the principal, use the <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Name (ARN)</a> of an AWS principal. Valid AWS principals include AWS accounts (root), IAM users, federated users, and assumed role users. For examples of the ARN syntax to use for specifying a principal, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-iam\">AWS Identity and Access Management (IAM)</a> in the Example ARNs section of the <i>AWS General Reference</i>.</p>"]
     #[serde(rename="RetiringPrincipal")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub retiring_principal: Option<PrincipalIdType>,
+    pub retiring_principal: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -110,11 +103,11 @@ pub struct CreateGrantResponse {
     #[doc="<p>The unique identifier for the grant.</p> <p>You can use the <code>GrantId</code> in a subsequent <a>RetireGrant</a> or <a>RevokeGrant</a> operation.</p>"]
     #[serde(rename="GrantId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub grant_id: Option<GrantIdType>,
+    pub grant_id: Option<String>,
     #[doc="<p>The grant token.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#grant_token\">Grant Tokens</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
     #[serde(rename="GrantToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub grant_token: Option<GrantTokenType>,
+    pub grant_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -122,27 +115,27 @@ pub struct CreateKeyRequest {
     #[doc="<p>A flag to indicate whether to bypass the key policy lockout safety check.</p> <important> <p>Setting this value to true increases the likelihood that the CMK becomes unmanageable. Do not set this value to true indiscriminately.</p> <p>For more information, refer to the scenario in the <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default-allow-root-enable-iam\">Default Key Policy</a> section in the <i>AWS Key Management Service Developer Guide</i>.</p> </important> <p>Use this parameter only when you include a policy in the request and you intend to prevent the principal that is making the request from making a subsequent <a>PutKeyPolicy</a> request on the CMK.</p> <p>The default value is false.</p>"]
     #[serde(rename="BypassPolicyLockoutSafetyCheck")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub bypass_policy_lockout_safety_check: Option<BooleanType>,
+    pub bypass_policy_lockout_safety_check: Option<bool>,
     #[doc="<p>A description of the CMK.</p> <p>Use a description that helps you decide whether the CMK is appropriate for a task.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub description: Option<DescriptionType>,
+    pub description: Option<String>,
     #[doc="<p>The intended use of the CMK.</p> <p>You can use CMKs only for symmetric encryption and decryption.</p>"]
     #[serde(rename="KeyUsage")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub key_usage: Option<KeyUsageType>,
+    pub key_usage: Option<String>,
     #[doc="<p>The source of the CMK's key material.</p> <p>The default is <code>AWS_KMS</code>, which means AWS KMS creates the key material. When this parameter is set to <code>EXTERNAL</code>, the request creates a CMK without key material so that you can import key material from your existing key management infrastructure. For more information about importing key material into AWS KMS, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html\">Importing Key Material</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>The CMK's <code>Origin</code> is immutable and is set when the CMK is created.</p>"]
     #[serde(rename="Origin")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub origin: Option<OriginType>,
+    pub origin: Option<String>,
     #[doc="<p>The key policy to attach to the CMK.</p> <p>If you specify a policy and do not set <code>BypassPolicyLockoutSafetyCheck</code> to true, the policy must meet the following criteria:</p> <ul> <li> <p>It must allow the principal that is making the <code>CreateKey</code> request to make a subsequent <a>PutKeyPolicy</a> request on the CMK. This reduces the likelihood that the CMK becomes unmanageable. For more information, refer to the scenario in the <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default-allow-root-enable-iam\">Default Key Policy</a> section in the <i>AWS Key Management Service Developer Guide</i>.</p> </li> <li> <p>The principals that are specified in the key policy must exist and be visible to AWS KMS. When you create a new AWS principal (for example, an IAM user or role), you might need to enforce a delay before specifying the new principal in a key policy because the new principal might not immediately be visible to AWS KMS. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/troubleshoot_general.html#troubleshoot_general_eventual-consistency\">Changes that I make are not always immediately visible</a> in the <i>IAM User Guide</i>.</p> </li> </ul> <p>If you do not specify a policy, AWS KMS attaches a default key policy to the CMK. For more information, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default\">Default Key Policy</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>The policy size limit is 32 KiB (32768 bytes).</p>"]
     #[serde(rename="Policy")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub policy: Option<PolicyType>,
+    pub policy: Option<String>,
     #[doc="<p>One or more tags. Each tag consists of a tag key and a tag value. Tag keys and tag values are both required, but tag values can be empty (null) strings.</p> <p>Use this parameter to tag the CMK when it is created. Alternately, you can omit this parameter and instead tag the CMK after it is created using <a>TagResource</a>.</p>"]
     #[serde(rename="Tags")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -153,8 +146,6 @@ pub struct CreateKeyResponse {
     pub key_metadata: Option<KeyMetadata>,
 }
 
-pub type DataKeySpec = String;
-pub type DateType = f64;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DecryptRequest {
     #[doc="<p>Ciphertext to be decrypted. The blob includes metadata.</p>"]
@@ -164,15 +155,15 @@ pub struct DecryptRequest {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub ciphertext_blob: CiphertextType,
+    pub ciphertext_blob: Vec<u8>,
     #[doc="<p>The encryption context. If this was specified in the <a>Encrypt</a> function, it must be specified here or the decryption operation will fail. For more information, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html\">Encryption Context</a>.</p>"]
     #[serde(rename="EncryptionContext")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub encryption_context: Option<EncryptionContextType>,
+    pub encryption_context: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>A list of grant tokens.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#grant_token\">Grant Tokens</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
     #[serde(rename="GrantTokens")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub grant_tokens: Option<GrantTokenList>,
+    pub grant_tokens: Option<Vec<String>>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -180,7 +171,7 @@ pub struct DecryptResponse {
     #[doc="<p>ARN of the key used to perform the decryption. This value is returned if no errors are encountered during the operation.</p>"]
     #[serde(rename="KeyId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub key_id: Option<KeyIdType>,
+    pub key_id: Option<String>,
     #[doc="<p>Decrypted plaintext data. This value may not be returned if the customer master key is not available or if you didn't have permission to use it.</p>"]
     #[serde(rename="Plaintext")]
     #[serde(
@@ -188,21 +179,21 @@ pub struct DecryptResponse {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub plaintext: Option<PlaintextType>,
+    pub plaintext: Option<Vec<u8>>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteAliasRequest {
     #[doc="<p>The alias to be deleted. The name must start with the word \"alias\" followed by a forward slash (alias/). Aliases that begin with \"alias/AWS\" are reserved.</p>"]
     #[serde(rename="AliasName")]
-    pub alias_name: AliasNameType,
+    pub alias_name: String,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteImportedKeyMaterialRequest {
     #[doc="<p>The identifier of the CMK whose key material to delete. The CMK's <code>Origin</code> must be <code>EXTERNAL</code>.</p> <p>A valid identifier is the unique key ID or the Amazon Resource Name (ARN) of the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul>"]
     #[serde(rename="KeyId")]
-    pub key_id: KeyIdType,
+    pub key_id: String,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -210,10 +201,10 @@ pub struct DescribeKeyRequest {
     #[doc="<p>A list of grant tokens.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#grant_token\">Grant Tokens</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
     #[serde(rename="GrantTokens")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub grant_tokens: Option<GrantTokenList>,
+    pub grant_tokens: Option<Vec<String>>,
     #[doc="<p>A unique identifier for the customer master key. This value can be a globally unique identifier, a fully specified ARN to either an alias or a key, or an alias name prefixed by \"alias/\".</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Alias ARN Example - arn:aws:kms:us-east-1:123456789012:alias/MyAliasName</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Alias Name Example - alias/MyAliasName</p> </li> </ul>"]
     #[serde(rename="KeyId")]
-    pub key_id: KeyIdType,
+    pub key_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -224,33 +215,32 @@ pub struct DescribeKeyResponse {
     pub key_metadata: Option<KeyMetadata>,
 }
 
-pub type DescriptionType = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DisableKeyRequest {
     #[doc="<p>A unique identifier for the CMK.</p> <p>Use the CMK's unique identifier or its Amazon Resource Name (ARN). For example:</p> <ul> <li> <p>Unique ID: 1234abcd-12ab-34cd-56ef-1234567890ab</p> </li> <li> <p>ARN: arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</p> </li> </ul>"]
     #[serde(rename="KeyId")]
-    pub key_id: KeyIdType,
+    pub key_id: String,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DisableKeyRotationRequest {
     #[doc="<p>A unique identifier for the customer master key. This value can be a globally unique identifier or the fully specified ARN to a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul>"]
     #[serde(rename="KeyId")]
-    pub key_id: KeyIdType,
+    pub key_id: String,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct EnableKeyRequest {
     #[doc="<p>A unique identifier for the customer master key. This value can be a globally unique identifier or the fully specified ARN to a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul>"]
     #[serde(rename="KeyId")]
-    pub key_id: KeyIdType,
+    pub key_id: String,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct EnableKeyRotationRequest {
     #[doc="<p>A unique identifier for the customer master key. This value can be a globally unique identifier or the fully specified ARN to a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul>"]
     #[serde(rename="KeyId")]
-    pub key_id: KeyIdType,
+    pub key_id: String,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -258,14 +248,14 @@ pub struct EncryptRequest {
     #[doc="<p>Name-value pair that specifies the encryption context to be used for authenticated encryption. If used here, the same value must be supplied to the <code>Decrypt</code> API or decryption will fail. For more information, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html\">Encryption Context</a>.</p>"]
     #[serde(rename="EncryptionContext")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub encryption_context: Option<EncryptionContextType>,
+    pub encryption_context: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>A list of grant tokens.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#grant_token\">Grant Tokens</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
     #[serde(rename="GrantTokens")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub grant_tokens: Option<GrantTokenList>,
+    pub grant_tokens: Option<Vec<String>>,
     #[doc="<p>A unique identifier for the customer master key. This value can be a globally unique identifier, a fully specified ARN to either an alias or a key, or an alias name prefixed by \"alias/\".</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Alias ARN Example - arn:aws:kms:us-east-1:123456789012:alias/MyAliasName</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Alias Name Example - alias/MyAliasName</p> </li> </ul>"]
     #[serde(rename="KeyId")]
-    pub key_id: KeyIdType,
+    pub key_id: String,
     #[doc="<p>Data to be encrypted.</p>"]
     #[serde(rename="Plaintext")]
     #[serde(
@@ -273,7 +263,7 @@ pub struct EncryptRequest {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub plaintext: PlaintextType,
+    pub plaintext: Vec<u8>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -285,40 +275,34 @@ pub struct EncryptResponse {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub ciphertext_blob: Option<CiphertextType>,
+    pub ciphertext_blob: Option<Vec<u8>>,
     #[doc="<p>The ID of the key used during encryption.</p>"]
     #[serde(rename="KeyId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub key_id: Option<KeyIdType>,
+    pub key_id: Option<String>,
 }
 
-pub type EncryptionContextKey = String;
-pub type EncryptionContextType = ::std::collections::HashMap<EncryptionContextKey,
-                                                             EncryptionContextValue>;
-pub type EncryptionContextValue = String;
-pub type ErrorMessageType = String;
-pub type ExpirationModelType = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GenerateDataKeyRequest {
     #[doc="<p>A set of key-value pairs that represents additional authenticated data.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html\">Encryption Context</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
     #[serde(rename="EncryptionContext")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub encryption_context: Option<EncryptionContextType>,
+    pub encryption_context: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>A list of grant tokens.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#grant_token\">Grant Tokens</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
     #[serde(rename="GrantTokens")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub grant_tokens: Option<GrantTokenList>,
+    pub grant_tokens: Option<Vec<String>>,
     #[doc="<p>The identifier of the CMK under which to generate and encrypt the data encryption key.</p> <p>A valid identifier is the unique key ID or the Amazon Resource Name (ARN) of the CMK, or the alias name or ARN of an alias that refers to the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>CMK ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Alias name: <code>alias/ExampleAlias</code> </p> </li> <li> <p>Alias ARN: <code>arn:aws:kms:us-east-2:111122223333:alias/ExampleAlias</code> </p> </li> </ul>"]
     #[serde(rename="KeyId")]
-    pub key_id: KeyIdType,
+    pub key_id: String,
     #[doc="<p>The length of the data encryption key. Use <code>AES_128</code> to generate a 128-bit symmetric key, or <code>AES_256</code> to generate a 256-bit symmetric key.</p>"]
     #[serde(rename="KeySpec")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub key_spec: Option<DataKeySpec>,
+    pub key_spec: Option<String>,
     #[doc="<p>The length of the data encryption key in bytes. For example, use the value 64 to generate a 512-bit data key (64 bytes is 512 bits). For common key lengths (128-bit and 256-bit symmetric keys), we recommend that you use the <code>KeySpec</code> field instead of this one.</p>"]
     #[serde(rename="NumberOfBytes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub number_of_bytes: Option<NumberOfBytesType>,
+    pub number_of_bytes: Option<i64>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -330,11 +314,11 @@ pub struct GenerateDataKeyResponse {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub ciphertext_blob: Option<CiphertextType>,
+    pub ciphertext_blob: Option<Vec<u8>>,
     #[doc="<p>The identifier of the CMK under which the data encryption key was generated and encrypted.</p>"]
     #[serde(rename="KeyId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub key_id: Option<KeyIdType>,
+    pub key_id: Option<String>,
     #[doc="<p>The data encryption key. Use this data key for local encryption and decryption, then remove it from memory as soon as possible.</p>"]
     #[serde(rename="Plaintext")]
     #[serde(
@@ -342,7 +326,7 @@ pub struct GenerateDataKeyResponse {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub plaintext: Option<PlaintextType>,
+    pub plaintext: Option<Vec<u8>>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -350,22 +334,22 @@ pub struct GenerateDataKeyWithoutPlaintextRequest {
     #[doc="<p>A set of key-value pairs that represents additional authenticated data.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html\">Encryption Context</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
     #[serde(rename="EncryptionContext")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub encryption_context: Option<EncryptionContextType>,
+    pub encryption_context: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>A list of grant tokens.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#grant_token\">Grant Tokens</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
     #[serde(rename="GrantTokens")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub grant_tokens: Option<GrantTokenList>,
+    pub grant_tokens: Option<Vec<String>>,
     #[doc="<p>The identifier of the CMK under which to generate and encrypt the data encryption key.</p> <p>A valid identifier is the unique key ID or the Amazon Resource Name (ARN) of the CMK, or the alias name or ARN of an alias that refers to the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>CMK ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Alias name: <code>alias/ExampleAlias</code> </p> </li> <li> <p>Alias ARN: <code>arn:aws:kms:us-east-2:111122223333:alias/ExampleAlias</code> </p> </li> </ul>"]
     #[serde(rename="KeyId")]
-    pub key_id: KeyIdType,
+    pub key_id: String,
     #[doc="<p>The length of the data encryption key. Use <code>AES_128</code> to generate a 128-bit symmetric key, or <code>AES_256</code> to generate a 256-bit symmetric key.</p>"]
     #[serde(rename="KeySpec")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub key_spec: Option<DataKeySpec>,
+    pub key_spec: Option<String>,
     #[doc="<p>The length of the data encryption key in bytes. For example, use the value 64 to generate a 512-bit data key (64 bytes is 512 bits). For common key lengths (128-bit and 256-bit symmetric keys), we recommend that you use the <code>KeySpec</code> field instead of this one.</p>"]
     #[serde(rename="NumberOfBytes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub number_of_bytes: Option<NumberOfBytesType>,
+    pub number_of_bytes: Option<i64>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -377,11 +361,11 @@ pub struct GenerateDataKeyWithoutPlaintextResponse {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub ciphertext_blob: Option<CiphertextType>,
+    pub ciphertext_blob: Option<Vec<u8>>,
     #[doc="<p>The identifier of the CMK under which the data encryption key was generated and encrypted.</p>"]
     #[serde(rename="KeyId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub key_id: Option<KeyIdType>,
+    pub key_id: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -389,7 +373,7 @@ pub struct GenerateRandomRequest {
     #[doc="<p>The length of the byte string.</p>"]
     #[serde(rename="NumberOfBytes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub number_of_bytes: Option<NumberOfBytesType>,
+    pub number_of_bytes: Option<i64>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -401,17 +385,17 @@ pub struct GenerateRandomResponse {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub plaintext: Option<PlaintextType>,
+    pub plaintext: Option<Vec<u8>>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetKeyPolicyRequest {
     #[doc="<p>A unique identifier for the customer master key. This value can be a globally unique identifier or the fully specified ARN to a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul>"]
     #[serde(rename="KeyId")]
-    pub key_id: KeyIdType,
+    pub key_id: String,
     #[doc="<p>String that contains the name of the policy. Currently, this must be \"default\". Policy names can be discovered by calling <a>ListKeyPolicies</a>.</p>"]
     #[serde(rename="PolicyName")]
-    pub policy_name: PolicyNameType,
+    pub policy_name: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -419,14 +403,14 @@ pub struct GetKeyPolicyResponse {
     #[doc="<p>A policy document in JSON format.</p>"]
     #[serde(rename="Policy")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub policy: Option<PolicyType>,
+    pub policy: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetKeyRotationStatusRequest {
     #[doc="<p>A unique identifier for the customer master key. This value can be a globally unique identifier or the fully specified ARN to a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul>"]
     #[serde(rename="KeyId")]
-    pub key_id: KeyIdType,
+    pub key_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -434,20 +418,20 @@ pub struct GetKeyRotationStatusResponse {
     #[doc="<p>A Boolean value that specifies whether key rotation is enabled.</p>"]
     #[serde(rename="KeyRotationEnabled")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub key_rotation_enabled: Option<BooleanType>,
+    pub key_rotation_enabled: Option<bool>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetParametersForImportRequest {
     #[doc="<p>The identifier of the CMK into which you will import key material. The CMK's <code>Origin</code> must be <code>EXTERNAL</code>.</p> <p>A valid identifier is the unique key ID or the Amazon Resource Name (ARN) of the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul>"]
     #[serde(rename="KeyId")]
-    pub key_id: KeyIdType,
+    pub key_id: String,
     #[doc="<p>The algorithm you will use to encrypt the key material before importing it with <a>ImportKeyMaterial</a>. For more information, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/importing-keys-encrypt-key-material.html\">Encrypt the Key Material</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
     #[serde(rename="WrappingAlgorithm")]
-    pub wrapping_algorithm: AlgorithmSpec,
+    pub wrapping_algorithm: String,
     #[doc="<p>The type of wrapping key (public key) to return in the response. Only 2048-bit RSA public keys are supported.</p>"]
     #[serde(rename="WrappingKeySpec")]
-    pub wrapping_key_spec: WrappingKeySpec,
+    pub wrapping_key_spec: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -459,15 +443,15 @@ pub struct GetParametersForImportResponse {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub import_token: Option<CiphertextType>,
+    pub import_token: Option<Vec<u8>>,
     #[doc="<p>The identifier of the CMK to use in a subsequent <a>ImportKeyMaterial</a> request. This is the same CMK specified in the <code>GetParametersForImport</code> request.</p>"]
     #[serde(rename="KeyId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub key_id: Option<KeyIdType>,
+    pub key_id: Option<String>,
     #[doc="<p>The time at which the import token and public key are no longer valid. After this time, you cannot use them to make an <a>ImportKeyMaterial</a> request and you must send another <code>GetParametersForImport</code> request to retrieve new ones.</p>"]
     #[serde(rename="ParametersValidTo")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub parameters_valid_to: Option<DateType>,
+    pub parameters_valid_to: Option<f64>,
     #[doc="<p>The public key to use to encrypt the key material before importing it with <a>ImportKeyMaterial</a>.</p>"]
     #[serde(rename="PublicKey")]
     #[serde(
@@ -475,7 +459,7 @@ pub struct GetParametersForImportResponse {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub public_key: Option<PlaintextType>,
+    pub public_key: Option<Vec<u8>>,
 }
 
 #[doc="<p>A structure that you can use to allow certain operations in the grant only when the desired encryption context is present. For more information about encryption context, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html\">Encryption Context</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>Grant constraints apply only to operations that accept encryption context as input. For example, the <code> <a>DescribeKey</a> </code> operation does not accept encryption context as input. A grant that allows the <code>DescribeKey</code> operation does so regardless of the grant constraints. In constrast, the <code> <a>Encrypt</a> </code> operation accepts encryption context as input. A grant that allows the <code>Encrypt</code> operation does so only when the encryption context of the <code>Encrypt</code> operation satisfies the grant constraints.</p>"]
@@ -484,15 +468,13 @@ pub struct GrantConstraints {
     #[doc="<p>A list of key-value pairs that must be present in the encryption context of certain subsequent operations that the grant allows. When certain subsequent operations allowed by the grant include encryption context that matches this list, the grant allows the operation. Otherwise, the grant does not allow the operation.</p>"]
     #[serde(rename="EncryptionContextEquals")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub encryption_context_equals: Option<EncryptionContextType>,
+    pub encryption_context_equals: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>A list of key-value pairs, all of which must be present in the encryption context of certain subsequent operations that the grant allows. When certain subsequent operations allowed by the grant include encryption context that matches this list or is a superset of this list, the grant allows the operation. Otherwise, the grant does not allow the operation.</p>"]
     #[serde(rename="EncryptionContextSubset")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub encryption_context_subset: Option<EncryptionContextType>,
+    pub encryption_context_subset: Option<::std::collections::HashMap<String, String>>,
 }
 
-pub type GrantIdType = String;
-pub type GrantList = Vec<GrantListEntry>;
 #[doc="<p>Contains information about an entry in a list of grants.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GrantListEntry {
@@ -503,42 +485,37 @@ pub struct GrantListEntry {
     #[doc="<p>The date and time when the grant was created.</p>"]
     #[serde(rename="CreationDate")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub creation_date: Option<DateType>,
+    pub creation_date: Option<f64>,
     #[doc="<p>The unique identifier for the grant.</p>"]
     #[serde(rename="GrantId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub grant_id: Option<GrantIdType>,
+    pub grant_id: Option<String>,
     #[doc="<p>The principal that receives the grant's permissions.</p>"]
     #[serde(rename="GranteePrincipal")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub grantee_principal: Option<PrincipalIdType>,
+    pub grantee_principal: Option<String>,
     #[doc="<p>The AWS account under which the grant was issued.</p>"]
     #[serde(rename="IssuingAccount")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub issuing_account: Option<PrincipalIdType>,
+    pub issuing_account: Option<String>,
     #[doc="<p>The unique identifier for the customer master key (CMK) to which the grant applies.</p>"]
     #[serde(rename="KeyId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub key_id: Option<KeyIdType>,
+    pub key_id: Option<String>,
     #[doc="<p>The friendly name that identifies the grant. If a name was provided in the <a>CreateGrant</a> request, that name is returned. Otherwise this value is null.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<GrantNameType>,
+    pub name: Option<String>,
     #[doc="<p>The list of operations permitted by the grant.</p>"]
     #[serde(rename="Operations")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub operations: Option<GrantOperationList>,
+    pub operations: Option<Vec<String>>,
     #[doc="<p>The principal that can retire the grant.</p>"]
     #[serde(rename="RetiringPrincipal")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub retiring_principal: Option<PrincipalIdType>,
+    pub retiring_principal: Option<String>,
 }
 
-pub type GrantNameType = String;
-pub type GrantOperation = String;
-pub type GrantOperationList = Vec<GrantOperation>;
-pub type GrantTokenList = Vec<GrantTokenType>;
-pub type GrantTokenType = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ImportKeyMaterialRequest {
     #[doc="<p>The encrypted key material to import. It must be encrypted with the public key that you received in the response to a previous <a>GetParametersForImport</a> request, using the wrapping algorithm that you specified in that request.</p>"]
@@ -548,11 +525,11 @@ pub struct ImportKeyMaterialRequest {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub encrypted_key_material: CiphertextType,
+    pub encrypted_key_material: Vec<u8>,
     #[doc="<p>Specifies whether the key material expires. The default is <code>KEY_MATERIAL_EXPIRES</code>, in which case you must include the <code>ValidTo</code> parameter. When this parameter is set to <code>KEY_MATERIAL_DOES_NOT_EXPIRE</code>, you must omit the <code>ValidTo</code> parameter.</p>"]
     #[serde(rename="ExpirationModel")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub expiration_model: Option<ExpirationModelType>,
+    pub expiration_model: Option<String>,
     #[doc="<p>The import token that you received in the response to a previous <a>GetParametersForImport</a> request. It must be from the same response that contained the public key that you used to encrypt the key material.</p>"]
     #[serde(rename="ImportToken")]
     #[serde(
@@ -560,32 +537,30 @@ pub struct ImportKeyMaterialRequest {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub import_token: CiphertextType,
+    pub import_token: Vec<u8>,
     #[doc="<p>The identifier of the CMK to import the key material into. The CMK's <code>Origin</code> must be <code>EXTERNAL</code>.</p> <p>A valid identifier is the unique key ID or the Amazon Resource Name (ARN) of the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul>"]
     #[serde(rename="KeyId")]
-    pub key_id: KeyIdType,
+    pub key_id: String,
     #[doc="<p>The time at which the imported key material expires. When the key material expires, AWS KMS deletes the key material and the CMK becomes unusable. You must omit this parameter when the <code>ExpirationModel</code> parameter is set to <code>KEY_MATERIAL_DOES_NOT_EXPIRE</code>. Otherwise it is required.</p>"]
     #[serde(rename="ValidTo")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub valid_to: Option<DateType>,
+    pub valid_to: Option<f64>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ImportKeyMaterialResponse;
 
-pub type KeyIdType = String;
-pub type KeyList = Vec<KeyListEntry>;
 #[doc="<p>Contains information about each entry in the key list.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct KeyListEntry {
     #[doc="<p>ARN of the key.</p>"]
     #[serde(rename="KeyArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub key_arn: Option<ArnType>,
+    pub key_arn: Option<String>,
     #[doc="<p>Unique identifier of the key.</p>"]
     #[serde(rename="KeyId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub key_id: Option<KeyIdType>,
+    pub key_id: Option<String>,
 }
 
 #[doc="<p>Contains metadata about a customer master key (CMK).</p> <p>This data type is used as a response element for the <a>CreateKey</a> and <a>DescribeKey</a> operations.</p>"]
@@ -594,65 +569,62 @@ pub struct KeyMetadata {
     #[doc="<p>The twelve-digit account ID of the AWS account that owns the CMK.</p>"]
     #[serde(rename="AWSAccountId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub aws_account_id: Option<AWSAccountIdType>,
+    pub aws_account_id: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the CMK. For examples, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-kms\">AWS Key Management Service (AWS KMS)</a> in the Example ARNs section of the <i>AWS General Reference</i>.</p>"]
     #[serde(rename="Arn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub arn: Option<ArnType>,
+    pub arn: Option<String>,
     #[doc="<p>The date and time when the CMK was created.</p>"]
     #[serde(rename="CreationDate")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub creation_date: Option<DateType>,
+    pub creation_date: Option<f64>,
     #[doc="<p>The date and time after which AWS KMS deletes the CMK. This value is present only when <code>KeyState</code> is <code>PendingDeletion</code>, otherwise this value is omitted.</p>"]
     #[serde(rename="DeletionDate")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub deletion_date: Option<DateType>,
+    pub deletion_date: Option<f64>,
     #[doc="<p>The description of the CMK.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub description: Option<DescriptionType>,
+    pub description: Option<String>,
     #[doc="<p>Specifies whether the CMK is enabled. When <code>KeyState</code> is <code>Enabled</code> this value is true, otherwise it is false.</p>"]
     #[serde(rename="Enabled")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub enabled: Option<BooleanType>,
+    pub enabled: Option<bool>,
     #[doc="<p>Specifies whether the CMK's key material expires. This value is present only when <code>Origin</code> is <code>EXTERNAL</code>, otherwise this value is omitted.</p>"]
     #[serde(rename="ExpirationModel")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub expiration_model: Option<ExpirationModelType>,
+    pub expiration_model: Option<String>,
     #[doc="<p>The globally unique identifier for the CMK.</p>"]
     #[serde(rename="KeyId")]
-    pub key_id: KeyIdType,
+    pub key_id: String,
     #[doc="<p>The state of the CMK.</p> <p>For more information about how key state affects the use of a CMK, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html\">How Key State Affects the Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
     #[serde(rename="KeyState")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub key_state: Option<KeyState>,
+    pub key_state: Option<String>,
     #[doc="<p>The cryptographic operations for which you can use the CMK. Currently the only allowed value is <code>ENCRYPT_DECRYPT</code>, which means you can use the CMK for the <a>Encrypt</a> and <a>Decrypt</a> operations.</p>"]
     #[serde(rename="KeyUsage")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub key_usage: Option<KeyUsageType>,
+    pub key_usage: Option<String>,
     #[doc="<p>The source of the CMK's key material. When this value is <code>AWS_KMS</code>, AWS KMS created the key material. When this value is <code>EXTERNAL</code>, the key material was imported from your existing key management infrastructure or the CMK lacks key material.</p>"]
     #[serde(rename="Origin")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub origin: Option<OriginType>,
+    pub origin: Option<String>,
     #[doc="<p>The time at which the imported key material expires. When the key material expires, AWS KMS deletes the key material and the CMK becomes unusable. This value is present only for CMKs whose <code>Origin</code> is <code>EXTERNAL</code> and whose <code>ExpirationModel</code> is <code>KEY_MATERIAL_EXPIRES</code>, otherwise this value is omitted.</p>"]
     #[serde(rename="ValidTo")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub valid_to: Option<DateType>,
+    pub valid_to: Option<f64>,
 }
 
-pub type KeyState = String;
-pub type KeyUsageType = String;
-pub type LimitType = i64;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListAliasesRequest {
     #[doc="<p>Use this parameter to specify the maximum number of items to return. When this value is present, AWS KMS does not return more than the specified number of items, but it might return fewer.</p> <p>This value is optional. If you include a value, it must be between 1 and 100, inclusive. If you do not include a value, it defaults to 50.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<LimitType>,
+    pub limit: Option<i64>,
     #[doc="<p>Use this parameter in a subsequent request after you receive a response with truncated results. Set it to the value of <code>NextMarker</code> from the truncated response you just received.</p>"]
     #[serde(rename="Marker")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -660,30 +632,30 @@ pub struct ListAliasesResponse {
     #[doc="<p>A list of key aliases in the user's account.</p>"]
     #[serde(rename="Aliases")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub aliases: Option<AliasList>,
+    pub aliases: Option<Vec<AliasListEntry>>,
     #[doc="<p>When <code>Truncated</code> is true, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent request.</p>"]
     #[serde(rename="NextMarker")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_marker: Option<MarkerType>,
+    pub next_marker: Option<String>,
     #[doc="<p>A flag that indicates whether there are more items in the list. When this value is true, the list in this response is truncated. To retrieve more items, pass the value of the <code>NextMarker</code> element in this response to the <code>Marker</code> parameter in a subsequent request.</p>"]
     #[serde(rename="Truncated")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub truncated: Option<BooleanType>,
+    pub truncated: Option<bool>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListGrantsRequest {
     #[doc="<p>A unique identifier for the customer master key. This value can be a globally unique identifier or the fully specified ARN to a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul>"]
     #[serde(rename="KeyId")]
-    pub key_id: KeyIdType,
+    pub key_id: String,
     #[doc="<p>Use this parameter to specify the maximum number of items to return. When this value is present, AWS KMS does not return more than the specified number of items, but it might return fewer.</p> <p>This value is optional. If you include a value, it must be between 1 and 100, inclusive. If you do not include a value, it defaults to 50.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<LimitType>,
+    pub limit: Option<i64>,
     #[doc="<p>Use this parameter in a subsequent request after you receive a response with truncated results. Set it to the value of <code>NextMarker</code> from the truncated response you just received.</p>"]
     #[serde(rename="Marker")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -691,30 +663,30 @@ pub struct ListGrantsResponse {
     #[doc="<p>A list of grants.</p>"]
     #[serde(rename="Grants")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub grants: Option<GrantList>,
+    pub grants: Option<Vec<GrantListEntry>>,
     #[doc="<p>When <code>Truncated</code> is true, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent request.</p>"]
     #[serde(rename="NextMarker")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_marker: Option<MarkerType>,
+    pub next_marker: Option<String>,
     #[doc="<p>A flag that indicates whether there are more items in the list. When this value is true, the list in this response is truncated. To retrieve more items, pass the value of the <code>NextMarker</code> element in this response to the <code>Marker</code> parameter in a subsequent request.</p>"]
     #[serde(rename="Truncated")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub truncated: Option<BooleanType>,
+    pub truncated: Option<bool>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListKeyPoliciesRequest {
     #[doc="<p>A unique identifier for the customer master key (CMK). You can use the unique key ID or the Amazon Resource Name (ARN) of the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul>"]
     #[serde(rename="KeyId")]
-    pub key_id: KeyIdType,
+    pub key_id: String,
     #[doc="<p>Use this parameter to specify the maximum number of items to return. When this value is present, AWS KMS does not return more than the specified number of items, but it might return fewer.</p> <p>This value is optional. If you include a value, it must be between 1 and 1000, inclusive. If you do not include a value, it defaults to 100.</p> <p>Currently only 1 policy can be attached to a key.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<LimitType>,
+    pub limit: Option<i64>,
     #[doc="<p>Use this parameter in a subsequent request after you receive a response with truncated results. Set it to the value of <code>NextMarker</code> from the truncated response you just received.</p>"]
     #[serde(rename="Marker")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -722,15 +694,15 @@ pub struct ListKeyPoliciesResponse {
     #[doc="<p>When <code>Truncated</code> is true, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent request.</p>"]
     #[serde(rename="NextMarker")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_marker: Option<MarkerType>,
+    pub next_marker: Option<String>,
     #[doc="<p>A list of policy names. Currently, there is only one policy and it is named \"Default\".</p>"]
     #[serde(rename="PolicyNames")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub policy_names: Option<PolicyNameList>,
+    pub policy_names: Option<Vec<String>>,
     #[doc="<p>A flag that indicates whether there are more items in the list. When this value is true, the list in this response is truncated. To retrieve more items, pass the value of the <code>NextMarker</code> element in this response to the <code>Marker</code> parameter in a subsequent request.</p>"]
     #[serde(rename="Truncated")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub truncated: Option<BooleanType>,
+    pub truncated: Option<bool>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -738,11 +710,11 @@ pub struct ListKeysRequest {
     #[doc="<p>Use this parameter to specify the maximum number of items to return. When this value is present, AWS KMS does not return more than the specified number of items, but it might return fewer.</p> <p>This value is optional. If you include a value, it must be between 1 and 1000, inclusive. If you do not include a value, it defaults to 100.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<LimitType>,
+    pub limit: Option<i64>,
     #[doc="<p>Use this parameter in a subsequent request after you receive a response with truncated results. Set it to the value of <code>NextMarker</code> from the truncated response you just received.</p>"]
     #[serde(rename="Marker")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -750,30 +722,30 @@ pub struct ListKeysResponse {
     #[doc="<p>A list of keys.</p>"]
     #[serde(rename="Keys")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub keys: Option<KeyList>,
+    pub keys: Option<Vec<KeyListEntry>>,
     #[doc="<p>When <code>Truncated</code> is true, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent request.</p>"]
     #[serde(rename="NextMarker")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_marker: Option<MarkerType>,
+    pub next_marker: Option<String>,
     #[doc="<p>A flag that indicates whether there are more items in the list. When this value is true, the list in this response is truncated. To retrieve more items, pass the value of the <code>NextMarker</code> element in this response to the <code>Marker</code> parameter in a subsequent request.</p>"]
     #[serde(rename="Truncated")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub truncated: Option<BooleanType>,
+    pub truncated: Option<bool>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListResourceTagsRequest {
     #[doc="<p>A unique identifier for the CMK whose tags you are listing. You can use the unique key ID or the Amazon Resource Name (ARN) of the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul>"]
     #[serde(rename="KeyId")]
-    pub key_id: KeyIdType,
+    pub key_id: String,
     #[doc="<p>Use this parameter to specify the maximum number of items to return. When this value is present, AWS KMS does not return more than the specified number of items, but it might return fewer.</p> <p>This value is optional. If you include a value, it must be between 1 and 50, inclusive. If you do not include a value, it defaults to 50.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<LimitType>,
+    pub limit: Option<i64>,
     #[doc="<p>Use this parameter in a subsequent request after you receive a response with truncated results. Set it to the value of <code>NextMarker</code> from the truncated response you just received.</p> <p>Do not attempt to construct this value. Use only the value of <code>NextMarker</code> from the truncated response you just received.</p>"]
     #[serde(rename="Marker")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -781,15 +753,15 @@ pub struct ListResourceTagsResponse {
     #[doc="<p>When <code>Truncated</code> is true, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent request.</p> <p>Do not assume or infer any information from this value.</p>"]
     #[serde(rename="NextMarker")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_marker: Option<MarkerType>,
+    pub next_marker: Option<String>,
     #[doc="<p>A list of tags. Each tag consists of a tag key and a tag value.</p>"]
     #[serde(rename="Tags")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>A flag that indicates whether there are more items in the list. When this value is true, the list in this response is truncated. To retrieve more items, pass the value of the <code>NextMarker</code> element in this response to the <code>Marker</code> parameter in a subsequent request.</p>"]
     #[serde(rename="Truncated")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub truncated: Option<BooleanType>,
+    pub truncated: Option<bool>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -797,40 +769,31 @@ pub struct ListRetirableGrantsRequest {
     #[doc="<p>Use this parameter to specify the maximum number of items to return. When this value is present, AWS KMS does not return more than the specified number of items, but it might return fewer.</p> <p>This value is optional. If you include a value, it must be between 1 and 100, inclusive. If you do not include a value, it defaults to 50.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<LimitType>,
+    pub limit: Option<i64>,
     #[doc="<p>Use this parameter in a subsequent request after you receive a response with truncated results. Set it to the value of <code>NextMarker</code> from the truncated response you just received.</p>"]
     #[serde(rename="Marker")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>The retiring principal for which to list grants.</p> <p>To specify the retiring principal, use the <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Name (ARN)</a> of an AWS principal. Valid AWS principals include AWS accounts (root), IAM users, federated users, and assumed role users. For examples of the ARN syntax for specifying a principal, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-iam\">AWS Identity and Access Management (IAM)</a> in the Example ARNs section of the <i>Amazon Web Services General Reference</i>.</p>"]
     #[serde(rename="RetiringPrincipal")]
-    pub retiring_principal: PrincipalIdType,
+    pub retiring_principal: String,
 }
 
-pub type MarkerType = String;
-pub type NumberOfBytesType = i64;
-pub type OriginType = String;
-pub type PendingWindowInDaysType = i64;
-pub type PlaintextType = Vec<u8>;
-pub type PolicyNameList = Vec<PolicyNameType>;
-pub type PolicyNameType = String;
-pub type PolicyType = String;
-pub type PrincipalIdType = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct PutKeyPolicyRequest {
     #[doc="<p>A flag to indicate whether to bypass the key policy lockout safety check.</p> <important> <p>Setting this value to true increases the likelihood that the CMK becomes unmanageable. Do not set this value to true indiscriminately.</p> <p>For more information, refer to the scenario in the <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default-allow-root-enable-iam\">Default Key Policy</a> section in the <i>AWS Key Management Service Developer Guide</i>.</p> </important> <p>Use this parameter only when you intend to prevent the principal that is making the request from making a subsequent <code>PutKeyPolicy</code> request on the CMK.</p> <p>The default value is false.</p>"]
     #[serde(rename="BypassPolicyLockoutSafetyCheck")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub bypass_policy_lockout_safety_check: Option<BooleanType>,
+    pub bypass_policy_lockout_safety_check: Option<bool>,
     #[doc="<p>A unique identifier for the CMK.</p> <p>Use the CMK's unique identifier or its Amazon Resource Name (ARN). For example:</p> <ul> <li> <p>Unique ID: 1234abcd-12ab-34cd-56ef-1234567890ab</p> </li> <li> <p>ARN: arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</p> </li> </ul>"]
     #[serde(rename="KeyId")]
-    pub key_id: KeyIdType,
+    pub key_id: String,
     #[doc="<p>The key policy to attach to the CMK.</p> <p>If you do not set <code>BypassPolicyLockoutSafetyCheck</code> to true, the policy must meet the following criteria:</p> <ul> <li> <p>It must allow the principal that is making the <code>PutKeyPolicy</code> request to make a subsequent <code>PutKeyPolicy</code> request on the CMK. This reduces the likelihood that the CMK becomes unmanageable. For more information, refer to the scenario in the <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default-allow-root-enable-iam\">Default Key Policy</a> section in the <i>AWS Key Management Service Developer Guide</i>.</p> </li> <li> <p>The principals that are specified in the key policy must exist and be visible to AWS KMS. When you create a new AWS principal (for example, an IAM user or role), you might need to enforce a delay before specifying the new principal in a key policy because the new principal might not immediately be visible to AWS KMS. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/troubleshoot_general.html#troubleshoot_general_eventual-consistency\">Changes that I make are not always immediately visible</a> in the <i>IAM User Guide</i>.</p> </li> </ul> <p>The policy size limit is 32 KiB (32768 bytes).</p>"]
     #[serde(rename="Policy")]
-    pub policy: PolicyType,
+    pub policy: String,
     #[doc="<p>The name of the key policy.</p> <p>This value must be <code>default</code>.</p>"]
     #[serde(rename="PolicyName")]
-    pub policy_name: PolicyNameType,
+    pub policy_name: String,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -842,22 +805,22 @@ pub struct ReEncryptRequest {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub ciphertext_blob: CiphertextType,
+    pub ciphertext_blob: Vec<u8>,
     #[doc="<p>Encryption context to use when the data is reencrypted.</p>"]
     #[serde(rename="DestinationEncryptionContext")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub destination_encryption_context: Option<EncryptionContextType>,
+    pub destination_encryption_context: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>A unique identifier for the CMK to use to reencrypt the data. This value can be a globally unique identifier, a fully specified ARN to either an alias or a key, or an alias name prefixed by \"alias/\".</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Alias ARN Example - arn:aws:kms:us-east-1:123456789012:alias/MyAliasName</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Alias Name Example - alias/MyAliasName</p> </li> </ul>"]
     #[serde(rename="DestinationKeyId")]
-    pub destination_key_id: KeyIdType,
+    pub destination_key_id: String,
     #[doc="<p>A list of grant tokens.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#grant_token\">Grant Tokens</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
     #[serde(rename="GrantTokens")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub grant_tokens: Option<GrantTokenList>,
+    pub grant_tokens: Option<Vec<String>>,
     #[doc="<p>Encryption context used to encrypt and decrypt the data specified in the <code>CiphertextBlob</code> parameter.</p>"]
     #[serde(rename="SourceEncryptionContext")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub source_encryption_context: Option<EncryptionContextType>,
+    pub source_encryption_context: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -869,15 +832,15 @@ pub struct ReEncryptResponse {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub ciphertext_blob: Option<CiphertextType>,
+    pub ciphertext_blob: Option<Vec<u8>>,
     #[doc="<p>Unique identifier of the CMK used to reencrypt the data.</p>"]
     #[serde(rename="KeyId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub key_id: Option<KeyIdType>,
+    pub key_id: Option<String>,
     #[doc="<p>Unique identifier of the CMK used to originally encrypt the data.</p>"]
     #[serde(rename="SourceKeyId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub source_key_id: Option<KeyIdType>,
+    pub source_key_id: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -885,36 +848,36 @@ pub struct RetireGrantRequest {
     #[doc="<p>Unique identifier of the grant to retire. The grant ID is returned in the response to a <code>CreateGrant</code> operation.</p> <ul> <li> <p>Grant ID Example - 0123456789012345678901234567890123456789012345678901234567890123</p> </li> </ul>"]
     #[serde(rename="GrantId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub grant_id: Option<GrantIdType>,
+    pub grant_id: Option<String>,
     #[doc="<p>Token that identifies the grant to be retired.</p>"]
     #[serde(rename="GrantToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub grant_token: Option<GrantTokenType>,
+    pub grant_token: Option<String>,
     #[doc="<p>The Amazon Resource Name of the CMK associated with the grant. Example:</p> <ul> <li> <p>arn:aws:kms:us-east-2:444455556666:key/1234abcd-12ab-34cd-56ef-1234567890ab</p> </li> </ul>"]
     #[serde(rename="KeyId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub key_id: Option<KeyIdType>,
+    pub key_id: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct RevokeGrantRequest {
     #[doc="<p>Identifier of the grant to be revoked.</p>"]
     #[serde(rename="GrantId")]
-    pub grant_id: GrantIdType,
+    pub grant_id: String,
     #[doc="<p>A unique identifier for the customer master key associated with the grant. This value can be a globally unique identifier or the fully specified ARN to a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul>"]
     #[serde(rename="KeyId")]
-    pub key_id: KeyIdType,
+    pub key_id: String,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ScheduleKeyDeletionRequest {
     #[doc="<p>The unique identifier for the customer master key (CMK) to delete.</p> <p>To specify this value, use the unique key ID or the Amazon Resource Name (ARN) of the CMK. Examples:</p> <ul> <li> <p>Unique key ID: 1234abcd-12ab-34cd-56ef-1234567890ab</p> </li> <li> <p>Key ARN: arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</p> </li> </ul> <p>To obtain the unique key ID and key ARN for a given CMK, use <a>ListKeys</a> or <a>DescribeKey</a>.</p>"]
     #[serde(rename="KeyId")]
-    pub key_id: KeyIdType,
+    pub key_id: String,
     #[doc="<p>The waiting period, specified in number of days. After the waiting period ends, AWS KMS deletes the customer master key (CMK).</p> <p>This value is optional. If you include a value, it must be between 7 and 30, inclusive. If you do not include a value, it defaults to 30.</p>"]
     #[serde(rename="PendingWindowInDays")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub pending_window_in_days: Option<PendingWindowInDaysType>,
+    pub pending_window_in_days: Option<i64>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -922,11 +885,11 @@ pub struct ScheduleKeyDeletionResponse {
     #[doc="<p>The date and time after which AWS KMS deletes the customer master key (CMK).</p>"]
     #[serde(rename="DeletionDate")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub deletion_date: Option<DateType>,
+    pub deletion_date: Option<f64>,
     #[doc="<p>The unique identifier of the customer master key (CMK) for which deletion is scheduled.</p>"]
     #[serde(rename="KeyId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub key_id: Option<KeyIdType>,
+    pub key_id: Option<String>,
 }
 
 #[doc="<p>A key-value pair. A tag consists of a tag key and a tag value. Tag keys and tag values are both required, but tag values can be empty (null) strings.</p>"]
@@ -934,57 +897,52 @@ pub struct ScheduleKeyDeletionResponse {
 pub struct Tag {
     #[doc="<p>The key of the tag.</p>"]
     #[serde(rename="TagKey")]
-    pub tag_key: TagKeyType,
+    pub tag_key: String,
     #[doc="<p>The value of the tag.</p>"]
     #[serde(rename="TagValue")]
-    pub tag_value: TagValueType,
+    pub tag_value: String,
 }
 
-pub type TagKeyList = Vec<TagKeyType>;
-pub type TagKeyType = String;
-pub type TagList = Vec<Tag>;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct TagResourceRequest {
     #[doc="<p>A unique identifier for the CMK you are tagging. You can use the unique key ID or the Amazon Resource Name (ARN) of the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul>"]
     #[serde(rename="KeyId")]
-    pub key_id: KeyIdType,
+    pub key_id: String,
     #[doc="<p>One or more tags. Each tag consists of a tag key and a tag value.</p>"]
     #[serde(rename="Tags")]
-    pub tags: TagList,
+    pub tags: Vec<Tag>,
 }
 
-pub type TagValueType = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UntagResourceRequest {
     #[doc="<p>A unique identifier for the CMK from which you are removing tags. You can use the unique key ID or the Amazon Resource Name (ARN) of the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul>"]
     #[serde(rename="KeyId")]
-    pub key_id: KeyIdType,
+    pub key_id: String,
     #[doc="<p>One or more tag keys. Specify only the tag keys, not the tag values.</p>"]
     #[serde(rename="TagKeys")]
-    pub tag_keys: TagKeyList,
+    pub tag_keys: Vec<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateAliasRequest {
     #[doc="<p>String that contains the name of the alias to be modified. The name must start with the word \"alias\" followed by a forward slash (alias/). Aliases that begin with \"alias/aws\" are reserved.</p>"]
     #[serde(rename="AliasName")]
-    pub alias_name: AliasNameType,
+    pub alias_name: String,
     #[doc="<p>Unique identifier of the customer master key to be mapped to the alias. This value can be a globally unique identifier or the fully specified ARN of a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul> <p>You can call <a>ListAliases</a> to verify that the alias is mapped to the correct <code>TargetKeyId</code>.</p>"]
     #[serde(rename="TargetKeyId")]
-    pub target_key_id: KeyIdType,
+    pub target_key_id: String,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateKeyDescriptionRequest {
     #[doc="<p>New description for the CMK.</p>"]
     #[serde(rename="Description")]
-    pub description: DescriptionType,
+    pub description: String,
     #[doc="<p>A unique identifier for the CMK. This value can be a globally unique identifier or the fully specified ARN to a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul>"]
     #[serde(rename="KeyId")]
-    pub key_id: KeyIdType,
+    pub key_id: String,
 }
 
-pub type WrappingKeySpec = String;
 /// Errors returned by CancelKeyDeletion
 #[derive(Debug, PartialEq)]
 pub enum CancelKeyDeletionError {

@@ -26,8 +26,6 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-pub type AttributeMap = ::std::collections::HashMap<AttributeName, AttributeValue>;
-pub type AttributeName = String;
 #[doc="<p>Represents the data for an attribute. You can set one, and only one, of the elements.</p> <p>Each attribute in an item is a name-value pair. An attribute can be single-valued or multi-valued set. For example, a book item can have title and authors attributes. Each book has one title but can have many authors. The multi-valued attribute is a set; duplicate values are not allowed.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct AttributeValue {
@@ -38,63 +36,59 @@ pub struct AttributeValue {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub b: Option<BinaryAttributeValue>,
+    pub b: Option<Vec<u8>>,
     #[doc="<p>A Boolean data type.</p>"]
     #[serde(rename="BOOL")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub bool: Option<BooleanAttributeValue>,
+    pub bool: Option<bool>,
     #[doc="<p>A Binary Set data type.</p>"]
     #[serde(rename="BS")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub bs: Option<BinarySetAttributeValue>,
+    pub bs: Option<Vec<Vec<u8>>>,
     #[doc="<p>A List data type.</p>"]
     #[serde(rename="L")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub l: Option<ListAttributeValue>,
+    pub l: Option<Vec<AttributeValue>>,
     #[doc="<p>A Map data type.</p>"]
     #[serde(rename="M")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub m: Option<MapAttributeValue>,
+    pub m: Option<::std::collections::HashMap<String, AttributeValue>>,
     #[doc="<p>A Number data type.</p>"]
     #[serde(rename="N")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub n: Option<NumberAttributeValue>,
+    pub n: Option<String>,
     #[doc="<p>A Number Set data type.</p>"]
     #[serde(rename="NS")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ns: Option<NumberSetAttributeValue>,
+    pub ns: Option<Vec<String>>,
     #[doc="<p>A Null data type.</p>"]
     #[serde(rename="NULL")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub null: Option<NullAttributeValue>,
+    pub null: Option<bool>,
     #[doc="<p>A String data type.</p>"]
     #[serde(rename="S")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub s: Option<StringAttributeValue>,
+    pub s: Option<String>,
     #[doc="<p>A String Set data type.</p>"]
     #[serde(rename="SS")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ss: Option<StringSetAttributeValue>,
+    pub ss: Option<Vec<String>>,
 }
 
-pub type BinaryAttributeValue = Vec<u8>;
-pub type BinarySetAttributeValue = Vec<BinaryAttributeValue>;
-pub type BooleanAttributeValue = bool;
-pub type Date = f64;
 #[doc="<p>Represents the input of a <code>DescribeStream</code> operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DescribeStreamInput {
     #[doc="<p>The shard ID of the first item that this operation will evaluate. Use the value that was returned for <code>LastEvaluatedShardId</code> in the previous operation. </p>"]
     #[serde(rename="ExclusiveStartShardId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub exclusive_start_shard_id: Option<ShardId>,
+    pub exclusive_start_shard_id: Option<String>,
     #[doc="<p>The maximum number of shard objects to return. The upper limit is 100.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<PositiveIntegerObject>,
+    pub limit: Option<i64>,
     #[doc="<p>The Amazon Resource Name (ARN) for the stream.</p>"]
     #[serde(rename="StreamArn")]
-    pub stream_arn: StreamArn,
+    pub stream_arn: String,
 }
 
 #[doc="<p>Represents the output of a <code>DescribeStream</code> operation.</p>"]
@@ -106,17 +100,16 @@ pub struct DescribeStreamOutput {
     pub stream_description: Option<StreamDescription>,
 }
 
-pub type ErrorMessage = String;
 #[doc="<p>Represents the input of a <code>GetRecords</code> operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetRecordsInput {
     #[doc="<p>The maximum number of records to return from the shard. The upper limit is 1000.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<PositiveIntegerObject>,
+    pub limit: Option<i64>,
     #[doc="<p>A shard iterator that was retrieved from a previous GetShardIterator operation. This iterator can be used to access the stream records in this shard.</p>"]
     #[serde(rename="ShardIterator")]
-    pub shard_iterator: ShardIterator,
+    pub shard_iterator: String,
 }
 
 #[doc="<p>Represents the output of a <code>GetRecords</code> operation.</p>"]
@@ -125,11 +118,11 @@ pub struct GetRecordsOutput {
     #[doc="<p>The next position in the shard from which to start sequentially reading stream records. If set to <code>null</code>, the shard has been closed and the requested iterator will not return any more data.</p>"]
     #[serde(rename="NextShardIterator")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_shard_iterator: Option<ShardIterator>,
+    pub next_shard_iterator: Option<String>,
     #[doc="<p>The stream records from the shard, which were retrieved using the shard iterator.</p>"]
     #[serde(rename="Records")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub records: Option<RecordList>,
+    pub records: Option<Vec<Record>>,
 }
 
 #[doc="<p>Represents the input of a <code>GetShardIterator</code> operation.</p>"]
@@ -138,16 +131,16 @@ pub struct GetShardIteratorInput {
     #[doc="<p>The sequence number of a stream record in the shard from which to start reading.</p>"]
     #[serde(rename="SequenceNumber")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub sequence_number: Option<SequenceNumber>,
+    pub sequence_number: Option<String>,
     #[doc="<p>The identifier of the shard. The iterator will be returned for this shard ID.</p>"]
     #[serde(rename="ShardId")]
-    pub shard_id: ShardId,
+    pub shard_id: String,
     #[doc="<p>Determines how the shard iterator is used to start reading stream records from the shard:</p> <ul> <li> <p> <code>AT_SEQUENCE_NUMBER</code> - Start reading exactly from the position denoted by a specific sequence number.</p> </li> <li> <p> <code>AFTER_SEQUENCE_NUMBER</code> - Start reading right after the position denoted by a specific sequence number.</p> </li> <li> <p> <code>TRIM_HORIZON</code> - Start reading at the last (untrimmed) stream record, which is the oldest record in the shard. In DynamoDB Streams, there is a 24 hour limit on data retention. Stream records whose age exceeds this limit are subject to removal (trimming) from the stream.</p> </li> <li> <p> <code>LATEST</code> - Start reading just after the most recent stream record in the shard, so that you always read the most recent data in the shard.</p> </li> </ul>"]
     #[serde(rename="ShardIteratorType")]
-    pub shard_iterator_type: ShardIteratorType,
+    pub shard_iterator_type: String,
     #[doc="<p>The Amazon Resource Name (ARN) for the stream.</p>"]
     #[serde(rename="StreamArn")]
-    pub stream_arn: StreamArn,
+    pub stream_arn: String,
 }
 
 #[doc="<p>Represents the output of a <code>GetShardIterator</code> operation.</p>"]
@@ -156,7 +149,7 @@ pub struct GetShardIteratorOutput {
     #[doc="<p>The position in the shard from which to start reading stream records sequentially. A shard iterator specifies this position using the sequence number of a stream record in a shard.</p>"]
     #[serde(rename="ShardIterator")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub shard_iterator: Option<ShardIterator>,
+    pub shard_iterator: Option<String>,
 }
 
 #[doc="<p>Contains details about the type of identity that made the request.</p>"]
@@ -172,36 +165,32 @@ pub struct Identity {
     pub type_: Option<String>,
 }
 
-pub type KeySchema = Vec<KeySchemaElement>;
-pub type KeySchemaAttributeName = String;
 #[doc="<p>Represents <i>a single element</i> of a key schema. A key schema specifies the attributes that make up the primary key of a table, or the key attributes of an index.</p> <p>A <code>KeySchemaElement</code> represents exactly one attribute of the primary key. For example, a simple primary key (partition key) would be represented by one <code>KeySchemaElement</code>. A composite primary key (partition key and sort key) would require one <code>KeySchemaElement</code> for the partition key, and another <code>KeySchemaElement</code> for the sort key.</p> <note> <p>The partition key of an item is also known as its <i>hash attribute</i>. The term \"hash attribute\" derives from DynamoDB's usage of an internal hash function to evenly distribute data items across partitions, based on their partition key values.</p> <p>The sort key of an item is also known as its <i>range attribute</i>. The term \"range attribute\" derives from the way DynamoDB stores items with the same partition key physically close together, in sorted order by the sort key value.</p> </note>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct KeySchemaElement {
     #[doc="<p>The name of a key attribute.</p>"]
     #[serde(rename="AttributeName")]
-    pub attribute_name: KeySchemaAttributeName,
+    pub attribute_name: String,
     #[doc="<p>The attribute data, consisting of the data type and the attribute value itself.</p>"]
     #[serde(rename="KeyType")]
-    pub key_type: KeyType,
+    pub key_type: String,
 }
 
-pub type KeyType = String;
-pub type ListAttributeValue = Vec<AttributeValue>;
 #[doc="<p>Represents the input of a <code>ListStreams</code> operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListStreamsInput {
     #[doc="<p>The ARN (Amazon Resource Name) of the first item that this operation will evaluate. Use the value that was returned for <code>LastEvaluatedStreamArn</code> in the previous operation. </p>"]
     #[serde(rename="ExclusiveStartStreamArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub exclusive_start_stream_arn: Option<StreamArn>,
+    pub exclusive_start_stream_arn: Option<String>,
     #[doc="<p>The maximum number of streams to return. The upper limit is 100.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<PositiveIntegerObject>,
+    pub limit: Option<i64>,
     #[doc="<p>If this parameter is provided, then only the streams associated with this table name are returned.</p>"]
     #[serde(rename="TableName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub table_name: Option<TableName>,
+    pub table_name: Option<String>,
 }
 
 #[doc="<p>Represents the output of a <code>ListStreams</code> operation.</p>"]
@@ -210,20 +199,13 @@ pub struct ListStreamsOutput {
     #[doc="<p>The stream ARN of the item where the operation stopped, inclusive of the previous result set. Use this value to start a new operation, excluding this value in the new request.</p> <p>If <code>LastEvaluatedStreamArn</code> is empty, then the \"last page\" of results has been processed and there is no more data to be retrieved.</p> <p>If <code>LastEvaluatedStreamArn</code> is not empty, it does not necessarily mean that there is more data in the result set. The only way to know when you have reached the end of the result set is when <code>LastEvaluatedStreamArn</code> is empty.</p>"]
     #[serde(rename="LastEvaluatedStreamArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub last_evaluated_stream_arn: Option<StreamArn>,
+    pub last_evaluated_stream_arn: Option<String>,
     #[doc="<p>A list of stream descriptors associated with the current account and endpoint.</p>"]
     #[serde(rename="Streams")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub streams: Option<StreamList>,
+    pub streams: Option<Vec<Stream>>,
 }
 
-pub type MapAttributeValue = ::std::collections::HashMap<AttributeName, AttributeValue>;
-pub type NullAttributeValue = bool;
-pub type NumberAttributeValue = String;
-pub type NumberSetAttributeValue = Vec<NumberAttributeValue>;
-pub type OperationType = String;
-pub type PositiveIntegerObject = i64;
-pub type PositiveLongObject = i64;
 #[doc="<p>A description of a unique event within a stream.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Record {
@@ -242,7 +224,7 @@ pub struct Record {
     #[doc="<p>The type of data modification that was performed on the DynamoDB table:</p> <ul> <li> <p> <code>INSERT</code> - a new item was added to the table.</p> </li> <li> <p> <code>MODIFY</code> - one or more of an existing item's attributes were modified.</p> </li> <li> <p> <code>REMOVE</code> - the item was deleted from the table</p> </li> </ul>"]
     #[serde(rename="eventName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub event_name: Option<OperationType>,
+    pub event_name: Option<String>,
     #[doc="<p>The AWS service from which the stream record originated. For DynamoDB Streams, this is <code>aws:dynamodb</code>.</p>"]
     #[serde(rename="eventSource")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -257,19 +239,17 @@ pub struct Record {
     pub user_identity: Option<Identity>,
 }
 
-pub type RecordList = Vec<Record>;
-pub type SequenceNumber = String;
 #[doc="<p>The beginning and ending sequence numbers for the stream records contained within a shard.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct SequenceNumberRange {
     #[doc="<p>The last sequence number.</p>"]
     #[serde(rename="EndingSequenceNumber")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ending_sequence_number: Option<SequenceNumber>,
+    pub ending_sequence_number: Option<String>,
     #[doc="<p>The first sequence number.</p>"]
     #[serde(rename="StartingSequenceNumber")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub starting_sequence_number: Option<SequenceNumber>,
+    pub starting_sequence_number: Option<String>,
 }
 
 #[doc="<p>A uniquely identified group of stream records within a stream.</p>"]
@@ -278,7 +258,7 @@ pub struct Shard {
     #[doc="<p>The shard ID of the current shard's parent.</p>"]
     #[serde(rename="ParentShardId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub parent_shard_id: Option<ShardId>,
+    pub parent_shard_id: Option<String>,
     #[doc="<p>The range of possible sequence numbers for the shard.</p>"]
     #[serde(rename="SequenceNumberRange")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -286,20 +266,16 @@ pub struct Shard {
     #[doc="<p>The system-generated identifier for this shard.</p>"]
     #[serde(rename="ShardId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub shard_id: Option<ShardId>,
+    pub shard_id: Option<String>,
 }
 
-pub type ShardDescriptionList = Vec<Shard>;
-pub type ShardId = String;
-pub type ShardIterator = String;
-pub type ShardIteratorType = String;
 #[doc="<p>Represents all of the data describing a particular stream.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Stream {
     #[doc="<p>The Amazon Resource Name (ARN) for the stream.</p>"]
     #[serde(rename="StreamArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub stream_arn: Option<StreamArn>,
+    pub stream_arn: Option<String>,
     #[doc="<p>A timestamp, in ISO 8601 format, for this stream.</p> <p>Note that <code>LatestStreamLabel</code> is not a unique identifier for the stream, because it is possible that a stream from another table might have the same timestamp. However, the combination of the following three elements is guaranteed to be unique:</p> <ul> <li> <p>the AWS customer ID.</p> </li> <li> <p>the table name</p> </li> <li> <p>the <code>StreamLabel</code> </p> </li> </ul>"]
     #[serde(rename="StreamLabel")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -307,33 +283,32 @@ pub struct Stream {
     #[doc="<p>The DynamoDB table with which the stream is associated.</p>"]
     #[serde(rename="TableName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub table_name: Option<TableName>,
+    pub table_name: Option<String>,
 }
 
-pub type StreamArn = String;
 #[doc="<p>Represents all of the data describing a particular stream.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct StreamDescription {
     #[doc="<p>The date and time when the request to create this stream was issued.</p>"]
     #[serde(rename="CreationRequestDateTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub creation_request_date_time: Option<Date>,
+    pub creation_request_date_time: Option<f64>,
     #[doc="<p>The key attribute(s) of the stream's DynamoDB table.</p>"]
     #[serde(rename="KeySchema")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub key_schema: Option<KeySchema>,
+    pub key_schema: Option<Vec<KeySchemaElement>>,
     #[doc="<p>The shard ID of the item where the operation stopped, inclusive of the previous result set. Use this value to start a new operation, excluding this value in the new request.</p> <p>If <code>LastEvaluatedShardId</code> is empty, then the \"last page\" of results has been processed and there is currently no more data to be retrieved.</p> <p>If <code>LastEvaluatedShardId</code> is not empty, it does not necessarily mean that there is more data in the result set. The only way to know when you have reached the end of the result set is when <code>LastEvaluatedShardId</code> is empty.</p>"]
     #[serde(rename="LastEvaluatedShardId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub last_evaluated_shard_id: Option<ShardId>,
+    pub last_evaluated_shard_id: Option<String>,
     #[doc="<p>The shards that comprise the stream.</p>"]
     #[serde(rename="Shards")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub shards: Option<ShardDescriptionList>,
+    pub shards: Option<Vec<Shard>>,
     #[doc="<p>The Amazon Resource Name (ARN) for the stream.</p>"]
     #[serde(rename="StreamArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub stream_arn: Option<StreamArn>,
+    pub stream_arn: Option<String>,
     #[doc="<p>A timestamp, in ISO 8601 format, for this stream.</p> <p>Note that <code>LatestStreamLabel</code> is not a unique identifier for the stream, because it is possible that a stream from another table might have the same timestamp. However, the combination of the following three elements is guaranteed to be unique:</p> <ul> <li> <p>the AWS customer ID.</p> </li> <li> <p>the table name</p> </li> <li> <p>the <code>StreamLabel</code> </p> </li> </ul>"]
     #[serde(rename="StreamLabel")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -341,56 +316,50 @@ pub struct StreamDescription {
     #[doc="<p>Indicates the current status of the stream:</p> <ul> <li> <p> <code>ENABLING</code> - Streams is currently being enabled on the DynamoDB table.</p> </li> <li> <p> <code>ENABLED</code> - the stream is enabled.</p> </li> <li> <p> <code>DISABLING</code> - Streams is currently being disabled on the DynamoDB table.</p> </li> <li> <p> <code>DISABLED</code> - the stream is disabled.</p> </li> </ul>"]
     #[serde(rename="StreamStatus")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub stream_status: Option<StreamStatus>,
+    pub stream_status: Option<String>,
     #[doc="<p>Indicates the format of the records within this stream:</p> <ul> <li> <p> <code>KEYS_ONLY</code> - only the key attributes of items that were modified in the DynamoDB table.</p> </li> <li> <p> <code>NEW_IMAGE</code> - entire items from the table, as they appeared after they were modified.</p> </li> <li> <p> <code>OLD_IMAGE</code> - entire items from the table, as they appeared before they were modified.</p> </li> <li> <p> <code>NEW_AND_OLD_IMAGES</code> - both the new and the old images of the items from the table.</p> </li> </ul>"]
     #[serde(rename="StreamViewType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub stream_view_type: Option<StreamViewType>,
+    pub stream_view_type: Option<String>,
     #[doc="<p>The DynamoDB table with which the stream is associated.</p>"]
     #[serde(rename="TableName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub table_name: Option<TableName>,
+    pub table_name: Option<String>,
 }
 
-pub type StreamList = Vec<Stream>;
 #[doc="<p>A description of a single data modification that was performed on an item in a DynamoDB table.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct StreamRecord {
     #[doc="<p>The approximate date and time when the stream record was created, in <a href=\"http://www.epochconverter.com/\">UNIX epoch time</a> format.</p>"]
     #[serde(rename="ApproximateCreationDateTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub approximate_creation_date_time: Option<Date>,
+    pub approximate_creation_date_time: Option<f64>,
     #[doc="<p>The primary key attribute(s) for the DynamoDB item that was modified.</p>"]
     #[serde(rename="Keys")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub keys: Option<AttributeMap>,
+    pub keys: Option<::std::collections::HashMap<String, AttributeValue>>,
     #[doc="<p>The item in the DynamoDB table as it appeared after it was modified.</p>"]
     #[serde(rename="NewImage")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub new_image: Option<AttributeMap>,
+    pub new_image: Option<::std::collections::HashMap<String, AttributeValue>>,
     #[doc="<p>The item in the DynamoDB table as it appeared before it was modified.</p>"]
     #[serde(rename="OldImage")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub old_image: Option<AttributeMap>,
+    pub old_image: Option<::std::collections::HashMap<String, AttributeValue>>,
     #[doc="<p>The sequence number of the stream record.</p>"]
     #[serde(rename="SequenceNumber")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub sequence_number: Option<SequenceNumber>,
+    pub sequence_number: Option<String>,
     #[doc="<p>The size of the stream record, in bytes.</p>"]
     #[serde(rename="SizeBytes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub size_bytes: Option<PositiveLongObject>,
+    pub size_bytes: Option<i64>,
     #[doc="<p>The type of data from the modified DynamoDB item that was captured in this stream record:</p> <ul> <li> <p> <code>KEYS_ONLY</code> - only the key attributes of the modified item.</p> </li> <li> <p> <code>NEW_IMAGE</code> - the entire item, as it appeared after it was modified.</p> </li> <li> <p> <code>OLD_IMAGE</code> - the entire item, as it appeared before it was modified.</p> </li> <li> <p> <code>NEW_AND_OLD_IMAGES</code> - both the new and the old item images of the item.</p> </li> </ul>"]
     #[serde(rename="StreamViewType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub stream_view_type: Option<StreamViewType>,
+    pub stream_view_type: Option<String>,
 }
 
-pub type StreamStatus = String;
-pub type StreamViewType = String;
-pub type StringAttributeValue = String;
-pub type StringSetAttributeValue = Vec<StringAttributeValue>;
-pub type TableName = String;
 /// Errors returned by DescribeStream
 #[derive(Debug, PartialEq)]
 pub enum DescribeStreamError {

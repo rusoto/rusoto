@@ -32,14 +32,14 @@ pub struct ActivatePipelineInput {
     #[doc="<p>A list of parameter values to pass to the pipeline at activation.</p>"]
     #[serde(rename="parameterValues")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub parameter_values: Option<ParameterValueList>,
+    pub parameter_values: Option<Vec<ParameterValue>>,
     #[doc="<p>The ID of the pipeline.</p>"]
     #[serde(rename="pipelineId")]
-    pub pipeline_id: Id,
+    pub pipeline_id: String,
     #[doc="<p>The date and time to resume the pipeline. By default, the pipeline resumes from the last completed execution.</p>"]
     #[serde(rename="startTimestamp")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub start_timestamp: Option<Timestamp>,
+    pub start_timestamp: Option<f64>,
 }
 
 #[doc="<p>Contains the output of ActivatePipeline.</p>"]
@@ -51,20 +51,16 @@ pub struct ActivatePipelineOutput;
 pub struct AddTagsInput {
     #[doc="<p>The ID of the pipeline.</p>"]
     #[serde(rename="pipelineId")]
-    pub pipeline_id: Id,
+    pub pipeline_id: String,
     #[doc="<p>The tags to add, as key/value pairs.</p>"]
     #[serde(rename="tags")]
-    pub tags: TagList,
+    pub tags: Vec<Tag>,
 }
 
 #[doc="<p>Contains the output of AddTags.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct AddTagsOutput;
 
-pub type AttributeNameString = String;
-pub type AttributeValueString = String;
-pub type Boolean = bool;
-pub type CancelActive = bool;
 #[doc="<p>Contains the parameters for CreatePipeline.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreatePipelineInput {
@@ -74,14 +70,14 @@ pub struct CreatePipelineInput {
     pub description: Option<String>,
     #[doc="<p>The name for the pipeline. You can use the same name for multiple pipelines associated with your AWS account, because AWS Data Pipeline assigns each pipeline a unique pipeline identifier.</p>"]
     #[serde(rename="name")]
-    pub name: Id,
+    pub name: String,
     #[doc="<p>A list of tags to associate with the pipeline at creation. Tags let you control access to pipelines. For more information, see <a href=\"http://docs.aws.amazon.com/datapipeline/latest/DeveloperGuide/dp-control-access.html\">Controlling User Access to Pipelines</a> in the <i>AWS Data Pipeline Developer Guide</i>.</p>"]
     #[serde(rename="tags")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>A unique identifier. This identifier is not the same as the pipeline identifier assigned by AWS Data Pipeline. You are responsible for defining the format and ensuring the uniqueness of this identifier. You use this parameter to ensure idempotency during repeated calls to <code>CreatePipeline</code>. For example, if the first call to <code>CreatePipeline</code> does not succeed, you can pass in the same unique identifier and pipeline name combination on a subsequent call to <code>CreatePipeline</code>. <code>CreatePipeline</code> ensures that if a pipeline already exists with the same name and unique identifier, a new pipeline is not created. Instead, you'll receive the pipeline identifier from the previous attempt. The uniqueness of the name and unique identifier combination is scoped to the AWS account or IAM user credentials.</p>"]
     #[serde(rename="uniqueId")]
-    pub unique_id: Id,
+    pub unique_id: String,
 }
 
 #[doc="<p>Contains the output of CreatePipeline.</p>"]
@@ -89,7 +85,7 @@ pub struct CreatePipelineInput {
 pub struct CreatePipelineOutput {
     #[doc="<p>The ID that AWS Data Pipeline assigns the newly created pipeline. For example, <code>df-06372391ZG65EXAMPLE</code>.</p>"]
     #[serde(rename="pipelineId")]
-    pub pipeline_id: Id,
+    pub pipeline_id: String,
 }
 
 #[doc="<p>Contains the parameters for DeactivatePipeline.</p>"]
@@ -98,10 +94,10 @@ pub struct DeactivatePipelineInput {
     #[doc="<p>Indicates whether to cancel any running objects. The default is true, which sets the state of any running objects to <code>CANCELED</code>. If this value is false, the pipeline is deactivated after all running objects finish.</p>"]
     #[serde(rename="cancelActive")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub cancel_active: Option<CancelActive>,
+    pub cancel_active: Option<bool>,
     #[doc="<p>The ID of the pipeline.</p>"]
     #[serde(rename="pipelineId")]
-    pub pipeline_id: Id,
+    pub pipeline_id: String,
 }
 
 #[doc="<p>Contains the output of DeactivatePipeline.</p>"]
@@ -113,7 +109,7 @@ pub struct DeactivatePipelineOutput;
 pub struct DeletePipelineInput {
     #[doc="<p>The ID of the pipeline.</p>"]
     #[serde(rename="pipelineId")]
-    pub pipeline_id: Id,
+    pub pipeline_id: String,
 }
 
 #[doc="<p>Contains the parameters for DescribeObjects.</p>"]
@@ -122,17 +118,17 @@ pub struct DescribeObjectsInput {
     #[doc="<p>Indicates whether any expressions in the object should be evaluated when the object descriptions are returned.</p>"]
     #[serde(rename="evaluateExpressions")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub evaluate_expressions: Option<Boolean>,
+    pub evaluate_expressions: Option<bool>,
     #[doc="<p>The starting point for the results to be returned. For the first call, this value should be empty. As long as there are more results, continue to call <code>DescribeObjects</code> with the marker value from the previous call to retrieve the next set of results.</p>"]
     #[serde(rename="marker")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The IDs of the pipeline objects that contain the definitions to be described. You can pass as many as 25 identifiers in a single call to <code>DescribeObjects</code>.</p>"]
     #[serde(rename="objectIds")]
-    pub object_ids: IdList,
+    pub object_ids: Vec<String>,
     #[doc="<p>The ID of the pipeline that contains the object definitions.</p>"]
     #[serde(rename="pipelineId")]
-    pub pipeline_id: Id,
+    pub pipeline_id: String,
 }
 
 #[doc="<p>Contains the output of DescribeObjects.</p>"]
@@ -141,14 +137,14 @@ pub struct DescribeObjectsOutput {
     #[doc="<p>Indicates whether there are more results to return.</p>"]
     #[serde(rename="hasMoreResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub has_more_results: Option<Boolean>,
+    pub has_more_results: Option<bool>,
     #[doc="<p>The starting point for the next page of results. To view the next page of results, call <code>DescribeObjects</code> again with this marker value. If the value is null, there are no more results.</p>"]
     #[serde(rename="marker")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>An array of object definitions.</p>"]
     #[serde(rename="pipelineObjects")]
-    pub pipeline_objects: PipelineObjectList,
+    pub pipeline_objects: Vec<PipelineObject>,
 }
 
 #[doc="<p>Contains the parameters for DescribePipelines.</p>"]
@@ -156,7 +152,7 @@ pub struct DescribeObjectsOutput {
 pub struct DescribePipelinesInput {
     #[doc="<p>The IDs of the pipelines to describe. You can pass as many as 25 identifiers in a single call. To obtain pipeline IDs, call <a>ListPipelines</a>.</p>"]
     #[serde(rename="pipelineIds")]
-    pub pipeline_ids: IdList,
+    pub pipeline_ids: Vec<String>,
 }
 
 #[doc="<p>Contains the output of DescribePipelines.</p>"]
@@ -164,22 +160,21 @@ pub struct DescribePipelinesInput {
 pub struct DescribePipelinesOutput {
     #[doc="<p>An array of descriptions for the specified pipelines.</p>"]
     #[serde(rename="pipelineDescriptionList")]
-    pub pipeline_description_list: PipelineDescriptionList,
+    pub pipeline_description_list: Vec<PipelineDescription>,
 }
 
-pub type ErrorMessage = String;
 #[doc="<p>Contains the parameters for EvaluateExpression.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct EvaluateExpressionInput {
     #[doc="<p>The expression to evaluate.</p>"]
     #[serde(rename="expression")]
-    pub expression: LongString,
+    pub expression: String,
     #[doc="<p>The ID of the object.</p>"]
     #[serde(rename="objectId")]
-    pub object_id: Id,
+    pub object_id: String,
     #[doc="<p>The ID of the pipeline.</p>"]
     #[serde(rename="pipelineId")]
-    pub pipeline_id: Id,
+    pub pipeline_id: String,
 }
 
 #[doc="<p>Contains the output of EvaluateExpression.</p>"]
@@ -187,7 +182,7 @@ pub struct EvaluateExpressionInput {
 pub struct EvaluateExpressionOutput {
     #[doc="<p>The evaluated expression.</p>"]
     #[serde(rename="evaluatedExpression")]
-    pub evaluated_expression: LongString,
+    pub evaluated_expression: String,
 }
 
 #[doc="<p>A key-value pair that describes a property of a pipeline object. The value is specified as either a string value (<code>StringValue</code>) or a reference to another object (<code>RefValue</code>) but not as both.</p>"]
@@ -195,26 +190,23 @@ pub struct EvaluateExpressionOutput {
 pub struct Field {
     #[doc="<p>The field identifier.</p>"]
     #[serde(rename="key")]
-    pub key: FieldNameString,
+    pub key: String,
     #[doc="<p>The field value, expressed as the identifier of another object.</p>"]
     #[serde(rename="refValue")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ref_value: Option<FieldNameString>,
+    pub ref_value: Option<String>,
     #[doc="<p>The field value, expressed as a String.</p>"]
     #[serde(rename="stringValue")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub string_value: Option<FieldStringValue>,
+    pub string_value: Option<String>,
 }
 
-pub type FieldList = Vec<Field>;
-pub type FieldNameString = String;
-pub type FieldStringValue = String;
 #[doc="<p>Contains the parameters for GetPipelineDefinition.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetPipelineDefinitionInput {
     #[doc="<p>The ID of the pipeline.</p>"]
     #[serde(rename="pipelineId")]
-    pub pipeline_id: Id,
+    pub pipeline_id: String,
     #[doc="<p>The version of the pipeline definition to retrieve. Set this parameter to <code>latest</code> (default) to use the last definition saved to the pipeline or <code>active</code> to use the last definition that was activated.</p>"]
     #[serde(rename="version")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -227,19 +219,17 @@ pub struct GetPipelineDefinitionOutput {
     #[doc="<p>The parameter objects used in the pipeline definition.</p>"]
     #[serde(rename="parameterObjects")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub parameter_objects: Option<ParameterObjectList>,
+    pub parameter_objects: Option<Vec<ParameterObject>>,
     #[doc="<p>The parameter values used in the pipeline definition.</p>"]
     #[serde(rename="parameterValues")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub parameter_values: Option<ParameterValueList>,
+    pub parameter_values: Option<Vec<ParameterValue>>,
     #[doc="<p>The objects defined in the pipeline.</p>"]
     #[serde(rename="pipelineObjects")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub pipeline_objects: Option<PipelineObjectList>,
+    pub pipeline_objects: Option<Vec<PipelineObject>>,
 }
 
-pub type Id = String;
-pub type IdList = Vec<Id>;
 #[doc="<p><p>Identity information for the EC2 instance that is hosting the task runner. You can get this value by calling a metadata URI from the EC2 instance. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AESDG-chapter-instancedata.html\">Instance Metadata</a> in the <i>Amazon Elastic Compute Cloud User Guide.</i> Passing in this value proves that your task runner is running on an EC2 instance, and ensures the proper AWS Data Pipeline service charges are applied to your pipeline.</p></p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct InstanceIdentity {
@@ -253,7 +243,6 @@ pub struct InstanceIdentity {
     pub signature: Option<String>,
 }
 
-pub type Int = i64;
 #[doc="<p>Contains the parameters for ListPipelines.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListPipelinesInput {
@@ -269,67 +258,62 @@ pub struct ListPipelinesOutput {
     #[doc="<p>Indicates whether there are more results that can be obtained by a subsequent call.</p>"]
     #[serde(rename="hasMoreResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub has_more_results: Option<Boolean>,
+    pub has_more_results: Option<bool>,
     #[doc="<p>The starting point for the next page of results. To view the next page of results, call <code>ListPipelinesOutput</code> again with this marker value. If the value is null, there are no more results.</p>"]
     #[serde(rename="marker")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The pipeline identifiers. If you require additional information about the pipelines, you can use these identifiers to call <a>DescribePipelines</a> and <a>GetPipelineDefinition</a>.</p>"]
     #[serde(rename="pipelineIdList")]
-    pub pipeline_id_list: PipelineList,
+    pub pipeline_id_list: Vec<PipelineIdName>,
 }
 
-pub type LongString = String;
 #[doc="<p>Contains a logical operation for comparing the value of a field with a specified value.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct Operator {
     #[doc="<p> The logical operation to be performed: equal (<code>EQ</code>), equal reference (<code>REF_EQ</code>), less than or equal (<code>LE</code>), greater than or equal (<code>GE</code>), or between (<code>BETWEEN</code>). Equal reference (<code>REF_EQ</code>) can be used only with reference fields. The other comparison types can be used only with String fields. The comparison types you can use apply only to certain object fields, as detailed below. </p> <p> The comparison operators EQ and REF_EQ act on the following fields: </p> <ul> <li>name</li> <li>@sphere</li> <li>parent</li> <li>@componentParent</li> <li>@instanceParent</li> <li>@status</li> <li>@scheduledStartTime</li> <li>@scheduledEndTime</li> <li>@actualStartTime</li> <li>@actualEndTime</li> </ul> <p> The comparison operators <code>GE</code>, <code>LE</code>, and <code>BETWEEN</code> act on the following fields: </p> <ul> <li>@scheduledStartTime</li> <li>@scheduledEndTime</li> <li>@actualStartTime</li> <li>@actualEndTime</li> </ul> <p>Note that fields beginning with the at sign (@) are read-only and set by the web service. When you name fields, you should choose names containing only alpha-numeric values, as symbols may be reserved by AWS Data Pipeline. User-defined fields that you add to a pipeline should prefix their name with the string \"my\".</p>"]
     #[serde(rename="type")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub type_: Option<OperatorType>,
+    pub type_: Option<String>,
     #[doc="<p>The value that the actual field value will be compared with.</p>"]
     #[serde(rename="values")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub values: Option<StringList>,
+    pub values: Option<Vec<String>>,
 }
 
-pub type OperatorType = String;
 #[doc="<p>The attributes allowed or specified with a parameter object.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ParameterAttribute {
     #[doc="<p>The field identifier.</p>"]
     #[serde(rename="key")]
-    pub key: AttributeNameString,
+    pub key: String,
     #[doc="<p>The field value, expressed as a String.</p>"]
     #[serde(rename="stringValue")]
-    pub string_value: AttributeValueString,
+    pub string_value: String,
 }
 
-pub type ParameterAttributeList = Vec<ParameterAttribute>;
 #[doc="<p>Contains information about a parameter object.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ParameterObject {
     #[doc="<p>The attributes of the parameter object.</p>"]
     #[serde(rename="attributes")]
-    pub attributes: ParameterAttributeList,
+    pub attributes: Vec<ParameterAttribute>,
     #[doc="<p>The ID of the parameter object. </p>"]
     #[serde(rename="id")]
-    pub id: FieldNameString,
+    pub id: String,
 }
 
-pub type ParameterObjectList = Vec<ParameterObject>;
 #[doc="<p>A value or list of parameter values. </p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ParameterValue {
     #[doc="<p>The ID of the parameter value.</p>"]
     #[serde(rename="id")]
-    pub id: FieldNameString,
+    pub id: String,
     #[doc="<p>The field value, expressed as a String.</p>"]
     #[serde(rename="stringValue")]
-    pub string_value: FieldStringValue,
+    pub string_value: String,
 }
 
-pub type ParameterValueList = Vec<ParameterValue>;
 #[doc="<p>Contains pipeline metadata.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct PipelineDescription {
@@ -339,57 +323,53 @@ pub struct PipelineDescription {
     pub description: Option<String>,
     #[doc="<p>A list of read-only fields that contain metadata about the pipeline: @userId, @accountId, and @pipelineState.</p>"]
     #[serde(rename="fields")]
-    pub fields: FieldList,
+    pub fields: Vec<Field>,
     #[doc="<p>The name of the pipeline.</p>"]
     #[serde(rename="name")]
-    pub name: Id,
+    pub name: String,
     #[doc="<p>The pipeline identifier that was assigned by AWS Data Pipeline. This is a string of the form <code>df-297EG78HU43EEXAMPLE</code>.</p>"]
     #[serde(rename="pipelineId")]
-    pub pipeline_id: Id,
+    pub pipeline_id: String,
     #[doc="<p>A list of tags to associated with a pipeline. Tags let you control access to pipelines. For more information, see <a href=\"http://docs.aws.amazon.com/datapipeline/latest/DeveloperGuide/dp-control-access.html\">Controlling User Access to Pipelines</a> in the <i>AWS Data Pipeline Developer Guide</i>.</p>"]
     #[serde(rename="tags")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
-pub type PipelineDescriptionList = Vec<PipelineDescription>;
 #[doc="<p>Contains the name and identifier of a pipeline.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct PipelineIdName {
     #[doc="<p>The ID of the pipeline that was assigned by AWS Data Pipeline. This is a string of the form <code>df-297EG78HU43EEXAMPLE</code>.</p>"]
     #[serde(rename="id")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub id: Option<Id>,
+    pub id: Option<String>,
     #[doc="<p>The name of the pipeline.</p>"]
     #[serde(rename="name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<Id>,
+    pub name: Option<String>,
 }
 
-pub type PipelineList = Vec<PipelineIdName>;
 #[doc="<p>Contains information about a pipeline object. This can be a logical, physical, or physical attempt pipeline object. The complete set of components of a pipeline defines the pipeline.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PipelineObject {
     #[doc="<p>Key-value pairs that define the properties of the object.</p>"]
     #[serde(rename="fields")]
-    pub fields: FieldList,
+    pub fields: Vec<Field>,
     #[doc="<p>The ID of the object.</p>"]
     #[serde(rename="id")]
-    pub id: Id,
+    pub id: String,
     #[doc="<p>The name of the object.</p>"]
     #[serde(rename="name")]
-    pub name: Id,
+    pub name: String,
 }
 
-pub type PipelineObjectList = Vec<PipelineObject>;
-pub type PipelineObjectMap = ::std::collections::HashMap<Id, PipelineObject>;
 #[doc="<p>Contains the parameters for PollForTask.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct PollForTaskInput {
     #[doc="<p>The public DNS name of the calling task runner.</p>"]
     #[serde(rename="hostname")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub hostname: Option<Id>,
+    pub hostname: Option<String>,
     #[doc="<p>Identity information for the EC2 instance that is hosting the task runner. You can get this value from the instance using <code>http://169.254.169.254/latest/meta-data/instance-id</code>. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AESDG-chapter-instancedata.html\">Instance Metadata</a> in the <i>Amazon Elastic Compute Cloud User Guide.</i> Passing in this value proves that your task runner is running on an EC2 instance, and ensures the proper AWS Data Pipeline service charges are applied to your pipeline.</p>"]
     #[serde(rename="instanceIdentity")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -414,17 +394,17 @@ pub struct PutPipelineDefinitionInput {
     #[doc="<p>The parameter objects used with the pipeline.</p>"]
     #[serde(rename="parameterObjects")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub parameter_objects: Option<ParameterObjectList>,
+    pub parameter_objects: Option<Vec<ParameterObject>>,
     #[doc="<p>The parameter values used with the pipeline.</p>"]
     #[serde(rename="parameterValues")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub parameter_values: Option<ParameterValueList>,
+    pub parameter_values: Option<Vec<ParameterValue>>,
     #[doc="<p>The ID of the pipeline.</p>"]
     #[serde(rename="pipelineId")]
-    pub pipeline_id: Id,
+    pub pipeline_id: String,
     #[doc="<p>The objects that define the pipeline. These objects overwrite the existing pipeline definition.</p>"]
     #[serde(rename="pipelineObjects")]
-    pub pipeline_objects: PipelineObjectList,
+    pub pipeline_objects: Vec<PipelineObject>,
 }
 
 #[doc="<p>Contains the output of PutPipelineDefinition.</p>"]
@@ -432,15 +412,15 @@ pub struct PutPipelineDefinitionInput {
 pub struct PutPipelineDefinitionOutput {
     #[doc="<p>Indicates whether there were validation errors, and the pipeline definition is stored but cannot be activated until you correct the pipeline and call <code>PutPipelineDefinition</code> to commit the corrected pipeline.</p>"]
     #[serde(rename="errored")]
-    pub errored: Boolean,
+    pub errored: bool,
     #[doc="<p>The validation errors that are associated with the objects defined in <code>pipelineObjects</code>.</p>"]
     #[serde(rename="validationErrors")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub validation_errors: Option<ValidationErrors>,
+    pub validation_errors: Option<Vec<ValidationError>>,
     #[doc="<p>The validation warnings that are associated with the objects defined in <code>pipelineObjects</code>.</p>"]
     #[serde(rename="validationWarnings")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub validation_warnings: Option<ValidationWarnings>,
+    pub validation_warnings: Option<Vec<ValidationWarning>>,
 }
 
 #[doc="<p>Defines the query to run against an object.</p>"]
@@ -449,7 +429,7 @@ pub struct Query {
     #[doc="<p>List of selectors that define the query. An object must satisfy all of the selectors to match the query.</p>"]
     #[serde(rename="selectors")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub selectors: Option<SelectorList>,
+    pub selectors: Option<Vec<Selector>>,
 }
 
 #[doc="<p>Contains the parameters for QueryObjects.</p>"]
@@ -458,14 +438,14 @@ pub struct QueryObjectsInput {
     #[doc="<p>The maximum number of object names that <code>QueryObjects</code> will return in a single call. The default value is 100. </p>"]
     #[serde(rename="limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<Int>,
+    pub limit: Option<i64>,
     #[doc="<p>The starting point for the results to be returned. For the first call, this value should be empty. As long as there are more results, continue to call <code>QueryObjects</code> with the marker value from the previous call to retrieve the next set of results.</p>"]
     #[serde(rename="marker")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub marker: Option<String>,
     #[doc="<p>The ID of the pipeline.</p>"]
     #[serde(rename="pipelineId")]
-    pub pipeline_id: Id,
+    pub pipeline_id: String,
     #[doc="<p>The query that defines the objects to be returned. The <code>Query</code> object can contain a maximum of ten selectors. The conditions in the query are limited to top-level String fields in the object. These filters can be applied to components, instances, and attempts.</p>"]
     #[serde(rename="query")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -481,11 +461,11 @@ pub struct QueryObjectsOutput {
     #[doc="<p>Indicates whether there are more results that can be obtained by a subsequent call.</p>"]
     #[serde(rename="hasMoreResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub has_more_results: Option<Boolean>,
+    pub has_more_results: Option<bool>,
     #[doc="<p>The identifiers that match the query selectors.</p>"]
     #[serde(rename="ids")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ids: Option<IdList>,
+    pub ids: Option<Vec<String>>,
     #[doc="<p>The starting point for the next page of results. To view the next page of results, call <code>QueryObjects</code> again with this marker value. If the value is null, there are no more results.</p>"]
     #[serde(rename="marker")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -497,10 +477,10 @@ pub struct QueryObjectsOutput {
 pub struct RemoveTagsInput {
     #[doc="<p>The ID of the pipeline.</p>"]
     #[serde(rename="pipelineId")]
-    pub pipeline_id: Id,
+    pub pipeline_id: String,
     #[doc="<p>The keys of the tags to remove.</p>"]
     #[serde(rename="tagKeys")]
-    pub tag_keys: StringList,
+    pub tag_keys: Vec<String>,
 }
 
 #[doc="<p>Contains the output of RemoveTags.</p>"]
@@ -513,10 +493,10 @@ pub struct ReportTaskProgressInput {
     #[doc="<p>Key-value pairs that define the properties of the ReportTaskProgressInput object.</p>"]
     #[serde(rename="fields")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub fields: Option<FieldList>,
+    pub fields: Option<Vec<Field>>,
     #[doc="<p>The ID of the task assigned to the task runner. This value is provided in the response for <a>PollForTask</a>.</p>"]
     #[serde(rename="taskId")]
-    pub task_id: TaskId,
+    pub task_id: String,
 }
 
 #[doc="<p>Contains the output of ReportTaskProgress.</p>"]
@@ -524,7 +504,7 @@ pub struct ReportTaskProgressInput {
 pub struct ReportTaskProgressOutput {
     #[doc="<p>If true, the calling task runner should cancel processing of the task. The task runner does not need to call <a>SetTaskStatus</a> for canceled tasks.</p>"]
     #[serde(rename="canceled")]
-    pub canceled: Boolean,
+    pub canceled: bool,
 }
 
 #[doc="<p>Contains the parameters for ReportTaskRunnerHeartbeat.</p>"]
@@ -533,10 +513,10 @@ pub struct ReportTaskRunnerHeartbeatInput {
     #[doc="<p>The public DNS name of the task runner.</p>"]
     #[serde(rename="hostname")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub hostname: Option<Id>,
+    pub hostname: Option<String>,
     #[doc="<p>The ID of the task runner. This value should be unique across your AWS account. In the case of AWS Data Pipeline Task Runner launched on a resource managed by AWS Data Pipeline, the web service provides a unique identifier when it launches the application. If you have written a custom task runner, you should assign a unique identifier for the task runner.</p>"]
     #[serde(rename="taskrunnerId")]
-    pub taskrunner_id: Id,
+    pub taskrunner_id: String,
     #[doc="<p>The type of task the task runner is configured to accept and process. The worker group is set as a field on objects in the pipeline when they are created. You can only specify a single value for <code>workerGroup</code>. There are no wildcard values permitted in <code>workerGroup</code>; the string must be an exact, case-sensitive, match.</p>"]
     #[serde(rename="workerGroup")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -548,7 +528,7 @@ pub struct ReportTaskRunnerHeartbeatInput {
 pub struct ReportTaskRunnerHeartbeatOutput {
     #[doc="<p>Indicates whether the calling task runner should terminate.</p>"]
     #[serde(rename="terminate")]
-    pub terminate: Boolean,
+    pub terminate: bool,
 }
 
 #[doc="<p>A comparision that is used to determine whether a query should return this object.</p>"]
@@ -564,16 +544,15 @@ pub struct Selector {
 }
 
 #[doc="<p>The list of Selectors that define queries on individual fields.</p>"]
-pub type SelectorList = Vec<Selector>;
 #[doc="<p>Contains the parameters for SetStatus.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct SetStatusInput {
     #[doc="<p>The IDs of the objects. The corresponding objects can be either physical or components, but not a mix of both types.</p>"]
     #[serde(rename="objectIds")]
-    pub object_ids: IdList,
+    pub object_ids: Vec<String>,
     #[doc="<p>The ID of the pipeline that contains the objects.</p>"]
     #[serde(rename="pipelineId")]
-    pub pipeline_id: Id,
+    pub pipeline_id: String,
     #[doc="<p>The status to be set on all the objects specified in <code>objectIds</code>. For components, use <code>PAUSE</code> or <code>RESUME</code>. For instances, use <code>TRY_CANCEL</code>, <code>RERUN</code>, or <code>MARK_FINISHED</code>.</p>"]
     #[serde(rename="status")]
     pub status: String,
@@ -589,79 +568,72 @@ pub struct SetTaskStatusInput {
     #[doc="<p>If an error occurred during the task, this value specifies a text description of the error. This value is set on the physical attempt object. It is used to display error information to the user. The web service does not parse this value.</p>"]
     #[serde(rename="errorMessage")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub error_message: Option<ErrorMessage>,
+    pub error_message: Option<String>,
     #[doc="<p>If an error occurred during the task, this value specifies the stack trace associated with the error. This value is set on the physical attempt object. It is used to display error information to the user. The web service does not parse this value.</p>"]
     #[serde(rename="errorStackTrace")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub error_stack_trace: Option<String>,
     #[doc="<p>The ID of the task assigned to the task runner. This value is provided in the response for <a>PollForTask</a>.</p>"]
     #[serde(rename="taskId")]
-    pub task_id: TaskId,
+    pub task_id: String,
     #[doc="<p>If <code>FINISHED</code>, the task successfully completed. If <code>FAILED</code>, the task ended unsuccessfully. Preconditions use false.</p>"]
     #[serde(rename="taskStatus")]
-    pub task_status: TaskStatus,
+    pub task_status: String,
 }
 
 #[doc="<p>Contains the output of SetTaskStatus.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct SetTaskStatusOutput;
 
-pub type StringList = Vec<String>;
 #[doc="<p>Tags are key/value pairs defined by a user and associated with a pipeline to control access. AWS Data Pipeline allows you to associate ten tags per pipeline. For more information, see <a href=\"http://docs.aws.amazon.com/datapipeline/latest/DeveloperGuide/dp-control-access.html\">Controlling User Access to Pipelines</a> in the <i>AWS Data Pipeline Developer Guide</i>.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Tag {
     #[doc="<p>The key name of a tag defined by a user. For more information, see <a href=\"http://docs.aws.amazon.com/datapipeline/latest/DeveloperGuide/dp-control-access.html\">Controlling User Access to Pipelines</a> in the <i>AWS Data Pipeline Developer Guide</i>.</p>"]
     #[serde(rename="key")]
-    pub key: TagKey,
+    pub key: String,
     #[doc="<p>The optional value portion of a tag defined by a user. For more information, see <a href=\"http://docs.aws.amazon.com/datapipeline/latest/DeveloperGuide/dp-control-access.html\">Controlling User Access to Pipelines</a> in the <i>AWS Data Pipeline Developer Guide</i>.</p>"]
     #[serde(rename="value")]
-    pub value: TagValue,
+    pub value: String,
 }
 
-pub type TagKey = String;
-pub type TagList = Vec<Tag>;
-pub type TagValue = String;
-pub type TaskId = String;
 #[doc="<p>Contains information about a pipeline task that is assigned to a task runner.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct TaskObject {
     #[doc="<p>The ID of the pipeline task attempt object. AWS Data Pipeline uses this value to track how many times a task is attempted.</p>"]
     #[serde(rename="attemptId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub attempt_id: Option<Id>,
+    pub attempt_id: Option<String>,
     #[doc="<p>Connection information for the location where the task runner will publish the output of the task.</p>"]
     #[serde(rename="objects")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub objects: Option<PipelineObjectMap>,
+    pub objects: Option<::std::collections::HashMap<String, PipelineObject>>,
     #[doc="<p>The ID of the pipeline that provided the task.</p>"]
     #[serde(rename="pipelineId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub pipeline_id: Option<Id>,
+    pub pipeline_id: Option<String>,
     #[doc="<p>An internal identifier for the task. This ID is passed to the <a>SetTaskStatus</a> and <a>ReportTaskProgress</a> actions.</p>"]
     #[serde(rename="taskId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub task_id: Option<TaskId>,
+    pub task_id: Option<String>,
 }
 
-pub type TaskStatus = String;
-pub type Timestamp = f64;
 #[doc="<p>Contains the parameters for ValidatePipelineDefinition.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ValidatePipelineDefinitionInput {
     #[doc="<p>The parameter objects used with the pipeline.</p>"]
     #[serde(rename="parameterObjects")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub parameter_objects: Option<ParameterObjectList>,
+    pub parameter_objects: Option<Vec<ParameterObject>>,
     #[doc="<p>The parameter values used with the pipeline.</p>"]
     #[serde(rename="parameterValues")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub parameter_values: Option<ParameterValueList>,
+    pub parameter_values: Option<Vec<ParameterValue>>,
     #[doc="<p>The ID of the pipeline.</p>"]
     #[serde(rename="pipelineId")]
-    pub pipeline_id: Id,
+    pub pipeline_id: String,
     #[doc="<p>The objects that define the pipeline changes to validate against the pipeline.</p>"]
     #[serde(rename="pipelineObjects")]
-    pub pipeline_objects: PipelineObjectList,
+    pub pipeline_objects: Vec<PipelineObject>,
 }
 
 #[doc="<p>Contains the output of ValidatePipelineDefinition.</p>"]
@@ -669,15 +641,15 @@ pub struct ValidatePipelineDefinitionInput {
 pub struct ValidatePipelineDefinitionOutput {
     #[doc="<p>Indicates whether there were validation errors.</p>"]
     #[serde(rename="errored")]
-    pub errored: Boolean,
+    pub errored: bool,
     #[doc="<p>Any validation errors that were found.</p>"]
     #[serde(rename="validationErrors")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub validation_errors: Option<ValidationErrors>,
+    pub validation_errors: Option<Vec<ValidationError>>,
     #[doc="<p>Any validation warnings that were found.</p>"]
     #[serde(rename="validationWarnings")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub validation_warnings: Option<ValidationWarnings>,
+    pub validation_warnings: Option<Vec<ValidationWarning>>,
 }
 
 #[doc="<p>Defines a validation error. Validation errors prevent pipeline activation. The set of validation errors that can be returned are defined by AWS Data Pipeline.</p>"]
@@ -686,30 +658,26 @@ pub struct ValidationError {
     #[doc="<p>A description of the validation error.</p>"]
     #[serde(rename="errors")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub errors: Option<ValidationMessages>,
+    pub errors: Option<Vec<String>>,
     #[doc="<p>The identifier of the object that contains the validation error.</p>"]
     #[serde(rename="id")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub id: Option<Id>,
+    pub id: Option<String>,
 }
 
-pub type ValidationErrors = Vec<ValidationError>;
-pub type ValidationMessage = String;
-pub type ValidationMessages = Vec<ValidationMessage>;
 #[doc="<p>Defines a validation warning. Validation warnings do not prevent pipeline activation. The set of validation warnings that can be returned are defined by AWS Data Pipeline.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ValidationWarning {
     #[doc="<p>The identifier of the object that contains the validation warning.</p>"]
     #[serde(rename="id")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub id: Option<Id>,
+    pub id: Option<String>,
     #[doc="<p>A description of the validation warning.</p>"]
     #[serde(rename="warnings")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub warnings: Option<ValidationMessages>,
+    pub warnings: Option<Vec<String>>,
 }
 
-pub type ValidationWarnings = Vec<ValidationWarning>;
 /// Errors returned by ActivatePipeline
 #[derive(Debug, PartialEq)]
 pub enum ActivatePipelineError {

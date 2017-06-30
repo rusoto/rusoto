@@ -36,14 +36,13 @@ pub struct AccountQuota {
     #[doc="<p>The maximum allowed value for the quota.</p>"]
     #[serde(rename="Max")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max: Option<Long>,
+    pub max: Option<i64>,
     #[doc="<p>The amount currently used toward the quota maximum.</p>"]
     #[serde(rename="Used")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub used: Option<Long>,
+    pub used: Option<i64>,
 }
 
-pub type AccountQuotaList = Vec<AccountQuota>;
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct AddTagsToResourceMessage {
@@ -52,15 +51,13 @@ pub struct AddTagsToResourceMessage {
     pub resource_arn: String,
     #[doc="<p>The tag to be assigned to the DMS resource.</p>"]
     #[serde(rename="Tags")]
-    pub tags: TagList,
+    pub tags: Vec<Tag>,
 }
 
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct AddTagsToResourceResponse;
 
-pub type AuthMechanismValue = String;
-pub type AuthTypeValue = String;
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct AvailabilityZone {
@@ -70,8 +67,6 @@ pub struct AvailabilityZone {
     pub name: Option<String>,
 }
 
-pub type Boolean = bool;
-pub type BooleanOptional = bool;
 #[doc="<p>The SSL certificate that can be used to encrypt connections between the endpoints and the replication instance.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Certificate {
@@ -82,7 +77,7 @@ pub struct Certificate {
     #[doc="<p>The date that the certificate was created.</p>"]
     #[serde(rename="CertificateCreationDate")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub certificate_creation_date: Option<TStamp>,
+    pub certificate_creation_date: Option<f64>,
     #[doc="<p>The customer-assigned name of the certificate. Valid characters are A-z and 0-9.</p>"]
     #[serde(rename="CertificateIdentifier")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -102,11 +97,11 @@ pub struct Certificate {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub certificate_wallet: Option<CertificateWallet>,
+    pub certificate_wallet: Option<Vec<u8>>,
     #[doc="<p>The key length of the cryptographic algorithm being used.</p>"]
     #[serde(rename="KeyLength")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub key_length: Option<IntegerOptional>,
+    pub key_length: Option<i64>,
     #[doc="<p>The signing algorithm for the certificate.</p>"]
     #[serde(rename="SigningAlgorithm")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -114,16 +109,13 @@ pub struct Certificate {
     #[doc="<p>The beginning date that the certificate is valid.</p>"]
     #[serde(rename="ValidFromDate")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub valid_from_date: Option<TStamp>,
+    pub valid_from_date: Option<f64>,
     #[doc="<p>The final date that the certificate is valid.</p>"]
     #[serde(rename="ValidToDate")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub valid_to_date: Option<TStamp>,
+    pub valid_to_date: Option<f64>,
 }
 
-pub type CertificateList = Vec<Certificate>;
-pub type CertificateWallet = Vec<u8>;
-pub type CompressionTypeValue = String;
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Connection {
@@ -153,7 +145,6 @@ pub struct Connection {
     pub status: Option<String>,
 }
 
-pub type ConnectionList = Vec<Connection>;
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateEndpointMessage {
@@ -174,7 +165,7 @@ pub struct CreateEndpointMessage {
     pub endpoint_identifier: String,
     #[doc="<p>The type of endpoint.</p>"]
     #[serde(rename="EndpointType")]
-    pub endpoint_type: ReplicationEndpointTypeValue,
+    pub endpoint_type: String,
     #[doc="<p>The type of engine for the endpoint. Valid values, depending on the EndPointType, include MYSQL, ORACLE, POSTGRES, MARIADB, AURORA, REDSHIFT, S3, SYBASE, DYNAMODB, MONGODB, and SQLSERVER.</p>"]
     #[serde(rename="EngineName")]
     pub engine_name: String,
@@ -193,11 +184,11 @@ pub struct CreateEndpointMessage {
     #[doc="<p>The password to be used to login to the endpoint database.</p>"]
     #[serde(rename="Password")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub password: Option<SecretString>,
+    pub password: Option<String>,
     #[doc="<p>The port used by the endpoint database.</p>"]
     #[serde(rename="Port")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub port: Option<IntegerOptional>,
+    pub port: Option<i64>,
     #[doc="<p>Settings in JSON format for the target S3 endpoint. For more information about the available settings, see the <b>Extra Connection Attributes</b> section at <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html\"> Using Amazon S3 as a Target for AWS Database Migration Service</a>. </p>"]
     #[serde(rename="S3Settings")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -209,11 +200,11 @@ pub struct CreateEndpointMessage {
     #[doc="<p>The SSL mode to use for the SSL connection.</p> <p>SSL mode can be one of four values: none, require, verify-ca, verify-full. </p> <p>The default value is none.</p>"]
     #[serde(rename="SslMode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ssl_mode: Option<DmsSslModeValue>,
+    pub ssl_mode: Option<String>,
     #[doc="<p>Tags to be added to the endpoint.</p>"]
     #[serde(rename="Tags")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>The user name to be used to login to the endpoint database.</p>"]
     #[serde(rename="Username")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -235,18 +226,18 @@ pub struct CreateEventSubscriptionMessage {
     #[doc="<p> A Boolean value; set to <b>true</b> to activate the subscription, or set to <b>false</b> to create the subscription but not activate it. </p>"]
     #[serde(rename="Enabled")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub enabled: Option<BooleanOptional>,
+    pub enabled: Option<bool>,
     #[doc="<p> A list of event categories for a source type that you want to subscribe to. You can see a list of the categories for a given source type by calling the <b>DescribeEventCategories</b> action or in the topic <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html\"> Working with Events and Notifications</a> in the AWS Database Migration Service User Guide. </p>"]
     #[serde(rename="EventCategories")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub event_categories: Option<EventCategoriesList>,
+    pub event_categories: Option<Vec<String>>,
     #[doc="<p> The Amazon Resource Name (ARN) of the Amazon SNS topic created for event notification. The ARN is created by Amazon SNS when you create a topic and subscribe to it. </p>"]
     #[serde(rename="SnsTopicArn")]
     pub sns_topic_arn: String,
     #[doc="<p> The list of identifiers of the event sources for which events will be returned. If not specified, then all sources are included in the response. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it cannot end with a hyphen or contain two consecutive hyphens. </p>"]
     #[serde(rename="SourceIds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub source_ids: Option<SourceIdsList>,
+    pub source_ids: Option<Vec<String>>,
     #[doc="<p> The type of AWS DMS resource that generates the events. For example, if you want to be notified of events generated by a replication instance, you set this parameter to <code>replication-instance</code>. If this value is not specified, all events are returned. </p> <p>Valid values: replication-instance | migration-task</p>"]
     #[serde(rename="SourceType")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -257,7 +248,7 @@ pub struct CreateEventSubscriptionMessage {
     #[doc="<p>A tag to be attached to the event subscription.</p>"]
     #[serde(rename="Tags")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[doc="<p/>"]
@@ -275,11 +266,11 @@ pub struct CreateReplicationInstanceMessage {
     #[doc="<p>The amount of storage (in gigabytes) to be initially allocated for the replication instance.</p>"]
     #[serde(rename="AllocatedStorage")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub allocated_storage: Option<IntegerOptional>,
+    pub allocated_storage: Option<i64>,
     #[doc="<p>Indicates that minor engine upgrades will be applied automatically to the replication instance during the maintenance window.</p> <p>Default: <code>true</code> </p>"]
     #[serde(rename="AutoMinorVersionUpgrade")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub auto_minor_version_upgrade: Option<BooleanOptional>,
+    pub auto_minor_version_upgrade: Option<bool>,
     #[doc="<p>The EC2 Availability Zone that the replication instance will be created in.</p> <p>Default: A random, system-chosen Availability Zone in the endpoint's region.</p> <p> Example: <code>us-east-1d</code> </p>"]
     #[serde(rename="AvailabilityZone")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -295,7 +286,7 @@ pub struct CreateReplicationInstanceMessage {
     #[doc="<p> Specifies if the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>"]
     #[serde(rename="MultiAZ")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub multi_az: Option<BooleanOptional>,
+    pub multi_az: Option<bool>,
     #[doc="<p>The weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).</p> <p> Format: <code>ddd:hh24:mi-ddd:hh24:mi</code> </p> <p>Default: A 30-minute window selected at random from an 8-hour block of time per region, occurring on a random day of the week.</p> <p>Valid Days: Mon, Tue, Wed, Thu, Fri, Sat, Sun</p> <p>Constraints: Minimum 30-minute window.</p>"]
     #[serde(rename="PreferredMaintenanceWindow")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -303,7 +294,7 @@ pub struct CreateReplicationInstanceMessage {
     #[doc="<p> Specifies the accessibility options for the replication instance. A value of <code>true</code> represents an instance with a public IP address. A value of <code>false</code> represents an instance with a private IP address. The default value is <code>true</code>. </p>"]
     #[serde(rename="PubliclyAccessible")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub publicly_accessible: Option<BooleanOptional>,
+    pub publicly_accessible: Option<bool>,
     #[doc="<p>The compute and memory capacity of the replication instance as specified by the replication instance class.</p> <p> Valid Values: <code>dms.t2.micro | dms.t2.small | dms.t2.medium | dms.t2.large | dms.c4.large | dms.c4.xlarge | dms.c4.2xlarge | dms.c4.4xlarge </code> </p>"]
     #[serde(rename="ReplicationInstanceClass")]
     pub replication_instance_class: String,
@@ -317,11 +308,11 @@ pub struct CreateReplicationInstanceMessage {
     #[doc="<p>Tags to be associated with the replication instance.</p>"]
     #[serde(rename="Tags")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p> Specifies the VPC security group to be used with the replication instance. The VPC security group must work with the VPC containing the replication instance. </p>"]
     #[serde(rename="VpcSecurityGroupIds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub vpc_security_group_ids: Option<VpcSecurityGroupIdList>,
+    pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
 #[doc="<p/>"]
@@ -344,11 +335,11 @@ pub struct CreateReplicationSubnetGroupMessage {
     pub replication_subnet_group_identifier: String,
     #[doc="<p>The EC2 subnet IDs for the subnet group.</p>"]
     #[serde(rename="SubnetIds")]
-    pub subnet_ids: SubnetIdentifierList,
+    pub subnet_ids: Vec<String>,
     #[doc="<p>The tag to be assigned to the subnet group.</p>"]
     #[serde(rename="Tags")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[doc="<p/>"]
@@ -366,10 +357,10 @@ pub struct CreateReplicationTaskMessage {
     #[doc="<p>The start time for the Change Data Capture (CDC) operation.</p>"]
     #[serde(rename="CdcStartTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub cdc_start_time: Option<TStamp>,
+    pub cdc_start_time: Option<f64>,
     #[doc="<p>The migration type.</p>"]
     #[serde(rename="MigrationType")]
-    pub migration_type: MigrationTypeValue,
+    pub migration_type: String,
     #[doc="<p>The Amazon Resource Name (ARN) of the replication instance.</p>"]
     #[serde(rename="ReplicationInstanceArn")]
     pub replication_instance_arn: String,
@@ -389,7 +380,7 @@ pub struct CreateReplicationTaskMessage {
     #[doc="<p>Tags to be added to the replication instance.</p>"]
     #[serde(rename="Tags")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>"]
     #[serde(rename="TargetEndpointArn")]
     pub target_endpoint_arn: String,
@@ -509,7 +500,7 @@ pub struct DescribeAccountAttributesResponse {
     #[doc="<p>Account quota information.</p>"]
     #[serde(rename="AccountQuotas")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub account_quotas: Option<AccountQuotaList>,
+    pub account_quotas: Option<Vec<AccountQuota>>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -517,7 +508,7 @@ pub struct DescribeCertificatesMessage {
     #[doc="<p>Filters applied to the certificate described in the form of key-value pairs.</p>"]
     #[serde(rename="Filters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     #[serde(rename="Marker")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -525,7 +516,7 @@ pub struct DescribeCertificatesMessage {
     #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 10</p>"]
     #[serde(rename="MaxRecords")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -533,7 +524,7 @@ pub struct DescribeCertificatesResponse {
     #[doc="<p>The Secure Sockets Layer (SSL) certificates associated with the replication instance.</p>"]
     #[serde(rename="Certificates")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub certificates: Option<CertificateList>,
+    pub certificates: Option<Vec<Certificate>>,
     #[doc="<p>The pagination token.</p>"]
     #[serde(rename="Marker")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -546,7 +537,7 @@ pub struct DescribeConnectionsMessage {
     #[doc="<p>The filters applied to the connection.</p> <p>Valid filter names: endpoint-arn | replication-instance-arn</p>"]
     #[serde(rename="Filters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     #[serde(rename="Marker")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -554,7 +545,7 @@ pub struct DescribeConnectionsMessage {
     #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
     #[serde(rename="MaxRecords")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
 }
 
 #[doc="<p/>"]
@@ -563,7 +554,7 @@ pub struct DescribeConnectionsResponse {
     #[doc="<p>A description of the connections.</p>"]
     #[serde(rename="Connections")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub connections: Option<ConnectionList>,
+    pub connections: Option<Vec<Connection>>,
     #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     #[serde(rename="Marker")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -576,7 +567,7 @@ pub struct DescribeEndpointTypesMessage {
     #[doc="<p>Filters applied to the describe action.</p> <p>Valid filter names: engine-name | endpoint-type</p>"]
     #[serde(rename="Filters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     #[serde(rename="Marker")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -584,7 +575,7 @@ pub struct DescribeEndpointTypesMessage {
     #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
     #[serde(rename="MaxRecords")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
 }
 
 #[doc="<p/>"]
@@ -597,7 +588,7 @@ pub struct DescribeEndpointTypesResponse {
     #[doc="<p>The type of endpoints that are supported.</p>"]
     #[serde(rename="SupportedEndpointTypes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub supported_endpoint_types: Option<SupportedEndpointTypeList>,
+    pub supported_endpoint_types: Option<Vec<SupportedEndpointType>>,
 }
 
 #[doc="<p/>"]
@@ -606,7 +597,7 @@ pub struct DescribeEndpointsMessage {
     #[doc="<p>Filters applied to the describe action.</p> <p>Valid filter names: endpoint-arn | endpoint-type | endpoint-id | engine-name</p>"]
     #[serde(rename="Filters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     #[serde(rename="Marker")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -614,7 +605,7 @@ pub struct DescribeEndpointsMessage {
     #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
     #[serde(rename="MaxRecords")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
 }
 
 #[doc="<p/>"]
@@ -623,7 +614,7 @@ pub struct DescribeEndpointsResponse {
     #[doc="<p>Endpoint description.</p>"]
     #[serde(rename="Endpoints")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub endpoints: Option<EndpointList>,
+    pub endpoints: Option<Vec<Endpoint>>,
     #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     #[serde(rename="Marker")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -636,7 +627,7 @@ pub struct DescribeEventCategoriesMessage {
     #[doc="<p>Filters applied to the action.</p>"]
     #[serde(rename="Filters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p> The type of AWS DMS resource that generates events. </p> <p>Valid values: replication-instance | migration-task</p>"]
     #[serde(rename="SourceType")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -649,7 +640,7 @@ pub struct DescribeEventCategoriesResponse {
     #[doc="<p>A list of event categories.</p>"]
     #[serde(rename="EventCategoryGroupList")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub event_category_group_list: Option<EventCategoryGroupList>,
+    pub event_category_group_list: Option<Vec<EventCategoryGroup>>,
 }
 
 #[doc="<p/>"]
@@ -658,7 +649,7 @@ pub struct DescribeEventSubscriptionsMessage {
     #[doc="<p>Filters applied to the action.</p>"]
     #[serde(rename="Filters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     #[serde(rename="Marker")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -666,7 +657,7 @@ pub struct DescribeEventSubscriptionsMessage {
     #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
     #[serde(rename="MaxRecords")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>The name of the AWS DMS event subscription to be described.</p>"]
     #[serde(rename="SubscriptionName")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -679,7 +670,7 @@ pub struct DescribeEventSubscriptionsResponse {
     #[doc="<p>A list of event subscriptions.</p>"]
     #[serde(rename="EventSubscriptionsList")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub event_subscriptions_list: Option<EventSubscriptionsList>,
+    pub event_subscriptions_list: Option<Vec<EventSubscription>>,
     #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     #[serde(rename="Marker")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -692,19 +683,19 @@ pub struct DescribeEventsMessage {
     #[doc="<p>The duration of the events to be listed.</p>"]
     #[serde(rename="Duration")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub duration: Option<IntegerOptional>,
+    pub duration: Option<i64>,
     #[doc="<p>The end time for the events to be listed.</p>"]
     #[serde(rename="EndTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub end_time: Option<TStamp>,
+    pub end_time: Option<f64>,
     #[doc="<p>A list of event categories for a source type that you want to subscribe to.</p>"]
     #[serde(rename="EventCategories")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub event_categories: Option<EventCategoriesList>,
+    pub event_categories: Option<Vec<String>>,
     #[doc="<p>Filters applied to the action.</p>"]
     #[serde(rename="Filters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     #[serde(rename="Marker")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -712,7 +703,7 @@ pub struct DescribeEventsMessage {
     #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
     #[serde(rename="MaxRecords")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p> The identifier of the event source. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens. It cannot end with a hyphen or contain two consecutive hyphens. </p>"]
     #[serde(rename="SourceIdentifier")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -720,11 +711,11 @@ pub struct DescribeEventsMessage {
     #[doc="<p>The type of AWS DMS resource that generates events.</p> <p>Valid values: replication-instance | migration-task</p>"]
     #[serde(rename="SourceType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub source_type: Option<SourceType>,
+    pub source_type: Option<String>,
     #[doc="<p>The start time for the events to be listed.</p>"]
     #[serde(rename="StartTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub start_time: Option<TStamp>,
+    pub start_time: Option<f64>,
 }
 
 #[doc="<p/>"]
@@ -733,7 +724,7 @@ pub struct DescribeEventsResponse {
     #[doc="<p>The events described.</p>"]
     #[serde(rename="Events")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub events: Option<EventList>,
+    pub events: Option<Vec<Event>>,
     #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     #[serde(rename="Marker")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -750,7 +741,7 @@ pub struct DescribeOrderableReplicationInstancesMessage {
     #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
     #[serde(rename="MaxRecords")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
 }
 
 #[doc="<p/>"]
@@ -763,7 +754,7 @@ pub struct DescribeOrderableReplicationInstancesResponse {
     #[doc="<p>The order-able replication instances available.</p>"]
     #[serde(rename="OrderableReplicationInstances")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub orderable_replication_instances: Option<OrderableReplicationInstanceList>,
+    pub orderable_replication_instances: Option<Vec<OrderableReplicationInstance>>,
 }
 
 #[doc="<p/>"]
@@ -789,7 +780,7 @@ pub struct DescribeReplicationInstancesMessage {
     #[doc="<p>Filters applied to the describe action.</p> <p>Valid filter names: replication-instance-arn | replication-instance-id | replication-instance-class | engine-version</p>"]
     #[serde(rename="Filters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     #[serde(rename="Marker")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -797,7 +788,7 @@ pub struct DescribeReplicationInstancesMessage {
     #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
     #[serde(rename="MaxRecords")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
 }
 
 #[doc="<p/>"]
@@ -810,7 +801,7 @@ pub struct DescribeReplicationInstancesResponse {
     #[doc="<p>The replication instances described.</p>"]
     #[serde(rename="ReplicationInstances")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub replication_instances: Option<ReplicationInstanceList>,
+    pub replication_instances: Option<Vec<ReplicationInstance>>,
 }
 
 #[doc="<p/>"]
@@ -819,7 +810,7 @@ pub struct DescribeReplicationSubnetGroupsMessage {
     #[doc="<p>Filters applied to the describe action.</p>"]
     #[serde(rename="Filters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     #[serde(rename="Marker")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -827,7 +818,7 @@ pub struct DescribeReplicationSubnetGroupsMessage {
     #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
     #[serde(rename="MaxRecords")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
 }
 
 #[doc="<p/>"]
@@ -840,7 +831,7 @@ pub struct DescribeReplicationSubnetGroupsResponse {
     #[doc="<p>A description of the replication subnet groups.</p>"]
     #[serde(rename="ReplicationSubnetGroups")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub replication_subnet_groups: Option<ReplicationSubnetGroups>,
+    pub replication_subnet_groups: Option<Vec<ReplicationSubnetGroup>>,
 }
 
 #[doc="<p/>"]
@@ -849,7 +840,7 @@ pub struct DescribeReplicationTasksMessage {
     #[doc="<p>Filters applied to the describe action.</p> <p>Valid filter names: replication-task-arn | replication-task-id | migration-type | endpoint-arn | replication-instance-arn</p>"]
     #[serde(rename="Filters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     #[serde(rename="Marker")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -857,7 +848,7 @@ pub struct DescribeReplicationTasksMessage {
     #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
     #[serde(rename="MaxRecords")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
 }
 
 #[doc="<p/>"]
@@ -870,7 +861,7 @@ pub struct DescribeReplicationTasksResponse {
     #[doc="<p>A description of the replication tasks.</p>"]
     #[serde(rename="ReplicationTasks")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub replication_tasks: Option<ReplicationTaskList>,
+    pub replication_tasks: Option<Vec<ReplicationTask>>,
 }
 
 #[doc="<p/>"]
@@ -886,7 +877,7 @@ pub struct DescribeSchemasMessage {
     #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
     #[serde(rename="MaxRecords")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
 }
 
 #[doc="<p/>"]
@@ -899,7 +890,7 @@ pub struct DescribeSchemasResponse {
     #[doc="<p>The described schema.</p>"]
     #[serde(rename="Schemas")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub schemas: Option<SchemaList>,
+    pub schemas: Option<Vec<String>>,
 }
 
 #[doc="<p/>"]
@@ -912,7 +903,7 @@ pub struct DescribeTableStatisticsMessage {
     #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
     #[serde(rename="MaxRecords")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>The Amazon Resource Name (ARN) of the replication task.</p>"]
     #[serde(rename="ReplicationTaskArn")]
     pub replication_task_arn: String,
@@ -932,10 +923,9 @@ pub struct DescribeTableStatisticsResponse {
     #[doc="<p>The table statistics.</p>"]
     #[serde(rename="TableStatistics")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub table_statistics: Option<TableStatisticsList>,
+    pub table_statistics: Option<Vec<TableStatistics>>,
 }
 
-pub type DmsSslModeValue = String;
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct DynamoDbSettings {
@@ -970,7 +960,7 @@ pub struct Endpoint {
     #[doc="<p>The type of endpoint.</p>"]
     #[serde(rename="EndpointType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub endpoint_type: Option<ReplicationEndpointTypeValue>,
+    pub endpoint_type: Option<String>,
     #[doc="<p>The database engine name. Valid values, depending on the EndPointType, include MYSQL, ORACLE, POSTGRES, MARIADB, AURORA, REDSHIFT, S3, SYBASE, DYNAMODB, MONGODB, and SQLSERVER.</p>"]
     #[serde(rename="EngineName")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -994,7 +984,7 @@ pub struct Endpoint {
     #[doc="<p>The port value used to access the endpoint.</p>"]
     #[serde(rename="Port")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub port: Option<IntegerOptional>,
+    pub port: Option<i64>,
     #[doc="<p>The settings for the S3 target endpoint. For more information, see the <code>S3Settings</code> structure.</p>"]
     #[serde(rename="S3Settings")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1006,7 +996,7 @@ pub struct Endpoint {
     #[doc="<p>The SSL mode used to connect to the endpoint.</p> <p>SSL mode can be one of four values: none, require, verify-ca, verify-full. </p> <p>The default value is none.</p>"]
     #[serde(rename="SslMode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ssl_mode: Option<DmsSslModeValue>,
+    pub ssl_mode: Option<String>,
     #[doc="<p>The status of the endpoint.</p>"]
     #[serde(rename="Status")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1017,18 +1007,17 @@ pub struct Endpoint {
     pub username: Option<String>,
 }
 
-pub type EndpointList = Vec<Endpoint>;
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Event {
     #[doc="<p>The date of the event.</p>"]
     #[serde(rename="Date")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub date: Option<TStamp>,
+    pub date: Option<f64>,
     #[doc="<p>The event categories available for the specified source type.</p>"]
     #[serde(rename="EventCategories")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub event_categories: Option<EventCategoriesList>,
+    pub event_categories: Option<Vec<String>>,
     #[doc="<p>The event message.</p>"]
     #[serde(rename="Message")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1040,25 +1029,22 @@ pub struct Event {
     #[doc="<p> The type of AWS DMS resource that generates events. </p> <p>Valid values: replication-instance | endpoint | migration-task</p>"]
     #[serde(rename="SourceType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub source_type: Option<SourceType>,
+    pub source_type: Option<String>,
 }
 
-pub type EventCategoriesList = Vec<String>;
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct EventCategoryGroup {
     #[doc="<p> A list of event categories for a <code>SourceType</code> that you want to subscribe to. </p>"]
     #[serde(rename="EventCategories")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub event_categories: Option<EventCategoriesList>,
+    pub event_categories: Option<Vec<String>>,
     #[doc="<p> The type of AWS DMS resource that generates events. </p> <p>Valid values: replication-instance | replication-server | security-group | migration-task</p>"]
     #[serde(rename="SourceType")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub source_type: Option<String>,
 }
 
-pub type EventCategoryGroupList = Vec<EventCategoryGroup>;
-pub type EventList = Vec<Event>;
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct EventSubscription {
@@ -1073,11 +1059,11 @@ pub struct EventSubscription {
     #[doc="<p>Boolean value that indicates if the event subscription is enabled.</p>"]
     #[serde(rename="Enabled")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub enabled: Option<Boolean>,
+    pub enabled: Option<bool>,
     #[doc="<p>A lists of event categories.</p>"]
     #[serde(rename="EventCategoriesList")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub event_categories_list: Option<EventCategoriesList>,
+    pub event_categories_list: Option<Vec<String>>,
     #[doc="<p>The topic ARN of the AWS DMS event notification subscription.</p>"]
     #[serde(rename="SnsTopicArn")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1085,7 +1071,7 @@ pub struct EventSubscription {
     #[doc="<p>A list of source Ids for the event subscription.</p>"]
     #[serde(rename="SourceIdsList")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub source_ids_list: Option<SourceIdsList>,
+    pub source_ids_list: Option<Vec<String>>,
     #[doc="<p> The type of AWS DMS resource that generates events. </p> <p>Valid values: replication-instance | replication-server | security-group | migration-task</p>"]
     #[serde(rename="SourceType")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1100,8 +1086,6 @@ pub struct EventSubscription {
     pub subscription_creation_time: Option<String>,
 }
 
-pub type EventSubscriptionsList = Vec<EventSubscription>;
-pub type ExceptionMessage = String;
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct Filter {
@@ -1110,11 +1094,9 @@ pub struct Filter {
     pub name: String,
     #[doc="<p>The filter value.</p>"]
     #[serde(rename="Values")]
-    pub values: FilterValueList,
+    pub values: Vec<String>,
 }
 
-pub type FilterList = Vec<Filter>;
-pub type FilterValueList = Vec<String>;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ImportCertificateMessage {
     #[doc="<p>The customer-assigned name of the certificate. Valid characters are A-z and 0-9.</p>"]
@@ -1131,11 +1113,11 @@ pub struct ImportCertificateMessage {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub certificate_wallet: Option<CertificateWallet>,
+    pub certificate_wallet: Option<Vec<u8>>,
     #[doc="<p>The tags associated with the certificate.</p>"]
     #[serde(rename="Tags")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -1146,9 +1128,6 @@ pub struct ImportCertificateResponse {
     pub certificate: Option<Certificate>,
 }
 
-pub type Integer = i64;
-pub type IntegerOptional = i64;
-pub type KeyList = Vec<String>;
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListTagsForResourceMessage {
@@ -1163,11 +1142,9 @@ pub struct ListTagsForResourceResponse {
     #[doc="<p>A list of tags for the resource.</p>"]
     #[serde(rename="TagList")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub tag_list: Option<TagList>,
+    pub tag_list: Option<Vec<Tag>>,
 }
 
-pub type Long = i64;
-pub type MigrationTypeValue = String;
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ModifyEndpointMessage {
@@ -1193,7 +1170,7 @@ pub struct ModifyEndpointMessage {
     #[doc="<p>The type of endpoint.</p>"]
     #[serde(rename="EndpointType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub endpoint_type: Option<ReplicationEndpointTypeValue>,
+    pub endpoint_type: Option<String>,
     #[doc="<p>The type of engine for the endpoint. Valid values, depending on the EndPointType, include MYSQL, ORACLE, POSTGRES, MARIADB, AURORA, REDSHIFT, S3, DYNAMODB, MONGODB, SYBASE, and SQLSERVER.</p>"]
     #[serde(rename="EngineName")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1209,11 +1186,11 @@ pub struct ModifyEndpointMessage {
     #[doc="<p>The password to be used to login to the endpoint database.</p>"]
     #[serde(rename="Password")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub password: Option<SecretString>,
+    pub password: Option<String>,
     #[doc="<p>The port used by the endpoint database.</p>"]
     #[serde(rename="Port")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub port: Option<IntegerOptional>,
+    pub port: Option<i64>,
     #[doc="<p>Settings in JSON format for the target S3 endpoint. For more information about the available settings, see the <b>Extra Connection Attributes</b> section at <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html\"> Using Amazon S3 as a Target for AWS Database Migration Service</a>. </p>"]
     #[serde(rename="S3Settings")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1225,7 +1202,7 @@ pub struct ModifyEndpointMessage {
     #[doc="<p>The SSL mode to be used.</p> <p>SSL mode can be one of four values: none, require, verify-ca, verify-full. </p> <p>The default value is none.</p>"]
     #[serde(rename="SslMode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ssl_mode: Option<DmsSslModeValue>,
+    pub ssl_mode: Option<String>,
     #[doc="<p>The user name to be used to login to the endpoint database.</p>"]
     #[serde(rename="Username")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1247,11 +1224,11 @@ pub struct ModifyEventSubscriptionMessage {
     #[doc="<p> A Boolean value; set to <b>true</b> to activate the subscription. </p>"]
     #[serde(rename="Enabled")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub enabled: Option<BooleanOptional>,
+    pub enabled: Option<bool>,
     #[doc="<p> A list of event categories for a source type that you want to subscribe to. Use the <code>DescribeEventCategories</code> action to see a list of event categories. </p>"]
     #[serde(rename="EventCategories")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub event_categories: Option<EventCategoriesList>,
+    pub event_categories: Option<Vec<String>>,
     #[doc="<p> The Amazon Resource Name (ARN) of the Amazon SNS topic created for event notification. The ARN is created by Amazon SNS when you create a topic and subscribe to it.</p>"]
     #[serde(rename="SnsTopicArn")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1280,19 +1257,19 @@ pub struct ModifyReplicationInstanceMessage {
     #[doc="<p>The amount of storage (in gigabytes) to be allocated for the replication instance.</p>"]
     #[serde(rename="AllocatedStorage")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub allocated_storage: Option<IntegerOptional>,
+    pub allocated_storage: Option<i64>,
     #[doc="<p>Indicates that major version upgrades are allowed. Changing this parameter does not result in an outage and the change is asynchronously applied as soon as possible.</p> <p>Constraints: This parameter must be set to true when specifying a value for the <code>EngineVersion</code> parameter that is a different major version than the replication instance's current version.</p>"]
     #[serde(rename="AllowMajorVersionUpgrade")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub allow_major_version_upgrade: Option<Boolean>,
+    pub allow_major_version_upgrade: Option<bool>,
     #[doc="<p>Indicates whether the changes should be applied immediately or during the next maintenance window.</p>"]
     #[serde(rename="ApplyImmediately")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub apply_immediately: Option<Boolean>,
+    pub apply_immediately: Option<bool>,
     #[doc="<p> Indicates that minor version upgrades will be applied automatically to the replication instance during the maintenance window. Changing this parameter does not result in an outage except in the following case and the change is asynchronously applied as soon as possible. An outage will result if this parameter is set to <code>true</code> during the maintenance window, and a newer minor version is available, and AWS DMS has enabled auto patching for that engine version. </p>"]
     #[serde(rename="AutoMinorVersionUpgrade")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub auto_minor_version_upgrade: Option<BooleanOptional>,
+    pub auto_minor_version_upgrade: Option<bool>,
     #[doc="<p>The engine version number of the replication instance.</p>"]
     #[serde(rename="EngineVersion")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1300,7 +1277,7 @@ pub struct ModifyReplicationInstanceMessage {
     #[doc="<p> Specifies if the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>"]
     #[serde(rename="MultiAZ")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub multi_az: Option<BooleanOptional>,
+    pub multi_az: Option<bool>,
     #[doc="<p>The weekly time range (in UTC) during which system maintenance can occur, which might result in an outage. Changing this parameter does not result in an outage, except in the following situation, and the change is asynchronously applied as soon as possible. If moving this window to the current time, there must be at least 30 minutes between the current time and end of the window to ensure pending changes are applied.</p> <p>Default: Uses existing setting</p> <p>Format: ddd:hh24:mi-ddd:hh24:mi</p> <p>Valid Days: Mon | Tue | Wed | Thu | Fri | Sat | Sun</p> <p>Constraints: Must be at least 30 minutes</p>"]
     #[serde(rename="PreferredMaintenanceWindow")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1319,7 +1296,7 @@ pub struct ModifyReplicationInstanceMessage {
     #[doc="<p> Specifies the VPC security group to be used with the replication instance. The VPC security group must work with the VPC containing the replication instance. </p>"]
     #[serde(rename="VpcSecurityGroupIds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub vpc_security_group_ids: Option<VpcSecurityGroupIdList>,
+    pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
 #[doc="<p/>"]
@@ -1343,7 +1320,7 @@ pub struct ModifyReplicationSubnetGroupMessage {
     pub replication_subnet_group_identifier: String,
     #[doc="<p>A list of subnet IDs.</p>"]
     #[serde(rename="SubnetIds")]
-    pub subnet_ids: SubnetIdentifierList,
+    pub subnet_ids: Vec<String>,
 }
 
 #[doc="<p/>"]
@@ -1361,11 +1338,11 @@ pub struct ModifyReplicationTaskMessage {
     #[doc="<p>The start time for the Change Data Capture (CDC) operation.</p>"]
     #[serde(rename="CdcStartTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub cdc_start_time: Option<TStamp>,
+    pub cdc_start_time: Option<f64>,
     #[doc="<p>The migration type.</p> <p>Valid values: full-load | cdc | full-load-and-cdc</p>"]
     #[serde(rename="MigrationType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub migration_type: Option<MigrationTypeValue>,
+    pub migration_type: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the replication task.</p>"]
     #[serde(rename="ReplicationTaskArn")]
     pub replication_task_arn: String,
@@ -1398,7 +1375,7 @@ pub struct MongoDbSettings {
     #[doc="<p> The authentication mechanism you use to access the MongoDB source endpoint.</p> <p>Valid values: DEFAULT, MONGODB_CR, SCRAM_SHA_1 </p> <p>DEFAULT – For MongoDB version 2.x, use MONGODB_CR. For MongoDB version 3.x, use SCRAM_SHA_1. This attribute is not used when authType=No.</p>"]
     #[serde(rename="AuthMechanism")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub auth_mechanism: Option<AuthMechanismValue>,
+    pub auth_mechanism: Option<String>,
     #[doc="<p> The MongoDB database name. This attribute is not used when <code>authType=NO</code>. </p> <p>The default is admin.</p>"]
     #[serde(rename="AuthSource")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1406,7 +1383,7 @@ pub struct MongoDbSettings {
     #[doc="<p> The authentication type you use to access the MongoDB source endpoint.</p> <p>Valid values: NO, PASSWORD </p> <p>When NO is selected, user name and password parameters are not used and can be empty. </p>"]
     #[serde(rename="AuthType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub auth_type: Option<AuthTypeValue>,
+    pub auth_type: Option<String>,
     #[doc="<p> The database name on the MongoDB source endpoint. </p>"]
     #[serde(rename="DatabaseName")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1422,15 +1399,15 @@ pub struct MongoDbSettings {
     #[doc="<p> Specifies either document or table mode. </p> <p>Valid values: NONE, ONE</p> <p>Default value is NONE. Specify NONE to use document mode. Specify ONE to use table mode.</p>"]
     #[serde(rename="NestingLevel")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub nesting_level: Option<NestingLevelValue>,
+    pub nesting_level: Option<String>,
     #[doc="<p> The password for the user account you use to access the MongoDB source endpoint. </p>"]
     #[serde(rename="Password")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub password: Option<SecretString>,
+    pub password: Option<String>,
     #[doc="<p> The port value for the MongoDB source endpoint. </p>"]
     #[serde(rename="Port")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub port: Option<IntegerOptional>,
+    pub port: Option<i64>,
     #[doc="<p> The name of the server on the MongoDB source endpoint. </p>"]
     #[serde(rename="ServerName")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1441,14 +1418,13 @@ pub struct MongoDbSettings {
     pub username: Option<String>,
 }
 
-pub type NestingLevelValue = String;
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct OrderableReplicationInstance {
     #[doc="<p>The default amount of storage (in gigabytes) that is allocated for the replication instance.</p>"]
     #[serde(rename="DefaultAllocatedStorage")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub default_allocated_storage: Option<Integer>,
+    pub default_allocated_storage: Option<i64>,
     #[doc="<p>The version of the replication engine.</p>"]
     #[serde(rename="EngineVersion")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1456,15 +1432,15 @@ pub struct OrderableReplicationInstance {
     #[doc="<p>The amount of storage (in gigabytes) that is allocated for the replication instance.</p>"]
     #[serde(rename="IncludedAllocatedStorage")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub included_allocated_storage: Option<Integer>,
+    pub included_allocated_storage: Option<i64>,
     #[doc="<p>The minimum amount of storage (in gigabytes) that can be allocated for the replication instance.</p>"]
     #[serde(rename="MaxAllocatedStorage")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_allocated_storage: Option<Integer>,
+    pub max_allocated_storage: Option<i64>,
     #[doc="<p>The minimum amount of storage (in gigabytes) that can be allocated for the replication instance.</p>"]
     #[serde(rename="MinAllocatedStorage")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub min_allocated_storage: Option<Integer>,
+    pub min_allocated_storage: Option<i64>,
     #[doc="<p>The compute and memory capacity of the replication instance.</p> <p> Valid Values: <code>dms.t2.micro | dms.t2.small | dms.t2.medium | dms.t2.large | dms.c4.large | dms.c4.xlarge | dms.c4.2xlarge | dms.c4.4xlarge </code> </p>"]
     #[serde(rename="ReplicationInstanceClass")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1475,7 +1451,6 @@ pub struct OrderableReplicationInstance {
     pub storage_type: Option<String>,
 }
 
-pub type OrderableReplicationInstanceList = Vec<OrderableReplicationInstance>;
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct RefreshSchemasMessage {
@@ -1510,7 +1485,7 @@ pub struct RefreshSchemasStatus {
     #[doc="<p>The date the schema was last refreshed.</p>"]
     #[serde(rename="LastRefreshDate")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub last_refresh_date: Option<TStamp>,
+    pub last_refresh_date: Option<f64>,
     #[doc="<p>The Amazon Resource Name (ARN) of the replication instance.</p>"]
     #[serde(rename="ReplicationInstanceArn")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1518,10 +1493,9 @@ pub struct RefreshSchemasStatus {
     #[doc="<p>The status of the schema.</p>"]
     #[serde(rename="Status")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status: Option<RefreshSchemasStatusTypeValue>,
+    pub status: Option<String>,
 }
 
-pub type RefreshSchemasStatusTypeValue = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ReloadTablesMessage {
     #[doc="<p>The Amazon Resource Name (ARN) of the replication instance. </p>"]
@@ -1529,7 +1503,7 @@ pub struct ReloadTablesMessage {
     pub replication_task_arn: String,
     #[doc="<p>The name and schema of the table to be reloaded. </p>"]
     #[serde(rename="TablesToReload")]
-    pub tables_to_reload: TableListToReload,
+    pub tables_to_reload: Vec<TableToReload>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -1548,25 +1522,24 @@ pub struct RemoveTagsFromResourceMessage {
     pub resource_arn: String,
     #[doc="<p>The tag key (name) of the tag to be removed.</p>"]
     #[serde(rename="TagKeys")]
-    pub tag_keys: KeyList,
+    pub tag_keys: Vec<String>,
 }
 
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct RemoveTagsFromResourceResponse;
 
-pub type ReplicationEndpointTypeValue = String;
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ReplicationInstance {
     #[doc="<p>The amount of storage (in gigabytes) that is allocated for the replication instance.</p>"]
     #[serde(rename="AllocatedStorage")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub allocated_storage: Option<Integer>,
+    pub allocated_storage: Option<i64>,
     #[doc="<p>Boolean value indicating if minor version upgrades will be automatically applied to the instance.</p>"]
     #[serde(rename="AutoMinorVersionUpgrade")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub auto_minor_version_upgrade: Option<Boolean>,
+    pub auto_minor_version_upgrade: Option<bool>,
     #[doc="<p>The Availability Zone for the instance.</p>"]
     #[serde(rename="AvailabilityZone")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1578,7 +1551,7 @@ pub struct ReplicationInstance {
     #[doc="<p>The time the replication instance was created.</p>"]
     #[serde(rename="InstanceCreateTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub instance_create_time: Option<TStamp>,
+    pub instance_create_time: Option<f64>,
     #[doc="<p>The KMS key identifier that is used to encrypt the content on the replication instance. If you do not specify a value for the KmsKeyId parameter, then AWS DMS will use your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS region.</p>"]
     #[serde(rename="KmsKeyId")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1586,7 +1559,7 @@ pub struct ReplicationInstance {
     #[doc="<p> Specifies if the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>"]
     #[serde(rename="MultiAZ")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub multi_az: Option<Boolean>,
+    pub multi_az: Option<bool>,
     #[doc="<p>The pending modification values.</p>"]
     #[serde(rename="PendingModifiedValues")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1598,7 +1571,7 @@ pub struct ReplicationInstance {
     #[doc="<p> Specifies the accessibility options for the replication instance. A value of <code>true</code> represents an instance with a public IP address. A value of <code>false</code> represents an instance with a private IP address. The default value is <code>true</code>. </p>"]
     #[serde(rename="PubliclyAccessible")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub publicly_accessible: Option<Boolean>,
+    pub publicly_accessible: Option<bool>,
     #[doc="<p>The Amazon Resource Name (ARN) of the replication instance.</p>"]
     #[serde(rename="ReplicationInstanceArn")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1614,13 +1587,11 @@ pub struct ReplicationInstance {
     #[doc="<p>The private IP address of the replication instance.</p>"]
     #[serde(rename="ReplicationInstancePrivateIpAddresses")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub replication_instance_private_ip_addresses:
-        Option<ReplicationInstancePrivateIpAddressList>,
+    pub replication_instance_private_ip_addresses: Option<Vec<String>>,
     #[doc="<p>The public IP address of the replication instance.</p>"]
     #[serde(rename="ReplicationInstancePublicIpAddresses")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub replication_instance_public_ip_addresses:
-        Option<ReplicationInstancePublicIpAddressList>,
+    pub replication_instance_public_ip_addresses: Option<Vec<String>>,
     #[doc="<p>The status of the replication instance.</p>"]
     #[serde(rename="ReplicationInstanceStatus")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1636,19 +1607,16 @@ pub struct ReplicationInstance {
     #[doc="<p>The VPC security group for the instance.</p>"]
     #[serde(rename="VpcSecurityGroups")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub vpc_security_groups: Option<VpcSecurityGroupMembershipList>,
+    pub vpc_security_groups: Option<Vec<VpcSecurityGroupMembership>>,
 }
 
-pub type ReplicationInstanceList = Vec<ReplicationInstance>;
-pub type ReplicationInstancePrivateIpAddressList = Vec<String>;
-pub type ReplicationInstancePublicIpAddressList = Vec<String>;
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ReplicationPendingModifiedValues {
     #[doc="<p>The amount of storage (in gigabytes) that is allocated for the replication instance.</p>"]
     #[serde(rename="AllocatedStorage")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub allocated_storage: Option<IntegerOptional>,
+    pub allocated_storage: Option<i64>,
     #[doc="<p>The engine version number of the replication instance.</p>"]
     #[serde(rename="EngineVersion")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1656,7 +1624,7 @@ pub struct ReplicationPendingModifiedValues {
     #[doc="<p> Specifies if the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>"]
     #[serde(rename="MultiAZ")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub multi_az: Option<BooleanOptional>,
+    pub multi_az: Option<bool>,
     #[doc="<p>The compute and memory capacity of the replication instance.</p> <p> Valid Values: <code>dms.t2.micro | dms.t2.small | dms.t2.medium | dms.t2.large | dms.c4.large | dms.c4.xlarge | dms.c4.2xlarge | dms.c4.4xlarge </code> </p>"]
     #[serde(rename="ReplicationInstanceClass")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1681,14 +1649,13 @@ pub struct ReplicationSubnetGroup {
     #[doc="<p>The subnets that are in the subnet group.</p>"]
     #[serde(rename="Subnets")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub subnets: Option<SubnetList>,
+    pub subnets: Option<Vec<Subnet>>,
     #[doc="<p>The ID of the VPC.</p>"]
     #[serde(rename="VpcId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<String>,
 }
 
-pub type ReplicationSubnetGroups = Vec<ReplicationSubnetGroup>;
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ReplicationTask {
@@ -1699,7 +1666,7 @@ pub struct ReplicationTask {
     #[doc="<p>The type of migration.</p>"]
     #[serde(rename="MigrationType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub migration_type: Option<MigrationTypeValue>,
+    pub migration_type: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the replication instance.</p>"]
     #[serde(rename="ReplicationInstanceArn")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1711,7 +1678,7 @@ pub struct ReplicationTask {
     #[doc="<p>The date the replication task was created.</p>"]
     #[serde(rename="ReplicationTaskCreationDate")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub replication_task_creation_date: Option<TStamp>,
+    pub replication_task_creation_date: Option<f64>,
     #[doc="<p>The replication task identifier.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>"]
     #[serde(rename="ReplicationTaskIdentifier")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1723,7 +1690,7 @@ pub struct ReplicationTask {
     #[doc="<p>The date the replication task is scheduled to start.</p>"]
     #[serde(rename="ReplicationTaskStartDate")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub replication_task_start_date: Option<TStamp>,
+    pub replication_task_start_date: Option<f64>,
     #[doc="<p>The statistics for the task, including elapsed time, tables loaded, and table errors.</p>"]
     #[serde(rename="ReplicationTaskStats")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1750,34 +1717,33 @@ pub struct ReplicationTask {
     pub target_endpoint_arn: Option<String>,
 }
 
-pub type ReplicationTaskList = Vec<ReplicationTask>;
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ReplicationTaskStats {
     #[doc="<p>The elapsed time of the task, in milliseconds.</p>"]
     #[serde(rename="ElapsedTimeMillis")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub elapsed_time_millis: Option<Long>,
+    pub elapsed_time_millis: Option<i64>,
     #[doc="<p>The percent complete for the full load migration task.</p>"]
     #[serde(rename="FullLoadProgressPercent")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub full_load_progress_percent: Option<Integer>,
+    pub full_load_progress_percent: Option<i64>,
     #[doc="<p>The number of errors that have occurred during this task.</p>"]
     #[serde(rename="TablesErrored")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub tables_errored: Option<Integer>,
+    pub tables_errored: Option<i64>,
     #[doc="<p>The number of tables loaded for this task.</p>"]
     #[serde(rename="TablesLoaded")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub tables_loaded: Option<Integer>,
+    pub tables_loaded: Option<i64>,
     #[doc="<p>The number of tables currently loading for this task.</p>"]
     #[serde(rename="TablesLoading")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub tables_loading: Option<Integer>,
+    pub tables_loading: Option<i64>,
     #[doc="<p>The number of tables queued for this task.</p>"]
     #[serde(rename="TablesQueued")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub tables_queued: Option<Integer>,
+    pub tables_queued: Option<i64>,
 }
 
 #[doc="<p/>"]
@@ -1794,7 +1760,7 @@ pub struct S3Settings {
     #[doc="<p> An optional parameter to use GZIP to compress the target files. Set to GZIP to compress the target files. Set to NONE (the default) or do not use to leave the files uncompressed. </p>"]
     #[serde(rename="CompressionType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub compression_type: Option<CompressionTypeValue>,
+    pub compression_type: Option<String>,
     #[doc="<p> The delimiter used to separate columns in the source files. The default is a comma. </p>"]
     #[serde(rename="CsvDelimiter")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1813,23 +1779,19 @@ pub struct S3Settings {
     pub service_access_role_arn: Option<String>,
 }
 
-pub type SchemaList = Vec<String>;
-pub type SecretString = String;
-pub type SourceIdsList = Vec<String>;
-pub type SourceType = String;
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct StartReplicationTaskMessage {
     #[doc="<p>The start time for the Change Data Capture (CDC) operation.</p>"]
     #[serde(rename="CdcStartTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub cdc_start_time: Option<TStamp>,
+    pub cdc_start_time: Option<f64>,
     #[doc="<p>The Amazon Resource Number (ARN) of the replication task to be started.</p>"]
     #[serde(rename="ReplicationTaskArn")]
     pub replication_task_arn: String,
     #[doc="<p>The type of replication task.</p>"]
     #[serde(rename="StartReplicationTaskType")]
-    pub start_replication_task_type: StartReplicationTaskTypeValue,
+    pub start_replication_task_type: String,
 }
 
 #[doc="<p/>"]
@@ -1841,7 +1803,6 @@ pub struct StartReplicationTaskResponse {
     pub replication_task: Option<ReplicationTask>,
 }
 
-pub type StartReplicationTaskTypeValue = String;
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct StopReplicationTaskMessage {
@@ -1876,15 +1837,13 @@ pub struct Subnet {
     pub subnet_status: Option<String>,
 }
 
-pub type SubnetIdentifierList = Vec<String>;
-pub type SubnetList = Vec<Subnet>;
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct SupportedEndpointType {
     #[doc="<p>The type of endpoint.</p>"]
     #[serde(rename="EndpointType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub endpoint_type: Option<ReplicationEndpointTypeValue>,
+    pub endpoint_type: Option<String>,
     #[doc="<p>The database engine name. Valid values, depending on the EndPointType, include MYSQL, ORACLE, POSTGRES, MARIADB, AURORA, REDSHIFT, S3, SYBASE, DYNAMODB, MONGODB, and SQLSERVER.</p>"]
     #[serde(rename="EngineName")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1892,43 +1851,40 @@ pub struct SupportedEndpointType {
     #[doc="<p>Indicates if Change Data Capture (CDC) is supported.</p>"]
     #[serde(rename="SupportsCDC")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub supports_cdc: Option<Boolean>,
+    pub supports_cdc: Option<bool>,
 }
 
-pub type SupportedEndpointTypeList = Vec<SupportedEndpointType>;
-pub type TStamp = f64;
-pub type TableListToReload = Vec<TableToReload>;
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct TableStatistics {
     #[doc="<p>The Data Definition Language (DDL) used to build and modify the structure of your tables.</p>"]
     #[serde(rename="Ddls")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ddls: Option<Long>,
+    pub ddls: Option<i64>,
     #[doc="<p>The number of delete actions performed on a table.</p>"]
     #[serde(rename="Deletes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub deletes: Option<Long>,
+    pub deletes: Option<i64>,
     #[doc="<p>The number of rows that failed conditional checks during the Full Load operation (valid only for DynamoDB as a target migrations).</p>"]
     #[serde(rename="FullLoadCondtnlChkFailedRows")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub full_load_condtnl_chk_failed_rows: Option<Long>,
+    pub full_load_condtnl_chk_failed_rows: Option<i64>,
     #[doc="<p>The number of rows that failed to load during the Full Load operation (valid only for DynamoDB as a target migrations).</p>"]
     #[serde(rename="FullLoadErrorRows")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub full_load_error_rows: Option<Long>,
+    pub full_load_error_rows: Option<i64>,
     #[doc="<p>The number of rows added during the Full Load operation.</p>"]
     #[serde(rename="FullLoadRows")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub full_load_rows: Option<Long>,
+    pub full_load_rows: Option<i64>,
     #[doc="<p>The number of insert actions performed on a table.</p>"]
     #[serde(rename="Inserts")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub inserts: Option<Long>,
+    pub inserts: Option<i64>,
     #[doc="<p>The last time the table was updated.</p>"]
     #[serde(rename="LastUpdateTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub last_update_time: Option<TStamp>,
+    pub last_update_time: Option<f64>,
     #[doc="<p>The schema name.</p>"]
     #[serde(rename="SchemaName")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1944,10 +1900,9 @@ pub struct TableStatistics {
     #[doc="<p>The number of update actions performed on a table.</p>"]
     #[serde(rename="Updates")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub updates: Option<Long>,
+    pub updates: Option<i64>,
 }
 
-pub type TableStatisticsList = Vec<TableStatistics>;
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct TableToReload {
@@ -1974,7 +1929,6 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
-pub type TagList = Vec<Tag>;
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct TestConnectionMessage {
@@ -1995,7 +1949,6 @@ pub struct TestConnectionResponse {
     pub connection: Option<Connection>,
 }
 
-pub type VpcSecurityGroupIdList = Vec<String>;
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct VpcSecurityGroupMembership {
@@ -2009,7 +1962,6 @@ pub struct VpcSecurityGroupMembership {
     pub vpc_security_group_id: Option<String>,
 }
 
-pub type VpcSecurityGroupMembershipList = Vec<VpcSecurityGroupMembership>;
 /// Errors returned by AddTagsToResource
 #[derive(Debug, PartialEq)]
 pub enum AddTagsToResourceError {

@@ -92,13 +92,12 @@ impl AccountWithRestoreAccessDeserializer {
 
     }
 }
-pub type AccountsWithRestoreAccessList = Vec<AccountWithRestoreAccess>;
 struct AccountsWithRestoreAccessListDeserializer;
 impl AccountsWithRestoreAccessListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AccountsWithRestoreAccessList, XmlParseError> {
+                                       -> Result<Vec<AccountWithRestoreAccess>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -353,13 +352,12 @@ impl AvailabilityZoneDeserializer {
 
     }
 }
-pub type AvailabilityZoneList = Vec<AvailabilityZone>;
 struct AvailabilityZoneListDeserializer;
 impl AvailabilityZoneListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AvailabilityZoneList, XmlParseError> {
+                                       -> Result<Vec<AvailabilityZone>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -396,13 +394,12 @@ impl AvailabilityZoneListDeserializer {
 
     }
 }
-pub type Boolean = bool;
 struct BooleanDeserializer;
 impl BooleanDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Boolean, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -411,13 +408,12 @@ impl BooleanDeserializer {
 
     }
 }
-pub type BooleanOptional = bool;
 struct BooleanOptionalDeserializer;
 impl BooleanOptionalDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<BooleanOptional, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -430,25 +426,25 @@ impl BooleanOptionalDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct Cluster {
     #[doc="<p>A Boolean value that, if <code>true</code>, indicates that major version upgrades will be applied automatically to the cluster during the maintenance window. </p>"]
-    pub allow_version_upgrade: Option<Boolean>,
+    pub allow_version_upgrade: Option<bool>,
     #[doc="<p>The number of days that automatic cluster snapshots are retained.</p>"]
-    pub automated_snapshot_retention_period: Option<Integer>,
+    pub automated_snapshot_retention_period: Option<i64>,
     #[doc="<p>The name of the Availability Zone in which the cluster is located.</p>"]
     pub availability_zone: Option<String>,
     #[doc="<p>The date and time that the cluster was created.</p>"]
-    pub cluster_create_time: Option<TStamp>,
+    pub cluster_create_time: Option<String>,
     #[doc="<p>The unique identifier of the cluster.</p>"]
     pub cluster_identifier: Option<String>,
     #[doc="<p>The nodes in the cluster.</p>"]
-    pub cluster_nodes: Option<ClusterNodesList>,
+    pub cluster_nodes: Option<Vec<ClusterNode>>,
     #[doc="<p>The list of cluster parameter groups that are associated with this cluster. Each parameter group in the list is returned with its status.</p>"]
-    pub cluster_parameter_groups: Option<ClusterParameterGroupStatusList>,
+    pub cluster_parameter_groups: Option<Vec<ClusterParameterGroupStatus>>,
     #[doc="<p>The public key for the cluster.</p>"]
     pub cluster_public_key: Option<String>,
     #[doc="<p>The specific revision number of the database in the cluster.</p>"]
     pub cluster_revision_number: Option<String>,
     #[doc="<p>A list of cluster security group that are associated with the cluster. Each security group is represented by an element that contains <code>ClusterSecurityGroup.Name</code> and <code>ClusterSecurityGroup.Status</code> subelements. </p> <p>Cluster security groups are used when the cluster is not created in an Amazon Virtual Private Cloud (VPC). Clusters that are created in a VPC use VPC security groups, which are listed by the <b>VpcSecurityGroups</b> parameter. </p>"]
-    pub cluster_security_groups: Option<ClusterSecurityGroupMembershipList>,
+    pub cluster_security_groups: Option<Vec<ClusterSecurityGroupMembership>>,
     #[doc="<p>A value that returns the destination region and retention period that are configured for cross-region snapshot copy.</p>"]
     pub cluster_snapshot_copy_status: Option<ClusterSnapshotCopyStatus>,
     #[doc="<p> The current state of the cluster. Possible values are the following:</p> <ul> <li> <p> <code>available</code> </p> </li> <li> <p> <code>creating</code> </p> </li> <li> <p> <code>deleting</code> </p> </li> <li> <p> <code>final-snapshot</code> </p> </li> <li> <p> <code>hardware-failure</code> </p> </li> <li> <p> <code>incompatible-hsm</code> </p> </li> <li> <p> <code>incompatible-network</code> </p> </li> <li> <p> <code>incompatible-parameters</code> </p> </li> <li> <p> <code>incompatible-restore</code> </p> </li> <li> <p> <code>modifying</code> </p> </li> <li> <p> <code>rebooting</code> </p> </li> <li> <p> <code>renaming</code> </p> </li> <li> <p> <code>resizing</code> </p> </li> <li> <p> <code>rotating-keys</code> </p> </li> <li> <p> <code>storage-full</code> </p> </li> <li> <p> <code>updating-hsm</code> </p> </li> </ul>"]
@@ -462,15 +458,15 @@ pub struct Cluster {
     #[doc="<p>The status of the elastic IP (EIP) address.</p>"]
     pub elastic_ip_status: Option<ElasticIpStatus>,
     #[doc="<p>A Boolean value that, if <code>true</code>, indicates that data in the cluster is encrypted at rest.</p>"]
-    pub encrypted: Option<Boolean>,
+    pub encrypted: Option<bool>,
     #[doc="<p>The connection endpoint.</p>"]
     pub endpoint: Option<Endpoint>,
     #[doc="<p>An option that specifies whether to create the cluster with enhanced VPC routing enabled. To create a cluster that uses enhanced VPC routing, the cluster must be in a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/enhanced-vpc-routing.html\">Enhanced VPC Routing</a> in the Amazon Redshift Cluster Management Guide.</p> <p>If this option is <code>true</code>, enhanced VPC routing is enabled. </p> <p>Default: false</p>"]
-    pub enhanced_vpc_routing: Option<Boolean>,
+    pub enhanced_vpc_routing: Option<bool>,
     #[doc="<p>A value that reports whether the Amazon Redshift cluster has finished applying any hardware security module (HSM) settings changes specified in a modify cluster command.</p> <p>Values: active, applying</p>"]
     pub hsm_status: Option<HsmStatus>,
     #[doc="<p>A list of AWS Identity and Access Management (IAM) roles that can be used by the cluster to access other AWS services.</p>"]
-    pub iam_roles: Option<ClusterIamRoleList>,
+    pub iam_roles: Option<Vec<ClusterIamRole>>,
     #[doc="<p>The AWS Key Management Service (AWS KMS) key ID of the encryption key used to encrypt data in the cluster.</p>"]
     pub kms_key_id: Option<String>,
     #[doc="<p>The master user name for the cluster. This name is used to connect to the database that is specified in the <b>DBName</b> parameter. </p>"]
@@ -480,21 +476,21 @@ pub struct Cluster {
     #[doc="<p>The node type for the nodes in the cluster.</p>"]
     pub node_type: Option<String>,
     #[doc="<p>The number of compute nodes in the cluster.</p>"]
-    pub number_of_nodes: Option<Integer>,
+    pub number_of_nodes: Option<i64>,
     #[doc="<p>A value that, if present, indicates that changes to the cluster are pending. Specific pending changes are identified by subelements.</p>"]
     pub pending_modified_values: Option<PendingModifiedValues>,
     #[doc="<p>The weekly time range, in Universal Coordinated Time (UTC), during which system maintenance can occur.</p>"]
     pub preferred_maintenance_window: Option<String>,
     #[doc="<p>A Boolean value that, if <code>true</code>, indicates that the cluster can be accessed from a public network.</p>"]
-    pub publicly_accessible: Option<Boolean>,
+    pub publicly_accessible: Option<bool>,
     #[doc="<p>A value that describes the status of a cluster restore action. This parameter returns null if the cluster was not created by restoring a snapshot.</p>"]
     pub restore_status: Option<RestoreStatus>,
     #[doc="<p>The list of tags for the cluster.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>The identifier of the VPC the cluster is in, if the cluster is in a VPC.</p>"]
     pub vpc_id: Option<String>,
     #[doc="<p>A list of Amazon Virtual Private Cloud (Amazon VPC) security groups that are associated with the cluster. This parameter is returned only if the cluster is in a VPC.</p>"]
-    pub vpc_security_groups: Option<VpcSecurityGroupMembershipList>,
+    pub vpc_security_groups: Option<Vec<VpcSecurityGroupMembership>>,
 }
 
 struct ClusterDeserializer;
@@ -685,11 +681,11 @@ impl ClusterDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ClusterCredentials {
     #[doc="<p>A temporary password that authorizes the user name returned by <code>DbUser</code> to log on to the database <code>DbName</code>. </p>"]
-    pub db_password: Option<SensitiveString>,
+    pub db_password: Option<String>,
     #[doc="<p>A database user name that is authorized to log on to the database <code>DbName</code> using the password <code>DbPassword</code>. If the <code>DbGroups</code> parameter is specifed, <code>DbUser</code> is added to the listed groups for the current session. The user name is prefixed with <code>IAM:</code> for an existing user name or <code>IAMA:</code> if the user was auto-created. </p>"]
     pub db_user: Option<String>,
     #[doc="<p>The date and time <code>DbPassword</code> expires.</p>"]
-    pub expiration: Option<TStamp>,
+    pub expiration: Option<String>,
 }
 
 struct ClusterCredentialsDeserializer;
@@ -798,13 +794,12 @@ impl ClusterIamRoleDeserializer {
 
     }
 }
-pub type ClusterIamRoleList = Vec<ClusterIamRole>;
 struct ClusterIamRoleListDeserializer;
 impl ClusterIamRoleListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ClusterIamRoleList, XmlParseError> {
+                                       -> Result<Vec<ClusterIamRole>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -841,13 +836,12 @@ impl ClusterIamRoleListDeserializer {
 
     }
 }
-pub type ClusterList = Vec<Cluster>;
 struct ClusterListDeserializer;
 impl ClusterListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ClusterList, XmlParseError> {
+                                       -> Result<Vec<Cluster>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -946,13 +940,12 @@ impl ClusterNodeDeserializer {
 
     }
 }
-pub type ClusterNodesList = Vec<ClusterNode>;
 struct ClusterNodesListDeserializer;
 impl ClusterNodesListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ClusterNodesList, XmlParseError> {
+                                       -> Result<Vec<ClusterNode>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -998,7 +991,7 @@ pub struct ClusterParameterGroup {
     #[doc="<p>The name of the cluster parameter group.</p>"]
     pub parameter_group_name: Option<String>,
     #[doc="<p>The list of tags for the cluster parameter group.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 struct ClusterParameterGroupDeserializer;
@@ -1062,7 +1055,7 @@ pub struct ClusterParameterGroupDetails {
     #[doc="<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>"]
     pub marker: Option<String>,
     #[doc="<p>A list of <a>Parameter</a> instances. Each instance lists the parameters of one cluster parameter group. </p>"]
-    pub parameters: Option<ParametersList>,
+    pub parameters: Option<Vec<Parameter>>,
 }
 
 struct ClusterParameterGroupDetailsDeserializer;
@@ -1174,7 +1167,7 @@ impl ClusterParameterGroupNameMessageDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ClusterParameterGroupStatus {
     #[doc="<p>The list of parameter statuses.</p> <p> For more information about parameters and parameter groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-    pub cluster_parameter_status_list: Option<ClusterParameterStatusList>,
+    pub cluster_parameter_status_list: Option<Vec<ClusterParameterStatus>>,
     #[doc="<p>The status of parameter updates.</p>"]
     pub parameter_apply_status: Option<String>,
     #[doc="<p>The name of the cluster parameter group.</p>"]
@@ -1232,14 +1225,13 @@ impl ClusterParameterGroupStatusDeserializer {
 
     }
 }
-pub type ClusterParameterGroupStatusList = Vec<ClusterParameterGroupStatus>;
 struct ClusterParameterGroupStatusListDeserializer;
 impl ClusterParameterGroupStatusListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>
         (tag_name: &str,
          stack: &mut T)
-         -> Result<ClusterParameterGroupStatusList, XmlParseError> {
+         -> Result<Vec<ClusterParameterGroupStatus>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -1281,7 +1273,7 @@ pub struct ClusterParameterGroupsMessage {
     #[doc="<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>"]
     pub marker: Option<String>,
     #[doc="<p>A list of <a>ClusterParameterGroup</a> instances. Each instance describes one cluster parameter group. </p>"]
-    pub parameter_groups: Option<ParameterGroupList>,
+    pub parameter_groups: Option<Vec<ClusterParameterGroup>>,
 }
 
 struct ClusterParameterGroupsMessageDeserializer;
@@ -1394,13 +1386,12 @@ impl ClusterParameterStatusDeserializer {
 
     }
 }
-pub type ClusterParameterStatusList = Vec<ClusterParameterStatus>;
 struct ClusterParameterStatusListDeserializer;
 impl ClusterParameterStatusListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ClusterParameterStatusList, XmlParseError> {
+                                       -> Result<Vec<ClusterParameterStatus>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -1445,11 +1436,11 @@ pub struct ClusterSecurityGroup {
     #[doc="<p>A description of the security group.</p>"]
     pub description: Option<String>,
     #[doc="<p>A list of EC2 security groups that are permitted to access clusters associated with this cluster security group.</p>"]
-    pub ec2_security_groups: Option<EC2SecurityGroupList>,
+    pub ec2_security_groups: Option<Vec<EC2SecurityGroup>>,
     #[doc="<p>A list of IP ranges (CIDR blocks) that are permitted to access clusters associated with this cluster security group.</p>"]
-    pub ip_ranges: Option<IPRangeList>,
+    pub ip_ranges: Option<Vec<IPRange>>,
     #[doc="<p>The list of tags for the cluster security group.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 struct ClusterSecurityGroupDeserializer;
@@ -1567,14 +1558,13 @@ impl ClusterSecurityGroupMembershipDeserializer {
 
     }
 }
-pub type ClusterSecurityGroupMembershipList = Vec<ClusterSecurityGroupMembership>;
 struct ClusterSecurityGroupMembershipListDeserializer;
 impl ClusterSecurityGroupMembershipListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>
         (tag_name: &str,
          stack: &mut T)
-         -> Result<ClusterSecurityGroupMembershipList, XmlParseError> {
+         -> Result<Vec<ClusterSecurityGroupMembership>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -1614,7 +1604,7 @@ impl ClusterSecurityGroupMembershipListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ClusterSecurityGroupMessage {
     #[doc="<p>A list of <a>ClusterSecurityGroup</a> instances. </p>"]
-    pub cluster_security_groups: Option<ClusterSecurityGroups>,
+    pub cluster_security_groups: Option<Vec<ClusterSecurityGroup>>,
     #[doc="<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>"]
     pub marker: Option<String>,
 }
@@ -1666,12 +1656,11 @@ impl ClusterSecurityGroupMessageDeserializer {
 
     }
 }
-pub type ClusterSecurityGroupNameList = Vec<String>;
 
 /// Serialize `ClusterSecurityGroupNameList` contents to a `SignedRequest`.
 struct ClusterSecurityGroupNameListSerializer;
 impl ClusterSecurityGroupNameListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ClusterSecurityGroupNameList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -1679,13 +1668,12 @@ impl ClusterSecurityGroupNameListSerializer {
     }
 }
 
-pub type ClusterSecurityGroups = Vec<ClusterSecurityGroup>;
 struct ClusterSecurityGroupsDeserializer;
 impl ClusterSecurityGroupsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ClusterSecurityGroups, XmlParseError> {
+                                       -> Result<Vec<ClusterSecurityGroup>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -1727,7 +1715,7 @@ pub struct ClusterSnapshotCopyStatus {
     #[doc="<p>The destination region that snapshots are automatically copied to when cross-region snapshot copy is enabled.</p>"]
     pub destination_region: Option<String>,
     #[doc="<p>The number of days that automated snapshots are retained in the destination region after they are copied from a source region.</p>"]
-    pub retention_period: Option<Long>,
+    pub retention_period: Option<i64>,
     #[doc="<p>The name of the snapshot copy grant.</p>"]
     pub snapshot_copy_grant_name: Option<String>,
 }
@@ -1794,9 +1782,9 @@ pub struct ClusterSubnetGroup {
     #[doc="<p>The status of the cluster subnet group. Possible values are <code>Complete</code>, <code>Incomplete</code> and <code>Invalid</code>. </p>"]
     pub subnet_group_status: Option<String>,
     #[doc="<p>A list of the VPC <a>Subnet</a> elements. </p>"]
-    pub subnets: Option<SubnetList>,
+    pub subnets: Option<Vec<Subnet>>,
     #[doc="<p>The list of tags for the cluster subnet group.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>The VPC ID of the cluster subnet group.</p>"]
     pub vpc_id: Option<String>,
 }
@@ -1868,7 +1856,7 @@ impl ClusterSubnetGroupDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ClusterSubnetGroupMessage {
     #[doc="<p>A list of <a>ClusterSubnetGroup</a> instances. </p>"]
-    pub cluster_subnet_groups: Option<ClusterSubnetGroups>,
+    pub cluster_subnet_groups: Option<Vec<ClusterSubnetGroup>>,
     #[doc="<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>"]
     pub marker: Option<String>,
 }
@@ -1920,13 +1908,12 @@ impl ClusterSubnetGroupMessageDeserializer {
 
     }
 }
-pub type ClusterSubnetGroups = Vec<ClusterSubnetGroup>;
 struct ClusterSubnetGroupsDeserializer;
 impl ClusterSubnetGroupsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ClusterSubnetGroups, XmlParseError> {
+                                       -> Result<Vec<ClusterSubnetGroup>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -2025,13 +2012,12 @@ impl ClusterVersionDeserializer {
 
     }
 }
-pub type ClusterVersionList = Vec<ClusterVersion>;
 struct ClusterVersionListDeserializer;
 impl ClusterVersionListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ClusterVersionList, XmlParseError> {
+                                       -> Result<Vec<ClusterVersion>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -2072,7 +2058,7 @@ impl ClusterVersionListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ClusterVersionsMessage {
     #[doc="<p>A list of <code>Version</code> elements. </p>"]
-    pub cluster_versions: Option<ClusterVersionList>,
+    pub cluster_versions: Option<Vec<ClusterVersion>>,
     #[doc="<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>"]
     pub marker: Option<String>,
 }
@@ -2128,7 +2114,7 @@ impl ClusterVersionsMessageDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ClustersMessage {
     #[doc="<p>A list of <code>Cluster</code> objects, where each object describes one cluster. </p>"]
-    pub clusters: Option<ClusterList>,
+    pub clusters: Option<Vec<Cluster>>,
     #[doc="<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>"]
     pub marker: Option<String>,
 }
@@ -2265,9 +2251,9 @@ pub struct CreateClusterMessage {
     #[doc="<p>Reserved.</p>"]
     pub additional_info: Option<String>,
     #[doc="<p>If <code>true</code>, major version upgrades can be applied during the maintenance window to the Amazon Redshift engine that is running on the cluster.</p> <p>When a new major version of the Amazon Redshift engine is released, you can request that the service automatically apply upgrades during the maintenance window to the Amazon Redshift engine that is running on your cluster.</p> <p>Default: <code>true</code> </p>"]
-    pub allow_version_upgrade: Option<BooleanOptional>,
+    pub allow_version_upgrade: Option<bool>,
     #[doc="<p>The number of days that automated snapshots are retained. If the value is 0, automated snapshots are disabled. Even if automated snapshots are disabled, you can still create manual snapshots when you want with <a>CreateClusterSnapshot</a>. </p> <p>Default: <code>1</code> </p> <p>Constraints: Must be a value from 0 to 35.</p>"]
-    pub automated_snapshot_retention_period: Option<IntegerOptional>,
+    pub automated_snapshot_retention_period: Option<i64>,
     #[doc="<p>The EC2 Availability Zone (AZ) in which you want Amazon Redshift to provision the cluster. For example, if you have several EC2 instances running in a specific Availability Zone, then you might want the cluster to be provisioned in the same zone in order to decrease network latency.</p> <p>Default: A random, system-chosen Availability Zone in the region that is specified by the endpoint.</p> <p>Example: <code>us-east-1d</code> </p> <p>Constraint: The specified Availability Zone must be in the same region as the current endpoint.</p>"]
     pub availability_zone: Option<String>,
     #[doc="<p>A unique identifier for the cluster. You use this identifier to refer to the cluster for any subsequent cluster operations such as deleting or modifying. The identifier also appears in the Amazon Redshift console.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>Alphabetic characters must be lowercase.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must be unique for all clusters within an AWS account.</p> </li> </ul> <p>Example: <code>myexamplecluster</code> </p>"]
@@ -2275,7 +2261,7 @@ pub struct CreateClusterMessage {
     #[doc="<p>The name of the parameter group to be associated with this cluster.</p> <p>Default: The default Amazon Redshift cluster parameter group. For information about the default parameter group, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Working with Amazon Redshift Parameter Groups</a> </p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>"]
     pub cluster_parameter_group_name: Option<String>,
     #[doc="<p>A list of security groups to be associated with this cluster.</p> <p>Default: The default cluster security group for Amazon Redshift.</p>"]
-    pub cluster_security_groups: Option<ClusterSecurityGroupNameList>,
+    pub cluster_security_groups: Option<Vec<String>>,
     #[doc="<p>The name of a cluster subnet group to be associated with this cluster.</p> <p>If this parameter is not provided the resulting cluster will be deployed outside virtual private cloud (VPC).</p>"]
     pub cluster_subnet_group_name: Option<String>,
     #[doc="<p>The type of the cluster. When cluster type is specified as</p> <ul> <li> <p> <code>single-node</code>, the <b>NumberOfNodes</b> parameter is not required.</p> </li> <li> <p> <code>multi-node</code>, the <b>NumberOfNodes</b> parameter is required.</p> </li> </ul> <p>Valid Values: <code>multi-node</code> | <code>single-node</code> </p> <p>Default: <code>multi-node</code> </p>"]
@@ -2287,15 +2273,15 @@ pub struct CreateClusterMessage {
     #[doc="<p>The Elastic IP (EIP) address for the cluster.</p> <p>Constraints: The cluster must be provisioned in EC2-VPC and publicly-accessible through an Internet gateway. For more information about provisioning clusters in EC2-VPC, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#cluster-platforms\">Supported Platforms to Launch Your Cluster</a> in the Amazon Redshift Cluster Management Guide.</p>"]
     pub elastic_ip: Option<String>,
     #[doc="<p>If <code>true</code>, the data in the cluster is encrypted at rest. </p> <p>Default: false</p>"]
-    pub encrypted: Option<BooleanOptional>,
+    pub encrypted: Option<bool>,
     #[doc="<p>An option that specifies whether to create the cluster with enhanced VPC routing enabled. To create a cluster that uses enhanced VPC routing, the cluster must be in a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/enhanced-vpc-routing.html\">Enhanced VPC Routing</a> in the Amazon Redshift Cluster Management Guide.</p> <p>If this option is <code>true</code>, enhanced VPC routing is enabled. </p> <p>Default: false</p>"]
-    pub enhanced_vpc_routing: Option<BooleanOptional>,
+    pub enhanced_vpc_routing: Option<bool>,
     #[doc="<p>Specifies the name of the HSM client certificate the Amazon Redshift cluster uses to retrieve the data encryption keys stored in an HSM.</p>"]
     pub hsm_client_certificate_identifier: Option<String>,
     #[doc="<p>Specifies the name of the HSM configuration that contains the information the Amazon Redshift cluster can use to retrieve and store keys in an HSM.</p>"]
     pub hsm_configuration_identifier: Option<String>,
     #[doc="<p>A list of AWS Identity and Access Management (IAM) roles that can be used by the cluster to access other AWS services. You must supply the IAM roles in their Amazon Resource Name (ARN) format. You can supply up to 10 IAM roles in a single request.</p> <p>A cluster can have up to 10 IAM roles associated with it at any time.</p>"]
-    pub iam_roles: Option<IamRoleArnList>,
+    pub iam_roles: Option<Vec<String>>,
     #[doc="<p>The AWS Key Management Service (KMS) key ID of the encryption key that you want to use to encrypt data in the cluster.</p>"]
     pub kms_key_id: Option<String>,
     #[doc="<p>The password associated with the master user account for the cluster that is being created.</p> <p>Constraints:</p> <ul> <li> <p>Must be between 8 and 64 characters in length.</p> </li> <li> <p>Must contain at least one uppercase letter.</p> </li> <li> <p>Must contain at least one lowercase letter.</p> </li> <li> <p>Must contain one number.</p> </li> <li> <p>Can be any printable ASCII character (ASCII code 33 to 126) except ' (single quote), \" (double quote), \\, /, @, or space.</p> </li> </ul>"]
@@ -2305,17 +2291,17 @@ pub struct CreateClusterMessage {
     #[doc="<p>The node type to be provisioned for the cluster. For information about node types, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#how-many-nodes\"> Working with Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p> <p>Valid Values: <code>ds1.xlarge</code> | <code>ds1.8xlarge</code> | <code>ds2.xlarge</code> | <code>ds2.8xlarge</code> | <code>dc1.large</code> | <code>dc1.8xlarge</code>. </p>"]
     pub node_type: String,
     #[doc="<p>The number of compute nodes in the cluster. This parameter is required when the <b>ClusterType</b> parameter is specified as <code>multi-node</code>. </p> <p>For information about determining how many nodes you need, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#how-many-nodes\"> Working with Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p> <p>If you don't specify this parameter, you get a single-node cluster. When requesting a multi-node cluster, you must specify the number of nodes that you want in the cluster.</p> <p>Default: <code>1</code> </p> <p>Constraints: Value must be at least 1 and no more than 100.</p>"]
-    pub number_of_nodes: Option<IntegerOptional>,
+    pub number_of_nodes: Option<i64>,
     #[doc="<p>The port number on which the cluster accepts incoming connections.</p> <p>The cluster is accessible only via the JDBC and ODBC connection strings. Part of the connection string requires the port on which the cluster will listen for incoming connections.</p> <p>Default: <code>5439</code> </p> <p>Valid Values: <code>1150-65535</code> </p>"]
-    pub port: Option<IntegerOptional>,
+    pub port: Option<i64>,
     #[doc="<p>The weekly time range (in UTC) during which automated cluster maintenance can occur.</p> <p> Format: <code>ddd:hh24:mi-ddd:hh24:mi</code> </p> <p> Default: A 30-minute window selected at random from an 8-hour block of time per region, occurring on a random day of the week. For more information about the time blocks for each region, see <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#rs-maintenance-windows\">Maintenance Windows</a> in Amazon Redshift Cluster Management Guide.</p> <p>Valid Days: Mon | Tue | Wed | Thu | Fri | Sat | Sun</p> <p>Constraints: Minimum 30-minute window.</p>"]
     pub preferred_maintenance_window: Option<String>,
     #[doc="<p>If <code>true</code>, the cluster can be accessed from a public network. </p>"]
-    pub publicly_accessible: Option<BooleanOptional>,
+    pub publicly_accessible: Option<bool>,
     #[doc="<p>A list of tag instances.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>A list of Virtual Private Cloud (VPC) security groups to be associated with the cluster.</p> <p>Default: The default VPC security group is associated with the cluster.</p>"]
-    pub vpc_security_group_ids: Option<VpcSecurityGroupIdList>,
+    pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
 
@@ -2439,7 +2425,7 @@ pub struct CreateClusterParameterGroupMessage {
     #[doc="<p>The name of the cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters or hyphens</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must be unique withing your AWS account.</p> </li> </ul> <note> <p>This value is stored as a lower-case string.</p> </note>"]
     pub parameter_group_name: String,
     #[doc="<p>A list of tag instances.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 
@@ -2568,7 +2554,7 @@ pub struct CreateClusterSecurityGroupMessage {
     #[doc="<p>A description for the security group.</p>"]
     pub description: String,
     #[doc="<p>A list of tag instances.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 
@@ -2648,7 +2634,7 @@ pub struct CreateClusterSnapshotMessage {
     #[doc="<p>A unique identifier for the snapshot that you are requesting. This identifier must be unique for all snapshots within the AWS account.</p> <p>Constraints:</p> <ul> <li> <p>Cannot be null, empty, or blank</p> </li> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul> <p>Example: <code>my-snapshot-id</code> </p>"]
     pub snapshot_identifier: String,
     #[doc="<p>A list of tag instances.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 
@@ -2727,9 +2713,9 @@ pub struct CreateClusterSubnetGroupMessage {
     #[doc="<p>A description for the subnet group.</p>"]
     pub description: String,
     #[doc="<p>An array of VPC subnet IDs. A maximum of 20 subnets can be modified in a single request.</p>"]
-    pub subnet_ids: SubnetIdentifierList,
+    pub subnet_ids: Vec<String>,
     #[doc="<p>A list of tag instances.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 
@@ -2807,21 +2793,21 @@ impl CreateClusterSubnetGroupResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateEventSubscriptionMessage {
     #[doc="<p>A Boolean value; set to <code>true</code> to activate the subscription, set to <code>false</code> to create the subscription but not active it. </p>"]
-    pub enabled: Option<BooleanOptional>,
+    pub enabled: Option<bool>,
     #[doc="<p>Specifies the Amazon Redshift event categories to be published by the event notification subscription.</p> <p>Values: Configuration, Management, Monitoring, Security</p>"]
-    pub event_categories: Option<EventCategoriesList>,
+    pub event_categories: Option<Vec<String>>,
     #[doc="<p>Specifies the Amazon Redshift event severity to be published by the event notification subscription.</p> <p>Values: ERROR, INFO</p>"]
     pub severity: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon SNS topic used to transmit the event notifications. The ARN is created by Amazon SNS when you create a topic and subscribe to it.</p>"]
     pub sns_topic_arn: String,
     #[doc="<p>A list of one or more identifiers of Amazon Redshift source objects. All of the objects must be of the same type as was specified in the source type parameter. The event subscription will return only events generated by the specified objects. If not specified, then events are returned for all objects within the source type specified.</p> <p>Example: my-cluster-1, my-cluster-2</p> <p>Example: my-snapshot-20131010</p>"]
-    pub source_ids: Option<SourceIdsList>,
+    pub source_ids: Option<Vec<String>>,
     #[doc="<p>The type of source that will be generating the events. For example, if you want to be notified of events generated by a cluster, you would set this parameter to cluster. If this value is not specified, events are returned for all Amazon Redshift objects in your AWS account. You must specify a source type in order to specify source IDs.</p> <p>Valid values: cluster, cluster-parameter-group, cluster-security-group, and cluster-snapshot.</p>"]
     pub source_type: Option<String>,
     #[doc="<p>The name of the event subscription to be created.</p> <p>Constraints:</p> <ul> <li> <p>Cannot be null, empty, or blank.</p> </li> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>"]
     pub subscription_name: String,
     #[doc="<p>A list of tag instances.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 
@@ -2918,7 +2904,7 @@ pub struct CreateHsmClientCertificateMessage {
     #[doc="<p>The identifier to be assigned to the new HSM client certificate that the cluster will use to connect to the HSM to use the database encryption keys.</p>"]
     pub hsm_client_certificate_identifier: String,
     #[doc="<p>A list of tag instances.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 
@@ -3005,7 +2991,7 @@ pub struct CreateHsmConfigurationMessage {
     #[doc="<p>The HSMs public certificate file. When using Cloud HSM, the file name is server.pem.</p>"]
     pub hsm_server_public_certificate: String,
     #[doc="<p>A list of tag instances.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 
@@ -3092,7 +3078,7 @@ pub struct CreateSnapshotCopyGrantMessage {
     #[doc="<p>The name of the snapshot copy grant. This name must be unique in the region for the AWS account.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>Alphabetic characters must be lowercase.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must be unique for all clusters within an AWS account.</p> </li> </ul>"]
     pub snapshot_copy_grant_name: String,
     #[doc="<p>A list of tag instances.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 
@@ -3171,7 +3157,7 @@ pub struct CreateTagsMessage {
     #[doc="<p>The Amazon Resource Name (ARN) to which you want to add the tag or tags. For example, <code>arn:aws:redshift:us-east-1:123456789:cluster:t1</code>. </p>"]
     pub resource_name: String,
     #[doc="<p>One or more name/value pairs to add as tags to the specified resource. Each tag name is passed in with the parameter <code>Key</code> and the corresponding value is passed in with the parameter <code>Value</code>. The <code>Key</code> and <code>Value</code> parameters are separated by a comma (,). Separate multiple tags with a space. For example, <code>--tags \"Key\"=\"owner\",\"Value\"=\"admin\" \"Key\"=\"environment\",\"Value\"=\"test\" \"Key\"=\"version\",\"Value\"=\"1.0\"</code>. </p>"]
-    pub tags: TagList,
+    pub tags: Vec<Tag>,
 }
 
 
@@ -3190,12 +3176,11 @@ impl CreateTagsMessageSerializer {
     }
 }
 
-pub type DbGroupList = Vec<String>;
 
 /// Serialize `DbGroupList` contents to a `SignedRequest`.
 struct DbGroupListSerializer;
 impl DbGroupListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DbGroupList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -3211,7 +3196,7 @@ pub struct DefaultClusterParameters {
     #[doc="<p>The name of the cluster parameter group family to which the engine default parameters apply.</p>"]
     pub parameter_group_family: Option<String>,
     #[doc="<p>The list of cluster default parameters.</p>"]
-    pub parameters: Option<ParametersList>,
+    pub parameters: Option<Vec<Parameter>>,
 }
 
 struct DefaultClusterParametersDeserializer;
@@ -3274,7 +3259,7 @@ pub struct DeleteClusterMessage {
     #[doc="<p>The identifier of the final snapshot that is to be created immediately before deleting the cluster. If this parameter is provided, <i>SkipFinalClusterSnapshot</i> must be <code>false</code>. </p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>"]
     pub final_cluster_snapshot_identifier: Option<String>,
     #[doc="<p>Determines whether a final snapshot of the cluster is created before Amazon Redshift deletes the cluster. If <code>true</code>, a final cluster snapshot is not created. If <code>false</code>, a final cluster snapshot is created before the cluster is deleted. </p> <note> <p>The <i>FinalClusterSnapshotIdentifier</i> parameter must be specified if <i>SkipFinalClusterSnapshot</i> is <code>false</code>.</p> </note> <p>Default: <code>false</code> </p>"]
-    pub skip_final_cluster_snapshot: Option<Boolean>,
+    pub skip_final_cluster_snapshot: Option<bool>,
 }
 
 
@@ -3591,7 +3576,7 @@ pub struct DeleteTagsMessage {
     #[doc="<p>The Amazon Resource Name (ARN) from which you want to remove the tag or tags. For example, <code>arn:aws:redshift:us-east-1:123456789:cluster:t1</code>. </p>"]
     pub resource_name: String,
     #[doc="<p>The tag key that you want to delete.</p>"]
-    pub tag_keys: TagKeyList,
+    pub tag_keys: Vec<String>,
 }
 
 
@@ -3616,13 +3601,13 @@ pub struct DescribeClusterParameterGroupsMessage {
     #[doc="<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeClusterParameterGroups</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>"]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>The name of a specific parameter group for which to return details. By default, details about all parameter groups and the default parameter group are returned.</p>"]
     pub parameter_group_name: Option<String>,
     #[doc="<p>A tag key or keys for which you want to return all matching cluster parameter groups that are associated with the specified key or keys. For example, suppose that you have parameter groups that are tagged with keys called <code>owner</code> and <code>environment</code>. If you specify both of these tag keys in the request, Amazon Redshift returns a response with the parameter groups that have either or both of these tag keys associated with them.</p>"]
-    pub tag_keys: Option<TagKeyList>,
+    pub tag_keys: Option<Vec<String>>,
     #[doc="<p>A tag value or values for which you want to return all matching cluster parameter groups that are associated with the specified tag value or values. For example, suppose that you have parameter groups that are tagged with values called <code>admin</code> and <code>test</code>. If you specify both of these tag values in the request, Amazon Redshift returns a response with the parameter groups that have either or both of these tag values associated with them.</p>"]
-    pub tag_values: Option<TagValueList>,
+    pub tag_values: Option<Vec<String>>,
 }
 
 
@@ -3665,7 +3650,7 @@ pub struct DescribeClusterParametersMessage {
     #[doc="<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeClusterParameters</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>"]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>The name of a cluster parameter group for which to return details.</p>"]
     pub parameter_group_name: String,
     #[doc="<p>The parameter types to return. Specify <code>user</code> to show parameters that are different form the default. Similarly, specify <code>engine-default</code> to show parameters that are the same as the default parameter group. </p> <p>Default: All parameter types returned.</p> <p>Valid Values: <code>user</code> | <code>engine-default</code> </p>"]
@@ -3706,11 +3691,11 @@ pub struct DescribeClusterSecurityGroupsMessage {
     #[doc="<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeClusterSecurityGroups</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p> <p>Constraints: You can specify either the <b>ClusterSecurityGroupName</b> parameter or the <b>Marker</b> parameter, but not both. </p>"]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>A tag key or keys for which you want to return all matching cluster security groups that are associated with the specified key or keys. For example, suppose that you have security groups that are tagged with keys called <code>owner</code> and <code>environment</code>. If you specify both of these tag keys in the request, Amazon Redshift returns a response with the security groups that have either or both of these tag keys associated with them.</p>"]
-    pub tag_keys: Option<TagKeyList>,
+    pub tag_keys: Option<Vec<String>>,
     #[doc="<p>A tag value or values for which you want to return all matching cluster security groups that are associated with the specified tag value or values. For example, suppose that you have security groups that are tagged with values called <code>admin</code> and <code>test</code>. If you specify both of these tag values in the request, Amazon Redshift returns a response with the security groups that have either or both of these tag values associated with them.</p>"]
-    pub tag_values: Option<TagValueList>,
+    pub tag_values: Option<Vec<String>>,
 }
 
 
@@ -3754,11 +3739,11 @@ pub struct DescribeClusterSnapshotsMessage {
     #[doc="<p>The identifier of the cluster for which information about snapshots is requested.</p>"]
     pub cluster_identifier: Option<String>,
     #[doc="<p>A time value that requests only snapshots created at or before the specified time. The time value is specified in ISO 8601 format. For more information about ISO 8601, go to the <a href=\"http://en.wikipedia.org/wiki/ISO_8601\">ISO8601 Wikipedia page.</a> </p> <p>Example: <code>2012-07-16T18:00:00Z</code> </p>"]
-    pub end_time: Option<TStamp>,
+    pub end_time: Option<String>,
     #[doc="<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeClusterSnapshots</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>"]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>The AWS customer account used to create or copy the snapshot. Use this field to filter the results to snapshots owned by a particular account. To describe snapshots you own, either specify your AWS customer account, or do not specify the parameter.</p>"]
     pub owner_account: Option<String>,
     #[doc="<p>The snapshot identifier of the snapshot about which to return information.</p>"]
@@ -3766,11 +3751,11 @@ pub struct DescribeClusterSnapshotsMessage {
     #[doc="<p>The type of snapshots for which you are requesting information. By default, snapshots of all types are returned.</p> <p>Valid Values: <code>automated</code> | <code>manual</code> </p>"]
     pub snapshot_type: Option<String>,
     #[doc="<p>A value that requests only snapshots created at or after the specified time. The time value is specified in ISO 8601 format. For more information about ISO 8601, go to the <a href=\"http://en.wikipedia.org/wiki/ISO_8601\">ISO8601 Wikipedia page.</a> </p> <p>Example: <code>2012-07-16T18:00:00Z</code> </p>"]
-    pub start_time: Option<TStamp>,
+    pub start_time: Option<String>,
     #[doc="<p>A tag key or keys for which you want to return all matching cluster snapshots that are associated with the specified key or keys. For example, suppose that you have snapshots that are tagged with keys called <code>owner</code> and <code>environment</code>. If you specify both of these tag keys in the request, Amazon Redshift returns a response with the snapshots that have either or both of these tag keys associated with them.</p>"]
-    pub tag_keys: Option<TagKeyList>,
+    pub tag_keys: Option<Vec<String>>,
     #[doc="<p>A tag value or values for which you want to return all matching cluster snapshots that are associated with the specified tag value or values. For example, suppose that you have snapshots that are tagged with values called <code>admin</code> and <code>test</code>. If you specify both of these tag values in the request, Amazon Redshift returns a response with the snapshots that have either or both of these tag values associated with them.</p>"]
-    pub tag_values: Option<TagValueList>,
+    pub tag_values: Option<Vec<String>>,
 }
 
 
@@ -3830,11 +3815,11 @@ pub struct DescribeClusterSubnetGroupsMessage {
     #[doc="<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeClusterSubnetGroups</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>"]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>A tag key or keys for which you want to return all matching cluster subnet groups that are associated with the specified key or keys. For example, suppose that you have subnet groups that are tagged with keys called <code>owner</code> and <code>environment</code>. If you specify both of these tag keys in the request, Amazon Redshift returns a response with the subnet groups that have either or both of these tag keys associated with them.</p>"]
-    pub tag_keys: Option<TagKeyList>,
+    pub tag_keys: Option<Vec<String>>,
     #[doc="<p>A tag value or values for which you want to return all matching cluster subnet groups that are associated with the specified tag value or values. For example, suppose that you have subnet groups that are tagged with values called <code>admin</code> and <code>test</code>. If you specify both of these tag values in the request, Amazon Redshift returns a response with the subnet groups that have either or both of these tag values associated with them.</p>"]
-    pub tag_values: Option<TagValueList>,
+    pub tag_values: Option<Vec<String>>,
 }
 
 
@@ -3882,7 +3867,7 @@ pub struct DescribeClusterVersionsMessage {
     #[doc="<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeClusterVersions</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>"]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
 }
 
 
@@ -3921,11 +3906,11 @@ pub struct DescribeClustersMessage {
     #[doc="<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeClusters</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p> <p>Constraints: You can specify either the <b>ClusterIdentifier</b> parameter or the <b>Marker</b> parameter, but not both. </p>"]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>A tag key or keys for which you want to return all matching clusters that are associated with the specified key or keys. For example, suppose that you have clusters that are tagged with keys called <code>owner</code> and <code>environment</code>. If you specify both of these tag keys in the request, Amazon Redshift returns a response with the clusters that have either or both of these tag keys associated with them.</p>"]
-    pub tag_keys: Option<TagKeyList>,
+    pub tag_keys: Option<Vec<String>>,
     #[doc="<p>A tag value or values for which you want to return all matching clusters that are associated with the specified tag value or values. For example, suppose that you have clusters that are tagged with values called <code>admin</code> and <code>test</code>. If you specify both of these tag values in the request, Amazon Redshift returns a response with the clusters that have either or both of these tag values associated with them.</p>"]
-    pub tag_values: Option<TagValueList>,
+    pub tag_values: Option<Vec<String>>,
 }
 
 
@@ -3968,7 +3953,7 @@ pub struct DescribeDefaultClusterParametersMessage {
     #[doc="<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeDefaultClusterParameters</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>"]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>The name of the cluster parameter group family.</p>"]
     pub parameter_group_family: String,
 }
@@ -4073,7 +4058,7 @@ pub struct DescribeEventSubscriptionsMessage {
     #[doc="<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeEventSubscriptions</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>"]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>The name of the Amazon Redshift event notification subscription to be described.</p>"]
     pub subscription_name: Option<String>,
 }
@@ -4106,19 +4091,19 @@ impl DescribeEventSubscriptionsMessageSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeEventsMessage {
     #[doc="<p>The number of minutes prior to the time of the request for which to retrieve events. For example, if the request is sent at 18:00 and you specify a duration of 60, then only events which have occurred after 17:00 will be returned.</p> <p>Default: <code>60</code> </p>"]
-    pub duration: Option<IntegerOptional>,
+    pub duration: Option<i64>,
     #[doc="<p>The end of the time interval for which to retrieve events, specified in ISO 8601 format. For more information about ISO 8601, go to the <a href=\"http://en.wikipedia.org/wiki/ISO_8601\">ISO8601 Wikipedia page.</a> </p> <p>Example: <code>2009-07-08T18:00Z</code> </p>"]
-    pub end_time: Option<TStamp>,
+    pub end_time: Option<String>,
     #[doc="<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeEvents</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>"]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>The identifier of the event source for which events will be returned. If this parameter is not specified, then all sources are included in the response.</p> <p>Constraints:</p> <p>If <i>SourceIdentifier</i> is supplied, <i>SourceType</i> must also be provided.</p> <ul> <li> <p>Specify a cluster identifier when <i>SourceType</i> is <code>cluster</code>.</p> </li> <li> <p>Specify a cluster security group name when <i>SourceType</i> is <code>cluster-security-group</code>.</p> </li> <li> <p>Specify a cluster parameter group name when <i>SourceType</i> is <code>cluster-parameter-group</code>.</p> </li> <li> <p>Specify a cluster snapshot identifier when <i>SourceType</i> is <code>cluster-snapshot</code>.</p> </li> </ul>"]
     pub source_identifier: Option<String>,
     #[doc="<p>The event source to retrieve events for. If no value is specified, all events are returned.</p> <p>Constraints:</p> <p>If <i>SourceType</i> is supplied, <i>SourceIdentifier</i> must also be provided.</p> <ul> <li> <p>Specify <code>cluster</code> when <i>SourceIdentifier</i> is a cluster identifier.</p> </li> <li> <p>Specify <code>cluster-security-group</code> when <i>SourceIdentifier</i> is a cluster security group name.</p> </li> <li> <p>Specify <code>cluster-parameter-group</code> when <i>SourceIdentifier</i> is a cluster parameter group name.</p> </li> <li> <p>Specify <code>cluster-snapshot</code> when <i>SourceIdentifier</i> is a cluster snapshot identifier.</p> </li> </ul>"]
-    pub source_type: Option<SourceType>,
+    pub source_type: Option<String>,
     #[doc="<p>The beginning of the time interval to retrieve events for, specified in ISO 8601 format. For more information about ISO 8601, go to the <a href=\"http://en.wikipedia.org/wiki/ISO_8601\">ISO8601 Wikipedia page.</a> </p> <p>Example: <code>2009-07-08T18:00Z</code> </p>"]
-    pub start_time: Option<TStamp>,
+    pub start_time: Option<String>,
 }
 
 
@@ -4166,11 +4151,11 @@ pub struct DescribeHsmClientCertificatesMessage {
     #[doc="<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeHsmClientCertificates</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>"]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>A tag key or keys for which you want to return all matching HSM client certificates that are associated with the specified key or keys. For example, suppose that you have HSM client certificates that are tagged with keys called <code>owner</code> and <code>environment</code>. If you specify both of these tag keys in the request, Amazon Redshift returns a response with the HSM client certificates that have either or both of these tag keys associated with them.</p>"]
-    pub tag_keys: Option<TagKeyList>,
+    pub tag_keys: Option<Vec<String>>,
     #[doc="<p>A tag value or values for which you want to return all matching HSM client certificates that are associated with the specified tag value or values. For example, suppose that you have HSM client certificates that are tagged with values called <code>admin</code> and <code>test</code>. If you specify both of these tag values in the request, Amazon Redshift returns a response with the HSM client certificates that have either or both of these tag values associated with them.</p>"]
-    pub tag_values: Option<TagValueList>,
+    pub tag_values: Option<Vec<String>>,
 }
 
 
@@ -4216,11 +4201,11 @@ pub struct DescribeHsmConfigurationsMessage {
     #[doc="<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeHsmConfigurations</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>"]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>A tag key or keys for which you want to return all matching HSM configurations that are associated with the specified key or keys. For example, suppose that you have HSM configurations that are tagged with keys called <code>owner</code> and <code>environment</code>. If you specify both of these tag keys in the request, Amazon Redshift returns a response with the HSM configurations that have either or both of these tag keys associated with them.</p>"]
-    pub tag_keys: Option<TagKeyList>,
+    pub tag_keys: Option<Vec<String>>,
     #[doc="<p>A tag value or values for which you want to return all matching HSM configurations that are associated with the specified tag value or values. For example, suppose that you have HSM configurations that are tagged with values called <code>admin</code> and <code>test</code>. If you specify both of these tag values in the request, Amazon Redshift returns a response with the HSM configurations that have either or both of these tag values associated with them.</p>"]
-    pub tag_values: Option<TagValueList>,
+    pub tag_values: Option<Vec<String>>,
 }
 
 
@@ -4289,7 +4274,7 @@ pub struct DescribeOrderableClusterOptionsMessage {
     #[doc="<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeOrderableClusterOptions</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>"]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>The node type filter value. Specify this parameter to show only the available offerings matching the specified node type.</p>"]
     pub node_type: Option<String>,
 }
@@ -4327,7 +4312,7 @@ pub struct DescribeReservedNodeOfferingsMessage {
     #[doc="<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeReservedNodeOfferings</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>"]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>The unique identifier for the offering.</p>"]
     pub reserved_node_offering_id: Option<String>,
 }
@@ -4363,7 +4348,7 @@ pub struct DescribeReservedNodesMessage {
     #[doc="<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeReservedNodes</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>"]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>Identifier for the node reservation.</p>"]
     pub reserved_node_id: Option<String>,
 }
@@ -4421,13 +4406,13 @@ pub struct DescribeSnapshotCopyGrantsMessage {
     #[doc="<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <code>DescribeSnapshotCopyGrant</code> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p> <p>Constraints: You can specify either the <b>SnapshotCopyGrantName</b> parameter or the <b>Marker</b> parameter, but not both. </p>"]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>The name of the snapshot copy grant.</p>"]
     pub snapshot_copy_grant_name: Option<String>,
     #[doc="<p>A tag key or keys for which you want to return all matching resources that are associated with the specified key or keys. For example, suppose that you have resources tagged with keys called <code>owner</code> and <code>environment</code>. If you specify both of these tag keys in the request, Amazon Redshift returns a response with all resources that have either or both of these tag keys associated with them.</p>"]
-    pub tag_keys: Option<TagKeyList>,
+    pub tag_keys: Option<Vec<String>>,
     #[doc="<p>A tag value or values for which you want to return all matching resources that are associated with the specified value or values. For example, suppose that you have resources tagged with values called <code>admin</code> and <code>test</code>. If you specify both of these tag values in the request, Amazon Redshift returns a response with all resources that have either or both of these tag values associated with them.</p>"]
-    pub tag_values: Option<TagValueList>,
+    pub tag_values: Option<Vec<String>>,
 }
 
 
@@ -4473,7 +4458,7 @@ pub struct DescribeTableRestoreStatusMessage {
     #[doc="<p>An optional pagination token provided by a previous <code>DescribeTableRestoreStatus</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by the <code>MaxRecords</code> parameter.</p>"]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>The identifier of the table restore request to return status for. If you don't specify a <code>TableRestoreRequestId</code> value, then <code>DescribeTableRestoreStatus</code> returns the status of all in-progress table restore requests.</p>"]
     pub table_restore_request_id: Option<String>,
 }
@@ -4512,15 +4497,15 @@ pub struct DescribeTagsMessage {
     #[doc="<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>marker</code> parameter and retrying the command. If the <code>marker</code> field is empty, all response records have been retrieved for the request. </p>"]
     pub marker: Option<String>,
     #[doc="<p>The maximum number or response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned <code>marker</code> value. </p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>The Amazon Resource Name (ARN) for which you want to describe the tag or tags. For example, <code>arn:aws:redshift:us-east-1:123456789:cluster:t1</code>. </p>"]
     pub resource_name: Option<String>,
     #[doc="<p>The type of resource with which you want to view tags. Valid resource types are: </p> <ul> <li> <p>Cluster</p> </li> <li> <p>CIDR/IP</p> </li> <li> <p>EC2 security group</p> </li> <li> <p>Snapshot</p> </li> <li> <p>Cluster security group</p> </li> <li> <p>Subnet group</p> </li> <li> <p>HSM connection</p> </li> <li> <p>HSM certificate</p> </li> <li> <p>Parameter group</p> </li> <li> <p>Snapshot copy grant</p> </li> </ul> <p>For more information about Amazon Redshift resource types and constructing ARNs, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/constructing-redshift-arn.html\">Constructing an Amazon Redshift Amazon Resource Name (ARN)</a> in the Amazon Redshift Cluster Management Guide. </p>"]
     pub resource_type: Option<String>,
     #[doc="<p>A tag key or keys for which you want to return all matching resources that are associated with the specified key or keys. For example, suppose that you have resources tagged with keys called <code>owner</code> and <code>environment</code>. If you specify both of these tag keys in the request, Amazon Redshift returns a response with all resources that have either or both of these tag keys associated with them.</p>"]
-    pub tag_keys: Option<TagKeyList>,
+    pub tag_keys: Option<Vec<String>>,
     #[doc="<p>A tag value or values for which you want to return all matching resources that are associated with the specified value or values. For example, suppose that you have resources tagged with values called <code>admin</code> and <code>test</code>. If you specify both of these tag values in the request, Amazon Redshift returns a response with all resources that have either or both of these tag values associated with them.</p>"]
-    pub tag_values: Option<TagValueList>,
+    pub tag_values: Option<Vec<String>>,
 }
 
 
@@ -4653,13 +4638,12 @@ impl DisableSnapshotCopyResultDeserializer {
 
     }
 }
-pub type Double = f64;
 struct DoubleDeserializer;
 impl DoubleDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Double, XmlParseError> {
+                                       -> Result<f64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = f64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -4668,13 +4652,12 @@ impl DoubleDeserializer {
 
     }
 }
-pub type DoubleOptional = f64;
 struct DoubleOptionalDeserializer;
 impl DoubleOptionalDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DoubleOptional, XmlParseError> {
+                                       -> Result<f64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = f64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -4693,7 +4676,7 @@ pub struct EC2SecurityGroup {
     #[doc="<p>The status of the EC2 security group.</p>"]
     pub status: Option<String>,
     #[doc="<p>The list of tags for the EC2 security group.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 struct EC2SecurityGroupDeserializer;
@@ -4751,13 +4734,12 @@ impl EC2SecurityGroupDeserializer {
 
     }
 }
-pub type EC2SecurityGroupList = Vec<EC2SecurityGroup>;
 struct EC2SecurityGroupListDeserializer;
 impl EC2SecurityGroupListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EC2SecurityGroupList, XmlParseError> {
+                                       -> Result<Vec<EC2SecurityGroup>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4888,7 +4870,7 @@ pub struct EnableSnapshotCopyMessage {
     #[doc="<p>The destination region that you want to copy snapshots to.</p> <p>Constraints: Must be the name of a valid region. For more information, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/rande.html#redshift_region\">Regions and Endpoints</a> in the Amazon Web Services General Reference. </p>"]
     pub destination_region: String,
     #[doc="<p>The number of days to retain automated snapshots in the destination region after they are copied from the source region.</p> <p>Default: 7.</p> <p>Constraints: Must be at least 1 and no more than 35.</p>"]
-    pub retention_period: Option<IntegerOptional>,
+    pub retention_period: Option<i64>,
     #[doc="<p>The name of the snapshot copy grant to use when snapshots of an AWS KMS-encrypted cluster are copied to the destination region.</p>"]
     pub snapshot_copy_grant_name: Option<String>,
 }
@@ -4972,7 +4954,7 @@ pub struct Endpoint {
     #[doc="<p>The DNS address of the Cluster.</p>"]
     pub address: Option<String>,
     #[doc="<p>The port that the database engine is listening on.</p>"]
-    pub port: Option<Integer>,
+    pub port: Option<i64>,
 }
 
 struct EndpointDeserializer;
@@ -5024,9 +5006,9 @@ impl EndpointDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct Event {
     #[doc="<p>The date and time of the event.</p>"]
-    pub date: Option<TStamp>,
+    pub date: Option<String>,
     #[doc="<p>A list of the event categories.</p> <p>Values: Configuration, Management, Monitoring, Security</p>"]
-    pub event_categories: Option<EventCategoriesList>,
+    pub event_categories: Option<Vec<String>>,
     #[doc="<p>The identifier of the event.</p>"]
     pub event_id: Option<String>,
     #[doc="<p>The text of this event.</p>"]
@@ -5036,7 +5018,7 @@ pub struct Event {
     #[doc="<p>The identifier for the source of the event.</p>"]
     pub source_identifier: Option<String>,
     #[doc="<p>The source type for this event.</p>"]
-    pub source_type: Option<SourceType>,
+    pub source_type: Option<String>,
 }
 
 struct EventDeserializer;
@@ -5107,13 +5089,12 @@ impl EventDeserializer {
 
     }
 }
-pub type EventCategoriesList = Vec<String>;
 struct EventCategoriesListDeserializer;
 impl EventCategoriesListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EventCategoriesList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5153,7 +5134,7 @@ impl EventCategoriesListDeserializer {
 /// Serialize `EventCategoriesList` contents to a `SignedRequest`.
 struct EventCategoriesListSerializer;
 impl EventCategoriesListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &EventCategoriesList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -5165,7 +5146,7 @@ impl EventCategoriesListSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct EventCategoriesMap {
     #[doc="<p>The events in the event category.</p>"]
-    pub events: Option<EventInfoMapList>,
+    pub events: Option<Vec<EventInfoMap>>,
     #[doc="<p>The source type, such as cluster or cluster-snapshot, that the returned categories belong to.</p>"]
     pub source_type: Option<String>,
 }
@@ -5217,13 +5198,12 @@ impl EventCategoriesMapDeserializer {
 
     }
 }
-pub type EventCategoriesMapList = Vec<EventCategoriesMap>;
 struct EventCategoriesMapListDeserializer;
 impl EventCategoriesMapListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EventCategoriesMapList, XmlParseError> {
+                                       -> Result<Vec<EventCategoriesMap>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5263,7 +5243,7 @@ impl EventCategoriesMapListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct EventCategoriesMessage {
     #[doc="<p>A list of event categories descriptions.</p>"]
-    pub event_categories_map_list: Option<EventCategoriesMapList>,
+    pub event_categories_map_list: Option<Vec<EventCategoriesMap>>,
 }
 
 struct EventCategoriesMessageDeserializer;
@@ -5313,7 +5293,7 @@ impl EventCategoriesMessageDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct EventInfoMap {
     #[doc="<p>The category of an Amazon Redshift event.</p>"]
-    pub event_categories: Option<EventCategoriesList>,
+    pub event_categories: Option<Vec<String>>,
     #[doc="<p>The description of an Amazon Redshift event.</p>"]
     pub event_description: Option<String>,
     #[doc="<p>The identifier of an Amazon Redshift event.</p>"]
@@ -5378,13 +5358,12 @@ impl EventInfoMapDeserializer {
 
     }
 }
-pub type EventInfoMapList = Vec<EventInfoMap>;
 struct EventInfoMapListDeserializer;
 impl EventInfoMapListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EventInfoMapList, XmlParseError> {
+                                       -> Result<Vec<EventInfoMap>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5421,13 +5400,12 @@ impl EventInfoMapListDeserializer {
 
     }
 }
-pub type EventList = Vec<Event>;
 struct EventListDeserializer;
 impl EventListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EventList, XmlParseError> {
+                                       -> Result<Vec<Event>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5471,23 +5449,23 @@ pub struct EventSubscription {
     #[doc="<p>The AWS customer account associated with the Amazon Redshift event notification subscription.</p>"]
     pub customer_aws_id: Option<String>,
     #[doc="<p>A Boolean value indicating whether the subscription is enabled. <code>true</code> indicates the subscription is enabled.</p>"]
-    pub enabled: Option<Boolean>,
+    pub enabled: Option<bool>,
     #[doc="<p>The list of Amazon Redshift event categories specified in the event notification subscription.</p> <p>Values: Configuration, Management, Monitoring, Security</p>"]
-    pub event_categories_list: Option<EventCategoriesList>,
+    pub event_categories_list: Option<Vec<String>>,
     #[doc="<p>The event severity specified in the Amazon Redshift event notification subscription.</p> <p>Values: ERROR, INFO</p>"]
     pub severity: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon SNS topic used by the event notification subscription.</p>"]
     pub sns_topic_arn: Option<String>,
     #[doc="<p>A list of the sources that publish events to the Amazon Redshift event notification subscription.</p>"]
-    pub source_ids_list: Option<SourceIdsList>,
+    pub source_ids_list: Option<Vec<String>>,
     #[doc="<p>The source type of the events returned the Amazon Redshift event notification, such as cluster, or cluster-snapshot.</p>"]
     pub source_type: Option<String>,
     #[doc="<p>The status of the Amazon Redshift event notification subscription.</p> <p>Constraints:</p> <ul> <li> <p>Can be one of the following: active | no-permission | topic-not-exist</p> </li> <li> <p>The status \"no-permission\" indicates that Amazon Redshift no longer has permission to post to the Amazon SNS topic. The status \"topic-not-exist\" indicates that the topic was deleted after the subscription was created.</p> </li> </ul>"]
     pub status: Option<String>,
     #[doc="<p>The date and time the Amazon Redshift event notification subscription was created.</p>"]
-    pub subscription_creation_time: Option<TStamp>,
+    pub subscription_creation_time: Option<String>,
     #[doc="<p>The list of tags for the event subscription.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 struct EventSubscriptionDeserializer;
@@ -5575,13 +5553,12 @@ impl EventSubscriptionDeserializer {
 
     }
 }
-pub type EventSubscriptionsList = Vec<EventSubscription>;
 struct EventSubscriptionsListDeserializer;
 impl EventSubscriptionsListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EventSubscriptionsList, XmlParseError> {
+                                       -> Result<Vec<EventSubscription>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5621,7 +5598,7 @@ impl EventSubscriptionsListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct EventSubscriptionsMessage {
     #[doc="<p>A list of event subscriptions.</p>"]
-    pub event_subscriptions_list: Option<EventSubscriptionsList>,
+    pub event_subscriptions_list: Option<Vec<EventSubscription>>,
     #[doc="<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>"]
     pub marker: Option<String>,
 }
@@ -5677,7 +5654,7 @@ impl EventSubscriptionsMessageDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct EventsMessage {
     #[doc="<p>A list of <code>Event</code> instances. </p>"]
-    pub events: Option<EventList>,
+    pub events: Option<Vec<Event>>,
     #[doc="<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>"]
     pub marker: Option<String>,
 }
@@ -5732,17 +5709,17 @@ impl EventsMessageDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetClusterCredentialsMessage {
     #[doc="<p>Create a database user with the name specified for <code>DbUser</code> if one does not exist.</p>"]
-    pub auto_create: Option<BooleanOptional>,
+    pub auto_create: Option<bool>,
     #[doc="<p>The unique identifier of the cluster that contains the database for which your are requesting credentials. This parameter is case sensitive.</p>"]
     pub cluster_identifier: String,
     #[doc="<p>A list of the names of existing database groups that <code>DbUser</code> will join for the current session. If not specified, the new user is added only to PUBLIC.</p>"]
-    pub db_groups: Option<DbGroupList>,
+    pub db_groups: Option<Vec<String>>,
     #[doc="<p>The name of a database that <code>DbUser</code> is authorized to log on to. If <code>DbName</code> is not specified, <code>DbUser</code> can log in to any existing database.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 64 alphanumeric characters or hyphens</p> </li> <li> <p>Must contain only lowercase letters.</p> </li> <li> <p>Cannot be a reserved word. A list of reserved words can be found in <a href=\"http://docs.aws.amazon.com/redshift/latest/dg/r_pg_keywords.html\">Reserved Words</a> in the Amazon Redshift Database Developer Guide.</p> </li> </ul>"]
     pub db_name: Option<String>,
     #[doc="<p>The name of a database user. If a user name matching <code>DbUser</code> exists in the database, the temporary user credentials have the same permissions as the existing user. If <code>DbUser</code> doesn't exist in the database and <code>Autocreate</code> is <code>True</code>, a new user is created using the value for <code>DbUser</code> with PUBLIC permissions. If a database user matching the value for <code>DbUser</code> doesn't exist and <code>Autocreate</code> is <code>False</code>, then the command succeeds but the connection attempt will fail because the user doesn't exist in the database.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/http:/docs.aws.amazon.com/redshift/latest/dg/r_CREATE_USER.html\">CREATE USER</a> in the Amazon Redshift Database Developer Guide. </p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 128 alphanumeric characters or hyphens</p> </li> <li> <p>Must contain only lowercase letters.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Must not contain a colon ( : ) or slash ( / ). </p> </li> <li> <p>Cannot be a reserved word. A list of reserved words can be found in <a href=\"http://docs.aws.amazon.com/redshift/latest/dg/r_pg_keywords.html\">Reserved Words</a> in the Amazon Redshift Database Developer Guide.</p> </li> </ul>"]
     pub db_user: String,
     #[doc="<p>The number of seconds until the returned temporary password expires.</p> <p>Constraint: minimum 900, maximum 3600.</p> <p>Default: 900</p>"]
-    pub duration_seconds: Option<IntegerOptional>,
+    pub duration_seconds: Option<i64>,
 }
 
 
@@ -5786,7 +5763,7 @@ pub struct HsmClientCertificate {
     #[doc="<p>The public key that the Amazon Redshift cluster will use to connect to the HSM. You must register the public key in the HSM.</p>"]
     pub hsm_client_certificate_public_key: Option<String>,
     #[doc="<p>The list of tags for the HSM client certificate.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 struct HsmClientCertificateDeserializer;
@@ -5840,13 +5817,12 @@ impl HsmClientCertificateDeserializer {
 
     }
 }
-pub type HsmClientCertificateList = Vec<HsmClientCertificate>;
 struct HsmClientCertificateListDeserializer;
 impl HsmClientCertificateListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<HsmClientCertificateList, XmlParseError> {
+                                       -> Result<Vec<HsmClientCertificate>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5886,7 +5862,7 @@ impl HsmClientCertificateListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct HsmClientCertificateMessage {
     #[doc="<p>A list of the identifiers for one or more HSM client certificates used by Amazon Redshift clusters to store and retrieve database encryption keys in an HSM.</p>"]
-    pub hsm_client_certificates: Option<HsmClientCertificateList>,
+    pub hsm_client_certificates: Option<Vec<HsmClientCertificate>>,
     #[doc="<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>"]
     pub marker: Option<String>,
 }
@@ -5948,7 +5924,7 @@ pub struct HsmConfiguration {
     #[doc="<p>The name of the partition in the HSM where the Amazon Redshift clusters will store their database encryption keys.</p>"]
     pub hsm_partition_name: Option<String>,
     #[doc="<p>The list of tags for the HSM configuration.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 struct HsmConfigurationDeserializer;
@@ -6010,13 +5986,12 @@ impl HsmConfigurationDeserializer {
 
     }
 }
-pub type HsmConfigurationList = Vec<HsmConfiguration>;
 struct HsmConfigurationListDeserializer;
 impl HsmConfigurationListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<HsmConfigurationList, XmlParseError> {
+                                       -> Result<Vec<HsmConfiguration>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -6057,7 +6032,7 @@ impl HsmConfigurationListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct HsmConfigurationMessage {
     #[doc="<p>A list of <code>HsmConfiguration</code> objects.</p>"]
-    pub hsm_configurations: Option<HsmConfigurationList>,
+    pub hsm_configurations: Option<Vec<HsmConfiguration>>,
     #[doc="<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>"]
     pub marker: Option<String>,
 }
@@ -6180,7 +6155,7 @@ pub struct IPRange {
     #[doc="<p>The status of the IP range, for example, \"authorized\".</p>"]
     pub status: Option<String>,
     #[doc="<p>The list of tags for the IP range.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 struct IPRangeDeserializer;
@@ -6232,13 +6207,12 @@ impl IPRangeDeserializer {
 
     }
 }
-pub type IPRangeList = Vec<IPRange>;
 struct IPRangeListDeserializer;
 impl IPRangeListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<IPRangeList, XmlParseError> {
+                                       -> Result<Vec<IPRange>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -6274,12 +6248,11 @@ impl IPRangeListDeserializer {
 
     }
 }
-pub type IamRoleArnList = Vec<String>;
 
 /// Serialize `IamRoleArnList` contents to a `SignedRequest`.
 struct IamRoleArnListSerializer;
 impl IamRoleArnListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &IamRoleArnList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -6287,13 +6260,12 @@ impl IamRoleArnListSerializer {
     }
 }
 
-pub type ImportTablesCompleted = Vec<String>;
 struct ImportTablesCompletedDeserializer;
 impl ImportTablesCompletedDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ImportTablesCompleted, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -6329,13 +6301,12 @@ impl ImportTablesCompletedDeserializer {
 
     }
 }
-pub type ImportTablesInProgress = Vec<String>;
 struct ImportTablesInProgressDeserializer;
 impl ImportTablesInProgressDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ImportTablesInProgress, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -6371,13 +6342,12 @@ impl ImportTablesInProgressDeserializer {
 
     }
 }
-pub type ImportTablesNotStarted = Vec<String>;
 struct ImportTablesNotStartedDeserializer;
 impl ImportTablesNotStartedDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ImportTablesNotStarted, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -6413,13 +6383,12 @@ impl ImportTablesNotStartedDeserializer {
 
     }
 }
-pub type Integer = i64;
 struct IntegerDeserializer;
 impl IntegerDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Integer, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -6428,13 +6397,12 @@ impl IntegerDeserializer {
 
     }
 }
-pub type IntegerOptional = i64;
 struct IntegerOptionalDeserializer;
 impl IntegerOptionalDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<IntegerOptional, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -6451,11 +6419,11 @@ pub struct LoggingStatus {
     #[doc="<p>The message indicating that logs failed to be delivered.</p>"]
     pub last_failure_message: Option<String>,
     #[doc="<p>The last time when logs failed to be delivered.</p>"]
-    pub last_failure_time: Option<TStamp>,
+    pub last_failure_time: Option<String>,
     #[doc="<p>The last time that logs were delivered.</p>"]
-    pub last_successful_delivery_time: Option<TStamp>,
+    pub last_successful_delivery_time: Option<String>,
     #[doc="<p> <code>true</code> if logging is on, <code>false</code> if logging is off.</p>"]
-    pub logging_enabled: Option<Boolean>,
+    pub logging_enabled: Option<bool>,
     #[doc="<p>The prefix applied to the log file names.</p>"]
     pub s3_key_prefix: Option<String>,
 }
@@ -6526,13 +6494,12 @@ impl LoggingStatusDeserializer {
 
     }
 }
-pub type Long = i64;
 struct LongDeserializer;
 impl LongDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Long, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -6541,13 +6508,12 @@ impl LongDeserializer {
 
     }
 }
-pub type LongOptional = i64;
 struct LongOptionalDeserializer;
 impl LongOptionalDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LongOptional, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -6560,11 +6526,11 @@ impl LongOptionalDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ModifyClusterIamRolesMessage {
     #[doc="<p>Zero or more IAM roles to associate with the cluster. The roles must be in their Amazon Resource Name (ARN) format. You can associate up to 10 IAM roles with a single cluster in a single request.</p>"]
-    pub add_iam_roles: Option<IamRoleArnList>,
+    pub add_iam_roles: Option<Vec<String>>,
     #[doc="<p>The unique identifier of the cluster for which you want to associate or disassociate IAM roles.</p>"]
     pub cluster_identifier: String,
     #[doc="<p>Zero or more IAM roles in ARN format to disassociate from the cluster. You can disassociate up to 10 IAM roles from a single cluster in a single request.</p>"]
-    pub remove_iam_roles: Option<IamRoleArnList>,
+    pub remove_iam_roles: Option<Vec<String>>,
 }
 
 
@@ -6644,15 +6610,15 @@ impl ModifyClusterIamRolesResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ModifyClusterMessage {
     #[doc="<p>If <code>true</code>, major version upgrades will be applied automatically to the cluster during the maintenance window. </p> <p>Default: <code>false</code> </p>"]
-    pub allow_version_upgrade: Option<BooleanOptional>,
+    pub allow_version_upgrade: Option<bool>,
     #[doc="<p>The number of days that automated snapshots are retained. If the value is 0, automated snapshots are disabled. Even if automated snapshots are disabled, you can still create manual snapshots when you want with <a>CreateClusterSnapshot</a>. </p> <p>If you decrease the automated snapshot retention period from its current value, existing automated snapshots that fall outside of the new retention period will be immediately deleted.</p> <p>Default: Uses existing setting.</p> <p>Constraints: Must be a value from 0 to 35.</p>"]
-    pub automated_snapshot_retention_period: Option<IntegerOptional>,
+    pub automated_snapshot_retention_period: Option<i64>,
     #[doc="<p>The unique identifier of the cluster to be modified.</p> <p>Example: <code>examplecluster</code> </p>"]
     pub cluster_identifier: String,
     #[doc="<p>The name of the cluster parameter group to apply to this cluster. This change is applied only after the cluster is rebooted. To reboot a cluster use <a>RebootCluster</a>. </p> <p>Default: Uses existing setting.</p> <p>Constraints: The cluster parameter group must be in the same parameter group family that matches the cluster version.</p>"]
     pub cluster_parameter_group_name: Option<String>,
     #[doc="<p>A list of cluster security groups to be authorized on this cluster. This change is asynchronously applied as soon as possible.</p> <p>Security groups currently associated with the cluster, and not in the list of groups to apply, will be revoked from the cluster.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters or hyphens</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul>"]
-    pub cluster_security_groups: Option<ClusterSecurityGroupNameList>,
+    pub cluster_security_groups: Option<Vec<String>>,
     #[doc="<p>The new cluster type.</p> <p>When you submit your cluster resize request, your existing cluster goes into a read-only mode. After Amazon Redshift provisions a new cluster based on your resize requirements, there will be outage for a period while the old cluster is deleted and your connection is switched to the new cluster. You can use <a>DescribeResize</a> to track the progress of the resize request. </p> <p>Valid Values: <code> multi-node | single-node </code> </p>"]
     pub cluster_type: Option<String>,
     #[doc="<p>The new version number of the Amazon Redshift engine to upgrade to.</p> <p>For major version upgrades, if a non-default cluster parameter group is currently in use, a new cluster parameter group in the cluster parameter group family for the new version must be specified. The new cluster parameter group can be the default for that cluster parameter group family. For more information about parameters and parameter groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>Example: <code>1.0</code> </p>"]
@@ -6660,7 +6626,7 @@ pub struct ModifyClusterMessage {
     #[doc="<p>The Elastic IP (EIP) address for the cluster.</p> <p>Constraints: The cluster must be provisioned in EC2-VPC and publicly-accessible through an Internet gateway. For more information about provisioning clusters in EC2-VPC, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#cluster-platforms\">Supported Platforms to Launch Your Cluster</a> in the Amazon Redshift Cluster Management Guide.</p>"]
     pub elastic_ip: Option<String>,
     #[doc="<p>An option that specifies whether to create the cluster with enhanced VPC routing enabled. To create a cluster that uses enhanced VPC routing, the cluster must be in a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/enhanced-vpc-routing.html\">Enhanced VPC Routing</a> in the Amazon Redshift Cluster Management Guide.</p> <p>If this option is <code>true</code>, enhanced VPC routing is enabled. </p> <p>Default: false</p>"]
-    pub enhanced_vpc_routing: Option<BooleanOptional>,
+    pub enhanced_vpc_routing: Option<bool>,
     #[doc="<p>Specifies the name of the HSM client certificate the Amazon Redshift cluster uses to retrieve the data encryption keys stored in an HSM.</p>"]
     pub hsm_client_certificate_identifier: Option<String>,
     #[doc="<p>Specifies the name of the HSM configuration that contains the information the Amazon Redshift cluster can use to retrieve and store keys in an HSM.</p>"]
@@ -6672,13 +6638,13 @@ pub struct ModifyClusterMessage {
     #[doc="<p>The new node type of the cluster. If you specify a new node type, you must also specify the number of nodes parameter.</p> <p>When you submit your request to resize a cluster, Amazon Redshift sets access permissions for the cluster to read-only. After Amazon Redshift provisions a new cluster according to your resize requirements, there will be a temporary outage while the old cluster is deleted and your connection is switched to the new cluster. When the new connection is complete, the original access permissions for the cluster are restored. You can use <a>DescribeResize</a> to track the progress of the resize request. </p> <p>Valid Values: <code> ds1.xlarge</code> | <code>ds1.8xlarge</code> | <code> ds2.xlarge</code> | <code>ds2.8xlarge</code> | <code>dc1.large</code> | <code>dc1.8xlarge</code>.</p>"]
     pub node_type: Option<String>,
     #[doc="<p>The new number of nodes of the cluster. If you specify a new number of nodes, you must also specify the node type parameter.</p> <p>When you submit your request to resize a cluster, Amazon Redshift sets access permissions for the cluster to read-only. After Amazon Redshift provisions a new cluster according to your resize requirements, there will be a temporary outage while the old cluster is deleted and your connection is switched to the new cluster. When the new connection is complete, the original access permissions for the cluster are restored. You can use <a>DescribeResize</a> to track the progress of the resize request. </p> <p>Valid Values: Integer greater than <code>0</code>.</p>"]
-    pub number_of_nodes: Option<IntegerOptional>,
+    pub number_of_nodes: Option<i64>,
     #[doc="<p>The weekly time range (in UTC) during which system maintenance can occur, if necessary. If system maintenance is necessary during the window, it may result in an outage.</p> <p>This maintenance window change is made immediately. If the new maintenance window indicates the current time, there must be at least 120 minutes between the current time and end of the window in order to ensure that pending changes are applied.</p> <p>Default: Uses existing setting.</p> <p>Format: ddd:hh24:mi-ddd:hh24:mi, for example <code>wed:07:30-wed:08:00</code>.</p> <p>Valid Days: Mon | Tue | Wed | Thu | Fri | Sat | Sun</p> <p>Constraints: Must be at least 30 minutes.</p>"]
     pub preferred_maintenance_window: Option<String>,
     #[doc="<p>If <code>true</code>, the cluster can be accessed from a public network. Only clusters in VPCs can be set to be publicly available.</p>"]
-    pub publicly_accessible: Option<BooleanOptional>,
+    pub publicly_accessible: Option<bool>,
     #[doc="<p>A list of virtual private cloud (VPC) security groups to be associated with the cluster.</p>"]
-    pub vpc_security_group_ids: Option<VpcSecurityGroupIdList>,
+    pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
 
@@ -6772,7 +6738,7 @@ pub struct ModifyClusterParameterGroupMessage {
     #[doc="<p>The name of the parameter group to be modified.</p>"]
     pub parameter_group_name: String,
     #[doc="<p>An array of parameters to be modified. A maximum of 20 parameters can be modified in a single request.</p> <p>For each parameter to be modified, you must supply at least the parameter name and parameter value; other name-value pairs of the parameter are optional.</p> <p>For the workload management (WLM) configuration, you must supply all the name-value pairs in the wlm_json_configuration parameter.</p>"]
-    pub parameters: ParametersList,
+    pub parameters: Vec<Parameter>,
 }
 
 
@@ -6849,7 +6815,7 @@ pub struct ModifyClusterSubnetGroupMessage {
     #[doc="<p>A text description of the subnet group to be modified.</p>"]
     pub description: Option<String>,
     #[doc="<p>An array of VPC subnet IDs. A maximum of 20 subnets can be modified in a single request.</p>"]
-    pub subnet_ids: SubnetIdentifierList,
+    pub subnet_ids: Vec<String>,
 }
 
 
@@ -6926,15 +6892,15 @@ impl ModifyClusterSubnetGroupResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ModifyEventSubscriptionMessage {
     #[doc="<p>A Boolean value indicating if the subscription is enabled. <code>true</code> indicates the subscription is enabled </p>"]
-    pub enabled: Option<BooleanOptional>,
+    pub enabled: Option<bool>,
     #[doc="<p>Specifies the Amazon Redshift event categories to be published by the event notification subscription.</p> <p>Values: Configuration, Management, Monitoring, Security</p>"]
-    pub event_categories: Option<EventCategoriesList>,
+    pub event_categories: Option<Vec<String>>,
     #[doc="<p>Specifies the Amazon Redshift event severity to be published by the event notification subscription.</p> <p>Values: ERROR, INFO</p>"]
     pub severity: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the SNS topic to be used by the event notification subscription.</p>"]
     pub sns_topic_arn: Option<String>,
     #[doc="<p>A list of one or more identifiers of Amazon Redshift source objects. All of the objects must be of the same type as was specified in the source type parameter. The event subscription will return only events generated by the specified objects. If not specified, then events are returned for all objects within the source type specified.</p> <p>Example: my-cluster-1, my-cluster-2</p> <p>Example: my-snapshot-20131010</p>"]
-    pub source_ids: Option<SourceIdsList>,
+    pub source_ids: Option<Vec<String>>,
     #[doc="<p>The type of source that will be generating the events. For example, if you want to be notified of events generated by a cluster, you would set this parameter to cluster. If this value is not specified, events are returned for all Amazon Redshift objects in your AWS account. You must specify a source type in order to specify source IDs.</p> <p>Valid values: cluster, cluster-parameter-group, cluster-security-group, and cluster-snapshot.</p>"]
     pub source_type: Option<String>,
     #[doc="<p>The name of the modified Amazon Redshift event notification subscription.</p>"]
@@ -7034,7 +7000,7 @@ pub struct ModifySnapshotCopyRetentionPeriodMessage {
     #[doc="<p>The unique identifier of the cluster for which you want to change the retention period for automated snapshots that are copied to a destination region.</p> <p>Constraints: Must be the valid name of an existing cluster that has cross-region snapshot copy enabled.</p>"]
     pub cluster_identifier: String,
     #[doc="<p>The number of days to retain automated snapshots in the destination region after they are copied from the source region.</p> <p>If you decrease the retention period for automated snapshots that are copied to a destination region, Amazon Redshift will delete any existing automated snapshots that were copied to the destination region and that fall outside of the new retention period.</p> <p>Constraints: Must be at least 1 and no more than 35.</p>"]
-    pub retention_period: Integer,
+    pub retention_period: i64,
 }
 
 
@@ -7107,7 +7073,7 @@ impl ModifySnapshotCopyRetentionPeriodResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct OrderableClusterOption {
     #[doc="<p>A list of availability zones for the orderable cluster.</p>"]
-    pub availability_zones: Option<AvailabilityZoneList>,
+    pub availability_zones: Option<Vec<AvailabilityZone>>,
     #[doc="<p>The cluster type, for example <code>multi-node</code>. </p>"]
     pub cluster_type: Option<String>,
     #[doc="<p>The version of the orderable cluster.</p>"]
@@ -7172,13 +7138,12 @@ impl OrderableClusterOptionDeserializer {
 
     }
 }
-pub type OrderableClusterOptionsList = Vec<OrderableClusterOption>;
 struct OrderableClusterOptionsListDeserializer;
 impl OrderableClusterOptionsListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<OrderableClusterOptionsList, XmlParseError> {
+                                       -> Result<Vec<OrderableClusterOption>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -7220,7 +7185,7 @@ pub struct OrderableClusterOptionsMessage {
     #[doc="<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>"]
     pub marker: Option<String>,
     #[doc="<p>An <code>OrderableClusterOption</code> structure containing information about orderable options for the cluster.</p>"]
-    pub orderable_cluster_options: Option<OrderableClusterOptionsList>,
+    pub orderable_cluster_options: Option<Vec<OrderableClusterOption>>,
 }
 
 struct OrderableClusterOptionsMessageDeserializer;
@@ -7274,13 +7239,13 @@ pub struct Parameter {
     #[doc="<p>The valid range of values for the parameter.</p>"]
     pub allowed_values: Option<String>,
     #[doc="<p>Specifies how to apply the WLM configuration parameter. Some properties can be applied dynamically, while other properties require that any associated clusters be rebooted for the configuration changes to be applied. For more information about parameters and parameter groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>"]
-    pub apply_type: Option<ParameterApplyType>,
+    pub apply_type: Option<String>,
     #[doc="<p>The data type of the parameter.</p>"]
     pub data_type: Option<String>,
     #[doc="<p>A description of the parameter.</p>"]
     pub description: Option<String>,
     #[doc="<p>If <code>true</code>, the parameter can be modified. Some parameters have security or operational implications that prevent them from being changed. </p>"]
-    pub is_modifiable: Option<Boolean>,
+    pub is_modifiable: Option<bool>,
     #[doc="<p>The earliest engine version to which the parameter can apply.</p>"]
     pub minimum_engine_version: Option<String>,
     #[doc="<p>The name of the parameter.</p>"]
@@ -7411,13 +7376,12 @@ impl ParameterSerializer {
     }
 }
 
-pub type ParameterApplyType = String;
 struct ParameterApplyTypeDeserializer;
 impl ParameterApplyTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ParameterApplyType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7426,13 +7390,12 @@ impl ParameterApplyTypeDeserializer {
 
     }
 }
-pub type ParameterGroupList = Vec<ClusterParameterGroup>;
 struct ParameterGroupListDeserializer;
 impl ParameterGroupListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ParameterGroupList, XmlParseError> {
+                                       -> Result<Vec<ClusterParameterGroup>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -7468,13 +7431,12 @@ impl ParameterGroupListDeserializer {
 
     }
 }
-pub type ParametersList = Vec<Parameter>;
 struct ParametersListDeserializer;
 impl ParametersListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ParametersList, XmlParseError> {
+                                       -> Result<Vec<Parameter>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -7514,7 +7476,7 @@ impl ParametersListDeserializer {
 /// Serialize `ParametersList` contents to a `SignedRequest`.
 struct ParametersListSerializer;
 impl ParametersListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ParametersList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<Parameter>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             ParameterSerializer::serialize(params, &key, obj);
@@ -7526,7 +7488,7 @@ impl ParametersListSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct PendingModifiedValues {
     #[doc="<p>The pending or in-progress change of the automated snapshot retention period.</p>"]
-    pub automated_snapshot_retention_period: Option<IntegerOptional>,
+    pub automated_snapshot_retention_period: Option<i64>,
     #[doc="<p>The pending or in-progress change of the new identifier for the cluster.</p>"]
     pub cluster_identifier: Option<String>,
     #[doc="<p>The pending or in-progress change of the cluster type.</p>"]
@@ -7534,15 +7496,15 @@ pub struct PendingModifiedValues {
     #[doc="<p>The pending or in-progress change of the service version.</p>"]
     pub cluster_version: Option<String>,
     #[doc="<p>An option that specifies whether to create the cluster with enhanced VPC routing enabled. To create a cluster that uses enhanced VPC routing, the cluster must be in a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/enhanced-vpc-routing.html\">Enhanced VPC Routing</a> in the Amazon Redshift Cluster Management Guide.</p> <p>If this option is <code>true</code>, enhanced VPC routing is enabled. </p> <p>Default: false</p>"]
-    pub enhanced_vpc_routing: Option<BooleanOptional>,
+    pub enhanced_vpc_routing: Option<bool>,
     #[doc="<p>The pending or in-progress change of the master user password for the cluster.</p>"]
     pub master_user_password: Option<String>,
     #[doc="<p>The pending or in-progress change of the cluster's node type.</p>"]
     pub node_type: Option<String>,
     #[doc="<p>The pending or in-progress change of the number of nodes in the cluster.</p>"]
-    pub number_of_nodes: Option<IntegerOptional>,
+    pub number_of_nodes: Option<i64>,
     #[doc="<p>The pending or in-progress change of the ability to connect to the cluster from the public network.</p>"]
-    pub publicly_accessible: Option<BooleanOptional>,
+    pub publicly_accessible: Option<bool>,
 }
 
 struct PendingModifiedValuesDeserializer;
@@ -7630,7 +7592,7 @@ impl PendingModifiedValuesDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct PurchaseReservedNodeOfferingMessage {
     #[doc="<p>The number of reserved nodes that you want to purchase.</p> <p>Default: <code>1</code> </p>"]
-    pub node_count: Option<IntegerOptional>,
+    pub node_count: Option<i64>,
     #[doc="<p>The unique identifier of the reserved node offering you want to purchase.</p>"]
     pub reserved_node_offering_id: String,
 }
@@ -7778,7 +7740,7 @@ impl RebootClusterResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct RecurringCharge {
     #[doc="<p>The amount charged per the period of time specified by the recurring charge frequency.</p>"]
-    pub recurring_charge_amount: Option<Double>,
+    pub recurring_charge_amount: Option<f64>,
     #[doc="<p>The frequency at which the recurring charge amount is applied.</p>"]
     pub recurring_charge_frequency: Option<String>,
 }
@@ -7831,13 +7793,12 @@ impl RecurringChargeDeserializer {
 
     }
 }
-pub type RecurringChargeList = Vec<RecurringCharge>;
 struct RecurringChargeListDeserializer;
 impl RecurringChargeListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<RecurringChargeList, XmlParseError> {
+                                       -> Result<Vec<RecurringCharge>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -7880,27 +7841,27 @@ pub struct ReservedNode {
     #[doc="<p>The currency code for the reserved cluster.</p>"]
     pub currency_code: Option<String>,
     #[doc="<p>The duration of the node reservation in seconds.</p>"]
-    pub duration: Option<Integer>,
+    pub duration: Option<i64>,
     #[doc="<p>The fixed cost Amazon Redshift charges you for this reserved node.</p>"]
-    pub fixed_price: Option<Double>,
+    pub fixed_price: Option<f64>,
     #[doc="<p>The number of reserved compute nodes.</p>"]
-    pub node_count: Option<Integer>,
+    pub node_count: Option<i64>,
     #[doc="<p>The node type of the reserved node.</p>"]
     pub node_type: Option<String>,
     #[doc="<p>The anticipated utilization of the reserved node, as defined in the reserved node offering.</p>"]
     pub offering_type: Option<String>,
     #[doc="<p>The recurring charges for the reserved node.</p>"]
-    pub recurring_charges: Option<RecurringChargeList>,
+    pub recurring_charges: Option<Vec<RecurringCharge>>,
     #[doc="<p>The unique identifier for the reservation.</p>"]
     pub reserved_node_id: Option<String>,
     #[doc="<p>The identifier for the reserved node offering.</p>"]
     pub reserved_node_offering_id: Option<String>,
     #[doc="<p>The time the reservation started. You purchase a reserved node offering for a duration. This is the start time of that duration.</p>"]
-    pub start_time: Option<TStamp>,
+    pub start_time: Option<String>,
     #[doc="<p>The state of the reserved compute node.</p> <p>Possible Values:</p> <ul> <li> <p>pending-payment-This reserved node has recently been purchased, and the sale has been approved, but payment has not yet been confirmed.</p> </li> <li> <p>active-This reserved node is owned by the caller and is available for use.</p> </li> <li> <p>payment-failed-Payment failed for the purchase attempt.</p> </li> </ul>"]
     pub state: Option<String>,
     #[doc="<p>The hourly rate Amazon Redshift charges you for this reserved node.</p>"]
-    pub usage_price: Option<Double>,
+    pub usage_price: Option<f64>,
 }
 
 struct ReservedNodeDeserializer;
@@ -7991,13 +7952,12 @@ impl ReservedNodeDeserializer {
 
     }
 }
-pub type ReservedNodeList = Vec<ReservedNode>;
 struct ReservedNodeListDeserializer;
 impl ReservedNodeListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ReservedNodeList, XmlParseError> {
+                                       -> Result<Vec<ReservedNode>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -8040,19 +8000,19 @@ pub struct ReservedNodeOffering {
     #[doc="<p>The currency code for the compute nodes offering.</p>"]
     pub currency_code: Option<String>,
     #[doc="<p>The duration, in seconds, for which the offering will reserve the node.</p>"]
-    pub duration: Option<Integer>,
+    pub duration: Option<i64>,
     #[doc="<p>The upfront fixed charge you will pay to purchase the specific reserved node offering.</p>"]
-    pub fixed_price: Option<Double>,
+    pub fixed_price: Option<f64>,
     #[doc="<p>The node type offered by the reserved node offering.</p>"]
     pub node_type: Option<String>,
     #[doc="<p>The anticipated utilization of the reserved node, as defined in the reserved node offering.</p>"]
     pub offering_type: Option<String>,
     #[doc="<p>The charge to your account regardless of whether you are creating any clusters using the node offering. Recurring charges are only in effect for heavy-utilization reserved nodes.</p>"]
-    pub recurring_charges: Option<RecurringChargeList>,
+    pub recurring_charges: Option<Vec<RecurringCharge>>,
     #[doc="<p>The offering identifier.</p>"]
     pub reserved_node_offering_id: Option<String>,
     #[doc="<p>The rate you are charged for each hour the cluster that is using the offering is running.</p>"]
-    pub usage_price: Option<Double>,
+    pub usage_price: Option<f64>,
 }
 
 struct ReservedNodeOfferingDeserializer;
@@ -8127,13 +8087,12 @@ impl ReservedNodeOfferingDeserializer {
 
     }
 }
-pub type ReservedNodeOfferingList = Vec<ReservedNodeOffering>;
 struct ReservedNodeOfferingListDeserializer;
 impl ReservedNodeOfferingListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ReservedNodeOfferingList, XmlParseError> {
+                                       -> Result<Vec<ReservedNodeOffering>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -8175,7 +8134,7 @@ pub struct ReservedNodeOfferingsMessage {
     #[doc="<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>"]
     pub marker: Option<String>,
     #[doc="<p>A list of <code>ReservedNodeOffering</code> objects.</p>"]
-    pub reserved_node_offerings: Option<ReservedNodeOfferingList>,
+    pub reserved_node_offerings: Option<Vec<ReservedNodeOffering>>,
 }
 
 struct ReservedNodeOfferingsMessageDeserializer;
@@ -8229,7 +8188,7 @@ pub struct ReservedNodesMessage {
     #[doc="<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>"]
     pub marker: Option<String>,
     #[doc="<p>The list of <code>ReservedNode</code> objects.</p>"]
-    pub reserved_nodes: Option<ReservedNodeList>,
+    pub reserved_nodes: Option<Vec<ReservedNode>>,
 }
 
 struct ReservedNodesMessageDeserializer;
@@ -8285,9 +8244,9 @@ pub struct ResetClusterParameterGroupMessage {
     #[doc="<p>The name of the cluster parameter group to be reset.</p>"]
     pub parameter_group_name: String,
     #[doc="<p>An array of names of parameters to be reset. If <i>ResetAllParameters</i> option is not used, then at least one parameter name must be supplied. </p> <p>Constraints: A maximum of 20 parameters can be reset in a single request.</p>"]
-    pub parameters: Option<ParametersList>,
+    pub parameters: Option<Vec<Parameter>>,
     #[doc="<p>If <code>true</code>, all parameters in the specified parameter group will be reset to their default values. </p> <p>Default: <code>true</code> </p>"]
-    pub reset_all_parameters: Option<Boolean>,
+    pub reset_all_parameters: Option<bool>,
 }
 
 
@@ -8319,19 +8278,19 @@ impl ResetClusterParameterGroupMessageSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ResizeProgressMessage {
     #[doc="<p>The average rate of the resize operation over the last few minutes, measured in megabytes per second. After the resize operation completes, this value shows the average rate of the entire resize operation.</p>"]
-    pub avg_resize_rate_in_mega_bytes_per_second: Option<DoubleOptional>,
+    pub avg_resize_rate_in_mega_bytes_per_second: Option<f64>,
     #[doc="<p>The amount of seconds that have elapsed since the resize operation began. After the resize operation completes, this value shows the total actual time, in seconds, for the resize operation.</p>"]
-    pub elapsed_time_in_seconds: Option<LongOptional>,
+    pub elapsed_time_in_seconds: Option<i64>,
     #[doc="<p>The estimated time remaining, in seconds, until the resize operation is complete. This value is calculated based on the average resize rate and the estimated amount of data remaining to be processed. Once the resize operation is complete, this value will be 0.</p>"]
-    pub estimated_time_to_completion_in_seconds: Option<LongOptional>,
+    pub estimated_time_to_completion_in_seconds: Option<i64>,
     #[doc="<p>The names of tables that have been completely imported .</p> <p>Valid Values: List of table names.</p>"]
-    pub import_tables_completed: Option<ImportTablesCompleted>,
+    pub import_tables_completed: Option<Vec<String>>,
     #[doc="<p>The names of tables that are being currently imported.</p> <p>Valid Values: List of table names.</p>"]
-    pub import_tables_in_progress: Option<ImportTablesInProgress>,
+    pub import_tables_in_progress: Option<Vec<String>>,
     #[doc="<p>The names of tables that have not been yet imported.</p> <p>Valid Values: List of table names</p>"]
-    pub import_tables_not_started: Option<ImportTablesNotStarted>,
+    pub import_tables_not_started: Option<Vec<String>>,
     #[doc="<p>While the resize operation is in progress, this value shows the current amount of data, in megabytes, that has been processed so far. When the resize operation is complete, this value shows the total amount of data, in megabytes, on the cluster, which may be more or less than TotalResizeDataInMegaBytes (the estimated total amount of data before resize).</p>"]
-    pub progress_in_mega_bytes: Option<LongOptional>,
+    pub progress_in_mega_bytes: Option<i64>,
     #[doc="<p>The status of the resize operation.</p> <p>Valid Values: <code>NONE</code> | <code>IN_PROGRESS</code> | <code>FAILED</code> | <code>SUCCEEDED</code> </p>"]
     pub status: Option<String>,
     #[doc="<p>The cluster type after the resize operation is complete.</p> <p>Valid Values: <code>multi-node</code> | <code>single-node</code> </p>"]
@@ -8339,9 +8298,9 @@ pub struct ResizeProgressMessage {
     #[doc="<p>The node type that the cluster will have after the resize operation is complete.</p>"]
     pub target_node_type: Option<String>,
     #[doc="<p>The number of nodes that the cluster will have after the resize operation is complete.</p>"]
-    pub target_number_of_nodes: Option<IntegerOptional>,
+    pub target_number_of_nodes: Option<i64>,
     #[doc="<p>The estimated total amount of data, in megabytes, on the cluster before the resize operation began.</p>"]
-    pub total_resize_data_in_mega_bytes: Option<LongOptional>,
+    pub total_resize_data_in_mega_bytes: Option<i64>,
 }
 
 struct ResizeProgressMessageDeserializer;
@@ -8441,13 +8400,12 @@ impl ResizeProgressMessageDeserializer {
 
     }
 }
-pub type RestorableNodeTypeList = Vec<String>;
 struct RestorableNodeTypeListDeserializer;
 impl RestorableNodeTypeListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<RestorableNodeTypeList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -8489,9 +8447,9 @@ pub struct RestoreFromClusterSnapshotMessage {
     #[doc="<p>Reserved.</p>"]
     pub additional_info: Option<String>,
     #[doc="<p>If <code>true</code>, major version upgrades can be applied during the maintenance window to the Amazon Redshift engine that is running on the cluster. </p> <p>Default: <code>true</code> </p>"]
-    pub allow_version_upgrade: Option<BooleanOptional>,
+    pub allow_version_upgrade: Option<bool>,
     #[doc="<p>The number of days that automated snapshots are retained. If the value is 0, automated snapshots are disabled. Even if automated snapshots are disabled, you can still create manual snapshots when you want with <a>CreateClusterSnapshot</a>. </p> <p>Default: The value selected for the cluster from which the snapshot was taken.</p> <p>Constraints: Must be a value from 0 to 35.</p>"]
-    pub automated_snapshot_retention_period: Option<IntegerOptional>,
+    pub automated_snapshot_retention_period: Option<i64>,
     #[doc="<p>The Amazon EC2 Availability Zone in which to restore the cluster.</p> <p>Default: A random, system-chosen Availability Zone.</p> <p>Example: <code>us-east-1a</code> </p>"]
     pub availability_zone: Option<String>,
     #[doc="<p>The identifier of the cluster that will be created from restoring the snapshot.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>Alphabetic characters must be lowercase.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must be unique for all clusters within an AWS account.</p> </li> </ul>"]
@@ -8499,19 +8457,19 @@ pub struct RestoreFromClusterSnapshotMessage {
     #[doc="<p>The name of the parameter group to be associated with this cluster.</p> <p>Default: The default Amazon Redshift cluster parameter group. For information about the default parameter group, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Working with Amazon Redshift Parameter Groups</a>.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>"]
     pub cluster_parameter_group_name: Option<String>,
     #[doc="<p>A list of security groups to be associated with this cluster.</p> <p>Default: The default cluster security group for Amazon Redshift.</p> <p>Cluster security groups only apply to clusters outside of VPCs.</p>"]
-    pub cluster_security_groups: Option<ClusterSecurityGroupNameList>,
+    pub cluster_security_groups: Option<Vec<String>>,
     #[doc="<p>The name of the subnet group where you want to cluster restored.</p> <p>A snapshot of cluster in VPC can be restored only in VPC. Therefore, you must provide subnet group name where you want the cluster restored.</p>"]
     pub cluster_subnet_group_name: Option<String>,
     #[doc="<p>The elastic IP (EIP) address for the cluster.</p>"]
     pub elastic_ip: Option<String>,
     #[doc="<p>An option that specifies whether to create the cluster with enhanced VPC routing enabled. To create a cluster that uses enhanced VPC routing, the cluster must be in a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/enhanced-vpc-routing.html\">Enhanced VPC Routing</a> in the Amazon Redshift Cluster Management Guide.</p> <p>If this option is <code>true</code>, enhanced VPC routing is enabled. </p> <p>Default: false</p>"]
-    pub enhanced_vpc_routing: Option<BooleanOptional>,
+    pub enhanced_vpc_routing: Option<bool>,
     #[doc="<p>Specifies the name of the HSM client certificate the Amazon Redshift cluster uses to retrieve the data encryption keys stored in an HSM.</p>"]
     pub hsm_client_certificate_identifier: Option<String>,
     #[doc="<p>Specifies the name of the HSM configuration that contains the information the Amazon Redshift cluster can use to retrieve and store keys in an HSM.</p>"]
     pub hsm_configuration_identifier: Option<String>,
     #[doc="<p>A list of AWS Identity and Access Management (IAM) roles that can be used by the cluster to access other AWS services. You must supply the IAM roles in their Amazon Resource Name (ARN) format. You can supply up to 10 IAM roles in a single request.</p> <p>A cluster can have up to 10 IAM roles associated at any time.</p>"]
-    pub iam_roles: Option<IamRoleArnList>,
+    pub iam_roles: Option<Vec<String>>,
     #[doc="<p>The AWS Key Management Service (KMS) key ID of the encryption key that you want to use to encrypt data in the cluster that you restore from a shared snapshot.</p>"]
     pub kms_key_id: Option<String>,
     #[doc="<p>The node type that the restored cluster will be provisioned with.</p> <p>Default: The node type of the cluster from which the snapshot was taken. You can modify this if you are using any DS node type. In that case, you can choose to restore into another DS node type of the same size. For example, you can restore ds1.8xlarge into ds2.8xlarge, or ds2.xlarge into ds1.xlarge. If you have a DC instance type, you must restore into that same instance type and size. In other words, you can only restore a dc1.large instance type into another dc1.large instance type. For more information about node types, see <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#rs-about-clusters-and-nodes\"> About Clusters and Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i> </p>"]
@@ -8519,17 +8477,17 @@ pub struct RestoreFromClusterSnapshotMessage {
     #[doc="<p>The AWS customer account used to create or copy the snapshot. Required if you are restoring a snapshot you do not own, optional if you own the snapshot.</p>"]
     pub owner_account: Option<String>,
     #[doc="<p>The port number on which the cluster accepts connections.</p> <p>Default: The same port as the original cluster.</p> <p>Constraints: Must be between <code>1115</code> and <code>65535</code>.</p>"]
-    pub port: Option<IntegerOptional>,
+    pub port: Option<i64>,
     #[doc="<p>The weekly time range (in UTC) during which automated cluster maintenance can occur.</p> <p> Format: <code>ddd:hh24:mi-ddd:hh24:mi</code> </p> <p> Default: The value selected for the cluster from which the snapshot was taken. For more information about the time blocks for each region, see <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#rs-maintenance-windows\">Maintenance Windows</a> in Amazon Redshift Cluster Management Guide. </p> <p>Valid Days: Mon | Tue | Wed | Thu | Fri | Sat | Sun</p> <p>Constraints: Minimum 30-minute window.</p>"]
     pub preferred_maintenance_window: Option<String>,
     #[doc="<p>If <code>true</code>, the cluster can be accessed from a public network. </p>"]
-    pub publicly_accessible: Option<BooleanOptional>,
+    pub publicly_accessible: Option<bool>,
     #[doc="<p>The name of the cluster the source snapshot was created from. This parameter is required if your IAM user has a policy containing a snapshot resource element that specifies anything other than * for the cluster name.</p>"]
     pub snapshot_cluster_identifier: Option<String>,
     #[doc="<p>The name of the snapshot from which to create the new cluster. This parameter isn't case sensitive.</p> <p>Example: <code>my-snapshot-id</code> </p>"]
     pub snapshot_identifier: String,
     #[doc="<p>A list of Virtual Private Cloud (VPC) security groups to be associated with the cluster.</p> <p>Default: The default VPC security group is associated with the cluster.</p> <p>VPC security groups only apply to clusters in VPCs.</p>"]
-    pub vpc_security_group_ids: Option<VpcSecurityGroupIdList>,
+    pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
 
@@ -8682,15 +8640,15 @@ impl RestoreFromClusterSnapshotResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct RestoreStatus {
     #[doc="<p>The number of megabytes per second being transferred from the backup storage. Returns the average rate for a completed backup.</p>"]
-    pub current_restore_rate_in_mega_bytes_per_second: Option<Double>,
+    pub current_restore_rate_in_mega_bytes_per_second: Option<f64>,
     #[doc="<p>The amount of time an in-progress restore has been running, or the amount of time it took a completed restore to finish.</p>"]
-    pub elapsed_time_in_seconds: Option<Long>,
+    pub elapsed_time_in_seconds: Option<i64>,
     #[doc="<p>The estimate of the time remaining before the restore will complete. Returns 0 for a completed restore.</p>"]
-    pub estimated_time_to_completion_in_seconds: Option<Long>,
+    pub estimated_time_to_completion_in_seconds: Option<i64>,
     #[doc="<p>The number of megabytes that have been transferred from snapshot storage.</p>"]
-    pub progress_in_mega_bytes: Option<Long>,
+    pub progress_in_mega_bytes: Option<i64>,
     #[doc="<p>The size of the set of snapshot data used to restore the cluster.</p>"]
-    pub snapshot_size_in_mega_bytes: Option<Long>,
+    pub snapshot_size_in_mega_bytes: Option<i64>,
     #[doc="<p>The status of the restore action. Returns starting, restoring, completed, or failed.</p>"]
     pub status: Option<String>,
 }
@@ -9104,13 +9062,12 @@ impl RotateEncryptionKeyResultDeserializer {
 
     }
 }
-pub type SensitiveString = String;
 struct SensitiveStringDeserializer;
 impl SensitiveStringDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SensitiveString, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -9123,33 +9080,33 @@ impl SensitiveStringDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct Snapshot {
     #[doc="<p>A list of the AWS customer accounts authorized to restore the snapshot. Returns <code>null</code> if no accounts are authorized. Visible only to the snapshot owner. </p>"]
-    pub accounts_with_restore_access: Option<AccountsWithRestoreAccessList>,
+    pub accounts_with_restore_access: Option<Vec<AccountWithRestoreAccess>>,
     #[doc="<p>The size of the incremental backup.</p>"]
-    pub actual_incremental_backup_size_in_mega_bytes: Option<Double>,
+    pub actual_incremental_backup_size_in_mega_bytes: Option<f64>,
     #[doc="<p>The Availability Zone in which the cluster was created.</p>"]
     pub availability_zone: Option<String>,
     #[doc="<p>The number of megabytes that have been transferred to the snapshot backup.</p>"]
-    pub backup_progress_in_mega_bytes: Option<Double>,
+    pub backup_progress_in_mega_bytes: Option<f64>,
     #[doc="<p>The time (UTC) when the cluster was originally created.</p>"]
-    pub cluster_create_time: Option<TStamp>,
+    pub cluster_create_time: Option<String>,
     #[doc="<p>The identifier of the cluster for which the snapshot was taken.</p>"]
     pub cluster_identifier: Option<String>,
     #[doc="<p>The version ID of the Amazon Redshift engine that is running on the cluster.</p>"]
     pub cluster_version: Option<String>,
     #[doc="<p>The number of megabytes per second being transferred to the snapshot backup. Returns <code>0</code> for a completed backup. </p>"]
-    pub current_backup_rate_in_mega_bytes_per_second: Option<Double>,
+    pub current_backup_rate_in_mega_bytes_per_second: Option<f64>,
     #[doc="<p>The name of the database that was created when the cluster was created.</p>"]
     pub db_name: Option<String>,
     #[doc="<p>The amount of time an in-progress snapshot backup has been running, or the amount of time it took a completed backup to finish.</p>"]
-    pub elapsed_time_in_seconds: Option<Long>,
+    pub elapsed_time_in_seconds: Option<i64>,
     #[doc="<p>If <code>true</code>, the data in the snapshot is encrypted at rest.</p>"]
-    pub encrypted: Option<Boolean>,
+    pub encrypted: Option<bool>,
     #[doc="<p>A boolean that indicates whether the snapshot data is encrypted using the HSM keys of the source cluster. <code>true</code> indicates that the data is encrypted using HSM keys.</p>"]
-    pub encrypted_with_hsm: Option<Boolean>,
+    pub encrypted_with_hsm: Option<bool>,
     #[doc="<p>An option that specifies whether to create the cluster with enhanced VPC routing enabled. To create a cluster that uses enhanced VPC routing, the cluster must be in a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/enhanced-vpc-routing.html\">Enhanced VPC Routing</a> in the Amazon Redshift Cluster Management Guide.</p> <p>If this option is <code>true</code>, enhanced VPC routing is enabled. </p> <p>Default: false</p>"]
-    pub enhanced_vpc_routing: Option<Boolean>,
+    pub enhanced_vpc_routing: Option<bool>,
     #[doc="<p>The estimate of the time remaining before the snapshot backup will complete. Returns <code>0</code> for a completed backup. </p>"]
-    pub estimated_seconds_to_completion: Option<Long>,
+    pub estimated_seconds_to_completion: Option<i64>,
     #[doc="<p>The AWS Key Management Service (KMS) key ID of the encryption key that was used to encrypt data in the cluster from which the snapshot was taken.</p>"]
     pub kms_key_id: Option<String>,
     #[doc="<p>The master user name for the cluster.</p>"]
@@ -9157,15 +9114,15 @@ pub struct Snapshot {
     #[doc="<p>The node type of the nodes in the cluster.</p>"]
     pub node_type: Option<String>,
     #[doc="<p>The number of nodes in the cluster.</p>"]
-    pub number_of_nodes: Option<Integer>,
+    pub number_of_nodes: Option<i64>,
     #[doc="<p>For manual snapshots, the AWS customer account used to create or copy the snapshot. For automatic snapshots, the owner of the cluster. The owner can perform all snapshot actions, such as sharing a manual snapshot.</p>"]
     pub owner_account: Option<String>,
     #[doc="<p>The port that the cluster is listening on.</p>"]
-    pub port: Option<Integer>,
+    pub port: Option<i64>,
     #[doc="<p>The list of node types that this cluster snapshot is able to restore into.</p>"]
-    pub restorable_node_types: Option<RestorableNodeTypeList>,
+    pub restorable_node_types: Option<Vec<String>>,
     #[doc="<p>The time (UTC) when Amazon Redshift began the snapshot. A snapshot contains a copy of the cluster data as of this exact time.</p>"]
-    pub snapshot_create_time: Option<TStamp>,
+    pub snapshot_create_time: Option<String>,
     #[doc="<p>The snapshot identifier that is provided in the request.</p>"]
     pub snapshot_identifier: Option<String>,
     #[doc="<p>The snapshot type. Snapshots created using <a>CreateClusterSnapshot</a> and <a>CopyClusterSnapshot</a> will be of type \"manual\". </p>"]
@@ -9175,9 +9132,9 @@ pub struct Snapshot {
     #[doc="<p>The snapshot status. The value of the status depends on the API operation used. </p> <ul> <li> <p> <a>CreateClusterSnapshot</a> and <a>CopyClusterSnapshot</a> returns status as \"creating\". </p> </li> <li> <p> <a>DescribeClusterSnapshots</a> returns status as \"creating\", \"available\", \"final snapshot\", or \"failed\".</p> </li> <li> <p> <a>DeleteClusterSnapshot</a> returns status as \"deleted\".</p> </li> </ul>"]
     pub status: Option<String>,
     #[doc="<p>The list of tags for the cluster snapshot.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>The size of the complete set of backup data that would be used to restore the cluster.</p>"]
-    pub total_backup_size_in_mega_bytes: Option<Double>,
+    pub total_backup_size_in_mega_bytes: Option<f64>,
     #[doc="<p>The VPC identifier of the cluster if the snapshot is from a cluster in a VPC. Otherwise, this field is not in the output.</p>"]
     pub vpc_id: Option<String>,
 }
@@ -9358,7 +9315,7 @@ pub struct SnapshotCopyGrant {
     #[doc="<p>The name of the snapshot copy grant.</p>"]
     pub snapshot_copy_grant_name: Option<String>,
     #[doc="<p>A list of tag instances.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 struct SnapshotCopyGrantDeserializer;
@@ -9411,13 +9368,12 @@ impl SnapshotCopyGrantDeserializer {
 
     }
 }
-pub type SnapshotCopyGrantList = Vec<SnapshotCopyGrant>;
 struct SnapshotCopyGrantListDeserializer;
 impl SnapshotCopyGrantListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SnapshotCopyGrantList, XmlParseError> {
+                                       -> Result<Vec<SnapshotCopyGrant>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -9459,7 +9415,7 @@ pub struct SnapshotCopyGrantMessage {
     #[doc="<p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <code>DescribeSnapshotCopyGrant</code> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p> <p>Constraints: You can specify either the <b>SnapshotCopyGrantName</b> parameter or the <b>Marker</b> parameter, but not both. </p>"]
     pub marker: Option<String>,
     #[doc="<p>The list of <code>SnapshotCopyGrant</code> objects.</p>"]
-    pub snapshot_copy_grants: Option<SnapshotCopyGrantList>,
+    pub snapshot_copy_grants: Option<Vec<SnapshotCopyGrant>>,
 }
 
 struct SnapshotCopyGrantMessageDeserializer;
@@ -9509,13 +9465,12 @@ impl SnapshotCopyGrantMessageDeserializer {
 
     }
 }
-pub type SnapshotList = Vec<Snapshot>;
 struct SnapshotListDeserializer;
 impl SnapshotListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SnapshotList, XmlParseError> {
+                                       -> Result<Vec<Snapshot>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -9557,7 +9512,7 @@ pub struct SnapshotMessage {
     #[doc="<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>"]
     pub marker: Option<String>,
     #[doc="<p>A list of <a>Snapshot</a> instances. </p>"]
-    pub snapshots: Option<SnapshotList>,
+    pub snapshots: Option<Vec<Snapshot>>,
 }
 
 struct SnapshotMessageDeserializer;
@@ -9607,13 +9562,12 @@ impl SnapshotMessageDeserializer {
 
     }
 }
-pub type SourceIdsList = Vec<String>;
 struct SourceIdsListDeserializer;
 impl SourceIdsListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SourceIdsList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -9653,7 +9607,7 @@ impl SourceIdsListDeserializer {
 /// Serialize `SourceIdsList` contents to a `SignedRequest`.
 struct SourceIdsListSerializer;
 impl SourceIdsListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SourceIdsList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -9661,13 +9615,12 @@ impl SourceIdsListSerializer {
     }
 }
 
-pub type SourceType = String;
 struct SourceTypeDeserializer;
 impl SourceTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SourceType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -9752,12 +9705,11 @@ impl SubnetDeserializer {
 
     }
 }
-pub type SubnetIdentifierList = Vec<String>;
 
 /// Serialize `SubnetIdentifierList` contents to a `SignedRequest`.
 struct SubnetIdentifierListSerializer;
 impl SubnetIdentifierListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SubnetIdentifierList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -9765,13 +9717,12 @@ impl SubnetIdentifierListSerializer {
     }
 }
 
-pub type SubnetList = Vec<Subnet>;
 struct SubnetListDeserializer;
 impl SubnetListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SubnetList, XmlParseError> {
+                                       -> Result<Vec<Subnet>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -9807,13 +9758,12 @@ impl SubnetListDeserializer {
 
     }
 }
-pub type TStamp = String;
 struct TStampDeserializer;
 impl TStampDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TStamp, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -9832,9 +9782,9 @@ pub struct TableRestoreStatus {
     #[doc="<p>The name of the table to create as a result of the table restore request.</p>"]
     pub new_table_name: Option<String>,
     #[doc="<p>The amount of data restored to the new table so far, in megabytes (MB).</p>"]
-    pub progress_in_mega_bytes: Option<LongOptional>,
+    pub progress_in_mega_bytes: Option<i64>,
     #[doc="<p>The time that the table restore request was made, in Universal Coordinated Time (UTC).</p>"]
-    pub request_time: Option<TStamp>,
+    pub request_time: Option<String>,
     #[doc="<p>The identifier of the snapshot that the table is being restored from.</p>"]
     pub snapshot_identifier: Option<String>,
     #[doc="<p>The name of the source database that contains the table being restored.</p>"]
@@ -9844,7 +9794,7 @@ pub struct TableRestoreStatus {
     #[doc="<p>The name of the source table being restored.</p>"]
     pub source_table_name: Option<String>,
     #[doc="<p>A value that describes the current state of the table restore request.</p> <p>Valid Values: <code>SUCCEEDED</code>, <code>FAILED</code>, <code>CANCELED</code>, <code>PENDING</code>, <code>IN_PROGRESS</code> </p>"]
-    pub status: Option<TableRestoreStatusType>,
+    pub status: Option<String>,
     #[doc="<p>The unique identifier for the table restore request.</p>"]
     pub table_restore_request_id: Option<String>,
     #[doc="<p>The name of the database to restore the table to.</p>"]
@@ -9852,7 +9802,7 @@ pub struct TableRestoreStatus {
     #[doc="<p>The name of the schema to restore the table to.</p>"]
     pub target_schema_name: Option<String>,
     #[doc="<p>The total amount of data to restore to the new table, in megabytes (MB).</p>"]
-    pub total_data_in_mega_bytes: Option<LongOptional>,
+    pub total_data_in_mega_bytes: Option<i64>,
 }
 
 struct TableRestoreStatusDeserializer;
@@ -9960,13 +9910,12 @@ impl TableRestoreStatusDeserializer {
 
     }
 }
-pub type TableRestoreStatusList = Vec<TableRestoreStatus>;
 struct TableRestoreStatusListDeserializer;
 impl TableRestoreStatusListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TableRestoreStatusList, XmlParseError> {
+                                       -> Result<Vec<TableRestoreStatus>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -10008,7 +9957,7 @@ pub struct TableRestoreStatusMessage {
     #[doc="<p>A pagination token that can be used in a subsequent <a>DescribeTableRestoreStatus</a> request.</p>"]
     pub marker: Option<String>,
     #[doc="<p>A list of status details for one or more table restore requests.</p>"]
-    pub table_restore_status_details: Option<TableRestoreStatusList>,
+    pub table_restore_status_details: Option<Vec<TableRestoreStatus>>,
 }
 
 struct TableRestoreStatusMessageDeserializer;
@@ -10058,13 +10007,12 @@ impl TableRestoreStatusMessageDeserializer {
 
     }
 }
-pub type TableRestoreStatusType = String;
 struct TableRestoreStatusTypeDeserializer;
 impl TableRestoreStatusTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TableRestoreStatusType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -10146,12 +10094,11 @@ impl TagSerializer {
     }
 }
 
-pub type TagKeyList = Vec<String>;
 
 /// Serialize `TagKeyList` contents to a `SignedRequest`.
 struct TagKeyListSerializer;
 impl TagKeyListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &TagKeyList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -10159,13 +10106,12 @@ impl TagKeyListSerializer {
     }
 }
 
-pub type TagList = Vec<Tag>;
 struct TagListDeserializer;
 impl TagListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TagList, XmlParseError> {
+                                       -> Result<Vec<Tag>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -10205,7 +10151,7 @@ impl TagListDeserializer {
 /// Serialize `TagList` contents to a `SignedRequest`.
 struct TagListSerializer;
 impl TagListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &TagList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<Tag>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             TagSerializer::serialize(params, &key, obj);
@@ -10213,12 +10159,11 @@ impl TagListSerializer {
     }
 }
 
-pub type TagValueList = Vec<String>;
 
 /// Serialize `TagValueList` contents to a `SignedRequest`.
 struct TagValueListSerializer;
 impl TagValueListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &TagValueList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -10286,13 +10231,12 @@ impl TaggedResourceDeserializer {
 
     }
 }
-pub type TaggedResourceList = Vec<TaggedResource>;
 struct TaggedResourceListDeserializer;
 impl TaggedResourceListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TaggedResourceList, XmlParseError> {
+                                       -> Result<Vec<TaggedResource>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -10335,7 +10279,7 @@ pub struct TaggedResourceListMessage {
     #[doc="<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>"]
     pub marker: Option<String>,
     #[doc="<p>A list of tags with their associated resources.</p>"]
-    pub tagged_resources: Option<TaggedResourceList>,
+    pub tagged_resources: Option<Vec<TaggedResource>>,
 }
 
 struct TaggedResourceListMessageDeserializer;
@@ -10385,12 +10329,11 @@ impl TaggedResourceListMessageDeserializer {
 
     }
 }
-pub type VpcSecurityGroupIdList = Vec<String>;
 
 /// Serialize `VpcSecurityGroupIdList` contents to a `SignedRequest`.
 struct VpcSecurityGroupIdListSerializer;
 impl VpcSecurityGroupIdListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &VpcSecurityGroupIdList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -10454,13 +10397,13 @@ impl VpcSecurityGroupMembershipDeserializer {
 
     }
 }
-pub type VpcSecurityGroupMembershipList = Vec<VpcSecurityGroupMembership>;
 struct VpcSecurityGroupMembershipListDeserializer;
 impl VpcSecurityGroupMembershipListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<VpcSecurityGroupMembershipList, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<Vec<VpcSecurityGroupMembership>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));

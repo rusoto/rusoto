@@ -37,14 +37,13 @@ enum DeserializerNext {
     Skip,
     Element(String),
 }
-pub type AZMode = String;
 #[doc="<p>Represents the input of an AddTagsToResource operation.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct AddTagsToResourceMessage {
     #[doc="<p>The Amazon Resource Name (ARN) of the resource to which the tags are to be added, for example <code>arn:aws:elasticache:us-west-2:0123456789:cluster:myCluster</code> or <code>arn:aws:elasticache:us-west-2:0123456789:snapshot:mySnapshot</code>.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>.</p>"]
     pub resource_name: String,
     #[doc="<p>A list of cost allocation tags to be added to this resource. A tag is a key-value pair. A tag key must be accompanied by a tag value.</p>"]
-    pub tags: TagList,
+    pub tags: Vec<Tag>,
 }
 
 
@@ -67,7 +66,7 @@ impl AddTagsToResourceMessageSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct AllowedNodeTypeModificationsMessage {
     #[doc="<p>A string list, each element of which specifies a cache node type which you can use to scale your cache cluster or replication group.</p> <p>When scaling up a Redis cluster or replication group using <code>ModifyCacheCluster</code> or <code>ModifyReplicationGroup</code>, use a value from this list for the <code>CacheNodeType</code> parameter.</p>"]
-    pub scale_up_modifications: Option<NodeTypeList>,
+    pub scale_up_modifications: Option<Vec<String>>,
 }
 
 struct AllowedNodeTypeModificationsMessageDeserializer;
@@ -196,13 +195,12 @@ impl AuthorizeCacheSecurityGroupIngressResultDeserializer {
 
     }
 }
-pub type AutomaticFailoverStatus = String;
 struct AutomaticFailoverStatusDeserializer;
 impl AutomaticFailoverStatusDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AutomaticFailoverStatus, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -259,13 +257,12 @@ impl AvailabilityZoneDeserializer {
 
     }
 }
-pub type AvailabilityZonesList = Vec<String>;
 struct AvailabilityZonesListDeserializer;
 impl AvailabilityZonesListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AvailabilityZonesList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -305,7 +302,7 @@ impl AvailabilityZonesListDeserializer {
 /// Serialize `AvailabilityZonesList` contents to a `SignedRequest`.
 struct AvailabilityZonesListSerializer;
 impl AvailabilityZonesListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AvailabilityZonesList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -313,14 +310,12 @@ impl AvailabilityZonesListSerializer {
     }
 }
 
-pub type AwsQueryErrorMessage = String;
-pub type Boolean = bool;
 struct BooleanDeserializer;
 impl BooleanDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Boolean, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -329,13 +324,12 @@ impl BooleanDeserializer {
 
     }
 }
-pub type BooleanOptional = bool;
 struct BooleanOptionalDeserializer;
 impl BooleanOptionalDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<BooleanOptional, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -348,9 +342,9 @@ impl BooleanOptionalDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CacheCluster {
     #[doc="<p>This parameter is currently disabled.</p>"]
-    pub auto_minor_version_upgrade: Option<Boolean>,
+    pub auto_minor_version_upgrade: Option<bool>,
     #[doc="<p>The date and time when the cache cluster was created.</p>"]
-    pub cache_cluster_create_time: Option<TStamp>,
+    pub cache_cluster_create_time: Option<String>,
     #[doc="<p>The user-supplied identifier of the cache cluster. This identifier is a unique key that identifies a cache cluster.</p>"]
     pub cache_cluster_id: Option<String>,
     #[doc="<p>The current state of this cache cluster, one of the following values: <code>available</code>, <code>creating</code>, <code>deleted</code>, <code>deleting</code>, <code>incompatible-network</code>, <code>modifying</code>, <code>rebooting cache cluster nodes</code>, <code>restore-failed</code>, or <code>snapshotting</code>.</p>"]
@@ -358,10 +352,10 @@ pub struct CacheCluster {
     #[doc="<p>The name of the compute and memory capacity node type for the cache cluster.</p> <p>Valid node types are as follows:</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code>, <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code>, <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> </li> <li> <p>Previous generation: <code>cache.t1.micro</code>, <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized: <code>cache.c1.xlarge</code> </p> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> <li> <p>Previous generation: <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Notes:</b> </p> <ul> <li> <p>All T2 instances are created in an Amazon Virtual Private Cloud (Amazon VPC).</p> </li> <li> <p>Redis backup/restore is not supported for Redis (cluster mode disabled) T1 and T2 instances. Backup/restore is supported on Redis (cluster mode enabled) T2 instances.</p> </li> <li> <p>Redis Append-only files (AOF) functionality is not supported for T1 or T2 instances.</p> </li> </ul> <p>For a complete listing of node types and specifications, see <a href=\"http://aws.amazon.com/elasticache/details\">Amazon ElastiCache Product Features and Details</a> and either <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheParameterGroups.Memcached.html#ParameterGroups.Memcached.NodeSpecific\">Cache Node Type-Specific Parameters for Memcached</a> or <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheParameterGroups.Redis.html#ParameterGroups.Redis.NodeSpecific\">Cache Node Type-Specific Parameters for Redis</a>.</p>"]
     pub cache_node_type: Option<String>,
     #[doc="<p>A list of cache nodes that are members of the cache cluster.</p>"]
-    pub cache_nodes: Option<CacheNodeList>,
+    pub cache_nodes: Option<Vec<CacheNode>>,
     pub cache_parameter_group: Option<CacheParameterGroupStatus>,
     #[doc="<p>A list of cache security group elements, composed of name and status sub-elements.</p>"]
-    pub cache_security_groups: Option<CacheSecurityGroupMembershipList>,
+    pub cache_security_groups: Option<Vec<CacheSecurityGroupMembership>>,
     #[doc="<p>The name of the cache subnet group associated with the cache cluster.</p>"]
     pub cache_subnet_group_name: Option<String>,
     #[doc="<p>The URL of the web page where you can download the latest ElastiCache client library.</p>"]
@@ -374,7 +368,7 @@ pub struct CacheCluster {
     pub engine_version: Option<String>,
     pub notification_configuration: Option<NotificationConfiguration>,
     #[doc="<p>The number of cache nodes in the cache cluster.</p> <p>For clusters running Redis, this value must be 1. For clusters running Memcached, this value must be between 1 and 20.</p>"]
-    pub num_cache_nodes: Option<IntegerOptional>,
+    pub num_cache_nodes: Option<i64>,
     pub pending_modified_values: Option<PendingModifiedValues>,
     #[doc="<p>The name of the Availability Zone in which the cache cluster is located or \"Multiple\" if the cache nodes are located in different Availability Zones.</p>"]
     pub preferred_availability_zone: Option<String>,
@@ -383,9 +377,9 @@ pub struct CacheCluster {
     #[doc="<p>The replication group to which this cache cluster belongs. If this field is empty, the cache cluster is not associated with any replication group.</p>"]
     pub replication_group_id: Option<String>,
     #[doc="<p>A list of VPC Security Groups associated with the cache cluster.</p>"]
-    pub security_groups: Option<SecurityGroupMembershipList>,
+    pub security_groups: Option<Vec<SecurityGroupMembership>>,
     #[doc="<p>The number of days for which ElastiCache retains automatic cache cluster snapshots before deleting them. For example, if you set <code>SnapshotRetentionLimit</code> to 5, a snapshot that was taken today is retained for 5 days before being deleted.</p> <important> <p> If the value of SnapshotRetentionLimit is set to zero (0), backups are turned off.</p> </important>"]
-    pub snapshot_retention_limit: Option<IntegerOptional>,
+    pub snapshot_retention_limit: Option<i64>,
     #[doc="<p>The daily time range (in UTC) during which ElastiCache begins taking a daily snapshot of your cache cluster.</p> <p>Example: <code>05:00-09:00</code> </p>"]
     pub snapshot_window: Option<String>,
 }
@@ -527,13 +521,12 @@ impl CacheClusterDeserializer {
 
     }
 }
-pub type CacheClusterList = Vec<CacheCluster>;
 struct CacheClusterListDeserializer;
 impl CacheClusterListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CacheClusterList, XmlParseError> {
+                                       -> Result<Vec<CacheCluster>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -574,7 +567,7 @@ impl CacheClusterListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CacheClusterMessage {
     #[doc="<p>A list of cache clusters. Each item in the list contains detailed information about one cache cluster.</p>"]
-    pub cache_clusters: Option<CacheClusterList>,
+    pub cache_clusters: Option<Vec<CacheCluster>>,
     #[doc="<p>Provides an identifier to allow retrieval of paginated results.</p>"]
     pub marker: Option<String>,
 }
@@ -702,13 +695,12 @@ impl CacheEngineVersionDeserializer {
 
     }
 }
-pub type CacheEngineVersionList = Vec<CacheEngineVersion>;
 struct CacheEngineVersionListDeserializer;
 impl CacheEngineVersionListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CacheEngineVersionList, XmlParseError> {
+                                       -> Result<Vec<CacheEngineVersion>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -748,7 +740,7 @@ impl CacheEngineVersionListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CacheEngineVersionMessage {
     #[doc="<p>A list of cache engine version details. Each element in the list contains detailed information about one cache engine version.</p>"]
-    pub cache_engine_versions: Option<CacheEngineVersionList>,
+    pub cache_engine_versions: Option<Vec<CacheEngineVersion>>,
     #[doc="<p>Provides an identifier to allow retrieval of paginated results.</p>"]
     pub marker: Option<String>,
 }
@@ -804,7 +796,7 @@ impl CacheEngineVersionMessageDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CacheNode {
     #[doc="<p>The date and time when the cache node was created.</p>"]
-    pub cache_node_create_time: Option<TStamp>,
+    pub cache_node_create_time: Option<String>,
     #[doc="<p>The cache node identifier. A node ID is a numeric identifier (0001, 0002, etc.). The combination of cluster ID and node ID uniquely identifies every cache node used in a customer's AWS account.</p>"]
     pub cache_node_id: Option<String>,
     #[doc="<p>The current state of this cache node.</p>"]
@@ -890,13 +882,12 @@ impl CacheNodeDeserializer {
 
     }
 }
-pub type CacheNodeIdsList = Vec<String>;
 struct CacheNodeIdsListDeserializer;
 impl CacheNodeIdsListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CacheNodeIdsList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -936,7 +927,7 @@ impl CacheNodeIdsListDeserializer {
 /// Serialize `CacheNodeIdsList` contents to a `SignedRequest`.
 struct CacheNodeIdsListSerializer;
 impl CacheNodeIdsListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CacheNodeIdsList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -944,13 +935,12 @@ impl CacheNodeIdsListSerializer {
     }
 }
 
-pub type CacheNodeList = Vec<CacheNode>;
 struct CacheNodeListDeserializer;
 impl CacheNodeListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CacheNodeList, XmlParseError> {
+                                       -> Result<Vec<CacheNode>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -992,15 +982,15 @@ pub struct CacheNodeTypeSpecificParameter {
     #[doc="<p>The valid range of values for the parameter.</p>"]
     pub allowed_values: Option<String>,
     #[doc="<p>A list of cache node types and their corresponding values for this parameter.</p>"]
-    pub cache_node_type_specific_values: Option<CacheNodeTypeSpecificValueList>,
+    pub cache_node_type_specific_values: Option<Vec<CacheNodeTypeSpecificValue>>,
     #[doc="<p>Indicates whether a change to the parameter is applied immediately or requires a reboot for the change to be applied. You can force a reboot or wait until the next maintenance window's reboot. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Clusters.Rebooting.html\">Rebooting a Cluster</a>.</p>"]
-    pub change_type: Option<ChangeType>,
+    pub change_type: Option<String>,
     #[doc="<p>The valid data type for the parameter.</p>"]
     pub data_type: Option<String>,
     #[doc="<p>A description of the parameter.</p>"]
     pub description: Option<String>,
     #[doc="<p>Indicates whether (<code>true</code>) or not (<code>false</code>) the parameter can be modified. Some parameters have security or operational implications that prevent them from being changed.</p>"]
-    pub is_modifiable: Option<Boolean>,
+    pub is_modifiable: Option<bool>,
     #[doc="<p>The earliest cache engine version to which the parameter can apply.</p>"]
     pub minimum_engine_version: Option<String>,
     #[doc="<p>The name of the parameter.</p>"]
@@ -1084,14 +1074,13 @@ impl CacheNodeTypeSpecificParameterDeserializer {
 
     }
 }
-pub type CacheNodeTypeSpecificParametersList = Vec<CacheNodeTypeSpecificParameter>;
 struct CacheNodeTypeSpecificParametersListDeserializer;
 impl CacheNodeTypeSpecificParametersListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>
         (tag_name: &str,
          stack: &mut T)
-         -> Result<CacheNodeTypeSpecificParametersList, XmlParseError> {
+         -> Result<Vec<CacheNodeTypeSpecificParameter>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -1181,13 +1170,13 @@ impl CacheNodeTypeSpecificValueDeserializer {
 
     }
 }
-pub type CacheNodeTypeSpecificValueList = Vec<CacheNodeTypeSpecificValue>;
 struct CacheNodeTypeSpecificValueListDeserializer;
 impl CacheNodeTypeSpecificValueListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<CacheNodeTypeSpecificValueList, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<Vec<CacheNodeTypeSpecificValue>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -1290,11 +1279,11 @@ impl CacheParameterGroupDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CacheParameterGroupDetails {
     #[doc="<p>A list of parameters specific to a particular cache node type. Each element in the list contains detailed information about one parameter.</p>"]
-    pub cache_node_type_specific_parameters: Option<CacheNodeTypeSpecificParametersList>,
+    pub cache_node_type_specific_parameters: Option<Vec<CacheNodeTypeSpecificParameter>>,
     #[doc="<p>Provides an identifier to allow retrieval of paginated results.</p>"]
     pub marker: Option<String>,
     #[doc="<p>A list of <a>Parameter</a> instances.</p>"]
-    pub parameters: Option<ParametersList>,
+    pub parameters: Option<Vec<Parameter>>,
 }
 
 struct CacheParameterGroupDetailsDeserializer;
@@ -1347,13 +1336,12 @@ impl CacheParameterGroupDetailsDeserializer {
 
     }
 }
-pub type CacheParameterGroupList = Vec<CacheParameterGroup>;
 struct CacheParameterGroupListDeserializer;
 impl CacheParameterGroupListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CacheParameterGroupList, XmlParseError> {
+                                       -> Result<Vec<CacheParameterGroup>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -1443,7 +1431,7 @@ impl CacheParameterGroupNameMessageDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CacheParameterGroupStatus {
     #[doc="<p>A list of the cache node IDs which need to be rebooted for parameter changes to be applied. A node ID is a numeric identifier (0001, 0002, etc.).</p>"]
-    pub cache_node_ids_to_reboot: Option<CacheNodeIdsList>,
+    pub cache_node_ids_to_reboot: Option<Vec<String>>,
     #[doc="<p>The name of the cache parameter group.</p>"]
     pub cache_parameter_group_name: Option<String>,
     #[doc="<p>The status of parameter updates.</p>"]
@@ -1507,7 +1495,7 @@ impl CacheParameterGroupStatusDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CacheParameterGroupsMessage {
     #[doc="<p>A list of cache parameter groups. Each element in the list contains detailed information about one cache parameter group.</p>"]
-    pub cache_parameter_groups: Option<CacheParameterGroupList>,
+    pub cache_parameter_groups: Option<Vec<CacheParameterGroup>>,
     #[doc="<p>Provides an identifier to allow retrieval of paginated results.</p>"]
     pub marker: Option<String>,
 }
@@ -1567,7 +1555,7 @@ pub struct CacheSecurityGroup {
     #[doc="<p>The description of the cache security group.</p>"]
     pub description: Option<String>,
     #[doc="<p>A list of Amazon EC2 security groups that are associated with this cache security group.</p>"]
-    pub ec2_security_groups: Option<EC2SecurityGroupList>,
+    pub ec2_security_groups: Option<Vec<EC2SecurityGroup>>,
     #[doc="<p>The AWS account ID of the cache security group owner.</p>"]
     pub owner_id: Option<String>,
 }
@@ -1684,14 +1672,13 @@ impl CacheSecurityGroupMembershipDeserializer {
 
     }
 }
-pub type CacheSecurityGroupMembershipList = Vec<CacheSecurityGroupMembership>;
 struct CacheSecurityGroupMembershipListDeserializer;
 impl CacheSecurityGroupMembershipListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>
         (tag_name: &str,
          stack: &mut T)
-         -> Result<CacheSecurityGroupMembershipList, XmlParseError> {
+         -> Result<Vec<CacheSecurityGroupMembership>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -1731,7 +1718,7 @@ impl CacheSecurityGroupMembershipListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CacheSecurityGroupMessage {
     #[doc="<p>A list of cache security groups. Each element in the list contains detailed information about one group.</p>"]
-    pub cache_security_groups: Option<CacheSecurityGroups>,
+    pub cache_security_groups: Option<Vec<CacheSecurityGroup>>,
     #[doc="<p>Provides an identifier to allow retrieval of paginated results.</p>"]
     pub marker: Option<String>,
 }
@@ -1783,12 +1770,11 @@ impl CacheSecurityGroupMessageDeserializer {
 
     }
 }
-pub type CacheSecurityGroupNameList = Vec<String>;
 
 /// Serialize `CacheSecurityGroupNameList` contents to a `SignedRequest`.
 struct CacheSecurityGroupNameListSerializer;
 impl CacheSecurityGroupNameListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CacheSecurityGroupNameList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -1796,13 +1782,12 @@ impl CacheSecurityGroupNameListSerializer {
     }
 }
 
-pub type CacheSecurityGroups = Vec<CacheSecurityGroup>;
 struct CacheSecurityGroupsDeserializer;
 impl CacheSecurityGroupsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CacheSecurityGroups, XmlParseError> {
+                                       -> Result<Vec<CacheSecurityGroup>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -1846,7 +1831,7 @@ pub struct CacheSubnetGroup {
     #[doc="<p>The name of the cache subnet group.</p>"]
     pub cache_subnet_group_name: Option<String>,
     #[doc="<p>A list of subnets associated with the cache subnet group.</p>"]
-    pub subnets: Option<SubnetList>,
+    pub subnets: Option<Vec<Subnet>>,
     #[doc="<p>The Amazon Virtual Private Cloud identifier (VPC ID) of the cache subnet group.</p>"]
     pub vpc_id: Option<String>,
 }
@@ -1911,7 +1896,7 @@ impl CacheSubnetGroupDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CacheSubnetGroupMessage {
     #[doc="<p>A list of cache subnet groups. Each element in the list contains detailed information about one group.</p>"]
-    pub cache_subnet_groups: Option<CacheSubnetGroups>,
+    pub cache_subnet_groups: Option<Vec<CacheSubnetGroup>>,
     #[doc="<p>Provides an identifier to allow retrieval of paginated results.</p>"]
     pub marker: Option<String>,
 }
@@ -1963,13 +1948,12 @@ impl CacheSubnetGroupMessageDeserializer {
 
     }
 }
-pub type CacheSubnetGroups = Vec<CacheSubnetGroup>;
 struct CacheSubnetGroupsDeserializer;
 impl CacheSubnetGroupsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CacheSubnetGroups, XmlParseError> {
+                                       -> Result<Vec<CacheSubnetGroup>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -2006,13 +1990,12 @@ impl CacheSubnetGroupsDeserializer {
 
     }
 }
-pub type ChangeType = String;
 struct ChangeTypeDeserializer;
 impl ChangeTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ChangeType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2021,13 +2004,12 @@ impl ChangeTypeDeserializer {
 
     }
 }
-pub type ClusterIdList = Vec<String>;
 struct ClusterIdListDeserializer;
 impl ClusterIdListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ClusterIdList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -2146,11 +2128,11 @@ impl CopySnapshotResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateCacheClusterMessage {
     #[doc="<p>Specifies whether the nodes in this Memcached cluster are created in a single Availability Zone or created across multiple Availability Zones in the cluster's region.</p> <p>This parameter is only supported for Memcached cache clusters.</p> <p>If the <code>AZMode</code> and <code>PreferredAvailabilityZones</code> are not specified, ElastiCache assumes <code>single-az</code> mode.</p>"]
-    pub az_mode: Option<AZMode>,
+    pub az_mode: Option<String>,
     #[doc="<p> <b>Reserved parameter.</b> The password used to access a password protected server.</p> <p>Password constraints:</p> <ul> <li> <p>Must be only printable ASCII characters.</p> </li> <li> <p>Must be at least 16 characters and no more than 128 characters in length.</p> </li> <li> <p>Cannot contain any of the following characters: '/', '\"', or \"@\". </p> </li> </ul> <p>For more information, see <a href=\"http://redis.io/commands/AUTH\">AUTH password</a> at Redis.</p>"]
     pub auth_token: Option<String>,
     #[doc="<p>This parameter is currently disabled.</p>"]
-    pub auto_minor_version_upgrade: Option<BooleanOptional>,
+    pub auto_minor_version_upgrade: Option<bool>,
     #[doc="<p>The node group (shard) identifier. This parameter is stored as a lowercase string.</p> <p> <b>Constraints:</b> </p> <ul> <li> <p>A name must contain from 1 to 20 alphanumeric characters or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>A name cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>"]
     pub cache_cluster_id: String,
     #[doc="<p>The compute and memory capacity of the nodes in the node group (shard).</p> <p>Valid node types are as follows:</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code>, <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code>, <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> </li> <li> <p>Previous generation: <code>cache.t1.micro</code>, <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized: <code>cache.c1.xlarge</code> </p> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> <li> <p>Previous generation: <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Notes:</b> </p> <ul> <li> <p>All T2 instances are created in an Amazon Virtual Private Cloud (Amazon VPC).</p> </li> <li> <p>Redis backup/restore is not supported for Redis (cluster mode disabled) T1 and T2 instances. Backup/restore is supported on Redis (cluster mode enabled) T2 instances.</p> </li> <li> <p>Redis Append-only files (AOF) functionality is not supported for T1 or T2 instances.</p> </li> </ul> <p>For a complete listing of node types and specifications, see <a href=\"http://aws.amazon.com/elasticache/details\">Amazon ElastiCache Product Features and Details</a> and either <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheParameterGroups.Memcached.html#ParameterGroups.Memcached.NodeSpecific\">Cache Node Type-Specific Parameters for Memcached</a> or <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheParameterGroups.Redis.html#ParameterGroups.Redis.NodeSpecific\">Cache Node Type-Specific Parameters for Redis</a>.</p>"]
@@ -2158,7 +2140,7 @@ pub struct CreateCacheClusterMessage {
     #[doc="<p>The name of the parameter group to associate with this cache cluster. If this argument is omitted, the default parameter group for the specified engine is used. You cannot use any parameter group which has <code>cluster-enabled='yes'</code> when creating a cluster.</p>"]
     pub cache_parameter_group_name: Option<String>,
     #[doc="<p>A list of security group names to associate with this cache cluster.</p> <p>Use this parameter only when you are creating a cache cluster outside of an Amazon Virtual Private Cloud (Amazon VPC).</p>"]
-    pub cache_security_group_names: Option<CacheSecurityGroupNameList>,
+    pub cache_security_group_names: Option<Vec<String>>,
     #[doc="<p>The name of the subnet group to be used for the cache cluster.</p> <p>Use this parameter only when you are creating a cache cluster in an Amazon Virtual Private Cloud (Amazon VPC).</p> <important> <p>If you're going to launch your cluster in an Amazon VPC, you need to create a subnet group before you start creating a cluster. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/SubnetGroups.html\">Subnets and Subnet Groups</a>.</p> </important>"]
     pub cache_subnet_group_name: Option<String>,
     #[doc="<p>The name of the cache engine to be used for this cache cluster.</p> <p>Valid values for this parameter are: <code>memcached</code> | <code>redis</code> </p>"]
@@ -2168,29 +2150,29 @@ pub struct CreateCacheClusterMessage {
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (SNS) topic to which notifications are sent.</p> <note> <p>The Amazon SNS topic owner must be the same as the cache cluster owner.</p> </note>"]
     pub notification_topic_arn: Option<String>,
     #[doc="<p>The initial number of cache nodes that the cache cluster has.</p> <p>For clusters running Redis, this value must be 1. For clusters running Memcached, this value must be between 1 and 20.</p> <p>If you need more than 20 nodes for your Memcached cluster, please fill out the ElastiCache Limit Increase Request form at <a href=\"http://aws.amazon.com/contact-us/elasticache-node-limit-request/\">http://aws.amazon.com/contact-us/elasticache-node-limit-request/</a>.</p>"]
-    pub num_cache_nodes: Option<IntegerOptional>,
+    pub num_cache_nodes: Option<i64>,
     #[doc="<p>The port number on which each of the cache nodes accepts connections.</p>"]
-    pub port: Option<IntegerOptional>,
+    pub port: Option<i64>,
     #[doc="<p>The EC2 Availability Zone in which the cache cluster is created.</p> <p>All nodes belonging to this Memcached cache cluster are placed in the preferred Availability Zone. If you want to create your nodes across multiple Availability Zones, use <code>PreferredAvailabilityZones</code>.</p> <p>Default: System chosen Availability Zone.</p>"]
     pub preferred_availability_zone: Option<String>,
     #[doc="<p>A list of the Availability Zones in which cache nodes are created. The order of the zones in the list is not important.</p> <p>This option is only supported on Memcached.</p> <note> <p>If you are creating your cache cluster in an Amazon VPC (recommended) you can only locate nodes in Availability Zones that are associated with the subnets in the selected subnet group.</p> <p>The number of Availability Zones listed must equal the value of <code>NumCacheNodes</code>.</p> </note> <p>If you want all the nodes in the same Availability Zone, use <code>PreferredAvailabilityZone</code> instead, or repeat the Availability Zone multiple times in the list.</p> <p>Default: System chosen Availability Zones.</p>"]
-    pub preferred_availability_zones: Option<PreferredAvailabilityZoneList>,
+    pub preferred_availability_zones: Option<Vec<String>>,
     #[doc="<p>Specifies the weekly time range during which maintenance on the cache cluster is performed. It is specified as a range in the format ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window is a 60 minute period. Valid values for <code>ddd</code> are:</p> <p>Specifies the weekly time range during which maintenance on the cluster is performed. It is specified as a range in the format ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window is a 60 minute period.</p> <p>Valid values for <code>ddd</code> are:</p> <ul> <li> <p> <code>sun</code> </p> </li> <li> <p> <code>mon</code> </p> </li> <li> <p> <code>tue</code> </p> </li> <li> <p> <code>wed</code> </p> </li> <li> <p> <code>thu</code> </p> </li> <li> <p> <code>fri</code> </p> </li> <li> <p> <code>sat</code> </p> </li> </ul> <p>Example: <code>sun:23:00-mon:01:30</code> </p>"]
     pub preferred_maintenance_window: Option<String>,
     #[doc="<important> <p>Due to current limitations on Redis (cluster mode disabled), this operation or parameter is not supported on Redis (cluster mode enabled) replication groups.</p> </important> <p>The ID of the replication group to which this cache cluster should belong. If this parameter is specified, the cache cluster is added to the specified replication group as a read replica; otherwise, the cache cluster is a standalone primary that is not part of any replication group.</p> <p>If the specified replication group is Multi-AZ enabled and the Availability Zone is not specified, the cache cluster is created in Availability Zones that provide the best spread of read replicas across Availability Zones.</p> <note> <p>This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p> </note>"]
     pub replication_group_id: Option<String>,
     #[doc="<p>One or more VPC security groups associated with the cache cluster.</p> <p>Use this parameter only when you are creating a cache cluster in an Amazon Virtual Private Cloud (Amazon VPC).</p>"]
-    pub security_group_ids: Option<SecurityGroupIdsList>,
+    pub security_group_ids: Option<Vec<String>>,
     #[doc="<p>A single-element string list containing an Amazon Resource Name (ARN) that uniquely identifies a Redis RDB snapshot file stored in Amazon S3. The snapshot file is used to populate the node group (shard). The Amazon S3 object name in the ARN cannot contain any commas.</p> <note> <p>This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p> </note> <p>Example of an Amazon S3 ARN: <code>arn:aws:s3:::my_bucket/snapshot1.rdb</code> </p>"]
-    pub snapshot_arns: Option<SnapshotArnsList>,
+    pub snapshot_arns: Option<Vec<String>>,
     #[doc="<p>The name of a Redis snapshot from which to restore data into the new node group (shard). The snapshot status changes to <code>restoring</code> while the new node group (shard) is being created.</p> <note> <p>This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p> </note>"]
     pub snapshot_name: Option<String>,
     #[doc="<p>The number of days for which ElastiCache retains automatic snapshots before deleting them. For example, if you set <code>SnapshotRetentionLimit</code> to 5, a snapshot taken today is retained for 5 days before being deleted.</p> <note> <p>This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p> </note> <p>Default: 0 (i.e., automatic backups are disabled for this cache cluster).</p>"]
-    pub snapshot_retention_limit: Option<IntegerOptional>,
+    pub snapshot_retention_limit: Option<i64>,
     #[doc="<p>The daily time range (in UTC) during which ElastiCache begins taking a daily snapshot of your node group (shard).</p> <p>Example: <code>05:00-09:00</code> </p> <p>If you do not specify this parameter, ElastiCache automatically chooses an appropriate time range.</p> <p> <b>Note:</b> This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p>"]
     pub snapshot_window: Option<String>,
     #[doc="<p>A list of cost allocation tags to be added to this resource. A tag is a key-value pair. A tag key must be accompanied by a tag value.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 
@@ -2504,7 +2486,7 @@ pub struct CreateCacheSubnetGroupMessage {
     #[doc="<p>A name for the cache subnet group. This value is stored as a lowercase string.</p> <p>Constraints: Must contain no more than 255 alphanumeric characters or hyphens.</p> <p>Example: <code>mysubnetgroup</code> </p>"]
     pub cache_subnet_group_name: String,
     #[doc="<p>A list of VPC subnet IDs for the cache subnet group.</p>"]
-    pub subnet_ids: SubnetIdentifierList,
+    pub subnet_ids: Vec<String>,
 }
 
 
@@ -2582,15 +2564,15 @@ pub struct CreateReplicationGroupMessage {
     #[doc="<p> <b>Reserved parameter.</b> The password used to access a password protected server.</p> <p>Password constraints:</p> <ul> <li> <p>Must be only printable ASCII characters.</p> </li> <li> <p>Must be at least 16 characters and no more than 128 characters in length.</p> </li> <li> <p>Cannot contain any of the following characters: '/', '\"', or \"@\". </p> </li> </ul> <p>For more information, see <a href=\"http://redis.io/commands/AUTH\">AUTH password</a> at Redis.</p>"]
     pub auth_token: Option<String>,
     #[doc="<p>This parameter is currently disabled.</p>"]
-    pub auto_minor_version_upgrade: Option<BooleanOptional>,
+    pub auto_minor_version_upgrade: Option<bool>,
     #[doc="<p>Specifies whether a read-only replica is automatically promoted to read/write primary if the existing primary fails.</p> <p>If <code>true</code>, Multi-AZ is enabled for this replication group. If <code>false</code>, Multi-AZ is disabled for this replication group.</p> <p> <code>AutomaticFailoverEnabled</code> must be enabled for Redis (cluster mode enabled) replication groups.</p> <p>Default: false</p> <note> <p>ElastiCache Multi-AZ replication groups is not supported on:</p> <ul> <li> <p>Redis versions earlier than 2.8.6.</p> </li> <li> <p>Redis (cluster mode disabled): T1 and T2 node types.</p> <p>Redis (cluster mode enabled): T2 node types.</p> </li> </ul> </note>"]
-    pub automatic_failover_enabled: Option<BooleanOptional>,
+    pub automatic_failover_enabled: Option<bool>,
     #[doc="<p>The compute and memory capacity of the nodes in the node group (shard).</p> <p>Valid node types are as follows:</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code>, <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code>, <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> </li> <li> <p>Previous generation: <code>cache.t1.micro</code>, <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized: <code>cache.c1.xlarge</code> </p> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> <li> <p>Previous generation: <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Notes:</b> </p> <ul> <li> <p>All T2 instances are created in an Amazon Virtual Private Cloud (Amazon VPC).</p> </li> <li> <p>Redis backup/restore is not supported for Redis (cluster mode disabled) T1 and T2 instances. Backup/restore is supported on Redis (cluster mode enabled) T2 instances.</p> </li> <li> <p>Redis Append-only files (AOF) functionality is not supported for T1 or T2 instances.</p> </li> </ul> <p>For a complete listing of node types and specifications, see <a href=\"http://aws.amazon.com/elasticache/details\">Amazon ElastiCache Product Features and Details</a> and either <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheParameterGroups.Memcached.html#ParameterGroups.Memcached.NodeSpecific\">Cache Node Type-Specific Parameters for Memcached</a> or <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheParameterGroups.Redis.html#ParameterGroups.Redis.NodeSpecific\">Cache Node Type-Specific Parameters for Redis</a>.</p>"]
     pub cache_node_type: Option<String>,
     #[doc="<p>The name of the parameter group to associate with this replication group. If this argument is omitted, the default cache parameter group for the specified engine is used.</p> <p>If you are running Redis version 3.2.4 or later, only one node group (shard), and want to use a default parameter group, we recommend that you specify the parameter group by name. </p> <ul> <li> <p>To create a Redis (cluster mode disabled) replication group, use <code>CacheParameterGroupName=default.redis3.2</code>.</p> </li> <li> <p>To create a Redis (cluster mode enabled) replication group, use <code>CacheParameterGroupName=default.redis3.2.cluster.on</code>.</p> </li> </ul>"]
     pub cache_parameter_group_name: Option<String>,
     #[doc="<p>A list of cache security group names to associate with this replication group.</p>"]
-    pub cache_security_group_names: Option<CacheSecurityGroupNameList>,
+    pub cache_security_group_names: Option<Vec<String>>,
     #[doc="<p>The name of the cache subnet group to be used for the replication group.</p> <important> <p>If you're going to launch your cluster in an Amazon VPC, you need to create a subnet group before you start creating a cluster. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/SubnetGroups.html\">Subnets and Subnet Groups</a>.</p> </important>"]
     pub cache_subnet_group_name: Option<String>,
     #[doc="<p>The name of the cache engine to be used for the cache clusters in this replication group.</p>"]
@@ -2598,39 +2580,39 @@ pub struct CreateReplicationGroupMessage {
     #[doc="<p>The version number of the cache engine to be used for the cache clusters in this replication group. To view the supported cache engine versions, use the <code>DescribeCacheEngineVersions</code> operation.</p> <p> <b>Important:</b> You can upgrade to a newer engine version (see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/SelectEngine.html#VersionManagement\">Selecting a Cache Engine and Version</a>) in the <i>ElastiCache User Guide</i>, but you cannot downgrade to an earlier engine version. If you want to use an earlier engine version, you must delete the existing cache cluster or replication group and create it anew with the earlier engine version. </p>"]
     pub engine_version: Option<String>,
     #[doc="<p>A list of node group (shard) configuration options. Each node group (shard) configuration has the following: Slots, PrimaryAvailabilityZone, ReplicaAvailabilityZones, ReplicaCount.</p> <p>If you're creating a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group, you can use this parameter to individually configure each node group (shard), or you can omit this parameter.</p>"]
-    pub node_group_configuration: Option<NodeGroupConfigurationList>,
+    pub node_group_configuration: Option<Vec<NodeGroupConfiguration>>,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (SNS) topic to which notifications are sent.</p> <note> <p>The Amazon SNS topic owner must be the same as the cache cluster owner.</p> </note>"]
     pub notification_topic_arn: Option<String>,
     #[doc="<p>The number of clusters this replication group initially has.</p> <p>This parameter is not used if there is more than one node group (shard). You should use <code>ReplicasPerNodeGroup</code> instead.</p> <p>If <code>AutomaticFailoverEnabled</code> is <code>true</code>, the value of this parameter must be at least 2. If <code>AutomaticFailoverEnabled</code> is <code>false</code> you can omit this parameter (it will default to 1), or you can explicitly set it to a value between 2 and 6.</p> <p>The maximum permitted value for <code>NumCacheClusters</code> is 6 (primary plus 5 replicas).</p>"]
-    pub num_cache_clusters: Option<IntegerOptional>,
+    pub num_cache_clusters: Option<i64>,
     #[doc="<p>An optional parameter that specifies the number of node groups (shards) for this Redis (cluster mode enabled) replication group. For Redis (cluster mode disabled) either omit this parameter or set it to 1.</p> <p>Default: 1</p>"]
-    pub num_node_groups: Option<IntegerOptional>,
+    pub num_node_groups: Option<i64>,
     #[doc="<p>The port number on which each member of the replication group accepts connections.</p>"]
-    pub port: Option<IntegerOptional>,
+    pub port: Option<i64>,
     #[doc="<p>A list of EC2 Availability Zones in which the replication group's cache clusters are created. The order of the Availability Zones in the list is the order in which clusters are allocated. The primary cluster is created in the first AZ in the list.</p> <p>This parameter is not used if there is more than one node group (shard). You should use <code>NodeGroupConfiguration</code> instead.</p> <note> <p>If you are creating your replication group in an Amazon VPC (recommended), you can only locate cache clusters in Availability Zones associated with the subnets in the selected subnet group.</p> <p>The number of Availability Zones listed must equal the value of <code>NumCacheClusters</code>.</p> </note> <p>Default: system chosen Availability Zones.</p>"]
-    pub preferred_cache_cluster_a_zs: Option<AvailabilityZonesList>,
+    pub preferred_cache_cluster_a_zs: Option<Vec<String>>,
     #[doc="<p>Specifies the weekly time range during which maintenance on the cache cluster is performed. It is specified as a range in the format ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window is a 60 minute period. Valid values for <code>ddd</code> are:</p> <p>Specifies the weekly time range during which maintenance on the cluster is performed. It is specified as a range in the format ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window is a 60 minute period.</p> <p>Valid values for <code>ddd</code> are:</p> <ul> <li> <p> <code>sun</code> </p> </li> <li> <p> <code>mon</code> </p> </li> <li> <p> <code>tue</code> </p> </li> <li> <p> <code>wed</code> </p> </li> <li> <p> <code>thu</code> </p> </li> <li> <p> <code>fri</code> </p> </li> <li> <p> <code>sat</code> </p> </li> </ul> <p>Example: <code>sun:23:00-mon:01:30</code> </p>"]
     pub preferred_maintenance_window: Option<String>,
     #[doc="<p>The identifier of the cache cluster that serves as the primary for this replication group. This cache cluster must already exist and have a status of <code>available</code>.</p> <p>This parameter is not required if <code>NumCacheClusters</code>, <code>NumNodeGroups</code>, or <code>ReplicasPerNodeGroup</code> is specified.</p>"]
     pub primary_cluster_id: Option<String>,
     #[doc="<p>An optional parameter that specifies the number of replica nodes in each node group (shard). Valid values are 0 to 5.</p>"]
-    pub replicas_per_node_group: Option<IntegerOptional>,
+    pub replicas_per_node_group: Option<i64>,
     #[doc="<p>A user-created description for the replication group.</p>"]
     pub replication_group_description: String,
     #[doc="<p>The replication group identifier. This parameter is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>A name must contain from 1 to 20 alphanumeric characters or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>A name cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>"]
     pub replication_group_id: String,
     #[doc="<p>One or more Amazon VPC security groups associated with this replication group.</p> <p>Use this parameter only when you are creating a replication group in an Amazon Virtual Private Cloud (Amazon VPC).</p>"]
-    pub security_group_ids: Option<SecurityGroupIdsList>,
+    pub security_group_ids: Option<Vec<String>>,
     #[doc="<p>A list of Amazon Resource Names (ARN) that uniquely identify the Redis RDB snapshot files stored in Amazon S3. The snapshot files are used to populate the new replication group. The Amazon S3 object name in the ARN cannot contain any commas. The new replication group will have the number of node groups (console: shards) specified by the parameter <i>NumNodeGroups</i> or the number of node groups configured by <i>NodeGroupConfiguration</i> regardless of the number of ARNs specified here.</p> <note> <p>This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p> </note> <p>Example of an Amazon S3 ARN: <code>arn:aws:s3:::my_bucket/snapshot1.rdb</code> </p>"]
-    pub snapshot_arns: Option<SnapshotArnsList>,
+    pub snapshot_arns: Option<Vec<String>>,
     #[doc="<p>The name of a snapshot from which to restore data into the new replication group. The snapshot status changes to <code>restoring</code> while the new replication group is being created.</p> <note> <p>This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p> </note>"]
     pub snapshot_name: Option<String>,
     #[doc="<p>The number of days for which ElastiCache retains automatic snapshots before deleting them. For example, if you set <code>SnapshotRetentionLimit</code> to 5, a snapshot that was taken today is retained for 5 days before being deleted.</p> <note> <p>This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p> </note> <p>Default: 0 (i.e., automatic backups are disabled for this cache cluster).</p>"]
-    pub snapshot_retention_limit: Option<IntegerOptional>,
+    pub snapshot_retention_limit: Option<i64>,
     #[doc="<p>The daily time range (in UTC) during which ElastiCache begins taking a daily snapshot of your node group (shard).</p> <p>Example: <code>05:00-09:00</code> </p> <p>If you do not specify this parameter, ElastiCache automatically chooses an appropriate time range.</p> <note> <p>This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p> </note>"]
     pub snapshot_window: Option<String>,
     #[doc="<p>A list of cost allocation tags to be added to this resource. A tag is a key-value pair. A tag key must be accompanied by a tag value.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 
@@ -3030,7 +3012,7 @@ pub struct DeleteReplicationGroupMessage {
     #[doc="<p>The identifier for the cluster to be deleted. This parameter is not case sensitive.</p>"]
     pub replication_group_id: String,
     #[doc="<p>If set to <code>true</code>, all of the read replicas are deleted, but the primary node is retained.</p>"]
-    pub retain_primary_cluster: Option<BooleanOptional>,
+    pub retain_primary_cluster: Option<bool>,
 }
 
 
@@ -3182,11 +3164,11 @@ pub struct DescribeCacheClustersMessage {
     #[doc="<p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>"]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: minimum 20; maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>An optional flag that can be included in the <code>DescribeCacheCluster</code> request to show only nodes (API/CLI: clusters) that are not members of a replication group. In practice, this mean Memcached and single node Redis clusters.</p>"]
-    pub show_cache_clusters_not_in_replication_groups: Option<BooleanOptional>,
+    pub show_cache_clusters_not_in_replication_groups: Option<bool>,
     #[doc="<p>An optional flag that can be included in the <code>DescribeCacheCluster</code> request to retrieve information about the individual cache nodes.</p>"]
-    pub show_cache_node_info: Option<BooleanOptional>,
+    pub show_cache_node_info: Option<bool>,
 }
 
 
@@ -3227,7 +3209,7 @@ pub struct DescribeCacheEngineVersionsMessage {
     #[doc="<p>The name of a specific cache parameter group family to return details for.</p> <p>Valid values are: <code>memcached1.4</code> | <code>redis2.6</code> | <code>redis2.8</code> | <code>redis3.2</code> </p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul>"]
     pub cache_parameter_group_family: Option<String>,
     #[doc="<p>If <code>true</code>, specifies that only the default version of the specified engine or engine and major version combination is to be returned.</p>"]
-    pub default_only: Option<Boolean>,
+    pub default_only: Option<bool>,
     #[doc="<p>The cache engine to return. Valid values: <code>memcached</code> | <code>redis</code> </p>"]
     pub engine: Option<String>,
     #[doc="<p>The cache engine version to return.</p> <p>Example: <code>1.4.14</code> </p>"]
@@ -3235,7 +3217,7 @@ pub struct DescribeCacheEngineVersionsMessage {
     #[doc="<p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>"]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: minimum 20; maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
 }
 
 
@@ -3281,7 +3263,7 @@ pub struct DescribeCacheParameterGroupsMessage {
     #[doc="<p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>"]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: minimum 20; maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
 }
 
 
@@ -3317,7 +3299,7 @@ pub struct DescribeCacheParametersMessage {
     #[doc="<p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>"]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: minimum 20; maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>The parameter types to return.</p> <p>Valid values: <code>user</code> | <code>system</code> | <code>engine-default</code> </p>"]
     pub source: Option<String>,
 }
@@ -3356,7 +3338,7 @@ pub struct DescribeCacheSecurityGroupsMessage {
     #[doc="<p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>"]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: minimum 20; maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
 }
 
 
@@ -3392,7 +3374,7 @@ pub struct DescribeCacheSubnetGroupsMessage {
     #[doc="<p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>"]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: minimum 20; maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
 }
 
 
@@ -3428,7 +3410,7 @@ pub struct DescribeEngineDefaultParametersMessage {
     #[doc="<p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>"]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: minimum 20; maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
 }
 
 
@@ -3507,19 +3489,19 @@ impl DescribeEngineDefaultParametersResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeEventsMessage {
     #[doc="<p>The number of minutes worth of events to retrieve.</p>"]
-    pub duration: Option<IntegerOptional>,
+    pub duration: Option<i64>,
     #[doc="<p>The end of the time interval for which to retrieve events, specified in ISO 8601 format.</p> <p> <b>Example:</b> 2017-03-30T07:03:49.555Z</p>"]
-    pub end_time: Option<TStamp>,
+    pub end_time: Option<String>,
     #[doc="<p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>"]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: minimum 20; maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>The identifier of the event source for which events are returned. If not specified, all sources are included in the response.</p>"]
     pub source_identifier: Option<String>,
     #[doc="<p>The event source to retrieve events for. If no value is specified, all events are returned.</p>"]
-    pub source_type: Option<SourceType>,
+    pub source_type: Option<String>,
     #[doc="<p>The beginning of the time interval to retrieve events for, specified in ISO 8601 format.</p> <p> <b>Example:</b> 2017-03-30T07:03:49.555Z</p>"]
-    pub start_time: Option<TStamp>,
+    pub start_time: Option<String>,
 }
 
 
@@ -3565,7 +3547,7 @@ pub struct DescribeReplicationGroupsMessage {
     #[doc="<p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>"]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: minimum 20; maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>The identifier for the replication group to be described. This parameter is not case sensitive.</p> <p>If you do not specify this parameter, information about all replication groups is returned.</p>"]
     pub replication_group_id: Option<String>,
 }
@@ -3604,7 +3586,7 @@ pub struct DescribeReservedCacheNodesMessage {
     #[doc="<p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>"]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: minimum 20; maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>The offering type filter value. Use this parameter to show only the available offerings matching the specified offering type.</p> <p>Valid values: <code>\"Light Utilization\"|\"Medium Utilization\"|\"Heavy Utilization\"</code> </p>"]
     pub offering_type: Option<String>,
     #[doc="<p>The product description filter value. Use this parameter to show only those reservations matching the specified product description.</p>"]
@@ -3666,7 +3648,7 @@ pub struct DescribeReservedCacheNodesOfferingsMessage {
     #[doc="<p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>"]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: minimum 20; maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>The offering type filter value. Use this parameter to show only the available offerings matching the specified offering type.</p> <p>Valid Values: <code>\"Light Utilization\"|\"Medium Utilization\"|\"Heavy Utilization\"</code> </p>"]
     pub offering_type: Option<String>,
     #[doc="<p>The product description filter value. Use this parameter to show only the available offerings matching the specified product description.</p>"]
@@ -3720,7 +3702,7 @@ pub struct DescribeSnapshotsListMessage {
     #[doc="<p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>"]
     pub marker: Option<String>,
     #[doc="<p>A list of snapshots. Each item in the list contains detailed information about one snapshot.</p>"]
-    pub snapshots: Option<SnapshotList>,
+    pub snapshots: Option<Vec<Snapshot>>,
 }
 
 struct DescribeSnapshotsListMessageDeserializer;
@@ -3778,11 +3760,11 @@ pub struct DescribeSnapshotsMessage {
     #[doc="<p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>"]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 50</p> <p>Constraints: minimum 20; maximum 50.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>A user-supplied replication group identifier. If this parameter is specified, only snapshots associated with that specific replication group are described.</p>"]
     pub replication_group_id: Option<String>,
     #[doc="<p>A Boolean value which if true, the node group (shard) configuration is included in the snapshot description.</p>"]
-    pub show_node_group_config: Option<BooleanOptional>,
+    pub show_node_group_config: Option<bool>,
     #[doc="<p>A user-supplied name of the snapshot. If this parameter is specified, only this snapshot are described.</p>"]
     pub snapshot_name: Option<String>,
     #[doc="<p>If set to <code>system</code>, the output shows snapshots that were automatically created by ElastiCache. If set to <code>user</code> the output shows snapshots that were manually created. If omitted, the output shows both automatically and manually created snapshots.</p>"]
@@ -3826,13 +3808,12 @@ impl DescribeSnapshotsMessageSerializer {
     }
 }
 
-pub type Double = f64;
 struct DoubleDeserializer;
 impl DoubleDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Double, XmlParseError> {
+                                       -> Result<f64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = f64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -3904,13 +3885,12 @@ impl EC2SecurityGroupDeserializer {
 
     }
 }
-pub type EC2SecurityGroupList = Vec<EC2SecurityGroup>;
 struct EC2SecurityGroupListDeserializer;
 impl EC2SecurityGroupListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EC2SecurityGroupList, XmlParseError> {
+                                       -> Result<Vec<EC2SecurityGroup>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -3953,7 +3933,7 @@ pub struct Endpoint {
     #[doc="<p>The DNS hostname of the cache node.</p>"]
     pub address: Option<String>,
     #[doc="<p>The port number that the cache engine is listening on.</p>"]
-    pub port: Option<Integer>,
+    pub port: Option<i64>,
 }
 
 struct EndpointDeserializer;
@@ -4005,13 +3985,13 @@ impl EndpointDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct EngineDefaults {
     #[doc="<p>A list of parameters specific to a particular cache node type. Each element in the list contains detailed information about one parameter.</p>"]
-    pub cache_node_type_specific_parameters: Option<CacheNodeTypeSpecificParametersList>,
+    pub cache_node_type_specific_parameters: Option<Vec<CacheNodeTypeSpecificParameter>>,
     #[doc="<p>Specifies the name of the cache parameter group family to which the engine default parameters apply.</p> <p>Valid values are: <code>memcached1.4</code> | <code>redis2.6</code> | <code>redis2.8</code> | <code>redis3.2</code> </p>"]
     pub cache_parameter_group_family: Option<String>,
     #[doc="<p>Provides an identifier to allow retrieval of paginated results.</p>"]
     pub marker: Option<String>,
     #[doc="<p>Contains a list of engine default parameters.</p>"]
-    pub parameters: Option<ParametersList>,
+    pub parameters: Option<Vec<Parameter>>,
 }
 
 struct EngineDefaultsDeserializer;
@@ -4073,13 +4053,13 @@ impl EngineDefaultsDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct Event {
     #[doc="<p>The date and time when the event occurred.</p>"]
-    pub date: Option<TStamp>,
+    pub date: Option<String>,
     #[doc="<p>The text of the event.</p>"]
     pub message: Option<String>,
     #[doc="<p>The identifier for the source of the event. For example, if the event occurred at the cache cluster level, the identifier would be the name of the cache cluster.</p>"]
     pub source_identifier: Option<String>,
     #[doc="<p>Specifies the origin of this event - a cache cluster, a parameter group, a security group, etc.</p>"]
-    pub source_type: Option<SourceType>,
+    pub source_type: Option<String>,
 }
 
 struct EventDeserializer;
@@ -4137,13 +4117,12 @@ impl EventDeserializer {
 
     }
 }
-pub type EventList = Vec<Event>;
 struct EventListDeserializer;
 impl EventListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EventList, XmlParseError> {
+                                       -> Result<Vec<Event>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4183,7 +4162,7 @@ impl EventListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct EventsMessage {
     #[doc="<p>A list of events. Each element in the list contains detailed information about one event.</p>"]
-    pub events: Option<EventList>,
+    pub events: Option<Vec<Event>>,
     #[doc="<p>Provides an identifier to allow retrieval of paginated results.</p>"]
     pub marker: Option<String>,
 }
@@ -4234,13 +4213,12 @@ impl EventsMessageDeserializer {
 
     }
 }
-pub type Integer = i64;
 struct IntegerDeserializer;
 impl IntegerDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Integer, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -4249,13 +4227,12 @@ impl IntegerDeserializer {
 
     }
 }
-pub type IntegerOptional = i64;
 struct IntegerOptionalDeserializer;
 impl IntegerOptionalDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<IntegerOptional, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -4264,12 +4241,11 @@ impl IntegerOptionalDeserializer {
 
     }
 }
-pub type KeyList = Vec<String>;
 
 /// Serialize `KeyList` contents to a `SignedRequest`.
 struct KeyListSerializer;
 impl KeyListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &KeyList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -4332,37 +4308,37 @@ impl ListTagsForResourceMessageSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ModifyCacheClusterMessage {
     #[doc="<p>Specifies whether the new nodes in this Memcached cache cluster are all created in a single Availability Zone or created across multiple Availability Zones.</p> <p>Valid values: <code>single-az</code> | <code>cross-az</code>.</p> <p>This option is only supported for Memcached cache clusters.</p> <note> <p>You cannot specify <code>single-az</code> if the Memcached cache cluster already has cache nodes in different Availability Zones. If <code>cross-az</code> is specified, existing Memcached nodes remain in their current Availability Zone.</p> <p>Only newly created nodes are located in different Availability Zones. For instructions on how to move existing Memcached nodes to different Availability Zones, see the <b>Availability Zone Considerations</b> section of <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheNode.Memcached.html\">Cache Node Considerations for Memcached</a>.</p> </note>"]
-    pub az_mode: Option<AZMode>,
+    pub az_mode: Option<String>,
     #[doc="<p>If <code>true</code>, this parameter causes the modifications in this request and any pending modifications to be applied, asynchronously and as soon as possible, regardless of the <code>PreferredMaintenanceWindow</code> setting for the cache cluster.</p> <p>If <code>false</code>, changes to the cache cluster are applied on the next maintenance reboot, or the next failure reboot, whichever occurs first.</p> <important> <p>If you perform a <code>ModifyCacheCluster</code> before a pending modification is applied, the pending modification is replaced by the newer modification.</p> </important> <p>Valid values: <code>true</code> | <code>false</code> </p> <p>Default: <code>false</code> </p>"]
-    pub apply_immediately: Option<Boolean>,
+    pub apply_immediately: Option<bool>,
     #[doc="<p>This parameter is currently disabled.</p>"]
-    pub auto_minor_version_upgrade: Option<BooleanOptional>,
+    pub auto_minor_version_upgrade: Option<bool>,
     #[doc="<p>The cache cluster identifier. This value is stored as a lowercase string.</p>"]
     pub cache_cluster_id: String,
     #[doc="<p>A list of cache node IDs to be removed. A node ID is a numeric identifier (0001, 0002, etc.). This parameter is only valid when <code>NumCacheNodes</code> is less than the existing number of cache nodes. The number of cache node IDs supplied in this parameter must match the difference between the existing number of cache nodes in the cluster or pending cache nodes, whichever is greater, and the value of <code>NumCacheNodes</code> in the request.</p> <p>For example: If you have 3 active cache nodes, 7 pending cache nodes, and the number of cache nodes in this <code>ModifyCacheCluser</code> call is 5, you must list 2 (7 - 5) cache node IDs to remove.</p>"]
-    pub cache_node_ids_to_remove: Option<CacheNodeIdsList>,
+    pub cache_node_ids_to_remove: Option<Vec<String>>,
     #[doc="<p>A valid cache node type that you want to scale this cache cluster up to.</p>"]
     pub cache_node_type: Option<String>,
     #[doc="<p>The name of the cache parameter group to apply to this cache cluster. This change is asynchronously applied as soon as possible for parameters when the <code>ApplyImmediately</code> parameter is specified as <code>true</code> for this request.</p>"]
     pub cache_parameter_group_name: Option<String>,
     #[doc="<p>A list of cache security group names to authorize on this cache cluster. This change is asynchronously applied as soon as possible.</p> <p>You can use this parameter only with clusters that are created outside of an Amazon Virtual Private Cloud (Amazon VPC).</p> <p>Constraints: Must contain no more than 255 alphanumeric characters. Must not be \"Default\".</p>"]
-    pub cache_security_group_names: Option<CacheSecurityGroupNameList>,
+    pub cache_security_group_names: Option<Vec<String>>,
     #[doc="<p>The upgraded version of the cache engine to be run on the cache nodes.</p> <p> <b>Important:</b> You can upgrade to a newer engine version (see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/SelectEngine.html#VersionManagement\">Selecting a Cache Engine and Version</a>), but you cannot downgrade to an earlier engine version. If you want to use an earlier engine version, you must delete the existing cache cluster and create it anew with the earlier engine version. </p>"]
     pub engine_version: Option<String>,
     #[doc="<p>The list of Availability Zones where the new Memcached cache nodes are created.</p> <p>This parameter is only valid when <code>NumCacheNodes</code> in the request is greater than the sum of the number of active cache nodes and the number of cache nodes pending creation (which may be zero). The number of Availability Zones supplied in this list must match the cache nodes being added in this request.</p> <p>This option is only supported on Memcached clusters.</p> <p>Scenarios:</p> <ul> <li> <p> <b>Scenario 1:</b> You have 3 active nodes and wish to add 2 nodes. Specify <code>NumCacheNodes=5</code> (3 + 2) and optionally specify two Availability Zones for the two new nodes.</p> </li> <li> <p> <b>Scenario 2:</b> You have 3 active nodes and 2 nodes pending creation (from the scenario 1 call) and want to add 1 more node. Specify <code>NumCacheNodes=6</code> ((3 + 2) + 1) and optionally specify an Availability Zone for the new node.</p> </li> <li> <p> <b>Scenario 3:</b> You want to cancel all pending operations. Specify <code>NumCacheNodes=3</code> to cancel all pending operations.</p> </li> </ul> <p>The Availability Zone placement of nodes pending creation cannot be modified. If you wish to cancel any nodes pending creation, add 0 nodes by setting <code>NumCacheNodes</code> to the number of current nodes.</p> <p>If <code>cross-az</code> is specified, existing Memcached nodes remain in their current Availability Zone. Only newly created nodes can be located in different Availability Zones. For guidance on how to move existing Memcached nodes to different Availability Zones, see the <b>Availability Zone Considerations</b> section of <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheNode.Memcached.html\">Cache Node Considerations for Memcached</a>.</p> <p> <b>Impact of new add/remove requests upon pending requests</b> </p> <ul> <li> <p>Scenario-1</p> <ul> <li> <p>Pending Action: Delete</p> </li> <li> <p>New Request: Delete</p> </li> <li> <p>Result: The new delete, pending or immediate, replaces the pending delete.</p> </li> </ul> </li> <li> <p>Scenario-2</p> <ul> <li> <p>Pending Action: Delete</p> </li> <li> <p>New Request: Create</p> </li> <li> <p>Result: The new create, pending or immediate, replaces the pending delete.</p> </li> </ul> </li> <li> <p>Scenario-3</p> <ul> <li> <p>Pending Action: Create</p> </li> <li> <p>New Request: Delete</p> </li> <li> <p>Result: The new delete, pending or immediate, replaces the pending create.</p> </li> </ul> </li> <li> <p>Scenario-4</p> <ul> <li> <p>Pending Action: Create</p> </li> <li> <p>New Request: Create</p> </li> <li> <p>Result: The new create is added to the pending create.</p> <important> <p> <b>Important:</b> If the new create request is <b>Apply Immediately - Yes</b>, all creates are performed immediately. If the new create request is <b>Apply Immediately - No</b>, all creates are pending.</p> </important> </li> </ul> </li> </ul>"]
-    pub new_availability_zones: Option<PreferredAvailabilityZoneList>,
+    pub new_availability_zones: Option<Vec<String>>,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon SNS topic to which notifications are sent.</p> <note> <p>The Amazon SNS topic owner must be same as the cache cluster owner.</p> </note>"]
     pub notification_topic_arn: Option<String>,
     #[doc="<p>The status of the Amazon SNS notification topic. Notifications are sent only if the status is <code>active</code>.</p> <p>Valid values: <code>active</code> | <code>inactive</code> </p>"]
     pub notification_topic_status: Option<String>,
     #[doc="<p>The number of cache nodes that the cache cluster should have. If the value for <code>NumCacheNodes</code> is greater than the sum of the number of current cache nodes and the number of cache nodes pending creation (which may be zero), more nodes are added. If the value is less than the number of existing cache nodes, nodes are removed. If the value is equal to the number of current cache nodes, any pending add or remove requests are canceled.</p> <p>If you are removing cache nodes, you must use the <code>CacheNodeIdsToRemove</code> parameter to provide the IDs of the specific cache nodes to remove.</p> <p>For clusters running Redis, this value must be 1. For clusters running Memcached, this value must be between 1 and 20.</p> <note> <p>Adding or removing Memcached cache nodes can be applied immediately or as a pending operation (see <code>ApplyImmediately</code>).</p> <p>A pending operation to modify the number of cache nodes in a cluster during its maintenance window, whether by adding or removing nodes in accordance with the scale out architecture, is not queued. The customer's latest request to add or remove nodes to the cluster overrides any previous pending operations to modify the number of cache nodes in the cluster. For example, a request to remove 2 nodes would override a previous pending operation to remove 3 nodes. Similarly, a request to add 2 nodes would override a previous pending operation to remove 3 nodes and vice versa. As Memcached cache nodes may now be provisioned in different Availability Zones with flexible cache node placement, a request to add nodes does not automatically override a previous pending operation to add nodes. The customer can modify the previous pending operation to add more nodes or explicitly cancel the pending request and retry the new request. To cancel pending operations to modify the number of cache nodes in a cluster, use the <code>ModifyCacheCluster</code> request and set <code>NumCacheNodes</code> equal to the number of cache nodes currently in the cache cluster.</p> </note>"]
-    pub num_cache_nodes: Option<IntegerOptional>,
+    pub num_cache_nodes: Option<i64>,
     #[doc="<p>Specifies the weekly time range during which maintenance on the cluster is performed. It is specified as a range in the format ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window is a 60 minute period.</p> <p>Valid values for <code>ddd</code> are:</p> <ul> <li> <p> <code>sun</code> </p> </li> <li> <p> <code>mon</code> </p> </li> <li> <p> <code>tue</code> </p> </li> <li> <p> <code>wed</code> </p> </li> <li> <p> <code>thu</code> </p> </li> <li> <p> <code>fri</code> </p> </li> <li> <p> <code>sat</code> </p> </li> </ul> <p>Example: <code>sun:23:00-mon:01:30</code> </p>"]
     pub preferred_maintenance_window: Option<String>,
     #[doc="<p>Specifies the VPC Security Groups associated with the cache cluster.</p> <p>This parameter can be used only with clusters that are created in an Amazon Virtual Private Cloud (Amazon VPC).</p>"]
-    pub security_group_ids: Option<SecurityGroupIdsList>,
+    pub security_group_ids: Option<Vec<String>>,
     #[doc="<p>The number of days for which ElastiCache retains automatic cache cluster snapshots before deleting them. For example, if you set <code>SnapshotRetentionLimit</code> to 5, a snapshot that was taken today is retained for 5 days before being deleted.</p> <note> <p>If the value of <code>SnapshotRetentionLimit</code> is set to zero (0), backups are turned off.</p> </note>"]
-    pub snapshot_retention_limit: Option<IntegerOptional>,
+    pub snapshot_retention_limit: Option<i64>,
     #[doc="<p>The daily time range (in UTC) during which ElastiCache begins taking a daily snapshot of your cache cluster. </p>"]
     pub snapshot_window: Option<String>,
 }
@@ -4505,7 +4481,7 @@ pub struct ModifyCacheParameterGroupMessage {
     #[doc="<p>The name of the cache parameter group to modify.</p>"]
     pub cache_parameter_group_name: String,
     #[doc="<p>An array of parameter names and values for the parameter update. You must supply at least one parameter name and value; subsequent arguments are optional. A maximum of 20 parameters may be modified per request.</p>"]
-    pub parameter_name_values: ParameterNameValueList,
+    pub parameter_name_values: Vec<ParameterNameValue>,
 }
 
 
@@ -4537,7 +4513,7 @@ pub struct ModifyCacheSubnetGroupMessage {
     #[doc="<p>The name for the cache subnet group. This value is stored as a lowercase string.</p> <p>Constraints: Must contain no more than 255 alphanumeric characters or hyphens.</p> <p>Example: <code>mysubnetgroup</code> </p>"]
     pub cache_subnet_group_name: String,
     #[doc="<p>The EC2 subnet IDs for the cache subnet group.</p>"]
-    pub subnet_ids: Option<SubnetIdentifierList>,
+    pub subnet_ids: Option<Vec<String>>,
 }
 
 
@@ -4617,17 +4593,17 @@ impl ModifyCacheSubnetGroupResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ModifyReplicationGroupMessage {
     #[doc="<p>If <code>true</code>, this parameter causes the modifications in this request and any pending modifications to be applied, asynchronously and as soon as possible, regardless of the <code>PreferredMaintenanceWindow</code> setting for the replication group.</p> <p>If <code>false</code>, changes to the nodes in the replication group are applied on the next maintenance reboot, or the next failure reboot, whichever occurs first.</p> <p>Valid values: <code>true</code> | <code>false</code> </p> <p>Default: <code>false</code> </p>"]
-    pub apply_immediately: Option<Boolean>,
+    pub apply_immediately: Option<bool>,
     #[doc="<p>This parameter is currently disabled.</p>"]
-    pub auto_minor_version_upgrade: Option<BooleanOptional>,
+    pub auto_minor_version_upgrade: Option<bool>,
     #[doc="<p>Determines whether a read replica is automatically promoted to read/write primary if the existing primary encounters a failure.</p> <p>Valid values: <code>true</code> | <code>false</code> </p> <note> <p>ElastiCache Multi-AZ replication groups are not supported on:</p> <ul> <li> <p>Redis versions earlier than 2.8.6.</p> </li> <li> <p>Redis (cluster mode disabled):T1 and T2 cache node types.</p> <p>Redis (cluster mode enabled): T1 node types.</p> </li> </ul> </note>"]
-    pub automatic_failover_enabled: Option<BooleanOptional>,
+    pub automatic_failover_enabled: Option<bool>,
     #[doc="<p>A valid cache node type that you want to scale this replication group to.</p>"]
     pub cache_node_type: Option<String>,
     #[doc="<p>The name of the cache parameter group to apply to all of the clusters in this replication group. This change is asynchronously applied as soon as possible for parameters when the <code>ApplyImmediately</code> parameter is specified as <code>true</code> for this request.</p>"]
     pub cache_parameter_group_name: Option<String>,
     #[doc="<p>A list of cache security group names to authorize for the clusters in this replication group. This change is asynchronously applied as soon as possible.</p> <p>This parameter can be used only with replication group containing cache clusters running outside of an Amazon Virtual Private Cloud (Amazon VPC).</p> <p>Constraints: Must contain no more than 255 alphanumeric characters. Must not be <code>Default</code>.</p>"]
-    pub cache_security_group_names: Option<CacheSecurityGroupNameList>,
+    pub cache_security_group_names: Option<Vec<String>>,
     #[doc="<p>The upgraded version of the cache engine to be run on the cache clusters in the replication group.</p> <p> <b>Important:</b> You can upgrade to a newer engine version (see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/SelectEngine.html#VersionManagement\">Selecting a Cache Engine and Version</a>), but you cannot downgrade to an earlier engine version. If you want to use an earlier engine version, you must delete the existing replication group and create it anew with the earlier engine version. </p>"]
     pub engine_version: Option<String>,
     #[doc="<p>The name of the Node Group (called shard in the console).</p>"]
@@ -4645,9 +4621,9 @@ pub struct ModifyReplicationGroupMessage {
     #[doc="<p>The identifier of the replication group to modify.</p>"]
     pub replication_group_id: String,
     #[doc="<p>Specifies the VPC Security Groups associated with the cache clusters in the replication group.</p> <p>This parameter can be used only with replication group containing cache clusters running in an Amazon Virtual Private Cloud (Amazon VPC).</p>"]
-    pub security_group_ids: Option<SecurityGroupIdsList>,
+    pub security_group_ids: Option<Vec<String>>,
     #[doc="<p>The number of days for which ElastiCache retains automatic node group (shard) snapshots before deleting them. For example, if you set <code>SnapshotRetentionLimit</code> to 5, a snapshot that was taken today is retained for 5 days before being deleted.</p> <p> <b>Important</b> If the value of SnapshotRetentionLimit is set to zero (0), backups are turned off.</p>"]
-    pub snapshot_retention_limit: Option<IntegerOptional>,
+    pub snapshot_retention_limit: Option<i64>,
     #[doc="<p>The daily time range (in UTC) during which ElastiCache begins taking a daily snapshot of the node group (shard) specified by <code>SnapshottingClusterId</code>.</p> <p>Example: <code>05:00-09:00</code> </p> <p>If you do not specify this parameter, ElastiCache automatically chooses an appropriate time range.</p>"]
     pub snapshot_window: Option<String>,
     #[doc="<p>The cache cluster ID that is used as the daily snapshot source for the replication group. This parameter cannot be set for Redis (cluster mode enabled) replication groups.</p>"]
@@ -4791,7 +4767,7 @@ pub struct NodeGroup {
     #[doc="<p>The identifier for the node group (shard). A Redis (cluster mode disabled) replication group contains only 1 node group; therefore, the node group ID is 0001. A Redis (cluster mode enabled) replication group contains 1 to 15 node groups numbered 0001 to 0015. </p>"]
     pub node_group_id: Option<String>,
     #[doc="<p>A list containing information about individual nodes within the node group (shard).</p>"]
-    pub node_group_members: Option<NodeGroupMemberList>,
+    pub node_group_members: Option<Vec<NodeGroupMember>>,
     #[doc="<p>The endpoint of the primary node in this node group (shard).</p>"]
     pub primary_endpoint: Option<Endpoint>,
     #[doc="<p>The keyspace for this node group (shard).</p>"]
@@ -4865,9 +4841,9 @@ pub struct NodeGroupConfiguration {
     #[doc="<p>The Availability Zone where the primary node of this node group (shard) is launched.</p>"]
     pub primary_availability_zone: Option<String>,
     #[doc="<p>A list of Availability Zones to be used for the read replicas. The number of Availability Zones in this list must match the value of <code>ReplicaCount</code> or <code>ReplicasPerNodeGroup</code> if not specified.</p>"]
-    pub replica_availability_zones: Option<AvailabilityZonesList>,
+    pub replica_availability_zones: Option<Vec<String>>,
     #[doc="<p>The number of read replica nodes in this node group (shard).</p>"]
-    pub replica_count: Option<IntegerOptional>,
+    pub replica_count: Option<i64>,
     #[doc="<p>A string that specifies the keyspace for a particular node group. Keyspaces range from 0 to 16,383. The string is in the format <code>startkey-endkey</code>.</p> <p>Example: <code>\"0-3999\"</code> </p>"]
     pub slots: Option<String>,
 }
@@ -4960,12 +4936,11 @@ impl NodeGroupConfigurationSerializer {
     }
 }
 
-pub type NodeGroupConfigurationList = Vec<NodeGroupConfiguration>;
 
 /// Serialize `NodeGroupConfigurationList` contents to a `SignedRequest`.
 struct NodeGroupConfigurationListSerializer;
 impl NodeGroupConfigurationListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &NodeGroupConfigurationList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<NodeGroupConfiguration>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             NodeGroupConfigurationSerializer::serialize(params, &key, obj);
@@ -4973,13 +4948,12 @@ impl NodeGroupConfigurationListSerializer {
     }
 }
 
-pub type NodeGroupList = Vec<NodeGroup>;
 struct NodeGroupListDeserializer;
 impl NodeGroupListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NodeGroupList, XmlParseError> {
+                                       -> Result<Vec<NodeGroup>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5090,13 +5064,12 @@ impl NodeGroupMemberDeserializer {
 
     }
 }
-pub type NodeGroupMemberList = Vec<NodeGroupMember>;
 struct NodeGroupMemberListDeserializer;
 impl NodeGroupMemberListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NodeGroupMemberList, XmlParseError> {
+                                       -> Result<Vec<NodeGroupMember>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5139,7 +5112,7 @@ pub struct NodeSnapshot {
     #[doc="<p>A unique identifier for the source cache cluster.</p>"]
     pub cache_cluster_id: Option<String>,
     #[doc="<p>The date and time when the cache node was created in the source cache cluster.</p>"]
-    pub cache_node_create_time: Option<TStamp>,
+    pub cache_node_create_time: Option<String>,
     #[doc="<p>The cache node identifier for the node in the source cache cluster.</p>"]
     pub cache_node_id: Option<String>,
     #[doc="<p>The size of the cache on the source cache node.</p>"]
@@ -5149,7 +5122,7 @@ pub struct NodeSnapshot {
     #[doc="<p>A unique identifier for the source node group (shard).</p>"]
     pub node_group_id: Option<String>,
     #[doc="<p>The date and time when the source node's metadata and cache data set was obtained for the snapshot.</p>"]
-    pub snapshot_create_time: Option<TStamp>,
+    pub snapshot_create_time: Option<String>,
 }
 
 struct NodeSnapshotDeserializer;
@@ -5222,13 +5195,12 @@ impl NodeSnapshotDeserializer {
 
     }
 }
-pub type NodeSnapshotList = Vec<NodeSnapshot>;
 struct NodeSnapshotListDeserializer;
 impl NodeSnapshotListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NodeSnapshotList, XmlParseError> {
+                                       -> Result<Vec<NodeSnapshot>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5265,13 +5237,12 @@ impl NodeSnapshotListDeserializer {
 
     }
 }
-pub type NodeTypeList = Vec<String>;
 struct NodeTypeListDeserializer;
 impl NodeTypeListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NodeTypeList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5368,13 +5339,13 @@ pub struct Parameter {
     #[doc="<p>The valid range of values for the parameter.</p>"]
     pub allowed_values: Option<String>,
     #[doc="<p>Indicates whether a change to the parameter is applied immediately or requires a reboot for the change to be applied. You can force a reboot or wait until the next maintenance window's reboot. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/Clusters.Rebooting.html\">Rebooting a Cluster</a>.</p>"]
-    pub change_type: Option<ChangeType>,
+    pub change_type: Option<String>,
     #[doc="<p>The valid data type for the parameter.</p>"]
     pub data_type: Option<String>,
     #[doc="<p>A description of the parameter.</p>"]
     pub description: Option<String>,
     #[doc="<p>Indicates whether (<code>true</code>) or not (<code>false</code>) the parameter can be modified. Some parameters have security or operational implications that prevent them from being changed.</p>"]
-    pub is_modifiable: Option<Boolean>,
+    pub is_modifiable: Option<bool>,
     #[doc="<p>The earliest cache engine version to which the parameter can apply.</p>"]
     pub minimum_engine_version: Option<String>,
     #[doc="<p>The name of the parameter.</p>"]
@@ -5491,12 +5462,11 @@ impl ParameterNameValueSerializer {
     }
 }
 
-pub type ParameterNameValueList = Vec<ParameterNameValue>;
 
 /// Serialize `ParameterNameValueList` contents to a `SignedRequest`.
 struct ParameterNameValueListSerializer;
 impl ParameterNameValueListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ParameterNameValueList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<ParameterNameValue>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             ParameterNameValueSerializer::serialize(params, &key, obj);
@@ -5504,13 +5474,12 @@ impl ParameterNameValueListSerializer {
     }
 }
 
-pub type ParametersList = Vec<Parameter>;
 struct ParametersListDeserializer;
 impl ParametersListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ParametersList, XmlParseError> {
+                                       -> Result<Vec<Parameter>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5546,13 +5515,12 @@ impl ParametersListDeserializer {
 
     }
 }
-pub type PendingAutomaticFailoverStatus = String;
 struct PendingAutomaticFailoverStatusDeserializer;
 impl PendingAutomaticFailoverStatusDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PendingAutomaticFailoverStatus, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5565,13 +5533,13 @@ impl PendingAutomaticFailoverStatusDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct PendingModifiedValues {
     #[doc="<p>A list of cache node IDs that are being removed (or will be removed) from the cache cluster. A node ID is a numeric identifier (0001, 0002, etc.).</p>"]
-    pub cache_node_ids_to_remove: Option<CacheNodeIdsList>,
+    pub cache_node_ids_to_remove: Option<Vec<String>>,
     #[doc="<p>The cache node type that this cache cluster or replication group is scaled to.</p>"]
     pub cache_node_type: Option<String>,
     #[doc="<p>The new cache engine version that the cache cluster runs.</p>"]
     pub engine_version: Option<String>,
     #[doc="<p>The new number of cache nodes for the cache cluster.</p> <p>For clusters running Redis, this value must be 1. For clusters running Memcached, this value must be between 1 and 20.</p>"]
-    pub num_cache_nodes: Option<IntegerOptional>,
+    pub num_cache_nodes: Option<i64>,
 }
 
 struct PendingModifiedValuesDeserializer;
@@ -5630,12 +5598,11 @@ impl PendingModifiedValuesDeserializer {
 
     }
 }
-pub type PreferredAvailabilityZoneList = Vec<String>;
 
 /// Serialize `PreferredAvailabilityZoneList` contents to a `SignedRequest`.
 struct PreferredAvailabilityZoneListSerializer;
 impl PreferredAvailabilityZoneListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &PreferredAvailabilityZoneList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -5647,7 +5614,7 @@ impl PreferredAvailabilityZoneListSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct PurchaseReservedCacheNodesOfferingMessage {
     #[doc="<p>The number of cache node instances to reserve.</p> <p>Default: <code>1</code> </p>"]
-    pub cache_node_count: Option<IntegerOptional>,
+    pub cache_node_count: Option<i64>,
     #[doc="<p>A customer-specified identifier to track this reservation.</p> <note> <p>The Reserved Cache Node ID is an unique customer-specified identifier to track this reservation. If this parameter is not specified, ElastiCache automatically generates an identifier for the reservation.</p> </note> <p>Example: myreservationID</p>"]
     pub reserved_cache_node_id: Option<String>,
     #[doc="<p>The ID of the reserved cache node offering to purchase.</p> <p>Example: <code>438012d3-4052-4cc7-b2e3-8d3372e0e706</code> </p>"]
@@ -5735,7 +5702,7 @@ pub struct RebootCacheClusterMessage {
     #[doc="<p>The cache cluster identifier. This parameter is stored as a lowercase string.</p>"]
     pub cache_cluster_id: String,
     #[doc="<p>A list of cache node IDs to reboot. A node ID is a numeric identifier (0001, 0002, etc.). To reboot an entire cache cluster, specify all of the cache node IDs.</p>"]
-    pub cache_node_ids_to_reboot: CacheNodeIdsList,
+    pub cache_node_ids_to_reboot: Vec<String>,
 }
 
 
@@ -5809,7 +5776,7 @@ impl RebootCacheClusterResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct RecurringCharge {
     #[doc="<p>The monetary amount of the recurring charge.</p>"]
-    pub recurring_charge_amount: Option<Double>,
+    pub recurring_charge_amount: Option<f64>,
     #[doc="<p>The frequency of the recurring charge.</p>"]
     pub recurring_charge_frequency: Option<String>,
 }
@@ -5862,13 +5829,12 @@ impl RecurringChargeDeserializer {
 
     }
 }
-pub type RecurringChargeList = Vec<RecurringCharge>;
 struct RecurringChargeListDeserializer;
 impl RecurringChargeListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<RecurringChargeList, XmlParseError> {
+                                       -> Result<Vec<RecurringCharge>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5911,7 +5877,7 @@ pub struct RemoveTagsFromResourceMessage {
     #[doc="<p>The Amazon Resource Name (ARN) of the resource from which you want the tags removed, for example <code>arn:aws:elasticache:us-west-2:0123456789:cluster:myCluster</code> or <code>arn:aws:elasticache:us-west-2:0123456789:snapshot:mySnapshot</code>.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>.</p>"]
     pub resource_name: String,
     #[doc="<p>A list of <code>TagKeys</code> identifying the tags you want removed from the named resource.</p>"]
-    pub tag_keys: KeyList,
+    pub tag_keys: Vec<String>,
 }
 
 
@@ -5934,25 +5900,25 @@ impl RemoveTagsFromResourceMessageSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ReplicationGroup {
     #[doc="<p>Indicates the status of Multi-AZ for this replication group.</p> <note> <p>ElastiCache Multi-AZ replication groups are not supported on:</p> <ul> <li> <p>Redis versions earlier than 2.8.6.</p> </li> <li> <p>Redis (cluster mode disabled):T1 and T2 cache node types.</p> <p>Redis (cluster mode enabled): T1 node types.</p> </li> </ul> </note>"]
-    pub automatic_failover: Option<AutomaticFailoverStatus>,
+    pub automatic_failover: Option<String>,
     #[doc="<p>The name of the compute and memory capacity node type for each node in the replication group.</p>"]
     pub cache_node_type: Option<String>,
     #[doc="<p>A flag indicating whether or not this replication group is cluster enabled; i.e., whether its data can be partitioned across multiple shards (API/CLI: node groups).</p> <p>Valid values: <code>true</code> | <code>false</code> </p>"]
-    pub cluster_enabled: Option<BooleanOptional>,
+    pub cluster_enabled: Option<bool>,
     #[doc="<p>The configuration endpoint for this replicaiton group. Use the configuration endpoint to connect to this replication group.</p>"]
     pub configuration_endpoint: Option<Endpoint>,
     #[doc="<p>The description of the replication group.</p>"]
     pub description: Option<String>,
     #[doc="<p>The names of all the cache clusters that are part of this replication group.</p>"]
-    pub member_clusters: Option<ClusterIdList>,
+    pub member_clusters: Option<Vec<String>>,
     #[doc="<p>A single element list with information about the nodes in the replication group.</p>"]
-    pub node_groups: Option<NodeGroupList>,
+    pub node_groups: Option<Vec<NodeGroup>>,
     #[doc="<p>A group of settings to be applied to the replication group, either immediately or during the next maintenance window.</p>"]
     pub pending_modified_values: Option<ReplicationGroupPendingModifiedValues>,
     #[doc="<p>The identifier for the replication group.</p>"]
     pub replication_group_id: Option<String>,
     #[doc="<p>The number of days for which ElastiCache retains automatic cache cluster snapshots before deleting them. For example, if you set <code>SnapshotRetentionLimit</code> to 5, a snapshot that was taken today is retained for 5 days before being deleted.</p> <important> <p> If the value of <code>SnapshotRetentionLimit</code> is set to zero (0), backups are turned off.</p> </important>"]
-    pub snapshot_retention_limit: Option<IntegerOptional>,
+    pub snapshot_retention_limit: Option<i64>,
     #[doc="<p>The daily time range (in UTC) during which ElastiCache begins taking a daily snapshot of your node group (shard).</p> <p>Example: <code>05:00-09:00</code> </p> <p>If you do not specify this parameter, ElastiCache automatically chooses an appropriate time range.</p> <p> <b>Note:</b> This parameter is only valid if the <code>Engine</code> parameter is <code>redis</code>.</p>"]
     pub snapshot_window: Option<String>,
     #[doc="<p>The cache cluster ID that is used as the daily snapshot source for the replication group.</p>"]
@@ -6059,13 +6025,12 @@ impl ReplicationGroupDeserializer {
 
     }
 }
-pub type ReplicationGroupList = Vec<ReplicationGroup>;
 struct ReplicationGroupListDeserializer;
 impl ReplicationGroupListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ReplicationGroupList, XmlParseError> {
+                                       -> Result<Vec<ReplicationGroup>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -6108,7 +6073,7 @@ pub struct ReplicationGroupMessage {
     #[doc="<p>Provides an identifier to allow retrieval of paginated results.</p>"]
     pub marker: Option<String>,
     #[doc="<p>A list of replication groups. Each item in the list contains detailed information about one replication group.</p>"]
-    pub replication_groups: Option<ReplicationGroupList>,
+    pub replication_groups: Option<Vec<ReplicationGroup>>,
 }
 
 struct ReplicationGroupMessageDeserializer;
@@ -6162,7 +6127,7 @@ impl ReplicationGroupMessageDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ReplicationGroupPendingModifiedValues {
     #[doc="<p>Indicates the status of Multi-AZ for this Redis replication group.</p> <note> <p>ElastiCache Multi-AZ replication groups are not supported on:</p> <ul> <li> <p>Redis versions earlier than 2.8.6.</p> </li> <li> <p>Redis (cluster mode disabled):T1 and T2 cache node types.</p> <p>Redis (cluster mode enabled): T1 node types.</p> </li> </ul> </note>"]
-    pub automatic_failover_status: Option<PendingAutomaticFailoverStatus>,
+    pub automatic_failover_status: Option<String>,
     #[doc="<p>The primary cluster ID that is applied immediately (if <code>--apply-immediately</code> was specified), or during the next maintenance window.</p>"]
     pub primary_cluster_id: Option<String>,
 }
@@ -6218,29 +6183,29 @@ impl ReplicationGroupPendingModifiedValuesDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ReservedCacheNode {
     #[doc="<p>The number of cache nodes that have been reserved.</p>"]
-    pub cache_node_count: Option<Integer>,
+    pub cache_node_count: Option<i64>,
     #[doc="<p>The cache node type for the reserved cache nodes.</p> <p>Valid node types are as follows:</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code>, <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code>, <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> </li> <li> <p>Previous generation: <code>cache.t1.micro</code>, <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized: <code>cache.c1.xlarge</code> </p> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> <li> <p>Previous generation: <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Notes:</b> </p> <ul> <li> <p>All T2 instances are created in an Amazon Virtual Private Cloud (Amazon VPC).</p> </li> <li> <p>Redis backup/restore is not supported for Redis (cluster mode disabled) T1 and T2 instances. Backup/restore is supported on Redis (cluster mode enabled) T2 instances.</p> </li> <li> <p>Redis Append-only files (AOF) functionality is not supported for T1 or T2 instances.</p> </li> </ul> <p>For a complete listing of node types and specifications, see <a href=\"http://aws.amazon.com/elasticache/details\">Amazon ElastiCache Product Features and Details</a> and either <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheParameterGroups.Memcached.html#ParameterGroups.Memcached.NodeSpecific\">Cache Node Type-Specific Parameters for Memcached</a> or <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheParameterGroups.Redis.html#ParameterGroups.Redis.NodeSpecific\">Cache Node Type-Specific Parameters for Redis</a>.</p>"]
     pub cache_node_type: Option<String>,
     #[doc="<p>The duration of the reservation in seconds.</p>"]
-    pub duration: Option<Integer>,
+    pub duration: Option<i64>,
     #[doc="<p>The fixed price charged for this reserved cache node.</p>"]
-    pub fixed_price: Option<Double>,
+    pub fixed_price: Option<f64>,
     #[doc="<p>The offering type of this reserved cache node.</p>"]
     pub offering_type: Option<String>,
     #[doc="<p>The description of the reserved cache node.</p>"]
     pub product_description: Option<String>,
     #[doc="<p>The recurring price charged to run this reserved cache node.</p>"]
-    pub recurring_charges: Option<RecurringChargeList>,
+    pub recurring_charges: Option<Vec<RecurringCharge>>,
     #[doc="<p>The unique identifier for the reservation.</p>"]
     pub reserved_cache_node_id: Option<String>,
     #[doc="<p>The offering identifier.</p>"]
     pub reserved_cache_nodes_offering_id: Option<String>,
     #[doc="<p>The time the reservation started.</p>"]
-    pub start_time: Option<TStamp>,
+    pub start_time: Option<String>,
     #[doc="<p>The state of the reserved cache node.</p>"]
     pub state: Option<String>,
     #[doc="<p>The hourly price charged for this reserved cache node.</p>"]
-    pub usage_price: Option<Double>,
+    pub usage_price: Option<f64>,
 }
 
 struct ReservedCacheNodeDeserializer;
@@ -6333,13 +6298,12 @@ impl ReservedCacheNodeDeserializer {
 
     }
 }
-pub type ReservedCacheNodeList = Vec<ReservedCacheNode>;
 struct ReservedCacheNodeListDeserializer;
 impl ReservedCacheNodeListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ReservedCacheNodeList, XmlParseError> {
+                                       -> Result<Vec<ReservedCacheNode>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -6381,7 +6345,7 @@ pub struct ReservedCacheNodeMessage {
     #[doc="<p>Provides an identifier to allow retrieval of paginated results.</p>"]
     pub marker: Option<String>,
     #[doc="<p>A list of reserved cache nodes. Each element in the list contains detailed information about one node.</p>"]
-    pub reserved_cache_nodes: Option<ReservedCacheNodeList>,
+    pub reserved_cache_nodes: Option<Vec<ReservedCacheNode>>,
 }
 
 struct ReservedCacheNodeMessageDeserializer;
@@ -6437,19 +6401,19 @@ pub struct ReservedCacheNodesOffering {
     #[doc="<p>The cache node type for the reserved cache node.</p> <p>Valid node types are as follows:</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code>, <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code>, <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> </li> <li> <p>Previous generation: <code>cache.t1.micro</code>, <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized: <code>cache.c1.xlarge</code> </p> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> <li> <p>Previous generation: <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Notes:</b> </p> <ul> <li> <p>All T2 instances are created in an Amazon Virtual Private Cloud (Amazon VPC).</p> </li> <li> <p>Redis backup/restore is not supported for Redis (cluster mode disabled) T1 and T2 instances. Backup/restore is supported on Redis (cluster mode enabled) T2 instances.</p> </li> <li> <p>Redis Append-only files (AOF) functionality is not supported for T1 or T2 instances.</p> </li> </ul> <p>For a complete listing of node types and specifications, see <a href=\"http://aws.amazon.com/elasticache/details\">Amazon ElastiCache Product Features and Details</a> and either <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheParameterGroups.Memcached.html#ParameterGroups.Memcached.NodeSpecific\">Cache Node Type-Specific Parameters for Memcached</a> or <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheParameterGroups.Redis.html#ParameterGroups.Redis.NodeSpecific\">Cache Node Type-Specific Parameters for Redis</a>.</p>"]
     pub cache_node_type: Option<String>,
     #[doc="<p>The duration of the offering. in seconds.</p>"]
-    pub duration: Option<Integer>,
+    pub duration: Option<i64>,
     #[doc="<p>The fixed price charged for this offering.</p>"]
-    pub fixed_price: Option<Double>,
+    pub fixed_price: Option<f64>,
     #[doc="<p>The offering type.</p>"]
     pub offering_type: Option<String>,
     #[doc="<p>The cache engine used by the offering.</p>"]
     pub product_description: Option<String>,
     #[doc="<p>The recurring price charged to run this reserved cache node.</p>"]
-    pub recurring_charges: Option<RecurringChargeList>,
+    pub recurring_charges: Option<Vec<RecurringCharge>>,
     #[doc="<p>A unique identifier for the reserved cache node offering.</p>"]
     pub reserved_cache_nodes_offering_id: Option<String>,
     #[doc="<p>The hourly price charged for this offering.</p>"]
-    pub usage_price: Option<Double>,
+    pub usage_price: Option<f64>,
 }
 
 struct ReservedCacheNodesOfferingDeserializer;
@@ -6525,13 +6489,13 @@ impl ReservedCacheNodesOfferingDeserializer {
 
     }
 }
-pub type ReservedCacheNodesOfferingList = Vec<ReservedCacheNodesOffering>;
 struct ReservedCacheNodesOfferingListDeserializer;
 impl ReservedCacheNodesOfferingListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<ReservedCacheNodesOfferingList, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<Vec<ReservedCacheNodesOffering>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -6573,7 +6537,7 @@ pub struct ReservedCacheNodesOfferingMessage {
     #[doc="<p>Provides an identifier to allow retrieval of paginated results.</p>"]
     pub marker: Option<String>,
     #[doc="<p>A list of reserved cache node offerings. Each element in the list contains detailed information about one offering.</p>"]
-    pub reserved_cache_nodes_offerings: Option<ReservedCacheNodesOfferingList>,
+    pub reserved_cache_nodes_offerings: Option<Vec<ReservedCacheNodesOffering>>,
 }
 
 struct ReservedCacheNodesOfferingMessageDeserializer;
@@ -6628,9 +6592,9 @@ pub struct ResetCacheParameterGroupMessage {
     #[doc="<p>The name of the cache parameter group to reset.</p>"]
     pub cache_parameter_group_name: String,
     #[doc="<p>An array of parameter names to reset to their default values. If <code>ResetAllParameters</code> is <code>true</code>, do not use <code>ParameterNameValues</code>. If <code>ResetAllParameters</code> is <code>false</code>, you must specify the name of at least one parameter to reset.</p>"]
-    pub parameter_name_values: Option<ParameterNameValueList>,
+    pub parameter_name_values: Option<Vec<ParameterNameValue>>,
     #[doc="<p>If <code>true</code>, all parameters in the cache parameter group are reset to their default values. If <code>false</code>, only the parameters listed by <code>ParameterNameValues</code> are reset to their default values.</p> <p>Valid values: <code>true</code> | <code>false</code> </p>"]
-    pub reset_all_parameters: Option<Boolean>,
+    pub reset_all_parameters: Option<bool>,
 }
 
 
@@ -6740,12 +6704,11 @@ impl RevokeCacheSecurityGroupIngressResultDeserializer {
 
     }
 }
-pub type SecurityGroupIdsList = Vec<String>;
 
 /// Serialize `SecurityGroupIdsList` contents to a `SignedRequest`.
 struct SecurityGroupIdsListSerializer;
 impl SecurityGroupIdsListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SecurityGroupIdsList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -6809,13 +6772,12 @@ impl SecurityGroupMembershipDeserializer {
 
     }
 }
-pub type SecurityGroupMembershipList = Vec<SecurityGroupMembership>;
 struct SecurityGroupMembershipListDeserializer;
 impl SecurityGroupMembershipListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SecurityGroupMembershipList, XmlParseError> {
+                                       -> Result<Vec<SecurityGroupMembership>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -6856,11 +6818,11 @@ impl SecurityGroupMembershipListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct Snapshot {
     #[doc="<p>This parameter is currently disabled.</p>"]
-    pub auto_minor_version_upgrade: Option<Boolean>,
+    pub auto_minor_version_upgrade: Option<bool>,
     #[doc="<p>Indicates the status of Multi-AZ for the source replication group.</p> <note> <p>ElastiCache Multi-AZ replication groups are not supported on:</p> <ul> <li> <p>Redis versions earlier than 2.8.6.</p> </li> <li> <p>Redis (cluster mode disabled):T1 and T2 cache node types.</p> <p>Redis (cluster mode enabled): T1 node types.</p> </li> </ul> </note>"]
-    pub automatic_failover: Option<AutomaticFailoverStatus>,
+    pub automatic_failover: Option<String>,
     #[doc="<p>The date and time when the source cache cluster was created.</p>"]
-    pub cache_cluster_create_time: Option<TStamp>,
+    pub cache_cluster_create_time: Option<String>,
     #[doc="<p>The user-supplied identifier of the source cache cluster.</p>"]
     pub cache_cluster_id: Option<String>,
     #[doc="<p>The name of the compute and memory capacity node type for the source cache cluster.</p> <p>Valid node types are as follows:</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code>, <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code>, <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> </li> <li> <p>Previous generation: <code>cache.t1.micro</code>, <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized: <code>cache.c1.xlarge</code> </p> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> <li> <p>Previous generation: <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Notes:</b> </p> <ul> <li> <p>All T2 instances are created in an Amazon Virtual Private Cloud (Amazon VPC).</p> </li> <li> <p>Redis backup/restore is not supported for Redis (cluster mode disabled) T1 and T2 instances. Backup/restore is supported on Redis (cluster mode enabled) T2 instances.</p> </li> <li> <p>Redis Append-only files (AOF) functionality is not supported for T1 or T2 instances.</p> </li> </ul> <p>For a complete listing of node types and specifications, see <a href=\"http://aws.amazon.com/elasticache/details\">Amazon ElastiCache Product Features and Details</a> and either <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheParameterGroups.Memcached.html#ParameterGroups.Memcached.NodeSpecific\">Cache Node Type-Specific Parameters for Memcached</a> or <a href=\"http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheParameterGroups.Redis.html#ParameterGroups.Redis.NodeSpecific\">Cache Node Type-Specific Parameters for Redis</a>.</p>"]
@@ -6874,13 +6836,13 @@ pub struct Snapshot {
     #[doc="<p>The version of the cache engine version that is used by the source cache cluster.</p>"]
     pub engine_version: Option<String>,
     #[doc="<p>A list of the cache nodes in the source cache cluster.</p>"]
-    pub node_snapshots: Option<NodeSnapshotList>,
+    pub node_snapshots: Option<Vec<NodeSnapshot>>,
     #[doc="<p>The number of cache nodes in the source cache cluster.</p> <p>For clusters running Redis, this value must be 1. For clusters running Memcached, this value must be between 1 and 20.</p>"]
-    pub num_cache_nodes: Option<IntegerOptional>,
+    pub num_cache_nodes: Option<i64>,
     #[doc="<p>The number of node groups (shards) in this snapshot. When restoring from a snapshot, the number of node groups (shards) in the snapshot and in the restored replication group must be the same.</p>"]
-    pub num_node_groups: Option<IntegerOptional>,
+    pub num_node_groups: Option<i64>,
     #[doc="<p>The port number used by each cache nodes in the source cache cluster.</p>"]
-    pub port: Option<IntegerOptional>,
+    pub port: Option<i64>,
     #[doc="<p>The name of the Availability Zone in which the source cache cluster is located.</p>"]
     pub preferred_availability_zone: Option<String>,
     #[doc="<p>Specifies the weekly time range during which maintenance on the cluster is performed. It is specified as a range in the format ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window is a 60 minute period.</p> <p>Valid values for <code>ddd</code> are:</p> <ul> <li> <p> <code>sun</code> </p> </li> <li> <p> <code>mon</code> </p> </li> <li> <p> <code>tue</code> </p> </li> <li> <p> <code>wed</code> </p> </li> <li> <p> <code>thu</code> </p> </li> <li> <p> <code>fri</code> </p> </li> <li> <p> <code>sat</code> </p> </li> </ul> <p>Example: <code>sun:23:00-mon:01:30</code> </p>"]
@@ -6892,7 +6854,7 @@ pub struct Snapshot {
     #[doc="<p>The name of a snapshot. For an automatic snapshot, the name is system-generated. For a manual snapshot, this is the user-provided name.</p>"]
     pub snapshot_name: Option<String>,
     #[doc="<p>For an automatic snapshot, the number of days for which ElastiCache retains the snapshot before deleting it.</p> <p>For manual snapshots, this field reflects the <code>SnapshotRetentionLimit</code> for the source cache cluster when the snapshot was created. This field is otherwise ignored: Manual snapshots do not expire, and can only be deleted using the <code>DeleteSnapshot</code> operation. </p> <p> <b>Important</b> If the value of SnapshotRetentionLimit is set to zero (0), backups are turned off.</p>"]
-    pub snapshot_retention_limit: Option<IntegerOptional>,
+    pub snapshot_retention_limit: Option<i64>,
     #[doc="<p>Indicates whether the snapshot is from an automatic backup (<code>automated</code>) or was created manually (<code>manual</code>).</p>"]
     pub snapshot_source: Option<String>,
     #[doc="<p>The status of the snapshot. Valid values: <code>creating</code> | <code>available</code> | <code>restoring</code> | <code>copying</code> | <code>deleting</code>.</p>"]
@@ -7056,12 +7018,11 @@ impl SnapshotDeserializer {
 
     }
 }
-pub type SnapshotArnsList = Vec<String>;
 
 /// Serialize `SnapshotArnsList` contents to a `SignedRequest`.
 struct SnapshotArnsListSerializer;
 impl SnapshotArnsListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SnapshotArnsList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -7069,13 +7030,12 @@ impl SnapshotArnsListSerializer {
     }
 }
 
-pub type SnapshotList = Vec<Snapshot>;
 struct SnapshotListDeserializer;
 impl SnapshotListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SnapshotList, XmlParseError> {
+                                       -> Result<Vec<Snapshot>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -7111,13 +7071,12 @@ impl SnapshotListDeserializer {
 
     }
 }
-pub type SourceType = String;
 struct SourceTypeDeserializer;
 impl SourceTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SourceType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7197,12 +7156,11 @@ impl SubnetDeserializer {
 
     }
 }
-pub type SubnetIdentifierList = Vec<String>;
 
 /// Serialize `SubnetIdentifierList` contents to a `SignedRequest`.
 struct SubnetIdentifierListSerializer;
 impl SubnetIdentifierListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SubnetIdentifierList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -7210,13 +7168,12 @@ impl SubnetIdentifierListSerializer {
     }
 }
 
-pub type SubnetList = Vec<Subnet>;
 struct SubnetListDeserializer;
 impl SubnetListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SubnetList, XmlParseError> {
+                                       -> Result<Vec<Subnet>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -7252,13 +7209,12 @@ impl SubnetListDeserializer {
 
     }
 }
-pub type TStamp = String;
 struct TStampDeserializer;
 impl TStampDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TStamp, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7340,13 +7296,12 @@ impl TagSerializer {
     }
 }
 
-pub type TagList = Vec<Tag>;
 struct TagListDeserializer;
 impl TagListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TagList, XmlParseError> {
+                                       -> Result<Vec<Tag>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -7386,7 +7341,7 @@ impl TagListDeserializer {
 /// Serialize `TagList` contents to a `SignedRequest`.
 struct TagListSerializer;
 impl TagListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &TagList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<Tag>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             TagSerializer::serialize(params, &key, obj);
@@ -7398,7 +7353,7 @@ impl TagListSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct TagListMessage {
     #[doc="<p>A list of cost allocation tags as key-value pairs.</p>"]
-    pub tag_list: Option<TagList>,
+    pub tag_list: Option<Vec<Tag>>,
 }
 
 struct TagListMessageDeserializer;

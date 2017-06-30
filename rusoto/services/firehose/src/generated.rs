@@ -26,20 +26,17 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-pub type AWSKMSKeyARN = String;
-pub type BooleanObject = bool;
-pub type BucketARN = String;
 #[doc="<p>Describes hints for the buffering to perform before delivering data to the destination. Please note that these options are treated as hints, and therefore Firehose may choose to use different values when it is optimal.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct BufferingHints {
     #[doc="<p>Buffer incoming data for the specified period of time, in seconds, before delivering it to the destination. The default value is 300.</p>"]
     #[serde(rename="IntervalInSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub interval_in_seconds: Option<IntervalInSeconds>,
+    pub interval_in_seconds: Option<i64>,
     #[doc="<p>Buffer incoming data to the specified size, in MBs, before delivering it to the destination. The default value is 5.</p> <p>We recommend setting this parameter to a value greater than the amount of data you typically ingest into the delivery stream in 10 seconds. For example, if you typically ingest data at 1 MB/sec, the value should be 10 MB or higher.</p>"]
     #[serde(rename="SizeInMBs")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub size_in_m_bs: Option<SizeInMBs>,
+    pub size_in_m_bs: Option<i64>,
 }
 
 #[doc="<p>Describes the CloudWatch logging options for your delivery stream.</p>"]
@@ -48,41 +45,38 @@ pub struct CloudWatchLoggingOptions {
     #[doc="<p>Enables or disables CloudWatch logging.</p>"]
     #[serde(rename="Enabled")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub enabled: Option<BooleanObject>,
+    pub enabled: Option<bool>,
     #[doc="<p>The CloudWatch group name for logging. This value is required if CloudWatch logging is enabled.</p>"]
     #[serde(rename="LogGroupName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub log_group_name: Option<LogGroupName>,
+    pub log_group_name: Option<String>,
     #[doc="<p>The CloudWatch log stream name for logging. This value is required if CloudWatch logging is enabled.</p>"]
     #[serde(rename="LogStreamName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub log_stream_name: Option<LogStreamName>,
+    pub log_stream_name: Option<String>,
 }
 
-pub type ClusterJDBCURL = String;
-pub type CompressionFormat = String;
 #[doc="<p>Describes a <code>COPY</code> command for Amazon Redshift.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CopyCommand {
     #[doc="<p>Optional parameters to use with the Amazon Redshift <code>COPY</code> command. For more information, see the \"Optional Parameters\" section of <a href=\"http://docs.aws.amazon.com/redshift/latest/dg/r_COPY.html\">Amazon Redshift COPY command</a>. Some possible examples that would apply to Firehose are as follows:</p> <p> <code>delimiter '\\t' lzop;</code> - fields are delimited with \"\\t\" (TAB character) and compressed using lzop.</p> <p> <code>delimiter '|</code> - fields are delimited with \"|\" (this is the default delimiter).</p> <p> <code>delimiter '|' escape</code> - the delimiter should be escaped.</p> <p> <code>fixedwidth 'venueid:3,venuename:25,venuecity:12,venuestate:2,venueseats:6'</code> - fields are fixed width in the source, with each width specified after every column in the table.</p> <p> <code>JSON 's3://mybucket/jsonpaths.txt'</code> - data is in JSON format, and the path specified is the format of the data.</p> <p>For more examples, see <a href=\"http://docs.aws.amazon.com/redshift/latest/dg/r_COPY_command_examples.html\">Amazon Redshift COPY command examples</a>.</p>"]
     #[serde(rename="CopyOptions")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub copy_options: Option<CopyOptions>,
+    pub copy_options: Option<String>,
     #[doc="<p>A comma-separated list of column names.</p>"]
     #[serde(rename="DataTableColumns")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub data_table_columns: Option<DataTableColumns>,
+    pub data_table_columns: Option<String>,
     #[doc="<p>The name of the target table. The table must already exist in the database.</p>"]
     #[serde(rename="DataTableName")]
-    pub data_table_name: DataTableName,
+    pub data_table_name: String,
 }
 
-pub type CopyOptions = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateDeliveryStreamInput {
     #[doc="<p>The name of the delivery stream. This name must be unique per AWS account in the same region. You can have multiple delivery streams with the same name if they are in different accounts or different regions.</p>"]
     #[serde(rename="DeliveryStreamName")]
-    pub delivery_stream_name: DeliveryStreamName,
+    pub delivery_stream_name: String,
     #[doc="<p>The destination in Amazon ES. You can specify only one destination.</p>"]
     #[serde(rename="ElasticsearchDestinationConfiguration")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -102,74 +96,65 @@ pub struct CreateDeliveryStreamOutput {
     #[doc="<p>The ARN of the delivery stream.</p>"]
     #[serde(rename="DeliveryStreamARN")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub delivery_stream_arn: Option<DeliveryStreamARN>,
+    pub delivery_stream_arn: Option<String>,
 }
 
-pub type Data = Vec<u8>;
-pub type DataTableColumns = String;
-pub type DataTableName = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteDeliveryStreamInput {
     #[doc="<p>The name of the delivery stream.</p>"]
     #[serde(rename="DeliveryStreamName")]
-    pub delivery_stream_name: DeliveryStreamName,
+    pub delivery_stream_name: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DeleteDeliveryStreamOutput;
 
-pub type DeliveryStreamARN = String;
 #[doc="<p>Contains information about a delivery stream.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DeliveryStreamDescription {
     #[doc="<p>The date and time that the delivery stream was created.</p>"]
     #[serde(rename="CreateTimestamp")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub create_timestamp: Option<Timestamp>,
+    pub create_timestamp: Option<f64>,
     #[doc="<p>The Amazon Resource Name (ARN) of the delivery stream.</p>"]
     #[serde(rename="DeliveryStreamARN")]
-    pub delivery_stream_arn: DeliveryStreamARN,
+    pub delivery_stream_arn: String,
     #[doc="<p>The name of the delivery stream.</p>"]
     #[serde(rename="DeliveryStreamName")]
-    pub delivery_stream_name: DeliveryStreamName,
+    pub delivery_stream_name: String,
     #[doc="<p>The status of the delivery stream.</p>"]
     #[serde(rename="DeliveryStreamStatus")]
-    pub delivery_stream_status: DeliveryStreamStatus,
+    pub delivery_stream_status: String,
     #[doc="<p>The destinations.</p>"]
     #[serde(rename="Destinations")]
-    pub destinations: DestinationDescriptionList,
+    pub destinations: Vec<DestinationDescription>,
     #[doc="<p>Indicates whether there are more destinations available to list.</p>"]
     #[serde(rename="HasMoreDestinations")]
-    pub has_more_destinations: BooleanObject,
+    pub has_more_destinations: bool,
     #[doc="<p>The date and time that the delivery stream was last updated.</p>"]
     #[serde(rename="LastUpdateTimestamp")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub last_update_timestamp: Option<Timestamp>,
+    pub last_update_timestamp: Option<f64>,
     #[doc="<p>Each time the destination is updated for a delivery stream, the version ID is changed, and the current version ID is required when updating the destination. This is so that the service knows it is applying the changes to the correct version of the delivery stream.</p>"]
     #[serde(rename="VersionId")]
-    pub version_id: DeliveryStreamVersionId,
+    pub version_id: String,
 }
 
-pub type DeliveryStreamName = String;
-pub type DeliveryStreamNameList = Vec<DeliveryStreamName>;
-pub type DeliveryStreamStatus = String;
-pub type DeliveryStreamVersionId = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DescribeDeliveryStreamInput {
     #[doc="<p>The name of the delivery stream.</p>"]
     #[serde(rename="DeliveryStreamName")]
-    pub delivery_stream_name: DeliveryStreamName,
+    pub delivery_stream_name: String,
     #[doc="<p>The ID of the destination to start returning the destination information. Currently Firehose supports one destination per delivery stream.</p>"]
     #[serde(rename="ExclusiveStartDestinationId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub exclusive_start_destination_id: Option<DestinationId>,
+    pub exclusive_start_destination_id: Option<String>,
     #[doc="<p>The limit on the number of destinations to return. Currently, you can have one destination per delivery stream.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<DescribeDeliveryStreamInputLimit>,
+    pub limit: Option<i64>,
 }
 
-pub type DescribeDeliveryStreamInputLimit = i64;
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DescribeDeliveryStreamOutput {
     #[doc="<p>Information about the delivery stream.</p>"]
@@ -182,7 +167,7 @@ pub struct DescribeDeliveryStreamOutput {
 pub struct DestinationDescription {
     #[doc="<p>The ID of the destination.</p>"]
     #[serde(rename="DestinationId")]
-    pub destination_id: DestinationId,
+    pub destination_id: String,
     #[doc="<p>The destination in Amazon ES.</p>"]
     #[serde(rename="ElasticsearchDestinationDescription")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -201,23 +186,19 @@ pub struct DestinationDescription {
     pub s3_destination_description: Option<S3DestinationDescription>,
 }
 
-pub type DestinationDescriptionList = Vec<DestinationDescription>;
-pub type DestinationId = String;
 #[doc="<p>Describes the buffering to perform before delivering data to the Amazon ES destination.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ElasticsearchBufferingHints {
     #[doc="<p>Buffer incoming data for the specified period of time, in seconds, before delivering it to the destination. The default value is 300 (5 minutes).</p>"]
     #[serde(rename="IntervalInSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub interval_in_seconds: Option<ElasticsearchBufferingIntervalInSeconds>,
+    pub interval_in_seconds: Option<i64>,
     #[doc="<p>Buffer incoming data to the specified size, in MBs, before delivering it to the destination. The default value is 5.</p> <p>We recommend setting this parameter to a value greater than the amount of data you typically ingest into the delivery stream in 10 seconds. For example, if you typically ingest data at 1 MB/sec, the value should be 10 MB or higher.</p>"]
     #[serde(rename="SizeInMBs")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub size_in_m_bs: Option<ElasticsearchBufferingSizeInMBs>,
+    pub size_in_m_bs: Option<i64>,
 }
 
-pub type ElasticsearchBufferingIntervalInSeconds = i64;
-pub type ElasticsearchBufferingSizeInMBs = i64;
 #[doc="<p>Describes the configuration of a destination in Amazon ES.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ElasticsearchDestinationConfiguration {
@@ -231,14 +212,14 @@ pub struct ElasticsearchDestinationConfiguration {
     pub cloud_watch_logging_options: Option<CloudWatchLoggingOptions>,
     #[doc="<p>The ARN of the Amazon ES domain. The IAM role must have permissions for <code>DescribeElasticsearchDomain</code>, <code>DescribeElasticsearchDomains</code>, and <code>DescribeElasticsearchDomainConfig</code> after assuming the role specified in <b>RoleARN</b>.</p>"]
     #[serde(rename="DomainARN")]
-    pub domain_arn: ElasticsearchDomainARN,
+    pub domain_arn: String,
     #[doc="<p>The Elasticsearch index name.</p>"]
     #[serde(rename="IndexName")]
-    pub index_name: ElasticsearchIndexName,
+    pub index_name: String,
     #[doc="<p>The Elasticsearch index rotation period. Index rotation appends a timestamp to the IndexName to facilitate expiration of old data. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/basic-deliver.html#es-index-rotation\">Index Rotation for Amazon Elasticsearch Service Destination</a>. The default value is <code>OneDay</code>.</p>"]
     #[serde(rename="IndexRotationPeriod")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub index_rotation_period: Option<ElasticsearchIndexRotationPeriod>,
+    pub index_rotation_period: Option<String>,
     #[doc="<p>The data processing configuration.</p>"]
     #[serde(rename="ProcessingConfiguration")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -249,17 +230,17 @@ pub struct ElasticsearchDestinationConfiguration {
     pub retry_options: Option<ElasticsearchRetryOptions>,
     #[doc="<p>The ARN of the IAM role to be assumed by Firehose for calling the Amazon ES Configuration API and for indexing documents. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/controlling-access.html#using-iam-s3\">Amazon S3 Bucket Access</a>.</p>"]
     #[serde(rename="RoleARN")]
-    pub role_arn: RoleARN,
+    pub role_arn: String,
     #[doc="<p>Defines how documents should be delivered to Amazon S3. When set to FailedDocumentsOnly, Firehose writes any documents that could not be indexed to the configured Amazon S3 destination, with elasticsearch-failed/ appended to the key prefix. When set to AllDocuments, Firehose delivers all incoming records to Amazon S3, and also writes failed documents with elasticsearch-failed/ appended to the prefix. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/basic-deliver.html#es-s3-backup\">Amazon S3 Backup for Amazon Elasticsearch Service Destination</a>. Default value is FailedDocumentsOnly.</p>"]
     #[serde(rename="S3BackupMode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub s3_backup_mode: Option<ElasticsearchS3BackupMode>,
+    pub s3_backup_mode: Option<String>,
     #[doc="<p>The configuration for the intermediate Amazon S3 location from which Amazon ES obtains data.</p>"]
     #[serde(rename="S3Configuration")]
     pub s3_configuration: S3DestinationConfiguration,
     #[doc="<p>The Elasticsearch type name.</p>"]
     #[serde(rename="TypeName")]
-    pub type_name: ElasticsearchTypeName,
+    pub type_name: String,
 }
 
 #[doc="<p>The destination description in Amazon ES.</p>"]
@@ -276,15 +257,15 @@ pub struct ElasticsearchDestinationDescription {
     #[doc="<p>The ARN of the Amazon ES domain.</p>"]
     #[serde(rename="DomainARN")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub domain_arn: Option<ElasticsearchDomainARN>,
+    pub domain_arn: Option<String>,
     #[doc="<p>The Elasticsearch index name.</p>"]
     #[serde(rename="IndexName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub index_name: Option<ElasticsearchIndexName>,
+    pub index_name: Option<String>,
     #[doc="<p>The Elasticsearch index rotation period</p>"]
     #[serde(rename="IndexRotationPeriod")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub index_rotation_period: Option<ElasticsearchIndexRotationPeriod>,
+    pub index_rotation_period: Option<String>,
     #[doc="<p>The data processing configuration.</p>"]
     #[serde(rename="ProcessingConfiguration")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -296,11 +277,11 @@ pub struct ElasticsearchDestinationDescription {
     #[doc="<p>The ARN of the AWS credentials.</p>"]
     #[serde(rename="RoleARN")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub role_arn: Option<RoleARN>,
+    pub role_arn: Option<String>,
     #[doc="<p>The Amazon S3 backup mode.</p>"]
     #[serde(rename="S3BackupMode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub s3_backup_mode: Option<ElasticsearchS3BackupMode>,
+    pub s3_backup_mode: Option<String>,
     #[doc="<p>The Amazon S3 destination.</p>"]
     #[serde(rename="S3DestinationDescription")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -308,7 +289,7 @@ pub struct ElasticsearchDestinationDescription {
     #[doc="<p>The Elasticsearch type name.</p>"]
     #[serde(rename="TypeName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub type_name: Option<ElasticsearchTypeName>,
+    pub type_name: Option<String>,
 }
 
 #[doc="<p>Describes an update for a destination in Amazon ES.</p>"]
@@ -325,15 +306,15 @@ pub struct ElasticsearchDestinationUpdate {
     #[doc="<p>The ARN of the Amazon ES domain. The IAM role must have permissions for <code>DescribeElasticsearchDomain</code>, <code>DescribeElasticsearchDomains</code>, and <code>DescribeElasticsearchDomainConfig</code> after assuming the IAM role specified in <b>RoleARN</b>.</p>"]
     #[serde(rename="DomainARN")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub domain_arn: Option<ElasticsearchDomainARN>,
+    pub domain_arn: Option<String>,
     #[doc="<p>The Elasticsearch index name.</p>"]
     #[serde(rename="IndexName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub index_name: Option<ElasticsearchIndexName>,
+    pub index_name: Option<String>,
     #[doc="<p>The Elasticsearch index rotation period. Index rotation appends a timestamp to IndexName to facilitate the expiration of old data. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/basic-deliver.html#es-index-rotation\">Index Rotation for Amazon Elasticsearch Service Destination</a>. Default value is <code>OneDay</code>.</p>"]
     #[serde(rename="IndexRotationPeriod")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub index_rotation_period: Option<ElasticsearchIndexRotationPeriod>,
+    pub index_rotation_period: Option<String>,
     #[doc="<p>The data processing configuration.</p>"]
     #[serde(rename="ProcessingConfiguration")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -345,7 +326,7 @@ pub struct ElasticsearchDestinationUpdate {
     #[doc="<p>The ARN of the IAM role to be assumed by Firehose for calling the Amazon ES Configuration API and for indexing documents. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/controlling-access.html#using-iam-s3\">Amazon S3 Bucket Access</a>.</p>"]
     #[serde(rename="RoleARN")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub role_arn: Option<RoleARN>,
+    pub role_arn: Option<String>,
     #[doc="<p>The Amazon S3 destination.</p>"]
     #[serde(rename="S3Update")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -353,24 +334,18 @@ pub struct ElasticsearchDestinationUpdate {
     #[doc="<p>The Elasticsearch type name.</p>"]
     #[serde(rename="TypeName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub type_name: Option<ElasticsearchTypeName>,
+    pub type_name: Option<String>,
 }
 
-pub type ElasticsearchDomainARN = String;
-pub type ElasticsearchIndexName = String;
-pub type ElasticsearchIndexRotationPeriod = String;
-pub type ElasticsearchRetryDurationInSeconds = i64;
 #[doc="<p>Configures retry behavior in the event that Firehose is unable to deliver documents to Amazon ES.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ElasticsearchRetryOptions {
     #[doc="<p>After an initial failure to deliver to Amazon ES, the total amount of time during which Firehose re-attempts delivery (including the first attempt). After this time has elapsed, the failed documents are written to Amazon S3. Default value is 300 seconds (5 minutes). A value of 0 (zero) results in no retries.</p>"]
     #[serde(rename="DurationInSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub duration_in_seconds: Option<ElasticsearchRetryDurationInSeconds>,
+    pub duration_in_seconds: Option<i64>,
 }
 
-pub type ElasticsearchS3BackupMode = String;
-pub type ElasticsearchTypeName = String;
 #[doc="<p>Describes the encryption for a destination in Amazon S3.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EncryptionConfiguration {
@@ -381,17 +356,15 @@ pub struct EncryptionConfiguration {
     #[doc="<p>Specifically override existing encryption information to ensure no encryption is used.</p>"]
     #[serde(rename="NoEncryptionConfig")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub no_encryption_config: Option<NoEncryptionConfig>,
+    pub no_encryption_config: Option<String>,
 }
 
-pub type ErrorCode = String;
-pub type ErrorMessage = String;
 #[doc="<p>Describes the configuration of a destination in Amazon S3.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ExtendedS3DestinationConfiguration {
     #[doc="<p>The ARN of the S3 bucket.</p>"]
     #[serde(rename="BucketARN")]
-    pub bucket_arn: BucketARN,
+    pub bucket_arn: String,
     #[doc="<p>The buffering option.</p>"]
     #[serde(rename="BufferingHints")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -403,7 +376,7 @@ pub struct ExtendedS3DestinationConfiguration {
     #[doc="<p>The compression format. If no value is specified, the default is UNCOMPRESSED.</p>"]
     #[serde(rename="CompressionFormat")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub compression_format: Option<CompressionFormat>,
+    pub compression_format: Option<String>,
     #[doc="<p>The encryption configuration. If no value is specified, the default is no encryption.</p>"]
     #[serde(rename="EncryptionConfiguration")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -411,14 +384,14 @@ pub struct ExtendedS3DestinationConfiguration {
     #[doc="<p>The \"YYYY/MM/DD/HH\" time format prefix is automatically used for delivered S3 files. You can specify an extra prefix to be added in front of the time format prefix. Note that if the prefix ends with a slash, it appears as a folder in the S3 bucket. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/basic-deliver.html\">Amazon S3 Object Name Format</a> in the <i>Amazon Kinesis Firehose Developer Guide</i>.</p>"]
     #[serde(rename="Prefix")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub prefix: Option<Prefix>,
+    pub prefix: Option<String>,
     #[doc="<p>The data processing configuration.</p>"]
     #[serde(rename="ProcessingConfiguration")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub processing_configuration: Option<ProcessingConfiguration>,
     #[doc="<p>The ARN of the AWS credentials.</p>"]
     #[serde(rename="RoleARN")]
-    pub role_arn: RoleARN,
+    pub role_arn: String,
     #[doc="<p>The configuration for backup in Amazon S3.</p>"]
     #[serde(rename="S3BackupConfiguration")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -426,7 +399,7 @@ pub struct ExtendedS3DestinationConfiguration {
     #[doc="<p>The Amazon S3 backup mode.</p>"]
     #[serde(rename="S3BackupMode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub s3_backup_mode: Option<S3BackupMode>,
+    pub s3_backup_mode: Option<String>,
 }
 
 #[doc="<p>Describes a destination in Amazon S3.</p>"]
@@ -434,7 +407,7 @@ pub struct ExtendedS3DestinationConfiguration {
 pub struct ExtendedS3DestinationDescription {
     #[doc="<p>The ARN of the S3 bucket.</p>"]
     #[serde(rename="BucketARN")]
-    pub bucket_arn: BucketARN,
+    pub bucket_arn: String,
     #[doc="<p>The buffering option.</p>"]
     #[serde(rename="BufferingHints")]
     pub buffering_hints: BufferingHints,
@@ -444,21 +417,21 @@ pub struct ExtendedS3DestinationDescription {
     pub cloud_watch_logging_options: Option<CloudWatchLoggingOptions>,
     #[doc="<p>The compression format. If no value is specified, the default is <code>UNCOMPRESSED</code>.</p>"]
     #[serde(rename="CompressionFormat")]
-    pub compression_format: CompressionFormat,
+    pub compression_format: String,
     #[doc="<p>The encryption configuration. If no value is specified, the default is no encryption.</p>"]
     #[serde(rename="EncryptionConfiguration")]
     pub encryption_configuration: EncryptionConfiguration,
     #[doc="<p>The \"YYYY/MM/DD/HH\" time format prefix is automatically used for delivered S3 files. You can specify an extra prefix to be added in front of the time format prefix. Note that if the prefix ends with a slash, it appears as a folder in the S3 bucket. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/basic-deliver.html\">Amazon S3 Object Name Format</a> in the <i>Amazon Kinesis Firehose Developer Guide</i>.</p>"]
     #[serde(rename="Prefix")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub prefix: Option<Prefix>,
+    pub prefix: Option<String>,
     #[doc="<p>The data processing configuration.</p>"]
     #[serde(rename="ProcessingConfiguration")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub processing_configuration: Option<ProcessingConfiguration>,
     #[doc="<p>The ARN of the AWS credentials.</p>"]
     #[serde(rename="RoleARN")]
-    pub role_arn: RoleARN,
+    pub role_arn: String,
     #[doc="<p>The configuration for backup in Amazon S3.</p>"]
     #[serde(rename="S3BackupDescription")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -466,7 +439,7 @@ pub struct ExtendedS3DestinationDescription {
     #[doc="<p>The Amazon S3 backup mode.</p>"]
     #[serde(rename="S3BackupMode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub s3_backup_mode: Option<S3BackupMode>,
+    pub s3_backup_mode: Option<String>,
 }
 
 #[doc="<p>Describes an update for a destination in Amazon S3.</p>"]
@@ -475,7 +448,7 @@ pub struct ExtendedS3DestinationUpdate {
     #[doc="<p>The ARN of the S3 bucket.</p>"]
     #[serde(rename="BucketARN")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub bucket_arn: Option<BucketARN>,
+    pub bucket_arn: Option<String>,
     #[doc="<p>The buffering option.</p>"]
     #[serde(rename="BufferingHints")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -487,7 +460,7 @@ pub struct ExtendedS3DestinationUpdate {
     #[doc="<p>The compression format. If no value is specified, the default is <code>UNCOMPRESSED</code>. </p>"]
     #[serde(rename="CompressionFormat")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub compression_format: Option<CompressionFormat>,
+    pub compression_format: Option<String>,
     #[doc="<p>The encryption configuration. If no value is specified, the default is no encryption.</p>"]
     #[serde(rename="EncryptionConfiguration")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -495,7 +468,7 @@ pub struct ExtendedS3DestinationUpdate {
     #[doc="<p>The \"YYYY/MM/DD/HH\" time format prefix is automatically used for delivered S3 files. You can specify an extra prefix to be added in front of the time format prefix. Note that if the prefix ends with a slash, it appears as a folder in the S3 bucket. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/basic-deliver.html\">Amazon S3 Object Name Format</a> in the <i>Amazon Kinesis Firehose Developer Guide</i>.</p>"]
     #[serde(rename="Prefix")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub prefix: Option<Prefix>,
+    pub prefix: Option<String>,
     #[doc="<p>The data processing configuration.</p>"]
     #[serde(rename="ProcessingConfiguration")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -503,24 +476,23 @@ pub struct ExtendedS3DestinationUpdate {
     #[doc="<p>The ARN of the AWS credentials.</p>"]
     #[serde(rename="RoleARN")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub role_arn: Option<RoleARN>,
+    pub role_arn: Option<String>,
     #[doc="<p>Enables or disables Amazon S3 backup mode.</p>"]
     #[serde(rename="S3BackupMode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub s3_backup_mode: Option<S3BackupMode>,
+    pub s3_backup_mode: Option<String>,
     #[doc="<p>The Amazon S3 destination for backup.</p>"]
     #[serde(rename="S3BackupUpdate")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub s3_backup_update: Option<S3DestinationUpdate>,
 }
 
-pub type IntervalInSeconds = i64;
 #[doc="<p>Describes an encryption key for a destination in Amazon S3.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct KMSEncryptionConfig {
     #[doc="<p>The ARN of the encryption key. Must belong to the same region as the destination Amazon S3 bucket.</p>"]
     #[serde(rename="AWSKMSKeyARN")]
-    pub awskms_key_arn: AWSKMSKeyARN,
+    pub awskms_key_arn: String,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -528,41 +500,34 @@ pub struct ListDeliveryStreamsInput {
     #[doc="<p>The name of the delivery stream to start the list with.</p>"]
     #[serde(rename="ExclusiveStartDeliveryStreamName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub exclusive_start_delivery_stream_name: Option<DeliveryStreamName>,
+    pub exclusive_start_delivery_stream_name: Option<String>,
     #[doc="<p>The maximum number of delivery streams to list.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<ListDeliveryStreamsInputLimit>,
+    pub limit: Option<i64>,
 }
 
-pub type ListDeliveryStreamsInputLimit = i64;
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ListDeliveryStreamsOutput {
     #[doc="<p>The names of the delivery streams.</p>"]
     #[serde(rename="DeliveryStreamNames")]
-    pub delivery_stream_names: DeliveryStreamNameList,
+    pub delivery_stream_names: Vec<String>,
     #[doc="<p>Indicates whether there are more delivery streams available to list.</p>"]
     #[serde(rename="HasMoreDeliveryStreams")]
-    pub has_more_delivery_streams: BooleanObject,
+    pub has_more_delivery_streams: bool,
 }
 
-pub type LogGroupName = String;
-pub type LogStreamName = String;
-pub type NoEncryptionConfig = String;
-pub type NonNegativeIntegerObject = i64;
-pub type Password = String;
-pub type Prefix = String;
 #[doc="<p>Describes a data processing configuration.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ProcessingConfiguration {
     #[doc="<p>Enables or disables data processing.</p>"]
     #[serde(rename="Enabled")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub enabled: Option<BooleanObject>,
+    pub enabled: Option<bool>,
     #[doc="<p>The data processors.</p>"]
     #[serde(rename="Processors")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub processors: Option<ProcessorList>,
+    pub processors: Option<Vec<Processor>>,
 }
 
 #[doc="<p>Describes a data processor.</p>"]
@@ -571,72 +536,65 @@ pub struct Processor {
     #[doc="<p>The processor parameters.</p>"]
     #[serde(rename="Parameters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub parameters: Option<ProcessorParameterList>,
+    pub parameters: Option<Vec<ProcessorParameter>>,
     #[doc="<p>The type of processor.</p>"]
     #[serde(rename="Type")]
-    pub type_: ProcessorType,
+    pub type_: String,
 }
 
-pub type ProcessorList = Vec<Processor>;
 #[doc="<p>Describes the processor parameter.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ProcessorParameter {
     #[doc="<p>The name of the parameter.</p>"]
     #[serde(rename="ParameterName")]
-    pub parameter_name: ProcessorParameterName,
+    pub parameter_name: String,
     #[doc="<p>The parameter value.</p>"]
     #[serde(rename="ParameterValue")]
-    pub parameter_value: ProcessorParameterValue,
+    pub parameter_value: String,
 }
 
-pub type ProcessorParameterList = Vec<ProcessorParameter>;
-pub type ProcessorParameterName = String;
-pub type ProcessorParameterValue = String;
-pub type ProcessorType = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct PutRecordBatchInput {
     #[doc="<p>The name of the delivery stream.</p>"]
     #[serde(rename="DeliveryStreamName")]
-    pub delivery_stream_name: DeliveryStreamName,
+    pub delivery_stream_name: String,
     #[doc="<p>One or more records.</p>"]
     #[serde(rename="Records")]
-    pub records: PutRecordBatchRequestEntryList,
+    pub records: Vec<Record>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct PutRecordBatchOutput {
     #[doc="<p>The number of records that might have failed processing.</p>"]
     #[serde(rename="FailedPutCount")]
-    pub failed_put_count: NonNegativeIntegerObject,
+    pub failed_put_count: i64,
     #[doc="<p>The results array. For each record, the index of the response element is the same as the index used in the request array.</p>"]
     #[serde(rename="RequestResponses")]
-    pub request_responses: PutRecordBatchResponseEntryList,
+    pub request_responses: Vec<PutRecordBatchResponseEntry>,
 }
 
-pub type PutRecordBatchRequestEntryList = Vec<Record>;
 #[doc="<p>Contains the result for an individual record from a <a>PutRecordBatch</a> request. If the record is successfully added to your delivery stream, it receives a record ID. If the record fails to be added to your delivery stream, the result includes an error code and an error message.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct PutRecordBatchResponseEntry {
     #[doc="<p>The error code for an individual record result.</p>"]
     #[serde(rename="ErrorCode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub error_code: Option<ErrorCode>,
+    pub error_code: Option<String>,
     #[doc="<p>The error message for an individual record result.</p>"]
     #[serde(rename="ErrorMessage")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub error_message: Option<ErrorMessage>,
+    pub error_message: Option<String>,
     #[doc="<p>The ID of the record.</p>"]
     #[serde(rename="RecordId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub record_id: Option<PutResponseRecordId>,
+    pub record_id: Option<String>,
 }
 
-pub type PutRecordBatchResponseEntryList = Vec<PutRecordBatchResponseEntry>;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct PutRecordInput {
     #[doc="<p>The name of the delivery stream.</p>"]
     #[serde(rename="DeliveryStreamName")]
-    pub delivery_stream_name: DeliveryStreamName,
+    pub delivery_stream_name: String,
     #[doc="<p>The record.</p>"]
     #[serde(rename="Record")]
     pub record: Record,
@@ -646,10 +604,9 @@ pub struct PutRecordInput {
 pub struct PutRecordOutput {
     #[doc="<p>The ID of the record.</p>"]
     #[serde(rename="RecordId")]
-    pub record_id: PutResponseRecordId,
+    pub record_id: String,
 }
 
-pub type PutResponseRecordId = String;
 #[doc="<p>The unit of data in a delivery stream.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct Record {
@@ -660,7 +617,7 @@ pub struct Record {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub data: Data,
+    pub data: Vec<u8>,
 }
 
 #[doc="<p>Describes the configuration of a destination in Amazon Redshift.</p>"]
@@ -672,13 +629,13 @@ pub struct RedshiftDestinationConfiguration {
     pub cloud_watch_logging_options: Option<CloudWatchLoggingOptions>,
     #[doc="<p>The database connection string.</p>"]
     #[serde(rename="ClusterJDBCURL")]
-    pub cluster_jdbcurl: ClusterJDBCURL,
+    pub cluster_jdbcurl: String,
     #[doc="<p>The <code>COPY</code> command.</p>"]
     #[serde(rename="CopyCommand")]
     pub copy_command: CopyCommand,
     #[doc="<p>The user password.</p>"]
     #[serde(rename="Password")]
-    pub password: Password,
+    pub password: String,
     #[doc="<p>The data processing configuration.</p>"]
     #[serde(rename="ProcessingConfiguration")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -689,7 +646,7 @@ pub struct RedshiftDestinationConfiguration {
     pub retry_options: Option<RedshiftRetryOptions>,
     #[doc="<p>The ARN of the AWS credentials.</p>"]
     #[serde(rename="RoleARN")]
-    pub role_arn: RoleARN,
+    pub role_arn: String,
     #[doc="<p>The configuration for backup in Amazon S3.</p>"]
     #[serde(rename="S3BackupConfiguration")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -697,13 +654,13 @@ pub struct RedshiftDestinationConfiguration {
     #[doc="<p>The Amazon S3 backup mode.</p>"]
     #[serde(rename="S3BackupMode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub s3_backup_mode: Option<RedshiftS3BackupMode>,
+    pub s3_backup_mode: Option<String>,
     #[doc="<p>The configuration for the intermediate Amazon S3 location from which Amazon Redshift obtains data. Restrictions are described in the topic for <a>CreateDeliveryStream</a>.</p> <p>The compression formats <code>SNAPPY</code> or <code>ZIP</code> cannot be specified in <b>RedshiftDestinationConfiguration.S3Configuration</b> because the Amazon Redshift <code>COPY</code> operation that reads from the S3 bucket doesn't support these compression formats.</p>"]
     #[serde(rename="S3Configuration")]
     pub s3_configuration: S3DestinationConfiguration,
     #[doc="<p>The name of the user.</p>"]
     #[serde(rename="Username")]
-    pub username: Username,
+    pub username: String,
 }
 
 #[doc="<p>Describes a destination in Amazon Redshift.</p>"]
@@ -715,7 +672,7 @@ pub struct RedshiftDestinationDescription {
     pub cloud_watch_logging_options: Option<CloudWatchLoggingOptions>,
     #[doc="<p>The database connection string.</p>"]
     #[serde(rename="ClusterJDBCURL")]
-    pub cluster_jdbcurl: ClusterJDBCURL,
+    pub cluster_jdbcurl: String,
     #[doc="<p>The <code>COPY</code> command.</p>"]
     #[serde(rename="CopyCommand")]
     pub copy_command: CopyCommand,
@@ -729,7 +686,7 @@ pub struct RedshiftDestinationDescription {
     pub retry_options: Option<RedshiftRetryOptions>,
     #[doc="<p>The ARN of the AWS credentials.</p>"]
     #[serde(rename="RoleARN")]
-    pub role_arn: RoleARN,
+    pub role_arn: String,
     #[doc="<p>The configuration for backup in Amazon S3.</p>"]
     #[serde(rename="S3BackupDescription")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -737,13 +694,13 @@ pub struct RedshiftDestinationDescription {
     #[doc="<p>The Amazon S3 backup mode.</p>"]
     #[serde(rename="S3BackupMode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub s3_backup_mode: Option<RedshiftS3BackupMode>,
+    pub s3_backup_mode: Option<String>,
     #[doc="<p>The Amazon S3 destination.</p>"]
     #[serde(rename="S3DestinationDescription")]
     pub s3_destination_description: S3DestinationDescription,
     #[doc="<p>The name of the user.</p>"]
     #[serde(rename="Username")]
-    pub username: Username,
+    pub username: String,
 }
 
 #[doc="<p>Describes an update for a destination in Amazon Redshift.</p>"]
@@ -756,7 +713,7 @@ pub struct RedshiftDestinationUpdate {
     #[doc="<p>The database connection string.</p>"]
     #[serde(rename="ClusterJDBCURL")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub cluster_jdbcurl: Option<ClusterJDBCURL>,
+    pub cluster_jdbcurl: Option<String>,
     #[doc="<p>The <code>COPY</code> command.</p>"]
     #[serde(rename="CopyCommand")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -764,7 +721,7 @@ pub struct RedshiftDestinationUpdate {
     #[doc="<p>The user password.</p>"]
     #[serde(rename="Password")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub password: Option<Password>,
+    pub password: Option<String>,
     #[doc="<p>The data processing configuration.</p>"]
     #[serde(rename="ProcessingConfiguration")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -776,11 +733,11 @@ pub struct RedshiftDestinationUpdate {
     #[doc="<p>The ARN of the AWS credentials.</p>"]
     #[serde(rename="RoleARN")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub role_arn: Option<RoleARN>,
+    pub role_arn: Option<String>,
     #[doc="<p>The Amazon S3 backup mode.</p>"]
     #[serde(rename="S3BackupMode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub s3_backup_mode: Option<RedshiftS3BackupMode>,
+    pub s3_backup_mode: Option<String>,
     #[doc="<p>The Amazon S3 destination for backup.</p>"]
     #[serde(rename="S3BackupUpdate")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -792,28 +749,24 @@ pub struct RedshiftDestinationUpdate {
     #[doc="<p>The name of the user.</p>"]
     #[serde(rename="Username")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub username: Option<Username>,
+    pub username: Option<String>,
 }
 
-pub type RedshiftRetryDurationInSeconds = i64;
 #[doc="<p>Configures retry behavior in the event that Firehose is unable to deliver documents to Amazon Redshift.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RedshiftRetryOptions {
     #[doc="<p>The length of time during which Firehose retries delivery after a failure, starting from the initial request and including the first attempt. The default value is 3600 seconds (60 minutes). Firehose does not retry if the value of <code>DurationInSeconds</code> is 0 (zero) or if the first delivery attempt takes longer than the current value.</p>"]
     #[serde(rename="DurationInSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub duration_in_seconds: Option<RedshiftRetryDurationInSeconds>,
+    pub duration_in_seconds: Option<i64>,
 }
 
-pub type RedshiftS3BackupMode = String;
-pub type RoleARN = String;
-pub type S3BackupMode = String;
 #[doc="<p>Describes the configuration of a destination in Amazon S3.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct S3DestinationConfiguration {
     #[doc="<p>The ARN of the S3 bucket.</p>"]
     #[serde(rename="BucketARN")]
-    pub bucket_arn: BucketARN,
+    pub bucket_arn: String,
     #[doc="<p>The buffering option. If no value is specified, <b>BufferingHints</b> object default values are used.</p>"]
     #[serde(rename="BufferingHints")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -825,7 +778,7 @@ pub struct S3DestinationConfiguration {
     #[doc="<p>The compression format. If no value is specified, the default is <code>UNCOMPRESSED</code>.</p> <p>The compression formats <code>SNAPPY</code> or <code>ZIP</code> cannot be specified for Amazon Redshift destinations because they are not supported by the Amazon Redshift <code>COPY</code> operation that reads from the S3 bucket.</p>"]
     #[serde(rename="CompressionFormat")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub compression_format: Option<CompressionFormat>,
+    pub compression_format: Option<String>,
     #[doc="<p>The encryption configuration. If no value is specified, the default is no encryption.</p>"]
     #[serde(rename="EncryptionConfiguration")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -833,10 +786,10 @@ pub struct S3DestinationConfiguration {
     #[doc="<p>The \"YYYY/MM/DD/HH\" time format prefix is automatically used for delivered S3 files. You can specify an extra prefix to be added in front of the time format prefix. Note that if the prefix ends with a slash, it appears as a folder in the S3 bucket. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/basic-deliver.html\">Amazon S3 Object Name Format</a> in the <i>Amazon Kinesis Firehose Developer Guide</i>.</p>"]
     #[serde(rename="Prefix")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub prefix: Option<Prefix>,
+    pub prefix: Option<String>,
     #[doc="<p>The ARN of the AWS credentials.</p>"]
     #[serde(rename="RoleARN")]
-    pub role_arn: RoleARN,
+    pub role_arn: String,
 }
 
 #[doc="<p>Describes a destination in Amazon S3.</p>"]
@@ -844,7 +797,7 @@ pub struct S3DestinationConfiguration {
 pub struct S3DestinationDescription {
     #[doc="<p>The ARN of the S3 bucket.</p>"]
     #[serde(rename="BucketARN")]
-    pub bucket_arn: BucketARN,
+    pub bucket_arn: String,
     #[doc="<p>The buffering option. If no value is specified, <b>BufferingHints</b> object default values are used.</p>"]
     #[serde(rename="BufferingHints")]
     pub buffering_hints: BufferingHints,
@@ -854,17 +807,17 @@ pub struct S3DestinationDescription {
     pub cloud_watch_logging_options: Option<CloudWatchLoggingOptions>,
     #[doc="<p>The compression format. If no value is specified, the default is <code>UNCOMPRESSED</code>.</p>"]
     #[serde(rename="CompressionFormat")]
-    pub compression_format: CompressionFormat,
+    pub compression_format: String,
     #[doc="<p>The encryption configuration. If no value is specified, the default is no encryption.</p>"]
     #[serde(rename="EncryptionConfiguration")]
     pub encryption_configuration: EncryptionConfiguration,
     #[doc="<p>The \"YYYY/MM/DD/HH\" time format prefix is automatically used for delivered S3 files. You can specify an extra prefix to be added in front of the time format prefix. Note that if the prefix ends with a slash, it appears as a folder in the S3 bucket. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/basic-deliver.html\">Amazon S3 Object Name Format</a> in the <i>Amazon Kinesis Firehose Developer Guide</i>.</p>"]
     #[serde(rename="Prefix")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub prefix: Option<Prefix>,
+    pub prefix: Option<String>,
     #[doc="<p>The ARN of the AWS credentials.</p>"]
     #[serde(rename="RoleARN")]
-    pub role_arn: RoleARN,
+    pub role_arn: String,
 }
 
 #[doc="<p>Describes an update for a destination in Amazon S3.</p>"]
@@ -873,7 +826,7 @@ pub struct S3DestinationUpdate {
     #[doc="<p>The ARN of the S3 bucket.</p>"]
     #[serde(rename="BucketARN")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub bucket_arn: Option<BucketARN>,
+    pub bucket_arn: Option<String>,
     #[doc="<p>The buffering option. If no value is specified, <b>BufferingHints</b> object default values are used.</p>"]
     #[serde(rename="BufferingHints")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -885,7 +838,7 @@ pub struct S3DestinationUpdate {
     #[doc="<p>The compression format. If no value is specified, the default is <code>UNCOMPRESSED</code>.</p> <p>The compression formats <code>SNAPPY</code> or <code>ZIP</code> cannot be specified for Amazon Redshift destinations because they are not supported by the Amazon Redshift <code>COPY</code> operation that reads from the S3 bucket.</p>"]
     #[serde(rename="CompressionFormat")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub compression_format: Option<CompressionFormat>,
+    pub compression_format: Option<String>,
     #[doc="<p>The encryption configuration. If no value is specified, the default is no encryption.</p>"]
     #[serde(rename="EncryptionConfiguration")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -893,26 +846,24 @@ pub struct S3DestinationUpdate {
     #[doc="<p>The \"YYYY/MM/DD/HH\" time format prefix is automatically used for delivered S3 files. You can specify an extra prefix to be added in front of the time format prefix. Note that if the prefix ends with a slash, it appears as a folder in the S3 bucket. For more information, see <a href=\"http://docs.aws.amazon.com/firehose/latest/dev/basic-deliver.html\">Amazon S3 Object Name Format</a> in the <i>Amazon Kinesis Firehose Developer Guide</i>.</p>"]
     #[serde(rename="Prefix")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub prefix: Option<Prefix>,
+    pub prefix: Option<String>,
     #[doc="<p>The ARN of the AWS credentials.</p>"]
     #[serde(rename="RoleARN")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub role_arn: Option<RoleARN>,
+    pub role_arn: Option<String>,
 }
 
-pub type SizeInMBs = i64;
-pub type Timestamp = f64;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateDestinationInput {
     #[doc="<p>Obtain this value from the <b>VersionId</b> result of <a>DeliveryStreamDescription</a>. This value is required, and helps the service to perform conditional operations. For example, if there is a interleaving update and this value is null, then the update destination fails. After the update is successful, the <b>VersionId</b> value is updated. The service then performs a merge of the old configuration with the new configuration.</p>"]
     #[serde(rename="CurrentDeliveryStreamVersionId")]
-    pub current_delivery_stream_version_id: DeliveryStreamVersionId,
+    pub current_delivery_stream_version_id: String,
     #[doc="<p>The name of the delivery stream.</p>"]
     #[serde(rename="DeliveryStreamName")]
-    pub delivery_stream_name: DeliveryStreamName,
+    pub delivery_stream_name: String,
     #[doc="<p>The ID of the destination.</p>"]
     #[serde(rename="DestinationId")]
-    pub destination_id: DestinationId,
+    pub destination_id: String,
     #[doc="<p>Describes an update for a destination in Amazon ES.</p>"]
     #[serde(rename="ElasticsearchDestinationUpdate")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -930,7 +881,6 @@ pub struct UpdateDestinationInput {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct UpdateDestinationOutput;
 
-pub type Username = String;
 /// Errors returned by CreateDeliveryStream
 #[derive(Debug, PartialEq)]
 pub enum CreateDeliveryStreamError {

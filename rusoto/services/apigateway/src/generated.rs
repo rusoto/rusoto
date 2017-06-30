@@ -41,7 +41,7 @@ pub struct Account {
     #[doc="<p>A list of features supported for the account. When usage plans are enabled, the features list will include an entry of <code>\"UsagePlans\"</code>.</p>"]
     #[serde(rename="features")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub features: Option<ListOfString>,
+    pub features: Option<Vec<String>>,
     #[doc="<p>Specifies the API request limits configured for the current <a>Account</a>.</p>"]
     #[serde(rename="throttleSettings")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -54,7 +54,7 @@ pub struct ApiKey {
     #[doc="<p>The timestamp when the API Key was created.</p>"]
     #[serde(rename="createdDate")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_date: Option<Timestamp>,
+    pub created_date: Option<f64>,
     #[doc="<p>An AWS Marketplace customer identifier , when integrating with the AWS SaaS Marketplace.</p>"]
     #[serde(rename="customerId")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -66,7 +66,7 @@ pub struct ApiKey {
     #[doc="<p>Specifies whether the API Key can be used by callers.</p>"]
     #[serde(rename="enabled")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub enabled: Option<Boolean>,
+    pub enabled: Option<bool>,
     #[doc="<p>The identifier of the API Key.</p>"]
     #[serde(rename="id")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -74,7 +74,7 @@ pub struct ApiKey {
     #[doc="<p>The timestamp when the API Key was last updated.</p>"]
     #[serde(rename="lastUpdatedDate")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub last_updated_date: Option<Timestamp>,
+    pub last_updated_date: Option<f64>,
     #[doc="<p>The name of the API Key.</p>"]
     #[serde(rename="name")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -82,7 +82,7 @@ pub struct ApiKey {
     #[doc="<p>A list of <a>Stage</a> resources that are associated with the <a>ApiKey</a> resource.</p>"]
     #[serde(rename="stageKeys")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub stage_keys: Option<ListOfString>,
+    pub stage_keys: Option<Vec<String>>,
     #[doc="<p>The value of the API Key.</p>"]
     #[serde(rename="value")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -95,11 +95,11 @@ pub struct ApiKeyIds {
     #[doc="<p>A list of all the <a>ApiKey</a> identifiers.</p>"]
     #[serde(rename="ids")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ids: Option<ListOfString>,
+    pub ids: Option<Vec<String>>,
     #[doc="<p>A list of warning messages.</p>"]
     #[serde(rename="warnings")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub warnings: Option<ListOfString>,
+    pub warnings: Option<Vec<String>>,
 }
 
 #[doc="<p>Represents a collection of API keys as represented by an <a>ApiKeys</a> resource.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-api-keys.html\">Use API Keys</a> </div>"]
@@ -108,17 +108,16 @@ pub struct ApiKeys {
     #[doc="<p>The current page of any <a>ApiKey</a> resources in the collection of <a>ApiKey</a> resources.</p>"]
     #[serde(rename="items")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub items: Option<ListOfApiKey>,
+    pub items: Option<Vec<ApiKey>>,
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub position: Option<String>,
     #[doc="<p>A list of warning messages logged during the import of API keys when the <code>failOnWarnings</code> option is set to true.</p>"]
     #[serde(rename="warnings")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub warnings: Option<ListOfString>,
+    pub warnings: Option<Vec<String>>,
 }
 
-pub type ApiKeysFormat = String;
 #[doc="<p>API stage name of the associated API stage in a usage plan.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ApiStage {
@@ -146,7 +145,7 @@ pub struct Authorizer {
     #[doc="<p>The TTL in seconds of cached authorizer results. If greater than 0, API Gateway will cache authorizer responses. If this field is not set, the default value is 300. The maximum value is 3600, or 1 hour.</p>"]
     #[serde(rename="authorizerResultTtlInSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub authorizer_result_ttl_in_seconds: Option<NullableInteger>,
+    pub authorizer_result_ttl_in_seconds: Option<i64>,
     #[doc="<p>[Required] Specifies the authorizer's Uniform Resource Identifier (URI). For <code>TOKEN</code> authorizers, this must be a well-formed Lambda function URI, for example, <code>arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:{account_id}:function:{lambda_function_name}/invocations</code>. In general, the URI has this form <code>arn:aws:apigateway:{region}:lambda:path/{service_api}</code>, where <code>{region}</code> is the same as the region hosting the Lambda function, <code>path</code> indicates that the remaining substring in the URI should be treated as the path to the resource, including the initial <code>/</code>. For Lambda functions, this is usually of the form /2015-03-31/functions/[FunctionARN]/invocations.</p>"]
     #[serde(rename="authorizerUri")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -170,22 +169,21 @@ pub struct Authorizer {
     #[doc="<p>A list of the provider ARNs of the authorizer. For an <code>TOKEN</code> authorizer, this is not defined. For authorizers of the <code>COGNITO_USER_POOLS</code> type, each element corresponds to a user pool ARN of this format: <code>arn:aws:cognito-idp:{region}:{account_id}:userpool/{user_pool_id}</code>. </p>"]
     #[serde(rename="providerARNs")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub provider_ar_ns: Option<ListOfARNs>,
+    pub provider_ar_ns: Option<Vec<String>>,
     #[doc="<p>[Required] The type of the authorizer. Currently, the valid type is <code>TOKEN</code> for a Lambda function or <code>COGNITO_USER_POOLS</code> for an Amazon Cognito user pool.</p>"]
     #[serde(rename="type")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub type_: Option<AuthorizerType>,
+    pub type_: Option<String>,
 }
 
 #[doc="<p>The authorizer type. the current value is <code>TOKEN</code> for a Lambda function or <code>COGNITO_USER_POOLS</code> for an Amazon Cognito Your User Pool.</p>"]
-pub type AuthorizerType = String;
 #[doc="<p>Represents a collection of <a>Authorizer</a> resources.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html\">Enable custom authorization</a> </div>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Authorizers {
     #[doc="<p>Gets the current list of <a>Authorizer</a> resources in the collection.</p>"]
     #[serde(rename="items")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub items: Option<ListOfAuthorizer>,
+    pub items: Option<Vec<Authorizer>>,
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub position: Option<String>,
@@ -214,18 +212,14 @@ pub struct BasePathMappings {
     #[doc="<p>The current page of any <a>BasePathMapping</a> resources in the collection of base path mapping resources.</p>"]
     #[serde(rename="items")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub items: Option<ListOfBasePathMapping>,
+    pub items: Option<Vec<BasePathMapping>>,
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub position: Option<String>,
 }
 
-pub type Blob = Vec<u8>;
-pub type Boolean = bool;
 #[doc="<p>Returns the size of the <b>CacheCluster</b>.</p>"]
-pub type CacheClusterSize = String;
 #[doc="<p>Returns the status of the <b>CacheCluster</b>.</p>"]
-pub type CacheClusterStatus = String;
 #[doc="<p>Represents a client certificate used to configure client-side SSL authentication while sending requests to the integration endpoint.</p> <div class=\"remarks\">Client certificates are used authenticate an API by the back-end server. To authenticate an API client (or user), use a custom <a>Authorizer</a>.</div> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/getting-started-client-side-ssl-authentication.html\">Use Client-Side Certificate</a> </div>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ClientCertificate {
@@ -236,7 +230,7 @@ pub struct ClientCertificate {
     #[doc="<p>The timestamp when the client certificate was created.</p>"]
     #[serde(rename="createdDate")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_date: Option<Timestamp>,
+    pub created_date: Option<f64>,
     #[doc="<p>The description of the client certificate.</p>"]
     #[serde(rename="description")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -244,7 +238,7 @@ pub struct ClientCertificate {
     #[doc="<p>The timestamp when the client certificate will expire.</p>"]
     #[serde(rename="expirationDate")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub expiration_date: Option<Timestamp>,
+    pub expiration_date: Option<f64>,
     #[doc="<p>The PEM-encoded public key of the client certificate, which can be used to configure certificate authentication in the integration endpoint .</p>"]
     #[serde(rename="pemEncodedCertificate")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -257,13 +251,12 @@ pub struct ClientCertificates {
     #[doc="<p>The current page of any <a>ClientCertificate</a> resources in the collection of <a>ClientCertificate</a> resources.</p>"]
     #[serde(rename="items")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub items: Option<ListOfClientCertificate>,
+    pub items: Option<Vec<ClientCertificate>>,
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub position: Option<String>,
 }
 
-pub type ContentHandlingStrategy = String;
 #[doc="<p>Request to create an <a>ApiKey</a> resource.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateApiKeyRequest {
@@ -278,11 +271,11 @@ pub struct CreateApiKeyRequest {
     #[doc="<p>Specifies whether the <a>ApiKey</a> can be used by callers.</p>"]
     #[serde(rename="enabled")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub enabled: Option<Boolean>,
+    pub enabled: Option<bool>,
     #[doc="<p>Specifies whether (<code>true</code>) or not (<code>false</code>) the key identifier is distinct from the created API key value.</p>"]
     #[serde(rename="generateDistinctId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub generate_distinct_id: Option<Boolean>,
+    pub generate_distinct_id: Option<bool>,
     #[doc="<p>The name of the <a>ApiKey</a>.</p>"]
     #[serde(rename="name")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -290,7 +283,7 @@ pub struct CreateApiKeyRequest {
     #[doc="<p>DEPRECATED FOR USAGE PLANS - Specifies stages associated with the API key.</p>"]
     #[serde(rename="stageKeys")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub stage_keys: Option<ListOfStageKeys>,
+    pub stage_keys: Option<Vec<StageKey>>,
     #[doc="<p>Specifies a value of the API key.</p>"]
     #[serde(rename="value")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -311,7 +304,7 @@ pub struct CreateAuthorizerRequest {
     #[doc="<p>The TTL of cached authorizer results.</p>"]
     #[serde(rename="authorizerResultTtlInSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub authorizer_result_ttl_in_seconds: Option<NullableInteger>,
+    pub authorizer_result_ttl_in_seconds: Option<i64>,
     #[doc="<p>[Required] Specifies the authorizer's Uniform Resource Identifier (URI).</p>"]
     #[serde(rename="authorizerUri")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -329,13 +322,13 @@ pub struct CreateAuthorizerRequest {
     #[doc="<p>A list of the Cognito Your User Pool authorizer's provider ARNs.</p>"]
     #[serde(rename="providerARNs")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub provider_ar_ns: Option<ListOfARNs>,
+    pub provider_ar_ns: Option<Vec<String>>,
     #[doc="<p>The <a>RestApi</a> identifier under which the <a>Authorizer</a> will be created.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
     #[doc="<p>[Required] The type of the authorizer.</p>"]
     #[serde(rename="type")]
-    pub type_: AuthorizerType,
+    pub type_: String,
 }
 
 #[doc="<p>Requests Amazon API Gateway to create a new <a>BasePathMapping</a> resource.</p>"]
@@ -363,11 +356,11 @@ pub struct CreateDeploymentRequest {
     #[doc="<p>Enables a cache cluster for the <a>Stage</a> resource specified in the input.</p>"]
     #[serde(rename="cacheClusterEnabled")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub cache_cluster_enabled: Option<NullableBoolean>,
+    pub cache_cluster_enabled: Option<bool>,
     #[doc="<p>Specifies the cache cluster size for the <a>Stage</a> resource specified in the input, if a cache cluster is enabled.</p>"]
     #[serde(rename="cacheClusterSize")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub cache_cluster_size: Option<CacheClusterSize>,
+    pub cache_cluster_size: Option<String>,
     #[doc="<p>The description for the <a>Deployment</a> resource to create.</p>"]
     #[serde(rename="description")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -386,7 +379,7 @@ pub struct CreateDeploymentRequest {
     #[doc="<p>A map that defines the stage variables for the <a>Stage</a> resource that is associated with the new deployment. Variable names can have alphanumeric and underscore characters, and the values must match <code>[A-Za-z0-9-._~:/?#&amp;=,]+</code>.</p>"]
     #[serde(rename="variables")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub variables: Option<MapOfStringToString>,
+    pub variables: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[doc="<p>Creates a new documentation part of a given API.</p>"]
@@ -485,11 +478,11 @@ pub struct CreateRequestValidatorRequest {
     #[doc="<p>A Boolean flag to indicate whether to validate request body according to the configured model schema for the method (<code>true</code>) or not (<code>false</code>).</p>"]
     #[serde(rename="validateRequestBody")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub validate_request_body: Option<Boolean>,
+    pub validate_request_body: Option<bool>,
     #[doc="<p>A Boolean flag to indicate whether to validate request parameters, <code>true</code>, or not <code>false</code>.</p>"]
     #[serde(rename="validateRequestParameters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub validate_request_parameters: Option<Boolean>,
+    pub validate_request_parameters: Option<bool>,
 }
 
 #[doc="<p>Requests Amazon API Gateway to create a <a>Resource</a> resource.</p>"]
@@ -512,7 +505,7 @@ pub struct CreateRestApiRequest {
     #[doc="<p>The list of binary media types supported by the <a>RestApi</a>. By default, the <a>RestApi</a> supports only UTF-8-encoded text payloads.</p>"]
     #[serde(rename="binaryMediaTypes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub binary_media_types: Option<ListOfString>,
+    pub binary_media_types: Option<Vec<String>>,
     #[doc="<p>The ID of the <a>RestApi</a> that you want to clone from.</p>"]
     #[serde(rename="cloneFrom")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -536,11 +529,11 @@ pub struct CreateStageRequest {
     #[doc="<p>Whether cache clustering is enabled for the stage.</p>"]
     #[serde(rename="cacheClusterEnabled")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub cache_cluster_enabled: Option<Boolean>,
+    pub cache_cluster_enabled: Option<bool>,
     #[doc="<p>The stage's cache cluster size.</p>"]
     #[serde(rename="cacheClusterSize")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub cache_cluster_size: Option<CacheClusterSize>,
+    pub cache_cluster_size: Option<String>,
     #[doc="<p>The identifier of the <a>Deployment</a> resource for the <a>Stage</a> resource.</p>"]
     #[serde(rename="deploymentId")]
     pub deployment_id: String,
@@ -561,7 +554,7 @@ pub struct CreateStageRequest {
     #[doc="<p>A map that defines the stage variables for the new <a>Stage</a> resource. Variable names can have alphanumeric and underscore characters, and the values must match <code>[A-Za-z0-9-._~:/?#&amp;=,]+</code>.</p>"]
     #[serde(rename="variables")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub variables: Option<MapOfStringToString>,
+    pub variables: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[doc="<p>The POST request to create a usage plan key for adding an existing API key to a usage plan.</p>"]
@@ -584,7 +577,7 @@ pub struct CreateUsagePlanRequest {
     #[doc="<p>The associated API stages of the usage plan.</p>"]
     #[serde(rename="apiStages")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub api_stages: Option<ListOfApiStage>,
+    pub api_stages: Option<Vec<ApiStage>>,
     #[doc="<p>The description of the usage plan.</p>"]
     #[serde(rename="description")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -709,7 +702,7 @@ pub struct DeleteIntegrationResponseRequest {
     pub rest_api_id: String,
     #[doc="<p>Specifies a delete integration response request's status code.</p>"]
     #[serde(rename="statusCode")]
-    pub status_code: ApiGatewayStatusCode,
+    pub status_code: String,
 }
 
 #[doc="<p>Request to delete an existing <a>Method</a> resource.</p>"]
@@ -740,7 +733,7 @@ pub struct DeleteMethodResponseRequest {
     pub rest_api_id: String,
     #[doc="<p>The status code identifier for the <a>MethodResponse</a> resource.</p>"]
     #[serde(rename="statusCode")]
-    pub status_code: ApiGatewayStatusCode,
+    pub status_code: String,
 }
 
 #[doc="<p>Request to delete an existing model in an existing <a>RestApi</a> resource.</p>"]
@@ -820,11 +813,13 @@ pub struct Deployment {
     #[doc="<p>A summary of the <a>RestApi</a> at the date and time that the deployment resource was created.</p>"]
     #[serde(rename="apiSummary")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub api_summary: Option<PathToMapOfMethodSnapshot>,
+    pub api_summary:
+        Option<::std::collections::HashMap<String,
+                                           ::std::collections::HashMap<String, MethodSnapshot>>>,
     #[doc="<p>The date and time that the deployment resource was created.</p>"]
     #[serde(rename="createdDate")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_date: Option<Timestamp>,
+    pub created_date: Option<f64>,
     #[doc="<p>The description for the deployment resource.</p>"]
     #[serde(rename="description")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -841,7 +836,7 @@ pub struct Deployments {
     #[doc="<p>The current page of any <a>Deployment</a> resources in the collection of deployment resources.</p>"]
     #[serde(rename="items")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub items: Option<ListOfDeployment>,
+    pub items: Option<Vec<Deployment>>,
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub position: Option<String>,
@@ -870,11 +865,11 @@ pub struct DocumentationPartIds {
     #[doc="<p>A list of the returned documentation part identifiers.</p>"]
     #[serde(rename="ids")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ids: Option<ListOfString>,
+    pub ids: Option<Vec<String>>,
     #[doc="<p>A list of warning messages reported during import of documentation parts.</p>"]
     #[serde(rename="warnings")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub warnings: Option<ListOfString>,
+    pub warnings: Option<Vec<String>>,
 }
 
 #[doc="<p>Specifies the target API entity to which the documentation applies.</p>"]
@@ -895,21 +890,19 @@ pub struct DocumentationPartLocation {
     #[doc="<p>The HTTP status code of a response. It is a valid field for the API entity types of <code>RESPONSE</code>, <code>RESPONSE_HEADER</code>, and <code>RESPONSE_BODY</code>. The default value is <code>*</code> for any status code. When an applicable child entity inherits the content of an entity of the same type with more general specifications of the other <code>location</code> attributes, the child entity's <code>statusCode</code> attribute must match that of the parent entity exactly.</p>"]
     #[serde(rename="statusCode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status_code: Option<DocumentationPartLocationStatusCode>,
+    pub status_code: Option<String>,
     #[doc="<p>The type of API entity to which the documentation content applies. It is a valid and required field for API entity types of <code>API</code>, <code>AUTHORIZER</code>, <code>MODEL</code>, <code>RESOURCE</code>, <code>METHOD</code>, <code>PATH_PARAMETER</code>, <code>QUERY_PARAMETER</code>, <code>REQUEST_HEADER</code>, <code>REQUEST_BODY</code>, <code>RESPONSE</code>, <code>RESPONSE_HEADER</code>, and <code>RESPONSE_BODY</code>. Content inheritance does not apply to any entity of the <code>API</code>, <code>AUTHROZER</code>, <code>METHOD</code>, <code>MODEL</code>, <code>REQUEST_BODY</code>, or <code>RESOURCE</code> type.</p>"]
     #[serde(rename="type")]
-    pub type_: DocumentationPartType,
+    pub type_: String,
 }
 
-pub type DocumentationPartLocationStatusCode = String;
-pub type DocumentationPartType = String;
 #[doc="<p>The collection of documentation parts of an API.</p> <div class=\"remarks\"/> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html\">Documenting an API</a>, <a>DocumentationPart</a> </div>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DocumentationParts {
     #[doc="<p>The current page of <a>DocumentationPart</a> resources in the <a>DocumentationParts</a> collection.</p>"]
     #[serde(rename="items")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub items: Option<ListOfDocumentationPart>,
+    pub items: Option<Vec<DocumentationPart>>,
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub position: Option<String>,
@@ -921,7 +914,7 @@ pub struct DocumentationVersion {
     #[doc="<p>The date when the API documentation snapshot is created.</p>"]
     #[serde(rename="createdDate")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_date: Option<Timestamp>,
+    pub created_date: Option<f64>,
     #[doc="<p>The description of the API documentation snapshot.</p>"]
     #[serde(rename="description")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -938,7 +931,7 @@ pub struct DocumentationVersions {
     #[doc="<p>The current page of <a>DocumentationVersion</a> items from the <a>DocumentationVersions</a> collection of an API.</p>"]
     #[serde(rename="items")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub items: Option<ListOfDocumentationVersion>,
+    pub items: Option<Vec<DocumentationVersion>>,
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub position: Option<String>,
@@ -958,7 +951,7 @@ pub struct DomainName {
     #[doc="<p>The timestamp when the certificate was uploaded.</p>"]
     #[serde(rename="certificateUploadDate")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub certificate_upload_date: Option<Timestamp>,
+    pub certificate_upload_date: Option<f64>,
     #[doc="<p>The domain name of the Amazon CloudFront distribution. For more information, see the <a href=\"http://aws.amazon.com/documentation/cloudfront/\" target=\"_blank\">Amazon CloudFront documentation</a>.</p>"]
     #[serde(rename="distributionDomainName")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -975,18 +968,17 @@ pub struct DomainNames {
     #[doc="<p>The current page of any <a>DomainName</a> resources in the collection of <a>DomainName</a> resources.</p>"]
     #[serde(rename="items")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub items: Option<ListOfDomainName>,
+    pub items: Option<Vec<DomainName>>,
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub position: Option<String>,
 }
 
-pub type Double = f64;
 #[doc="<p>The binary blob response to <a>GetExport</a>, which contains the generated SDK.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct ExportResponse {
     #[doc="<p>The binary blob response to <a>GetExport</a>, which contains the export.</p>"]
-    pub body: Option<Blob>,
+    pub body: Option<Vec<u8>>,
     #[doc="<p>The content-disposition header value in the HTTP response.</p>"]
     pub content_disposition: Option<String>,
     #[doc="<p>The content-type header value in the HTTP response. This will correspond to a valid 'accept' type in the request.</p>"]
@@ -1037,7 +1029,7 @@ pub struct GetApiKeyRequest {
     #[doc="<p>A boolean flag to specify whether (<code>true</code>) or not (<code>false</code>) the result contains the key value.</p>"]
     #[serde(rename="includeValue")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub include_value: Option<NullableBoolean>,
+    pub include_value: Option<bool>,
 }
 
 #[doc="<p>A request to get information about the current <a>ApiKeys</a> resource.</p>"]
@@ -1050,11 +1042,11 @@ pub struct GetApiKeysRequest {
     #[doc="<p>A boolean flag to specify whether (<code>true</code>) or not (<code>false</code>) the result contains key values.</p>"]
     #[serde(rename="includeValues")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub include_values: Option<NullableBoolean>,
+    pub include_values: Option<bool>,
     #[doc="<p>The maximum number of <a>ApiKeys</a> to get information about.</p>"]
     #[serde(rename="limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<NullableInteger>,
+    pub limit: Option<i64>,
     #[doc="<p>The name of queried API keys.</p>"]
     #[serde(rename="nameQuery")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1082,7 +1074,7 @@ pub struct GetAuthorizersRequest {
     #[doc="<p>The maximum number of returned results per page.</p>"]
     #[serde(rename="limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<NullableInteger>,
+    pub limit: Option<i64>,
     #[doc="<p>The current pagination position in the paged result set.</p>"]
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1112,7 +1104,7 @@ pub struct GetBasePathMappingsRequest {
     #[doc="<p>The maximum number of returned results per page. The value is 25 by default and could be between 1 - 500.</p>"]
     #[serde(rename="limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<NullableInteger>,
+    pub limit: Option<i64>,
     #[doc="<p>The current pagination position in the paged result set.</p>"]
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1133,7 +1125,7 @@ pub struct GetClientCertificatesRequest {
     #[doc="<p>The maximum number of returned results per page. The value is 25 by default and could be between 1 - 500.</p>"]
     #[serde(rename="limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<NullableInteger>,
+    pub limit: Option<i64>,
     #[doc="<p>The current pagination position in the paged result set.</p>"]
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1149,7 +1141,7 @@ pub struct GetDeploymentRequest {
     #[doc="<p>A query parameter to retrieve the specified embedded resources of the returned <a>Deployment</a> resource in the response. In a REST API call, this <code>embed</code> parameter value is a list of comma-separated strings, as in <code>GET /restapis/{restapi_id}/deployments/{deployment_id}?embed=var1,var2</code>. The SDK and other platform-dependent libraries might use a different format for the list. Currently, this request supports only retrieval of the embedded API summary this way. Hence, the parameter value must be a single-valued list containing only the <code>\"apisummary\"</code> string. For example, <code>GET /restapis/{restapi_id}/deployments/{deployment_id}?embed=apisummary</code>.</p>"]
     #[serde(rename="embed")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub embed: Option<ListOfString>,
+    pub embed: Option<Vec<String>>,
     #[doc="<p>The identifier of the <a>RestApi</a> resource for the <a>Deployment</a> resource to get information about.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
@@ -1161,7 +1153,7 @@ pub struct GetDeploymentsRequest {
     #[doc="<p>The maximum number of returned results per page. The value is 25 by default and could be between 1 - 500.</p>"]
     #[serde(rename="limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<NullableInteger>,
+    pub limit: Option<i64>,
     #[doc="<p>The current pagination position in the paged result set.</p>"]
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1188,7 +1180,7 @@ pub struct GetDocumentationPartsRequest {
     #[doc="<p>The maximum number of returned results per page.</p>"]
     #[serde(rename="limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<NullableInteger>,
+    pub limit: Option<i64>,
     #[doc="<p>The name of API entities of the to-be-retrieved documentation parts.</p>"]
     #[serde(rename="nameQuery")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1207,7 +1199,7 @@ pub struct GetDocumentationPartsRequest {
     #[doc="<p>The type of API entities of the to-be-retrieved documentation parts. </p>"]
     #[serde(rename="type")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub type_: Option<DocumentationPartType>,
+    pub type_: Option<String>,
 }
 
 #[doc="<p>Gets a documentation snapshot of an API.</p>"]
@@ -1227,7 +1219,7 @@ pub struct GetDocumentationVersionsRequest {
     #[doc="<p>The maximum number of returned results per page.</p>"]
     #[serde(rename="limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<NullableInteger>,
+    pub limit: Option<i64>,
     #[doc="<p>The current pagination position in the paged result set.</p>"]
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1251,7 +1243,7 @@ pub struct GetDomainNamesRequest {
     #[doc="<p>The maximum number of returned results per page. The value is 25 by default and could be between 1 - 500.</p>"]
     #[serde(rename="limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<NullableInteger>,
+    pub limit: Option<i64>,
     #[doc="<p>The current pagination position in the paged result set.</p>"]
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1271,7 +1263,7 @@ pub struct GetExportRequest {
     #[doc="<p>A key-value map of query string parameters that specify properties of the export, depending on the requested <code>exportType</code>. For <code>exportType</code> <code>swagger</code>, any combination of the following parameters are supported: <code>integrations</code> will export the API with x-amazon-apigateway-integration extensions. <code>authorizers</code> will export the API with x-amazon-apigateway-authorizer extensions. <code>postman</code> will export the API with Postman extensions, allowing for import to the Postman tool</p>"]
     #[serde(rename="parameters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub parameters: Option<MapOfStringToString>,
+    pub parameters: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>The identifier of the <a>RestApi</a> to be exported.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
@@ -1308,7 +1300,7 @@ pub struct GetIntegrationResponseRequest {
     pub rest_api_id: String,
     #[doc="<p>Specifies a get integration response request's status code.</p>"]
     #[serde(rename="statusCode")]
-    pub status_code: ApiGatewayStatusCode,
+    pub status_code: String,
 }
 
 #[doc="<p>Request to describe an existing <a>Method</a> resource.</p>"]
@@ -1339,7 +1331,7 @@ pub struct GetMethodResponseRequest {
     pub rest_api_id: String,
     #[doc="<p>The status code for the <a>MethodResponse</a> resource.</p>"]
     #[serde(rename="statusCode")]
-    pub status_code: ApiGatewayStatusCode,
+    pub status_code: String,
 }
 
 #[doc="<p>Request to list information about a model in an existing <a>RestApi</a> resource.</p>"]
@@ -1348,7 +1340,7 @@ pub struct GetModelRequest {
     #[doc="<p>A query parameter of a Boolean value to resolve (<code>true</code>) all external model references and returns a flattened model schema or not (<code>false</code>) The default is <code>false</code>.</p>"]
     #[serde(rename="flatten")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub flatten: Option<Boolean>,
+    pub flatten: Option<bool>,
     #[doc="<p>The name of the model as an identifier.</p>"]
     #[serde(rename="modelName")]
     pub model_name: String,
@@ -1374,7 +1366,7 @@ pub struct GetModelsRequest {
     #[doc="<p>The maximum number of returned results per page. The value is 25 by default and could be between 1 - 500.</p>"]
     #[serde(rename="limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<NullableInteger>,
+    pub limit: Option<i64>,
     #[doc="<p>The current pagination position in the paged result set.</p>"]
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1401,7 +1393,7 @@ pub struct GetRequestValidatorsRequest {
     #[doc="<p>The maximum number of returned results per page.</p>"]
     #[serde(rename="limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<NullableInteger>,
+    pub limit: Option<i64>,
     #[doc="<p>The current pagination position in the paged result set.</p>"]
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1417,7 +1409,7 @@ pub struct GetResourceRequest {
     #[doc="<p>A query parameter to retrieve the specified resources embedded in the returned <a>Resource</a> representation in the response. This <code>embed</code> parameter value is a list of comma-separated strings. Currently, the request supports only retrieval of the embedded <a>Method</a> resources this way. The query parameter value must be a single-valued list and contain the <code>\"methods\"</code> string. For example, <code>GET /restapis/{restapi_id}/resources/{resource_id}?embed=methods</code>.</p>"]
     #[serde(rename="embed")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub embed: Option<ListOfString>,
+    pub embed: Option<Vec<String>>,
     #[doc="<p>The identifier for the <a>Resource</a> resource.</p>"]
     #[serde(rename="resourceId")]
     pub resource_id: String,
@@ -1432,11 +1424,11 @@ pub struct GetResourcesRequest {
     #[doc="<p>A query parameter used to retrieve the specified resources embedded in the returned <a>Resources</a> resource in the response. This <code>embed</code> parameter value is a list of comma-separated strings. Currently, the request supports only retrieval of the embedded <a>Method</a> resources this way. The query parameter value must be a single-valued list and contain the <code>\"methods\"</code> string. For example, <code>GET /restapis/{restapi_id}/resources?embed=methods</code>.</p>"]
     #[serde(rename="embed")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub embed: Option<ListOfString>,
+    pub embed: Option<Vec<String>>,
     #[doc="<p>The maximum number of returned results per page. The value is 25 by default and could be between 1 - 500.</p>"]
     #[serde(rename="limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<NullableInteger>,
+    pub limit: Option<i64>,
     #[doc="<p>The current pagination position in the paged result set.</p>"]
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1460,7 +1452,7 @@ pub struct GetRestApisRequest {
     #[doc="<p>The maximum number of returned results per page. The value is 25 by default and could be between 1 - 500.</p>"]
     #[serde(rename="limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<NullableInteger>,
+    pub limit: Option<i64>,
     #[doc="<p>The current pagination position in the paged result set.</p>"]
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1473,7 +1465,7 @@ pub struct GetSdkRequest {
     #[doc="<p>A key-value map of query string parameters that specify properties of the SDK, depending on the requested <code>sdkType</code>. For <code>sdkType</code> of <code>objectivec</code>, a parameter named <code>classPrefix</code> is required. For <code>sdkType</code> of <code>android</code>, parameters named <code>groupId</code>, <code>artifactId</code>, <code>artifactVersion</code>, and <code>invokerPackage</code> are required.</p>"]
     #[serde(rename="parameters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub parameters: Option<MapOfStringToString>,
+    pub parameters: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>The identifier of the <a>RestApi</a> that the SDK will use.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
@@ -1499,7 +1491,7 @@ pub struct GetSdkTypesRequest {
     #[doc="<p>The maximum number of returned results per page.</p>"]
     #[serde(rename="limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<NullableInteger>,
+    pub limit: Option<i64>,
     #[doc="<p>The current pagination position in the paged result set.</p>"]
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1546,7 +1538,7 @@ pub struct GetUsagePlanKeysRequest {
     #[doc="<p>The maximum number of returned results per page.</p>"]
     #[serde(rename="limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<NullableInteger>,
+    pub limit: Option<i64>,
     #[doc="<p>A query parameter specifying the name of the to-be-returned usage plan keys.</p>"]
     #[serde(rename="nameQuery")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1578,7 +1570,7 @@ pub struct GetUsagePlansRequest {
     #[doc="<p>The maximum number of returned results per page.</p>"]
     #[serde(rename="limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<NullableInteger>,
+    pub limit: Option<i64>,
     #[doc="<p>The current pagination position in the paged result set.</p>"]
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1598,7 +1590,7 @@ pub struct GetUsageRequest {
     #[doc="<p>The maximum number of returned results per page.</p>"]
     #[serde(rename="limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<NullableInteger>,
+    pub limit: Option<i64>,
     #[doc="<p>The current pagination position in the paged result set.</p>"]
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1621,14 +1613,14 @@ pub struct ImportApiKeysRequest {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub body: Blob,
+    pub body: Vec<u8>,
     #[doc="<p>A query parameter to indicate whether to rollback <a>ApiKey</a> importation (<code>true</code>) or not (<code>false</code>) when error is encountered.</p>"]
     #[serde(rename="failOnWarnings")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub fail_on_warnings: Option<Boolean>,
+    pub fail_on_warnings: Option<bool>,
     #[doc="<p>A query parameter to specify the input format to imported API keys. Currently, only the <code>csv</code> format is supported.</p>"]
     #[serde(rename="format")]
-    pub format: ApiKeysFormat,
+    pub format: String,
 }
 
 #[doc="<p>Import documentation parts from an external (e.g., Swagger) definition file. </p>"]
@@ -1641,15 +1633,15 @@ pub struct ImportDocumentationPartsRequest {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub body: Blob,
+    pub body: Vec<u8>,
     #[doc="<p>A query parameter to specify whether to rollback the documentation importation (<code>true</code>) or not (<code>false</code>) when a warning is encountered. The default value is <code>false</code>.</p>"]
     #[serde(rename="failOnWarnings")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub fail_on_warnings: Option<Boolean>,
+    pub fail_on_warnings: Option<bool>,
     #[doc="<p>A query parameter to indicate whether to overwrite (<code>OVERWRITE</code>) any existing <a>DocumentationParts</a> definition or to merge (<code>MERGE</code>) the new definition into the existing one. The default value is <code>MERGE</code>.</p>"]
     #[serde(rename="mode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub mode: Option<PutMode>,
+    pub mode: Option<String>,
     #[doc="<p>[Required] The identifier of an API of the to-be-imported documentation parts.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
@@ -1665,25 +1657,24 @@ pub struct ImportRestApiRequest {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub body: Blob,
+    pub body: Vec<u8>,
     #[doc="<p>A query parameter to indicate whether to rollback the API creation (<code>true</code>) or not (<code>false</code>) when a warning is encountered. The default value is <code>false</code>.</p>"]
     #[serde(rename="failOnWarnings")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub fail_on_warnings: Option<Boolean>,
+    pub fail_on_warnings: Option<bool>,
     #[doc="<p>Custom header parameters as part of the request.</p>"]
     #[serde(rename="parameters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub parameters: Option<MapOfStringToString>,
+    pub parameters: Option<::std::collections::HashMap<String, String>>,
 }
 
-pub type Integer = i64;
 #[doc="<p>Represents an HTTP, HTTP_PROXY, AWS, AWS_PROXY, or Mock integration.</p> <div class=\"remarks\">In the API Gateway console, the built-in Lambda integration is an AWS integration.</div> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html\">Creating an API</a> </div>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Integration {
     #[doc="<p>Specifies the integration's cache key parameters.</p>"]
     #[serde(rename="cacheKeyParameters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub cache_key_parameters: Option<ListOfString>,
+    pub cache_key_parameters: Option<Vec<String>>,
     #[doc="<p>Specifies the integration's cache namespace.</p>"]
     #[serde(rename="cacheNamespace")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1691,7 +1682,7 @@ pub struct Integration {
     #[doc="<p>Specifies how to handle request payload content type conversions. Supported values are <code>CONVERT_TO_BINARY</code> and <code>CONVERT_TO_TEXT</code>, with the following behaviors:</p> <ul> <li><p><code>CONVERT_TO_BINARY</code>: Converts a request payload from a Base64-encoded string to the corresponding binary blob.</p></li> <li><p><code>CONVERT_TO_TEXT</code>: Converts a request payload from a binary blob to a Base64-encoded string.</p></li> </ul> <p>If this property is not defined, the request payload will be passed through from the method request to integration request without modification, provided that the <code>passthroughBehaviors</code> is configured to support payload pass-through.</p>"]
     #[serde(rename="contentHandling")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub content_handling: Option<ContentHandlingStrategy>,
+    pub content_handling: Option<String>,
     #[doc="<p>Specifies the credentials required for the integration, if any. For AWS integrations, three options are available. To specify an IAM Role for Amazon API Gateway to assume, use the role's Amazon Resource Name (ARN). To require that the caller's identity be passed through from the request, specify the string <code>arn:aws:iam::\\*:user/\\*</code>. To use resource-based permissions on supported AWS services, specify null.</p>"]
     #[serde(rename="credentials")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1703,7 +1694,7 @@ pub struct Integration {
     #[doc="<p>Specifies the integration's responses.</p> <div class=\"remarks\"> <p/> <h4>Example: Get integration responses of a method</h4> <h5>Request</h5> <p/> <pre><code>GET /restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200 HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160607T191449Z Authorization: AWS4-HMAC-SHA256 Credential={access_key_ID}/20160607/us-east-1/apigateway/aws4_request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4_hash} </code></pre> <h5>Response</h5> <p>The successful response returns <code>200 OK</code> status and a payload as follows:</p> <pre><code>{ \"_links\": { \"curies\": { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-response-{rel}.html\", \"name\": \"integrationresponse\", \"templated\": true }, \"self\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200\", \"title\": \"200\" }, \"integrationresponse:delete\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200\" }, \"integrationresponse:update\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200\" } }, \"responseParameters\": { \"method.response.header.Content-Type\": \"'application/xml'\" }, \"responseTemplates\": { \"application/json\": \"$util.urlDecode(\\\"%3CkinesisStreams%3E#foreach($stream in $input.path('$.StreamNames'))%3Cstream%3E%3Cname%3E$stream%3C/name%3E%3C/stream%3E#end%3C/kinesisStreams%3E\\\")\\n\" }, \"statusCode\": \"200\" }</code></pre> <p/> </div> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html\">Creating an API</a> </div>"]
     #[serde(rename="integrationResponses")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub integration_responses: Option<MapOfIntegrationResponse>,
+    pub integration_responses: Option<::std::collections::HashMap<String, IntegrationResponse>>,
     #[doc="<div> <p> Specifies how the method request body of an unmapped content type will be passed through the integration request to the back end without transformation. A content type is unmapped if no mapping template is defined in the integration or the content type does not match any of the mapped content types, as specified in <code>requestTemplates</code>. There are three valid values: <code>WHEN_NO_MATCH</code>, <code>WHEN_NO_TEMPLATES</code>, and <code>NEVER</code>. </p> <ul> <li> <code>WHEN_NO_MATCH</code> passes the method request body through the integration request to the back end without transformation when the method request content type does not match any content type associated with the mapping templates defined in the integration request. </li> <li> <code>WHEN_NO_TEMPLATES</code> passes the method request body through the integration request to the back end without transformation when no mapping template is defined in the integration request. If a template is defined when this option is selected, the method request of an unmapped content-type will be rejected with an HTTP <code>415 Unsupported Media Type</code> response. </li> <li> <code>NEVER</code> rejects the method request with an HTTP <code>415 Unsupported Media Type</code> response when either the method request content type does not match any content type associated with the mapping templates defined in the integration request or no mapping template is defined in the integration request. </li> </ul> </div>"]
     #[serde(rename="passthroughBehavior")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1711,15 +1702,15 @@ pub struct Integration {
     #[doc="<p>A key-value map specifying request parameters that are passed from the method request to the back end. The key is an integration request parameter name and the associated value is a method request parameter value or static value that must be enclosed within single quotes and pre-encoded as required by the back end. The method request parameter value must match the pattern of <code>method.request.{location}.{name}</code>, where <code>location</code> is <code>querystring</code>, <code>path</code>, or <code>header</code> and <code>name</code> must be a valid and unique method request parameter name.</p>"]
     #[serde(rename="requestParameters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub request_parameters: Option<MapOfStringToString>,
+    pub request_parameters: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>Represents a map of Velocity templates that are applied on the request payload based on the value of the Content-Type header sent by the client. The content type value is the key in this map, and the template (as a String) is the value.</p>"]
     #[serde(rename="requestTemplates")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub request_templates: Option<MapOfStringToString>,
+    pub request_templates: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>Specifies the integration's type. The valid value is <code>HTTP</code> for integrating with an HTTP back end, <code>AWS</code> for any AWS service endpoints, <code>MOCK</code> for testing without actually invoking the back end, <code>HTTP_PROXY</code> for integrating with the HTTP proxy integration, or <code>AWS_PROXY</code> for integrating with the Lambda proxy integration type.</p>"]
     #[serde(rename="type")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub type_: Option<IntegrationType>,
+    pub type_: Option<String>,
     #[doc="<p>Specifies the integration's Uniform Resource Identifier (URI). For HTTP integrations, the URI must be a fully formed, encoded HTTP(S) URL according to the <a href=\"https://en.wikipedia.org/wiki/Uniform_Resource_Identifier\" target=\"_blank\">RFC-3986 specification</a>. For AWS integrations, the URI should be of the form <code>arn:aws:apigateway:{region}:{subdomain.service|service}:{path|action}/{service_api}</code>. <code>Region</code>, <code>subdomain</code> and <code>service</code> are used to determine the right endpoint. For AWS services that use the <code>Action=</code> query string parameter, <code>service_api</code> should be a valid action for the desired service. For RESTful AWS service APIs, <code>path</code> is used to indicate that the remaining substring in the URI should be treated as the path to the resource, including the initial <code>/</code>.</p>"]
     #[serde(rename="uri")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1732,15 +1723,15 @@ pub struct IntegrationResponse {
     #[doc="<p>Specifies how to handle response payload content type conversions. Supported values are <code>CONVERT_TO_BINARY</code> and <code>CONVERT_TO_TEXT</code>, with the following behaviors:</p> <ul> <li><p><code>CONVERT_TO_BINARY</code>: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p></li> <li><p><code>CONVERT_TO_TEXT</code>: Converts a response payload from a binary blob to a Base64-encoded string.</p></li> </ul> <p>If this property is not defined, the response payload will be passed through from the integration response to the method response without modification.</p>"]
     #[serde(rename="contentHandling")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub content_handling: Option<ContentHandlingStrategy>,
+    pub content_handling: Option<String>,
     #[doc="<p>A key-value map specifying response parameters that are passed to the method response from the back end. The key is a method response header parameter name and the mapped value is an integration response header value, a static value enclosed within a pair of single quotes, or a JSON expression from the integration response body. The mapping key must match the pattern of <code>method.response.header.{name}</code>, where <code>name</code> is a valid and unique header name. The mapped non-static value must match the pattern of <code>integration.response.header.{name}</code> or <code>integration.response.body.{JSON-expression}</code>, where <code>name</code> is a valid and unique response header name and <code>JSON-expression</code> is a valid JSON expression without the <code>$</code> prefix.</p>"]
     #[serde(rename="responseParameters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub response_parameters: Option<MapOfStringToString>,
+    pub response_parameters: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>Specifies the templates used to transform the integration response body. Response templates are represented as a key/value map, with a content-type as the key and a template as the value.</p>"]
     #[serde(rename="responseTemplates")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub response_templates: Option<MapOfStringToString>,
+    pub response_templates: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>Specifies the regular expression (regex) pattern used to choose an integration response based on the response from the back end. For example, if the success response returns nothing and the error response returns some string, you could use the <code>.+</code> regex to match error response. However, make sure that the error response does not contain any newline (<code>\\n</code>) character in such cases. If the back end is an AWS Lambda function, the AWS Lambda function error header is matched. For all other HTTP and AWS back ends, the HTTP status code is matched.</p>"]
     #[serde(rename="selectionPattern")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1748,54 +1739,18 @@ pub struct IntegrationResponse {
     #[doc="<p>Specifies the status code that is used to map the integration response to an existing <a>MethodResponse</a>.</p>"]
     #[serde(rename="statusCode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status_code: Option<ApiGatewayStatusCode>,
+    pub status_code: Option<String>,
 }
 
 #[doc="<p>The integration type. The valid value is <code>HTTP</code> for integrating with an HTTP back end, <code>AWS</code> for any AWS service endpoints, <code>MOCK</code> for testing without actually invoking the back end, <code>HTTP_PROXY</code> for integrating with the HTTP proxy integration, or <code>AWS_PROXY</code> for integrating with the Lambda proxy integration type.</p>"]
-pub type IntegrationType = String;
-pub type ListOfARNs = Vec<ProviderARN>;
-pub type ListOfApiKey = Vec<ApiKey>;
-pub type ListOfApiStage = Vec<ApiStage>;
-pub type ListOfAuthorizer = Vec<Authorizer>;
-pub type ListOfBasePathMapping = Vec<BasePathMapping>;
-pub type ListOfClientCertificate = Vec<ClientCertificate>;
-pub type ListOfDeployment = Vec<Deployment>;
-pub type ListOfDocumentationPart = Vec<DocumentationPart>;
-pub type ListOfDocumentationVersion = Vec<DocumentationVersion>;
-pub type ListOfDomainName = Vec<DomainName>;
-pub type ListOfLong = Vec<Long>;
-pub type ListOfModel = Vec<Model>;
 #[doc="A list of operations describing the updates to apply to the specified resource. The patches are applied in the order specified in the list."]
-pub type ListOfPatchOperation = Vec<PatchOperation>;
-pub type ListOfRequestValidator = Vec<RequestValidator>;
-pub type ListOfResource = Vec<Resource>;
-pub type ListOfRestApi = Vec<RestApi>;
-pub type ListOfSdkConfigurationProperty = Vec<SdkConfigurationProperty>;
-pub type ListOfSdkType = Vec<SdkType>;
-pub type ListOfStage = Vec<Stage>;
-pub type ListOfStageKeys = Vec<StageKey>;
-pub type ListOfString = Vec<String>;
-pub type ListOfUsage = Vec<ListOfLong>;
-pub type ListOfUsagePlan = Vec<UsagePlan>;
-pub type ListOfUsagePlanKey = Vec<UsagePlanKey>;
-pub type Long = i64;
-pub type MapOfHeaderValues = ::std::collections::HashMap<String, String>;
-pub type MapOfIntegrationResponse = ::std::collections::HashMap<String, IntegrationResponse>;
-pub type MapOfKeyUsages = ::std::collections::HashMap<String, ListOfUsage>;
-pub type MapOfMethod = ::std::collections::HashMap<String, Method>;
-pub type MapOfMethodResponse = ::std::collections::HashMap<String, MethodResponse>;
-pub type MapOfMethodSettings = ::std::collections::HashMap<String, MethodSetting>;
-pub type MapOfMethodSnapshot = ::std::collections::HashMap<String, MethodSnapshot>;
-pub type MapOfStringToBoolean = ::std::collections::HashMap<String, NullableBoolean>;
-pub type MapOfStringToList = ::std::collections::HashMap<String, ListOfString>;
-pub type MapOfStringToString = ::std::collections::HashMap<String, String>;
 #[doc="<p> Represents a client-facing interface by which the client calls the API to access back-end resources. A <b>Method</b> resource is integrated with an <a>Integration</a> resource. Both consist of a request and one or more responses. The method request takes the client input that is passed to the back end through the integration request. A method response returns the output from the back end to the client through an integration response. A method request is embodied in a <b>Method</b> resource, whereas an integration request is embodied in an <a>Integration</a> resource. On the other hand, a method response is represented by a <a>MethodResponse</a> resource, whereas an integration response is represented by an <a>IntegrationResponse</a> resource. </p> <div class=\"remarks\"> <p/> <h4>Example: Retrive the GET method on a specified resource</h4> <h5>Request</h5> <p>The following example request retrieves the information about the GET method on an API resource (<code>3kzxbg5sa2</code>) of an API (<code>fugvjdxtri</code>). </p> <pre><code>GET /restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160603T210259Z Authorization: AWS4-HMAC-SHA256 Credential={access_key_ID}/20160603/us-east-1/apigateway/aws4_request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4_hash}</code></pre> <h5>Response</h5> <p>The successful response returns a <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ \"_links\": { \"curies\": [ { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-{rel}.html\", \"name\": \"integration\", \"templated\": true }, { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-response-{rel}.html\", \"name\": \"integrationresponse\", \"templated\": true }, { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-{rel}.html\", \"name\": \"method\", \"templated\": true }, { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-response-{rel}.html\", \"name\": \"methodresponse\", \"templated\": true } ], \"self\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET\", \"name\": \"GET\", \"title\": \"GET\" }, \"integration:put\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration\" }, \"method:delete\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET\" }, \"method:integration\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration\" }, \"method:responses\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200\", \"name\": \"200\", \"title\": \"200\" }, \"method:update\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET\" }, \"methodresponse:put\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/{status_code}\", \"templated\": true } }, \"apiKeyRequired\": true, \"authorizationType\": \"NONE\", \"httpMethod\": \"GET\", \"_embedded\": { \"method:integration\": { \"_links\": { \"self\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration\" }, \"integration:delete\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration\" }, \"integration:responses\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200\", \"name\": \"200\", \"title\": \"200\" }, \"integration:update\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration\" }, \"integrationresponse:put\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/{status_code}\", \"templated\": true } }, \"cacheKeyParameters\": [], \"cacheNamespace\": \"3kzxbg5sa2\", \"credentials\": \"arn:aws:iam::123456789012:role/apigAwsProxyRole\", \"httpMethod\": \"POST\", \"passthroughBehavior\": \"WHEN_NO_MATCH\", \"requestParameters\": { \"integration.request.header.Content-Type\": \"'application/x-amz-json-1.1'\" }, \"requestTemplates\": { \"application/json\": \"{\\n}\" }, \"type\": \"AWS\", \"uri\": \"arn:aws:apigateway:us-east-1:kinesis:action/ListStreams\", \"_embedded\": { \"integration:responses\": { \"_links\": { \"self\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200\", \"name\": \"200\", \"title\": \"200\" }, \"integrationresponse:delete\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200\" }, \"integrationresponse:update\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200\" } }, \"responseParameters\": { \"method.response.header.Content-Type\": \"'application/xml'\" }, \"responseTemplates\": { \"application/json\": \"$util.urlDecode(\\\"%3CkinesisStreams%3E%23foreach(%24stream%20in%20%24input.path(%27%24.StreamNames%27))%3Cstream%3E%3Cname%3E%24stream%3C%2Fname%3E%3C%2Fstream%3E%23end%3C%2FkinesisStreams%3E\\\")\" }, \"statusCode\": \"200\" } } }, \"method:responses\": { \"_links\": { \"self\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200\", \"name\": \"200\", \"title\": \"200\" }, \"methodresponse:delete\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200\" }, \"methodresponse:update\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200\" } }, \"responseModels\": { \"application/json\": \"Empty\" }, \"responseParameters\": { \"method.response.header.Content-Type\": false }, \"statusCode\": \"200\" } } }</code></pre> <p>In the example above, the response template for the <code>200 OK</code> response maps the JSON output from the <code>ListStreams</code> action in the back end to an XML output. The mapping template is URL-encoded as <code>%3CkinesisStreams%3E%23foreach(%24stream%20in%20%24input.path(%27%24.StreamNames%27))%3Cstream%3E%3Cname%3E%24stream%3C%2Fname%3E%3C%2Fstream%3E%23end%3C%2FkinesisStreams%3E</code> and the output is decoded using the <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html#util-templat-reference\">$util.urlDecode()</a> helper function.</p> </div> <div class=\"seeAlso\"> <a>MethodResponse</a>, <a>Integration</a>, <a>IntegrationResponse</a>, <a>Resource</a>, <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-method-settings.html\">Set up an API's method</a> </div>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Method {
     #[doc="<p>A boolean flag specifying whether a valid <a>ApiKey</a> is required to invoke this method.</p>"]
     #[serde(rename="apiKeyRequired")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub api_key_required: Option<NullableBoolean>,
+    pub api_key_required: Option<bool>,
     #[doc="<p>The method's authorization type. Valid values are <code>NONE</code> for open access, <code>AWS_IAM</code> for using AWS IAM permissions, <code>CUSTOM</code> for using a custom authorizer, or <code>COGNITO_USER_POOLS</code> for using a Cognito user pool.</p>"]
     #[serde(rename="authorizationType")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1815,7 +1770,7 @@ pub struct Method {
     #[doc="<p>Gets a method response associated with a given HTTP status code. </p> <div class=\"remarks\"> <p>The collection of method responses are encapsulated in a key-value map, where the key is a response's HTTP status code and the value is a <a>MethodResponse</a> resource that specifies the response returned to the caller from the back end through the integration response.</p> <h4>Example: Get a 200 OK response of a GET method</h4> <h5>Request</h5> <p/> <pre><code>GET /restapis/uojnr9hd57/resources/0cjtch/methods/GET/responses/200 HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com Content-Length: 117 X-Amz-Date: 20160613T215008Z Authorization: AWS4-HMAC-SHA256 Credential={access_key_ID}/20160613/us-east-1/apigateway/aws4_request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4_hash}</code></pre> <h5>Response</h5> <p>The successful response returns a <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ \"_links\": { \"curies\": { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-response-{rel}.html\", \"name\": \"methodresponse\", \"templated\": true }, \"self\": { \"href\": \"/restapis/uojnr9hd57/resources/0cjtch/methods/GET/responses/200\", \"title\": \"200\" }, \"methodresponse:delete\": { \"href\": \"/restapis/uojnr9hd57/resources/0cjtch/methods/GET/responses/200\" }, \"methodresponse:update\": { \"href\": \"/restapis/uojnr9hd57/resources/0cjtch/methods/GET/responses/200\" } }, \"responseModels\": { \"application/json\": \"Empty\" }, \"responseParameters\": { \"method.response.header.operator\": false, \"method.response.header.operand_2\": false, \"method.response.header.operand_1\": false }, \"statusCode\": \"200\" }</code></pre> <p/> </div> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-method-response.html\">AWS CLI</a> </div>"]
     #[serde(rename="methodResponses")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub method_responses: Option<MapOfMethodResponse>,
+    pub method_responses: Option<::std::collections::HashMap<String, MethodResponse>>,
     #[doc="<p>A human-friendly operation identifier for the method. For example, you can assign the <code>operationName</code> of <code>ListPets</code> for the <code>GET /pets</code> method in <a href=\"http://petstore-demo-endpoint.execute-api.com/petstore/pets\">PetStore</a> example.</p>"]
     #[serde(rename="operationName")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1823,11 +1778,11 @@ pub struct Method {
     #[doc="<p>A key-value map specifying data schemas, represented by <a>Model</a> resources, (as the mapped value) of the request payloads of given content types (as the mapping key).</p>"]
     #[serde(rename="requestModels")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub request_models: Option<MapOfStringToString>,
+    pub request_models: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>A key-value map defining required or optional method request parameters that can be accepted by Amazon API Gateway. A key is a method request parameter name matching the pattern of <code>method.request.{location}.{name}</code>, where <code>location</code> is <code>querystring</code>, <code>path</code>, or <code>header</code> and <code>name</code> is a valid and unique parameter name. The value associated with the key is a Boolean flag indicating whether the parameter is required (<code>true</code>) or optional (<code>false</code>). The method request parameter names defined here are available in <a>Integration</a> to be mapped to integration request parameters or templates.</p>"]
     #[serde(rename="requestParameters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub request_parameters: Option<MapOfStringToBoolean>,
+    pub request_parameters: Option<::std::collections::HashMap<String, bool>>,
     #[doc="<p>The identifier of a <a>RequestValidator</a> for request validation.</p>"]
     #[serde(rename="requestValidatorId")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1840,15 +1795,15 @@ pub struct MethodResponse {
     #[doc="<p>Specifies the <a>Model</a> resources used for the response's content-type. Response models are represented as a key/value map, with a content-type as the key and a <a>Model</a> name as the value.</p>"]
     #[serde(rename="responseModels")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub response_models: Option<MapOfStringToString>,
+    pub response_models: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>A key-value map specifying required or optional response parameters that Amazon API Gateway can send back to the caller. A key defines a method response header and the value specifies whether the associated method response header is required or not. The expression of the key must match the pattern <code>method.response.header.{name}</code>, where <code>name</code> is a valid and unique header name. Amazon API Gateway passes certain integration response data to the method response headers specified here according to the mapping you prescribe in the API's <a>IntegrationResponse</a>. The integration response data that can be mapped include an integration response header expressed in <code>integration.response.header.{name}</code>, a static value enclosed within a pair of single quotes (e.g., <code>'application/json'</code>), or a JSON expression from the back-end response payload in the form of <code>integration.response.body.{JSON-expression}</code>, where <code>JSON-expression</code> is a valid JSON expression without the <code>$</code> prefix.)</p>"]
     #[serde(rename="responseParameters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub response_parameters: Option<MapOfStringToBoolean>,
+    pub response_parameters: Option<::std::collections::HashMap<String, bool>>,
     #[doc="<p>The method response's status code.</p>"]
     #[serde(rename="statusCode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status_code: Option<ApiGatewayStatusCode>,
+    pub status_code: Option<String>,
 }
 
 #[doc="<p>Specifies the method setting properties.</p>"]
@@ -1857,19 +1812,19 @@ pub struct MethodSetting {
     #[doc="<p>Specifies whether the cached responses are encrypted. The PATCH path for this setting is <code>/{method_setting_key}/caching/dataEncrypted</code>, and the value is a Boolean.</p>"]
     #[serde(rename="cacheDataEncrypted")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub cache_data_encrypted: Option<Boolean>,
+    pub cache_data_encrypted: Option<bool>,
     #[doc="<p>Specifies the time to live (TTL), in seconds, for cached responses. The higher the TTL, the longer the response will be cached. The PATCH path for this setting is <code>/{method_setting_key}/caching/ttlInSeconds</code>, and the value is an integer.</p>"]
     #[serde(rename="cacheTtlInSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub cache_ttl_in_seconds: Option<Integer>,
+    pub cache_ttl_in_seconds: Option<i64>,
     #[doc="<p>Specifies whether responses should be cached and returned for requests. A cache cluster must be enabled on the stage for responses to be cached. The PATCH path for this setting is <code>/{method_setting_key}/caching/enabled</code>, and the value is a Boolean.</p>"]
     #[serde(rename="cachingEnabled")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub caching_enabled: Option<Boolean>,
+    pub caching_enabled: Option<bool>,
     #[doc="<p>Specifies whether data trace logging is enabled for this method, which effects the log entries pushed to Amazon CloudWatch Logs. The PATCH path for this setting is <code>/{method_setting_key}/logging/dataTrace</code>, and the value is a Boolean.</p>"]
     #[serde(rename="dataTraceEnabled")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub data_trace_enabled: Option<Boolean>,
+    pub data_trace_enabled: Option<bool>,
     #[doc="<p>Specifies the logging level for this method, which effects the log entries pushed to Amazon CloudWatch Logs. The PATCH path for this setting is <code>/{method_setting_key}/logging/loglevel</code>, and the available levels are <code>OFF</code>, <code>ERROR</code>, and <code>INFO</code>.</p>"]
     #[serde(rename="loggingLevel")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1877,24 +1832,23 @@ pub struct MethodSetting {
     #[doc="<p>Specifies whether Amazon CloudWatch metrics are enabled for this method. The PATCH path for this setting is <code>/{method_setting_key}/metrics/enabled</code>, and the value is a Boolean.</p>"]
     #[serde(rename="metricsEnabled")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub metrics_enabled: Option<Boolean>,
+    pub metrics_enabled: Option<bool>,
     #[doc="<p>Specifies whether authorization is required for a cache invalidation request. The PATCH path for this setting is <code>/{method_setting_key}/caching/requireAuthorizationForCacheControl</code>, and the value is a Boolean.</p>"]
     #[serde(rename="requireAuthorizationForCacheControl")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub require_authorization_for_cache_control: Option<Boolean>,
+    pub require_authorization_for_cache_control: Option<bool>,
     #[doc="<p>Specifies the throttling burst limit. The PATCH path for this setting is <code>/{method_setting_key}/throttling/burstLimit</code>, and the value is an integer.</p>"]
     #[serde(rename="throttlingBurstLimit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub throttling_burst_limit: Option<Integer>,
+    pub throttling_burst_limit: Option<i64>,
     #[doc="<p>Specifies the throttling rate limit. The PATCH path for this setting is <code>/{method_setting_key}/throttling/rateLimit</code>, and the value is a double.</p>"]
     #[serde(rename="throttlingRateLimit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub throttling_rate_limit: Option<Double>,
+    pub throttling_rate_limit: Option<f64>,
     #[doc="<p>Specifies how to handle unauthorized requests for cache invalidation. The PATCH path for this setting is <code>/{method_setting_key}/caching/unauthorizedCacheControlHeaderStrategy</code>, and the available values are <code>FAIL_WITH_403</code>, <code>SUCCEED_WITH_RESPONSE_HEADER</code>, <code>SUCCEED_WITHOUT_RESPONSE_HEADER</code>.</p>"]
     #[serde(rename="unauthorizedCacheControlHeaderStrategy")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub unauthorized_cache_control_header_strategy:
-        Option<UnauthorizedCacheControlHeaderStrategy>,
+    pub unauthorized_cache_control_header_strategy: Option<String>,
 }
 
 #[doc="<p>Represents a summary of a <a>Method</a> resource, given a particular date and time.</p>"]
@@ -1903,7 +1857,7 @@ pub struct MethodSnapshot {
     #[doc="<p>Specifies whether the method requires a valid <a>ApiKey</a>.</p>"]
     #[serde(rename="apiKeyRequired")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub api_key_required: Option<Boolean>,
+    pub api_key_required: Option<bool>,
     #[doc="<p>The method's authorization type. Valid values are <code>NONE</code> for open access, <code>AWS_IAM</code> for using AWS IAM permissions, <code>CUSTOM</code> for using a custom authorizer, or <code>COGNITO_USER_POOLS</code> for using a Cognito user pool.</p>"]
     #[serde(rename="authorizationType")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1941,15 +1895,12 @@ pub struct Models {
     #[doc="<p>Gets the current <a>Model</a> resource in the collection.</p>"]
     #[serde(rename="items")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub items: Option<ListOfModel>,
+    pub items: Option<Vec<Model>>,
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub position: Option<String>,
 }
 
-pub type NullableBoolean = bool;
-pub type NullableInteger = i64;
-pub type Op = String;
 #[doc="A single patch operation to apply to the specified resource. Please refer to http://tools.ietf.org/html/rfc6902#section-4 for an explanation of how each operation is used."]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct PatchOperation {
@@ -1960,7 +1911,7 @@ pub struct PatchOperation {
     #[doc="<p>An update operation to be performed with this PATCH request. The valid value can be \"add\", \"remove\", or \"replace\". Not all valid operations are supported for a given resource. Support of the operations depends on specific operational contexts. Attempts to apply an unsupported operation on a resource will return an error message.</p>"]
     #[serde(rename="op")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub op: Option<Op>,
+    pub op: Option<String>,
     #[doc="<p>The <code>op</code> operation's target, as identified by a <a href=\"https://tools.ietf.org/html/draft-ietf-appsawg-json-pointer-08\">JSON Pointer</a> value that references a location within the targeted resource. For example, if the target resource has an updateable property of <code>{\"name\":\"value\"}</code>, the path for this property is <code>/name</code>. If the <code>name</code> property value is a JSON object (e.g., <code>{\"name\": {\"child/name\": \"child-value\"}}</code>), the path for the <code>child/name</code> property will be <code>/name/child~1name</code>. Any slash (\"/\") character appearing in path names must be escaped with \"~1\", as shown in the example above. Each <code>op</code> operation can have only one <code>path</code> associated with it.</p>"]
     #[serde(rename="path")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1971,15 +1922,13 @@ pub struct PatchOperation {
     pub value: Option<String>,
 }
 
-pub type PathToMapOfMethodSnapshot = ::std::collections::HashMap<String, MapOfMethodSnapshot>;
-pub type ProviderARN = String;
 #[doc="<p>Represents a put integration request.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct PutIntegrationRequest {
     #[doc="<p>Specifies a put integration input's cache key parameters.</p>"]
     #[serde(rename="cacheKeyParameters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub cache_key_parameters: Option<ListOfString>,
+    pub cache_key_parameters: Option<Vec<String>>,
     #[doc="<p>Specifies a put integration input's cache namespace.</p>"]
     #[serde(rename="cacheNamespace")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1987,7 +1936,7 @@ pub struct PutIntegrationRequest {
     #[doc="<p>Specifies how to handle request payload content type conversions. Supported values are <code>CONVERT_TO_BINARY</code> and <code>CONVERT_TO_TEXT</code>, with the following behaviors:</p> <ul> <li><p><code>CONVERT_TO_BINARY</code>: Converts a request payload from a Base64-encoded string to the corresponding binary blob.</p></li> <li><p><code>CONVERT_TO_TEXT</code>: Converts a request payload from a binary blob to a Base64-encoded string.</p></li> </ul> <p>If this property is not defined, the request payload will be passed through from the method request to integration request without modification, provided that the <code>passthroughBehaviors</code> is configured to support payload pass-through.</p>"]
     #[serde(rename="contentHandling")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub content_handling: Option<ContentHandlingStrategy>,
+    pub content_handling: Option<String>,
     #[doc="<p>Specifies whether credentials are required for a put integration.</p>"]
     #[serde(rename="credentials")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -2006,11 +1955,11 @@ pub struct PutIntegrationRequest {
     #[doc="<p>A key-value map specifying request parameters that are passed from the method request to the back end. The key is an integration request parameter name and the associated value is a method request parameter value or static value that must be enclosed within single quotes and pre-encoded as required by the back end. The method request parameter value must match the pattern of <code>method.request.{location}.{name}</code>, where <code>location</code> is <code>querystring</code>, <code>path</code>, or <code>header</code> and <code>name</code> must be a valid and unique method request parameter name.</p>"]
     #[serde(rename="requestParameters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub request_parameters: Option<MapOfStringToString>,
+    pub request_parameters: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>Represents a map of Velocity templates that are applied on the request payload based on the value of the Content-Type header sent by the client. The content type value is the key in this map, and the template (as a String) is the value.</p>"]
     #[serde(rename="requestTemplates")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub request_templates: Option<MapOfStringToString>,
+    pub request_templates: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>Specifies a put integration request's resource ID.</p>"]
     #[serde(rename="resourceId")]
     pub resource_id: String,
@@ -2019,7 +1968,7 @@ pub struct PutIntegrationRequest {
     pub rest_api_id: String,
     #[doc="<p>Specifies a put integration input's type.</p>"]
     #[serde(rename="type")]
-    pub type_: IntegrationType,
+    pub type_: String,
     #[doc="<p>Specifies a put integration input's Uniform Resource Identifier (URI). When the integration type is HTTP or AWS, this field is required. For integration with Lambda as an AWS service proxy, this value is of the 'arn:aws:apigateway:&lt;region&gt;:lambda:path/2015-03-31/functions/&lt;functionArn&gt;/invocations' format.</p>"]
     #[serde(rename="uri")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -2032,7 +1981,7 @@ pub struct PutIntegrationResponseRequest {
     #[doc="<p>Specifies how to handle response payload content type conversions. Supported values are <code>CONVERT_TO_BINARY</code> and <code>CONVERT_TO_TEXT</code>, with the following behaviors:</p> <ul> <li><p><code>CONVERT_TO_BINARY</code>: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p></li> <li><p><code>CONVERT_TO_TEXT</code>: Converts a response payload from a binary blob to a Base64-encoded string.</p></li> </ul> <p>If this property is not defined, the response payload will be passed through from the integration response to the method response without modification.</p>"]
     #[serde(rename="contentHandling")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub content_handling: Option<ContentHandlingStrategy>,
+    pub content_handling: Option<String>,
     #[doc="<p>Specifies a put integration response request's HTTP method.</p>"]
     #[serde(rename="httpMethod")]
     pub http_method: String,
@@ -2042,11 +1991,11 @@ pub struct PutIntegrationResponseRequest {
     #[doc="<p>A key-value map specifying response parameters that are passed to the method response from the back end. The key is a method response header parameter name and the mapped value is an integration response header value, a static value enclosed within a pair of single quotes, or a JSON expression from the integration response body. The mapping key must match the pattern of <code>method.response.header.{name}</code>, where <code>name</code> is a valid and unique header name. The mapped non-static value must match the pattern of <code>integration.response.header.{name}</code> or <code>integration.response.body.{JSON-expression}</code>, where <code>name</code> must be a valid and unique response header name and <code>JSON-expression</code> a valid JSON expression without the <code>$</code> prefix.</p>"]
     #[serde(rename="responseParameters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub response_parameters: Option<MapOfStringToString>,
+    pub response_parameters: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>Specifies a put integration response's templates.</p>"]
     #[serde(rename="responseTemplates")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub response_templates: Option<MapOfStringToString>,
+    pub response_templates: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>Specifies a put integration response request's API identifier.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
@@ -2056,7 +2005,7 @@ pub struct PutIntegrationResponseRequest {
     pub selection_pattern: Option<String>,
     #[doc="<p>Specifies the status code that is used to map the integration response to an existing <a>MethodResponse</a>.</p>"]
     #[serde(rename="statusCode")]
-    pub status_code: ApiGatewayStatusCode,
+    pub status_code: String,
 }
 
 #[doc="<p>Request to add a method to an existing <a>Resource</a> resource.</p>"]
@@ -2065,7 +2014,7 @@ pub struct PutMethodRequest {
     #[doc="<p>Specifies whether the method required a valid <a>ApiKey</a>.</p>"]
     #[serde(rename="apiKeyRequired")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub api_key_required: Option<Boolean>,
+    pub api_key_required: Option<bool>,
     #[doc="<p>The method's authorization type. Valid values are <code>NONE</code> for open access, <code>AWS_IAM</code> for using AWS IAM permissions, <code>CUSTOM</code> for using a custom authorizer, or <code>COGNITO_USER_POOLS</code> for using a Cognito user pool.</p>"]
     #[serde(rename="authorizationType")]
     pub authorization_type: String,
@@ -2083,11 +2032,11 @@ pub struct PutMethodRequest {
     #[doc="<p>Specifies the <a>Model</a> resources used for the request's content type. Request models are represented as a key/value map, with a content type as the key and a <a>Model</a> name as the value.</p>"]
     #[serde(rename="requestModels")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub request_models: Option<MapOfStringToString>,
+    pub request_models: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>A key-value map defining required or optional method request parameters that can be accepted by Amazon API Gateway. A key defines a method request parameter name matching the pattern of <code>method.request.{location}.{name}</code>, where <code>location</code> is <code>querystring</code>, <code>path</code>, or <code>header</code> and <code>name</code> is a valid and unique parameter name. The value associated with the key is a Boolean flag indicating whether the parameter is required (<code>true</code>) or optional (<code>false</code>). The method request parameter names defined here are available in <a>Integration</a> to be mapped to integration request parameters or body-mapping templates.</p>"]
     #[serde(rename="requestParameters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub request_parameters: Option<MapOfStringToBoolean>,
+    pub request_parameters: Option<::std::collections::HashMap<String, bool>>,
     #[doc="<p>The identifier of a <a>RequestValidator</a> for validating the method request.</p>"]
     #[serde(rename="requestValidatorId")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -2112,20 +2061,19 @@ pub struct PutMethodResponseRequest {
     #[doc="<p>Specifies the <a>Model</a> resources used for the response's content type. Response models are represented as a key/value map, with a content type as the key and a <a>Model</a> name as the value.</p>"]
     #[serde(rename="responseModels")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub response_models: Option<MapOfStringToString>,
+    pub response_models: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>A key-value map specifying required or optional response parameters that Amazon API Gateway can send back to the caller. A key defines a method response header name and the associated value is a Boolean flag indicating whether the method response parameter is required or not. The method response header names must match the pattern of <code>method.response.header.{name}</code>, where <code>name</code> is a valid and unique header name. The response parameter names defined here are available in the integration response to be mapped from an integration response header expressed in <code>integration.response.header.{name}</code>, a static value enclosed within a pair of single quotes (e.g., <code>'application/json'</code>), or a JSON expression from the back-end response payload in the form of <code>integration.response.body.{JSON-expression}</code>, where <code>JSON-expression</code> is a valid JSON expression without the <code>$</code> prefix.)</p>"]
     #[serde(rename="responseParameters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub response_parameters: Option<MapOfStringToBoolean>,
+    pub response_parameters: Option<::std::collections::HashMap<String, bool>>,
     #[doc="<p>The <a>RestApi</a> identifier for the <a>Method</a> resource.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
     #[doc="<p>The method response's status code.</p>"]
     #[serde(rename="statusCode")]
-    pub status_code: ApiGatewayStatusCode,
+    pub status_code: String,
 }
 
-pub type PutMode = String;
 #[doc="<p>A PUT request to update an existing API, with external API definitions specified as the request body.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct PutRestApiRequest {
@@ -2136,40 +2084,39 @@ pub struct PutRestApiRequest {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub body: Blob,
+    pub body: Vec<u8>,
     #[doc="<p>A query parameter to indicate whether to rollback the API update (<code>true</code>) or not (<code>false</code>) when a warning is encountered. The default value is <code>false</code>.</p>"]
     #[serde(rename="failOnWarnings")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub fail_on_warnings: Option<Boolean>,
+    pub fail_on_warnings: Option<bool>,
     #[doc="<p>The <code>mode</code> query parameter to specify the update mode. Valid values are \"merge\" and \"overwrite\". By default, the update mode is \"merge\".</p>"]
     #[serde(rename="mode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub mode: Option<PutMode>,
+    pub mode: Option<String>,
     #[doc="<p>Custom headers supplied as part of the request. </p>"]
     #[serde(rename="parameters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub parameters: Option<MapOfStringToString>,
+    pub parameters: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>The identifier of the <a>RestApi</a> to be updated. </p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
 }
 
-pub type QuotaPeriodType = String;
 #[doc="<p>Quotas configured for a usage plan.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct QuotaSettings {
     #[doc="<p>The maximum number of requests that can be made in a given time period.</p>"]
     #[serde(rename="limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<Integer>,
+    pub limit: Option<i64>,
     #[doc="<p>The number of requests subtracted from the given limit in the initial time period.</p>"]
     #[serde(rename="offset")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub offset: Option<Integer>,
+    pub offset: Option<i64>,
     #[doc="<p>The time period in which the limit applies. Valid values are \"DAY\", \"WEEK\" or \"MONTH\".</p>"]
     #[serde(rename="period")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub period: Option<QuotaPeriodType>,
+    pub period: Option<String>,
 }
 
 #[doc="<p>A set of validation rules for incoming <a>Method</a> requests.</p> <div class=\"remarks\"> <p>In Swagger, a <a>RequestValidator</a> of an API is defined by the <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions.html#api-gateway-swagger-extensions-request-validators.requestValidator.html\">x-amazon-apigateway-request-validators.requestValidator</a> object. It the referenced using the <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions.html#api-gateway-swagger-extensions-request-validator\">x-amazon-apigateway-request-validator</a> property.</p> </div> <div class=\"seeAlso\"><a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-method-request-validation.html\">Enable Basic Request Validation in API Gateway</a></div>"]
@@ -2186,11 +2133,11 @@ pub struct RequestValidator {
     #[doc="<p>A Boolean flag to indicate whether to validate a request body according to the configured <a>Model</a> schema.</p>"]
     #[serde(rename="validateRequestBody")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub validate_request_body: Option<Boolean>,
+    pub validate_request_body: Option<bool>,
     #[doc="<p>A Boolean flag to indicate whether to validate request parameters (<code>true</code>) or not (<code>false</code>).</p>"]
     #[serde(rename="validateRequestParameters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub validate_request_parameters: Option<Boolean>,
+    pub validate_request_parameters: Option<bool>,
 }
 
 #[doc="<p>A collection of <a>RequestValidator</a> resources of a given <a>RestApi</a>.</p> <div class=\"remarks\"> <p>In Swagger, the <a>RequestValidators</a> of an API is defined by the <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions.html#api-gateway-swagger-extensions-request-validators.html\">x-amazon-apigateway-request-validators</a> extension.</p> </div> <div class=\"seeAlso\"><a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-method-request-validation.html\">Enable Basic Request Validation in API Gateway</a></div>"]
@@ -2199,7 +2146,7 @@ pub struct RequestValidators {
     #[doc="<p>The current page of <a>RequestValidator</a> resources in the <a>RequestValidators</a> collection.</p>"]
     #[serde(rename="items")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub items: Option<ListOfRequestValidator>,
+    pub items: Option<Vec<RequestValidator>>,
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub position: Option<String>,
@@ -2227,7 +2174,7 @@ pub struct Resource {
     #[doc="<p>Gets an API resource's method of a given HTTP verb.</p> <div class=\"remarks\"> <p>The resource methods are a map of methods indexed by methods' HTTP verbs enabled on the resource. This method map is included in the <code>200 OK</code> response of the <code>GET /restapis/{restapi_id}/resources/{resource_id}</code> or <code>GET /restapis/{restapi_id}/resources/{resource_id}?embed=methods</code> request.</p> <h4>Example: Get the GET method of an API resource</h4> <h5>Request</h5> <pre><code>GET /restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20170223T031827Z Authorization: AWS4-HMAC-SHA256 Credential={access_key_ID}/20170223/us-east-1/apigateway/aws4_request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4_hash}</code></pre> <h5>Response</h5> <pre><code>{ \"_links\": { \"curies\": [ { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-{rel}.html\", \"name\": \"integration\", \"templated\": true }, { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-response-{rel}.html\", \"name\": \"integrationresponse\", \"templated\": true }, { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-{rel}.html\", \"name\": \"method\", \"templated\": true }, { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-response-{rel}.html\", \"name\": \"methodresponse\", \"templated\": true } ], \"self\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET\", \"name\": \"GET\", \"title\": \"GET\" }, \"integration:put\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration\" }, \"method:delete\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET\" }, \"method:integration\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration\" }, \"method:responses\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200\", \"name\": \"200\", \"title\": \"200\" }, \"method:update\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET\" }, \"methodresponse:put\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/{status_code}\", \"templated\": true } }, \"apiKeyRequired\": false, \"authorizationType\": \"NONE\", \"httpMethod\": \"GET\", \"_embedded\": { \"method:integration\": { \"_links\": { \"self\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration\" }, \"integration:delete\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration\" }, \"integration:responses\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200\", \"name\": \"200\", \"title\": \"200\" }, \"integration:update\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration\" }, \"integrationresponse:put\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/{status_code}\", \"templated\": true } }, \"cacheKeyParameters\": [], \"cacheNamespace\": \"3kzxbg5sa2\", \"credentials\": \"arn:aws:iam::123456789012:role/apigAwsProxyRole\", \"httpMethod\": \"POST\", \"passthroughBehavior\": \"WHEN_NO_MATCH\", \"requestParameters\": { \"integration.request.header.Content-Type\": \"'application/x-amz-json-1.1'\" }, \"requestTemplates\": { \"application/json\": \"{\\n}\" }, \"type\": \"AWS\", \"uri\": \"arn:aws:apigateway:us-east-1:kinesis:action/ListStreams\", \"_embedded\": { \"integration:responses\": { \"_links\": { \"self\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200\", \"name\": \"200\", \"title\": \"200\" }, \"integrationresponse:delete\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200\" }, \"integrationresponse:update\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200\" } }, \"responseParameters\": { \"method.response.header.Content-Type\": \"'application/xml'\" }, \"responseTemplates\": { \"application/json\": \"$util.urlDecode(\\\"%3CkinesisStreams%3E#foreach($stream in $input.path('$.StreamNames'))%3Cstream%3E%3Cname%3E$stream%3C/name%3E%3C/stream%3E#end%3C/kinesisStreams%3E\\\")\\n\" }, \"statusCode\": \"200\" } } }, \"method:responses\": { \"_links\": { \"self\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200\", \"name\": \"200\", \"title\": \"200\" }, \"methodresponse:delete\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200\" }, \"methodresponse:update\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200\" } }, \"responseModels\": { \"application/json\": \"Empty\" }, \"responseParameters\": { \"method.response.header.Content-Type\": false }, \"statusCode\": \"200\" } } }</code></pre> <p>If the <code>OPTIONS</code> is enabled on the resource, you can follow the example here to get that method. Just replace the <code>GET</code> of the last path segment in the request URL with <code>OPTIONS</code>.</p> </div> <div class=\"seeAlso\"> </div>"]
     #[serde(rename="resourceMethods")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub resource_methods: Option<MapOfMethod>,
+    pub resource_methods: Option<::std::collections::HashMap<String, Method>>,
 }
 
 #[doc="<p>Represents a collection of <a>Resource</a> resources.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html\">Create an API</a> </div>"]
@@ -2236,7 +2183,7 @@ pub struct Resources {
     #[doc="<p>Gets the current <a>Resource</a> resource in the collection.</p>"]
     #[serde(rename="items")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub items: Option<ListOfResource>,
+    pub items: Option<Vec<Resource>>,
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub position: Option<String>,
@@ -2248,11 +2195,11 @@ pub struct RestApi {
     #[doc="<p>The list of binary media types supported by the <a>RestApi</a>. By default, the <a>RestApi</a> supports only UTF-8-encoded text payloads.</p>"]
     #[serde(rename="binaryMediaTypes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub binary_media_types: Option<ListOfString>,
+    pub binary_media_types: Option<Vec<String>>,
     #[doc="<p>The timestamp when the API was created.</p>"]
     #[serde(rename="createdDate")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_date: Option<Timestamp>,
+    pub created_date: Option<f64>,
     #[doc="<p>The API's description.</p>"]
     #[serde(rename="description")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -2272,7 +2219,7 @@ pub struct RestApi {
     #[doc="<p>The warning messages reported when <code>failonwarnings</code> is turned on during API import.</p>"]
     #[serde(rename="warnings")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub warnings: Option<ListOfString>,
+    pub warnings: Option<Vec<String>>,
 }
 
 #[doc="<p>Contains references to your APIs and links that guide you in how to interact with your collection. A collection offers a paginated view of your APIs.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html\">Create an API</a> </div>"]
@@ -2281,7 +2228,7 @@ pub struct RestApis {
     #[doc="<p>An array of links to the current page of <a>RestApi</a> resources.</p>"]
     #[serde(rename="items")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub items: Option<ListOfRestApi>,
+    pub items: Option<Vec<RestApi>>,
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub position: Option<String>,
@@ -2309,14 +2256,14 @@ pub struct SdkConfigurationProperty {
     #[doc="<p>A boolean flag of an <a>SdkType</a> configuration property to indicate if the associated SDK configuration property is required (<code>true</code>) or not (<code>false</code>).</p>"]
     #[serde(rename="required")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub required: Option<Boolean>,
+    pub required: Option<bool>,
 }
 
 #[doc="<p>The binary blob response to <a>GetSdk</a>, which contains the generated SDK.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct SdkResponse {
     #[doc="<p>The binary blob response to <a>GetSdk</a>, which contains the generated SDK.</p>"]
-    pub body: Option<Blob>,
+    pub body: Option<Vec<u8>>,
     #[doc="<p>The content-disposition header value in the HTTP response.</p>"]
     pub content_disposition: Option<String>,
     #[doc="<p>The content-type header value in the HTTP response.</p>"]
@@ -2329,7 +2276,7 @@ pub struct SdkType {
     #[doc="<p>A list of configuration properties of an <a>SdkType</a>.</p>"]
     #[serde(rename="configurationProperties")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub configuration_properties: Option<ListOfSdkConfigurationProperty>,
+    pub configuration_properties: Option<Vec<SdkConfigurationProperty>>,
     #[doc="<p>The description of an <a>SdkType</a>.</p>"]
     #[serde(rename="description")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -2350,7 +2297,7 @@ pub struct SdkTypes {
     #[doc="<p>The set of <a>SdkType</a> items that comprise this view of the <a>SdkTypes</a> collection.</p>"]
     #[serde(rename="items")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub items: Option<ListOfSdkType>,
+    pub items: Option<Vec<SdkType>>,
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub position: Option<String>,
@@ -2362,15 +2309,15 @@ pub struct Stage {
     #[doc="<p>Specifies whether a cache cluster is enabled for the stage.</p>"]
     #[serde(rename="cacheClusterEnabled")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub cache_cluster_enabled: Option<Boolean>,
+    pub cache_cluster_enabled: Option<bool>,
     #[doc="<p>The size of the cache cluster for the stage, if enabled.</p>"]
     #[serde(rename="cacheClusterSize")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub cache_cluster_size: Option<CacheClusterSize>,
+    pub cache_cluster_size: Option<String>,
     #[doc="<p>The status of the cache cluster for the stage, if enabled.</p>"]
     #[serde(rename="cacheClusterStatus")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub cache_cluster_status: Option<CacheClusterStatus>,
+    pub cache_cluster_status: Option<String>,
     #[doc="<p>The identifier of a client certificate for an API stage.</p>"]
     #[serde(rename="clientCertificateId")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -2378,7 +2325,7 @@ pub struct Stage {
     #[doc="<p>The timestamp when the stage was created.</p>"]
     #[serde(rename="createdDate")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_date: Option<Timestamp>,
+    pub created_date: Option<f64>,
     #[doc="<p>The identifier of the <a>Deployment</a> that the stage points to.</p>"]
     #[serde(rename="deploymentId")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -2394,11 +2341,11 @@ pub struct Stage {
     #[doc="<p>The timestamp when the stage last updated.</p>"]
     #[serde(rename="lastUpdatedDate")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub last_updated_date: Option<Timestamp>,
+    pub last_updated_date: Option<f64>,
     #[doc="<p>A map that defines the method settings for a <a>Stage</a> resource. Keys (designated as <code>/{method_setting_key</code> below) are method paths defined as <code>{resource_path}/{http_method}</code> for an individual method override, or <code>/\\*/\\*</code> for overriding all methods in the stage. </p>"]
     #[serde(rename="methodSettings")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub method_settings: Option<MapOfMethodSettings>,
+    pub method_settings: Option<::std::collections::HashMap<String, MethodSetting>>,
     #[doc="<p>The name of the stage is the first path segment in the Uniform Resource Identifier (URI) of a call to Amazon API Gateway.</p>"]
     #[serde(rename="stageName")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -2406,7 +2353,7 @@ pub struct Stage {
     #[doc="<p>A map that defines the stage variables for a <a>Stage</a> resource. Variable names can have alphanumeric and underscore characters, and the values must match <code>[A-Za-z0-9-._~:/?#&amp;=,]+</code>.</p>"]
     #[serde(rename="variables")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub variables: Option<MapOfStringToString>,
+    pub variables: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[doc="<p>A reference to a unique stage identified in the format <code>{restApiId}/{stage}</code>.</p>"]
@@ -2428,11 +2375,10 @@ pub struct Stages {
     #[doc="<p>An individual <a>Stage</a> resource.</p>"]
     #[serde(rename="item")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub item: Option<ListOfStage>,
+    pub item: Option<Vec<Stage>>,
 }
 
 #[doc="<p>The status code.</p>"]
-pub type ApiGatewayStatusCode = String;
 #[doc="<p>Represents a mapping template used to transform a payload.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html#models-mappings-mappings\">Mapping Templates</a> </div>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Template {
@@ -2448,7 +2394,7 @@ pub struct TestInvokeAuthorizerRequest {
     #[doc="<p>[Optional] A key-value map of additional context variables.</p>"]
     #[serde(rename="additionalContext")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub additional_context: Option<MapOfStringToString>,
+    pub additional_context: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>Specifies a test invoke authorizer request's <a>Authorizer</a> ID.</p>"]
     #[serde(rename="authorizerId")]
     pub authorizer_id: String,
@@ -2459,7 +2405,7 @@ pub struct TestInvokeAuthorizerRequest {
     #[doc="<p>[Required] A key-value map of headers to simulate an incoming invocation request. This is where the incoming authorization token, or identity source, should be specified.</p>"]
     #[serde(rename="headers")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub headers: Option<MapOfHeaderValues>,
+    pub headers: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>[Optional] The URI path, including query string, of the simulated invocation request. Use this to specify path parameters and query string parameters.</p>"]
     #[serde(rename="pathWithQueryString")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -2470,7 +2416,7 @@ pub struct TestInvokeAuthorizerRequest {
     #[doc="<p>A key-value map of stage variables to simulate an invocation on a deployed <a>Stage</a>.</p>"]
     #[serde(rename="stageVariables")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub stage_variables: Option<MapOfStringToString>,
+    pub stage_variables: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[doc="<p>Represents the response of the test invoke request for a custom <a>Authorizer</a></p>"]
@@ -2478,19 +2424,19 @@ pub struct TestInvokeAuthorizerRequest {
 pub struct TestInvokeAuthorizerResponse {
     #[serde(rename="authorization")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub authorization: Option<MapOfStringToList>,
+    pub authorization: Option<::std::collections::HashMap<String, Vec<String>>>,
     #[doc="<p>The <a href=\"http://openid.net/specs/openid-connect-core-1_0.html#StandardClaims\">open identity claims</a>, with any supported custom attributes, returned from the Cognito Your User Pool configured for the API.</p>"]
     #[serde(rename="claims")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub claims: Option<MapOfStringToString>,
+    pub claims: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>The HTTP status code that the client would have received. Value is 0 if the authorizer succeeded.</p>"]
     #[serde(rename="clientStatus")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub client_status: Option<Integer>,
+    pub client_status: Option<i64>,
     #[doc="<p>The execution latency of the test authorizer request.</p>"]
     #[serde(rename="latency")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub latency: Option<Long>,
+    pub latency: Option<i64>,
     #[doc="<p>The Amazon API Gateway execution log for the test authorizer request.</p>"]
     #[serde(rename="log")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -2519,7 +2465,7 @@ pub struct TestInvokeMethodRequest {
     #[doc="<p>A key-value map of headers to simulate an incoming invocation request.</p>"]
     #[serde(rename="headers")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub headers: Option<MapOfHeaderValues>,
+    pub headers: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>Specifies a test invoke method request's HTTP method.</p>"]
     #[serde(rename="httpMethod")]
     pub http_method: String,
@@ -2536,7 +2482,7 @@ pub struct TestInvokeMethodRequest {
     #[doc="<p>A key-value map of stage variables to simulate an invocation on a deployed <a>Stage</a>.</p>"]
     #[serde(rename="stageVariables")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub stage_variables: Option<MapOfStringToString>,
+    pub stage_variables: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[doc="<p>Represents the response of the test invoke request in the HTTP method.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-test-method.html#how-to-test-method-console\">Test API using the API Gateway console</a> </div>"]
@@ -2549,11 +2495,11 @@ pub struct TestInvokeMethodResponse {
     #[doc="<p>The headers of the HTTP response.</p>"]
     #[serde(rename="headers")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub headers: Option<MapOfHeaderValues>,
+    pub headers: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>The execution latency of the test invoke request.</p>"]
     #[serde(rename="latency")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub latency: Option<Long>,
+    pub latency: Option<i64>,
     #[doc="<p>The Amazon API Gateway execution log for the test invoke request.</p>"]
     #[serde(rename="log")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -2561,7 +2507,7 @@ pub struct TestInvokeMethodResponse {
     #[doc="<p>The HTTP status code.</p>"]
     #[serde(rename="status")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status: Option<Integer>,
+    pub status: Option<i64>,
 }
 
 #[doc="<p> The API request rate limits.</p>"]
@@ -2570,22 +2516,20 @@ pub struct ThrottleSettings {
     #[doc="<p>The API request burst limit, the maximum rate limit over a time ranging from one to a few seconds, depending upon whether the underlying token bucket is at its full capacity.</p>"]
     #[serde(rename="burstLimit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub burst_limit: Option<Integer>,
+    pub burst_limit: Option<i64>,
     #[doc="<p>The API request steady-state rate limit.</p>"]
     #[serde(rename="rateLimit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub rate_limit: Option<Double>,
+    pub rate_limit: Option<f64>,
 }
 
-pub type Timestamp = f64;
-pub type UnauthorizedCacheControlHeaderStrategy = String;
 #[doc="<p>Requests Amazon API Gateway to change information about the current <a>Account</a> resource.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateAccountRequest {
     #[doc="<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>"]
     #[serde(rename="patchOperations")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub patch_operations: Option<ListOfPatchOperation>,
+    pub patch_operations: Option<Vec<PatchOperation>>,
 }
 
 #[doc="<p>A request to change information about an <a>ApiKey</a> resource.</p>"]
@@ -2597,7 +2541,7 @@ pub struct UpdateApiKeyRequest {
     #[doc="<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>"]
     #[serde(rename="patchOperations")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub patch_operations: Option<ListOfPatchOperation>,
+    pub patch_operations: Option<Vec<PatchOperation>>,
 }
 
 #[doc="<p>Request to update an existing <a>Authorizer</a> resource.</p>"]
@@ -2609,7 +2553,7 @@ pub struct UpdateAuthorizerRequest {
     #[doc="<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>"]
     #[serde(rename="patchOperations")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub patch_operations: Option<ListOfPatchOperation>,
+    pub patch_operations: Option<Vec<PatchOperation>>,
     #[doc="<p>The <a>RestApi</a> identifier for the <a>Authorizer</a> resource.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
@@ -2627,7 +2571,7 @@ pub struct UpdateBasePathMappingRequest {
     #[doc="<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>"]
     #[serde(rename="patchOperations")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub patch_operations: Option<ListOfPatchOperation>,
+    pub patch_operations: Option<Vec<PatchOperation>>,
 }
 
 #[doc="<p>A request to change information about an <a>ClientCertificate</a> resource.</p>"]
@@ -2639,7 +2583,7 @@ pub struct UpdateClientCertificateRequest {
     #[doc="<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>"]
     #[serde(rename="patchOperations")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub patch_operations: Option<ListOfPatchOperation>,
+    pub patch_operations: Option<Vec<PatchOperation>>,
 }
 
 #[doc="<p>Requests Amazon API Gateway to change information about a <a>Deployment</a> resource.</p>"]
@@ -2651,7 +2595,7 @@ pub struct UpdateDeploymentRequest {
     #[doc="<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>"]
     #[serde(rename="patchOperations")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub patch_operations: Option<ListOfPatchOperation>,
+    pub patch_operations: Option<Vec<PatchOperation>>,
     #[doc="<p>The replacement identifier of the <a>RestApi</a> resource for the <a>Deployment</a> resource to change information about.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
@@ -2666,7 +2610,7 @@ pub struct UpdateDocumentationPartRequest {
     #[doc="<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>"]
     #[serde(rename="patchOperations")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub patch_operations: Option<ListOfPatchOperation>,
+    pub patch_operations: Option<Vec<PatchOperation>>,
     #[doc="<p>[Required] The identifier of an API of the to-be-updated documentation part.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
@@ -2681,7 +2625,7 @@ pub struct UpdateDocumentationVersionRequest {
     #[doc="<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>"]
     #[serde(rename="patchOperations")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub patch_operations: Option<ListOfPatchOperation>,
+    pub patch_operations: Option<Vec<PatchOperation>>,
     #[doc="<p>[Required] The identifier of an API of the to-be-updated documentation version.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
@@ -2696,7 +2640,7 @@ pub struct UpdateDomainNameRequest {
     #[doc="<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>"]
     #[serde(rename="patchOperations")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub patch_operations: Option<ListOfPatchOperation>,
+    pub patch_operations: Option<Vec<PatchOperation>>,
 }
 
 #[doc="<p>Represents an update integration request.</p>"]
@@ -2708,7 +2652,7 @@ pub struct UpdateIntegrationRequest {
     #[doc="<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>"]
     #[serde(rename="patchOperations")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub patch_operations: Option<ListOfPatchOperation>,
+    pub patch_operations: Option<Vec<PatchOperation>>,
     #[doc="<p>Represents an update integration request's resource identifier.</p>"]
     #[serde(rename="resourceId")]
     pub resource_id: String,
@@ -2726,7 +2670,7 @@ pub struct UpdateIntegrationResponseRequest {
     #[doc="<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>"]
     #[serde(rename="patchOperations")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub patch_operations: Option<ListOfPatchOperation>,
+    pub patch_operations: Option<Vec<PatchOperation>>,
     #[doc="<p>Specifies an update integration response request's resource identifier.</p>"]
     #[serde(rename="resourceId")]
     pub resource_id: String,
@@ -2735,7 +2679,7 @@ pub struct UpdateIntegrationResponseRequest {
     pub rest_api_id: String,
     #[doc="<p>Specifies an update integration response request's status code.</p>"]
     #[serde(rename="statusCode")]
-    pub status_code: ApiGatewayStatusCode,
+    pub status_code: String,
 }
 
 #[doc="<p>Request to update an existing <a>Method</a> resource.</p>"]
@@ -2747,7 +2691,7 @@ pub struct UpdateMethodRequest {
     #[doc="<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>"]
     #[serde(rename="patchOperations")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub patch_operations: Option<ListOfPatchOperation>,
+    pub patch_operations: Option<Vec<PatchOperation>>,
     #[doc="<p>The <a>Resource</a> identifier for the <a>Method</a> resource.</p>"]
     #[serde(rename="resourceId")]
     pub resource_id: String,
@@ -2765,7 +2709,7 @@ pub struct UpdateMethodResponseRequest {
     #[doc="<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>"]
     #[serde(rename="patchOperations")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub patch_operations: Option<ListOfPatchOperation>,
+    pub patch_operations: Option<Vec<PatchOperation>>,
     #[doc="<p>The <a>Resource</a> identifier for the <a>MethodResponse</a> resource.</p>"]
     #[serde(rename="resourceId")]
     pub resource_id: String,
@@ -2774,7 +2718,7 @@ pub struct UpdateMethodResponseRequest {
     pub rest_api_id: String,
     #[doc="<p>The status code for the <a>MethodResponse</a> resource.</p>"]
     #[serde(rename="statusCode")]
-    pub status_code: ApiGatewayStatusCode,
+    pub status_code: String,
 }
 
 #[doc="<p>Request to update an existing model in an existing <a>RestApi</a> resource.</p>"]
@@ -2786,7 +2730,7 @@ pub struct UpdateModelRequest {
     #[doc="<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>"]
     #[serde(rename="patchOperations")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub patch_operations: Option<ListOfPatchOperation>,
+    pub patch_operations: Option<Vec<PatchOperation>>,
     #[doc="<p>The <a>RestApi</a> identifier under which the model exists.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
@@ -2798,7 +2742,7 @@ pub struct UpdateRequestValidatorRequest {
     #[doc="<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>"]
     #[serde(rename="patchOperations")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub patch_operations: Option<ListOfPatchOperation>,
+    pub patch_operations: Option<Vec<PatchOperation>>,
     #[doc="<p>[Required] The identifier of <a>RequestValidator</a> to be updated.</p>"]
     #[serde(rename="requestValidatorId")]
     pub request_validator_id: String,
@@ -2813,7 +2757,7 @@ pub struct UpdateResourceRequest {
     #[doc="<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>"]
     #[serde(rename="patchOperations")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub patch_operations: Option<ListOfPatchOperation>,
+    pub patch_operations: Option<Vec<PatchOperation>>,
     #[doc="<p>The identifier of the <a>Resource</a> resource.</p>"]
     #[serde(rename="resourceId")]
     pub resource_id: String,
@@ -2828,7 +2772,7 @@ pub struct UpdateRestApiRequest {
     #[doc="<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>"]
     #[serde(rename="patchOperations")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub patch_operations: Option<ListOfPatchOperation>,
+    pub patch_operations: Option<Vec<PatchOperation>>,
     #[doc="<p>The ID of the <a>RestApi</a> you want to update.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
@@ -2840,7 +2784,7 @@ pub struct UpdateStageRequest {
     #[doc="<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>"]
     #[serde(rename="patchOperations")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub patch_operations: Option<ListOfPatchOperation>,
+    pub patch_operations: Option<Vec<PatchOperation>>,
     #[doc="<p>The identifier of the <a>RestApi</a> resource for the <a>Stage</a> resource to change information about.</p>"]
     #[serde(rename="restApiId")]
     pub rest_api_id: String,
@@ -2855,7 +2799,7 @@ pub struct UpdateUsagePlanRequest {
     #[doc="<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>"]
     #[serde(rename="patchOperations")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub patch_operations: Option<ListOfPatchOperation>,
+    pub patch_operations: Option<Vec<PatchOperation>>,
     #[doc="<p>The Id of the to-be-updated usage plan.</p>"]
     #[serde(rename="usagePlanId")]
     pub usage_plan_id: String,
@@ -2870,7 +2814,7 @@ pub struct UpdateUsageRequest {
     #[doc="<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>"]
     #[serde(rename="patchOperations")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub patch_operations: Option<ListOfPatchOperation>,
+    pub patch_operations: Option<Vec<PatchOperation>>,
     #[doc="<p>The Id of the usage plan associated with the usage data.</p>"]
     #[serde(rename="usagePlanId")]
     pub usage_plan_id: String,
@@ -2886,7 +2830,7 @@ pub struct Usage {
     #[doc="<p>The usage data, as daily logs of used and remaining quotas, over the specified time interval indexed over the API keys in a usage plan. For example, <code>{..., \"values\" : { \"{api_key}\" : [ [0, 100], [10, 90], [100, 10]]}</code>, where <code>{api_key}</code> stands for an API key value and the daily log entry is of the format <code>[used quota, remaining quota]</code>.</p>"]
     #[serde(rename="items")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub items: Option<MapOfKeyUsages>,
+    pub items: Option<::std::collections::HashMap<String, Vec<Vec<i64>>>>,
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub position: Option<String>,
@@ -2906,7 +2850,7 @@ pub struct UsagePlan {
     #[doc="<p>The associated API stages of a usage plan.</p>"]
     #[serde(rename="apiStages")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub api_stages: Option<ListOfApiStage>,
+    pub api_stages: Option<Vec<ApiStage>>,
     #[doc="<p>The description of a usage plan.</p>"]
     #[serde(rename="description")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -2960,7 +2904,7 @@ pub struct UsagePlanKeys {
     #[doc="<p>Gets the current item of the usage plan keys collection.</p>"]
     #[serde(rename="items")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub items: Option<ListOfUsagePlanKey>,
+    pub items: Option<Vec<UsagePlanKey>>,
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub position: Option<String>,
@@ -2972,7 +2916,7 @@ pub struct UsagePlans {
     #[doc="<p>Gets the current item when enumerating the collection of <a>UsagePlan</a>.</p>"]
     #[serde(rename="items")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub items: Option<ListOfUsagePlan>,
+    pub items: Option<Vec<UsagePlan>>,
     #[serde(rename="position")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub position: Option<String>,
