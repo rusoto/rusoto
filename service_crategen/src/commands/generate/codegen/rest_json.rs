@@ -113,7 +113,6 @@ impl GenerateProtocol for RestJsonGenerator {
         Ok(())
     }
 
-    // May need to special case this
     fn generate_prelude(&self, writer: &mut FileWriter, _: &Service) -> IoResult {
         writeln!(writer,
                  "use serde_json;
