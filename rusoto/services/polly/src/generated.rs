@@ -9,7 +9,6 @@ use std::error::Error;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
-use std::str::FromStr;
 use serde_json;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
@@ -1083,7 +1082,7 @@ impl<P, D> Polly for PollyClient<P, D>
                 if let Some(request_characters) =
                     response.headers.get("x-amzn-RequestCharacters") {
                     let value = request_characters.to_owned();
-                    result.request_characters = Some(i64::from_str(&value).unwrap())
+                    result.request_characters = Some(value.parse::<i64>().unwrap())
                 };
 
                 Ok(result)

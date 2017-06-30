@@ -117,11 +117,9 @@ fn parse_single_header(service: &Service,
 fn generate_header_primitive_parser(shape: &Shape) -> String {
     let statement = match shape.shape_type {
         ShapeType::String | ShapeType::Timestamp => "value",
-        ShapeType::Integer => "i64::from_str(&value).unwrap()",
-        ShapeType::Long => "i64::from_str(&value).unwrap()",
-        ShapeType::Double => "f64::from_str(&value).unwrap()",
-        ShapeType::Float => "f32::from_str(&value).unwrap()",
-        ShapeType::Boolean => "bool::from_str(&value).unwrap()",
+        ShapeType::Integer | ShapeType::Long | ShapeType::Double => "value.parse::<i64>().unwrap()",
+        ShapeType::Float => "value.parse::<f32>().unwrap()",
+        ShapeType::Boolean => "value.parse::<bool>().unwrap()",
         _ => panic!("Unknown primitive shape type"),
     };
 

@@ -116,8 +116,7 @@ impl GenerateProtocol for RestJsonGenerator {
     // May need to special case this
     fn generate_prelude(&self, writer: &mut FileWriter, _: &Service) -> IoResult {
         writeln!(writer,
-                 "use std::str::FromStr;
-        use serde_json;
+                 "use serde_json;
         use rusoto_core::param::{{Params, ServiceParams}};
         use rusoto_core::signature::SignedRequest;
         use serde_json::from_str;

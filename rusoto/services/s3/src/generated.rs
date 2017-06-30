@@ -18165,7 +18165,7 @@ impl<P, D> S3 for S3Client<P, D>
                 }
                 if let Some(delete_marker) = response.headers.get("x-amz-delete-marker") {
                     let value = delete_marker.to_owned();
-                    result.delete_marker = Some(bool::from_str(&value).unwrap())
+                    result.delete_marker = Some(value.parse::<bool>().unwrap())
                 };
                 if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
                     let value = request_charged.to_owned();
@@ -19325,7 +19325,7 @@ impl<P, D> S3 for S3Client<P, D>
                 };
                 if let Some(content_length) = response.headers.get("Content-Length") {
                     let value = content_length.to_owned();
-                    result.content_length = Some(i64::from_str(&value).unwrap())
+                    result.content_length = Some(value.parse::<i64>().unwrap())
                 };
                 if let Some(content_range) = response.headers.get("Content-Range") {
                     let value = content_range.to_owned();
@@ -19337,7 +19337,7 @@ impl<P, D> S3 for S3Client<P, D>
                 };
                 if let Some(delete_marker) = response.headers.get("x-amz-delete-marker") {
                     let value = delete_marker.to_owned();
-                    result.delete_marker = Some(bool::from_str(&value).unwrap())
+                    result.delete_marker = Some(value.parse::<bool>().unwrap())
                 };
                 if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
@@ -19364,11 +19364,11 @@ impl<P, D> S3 for S3Client<P, D>
                 result.metadata = Some(values);
                 if let Some(missing_meta) = response.headers.get("x-amz-missing-meta") {
                     let value = missing_meta.to_owned();
-                    result.missing_meta = Some(i64::from_str(&value).unwrap())
+                    result.missing_meta = Some(value.parse::<i64>().unwrap())
                 };
                 if let Some(parts_count) = response.headers.get("x-amz-mp-parts-count") {
                     let value = parts_count.to_owned();
-                    result.parts_count = Some(i64::from_str(&value).unwrap())
+                    result.parts_count = Some(value.parse::<i64>().unwrap())
                 };
                 if let Some(replication_status) =
                     response.headers.get("x-amz-replication-status") {
@@ -19415,7 +19415,7 @@ impl<P, D> S3 for S3Client<P, D>
                 };
                 if let Some(tag_count) = response.headers.get("x-amz-tagging-count") {
                     let value = tag_count.to_owned();
-                    result.tag_count = Some(i64::from_str(&value).unwrap())
+                    result.tag_count = Some(value.parse::<i64>().unwrap())
                 };
                 if let Some(version_id) = response.headers.get("x-amz-version-id") {
                     let value = version_id.to_owned();
@@ -19737,7 +19737,7 @@ impl<P, D> S3 for S3Client<P, D>
                 };
                 if let Some(content_length) = response.headers.get("Content-Length") {
                     let value = content_length.to_owned();
-                    result.content_length = Some(i64::from_str(&value).unwrap())
+                    result.content_length = Some(value.parse::<i64>().unwrap())
                 };
                 if let Some(content_type) = response.headers.get("Content-Type") {
                     let value = content_type.to_owned();
@@ -19745,7 +19745,7 @@ impl<P, D> S3 for S3Client<P, D>
                 };
                 if let Some(delete_marker) = response.headers.get("x-amz-delete-marker") {
                     let value = delete_marker.to_owned();
-                    result.delete_marker = Some(bool::from_str(&value).unwrap())
+                    result.delete_marker = Some(value.parse::<bool>().unwrap())
                 };
                 if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
@@ -19772,11 +19772,11 @@ impl<P, D> S3 for S3Client<P, D>
                 result.metadata = Some(values);
                 if let Some(missing_meta) = response.headers.get("x-amz-missing-meta") {
                     let value = missing_meta.to_owned();
-                    result.missing_meta = Some(i64::from_str(&value).unwrap())
+                    result.missing_meta = Some(value.parse::<i64>().unwrap())
                 };
                 if let Some(parts_count) = response.headers.get("x-amz-mp-parts-count") {
                     let value = parts_count.to_owned();
-                    result.parts_count = Some(i64::from_str(&value).unwrap())
+                    result.parts_count = Some(value.parse::<i64>().unwrap())
                 };
                 if let Some(replication_status) =
                     response.headers.get("x-amz-replication-status") {
