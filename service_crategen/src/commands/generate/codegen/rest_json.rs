@@ -70,6 +70,7 @@ impl GenerateProtocol for RestJsonGenerator {
 
                     let mut request = SignedRequest::new(\"{http_method}\", \"{endpoint_prefix}\", self.region, &request_uri);
                     request.set_content_type(\"application/x-amz-json-1.1\".to_owned());
+                    {set_headers}
                     {modify_endpoint_prefix}
                     {load_payload}
                     {load_params}
@@ -108,6 +109,7 @@ impl GenerateProtocol for RestJsonGenerator {
                 load_payload = generate_payload_loading_string(load_payload),
                 load_params = generate_params_loading_string(&member_param_strings),
                 encode_input = generate_encoding_string(load_payload),
+                set_headers = generate_headers(service).unwrap_or("".to_string()),
             )?
         }
         Ok(())
@@ -162,6 +164,15 @@ fn http_code_to_status_code(code: Option<i32>) -> String {
         // the response code, we'll assume this:
         None => "StatusCode::Ok".to_string(),
     }
+}
+
+// Glacier needs a special header added, not included in botocore definition.  See
+// http://docs.aws.amazon.com/amazonglacier/latest/dev/api-common-request-headers.html
+fn generate_headers(service: &Service) -> Option<String> {
+    if service.full_name() == "Amazon Glacier" {
+        return Some("request.add_header(\"x-amz-glacier-version\", \"2012-06-01\");".to_string());
+    }
+    None
 }
 
 // IoT has an endpoint_prefix and a signing_name that differ

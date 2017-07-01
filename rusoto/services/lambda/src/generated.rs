@@ -3866,6 +3866,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         let mut request = SignedRequest::new("POST", "lambda", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+
         request.set_payload(Some(encoded.into_bytes()));
         let mut params = Params::new();
         if let Some(ref x) = input.qualifier {
@@ -3913,6 +3914,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         let mut request = SignedRequest::new("POST", "lambda", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+
         request.set_payload(Some(encoded.into_bytes()));
 
 
@@ -3954,6 +3956,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         let mut request = SignedRequest::new("POST", "lambda", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+
         request.set_payload(Some(encoded.into_bytes()));
 
 
@@ -3994,6 +3997,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
         let mut request = SignedRequest::new("POST", "lambda", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -4041,6 +4045,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
 
+
         request.sign(&self.credentials_provider.credentials()?);
 
         let response = self.dispatcher.dispatch(&request)?;
@@ -4069,6 +4074,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
         let mut request = SignedRequest::new("DELETE", "lambda", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -4111,6 +4117,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
+
         let mut params = Params::new();
         if let Some(ref x) = input.qualifier {
             params.put("Qualifier", x);
@@ -4144,6 +4151,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
         let mut request = SignedRequest::new("GET", "lambda", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -4191,6 +4199,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
 
+
         request.sign(&self.credentials_provider.credentials()?);
 
         let response = self.dispatcher.dispatch(&request)?;
@@ -4229,6 +4238,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
         let mut request = SignedRequest::new("GET", "lambda", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
 
@@ -4274,6 +4284,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
         let mut request = SignedRequest::new("GET", "lambda", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
         let mut params = Params::new();
@@ -4322,6 +4333,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
+
         let mut params = Params::new();
         if let Some(ref x) = input.qualifier {
             params.put("Qualifier", x);
@@ -4365,6 +4377,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
+
         let mut params = Params::new();
         if let Some(ref x) = input.qualifier {
             params.put("Qualifier", x);
@@ -4406,6 +4419,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
         let mut request = SignedRequest::new("POST", "lambda", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
         request.set_payload(Some(encoded.into_bytes()));
         let mut params = Params::new();
@@ -4452,6 +4466,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         let mut request = SignedRequest::new("POST", "lambda", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+
         request.set_payload(Some(encoded.into_bytes()));
 
 
@@ -4492,6 +4507,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
         let mut request = SignedRequest::new("GET", "lambda", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
         let mut params = Params::new();
@@ -4543,6 +4559,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
         let mut request = SignedRequest::new("GET", "lambda", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
         let mut params = Params::new();
@@ -4599,6 +4616,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
+
         let mut params = Params::new();
         if let Some(ref x) = input.marker {
             params.put("Marker", x);
@@ -4648,6 +4666,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
 
 
+
         request.sign(&self.credentials_provider.credentials()?);
 
         let response = self.dispatcher.dispatch(&request)?;
@@ -4686,6 +4705,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
         let mut request = SignedRequest::new("GET", "lambda", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
         let mut params = Params::new();
@@ -4739,6 +4759,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         let mut request = SignedRequest::new("POST", "lambda", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+
         request.set_payload(Some(encoded.into_bytes()));
 
 
@@ -4785,6 +4806,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
 
+
         let mut params = Params::new();
         if let Some(ref x) = input.qualifier {
             params.put("Qualifier", x);
@@ -4819,6 +4841,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         let mut request = SignedRequest::new("POST", "lambda", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+
         request.set_payload(Some(encoded.into_bytes()));
 
 
@@ -4846,6 +4869,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
         let mut request = SignedRequest::new("DELETE", "lambda", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
 
         let mut params = Params::new();
@@ -4884,6 +4908,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
         let mut request = SignedRequest::new("PUT", "lambda", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -4927,6 +4952,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
         let mut request = SignedRequest::new("PUT", "lambda", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+
         request.set_payload(Some(encoded.into_bytes()));
 
 
@@ -4968,6 +4994,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
         let mut request = SignedRequest::new("PUT", "lambda", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -5013,6 +5040,7 @@ impl<P, D> Lambda for LambdaClient<P, D>
 
         let mut request = SignedRequest::new("PUT", "lambda", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
         request.set_payload(Some(encoded.into_bytes()));
 

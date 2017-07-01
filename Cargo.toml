@@ -39,6 +39,7 @@ members = [
     "rusoto/services/events",
     "rusoto/services/firehose",
     "rusoto/services/gamelift",
+    "rusoto/services/glacier",
     "rusoto/services/health",
     "rusoto/services/iam",
     "rusoto/services/importexport",
