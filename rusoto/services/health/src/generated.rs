@@ -1,3 +1,16 @@
+
+// =================================================================
+//
+//                           * WARNING *
+//
+//                    This file is generated!
+//
+//  Changes made to this file will be overwritten. If changes are
+//  required to the generated code, the service_crategen project
+//  must be updated to generate the changes.
+//
+// =================================================================
+
 #[allow(warnings)]
 use hyper::Client;
 use hyper::status::StatusCode;
