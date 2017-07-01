@@ -170,6 +170,18 @@ See [LICENSE][license] for details.
                 .expect("Unable to write lib.rs");
 
             let lib_file_contents = format!(r#"
+// =================================================================
+//
+//                           * WARNING *
+//
+//                    This file is generated!
+//
+//  Changes made to this file will be overwritten. If changes are
+//  required to the generated code, the service_crategen project
+//  must be updated to generate the changes.
+//
+// =================================================================
+
 //! {service_full_name}
 //!
 //! If you're using the service, you're probably looking for [{client_name}](struct.{client_name}.html) and [{trait_name}](trait.{trait_name}.html).
