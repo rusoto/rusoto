@@ -89,7 +89,20 @@ fn generate<P, E>(writer: &mut FileWriter, service: &Service, protocol_generator
     where P: GenerateProtocol,
           E: GenerateErrorTypes {
 
-    writeln!(writer, "#[allow(warnings)]
+    writeln!(writer, "
+        // =================================================================
+        //
+        //                           * WARNING *
+        //
+        //                    This file is generated!
+        //
+        //  Changes made to this file will be overwritten. If changes are
+        //  required to the generated code, the service_crategen project
+        //  must be updated to generate the changes.
+        //
+        // =================================================================
+
+        #[allow(warnings)]
         use hyper::Client;
         use hyper::status::StatusCode;
         use rusoto_core::request::DispatchSignedRequest;
