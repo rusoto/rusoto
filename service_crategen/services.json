@@ -23,6 +23,12 @@
     "protocolVersion": "2011-01-01",
     "baseTypeName": "Autoscaling"
   },
+  "batch": {
+    "version": "0.27.0",
+    "coreVersion": "0.27.0",
+    "protocolVersion": "2016-08-10",
+    "baseTypeName": "Batch"
+  },
   "cloudformation": {
     "version": "0.27.0",
     "coreVersion": "0.27.0",

@@ -6,6 +6,7 @@ members = [
     "rusoto/services/apigateway",
     "rusoto/services/appstream",
     "rusoto/services/autoscaling",
+    "rusoto/services/batch",
     "rusoto/services/cloudformation",
     "rusoto/services/cloudfront",
     "rusoto/services/cloudhsm",

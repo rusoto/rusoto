@@ -31,6 +31,10 @@ path = "../rusoto/services/appstream"
 optional = true
 path = "../rusoto/services/autoscaling"
 
+[dependencies.rusoto_batch]
+optional = true
+path = "../rusoto/services/batch"
+
 [dependencies.rusoto_cloudformation]
 optional = true
 path = "../rusoto/services/cloudformation"
@@ -336,6 +340,7 @@ all = [
         "apigateway",
 		"appstream",
 	   	"autoscaling",
+        "batch",
 	   	"cloudformation",
 	   	"cloudfront",
 	   	"cloudhsm",
@@ -414,6 +419,7 @@ acm = ["rusoto_acm"]
 apigateway = ["rusoto_apigateway"]
 appstream = ["rusoto_appstream"]
 autoscaling = ["rusoto_autoscaling"]
+batch = ["rusoto_batch"]
 cloudformation = ["rusoto_cloudformation"]
 cloudfront = ["rusoto_cloudfront"]
 cloudhsm = ["rusoto_cloudhsm"]
