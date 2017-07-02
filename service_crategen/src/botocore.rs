@@ -22,7 +22,7 @@ pub struct ServiceDefinition {
     pub operations: BTreeMap<String, Operation>,
     #[serde(deserialize_with="ShapesMap::deserialize_shapes_map")]
     pub shapes: BTreeMap<String, Shape>,
-    pub version: Option<String>
+    pub version: Option<String>,
 }
 
 impl ServiceDefinition {
@@ -224,6 +224,20 @@ impl Shape {
             _ => true,
         }
     }
+
+    pub fn has_query_parameters(&self) -> bool {
+        self.members
+            .as_ref()
+            .unwrap()
+            .iter()
+            .any(|(_, member)| {
+                if let Some(ref loc) = member.location {
+                    !member.deprecated() && loc == "querystring"
+                } else {
+                    false
+                }
+            })
+    }
 }
 
 impl<'a> Shape {
@@ -360,14 +374,16 @@ impl<'de> Visitor<'de> for ShapeNameVisitor {
     }
 
     fn visit_str<E>(self, v: &str) -> Result<Self::Value, E>
-        where E: SerdeError {
+        where E: SerdeError
+    {
         Ok(util::capitalize_first(v))
     }
 }
 
-impl <'de> ShapeName<'de> for String {
+impl<'de> ShapeName<'de> for String {
     fn deserialize_shape_name<D>(deserializer: D) -> Result<String, D::Error>
-        where D: Deserializer<'de> {
+        where D: Deserializer<'de>
+    {
         deserializer.deserialize_string(ShapeNameVisitor)
     }
 }
@@ -388,7 +404,8 @@ impl<V> ShapesMapVisitor<V> {
 }
 
 impl<'de, V> Visitor<'de> for ShapesMapVisitor<V>
-    where V: Deserialize<'de> {
+    where V: Deserialize<'de>
+{
     type Value = BTreeMap<String, V>;
 
     fn expecting(&self, formatter: &mut Formatter) -> FmtResult {
@@ -396,12 +413,14 @@ impl<'de, V> Visitor<'de> for ShapesMapVisitor<V>
     }
 
     fn visit_unit<E>(self) -> Result<BTreeMap<String, V>, E>
-        where E: SerdeError {
+        where E: SerdeError
+    {
         Ok(BTreeMap::new())
     }
 
     fn visit_map<Visitor>(self, mut visitor: Visitor) -> Result<Self::Value, Visitor::Error>
-        where Visitor: MapAccess<'de> {
+        where Visitor: MapAccess<'de>
+    {
         let mut values = BTreeMap::new();
 
         while let Some((key, value)) = try!(visitor.next_entry()) {
@@ -415,9 +434,11 @@ impl<'de, V> Visitor<'de> for ShapesMapVisitor<V>
 
 impl<'de, V> ShapesMap<'de> for BTreeMap<String, V>
     where String: Deserialize<'de>,
-          V: Deserialize<'de> {
+          V: Deserialize<'de>
+{
     fn deserialize_shapes_map<D>(deserializer: D) -> Result<BTreeMap<String, V>, D::Error>
-        where D: Deserializer<'de> {
+        where D: Deserializer<'de>
+    {
         deserializer.deserialize_map(ShapesMapVisitor::new())
     }
 }
