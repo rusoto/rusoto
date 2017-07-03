@@ -692,8 +692,6 @@ pub struct DirectoryDescription {
     pub vpc_settings: Option<DirectoryVpcSettingsDescription>,
 }
 
-#[doc="<p>A list of directory descriptions.</p>"]
-#[doc="<p>A list of directory identifiers.</p>"]
 #[doc="<p>Contains directory limit information for a region.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DirectoryLimits {
@@ -859,7 +857,6 @@ pub struct EventTopic {
     pub topic_name: Option<String>,
 }
 
-#[doc="<p>The descriptive message for the exception.</p>"]
 #[doc="<p>Contains the inputs for the <a>GetDirectoryLimits</a> operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetDirectoryLimitsRequest;
@@ -1091,7 +1088,6 @@ pub struct RemoveTagsFromResourceRequest {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct RemoveTagsFromResourceResult;
 
-#[doc="<p>The AWS request identifier.</p>"]
 #[doc="<p>An object representing the inputs for the <a>RestoreFromSnapshot</a> operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct RestoreFromSnapshotRequest {
@@ -1166,7 +1162,6 @@ pub struct Snapshot {
     pub type_: Option<String>,
 }
 
-#[doc="<p>A list of directory snapshot identifiers.</p>"]
 #[doc="<p>Contains manual snapshot limit information for a directory.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct SnapshotLimits {
@@ -1184,7 +1179,6 @@ pub struct SnapshotLimits {
     pub manual_snapshots_limit_reached: Option<bool>,
 }
 
-#[doc="<p>A list of descriptions of directory snapshots.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct StartSchemaExtensionRequest {
     #[doc="<p>If true, creates a snapshot of the directory before applying the schema extension.</p>"]

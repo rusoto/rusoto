@@ -43,7 +43,6 @@ pub struct AccountAttribute {
     pub used: Option<i64>,
 }
 
-#[doc="<p> A list of individual account attributes. </p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct AssociateNodeRequest {
     #[doc="<p>Engine attributes used for associating the node. </p> <p class=\"title\"> <b>Attributes accepted in a AssociateNode request:</b> </p> <ul> <li> <p> <code>CHEF_ORGANIZATION</code>: The Chef organization with which the node is associated. By default only one organization named <code>default</code> can exist. </p> </li> <li> <p> <code>CHEF_NODE_PUBLIC_KEY</code>: A PEM-formatted public key. This key is required for the <code>chef-client</code> agent to access the Chef API. </p> </li> </ul>"]
@@ -423,8 +422,6 @@ pub struct EngineAttribute {
     pub value: Option<String>,
 }
 
-#[doc="<p>The status of the association or disassociation request. </p> <p class=\"title\"> <b>Possible values:</b> </p> <ul> <li> <p> <code>SUCCESS</code>: The association or disassociation succeeded. </p> </li> <li> <p> <code>FAILED</code>: The association or disassociation failed. </p> </li> <li> <p> <code>IN_PROGRESS</code>: The association or disassociation is still in progress. </p> </li> </ul>"]
-#[doc="<p>The node name that is used by <code>chef-client</code> for a new node. For more information, see the <a href=\"http://docs.aws.amazon.com/https:/docs.chef.io/nodes.html#about-node-names\">Chef Documentation</a>. </p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct RestoreServerRequest {
     #[doc="<p> The ID of the backup that you want to use to restore a server. </p>"]
@@ -579,7 +576,6 @@ pub struct StartMaintenanceResponse {
     pub server: Option<Server>,
 }
 
-#[doc="<p> <code>DDD:HH:MM</code> (weekly start time) or <code>HH:MM</code> (daily start time). </p> <p> Time windows always use coordinated universal time (UTC). Valid strings for day of week (<code>DDD</code>) are: <code>Mon</code>, <code>Tue</code>, <code>Wed</code>, <code>Thr</code>, <code>Fri</code>, <code>Sat</code>, or <code>Sun</code>.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateServerEngineAttributesRequest {
     #[doc="<p>The name of the engine attribute to update. </p>"]

@@ -348,7 +348,6 @@ pub struct DisassociateFleetRequest {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DisassociateFleetResult;
 
-#[doc="<p>The error message in the exception.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ExpireSessionRequest {
     #[doc="<p>The unique identifier of the streaming session to be stopped.</p>"]
@@ -414,8 +413,6 @@ pub struct Fleet {
     pub vpc_config: Option<VpcConfig>,
 }
 
-#[doc="<p>Fleet attribute.</p>"]
-#[doc="<p>A list of fleet attributes.</p>"]
 #[doc="<p>The details of the fleet error.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct FleetError {
@@ -429,7 +426,6 @@ pub struct FleetError {
     pub error_message: Option<String>,
 }
 
-#[doc="<p>A list of fleets.</p>"]
 #[doc="<p>New streaming instances are booted from images. The image stores the application catalog and is connected to fleets.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Image {
@@ -547,8 +543,6 @@ pub struct ListAssociatedStacksResult {
     pub next_token: Option<String>,
 }
 
-#[doc="<p>The ARN of the resource.</p>"]
-#[doc="<p>A list of security groups.</p>"]
 #[doc="<p>Contains the parameters for a streaming session.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Session {
@@ -573,8 +567,6 @@ pub struct Session {
     pub user_id: String,
 }
 
-#[doc="<p>List of sessions.</p>"]
-#[doc="<p>Possible values for the state of a streaming session.</p>"]
 #[doc="<p>Details about a stack.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Stack {
@@ -620,8 +612,6 @@ pub struct StackError {
     pub error_message: Option<String>,
 }
 
-#[doc="<p>A list of stack errors.</p>"]
-#[doc="<p>A list of stacks.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct StartFleetRequest {
     #[doc="<p>The name of the fleet to start.</p>"]
@@ -654,9 +644,6 @@ pub struct StorageConnector {
     pub resource_identifier: Option<String>,
 }
 
-#[doc="<p>A list of storage connectors.</p>"]
-#[doc="<p>The type of storage connector. The possible values include: HOMEFOLDERS.</p>"]
-#[doc="<p>A list of subnet IDs.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateFleetRequest {
     #[doc="<p>Fleet attributes to be deleted.</p>"]

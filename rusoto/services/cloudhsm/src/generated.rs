@@ -380,8 +380,6 @@ pub struct GetConfigResponse {
     pub config_type: Option<String>,
 }
 
-#[doc="<p>An ARN that identifies an HSM.</p>"]
-#[doc="<p>Contains a list of ARNs that identify the HSMs.</p>"]
 #[doc="<p>Contains the inputs for the <a>ListAvailableZones</a> action.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListAvailableZonesRequest;
@@ -562,7 +560,6 @@ pub struct RemoveTagsFromResourceResponse {
     pub status: String,
 }
 
-#[doc="<p>Specifies the type of subscription for the HSM.</p> <ul> <li><b>PRODUCTION</b> - The HSM is being used in a production environment.</li> <li><b>TRIAL</b> - The HSM is being used in a product trial.</li> </ul>"]
 #[doc="<p>A key-value pair that identifies or specifies metadata about an AWS CloudHSM resource.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Tag {

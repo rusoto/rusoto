@@ -511,7 +511,6 @@ pub struct Resource {
     pub resource_type: Option<String>,
 }
 
-#[doc="<p>A list of resources referenced by the event returned.</p>"]
 #[doc="<p>A resource tag.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ResourceTag {
@@ -561,7 +560,6 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
-#[doc="<p>A list of tags.</p>"]
 #[doc="<p>The settings for a trail.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Trail {

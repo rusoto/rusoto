@@ -320,8 +320,6 @@ pub struct CloudWatchLogsConfiguration {
     pub log_streams: Option<Vec<CloudWatchLogsLogStream>>,
 }
 
-#[doc="<p>Specifies the encoding of the log file so that the file can be read correctly. The default is <code>utf_8</code>. Encodings supported by Python <code>codecs.decode()</code> can be used here.</p>"]
-#[doc="<p>Specifies where to start to read data (start_of_file or end_of_file). The default is start_of_file. It's only used if there is no state persisted for that log stream.</p>"]
 #[doc="<p>Describes the Amazon CloudWatch logs configuration for a layer. For detailed information about members of this data type, see the <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AgentReference.html\">CloudWatch Logs Agent Reference</a>.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CloudWatchLogsLogStream {
@@ -371,8 +369,6 @@ pub struct CloudWatchLogsLogStream {
     pub time_zone: Option<String>,
 }
 
-#[doc="<p>Describes the Amazon CloudWatch logs configuration for a layer.</p>"]
-#[doc="<p>The preferred time zone for logs streamed to CloudWatch Logs. Valid values are <code>LOCAL</code> and <code>UTC</code>, for Coordinated Universal Time.</p>"]
 #[doc="<p>Describes a command.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Command {

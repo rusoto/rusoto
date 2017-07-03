@@ -26,10 +26,6 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[doc="Region of customer S3 bucket."]
-#[doc="Enable support for Redshift and/or QuickSight."]
-#[doc="A list of additional artifacts."]
-#[doc="Preferred compression format for report."]
 #[doc="Request of DeleteReportDefinition"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteReportDefinitionRequest {
@@ -46,7 +42,6 @@ pub struct DeleteReportDefinitionResponse {
     pub response_message: Option<String>,
 }
 
-#[doc="A message indicates if the deletion is successful."]
 #[doc="Request of DescribeReportDefinitions"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DescribeReportDefinitionsRequest {
@@ -69,9 +64,6 @@ pub struct DescribeReportDefinitionsResponse {
     pub report_definitions: Option<Vec<ReportDefinition>>,
 }
 
-#[doc="A message to show the detail of the exception."]
-#[doc="A generic string."]
-#[doc="The max number of results returned by the operation."]
 #[doc="Request of PutReportDefinition"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct PutReportDefinitionRequest {
@@ -107,14 +99,6 @@ pub struct ReportDefinition {
     pub time_unit: String,
 }
 
-#[doc="A list of report definitions."]
-#[doc="Preferred format for report."]
-#[doc="Preferred name for a report, it has to be unique. Must starts with a number/letter, case sensitive. Limited to 256 characters."]
-#[doc="Name of customer S3 bucket."]
-#[doc="Preferred report path prefix. Limited to 256 characters."]
-#[doc="Preference of including Resource IDs. You can include additional details about individual resource IDs in your report."]
-#[doc="A list of schema elements."]
-#[doc="The frequency on which report data are measured and displayed."]
 /// Errors returned by DeleteReportDefinition
 #[derive(Debug, PartialEq)]
 pub enum DeleteReportDefinitionError {

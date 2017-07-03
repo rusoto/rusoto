@@ -26,8 +26,6 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[doc="<p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p> <p>Example: 65000</p>"]
-#[doc="<p>Indicates the address family for the BGP peer.</p> <ul> <li> <p> <b>ipv4</b>: IPv4 address family</p> </li> <li> <p> <b>ipv6</b>: IPv6 address family</p> </li> </ul>"]
 #[doc="<p>Container for the parameters to the AllocateConnectionOnInterconnect operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct AllocateConnectionOnInterconnectRequest {
@@ -96,7 +94,6 @@ pub struct AllocatePublicVirtualInterfaceRequest {
     pub owner_account: String,
 }
 
-#[doc="<p>IP address assigned to the Amazon interface.</p> <p>Example: 192.168.1.1/30 or 2001:db8::1/125</p>"]
 #[doc="<p>Container for the parameters to the AssociateConnectionWithLag operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct AssociateConnectionWithLagRequest {
@@ -130,8 +127,6 @@ pub struct AssociateVirtualInterfaceRequest {
     pub virtual_interface_id: String,
 }
 
-#[doc="<p>An abstract ID for the physical Direct Connect endpoint.</p> <p>Example: EQC50-abcdef123456</p>"]
-#[doc="<p>The authentication key for BGP configuration.</p> <p>Example: asdf34example</p>"]
 #[doc="<p>A structure containing information about a BGP peer.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct BGPPeer {
@@ -158,10 +153,6 @@ pub struct BGPPeer {
     pub customer_address: Option<String>,
 }
 
-#[doc="<p>A list of the BGP peers configured on this virtual interface.</p>"]
-#[doc="<p>The state of the BGP peer.</p> <ul> <li> <p> <b>Verifying</b>: The BGP peering addresses or ASN require validation before the BGP peer can be created. This state only applies to BGP peers on a public virtual interface. </p> </li> <li> <p> <b>Pending</b>: The BGP peer has been created, and is in this state until it is ready to be established.</p> </li> <li> <p> <b>Available</b>: The BGP peer can be established.</p> </li> <li> <p> <b>Deleting</b>: The BGP peer is in the process of being deleted.</p> </li> <li> <p> <b>Deleted</b>: The BGP peer has been deleted and cannot be established.</p> </li> </ul>"]
-#[doc="<p>The Up/Down state of the BGP peer.</p> <ul> <li> <p> <b>Up</b>: The BGP peer is established.</p> </li> <li> <p> <b>Down</b>: The BGP peer is down.</p> </li> </ul>"]
-#[doc="<p>Bandwidth of the connection.</p> <p>Example: 1Gbps</p> <p>Default: None</p>"]
 #[doc="<p>Container for the parameters to the ConfirmConnection operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ConfirmConnectionRequest {
@@ -256,10 +247,6 @@ pub struct Connection {
     pub vlan: Option<i64>,
 }
 
-#[doc="<p>The ID of the connection. This field is also used as the ID type for operations that use multiple connection types (LAG, interconnect, and/or connection).</p> <p>Example: dxcon-fg5678gh</p> <p>Default: None</p>"]
-#[doc="<p>A list of connections.</p>"]
-#[doc="<p>The name of the connection.</p> <p>Example: \"<i>My Connection to AWS</i>\"</p> <p>Default: None</p>"]
-#[doc="<p>State of the connection.</p> <ul> <li> <p> <b>Ordering</b>: The initial state of a hosted connection provisioned on an interconnect. The connection stays in the ordering state until the owner of the hosted connection confirms or declines the connection order.</p> </li> <li> <p> <b>Requested</b>: The initial state of a standard connection. The connection stays in the requested state until the Letter of Authorization (LOA) is sent to the customer.</p> </li> <li> <p> <b>Pending</b>: The connection has been approved, and is being initialized.</p> </li> <li> <p> <b>Available</b>: The network link is up, and the connection is ready for use.</p> </li> <li> <p> <b>Down</b>: The network link is down.</p> </li> <li> <p> <b>Deleting</b>: The connection is in the process of being deleted.</p> </li> <li> <p> <b>Deleted</b>: The connection has been deleted.</p> </li> <li> <p> <b>Rejected</b>: A hosted connection in the 'Ordering' state will enter the 'Rejected' state if it is deleted by the end customer.</p> </li> </ul>"]
 #[doc="<p>A structure containing a list of connections.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Connections {
@@ -362,7 +349,6 @@ pub struct CreatePublicVirtualInterfaceRequest {
     pub new_public_virtual_interface: NewPublicVirtualInterface,
 }
 
-#[doc="<p>IP address assigned to the customer interface.</p> <p>Example: 192.168.1.2/30 or 2001:db8::2/125</p>"]
 #[doc="<p>Container for the parameters to the DeleteBGPPeer operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteBGPPeerRequest {
@@ -605,10 +591,6 @@ pub struct Interconnect {
     pub region: Option<String>,
 }
 
-#[doc="<p>The ID of the interconnect.</p> <p>Example: dxcon-abc123</p>"]
-#[doc="<p>A list of interconnects.</p>"]
-#[doc="<p>The name of the interconnect.</p> <p>Example: \"<i>1G Interconnect to AWS</i>\"</p>"]
-#[doc="<p>State of the interconnect.</p> <ul> <li> <p> <b>Requested</b>: The initial state of an interconnect. The interconnect stays in the requested state until the Letter of Authorization (LOA) is sent to the customer.</p> </li> <li> <p> <b>Pending</b>: The interconnect has been approved, and is being initialized.</p> </li> <li> <p> <b>Available</b>: The network link is up, and the interconnect is ready for use.</p> </li> <li> <p> <b>Down</b>: The network link is down.</p> </li> <li> <p> <b>Deleting</b>: The interconnect is in the process of being deleted.</p> </li> <li> <p> <b>Deleted</b>: The interconnect has been deleted.</p> </li> </ul>"]
 #[doc="<p>A structure containing a list of interconnects.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Interconnects {
@@ -667,9 +649,6 @@ pub struct Lag {
     pub region: Option<String>,
 }
 
-#[doc="<p>The ID of the LAG.</p> <p>Example: dxlag-fg5678gh</p>"]
-#[doc="<p>A list of LAGs.</p>"]
-#[doc="<p>The state of the LAG.</p> <ul> <li> <p> <b>Requested</b>: The initial state of a LAG. The LAG stays in the requested state until the Letter of Authorization (LOA) is available.</p> </li> <li> <p> <b>Pending</b>: The LAG has been approved, and is being initialized.</p> </li> <li> <p> <b>Available</b>: The network link is established, and the LAG is ready for use.</p> </li> <li> <p> <b>Down</b>: The network link is down.</p> </li> <li> <p> <b>Deleting</b>: The LAG is in the process of being deleted.</p> </li> <li> <p> <b>Deleted</b>: The LAG has been deleted.</p> </li> </ul>"]
 #[doc="<p>A structure containing a list of LAGs.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Lags {
@@ -694,8 +673,6 @@ pub struct Loa {
     pub loa_content_type: Option<String>,
 }
 
-#[doc="<p>The binary contents of the LOA-CFA document.</p>"]
-#[doc="<p>A standard media type indicating the content type of the LOA-CFA document. Currently, the only supported value is \"application/pdf\".</p> <p>Default: application/pdf</p>"]
 #[doc="<p>An AWS Direct Connect location where connections and interconnects can be requested.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Location {
@@ -709,7 +686,6 @@ pub struct Location {
     pub location_name: Option<String>,
 }
 
-#[doc="<p>Where the connection is located.</p> <p>Example: EqSV5</p> <p>Default: None</p>"]
 #[doc="<p>A location is a network facility where AWS Direct Connect routers are available to be connected. Generally, these are colocation hubs where many network providers have equipment, and where cross connects can be delivered. Locations include a name and facility code, and must be provided when creating a connection.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Locations {
@@ -839,7 +815,6 @@ pub struct NewPublicVirtualInterfaceAllocation {
     pub vlan: i64,
 }
 
-#[doc="<p>The AWS region where the connection is located.</p> <p>Example: us-east-1</p> <p>Default: None</p>"]
 #[doc="<p>The tags associated with a Direct Connect resource.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ResourceTag {
@@ -862,7 +837,6 @@ pub struct RouteFilterPrefix {
     pub cidr: Option<String>,
 }
 
-#[doc="<p>A list of routes to be advertised to the AWS network in this region (public virtual interface).</p>"]
 #[doc="<p>Information about a tag.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Tag {
@@ -921,7 +895,6 @@ pub struct UpdateLagRequest {
     pub minimum_links: Option<i64>,
 }
 
-#[doc="<p>The VLAN ID.</p> <p>Example: 101</p>"]
 #[doc="<p>You can create one or more AWS Direct Connect private virtual interfaces linking to your virtual private gateway.</p> <p>Virtual private gateways can be managed using the Amazon Virtual Private Cloud (Amazon VPC) console or the <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-CreateVpnGateway.html\">Amazon EC2 CreateVpnGateway action</a>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct VirtualGateway {
@@ -933,9 +906,6 @@ pub struct VirtualGateway {
     pub virtual_gateway_state: Option<String>,
 }
 
-#[doc="<p>The ID of the virtual private gateway to a VPC. This only applies to private virtual interfaces.</p> <p>Example: vgw-123er56</p>"]
-#[doc="<p>A list of virtual private gateways.</p>"]
-#[doc="<p>State of the virtual private gateway.</p> <ul> <li> <p> <b>Pending</b>: This is the initial state after calling <i>CreateVpnGateway</i>.</p> </li> <li> <p> <b>Available</b>: Ready for use by a private virtual interface.</p> </li> <li> <p> <b>Deleting</b>: This is the initial state after calling <i>DeleteVpnGateway</i>.</p> </li> <li> <p> <b>Deleted</b>: In this state, a private virtual interface is unable to send traffic over this gateway.</p> </li> </ul>"]
 #[doc="<p>A structure containing a list of virtual private gateways.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct VirtualGateways {
@@ -1003,11 +973,6 @@ pub struct VirtualInterface {
     pub vlan: Option<i64>,
 }
 
-#[doc="<p>The ID of the virtual interface.</p> <p>Example: dxvif-123dfg56</p> <p>Default: None</p>"]
-#[doc="<p>A list of virtual interfaces.</p>"]
-#[doc="<p>The name of the virtual interface assigned by the customer.</p> <p>Example: \"My VPC\"</p>"]
-#[doc="<p>State of the virtual interface.</p> <ul> <li> <p> <b>Confirming</b>: The creation of the virtual interface is pending confirmation from the virtual interface owner. If the owner of the virtual interface is different from the owner of the connection on which it is provisioned, then the virtual interface will remain in this state until it is confirmed by the virtual interface owner.</p> </li> <li> <p> <b>Verifying</b>: This state only applies to public virtual interfaces. Each public virtual interface needs validation before the virtual interface can be created.</p> </li> <li> <p> <b>Pending</b>: A virtual interface is in this state from the time that it is created until the virtual interface is ready to forward traffic.</p> </li> <li> <p> <b>Available</b>: A virtual interface that is able to forward traffic.</p> </li> <li> <p> <b>Down</b>: A virtual interface that is BGP down.</p> </li> <li> <p> <b>Deleting</b>: A virtual interface is in this state immediately after calling <a>DeleteVirtualInterface</a> until it can no longer forward traffic.</p> </li> <li> <p> <b>Deleted</b>: A virtual interface that cannot forward traffic.</p> </li> <li> <p> <b>Rejected</b>: The virtual interface owner has declined creation of the virtual interface. If a virtual interface in the 'Confirming' state is deleted by the virtual interface owner, the virtual interface will enter the 'Rejected' state.</p> </li> </ul>"]
-#[doc="<p>The type of virtual interface.</p> <p>Example: private (Amazon VPC) or public (Amazon S3, Amazon DynamoDB, and so on.)</p>"]
 #[doc="<p>A structure containing a list of virtual interfaces.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct VirtualInterfaces {

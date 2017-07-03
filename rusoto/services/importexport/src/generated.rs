@@ -37,7 +37,6 @@ enum DeserializerNext {
     Skip,
     Element(String),
 }
-#[doc="Specifies the version of the client tool."]
 #[doc="A discrete item that contains the description and URL of an artifact (such as a PDF)."]
 #[derive(Default,Debug,Clone)]
 pub struct Artifact {
@@ -91,7 +90,6 @@ impl ArtifactDeserializer {
 
     }
 }
-#[doc="A collection of artifacts."]
 struct ArtifactListDeserializer;
 impl ArtifactListDeserializer {
     #[allow(unused_variables)]
@@ -206,7 +204,6 @@ impl CancelJobOutputDeserializer {
 
     }
 }
-#[doc="Name of the shipping company. This value is included when the LocationCode is \"Returned\"."]
 struct CarrierDeserializer;
 impl CarrierDeserializer {
     #[allow(unused_variables)]
@@ -221,9 +218,6 @@ impl CarrierDeserializer {
 
     }
 }
-#[doc="Specifies the name of your city for the return address."]
-#[doc="Specifies the name of the company that will ship this package."]
-#[doc="Specifies the name of your country for the return address."]
 #[doc="Input structure for the CreateJob operation."]
 #[derive(Default,Debug,Clone)]
 pub struct CreateJobInput {
@@ -333,7 +327,6 @@ impl CreateJobOutputDeserializer {
 
     }
 }
-#[doc="Timestamp of the CreateJob request in ISO8601 date format. For example \"2010-03-28T20:27:35Z\"."]
 struct CreationDateDeserializer;
 impl CreationDateDeserializer {
     #[allow(unused_variables)]
@@ -348,7 +341,6 @@ impl CreationDateDeserializer {
 
     }
 }
-#[doc="The last manifest submitted, which will be used to process the job."]
 struct CurrentManifestDeserializer;
 impl CurrentManifestDeserializer {
     #[allow(unused_variables)]
@@ -363,7 +355,6 @@ impl CurrentManifestDeserializer {
 
     }
 }
-#[doc="The associated description for this object."]
 struct DescriptionDeserializer;
 impl DescriptionDeserializer {
     #[allow(unused_variables)]
@@ -378,7 +369,6 @@ impl DescriptionDeserializer {
 
     }
 }
-#[doc="Number of errors. We return this value when the ProgressCode is Success or SuccessWithErrors."]
 struct ErrorCountDeserializer;
 impl ErrorCountDeserializer {
     #[allow(unused_variables)]
@@ -393,7 +383,6 @@ impl ErrorCountDeserializer {
 
     }
 }
-#[doc="The human-readable description of a particular error."]
 struct GenericStringDeserializer;
 impl GenericStringDeserializer {
     #[allow(unused_variables)]
@@ -682,7 +671,6 @@ impl GetStatusOutputDeserializer {
 
     }
 }
-#[doc="Indicates whether the job was canceled."]
 struct IsCanceledDeserializer;
 impl IsCanceledDeserializer {
     #[allow(unused_variables)]
@@ -697,7 +685,6 @@ impl IsCanceledDeserializer {
 
     }
 }
-#[doc="Indicates whether the list of jobs was truncated. If true, then call ListJobs again using the last JobId element as the marker."]
 struct IsTruncatedDeserializer;
 impl IsTruncatedDeserializer {
     #[allow(unused_variables)]
@@ -776,7 +763,6 @@ impl JobDeserializer {
 
     }
 }
-#[doc="A unique identifier which refers to a particular job."]
 struct JobIdDeserializer;
 impl JobIdDeserializer {
     #[allow(unused_variables)]
@@ -803,7 +789,6 @@ impl JobIdListSerializer {
     }
 }
 
-#[doc="Specifies whether the job to initiate is an import or export job."]
 struct JobTypeDeserializer;
 impl JobTypeDeserializer {
     #[allow(unused_variables)]
@@ -818,7 +803,6 @@ impl JobTypeDeserializer {
 
     }
 }
-#[doc="A list container for Jobs returned by the ListJobs operation."]
 struct JobsListDeserializer;
 impl JobsListDeserializer {
     #[allow(unused_variables)]
@@ -945,7 +929,6 @@ impl ListJobsOutputDeserializer {
 
     }
 }
-#[doc="A token representing the location of the storage device, such as \"AtAWS\"."]
 struct LocationCodeDeserializer;
 impl LocationCodeDeserializer {
     #[allow(unused_variables)]
@@ -960,7 +943,6 @@ impl LocationCodeDeserializer {
 
     }
 }
-#[doc="A more human readable form of the physical location of the storage device."]
 struct LocationMessageDeserializer;
 impl LocationMessageDeserializer {
     #[allow(unused_variables)]
@@ -975,7 +957,6 @@ impl LocationMessageDeserializer {
 
     }
 }
-#[doc="Amazon S3 bucket for user logs."]
 struct LogBucketDeserializer;
 impl LogBucketDeserializer {
     #[allow(unused_variables)]
@@ -990,7 +971,6 @@ impl LogBucketDeserializer {
 
     }
 }
-#[doc="The key where the user logs were stored."]
 struct LogKeyDeserializer;
 impl LogKeyDeserializer {
     #[allow(unused_variables)]
@@ -1005,14 +985,6 @@ impl LogKeyDeserializer {
 
     }
 }
-#[doc="The UTF-8 encoded text of the manifest file."]
-#[doc="For internal use only."]
-#[doc="Specifies the JOBID to start after when listing the jobs created with your account. AWS Import/Export lists your jobs in reverse chronological order. See MaxJobs."]
-#[doc="Sets the maximum number of jobs returned in the response. If there are additional jobs that were not returned because MaxJobs was exceeded, the response contains &lt;IsTruncated&gt;true&lt;/IsTruncated&gt;. To return the additional jobs, see Marker."]
-#[doc="Specifies the name of the person responsible for shipping this package."]
-#[doc="Specifies the phone number of the person responsible for shipping this package."]
-#[doc="Specifies the postal code for the return address."]
-#[doc="A token representing the state of the job, such as \"Started\"."]
 struct ProgressCodeDeserializer;
 impl ProgressCodeDeserializer {
     #[allow(unused_variables)]
@@ -1027,7 +999,6 @@ impl ProgressCodeDeserializer {
 
     }
 }
-#[doc="A more human readable form of the job status."]
 struct ProgressMessageDeserializer;
 impl ProgressMessageDeserializer {
     #[allow(unused_variables)]
@@ -1042,7 +1013,6 @@ impl ProgressMessageDeserializer {
 
     }
 }
-#[doc="An encrypted code used to authenticate the request and response, for example, \"DV+TpDfx1/TdSE9ktyK9k/bDTVI=\". Only use this value is you want to create the signature file yourself. Generally you should use the SignatureFileContents value."]
 struct SignatureDeserializer;
 impl SignatureDeserializer {
     #[allow(unused_variables)]
@@ -1057,7 +1027,6 @@ impl SignatureDeserializer {
 
     }
 }
-#[doc="The actual text of the SIGNATURE file to be written to disk."]
 struct SignatureFileContentsDeserializer;
 impl SignatureFileContentsDeserializer {
     #[allow(unused_variables)]
@@ -1072,11 +1041,6 @@ impl SignatureFileContentsDeserializer {
 
     }
 }
-#[doc="Specifies the name of your state or your province for the return address."]
-#[doc="Specifies the first part of the street address for the return address, for example 1234 Main Street."]
-#[doc="Specifies the optional second part of the street address for the return address, for example Suite 100."]
-#[doc="Specifies the optional third part of the street address for the return address, for example c/o Jane Doe."]
-#[doc="Specifies whether (true) or not (false) AWS Import/Export updated your job."]
 struct SuccessDeserializer;
 impl SuccessDeserializer {
     #[allow(unused_variables)]
@@ -1091,7 +1055,6 @@ impl SuccessDeserializer {
 
     }
 }
-#[doc="The shipping tracking number assigned by AWS Import/Export to the storage device when it's returned to you. We return this value when the LocationCode is \"Returned\"."]
 struct TrackingNumberDeserializer;
 impl TrackingNumberDeserializer {
     #[allow(unused_variables)]
@@ -1106,7 +1069,6 @@ impl TrackingNumberDeserializer {
 
     }
 }
-#[doc="The URL for a given Artifact."]
 struct URLDeserializer;
 impl URLDeserializer {
     #[allow(unused_variables)]
@@ -1213,8 +1175,6 @@ impl UpdateJobOutputDeserializer {
 
     }
 }
-#[doc="Validate the manifest and parameter values in the request but do not actually create a job."]
-#[doc="An optional message notifying you of non-fatal issues with the job, such as use of an incompatible Amazon S3 bucket name."]
 struct WarningMessageDeserializer;
 impl WarningMessageDeserializer {
     #[allow(unused_variables)]

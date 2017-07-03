@@ -1051,8 +1051,6 @@ pub struct NotifyWorkersResponse {
     pub notify_workers_failure_statuses: Option<Vec<NotifyWorkersFailureStatus>>,
 }
 
-#[doc="<p>A string representing a numeric value.</p>"]
-#[doc="<p>If the previous response was incomplete (because there is more data to retrieve), Amazon Mechanical Turk returns a pagination token in the response. You can use this pagination token to retrieve the next set of results. </p>"]
 #[doc="<p> This data structure is the data type for the AnswerKey parameter of the ScoreMyKnownAnswers/2011-09-01 Review Policy. </p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ParameterMapEntry {

@@ -52,8 +52,6 @@ pub struct AddTagsOutput {
     pub resource_type: Option<String>,
 }
 
-#[doc="<p>The function used to train an <code>MLModel</code>. Training choices supported by Amazon ML include the following:</p> <ul> <li> <code>SGD</code> - Stochastic Gradient Descent.</li> <li> <code>RandomForest</code> - Random forest of decision trees.</li> </ul>"]
-#[doc="<p>An Amazon Web Service (AWS) user account identifier. The account identifier can be an AWS root account or an AWS Identity and Access Management (IAM) user.</p>"]
 #[doc="<p> Represents the output of a <code>GetBatchPrediction</code> operation.</p> <p> The content consists of the detailed metadata, the status, and the data file information of a <code>Batch Prediction</code>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct BatchPrediction {
@@ -118,8 +116,6 @@ pub struct BatchPrediction {
     pub total_record_count: Option<i64>,
 }
 
-#[doc="<p>A list of the variables to use in searching or filtering <code>BatchPrediction</code>.</p> <ul> <li> <code>CreatedAt</code> - Sets the search criteria to <code>BatchPrediction</code> creation date.</li> <li> <code>Status</code> - Sets the search criteria to <code>BatchPrediction</code> status.</li> <li> <code>Name</code> - Sets the search criteria to the contents of <code>BatchPrediction</code><b> </b> <code>Name</code>.</li> <li> <code>IAMUser</code> - Sets the search criteria to the user account that invoked the <code>BatchPrediction</code> creation.</li> <li> <code>MLModelId</code> - Sets the search criteria to the <code>MLModel</code> used in the <code>BatchPrediction</code>.</li> <li> <code>DataSourceId</code> - Sets the search criteria to the <code>DataSource</code> used in the <code>BatchPrediction</code>.</li> <li> <code>DataURI</code> - Sets the search criteria to the data file(s) used in the <code>BatchPrediction</code>. The URL can identify either a file or an Amazon Simple Storage Service (Amazon S3) bucket or directory.</li> </ul>"]
-#[doc="<p>The value specified in a filtering condition. The <code>ComparatorValue</code> becomes the reference value when matching or evaluating data values in filtering and searching functions.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateBatchPredictionInput {
     #[doc="<p>The ID of the <code>DataSource</code> that points to the group of observations to predict.</p>"]
@@ -320,7 +316,6 @@ pub struct CreateRealtimeEndpointOutput {
     pub realtime_endpoint_info: Option<RealtimeEndpointInfo>,
 }
 
-#[doc="<p>The schema of a <code>DataSource</code>. The <code>DataSchema</code> defines the structure of the observation data in the data file(s) referenced in the <code>DataSource</code>. The DataSource schema is expressed in JSON format.</p> <p><code>DataSchema</code> is not required if you specify a <code>DataSchemaUri</code></p> <p>{ \"version\": \"1.0\", \"recordAnnotationFieldName\": \"F1\", \"recordWeightFieldName\": \"F2\", \"targetFieldName\": \"F3\", \"dataFormat\": \"CSV\", \"dataFileContainsHeader\": true, \"variables\": [ { \"fieldName\": \"F1\", \"fieldType\": \"TEXT\" }, { \"fieldName\": \"F2\", \"fieldType\": \"NUMERIC\" }, { \"fieldName\": \"F3\", \"fieldType\": \"CATEGORICAL\" }, { \"fieldName\": \"F4\", \"fieldType\": \"NUMERIC\" }, { \"fieldName\": \"F5\", \"fieldType\": \"CATEGORICAL\" }, { \"fieldName\": \"F6\", \"fieldType\": \"TEXT\" }, { \"fieldName\": \"F7\", \"fieldType\": \"WEIGHTED_INT_SEQUENCE\" }, { \"fieldName\": \"F8\", \"fieldType\": \"WEIGHTED_STRING_SEQUENCE\" } ], \"excludedVariableNames\": [ \"F6\" ] } </p>"]
 #[doc="<p> Represents the output of the <code>GetDataSource</code> operation. </p> <p> The content consists of the detailed metadata and data file information and the current status of the <code>DataSource</code>. </p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DataSource {
@@ -392,7 +387,6 @@ pub struct DataSource {
     pub status: Option<String>,
 }
 
-#[doc="<p>A list of the variables to use in searching or filtering <code>DataSource</code>.</p> <ul> <li> <code>CreatedAt</code> - Sets the search criteria to <code>DataSource</code> creation date.</li> <li> <code>Status</code> - Sets the search criteria to <code>DataSource</code> status.</li> <li> <code>Name</code> - Sets the search criteria to the contents of <code>DataSource</code> <b> </b> <code>Name</code>.</li> <li> <code>DataUri</code> - Sets the search criteria to the URI of data files used to create the <code>DataSource</code>. The URI can identify either a file or an Amazon Simple Storage Service (Amazon S3) bucket or directory.</li> <li> <code>IAMUser</code> - Sets the search criteria to the user account that invoked the <code>DataSource</code> creation.</li> </ul> <note><title>Note</title> <p>The variable names should match the variable names in the <code>DataSource</code>.</p> </note>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteBatchPredictionInput {
     #[doc="<p>A user-supplied ID that uniquely identifies the <code>BatchPrediction</code>.</p>"]
@@ -774,11 +768,6 @@ pub struct DescribeTagsOutput {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[doc="Contains the key values of <code>DetailsMap</code>: <code>PredictiveModelType</code> - Indicates the type of the <code>MLModel</code>. <code>Algorithm</code> - Indicates the algorithm that was used for the <code>MLModel</code>."]
-#[doc="Provides any additional details regarding the prediction."]
-#[doc="<p>A user-supplied name or description of the Amazon ML resource.</p>"]
-#[doc="<p>Object status with the following possible values:</p> <ul> <li><code>PENDING</code></li> <li><code>INPROGRESS</code></li> <li><code>FAILED</code></li> <li><code>COMPLETED</code></li> <li><code>DELETED</code></li> </ul>"]
-#[doc="<p>A timestamp represented in epoch time.</p>"]
 #[doc="<p> Represents the output of <code>GetEvaluation</code> operation. </p> <p>The content consists of the detailed metadata and data file information and the current status of the <code>Evaluation</code>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Evaluation {
@@ -837,7 +826,6 @@ pub struct Evaluation {
     pub status: Option<String>,
 }
 
-#[doc="<p>A list of the variables to use in searching or filtering <code>Evaluation</code>.</p> <ul> <li> <code>CreatedAt</code> - Sets the search criteria to <code>Evaluation</code> creation date.</li> <li> <code>Status</code> - Sets the search criteria to <code>Evaluation</code> status.</li> <li> <code>Name</code> - Sets the search criteria to the contents of <code>Evaluation</code> <b> </b> <code>Name</code>.</li> <li> <code>IAMUser</code> - Sets the search criteria to the user account that invoked an evaluation.</li> <li> <code>MLModelId</code> - Sets the search criteria to the <code>Predictor</code> that was evaluated.</li> <li> <code>DataSourceId</code> - Sets the search criteria to the <code>DataSource</code> used in evaluation.</li> <li> <code>DataUri</code> - Sets the search criteria to the data file(s) used in evaluation. The URL can identify either a file or an Amazon Simple Storage Service (Amazon S3) bucket or directory.</li> </ul>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetBatchPredictionInput {
     #[doc="<p>An ID assigned to the <code>BatchPrediction</code> at creation.</p>"]
@@ -1182,8 +1170,6 @@ pub struct GetMLModelOutput {
     pub training_parameters: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[doc="<p>Integer type that is a 32-bit signed number.</p>"]
-#[doc="<p>Long integer type that is a 64-bit signed number.</p>"]
 #[doc="<p> Represents the output of a <code>GetMLModel</code> operation. </p> <p>The content consists of the detailed metadata and the current status of the <code>MLModel</code>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct MLModel {
@@ -1260,7 +1246,6 @@ pub struct MLModel {
     pub training_parameters: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[doc="<p> Description of the most recent details about an object.</p>"]
 #[doc="<p>Measurements of how well the <code>MLModel</code> performed on known observations. One of the following metrics is returned, based on the type of the <code>MLModel</code>: </p> <ul> <li> <p>BinaryAUC: The binary <code>MLModel</code> uses the Area Under the Curve (AUC) technique to measure performance. </p> </li> <li> <p>RegressionRMSE: The regression <code>MLModel</code> uses the Root Mean Square Error (RMSE) technique to measure performance. RMSE measures the difference between predicted and actual values for a single variable.</p> </li> <li> <p>MulticlassAvgFScore: The multiclass <code>MLModel</code> uses the F1 score technique to measure performance. </p> </li> </ul> <p> For more information about performance metrics, please see the <a href=\"http://docs.aws.amazon.com/machine-learning/latest/dg\">Amazon Machine Learning Developer Guide</a>. </p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct PerformanceMetrics {
@@ -1366,10 +1351,6 @@ pub struct RDSDatabaseCredentials {
     pub username: String,
 }
 
-#[doc="<p>The name of a database hosted on an RDS DB instance.</p>"]
-#[doc="<p>The password to be used by Amazon ML to connect to a database on an RDS DB instance. The password should have sufficient permissions to execute the <code>RDSSelectQuery</code> query.</p>"]
-#[doc="<p>The username to be used by Amazon ML to connect to database on an Amazon RDS instance. The username should have sufficient permissions to execute an <code>RDSSelectSqlQuery</code> query.</p>"]
-#[doc="Identifier of RDS DB Instances."]
 #[doc="<p>The datasource details that are specific to Amazon RDS.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct RDSMetadata {
@@ -1398,7 +1379,6 @@ pub struct RDSMetadata {
     pub service_role: Option<String>,
 }
 
-#[doc="<p>The SQL query to be executed against the Amazon RDS database. The SQL query should be valid for the Amazon RDS type being used. </p>"]
 #[doc="<p> Describes the real-time endpoint information for an <code>MLModel</code>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct RealtimeEndpointInfo {
@@ -1420,8 +1400,6 @@ pub struct RealtimeEndpointInfo {
     pub peak_requests_per_second: Option<i64>,
 }
 
-#[doc="<p>A map of variable name-value pairs that represent an observation.</p>"]
-#[doc="<p>The ID of an Amazon Redshift cluster.</p>"]
 #[doc="<p>Describes the data specification of an Amazon Redshift <code>DataSource</code>.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct RedshiftDataSpec {
@@ -1469,9 +1447,6 @@ pub struct RedshiftDatabaseCredentials {
     pub username: String,
 }
 
-#[doc="<p>The name of a database hosted on an Amazon Redshift cluster.</p>"]
-#[doc="<p>A password to be used by Amazon ML to connect to a database on an Amazon Redshift cluster. The password should have sufficient permissions to execute a <code>RedshiftSelectSqlQuery</code> query. The password should be valid for an Amazon Redshift <a href=\"http://docs.aws.amazon.com/redshift/latest/dg/r_CREATE_USER.html\">USER</a>.</p>"]
-#[doc="<p>A username to be used by Amazon Machine Learning (Amazon ML)to connect to a database on an Amazon Redshift cluster. The username should have sufficient permissions to execute the <code>RedshiftSelectSqlQuery</code> query. The username should be valid for an Amazon Redshift <a href=\"http://docs.aws.amazon.com/redshift/latest/dg/r_CREATE_USER.html\">USER</a>.</p>"]
 #[doc="<p>Describes the <code>DataSource</code> details specific to Amazon Redshift.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct RedshiftMetadata {
@@ -1487,8 +1462,6 @@ pub struct RedshiftMetadata {
     pub select_sql_query: Option<String>,
 }
 
-#[doc="<p> Describes the SQL query to execute on the Amazon Redshift database. The SQL query should be valid for an Amazon Redshift <a href=\"http://docs.aws.amazon.com/redshift/latest/dg/r_SELECT_synopsis.html\">SELECT</a>. </p>"]
-#[doc="<p>The Amazon Resource Name (ARN) of an <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html#roles-about-termsandconcepts\">AWS IAM Role</a>, such as the following: arn:aws:iam::account:role/rolename. </p>"]
 #[doc="<p> Describes the data specification of a <code>DataSource</code>.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct S3DataSpec {
@@ -1509,10 +1482,6 @@ pub struct S3DataSpec {
     pub data_schema_location_s3: Option<String>,
 }
 
-#[doc="<p>A reference to a file or bucket on Amazon Simple Storage Service (Amazon S3).</p>"]
-#[doc="Provides the raw classification score corresponding to each label."]
-#[doc="<p>The sort order specified in a listing condition. Possible values include the following:</p> <ul> <li> <code>asc</code> - Present the information in ascending order (from A-Z).</li> <li> <code>dsc</code> - Present the information in descending order (from Z-A).</li> </ul>"]
-#[doc="<p>String type.</p>"]
 #[doc="<p>A custom key-value pair associated with an ML object, such as an ML model.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Tag {
@@ -1607,9 +1576,6 @@ pub struct UpdateMLModelOutput {
     pub ml_model_id: Option<String>,
 }
 
-#[doc="<p>The name of a variable. Currently it's used to specify the name of the target value, label, weight, and tags.</p>"]
-#[doc="<p>The value of a variable. Currently it's used to specify values of the target value, weights, and tag variables and for filtering variable values.</p>"]
-#[doc="<p>Specifies whether a describe operation should return exhaustive or abbreviated information.</p>"]
 /// Errors returned by AddTags
 #[derive(Debug, PartialEq)]
 pub enum AddTagsError {

@@ -254,7 +254,6 @@ impl AccessKeyMetadataDeserializer {
 
     }
 }
-#[doc="<p>Contains a list of access key metadata.</p> <p>This data type is used as a response element in the <a>ListAccessKeys</a> action.</p>"]
 struct AccessKeyMetadataListTypeDeserializer;
 impl AccessKeyMetadataListTypeDeserializer {
     #[allow(unused_variables)]
@@ -467,7 +466,6 @@ impl AddUserToGroupRequestSerializer {
     }
 }
 
-#[doc="<p>The Amazon Resource Name (ARN). ARNs are unique identifiers for AWS resources.</p> <p>For more information about ARNs, go to <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>. </p>"]
 struct ArnTypeDeserializer;
 impl ArnTypeDeserializer {
     #[allow(unused_variables)]
@@ -748,7 +746,6 @@ impl CertificateIdTypeDeserializer {
 
     }
 }
-#[doc="<p>Contains a list of signing certificates.</p> <p>This data type is used as a response element in the <a>ListSigningCertificates</a> action.</p>"]
 struct CertificateListTypeDeserializer;
 impl CertificateListTypeDeserializer {
     #[allow(unused_variables)]
@@ -4643,7 +4640,6 @@ impl GroupDetailListTypeDeserializer {
 
     }
 }
-#[doc="<p>Contains a list of IAM groups.</p> <p>This data type is used as a response element in the <a>ListGroups</a> action.</p>"]
 struct GroupListTypeDeserializer;
 impl GroupListTypeDeserializer {
     #[allow(unused_variables)]
@@ -4831,7 +4827,6 @@ impl InstanceProfileDeserializer {
 
     }
 }
-#[doc="<p>Contains a list of instance profiles.</p>"]
 struct InstanceProfileListTypeDeserializer;
 impl InstanceProfileListTypeDeserializer {
     #[allow(unused_variables)]
@@ -7565,7 +7560,6 @@ impl MaxPasswordAgeTypeDeserializer {
 
     }
 }
-#[doc="<p>Contains a list of MFA devices.</p> <p>This data type is used as a response element in the <a>ListMFADevices</a> and <a>ListVirtualMFADevices</a> actions. </p>"]
 struct MfaDeviceListTypeDeserializer;
 impl MfaDeviceListTypeDeserializer {
     #[allow(unused_variables)]
@@ -7668,7 +7662,6 @@ impl OpenIDConnectProviderListEntryDeserializer {
 
     }
 }
-#[doc="<p>Contains a list of IAM OpenID Connect providers.</p>"]
 struct OpenIDConnectProviderListTypeDeserializer;
 impl OpenIDConnectProviderListTypeDeserializer {
     #[allow(unused_variables)]
@@ -7711,7 +7704,6 @@ impl OpenIDConnectProviderListTypeDeserializer {
 
     }
 }
-#[doc="<p>Contains a URL that specifies the endpoint for an OpenID Connect provider.</p>"]
 struct OpenIDConnectProviderUrlTypeDeserializer;
 impl OpenIDConnectProviderUrlTypeDeserializer {
     #[allow(unused_variables)]
@@ -8352,7 +8344,6 @@ impl PolicyListTypeDeserializer {
 
     }
 }
-#[doc="<p>Contains a list of policy names.</p> <p>This data type is used as a response element in the <a>ListPolicies</a> action.</p>"]
 struct PolicyNameListTypeDeserializer;
 impl PolicyNameListTypeDeserializer {
     #[allow(unused_variables)]
@@ -9514,7 +9505,6 @@ impl RoleDetailListTypeDeserializer {
 
     }
 }
-#[doc="<p>Contains a list of IAM roles.</p> <p>This data type is used as a response element in the <a>ListRoles</a> action.</p>"]
 struct RoleListTypeDeserializer;
 impl RoleListTypeDeserializer {
     #[allow(unused_variables)]
@@ -10872,7 +10862,6 @@ impl SummaryValueTypeDeserializer {
 
     }
 }
-#[doc="<p>Contains a list of thumbprints of identity provider server certificates.</p>"]
 struct ThumbprintListTypeDeserializer;
 impl ThumbprintListTypeDeserializer {
     #[allow(unused_variables)]
@@ -10926,7 +10915,6 @@ impl ThumbprintListTypeSerializer {
     }
 }
 
-#[doc="<p>Contains a thumbprint for an identity provider's server certificate.</p> <p>The identity provider's server certificate thumbprint is the hex-encoded SHA-1 hash value of the self-signed X.509 certificate used by the domain where the OpenID Connect provider makes its keys available. It is always a 40-character string.</p>"]
 struct ThumbprintTypeDeserializer;
 impl ThumbprintTypeDeserializer {
     #[allow(unused_variables)]
@@ -11907,7 +11895,6 @@ impl UserDetailListTypeDeserializer {
 
     }
 }
-#[doc="<p>Contains a list of users.</p> <p>This data type is used as a response element in the <a>GetGroup</a> and <a>ListUsers</a> actions. </p>"]
 struct UserListTypeDeserializer;
 impl UserListTypeDeserializer {
     #[allow(unused_variables)]

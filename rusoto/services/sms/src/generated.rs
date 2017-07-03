@@ -26,7 +26,6 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[doc="The AMI id for the image resulting from a Replication Run."]
 #[doc="Object representing a Connector"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Connector {
@@ -62,12 +61,6 @@ pub struct Connector {
     pub vm_manager_type: Option<String>,
 }
 
-#[doc="Capabilities for a Connector"]
-#[doc="List of Connector Capabilities"]
-#[doc="Unique Identifier for Connector"]
-#[doc="List of connectors"]
-#[doc="Status of on-premise Connector"]
-#[doc="Connector version string"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateReplicationJobRequest {
     #[serde(rename="description")]
@@ -109,7 +102,6 @@ pub struct DeleteServerCatalogRequest;
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DeleteServerCatalogResponse;
 
-#[doc="The description for a Replication Job/Run."]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DisassociateConnectorRequest {
     #[serde(rename="connectorId")]
@@ -119,8 +111,6 @@ pub struct DisassociateConnectorRequest {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DisassociateConnectorResponse;
 
-#[doc="Error Message string"]
-#[doc="Interval between Replication Runs. This value is specified in hours, and represents the time between consecutive Replication Runs."]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetConnectorsRequest {
     #[serde(rename="maxResults")]
@@ -221,11 +211,6 @@ pub struct ImportServerCatalogRequest;
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ImportServerCatalogResponse;
 
-#[doc="Internet Protocol (IP) Address"]
-#[doc="The license type to be used for the Amazon Machine Image (AMI) created after a successful ReplicationRun."]
-#[doc="Hardware (MAC) address"]
-#[doc="The maximum number of results to return in one API call. If left empty, this will default to 50."]
-#[doc="Pagination token to pass as input to API call"]
 #[doc="Object representing a Replication Job"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ReplicationJob {
@@ -273,11 +258,6 @@ pub struct ReplicationJob {
     pub vm_server: Option<VmServer>,
 }
 
-#[doc="The unique identifier for a Replication Job."]
-#[doc="List of Replication Jobs"]
-#[doc="Current state of Replication Job"]
-#[doc="String describing current status of Replication Job"]
-#[doc="An indicator of the Replication Job being deleted or failed."]
 #[doc="Object representing a Replication Run"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ReplicationRun {
@@ -307,12 +287,6 @@ pub struct ReplicationRun {
     pub type_: Option<String>,
 }
 
-#[doc="The unique identifier for a Replication Run."]
-#[doc="List of Replication Runs"]
-#[doc="Current state of Replication Run"]
-#[doc="String describing current status of Replication Run"]
-#[doc="Type of Replication Run"]
-#[doc="Name of service role in customer's account to be used by SMS service."]
 #[doc="Object representing a server"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Server {
@@ -333,10 +307,6 @@ pub struct Server {
     pub vm_server: Option<VmServer>,
 }
 
-#[doc="Status of Server catalog"]
-#[doc="Unique Identifier for a server"]
-#[doc="List of servers from catalog"]
-#[doc="Type of server."]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct StartOnDemandReplicationRunRequest {
     #[serde(rename="description")]
@@ -353,7 +323,6 @@ pub struct StartOnDemandReplicationRunResponse {
     pub replication_run_id: Option<String>,
 }
 
-#[doc="Timestamp of an operation"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateReplicationJobRequest {
     #[serde(rename="description")]
@@ -378,12 +347,6 @@ pub struct UpdateReplicationJobRequest {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct UpdateReplicationJobResponse;
 
-#[doc="Unique Identifier for a VM"]
-#[doc="Unique Identifier for VM Manager"]
-#[doc="VM Manager Name"]
-#[doc="VM Management Product"]
-#[doc="Name of Virtual Machine"]
-#[doc="Path to VM"]
 #[doc="Object representing a VM server"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct VmServer {

@@ -8393,7 +8393,6 @@ impl DomainMembershipDeserializer {
 
     }
 }
-#[doc="<p>List of Active Directory Domain membership records associated with a DB instance.</p>"]
 struct DomainMembershipListDeserializer;
 impl DomainMembershipListDeserializer {
     #[allow(unused_variables)]
@@ -11287,7 +11286,6 @@ impl OptionGroupOptionVersionsListDeserializer {
 
     }
 }
-#[doc="<p>List of available option group options.</p>"]
 struct OptionGroupOptionsListDeserializer;
 impl OptionGroupOptionsListDeserializer {
     #[allow(unused_variables)]
@@ -15475,7 +15473,6 @@ impl TagSerializer {
     }
 }
 
-#[doc="<p>A list of tags.</p>"]
 struct TagListDeserializer;
 impl TagListDeserializer {
     #[allow(unused_variables)]

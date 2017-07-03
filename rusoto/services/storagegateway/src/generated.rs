@@ -1055,9 +1055,6 @@ pub struct Disk {
     pub disk_status: Option<String>,
 }
 
-#[doc="<p>The Amazon Resource Name (ARN) of the file share. </p>"]
-#[doc="<p>The list of clients that are allowed to access the file gateway. The list must contain either valid IP addresses or valid CIDR blocks. </p>"]
-#[doc="<p>The ID of the file share. </p>"]
 #[doc="<p>Describes a file share.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct FileShareInfo {
@@ -1075,8 +1072,6 @@ pub struct FileShareInfo {
     pub gateway_arn: Option<String>,
 }
 
-#[doc="<p>The status of the file share. Possible values are CREATING, UPDATING, AVAILABLE and DELETING. </p>"]
-#[doc="<p>The Amazon Resource Name (ARN) of the gateway. Use the <a>ListGateways</a> operation to return a list of gateways for your account and region.</p>"]
 #[doc="<p>Describes a gateway object.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GatewayInfo {
@@ -1102,8 +1097,6 @@ pub struct GatewayInfo {
     pub gateway_type: Option<String>,
 }
 
-#[doc="<p>The name you configured for your gateway.</p>"]
-#[doc="<p>The ARN of the KMS key used for Amazon S3 server side encryption. </p>"]
 #[doc="<p>ListFileShareInput</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListFileSharesInput {
@@ -1301,7 +1294,6 @@ pub struct ListVolumesOutput {
     pub volume_infos: Option<Vec<VolumeInfo>>,
 }
 
-#[doc="<p>The ARN of the backend storage used for storing file data. </p>"]
 #[doc="<p>Describes file share default values. Files and folders stored as Amazon S3 objects in S3 buckets don't, by default, have Unix file permissions assigned to them. Upon discovery in an S3 bucket by Storage Gateway, the S3 objects that represent files and folders are assigned these default Unix permissions. This operation is only supported in the file gateway architecture.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct NFSFileShareDefaults {
@@ -1389,7 +1381,6 @@ pub struct NetworkInterface {
     pub mac_address: Option<String>,
 }
 
-#[doc="<p>The file share path used by the NFS client to identify the mount point. </p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct RefreshCacheInput {
     #[serde(rename="FileShareARN")]
@@ -1475,7 +1466,6 @@ pub struct RetrieveTapeRecoveryPointOutput {
     pub tape_arn: Option<String>,
 }
 
-#[doc="<p>The ARN of the IAM role that file gateway assumes when it accesses the underlying storage. </p>"]
 #[doc="<p>SetLocalConsolePasswordInput</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct SetLocalConsolePasswordInput {
@@ -1508,7 +1498,6 @@ pub struct ShutdownGatewayOutput {
     pub gateway_arn: Option<String>,
 }
 
-#[doc="<p>The user mapped to anonymous user. Valid options are the following: </p> <ul> <li> <p>\"RootSquash\" - Only root is mapped to anonymous user.</p> </li> <li> <p>\"NoSquash\" - No one is mapped to anonymous user</p> </li> <li> <p>\"AllSquash\" - Everyone is mapped to anonymous user.</p> </li> </ul>"]
 #[doc="<p>A JSON object containing the of the gateway to start.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct StartGatewayInput {
@@ -1524,7 +1513,6 @@ pub struct StartGatewayOutput {
     pub gateway_arn: Option<String>,
 }
 
-#[doc="<p/>"]
 #[doc="<p>Provides additional information about an error that was returned by the service as an or. See the <code>errorCode</code> and <code>errorDetails</code> members for more information about the error.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct StorageGatewayError {
@@ -1628,7 +1616,6 @@ pub struct Tape {
     pub vtl_device: Option<String>,
 }
 
-#[doc="<p>The Amazon Resource Name (ARN) of each of the tapes you want to list. If you don't specify a tape ARN, the response lists all tapes in both your VTL and VTS.</p>"]
 #[doc="<p>Represents a virtual tape that is archived in the virtual tape shelf (VTS).</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct TapeArchive {
@@ -1690,7 +1677,6 @@ pub struct TapeInfo {
     pub tape_status: Option<String>,
 }
 
-#[doc="<p>An array of <a>TapeInfo</a> objects, where each object describes an a single tape. If there not tapes in the tape library or VTS, then the <code>TapeInfos</code> is an empty array.</p>"]
 #[doc="<p>Describes a recovery point.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct TapeRecoveryPointInfo {

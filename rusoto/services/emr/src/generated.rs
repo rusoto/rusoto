@@ -1346,7 +1346,6 @@ pub struct JobFlowDetail {
     pub visible_to_all_users: Option<bool>,
 }
 
-#[doc="<p>The type of instance.</p>"]
 #[doc="<p>Describes the status of the cluster (job flow).</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct JobFlowExecutionStatusDetail {

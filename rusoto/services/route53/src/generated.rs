@@ -5438,7 +5438,6 @@ impl RecordDataDeserializer {
 
     }
 }
-#[doc="<p>A value that Amazon Route 53 returned for this resource record set. A <code>RecordDataEntry</code> element is one of the following:</p> <ul> <li> <p>For non-alias resource record sets, a <code>RecordDataEntry</code> element contains one value in the resource record set. If the resource record set contains multiple values, the response includes one <code>RecordDataEntry</code> element for each value.</p> </li> <li> <p>For multiple resource record sets that have the same name and type, which includes weighted, latency, geolocation, and failover, a <code>RecordDataEntry</code> element contains the value from the appropriate resource record set based on the request.</p> </li> <li> <p>For alias resource record sets that refer to AWS resources other than another resource record set, the <code>RecordDataEntry</code> element contains an IP address or a domain name for the AWS resource, depending on the type of resource.</p> </li> <li> <p>For alias resource record sets that refer to other resource record sets, a <code>RecordDataEntry</code> element contains one value from the referenced resource record set. If the referenced resource record set contains multiple values, the response includes one <code>RecordDataEntry</code> element for each value.</p> </li> </ul>"]
 struct RecordDataEntryDeserializer;
 impl RecordDataEntryDeserializer {
     #[allow(unused_variables)]
@@ -7562,7 +7561,6 @@ impl VPCSerializer {
     }
 }
 
-#[doc="<p>(Private hosted zones only) The ID of an Amazon VPC. </p>"]
 struct VPCIdDeserializer;
 impl VPCIdDeserializer {
     #[allow(unused_variables)]
@@ -7613,7 +7611,6 @@ impl VPCRegionSerializer {
     }
 }
 
-#[doc="<p>(Private hosted zones only) A list of <code>VPC</code> elements.</p>"]
 struct VPCsDeserializer;
 impl VPCsDeserializer {
     #[allow(unused_variables)]

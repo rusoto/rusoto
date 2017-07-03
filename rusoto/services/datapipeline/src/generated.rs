@@ -543,7 +543,6 @@ pub struct Selector {
     pub operator: Option<Operator>,
 }
 
-#[doc="<p>The list of Selectors that define queries on individual fields.</p>"]
 #[doc="<p>Contains the parameters for SetStatus.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct SetStatusInput {

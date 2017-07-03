@@ -2812,7 +2812,6 @@ impl EmailAddressSerializer {
     }
 }
 
-#[doc="Requests Amazon S3 to encode the object keys in the response and specifies the encoding method to use. An object key may contain any Unicode character; however, XML 1.0 parser cannot parse some characters, such as characters with an ASCII value from 0 to 10. For characters that are not supported in XML 1.0, you can add this parameter to request that Amazon S3 encode the keys in the response."]
 struct EncodingTypeDeserializer;
 impl EncodingTypeDeserializer {
     #[allow(unused_variables)]
@@ -2986,7 +2985,6 @@ impl ErrorsDeserializer {
 
     }
 }
-#[doc="Bucket event for which to send notifications."]
 struct EventDeserializer;
 impl EventDeserializer {
     #[allow(unused_variables)]
@@ -3251,7 +3249,6 @@ impl FilterRuleSerializer {
     }
 }
 
-#[doc="A list of containers for key value pair that defines the criteria for the filter rule."]
 struct FilterRuleListDeserializer;
 impl FilterRuleListDeserializer {
     #[allow(unused_variables)]
@@ -8304,7 +8301,6 @@ impl NotificationConfigurationFilterSerializer {
     }
 }
 
-#[doc="Optional unique identifier for configurations in a notification configuration. If you don't provide one, Amazon S3 will assign an ID."]
 struct NotificationIdDeserializer;
 impl NotificationIdDeserializer {
     #[allow(unused_variables)]
@@ -9956,8 +9952,6 @@ impl ReplicationRulesSerializer {
     }
 }
 
-#[doc="If present, indicates that the requester was successfully charged for the request."]
-#[doc="Confirms that the requester knows that she or he will be charged for the request. Bucket owners need not specify this parameter in their requests. Documentation on downloading objects from requester pays buckets can be found at http://docs.aws.amazon.com/AmazonS3/latest/dev/ObjectsinRequesterPaysBuckets.html"]
 #[derive(Default,Clone,Debug)]
 pub struct RequestPaymentConfiguration {
     #[doc="Specifies who pays for the download and request fees."]

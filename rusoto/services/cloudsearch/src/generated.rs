@@ -37,7 +37,6 @@ enum DeserializerNext {
     Skip,
     Element(String),
 }
-#[doc="<p>The Amazon CloudSearch API version for a domain: 2011-02-01 or 2013-01-01.</p>"]
 struct APIVersionDeserializer;
 impl APIVersionDeserializer {
     #[allow(unused_variables)]
@@ -52,7 +51,6 @@ impl APIVersionDeserializer {
 
     }
 }
-#[doc="<p>The Amazon Resource Name (ARN) of the search domain. See <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/index.html?Using_Identifiers.html\" target=\"_blank\">Identifiers for IAM Entities</a> in <i>Using AWS Identity and Access Management</i> for more information.</p>"]
 struct ARNDeserializer;
 impl ARNDeserializer {
     #[allow(unused_variables)]
@@ -325,7 +323,6 @@ impl AnalysisSchemeSerializer {
     }
 }
 
-#[doc="<p>An <a href=\"http://tools.ietf.org/html/rfc4646\" target=\"_blank\">IETF RFC 4646</a> language code or <code>mul</code> for multiple languages.</p>"]
 struct AnalysisSchemeLanguageDeserializer;
 impl AnalysisSchemeLanguageDeserializer {
     #[allow(unused_variables)]
@@ -393,7 +390,6 @@ impl AnalysisSchemeStatusDeserializer {
 
     }
 }
-#[doc="<p>A list of the analysis schemes configured for a domain.</p>"]
 struct AnalysisSchemeStatusListDeserializer;
 impl AnalysisSchemeStatusListDeserializer {
     #[allow(unused_variables)]
@@ -2262,7 +2258,6 @@ impl DocumentSuggesterOptionsSerializer {
     }
 }
 
-#[doc="<p>An internally generated unique identifier for a domain.</p>"]
 struct DomainIdDeserializer;
 impl DomainIdDeserializer {
     #[allow(unused_variables)]
@@ -2277,7 +2272,6 @@ impl DomainIdDeserializer {
 
     }
 }
-#[doc="<p>A string that represents the name of a domain. Domain names are unique across the domains owned by an account within an AWS region. Domain names start with a letter or number and can contain the following characters: a-z (lowercase), 0-9, and - (hyphen).</p>"]
 struct DomainNameDeserializer;
 impl DomainNameDeserializer {
     #[allow(unused_variables)]
@@ -2292,7 +2286,6 @@ impl DomainNameDeserializer {
 
     }
 }
-#[doc="<p>A list of domain names.</p>"]
 
 /// Serialize `DomainNameList` contents to a `SignedRequest`.
 struct DomainNameListSerializer;
@@ -2305,7 +2298,6 @@ impl DomainNameListSerializer {
     }
 }
 
-#[doc="<p>A collection of domain names.</p>"]
 struct DomainNameMapDeserializer;
 impl DomainNameMapDeserializer {
     #[allow(unused_variables)]
@@ -2452,7 +2444,6 @@ impl DomainStatusDeserializer {
 
     }
 }
-#[doc="<p>A list that contains the status of each requested domain.</p>"]
 struct DomainStatusListDeserializer;
 impl DomainStatusListDeserializer {
     #[allow(unused_variables)]
@@ -2762,8 +2753,6 @@ impl DynamicFieldNameListSerializer {
     }
 }
 
-#[doc="<p>A machine-parsable string error or warning code.</p>"]
-#[doc="<p>A human-readable string error or warning message.</p>"]
 #[doc="<p>A named expression that can be evaluated at search time. Can be used to sort the search results, define other expressions, or return computed information in the search results. </p>"]
 #[derive(Default,Debug,Clone)]
 pub struct Expression {
@@ -2891,7 +2880,6 @@ impl ExpressionStatusDeserializer {
 
     }
 }
-#[doc="<p>Contains the status of multiple expressions.</p>"]
 struct ExpressionStatusListDeserializer;
 impl ExpressionStatusListDeserializer {
     #[allow(unused_variables)]
@@ -2933,7 +2921,6 @@ impl ExpressionStatusListDeserializer {
 
     }
 }
-#[doc="<p>The expression to evaluate for sorting while processing a search request. The <code>Expression</code> syntax is based on JavaScript expressions. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html\" target=\"_blank\">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
 struct ExpressionValueDeserializer;
 impl ExpressionValueDeserializer {
     #[allow(unused_variables)]
@@ -2948,7 +2935,6 @@ impl ExpressionValueDeserializer {
 
     }
 }
-#[doc="<p>A string that represents the name of an index field. CloudSearch supports regular index fields as well as dynamic fields. A dynamic field's name defines a pattern that begins or ends with a wildcard. Any document fields that don't map to a regular index field but do match a dynamic field's pattern are configured with the dynamic field's indexing options. </p> <p>Regular field names begin with a letter and can contain the following characters: a-z (lowercase), 0-9, and _ (underscore). Dynamic field names must begin or end with a wildcard (*). The wildcard can also be the only character in a dynamic field name. Multiple wildcards, and wildcards embedded within a string are not supported. </p> <p>The name <code>score</code> is reserved and cannot be used as a field name. To reference a document's ID, you can use the name <code>_id</code>. </p>"]
 struct FieldNameDeserializer;
 impl FieldNameDeserializer {
     #[allow(unused_variables)]
@@ -2977,7 +2963,6 @@ impl FieldNameCommaListDeserializer {
 
     }
 }
-#[doc="<p>A list of field names.</p>"]
 struct FieldNameListDeserializer;
 impl FieldNameListDeserializer {
     #[allow(unused_variables)]
@@ -3019,7 +3004,6 @@ impl FieldNameListDeserializer {
 
     }
 }
-#[doc="<p>The value of a field attribute.</p>"]
 struct FieldValueDeserializer;
 impl FieldValueDeserializer {
     #[allow(unused_variables)]
@@ -3355,7 +3339,6 @@ impl IndexFieldStatusDeserializer {
 
     }
 }
-#[doc="<p>Contains the status of multiple index fields.</p>"]
 struct IndexFieldStatusListDeserializer;
 impl IndexFieldStatusListDeserializer {
     #[allow(unused_variables)]
@@ -3397,7 +3380,6 @@ impl IndexFieldStatusListDeserializer {
 
     }
 }
-#[doc="<p>The type of field. The valid options for a field depend on the field type. For more information about the supported field types, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-index-fields.html\" target=\"_blank\">Configuring Index Fields</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
 struct IndexFieldTypeDeserializer;
 impl IndexFieldTypeDeserializer {
     #[allow(unused_variables)]
@@ -4159,7 +4141,6 @@ impl MultiAZDeserializer {
 
     }
 }
-#[doc="<p>The state of processing a change to an option. One of:</p> <ul> <li>RequiresIndexDocuments: The option's latest value will not be deployed until <a>IndexDocuments</a> has been called and indexing is complete.</li> <li>Processing: The option's latest value is in the process of being activated.</li> <li>Active: The option's latest value is fully deployed. </li> <li>FailedToValidate: The option value is not compatible with the domain's data and cannot be used to index the data. You must either modify the option value or update or remove the incompatible documents.</li> </ul>"]
 struct OptionStateDeserializer;
 impl OptionStateDeserializer {
     #[allow(unused_variables)]
@@ -4249,7 +4230,6 @@ impl OptionStatusDeserializer {
 
     }
 }
-#[doc="<p>The number of partitions used to hold the domain's index.</p>"]
 struct PartitionCountDeserializer;
 impl PartitionCountDeserializer {
     #[allow(unused_variables)]
@@ -4264,7 +4244,6 @@ impl PartitionCountDeserializer {
 
     }
 }
-#[doc="<p>The instance type (such as <code>search.m1.small</code>) on which an index partition is hosted.</p>"]
 struct PartitionInstanceTypeDeserializer;
 impl PartitionInstanceTypeDeserializer {
     #[allow(unused_variables)]
@@ -4279,7 +4258,6 @@ impl PartitionInstanceTypeDeserializer {
 
     }
 }
-#[doc="<p>Access rules for a domain's document or search service endpoints. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-access.html\" target=\"_blank\">Configuring Access for a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>. The maximum size of a policy document is 100 KB.</p>"]
 struct PolicyDocumentDeserializer;
 impl PolicyDocumentDeserializer {
     #[allow(unused_variables)]
@@ -4437,7 +4415,6 @@ impl ScalingParametersStatusDeserializer {
 
     }
 }
-#[doc="<p>The instance type (such as <code>search.m1.small</code>) that is being used to process search requests.</p>"]
 struct SearchInstanceTypeDeserializer;
 impl SearchInstanceTypeDeserializer {
     #[allow(unused_variables)]
@@ -4500,7 +4477,6 @@ impl ServiceEndpointDeserializer {
 
     }
 }
-#[doc="<p>The endpoint to which service requests can be submitted. For example, <code>search-imdb-movies-oopcnjfn6ugofer3zx5iadxxca.eu-west-1.cloudsearch.amazonaws.com</code> or <code>doc-imdb-movies-oopcnjfn6ugofer3zx5iadxxca.eu-west-1.cloudsearch.amazonaws.com</code>.</p>"]
 struct ServiceUrlDeserializer;
 impl ServiceUrlDeserializer {
     #[allow(unused_variables)]
@@ -4515,7 +4491,6 @@ impl ServiceUrlDeserializer {
 
     }
 }
-#[doc="<p>Names must begin with a letter and can contain the following characters: a-z (lowercase), 0-9, and _ (underscore).</p>"]
 struct StandardNameDeserializer;
 impl StandardNameDeserializer {
     #[allow(unused_variables)]
@@ -4698,7 +4673,6 @@ impl SuggesterStatusDeserializer {
 
     }
 }
-#[doc="<p>Contains the status of multiple suggesters.</p>"]
 struct SuggesterStatusListDeserializer;
 impl SuggesterStatusListDeserializer {
     #[allow(unused_variables)]

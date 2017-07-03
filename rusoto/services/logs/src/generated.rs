@@ -90,7 +90,6 @@ pub struct CreateLogStreamRequest {
     pub log_stream_name: String,
 }
 
-#[doc="<p>The number of days to retain the log events in the specified log group. Possible values are: 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, and 3653.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteDestinationRequest {
     #[doc="<p>The name of the destination.</p>"]
@@ -481,7 +480,6 @@ pub struct FilterLogEventsResponse {
     pub searched_log_streams: Option<Vec<SearchedLogStream>>,
 }
 
-#[doc="<p>A symbolic description of how CloudWatch Logs should interpret the data in each log event. For example, a log event may contain timestamps, IP addresses, strings, and so on. You use the filter pattern to specify what to look for in the log event message.</p>"]
 #[doc="<p>Represents a matched event.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct FilteredLogEvent {
@@ -685,7 +683,6 @@ pub struct MetricFilterMatchRecord {
     pub extracted_values: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[doc="<p>The name of the CloudWatch metric to which the monitored log information should be published. For example, you may publish to a metric called ErrorCount.</p>"]
 #[doc="<p>Indicates how to transform ingested log events into metric data in a CloudWatch metric.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct MetricTransformation {
@@ -704,8 +701,6 @@ pub struct MetricTransformation {
     pub metric_value: String,
 }
 
-#[doc="<p>The value to publish to the CloudWatch metric. For example, if you're counting the occurrences of a term like \"Error\", the value is \"1\" for each occurrence. If you're counting the bytes transferred, the value is the value in the log event.</p>"]
-#[doc="<p>The token for the next set of items to return. The token expires after 24 hours.</p>"]
 #[doc="<p>Represents a log event.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct OutputLogEvent {

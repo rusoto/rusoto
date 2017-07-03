@@ -135,7 +135,6 @@ pub struct AttributePayload {
     pub merge: Option<bool>,
 }
 
-#[doc="An attribute value for an Thing. An empty or null value in Update means that existing value for that attribute should be deleted. Empty and null values in create are ignored."]
 #[doc="<p>A CA certificate.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct CACertificate {
