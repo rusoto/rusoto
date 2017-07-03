@@ -11,15 +11,11 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -278,6 +274,44 @@ pub struct EntityFilter {
     pub tags: Option<Vec<::std::collections::HashMap<String, String>>>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum EntityStatusCode {
+    Impaired,
+    Unimpaired,
+    Unknown,
+}
+
+impl Into<String> for EntityStatusCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for EntityStatusCode {
+    fn into(self) -> &'static str {
+        match self {
+            EntityStatusCode::Impaired => "IMPAIRED",
+            EntityStatusCode::Unimpaired => "UNIMPAIRED",
+            EntityStatusCode::Unknown => "UNKNOWN",
+        }
+    }
+}
+
+impl ::std::str::FromStr for EntityStatusCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "IMPAIRED" => Ok(EntityStatusCode::Impaired),
+            "UNIMPAIRED" => Ok(EntityStatusCode::Unimpaired),
+            "UNKNOWN" => Ok(EntityStatusCode::Unknown),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Summary information about an event, returned by the <a>DescribeEvents</a> operation. The <a>DescribeEventDetails</a> operation also returns this information, as well as the <a>EventDescription</a> and additional event metadata.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Event {
@@ -334,6 +368,38 @@ pub struct EventAggregate {
     #[serde(rename="count")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub count: Option<i64>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum EventAggregateField {
+    EventTypeCategory,
+}
+
+impl Into<String> for EventAggregateField {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for EventAggregateField {
+    fn into(self) -> &'static str {
+        match self {
+            EventAggregateField::EventTypeCategory => "eventTypeCategory",
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventAggregateField {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "eventTypeCategory" => Ok(EventAggregateField::EventTypeCategory),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Detailed information about an event. A combination of an <a>Event</a> object, an <a>EventDescription</a> object, and additional metadata about the event. Returned by the <a>DescribeEventDetails</a> operation.</p>"]
@@ -425,6 +491,82 @@ pub struct EventFilter {
     #[serde(rename="tags")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub tags: Option<Vec<::std::collections::HashMap<String, String>>>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum EventStatusCode {
+    Closed,
+    Open,
+    Upcoming,
+}
+
+impl Into<String> for EventStatusCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for EventStatusCode {
+    fn into(self) -> &'static str {
+        match self {
+            EventStatusCode::Closed => "closed",
+            EventStatusCode::Open => "open",
+            EventStatusCode::Upcoming => "upcoming",
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventStatusCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "closed" => Ok(EventStatusCode::Closed),
+            "open" => Ok(EventStatusCode::Open),
+            "upcoming" => Ok(EventStatusCode::Upcoming),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum EventTypeCategory {
+    AccountNotification,
+    Issue,
+    ScheduledChange,
+}
+
+impl Into<String> for EventTypeCategory {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for EventTypeCategory {
+    fn into(self) -> &'static str {
+        match self {
+            EventTypeCategory::AccountNotification => "accountNotification",
+            EventTypeCategory::Issue => "issue",
+            EventTypeCategory::ScheduledChange => "scheduledChange",
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventTypeCategory {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "accountNotification" => Ok(EventTypeCategory::AccountNotification),
+            "issue" => Ok(EventTypeCategory::Issue),
+            "scheduledChange" => Ok(EventTypeCategory::ScheduledChange),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>The values to use to filter results from the <a>DescribeEventTypes</a> operation.</p>"]
@@ -990,7 +1132,7 @@ impl<P, D> AWSHealth for AWSHealthClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeAffectedEntitiesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeAffectedEntitiesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -1016,7 +1158,7 @@ impl<P, D> AWSHealth for AWSHealthClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeEntityAggregatesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeEntityAggregatesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -1041,7 +1183,7 @@ impl<P, D> AWSHealth for AWSHealthClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeEventAggregatesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeEventAggregatesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -1066,7 +1208,7 @@ impl<P, D> AWSHealth for AWSHealthClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeEventDetailsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -1093,7 +1235,7 @@ impl<P, D> AWSHealth for AWSHealthClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeEventTypesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -1120,7 +1262,7 @@ impl<P, D> AWSHealth for AWSHealthClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeEventsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {

@@ -11,21 +11,58 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ActionOnFailure {
+    CancelAndWait,
+    Continue,
+    TerminateCluster,
+    TerminateJobFlow,
+}
+
+impl Into<String> for ActionOnFailure {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ActionOnFailure {
+    fn into(self) -> &'static str {
+        match self {
+            ActionOnFailure::CancelAndWait => "CANCEL_AND_WAIT",
+            ActionOnFailure::Continue => "CONTINUE",
+            ActionOnFailure::TerminateCluster => "TERMINATE_CLUSTER",
+            ActionOnFailure::TerminateJobFlow => "TERMINATE_JOB_FLOW",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ActionOnFailure {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CANCEL_AND_WAIT" => Ok(ActionOnFailure::CancelAndWait),
+            "CONTINUE" => Ok(ActionOnFailure::Continue),
+            "TERMINATE_CLUSTER" => Ok(ActionOnFailure::TerminateCluster),
+            "TERMINATE_JOB_FLOW" => Ok(ActionOnFailure::TerminateJobFlow),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct AddInstanceFleetInput {
     #[doc="<p>The unique identifier of the cluster.</p>"]
@@ -107,6 +144,44 @@ pub struct AddTagsInput {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct AddTagsOutput;
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AdjustmentType {
+    ChangeInCapacity,
+    ExactCapacity,
+    PercentChangeInCapacity,
+}
+
+impl Into<String> for AdjustmentType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AdjustmentType {
+    fn into(self) -> &'static str {
+        match self {
+            AdjustmentType::ChangeInCapacity => "CHANGE_IN_CAPACITY",
+            AdjustmentType::ExactCapacity => "EXACT_CAPACITY",
+            AdjustmentType::PercentChangeInCapacity => "PERCENT_CHANGE_IN_CAPACITY",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AdjustmentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CHANGE_IN_CAPACITY" => Ok(AdjustmentType::ChangeInCapacity),
+            "EXACT_CAPACITY" => Ok(AdjustmentType::ExactCapacity),
+            "PERCENT_CHANGE_IN_CAPACITY" => Ok(AdjustmentType::PercentChangeInCapacity),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>An application is any Amazon or third-party software that you can add to the cluster. This structure contains a list of strings that indicates the software to use with the cluster and accepts a user argument list. Amazon EMR accepts and forwards the argument list to the corresponding installation script as bootstrap action argument. For more information, see <a href=\"http://docs.aws.amazon.com/ElasticMapReduce/latest/ManagementGuide/emr-mapr.html\">Using the MapR Distribution for Hadoop</a>. Currently supported values are:</p> <ul> <li> <p>\"mapr-m3\" - launch the cluster using MapR M3 Edition.</p> </li> <li> <p>\"mapr-m5\" - launch the cluster using MapR M5 Edition.</p> </li> <li> <p>\"mapr\" with the user arguments specifying \"--edition,m3\" or \"--edition,m5\" - launch the cluster using MapR M3 or M5 Edition, respectively.</p> </li> </ul> <note> <p>In Amazon EMR releases 4.0 and greater, the only accepted parameter is the application name. To pass arguments to applications, you supply a configuration for each application.</p> </note>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Application {
@@ -156,6 +231,53 @@ pub struct AutoScalingPolicyDescription {
     pub status: Option<AutoScalingPolicyStatus>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AutoScalingPolicyState {
+    Attached,
+    Attaching,
+    Detached,
+    Detaching,
+    Failed,
+    Pending,
+}
+
+impl Into<String> for AutoScalingPolicyState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AutoScalingPolicyState {
+    fn into(self) -> &'static str {
+        match self {
+            AutoScalingPolicyState::Attached => "ATTACHED",
+            AutoScalingPolicyState::Attaching => "ATTACHING",
+            AutoScalingPolicyState::Detached => "DETACHED",
+            AutoScalingPolicyState::Detaching => "DETACHING",
+            AutoScalingPolicyState::Failed => "FAILED",
+            AutoScalingPolicyState::Pending => "PENDING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AutoScalingPolicyState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ATTACHED" => Ok(AutoScalingPolicyState::Attached),
+            "ATTACHING" => Ok(AutoScalingPolicyState::Attaching),
+            "DETACHED" => Ok(AutoScalingPolicyState::Detached),
+            "DETACHING" => Ok(AutoScalingPolicyState::Detaching),
+            "FAILED" => Ok(AutoScalingPolicyState::Failed),
+            "PENDING" => Ok(AutoScalingPolicyState::Pending),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>The reason for an <a>AutoScalingPolicyStatus</a> change.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct AutoScalingPolicyStateChangeReason {
@@ -167,6 +289,44 @@ pub struct AutoScalingPolicyStateChangeReason {
     #[serde(rename="Message")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AutoScalingPolicyStateChangeReasonCode {
+    CleanupFailure,
+    ProvisionFailure,
+    UserRequest,
+}
+
+impl Into<String> for AutoScalingPolicyStateChangeReasonCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AutoScalingPolicyStateChangeReasonCode {
+    fn into(self) -> &'static str {
+        match self {
+            AutoScalingPolicyStateChangeReasonCode::CleanupFailure => "CLEANUP_FAILURE",
+            AutoScalingPolicyStateChangeReasonCode::ProvisionFailure => "PROVISION_FAILURE",
+            AutoScalingPolicyStateChangeReasonCode::UserRequest => "USER_REQUEST",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AutoScalingPolicyStateChangeReasonCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CLEANUP_FAILURE" => Ok(AutoScalingPolicyStateChangeReasonCode::CleanupFailure),
+            "PROVISION_FAILURE" => Ok(AutoScalingPolicyStateChangeReasonCode::ProvisionFailure),
+            "USER_REQUEST" => Ok(AutoScalingPolicyStateChangeReasonCode::UserRequest),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>The status of an automatic scaling policy. </p>"]
@@ -239,6 +399,41 @@ pub struct CancelStepsOutput {
     #[serde(rename="CancelStepsInfoList")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub cancel_steps_info_list: Option<Vec<CancelStepsInfo>>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CancelStepsRequestStatus {
+    Failed,
+    Submitted,
+}
+
+impl Into<String> for CancelStepsRequestStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CancelStepsRequestStatus {
+    fn into(self) -> &'static str {
+        match self {
+            CancelStepsRequestStatus::Failed => "FAILED",
+            CancelStepsRequestStatus::Submitted => "SUBMITTED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CancelStepsRequestStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "FAILED" => Ok(CancelStepsRequestStatus::Failed),
+            "SUBMITTED" => Ok(CancelStepsRequestStatus::Submitted),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>The definition of a CloudWatch metric alarm, which determines when an automatic scaling activity is triggered. When the defined alarm conditions are satisfied, scaling activity begins.</p>"]
@@ -367,6 +562,56 @@ pub struct Cluster {
     pub visible_to_all_users: Option<bool>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ClusterState {
+    Bootstrapping,
+    Running,
+    Starting,
+    Terminated,
+    TerminatedWithErrors,
+    Terminating,
+    Waiting,
+}
+
+impl Into<String> for ClusterState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ClusterState {
+    fn into(self) -> &'static str {
+        match self {
+            ClusterState::Bootstrapping => "BOOTSTRAPPING",
+            ClusterState::Running => "RUNNING",
+            ClusterState::Starting => "STARTING",
+            ClusterState::Terminated => "TERMINATED",
+            ClusterState::TerminatedWithErrors => "TERMINATED_WITH_ERRORS",
+            ClusterState::Terminating => "TERMINATING",
+            ClusterState::Waiting => "WAITING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ClusterState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "BOOTSTRAPPING" => Ok(ClusterState::Bootstrapping),
+            "RUNNING" => Ok(ClusterState::Running),
+            "STARTING" => Ok(ClusterState::Starting),
+            "TERMINATED" => Ok(ClusterState::Terminated),
+            "TERMINATED_WITH_ERRORS" => Ok(ClusterState::TerminatedWithErrors),
+            "TERMINATING" => Ok(ClusterState::Terminating),
+            "WAITING" => Ok(ClusterState::Waiting),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>The reason that the cluster changed to its current state.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ClusterStateChangeReason {
@@ -378,6 +623,56 @@ pub struct ClusterStateChangeReason {
     #[serde(rename="Message")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ClusterStateChangeReasonCode {
+    AllStepsCompleted,
+    BootstrapFailure,
+    InstanceFailure,
+    InternalError,
+    StepFailure,
+    UserRequest,
+    ValidationError,
+}
+
+impl Into<String> for ClusterStateChangeReasonCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ClusterStateChangeReasonCode {
+    fn into(self) -> &'static str {
+        match self {
+            ClusterStateChangeReasonCode::AllStepsCompleted => "ALL_STEPS_COMPLETED",
+            ClusterStateChangeReasonCode::BootstrapFailure => "BOOTSTRAP_FAILURE",
+            ClusterStateChangeReasonCode::InstanceFailure => "INSTANCE_FAILURE",
+            ClusterStateChangeReasonCode::InternalError => "INTERNAL_ERROR",
+            ClusterStateChangeReasonCode::StepFailure => "STEP_FAILURE",
+            ClusterStateChangeReasonCode::UserRequest => "USER_REQUEST",
+            ClusterStateChangeReasonCode::ValidationError => "VALIDATION_ERROR",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ClusterStateChangeReasonCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ALL_STEPS_COMPLETED" => Ok(ClusterStateChangeReasonCode::AllStepsCompleted),
+            "BOOTSTRAP_FAILURE" => Ok(ClusterStateChangeReasonCode::BootstrapFailure),
+            "INSTANCE_FAILURE" => Ok(ClusterStateChangeReasonCode::InstanceFailure),
+            "INTERNAL_ERROR" => Ok(ClusterStateChangeReasonCode::InternalError),
+            "STEP_FAILURE" => Ok(ClusterStateChangeReasonCode::StepFailure),
+            "USER_REQUEST" => Ok(ClusterStateChangeReasonCode::UserRequest),
+            "VALIDATION_ERROR" => Ok(ClusterStateChangeReasonCode::ValidationError),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>The detailed status of the cluster.</p>"]
@@ -450,6 +745,47 @@ pub struct Command {
     #[serde(rename="ScriptPath")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub script_path: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ComparisonOperator {
+    GreaterThan,
+    GreaterThanOrEqual,
+    LessThan,
+    LessThanOrEqual,
+}
+
+impl Into<String> for ComparisonOperator {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ComparisonOperator {
+    fn into(self) -> &'static str {
+        match self {
+            ComparisonOperator::GreaterThan => "GREATER_THAN",
+            ComparisonOperator::GreaterThanOrEqual => "GREATER_THAN_OR_EQUAL",
+            ComparisonOperator::LessThan => "LESS_THAN",
+            ComparisonOperator::LessThanOrEqual => "LESS_THAN_OR_EQUAL",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ComparisonOperator {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "GREATER_THAN" => Ok(ComparisonOperator::GreaterThan),
+            "GREATER_THAN_OR_EQUAL" => Ok(ComparisonOperator::GreaterThanOrEqual),
+            "LESS_THAN" => Ok(ComparisonOperator::LessThan),
+            "LESS_THAN_OR_EQUAL" => Ok(ComparisonOperator::LessThanOrEqual),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<note> <p>Amazon EMR releases 4.x or later.</p> </note> <p>An optional configuration specification to be used when provisioning cluster instances, which can include configurations for applications and software bundled with Amazon EMR. A configuration consists of a classification, properties, and optional nested configurations. A classification refers to an application-specific configuration file. Properties are the settings you want to change in that file. For more information, see <a href=\"http://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-configure-apps.html\">Configuring Applications</a>.</p>"]
@@ -800,6 +1136,41 @@ pub struct Instance {
     pub status: Option<InstanceStatus>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InstanceCollectionType {
+    InstanceFleet,
+    InstanceGroup,
+}
+
+impl Into<String> for InstanceCollectionType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InstanceCollectionType {
+    fn into(self) -> &'static str {
+        match self {
+            InstanceCollectionType::InstanceFleet => "INSTANCE_FLEET",
+            InstanceCollectionType::InstanceGroup => "INSTANCE_GROUP",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceCollectionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "INSTANCE_FLEET" => Ok(InstanceCollectionType::InstanceFleet),
+            "INSTANCE_GROUP" => Ok(InstanceCollectionType::InstanceGroup),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Describes an instance fleet, which is a group of EC2 instances that host a particular node type (master, core, or task) in an Amazon EMR cluster. Instance fleets can consist of a mix of instance types and On-Demand and Spot instances, which are provisioned to meet a defined target capacity. </p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct InstanceFleet {
@@ -897,6 +1268,56 @@ pub struct InstanceFleetProvisioningSpecifications {
     pub spot_specification: SpotProvisioningSpecification,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InstanceFleetState {
+    Bootstrapping,
+    Provisioning,
+    Resizing,
+    Running,
+    Suspended,
+    Terminated,
+    Terminating,
+}
+
+impl Into<String> for InstanceFleetState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InstanceFleetState {
+    fn into(self) -> &'static str {
+        match self {
+            InstanceFleetState::Bootstrapping => "BOOTSTRAPPING",
+            InstanceFleetState::Provisioning => "PROVISIONING",
+            InstanceFleetState::Resizing => "RESIZING",
+            InstanceFleetState::Running => "RUNNING",
+            InstanceFleetState::Suspended => "SUSPENDED",
+            InstanceFleetState::Terminated => "TERMINATED",
+            InstanceFleetState::Terminating => "TERMINATING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceFleetState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "BOOTSTRAPPING" => Ok(InstanceFleetState::Bootstrapping),
+            "PROVISIONING" => Ok(InstanceFleetState::Provisioning),
+            "RESIZING" => Ok(InstanceFleetState::Resizing),
+            "RUNNING" => Ok(InstanceFleetState::Running),
+            "SUSPENDED" => Ok(InstanceFleetState::Suspended),
+            "TERMINATED" => Ok(InstanceFleetState::Terminated),
+            "TERMINATING" => Ok(InstanceFleetState::Terminating),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Provides status change reason details for the instance fleet.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct InstanceFleetStateChangeReason {
@@ -908,6 +1329,47 @@ pub struct InstanceFleetStateChangeReason {
     #[serde(rename="Message")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InstanceFleetStateChangeReasonCode {
+    ClusterTerminated,
+    InstanceFailure,
+    InternalError,
+    ValidationError,
+}
+
+impl Into<String> for InstanceFleetStateChangeReasonCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InstanceFleetStateChangeReasonCode {
+    fn into(self) -> &'static str {
+        match self {
+            InstanceFleetStateChangeReasonCode::ClusterTerminated => "CLUSTER_TERMINATED",
+            InstanceFleetStateChangeReasonCode::InstanceFailure => "INSTANCE_FAILURE",
+            InstanceFleetStateChangeReasonCode::InternalError => "INTERNAL_ERROR",
+            InstanceFleetStateChangeReasonCode::ValidationError => "VALIDATION_ERROR",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceFleetStateChangeReasonCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CLUSTER_TERMINATED" => Ok(InstanceFleetStateChangeReasonCode::ClusterTerminated),
+            "INSTANCE_FAILURE" => Ok(InstanceFleetStateChangeReasonCode::InstanceFailure),
+            "INTERNAL_ERROR" => Ok(InstanceFleetStateChangeReasonCode::InternalError),
+            "VALIDATION_ERROR" => Ok(InstanceFleetStateChangeReasonCode::ValidationError),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>The status of the instance fleet.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note>"]
@@ -942,6 +1404,44 @@ pub struct InstanceFleetTimeline {
     #[serde(rename="ReadyDateTime")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub ready_date_time: Option<f64>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InstanceFleetType {
+    Core,
+    Master,
+    Task,
+}
+
+impl Into<String> for InstanceFleetType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InstanceFleetType {
+    fn into(self) -> &'static str {
+        match self {
+            InstanceFleetType::Core => "CORE",
+            InstanceFleetType::Master => "MASTER",
+            InstanceFleetType::Task => "TASK",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceFleetType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CORE" => Ok(InstanceFleetType::Core),
+            "MASTER" => Ok(InstanceFleetType::Master),
+            "TASK" => Ok(InstanceFleetType::Task),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>This entity represents an instance group, which is a group of instances that have common purpose. For example, CORE instance group is used for HDFS.</p>"]
@@ -1117,6 +1617,65 @@ pub struct InstanceGroupModifyConfig {
     pub shrink_policy: Option<ShrinkPolicy>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InstanceGroupState {
+    Arrested,
+    Bootstrapping,
+    Ended,
+    Provisioning,
+    Resizing,
+    Running,
+    ShuttingDown,
+    Suspended,
+    Terminated,
+    Terminating,
+}
+
+impl Into<String> for InstanceGroupState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InstanceGroupState {
+    fn into(self) -> &'static str {
+        match self {
+            InstanceGroupState::Arrested => "ARRESTED",
+            InstanceGroupState::Bootstrapping => "BOOTSTRAPPING",
+            InstanceGroupState::Ended => "ENDED",
+            InstanceGroupState::Provisioning => "PROVISIONING",
+            InstanceGroupState::Resizing => "RESIZING",
+            InstanceGroupState::Running => "RUNNING",
+            InstanceGroupState::ShuttingDown => "SHUTTING_DOWN",
+            InstanceGroupState::Suspended => "SUSPENDED",
+            InstanceGroupState::Terminated => "TERMINATED",
+            InstanceGroupState::Terminating => "TERMINATING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceGroupState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ARRESTED" => Ok(InstanceGroupState::Arrested),
+            "BOOTSTRAPPING" => Ok(InstanceGroupState::Bootstrapping),
+            "ENDED" => Ok(InstanceGroupState::Ended),
+            "PROVISIONING" => Ok(InstanceGroupState::Provisioning),
+            "RESIZING" => Ok(InstanceGroupState::Resizing),
+            "RUNNING" => Ok(InstanceGroupState::Running),
+            "SHUTTING_DOWN" => Ok(InstanceGroupState::ShuttingDown),
+            "SUSPENDED" => Ok(InstanceGroupState::Suspended),
+            "TERMINATED" => Ok(InstanceGroupState::Terminated),
+            "TERMINATING" => Ok(InstanceGroupState::Terminating),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>The status change reason details for the instance group.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct InstanceGroupStateChangeReason {
@@ -1128,6 +1687,47 @@ pub struct InstanceGroupStateChangeReason {
     #[serde(rename="Message")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InstanceGroupStateChangeReasonCode {
+    ClusterTerminated,
+    InstanceFailure,
+    InternalError,
+    ValidationError,
+}
+
+impl Into<String> for InstanceGroupStateChangeReasonCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InstanceGroupStateChangeReasonCode {
+    fn into(self) -> &'static str {
+        match self {
+            InstanceGroupStateChangeReasonCode::ClusterTerminated => "CLUSTER_TERMINATED",
+            InstanceGroupStateChangeReasonCode::InstanceFailure => "INSTANCE_FAILURE",
+            InstanceGroupStateChangeReasonCode::InternalError => "INTERNAL_ERROR",
+            InstanceGroupStateChangeReasonCode::ValidationError => "VALIDATION_ERROR",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceGroupStateChangeReasonCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CLUSTER_TERMINATED" => Ok(InstanceGroupStateChangeReasonCode::ClusterTerminated),
+            "INSTANCE_FAILURE" => Ok(InstanceGroupStateChangeReasonCode::InstanceFailure),
+            "INTERNAL_ERROR" => Ok(InstanceGroupStateChangeReasonCode::InternalError),
+            "VALIDATION_ERROR" => Ok(InstanceGroupStateChangeReasonCode::ValidationError),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>The details of the instance group status.</p>"]
@@ -1164,6 +1764,44 @@ pub struct InstanceGroupTimeline {
     pub ready_date_time: Option<f64>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InstanceGroupType {
+    Core,
+    Master,
+    Task,
+}
+
+impl Into<String> for InstanceGroupType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InstanceGroupType {
+    fn into(self) -> &'static str {
+        match self {
+            InstanceGroupType::Core => "CORE",
+            InstanceGroupType::Master => "MASTER",
+            InstanceGroupType::Task => "TASK",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceGroupType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CORE" => Ok(InstanceGroupType::Core),
+            "MASTER" => Ok(InstanceGroupType::Master),
+            "TASK" => Ok(InstanceGroupType::Task),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Custom policy for requesting termination protection or termination of specific instances when shrinking an instance group.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct InstanceResizePolicy {
@@ -1181,6 +1819,88 @@ pub struct InstanceResizePolicy {
     pub instances_to_terminate: Option<Vec<String>>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InstanceRoleType {
+    Core,
+    Master,
+    Task,
+}
+
+impl Into<String> for InstanceRoleType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InstanceRoleType {
+    fn into(self) -> &'static str {
+        match self {
+            InstanceRoleType::Core => "CORE",
+            InstanceRoleType::Master => "MASTER",
+            InstanceRoleType::Task => "TASK",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceRoleType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CORE" => Ok(InstanceRoleType::Core),
+            "MASTER" => Ok(InstanceRoleType::Master),
+            "TASK" => Ok(InstanceRoleType::Task),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InstanceState {
+    AwaitingFulfillment,
+    Bootstrapping,
+    Provisioning,
+    Running,
+    Terminated,
+}
+
+impl Into<String> for InstanceState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InstanceState {
+    fn into(self) -> &'static str {
+        match self {
+            InstanceState::AwaitingFulfillment => "AWAITING_FULFILLMENT",
+            InstanceState::Bootstrapping => "BOOTSTRAPPING",
+            InstanceState::Provisioning => "PROVISIONING",
+            InstanceState::Running => "RUNNING",
+            InstanceState::Terminated => "TERMINATED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AWAITING_FULFILLMENT" => Ok(InstanceState::AwaitingFulfillment),
+            "BOOTSTRAPPING" => Ok(InstanceState::Bootstrapping),
+            "PROVISIONING" => Ok(InstanceState::Provisioning),
+            "RUNNING" => Ok(InstanceState::Running),
+            "TERMINATED" => Ok(InstanceState::Terminated),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>The details of the status change reason for the instance.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct InstanceStateChangeReason {
@@ -1192,6 +1912,50 @@ pub struct InstanceStateChangeReason {
     #[serde(rename="Message")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InstanceStateChangeReasonCode {
+    BootstrapFailure,
+    ClusterTerminated,
+    InstanceFailure,
+    InternalError,
+    ValidationError,
+}
+
+impl Into<String> for InstanceStateChangeReasonCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InstanceStateChangeReasonCode {
+    fn into(self) -> &'static str {
+        match self {
+            InstanceStateChangeReasonCode::BootstrapFailure => "BOOTSTRAP_FAILURE",
+            InstanceStateChangeReasonCode::ClusterTerminated => "CLUSTER_TERMINATED",
+            InstanceStateChangeReasonCode::InstanceFailure => "INSTANCE_FAILURE",
+            InstanceStateChangeReasonCode::InternalError => "INTERNAL_ERROR",
+            InstanceStateChangeReasonCode::ValidationError => "VALIDATION_ERROR",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceStateChangeReasonCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "BOOTSTRAP_FAILURE" => Ok(InstanceStateChangeReasonCode::BootstrapFailure),
+            "CLUSTER_TERMINATED" => Ok(InstanceStateChangeReasonCode::ClusterTerminated),
+            "INSTANCE_FAILURE" => Ok(InstanceStateChangeReasonCode::InstanceFailure),
+            "INTERNAL_ERROR" => Ok(InstanceStateChangeReasonCode::InternalError),
+            "VALIDATION_ERROR" => Ok(InstanceStateChangeReasonCode::ValidationError),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>The instance status details.</p>"]
@@ -1344,6 +2108,59 @@ pub struct JobFlowDetail {
     #[serde(rename="VisibleToAllUsers")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub visible_to_all_users: Option<bool>,
+}
+
+#[doc="<p>The type of instance.</p>"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum JobFlowExecutionState {
+    Bootstrapping,
+    Completed,
+    Failed,
+    Running,
+    ShuttingDown,
+    Starting,
+    Terminated,
+    Waiting,
+}
+
+impl Into<String> for JobFlowExecutionState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for JobFlowExecutionState {
+    fn into(self) -> &'static str {
+        match self {
+            JobFlowExecutionState::Bootstrapping => "BOOTSTRAPPING",
+            JobFlowExecutionState::Completed => "COMPLETED",
+            JobFlowExecutionState::Failed => "FAILED",
+            JobFlowExecutionState::Running => "RUNNING",
+            JobFlowExecutionState::ShuttingDown => "SHUTTING_DOWN",
+            JobFlowExecutionState::Starting => "STARTING",
+            JobFlowExecutionState::Terminated => "TERMINATED",
+            JobFlowExecutionState::Waiting => "WAITING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for JobFlowExecutionState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "BOOTSTRAPPING" => Ok(JobFlowExecutionState::Bootstrapping),
+            "COMPLETED" => Ok(JobFlowExecutionState::Completed),
+            "FAILED" => Ok(JobFlowExecutionState::Failed),
+            "RUNNING" => Ok(JobFlowExecutionState::Running),
+            "SHUTTING_DOWN" => Ok(JobFlowExecutionState::ShuttingDown),
+            "STARTING" => Ok(JobFlowExecutionState::Starting),
+            "TERMINATED" => Ok(JobFlowExecutionState::Terminated),
+            "WAITING" => Ok(JobFlowExecutionState::Waiting),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Describes the status of the cluster (job flow).</p>"]
@@ -1718,6 +2535,41 @@ pub struct ListStepsOutput {
     pub steps: Option<Vec<StepSummary>>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum MarketType {
+    OnDemand,
+    Spot,
+}
+
+impl Into<String> for MarketType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for MarketType {
+    fn into(self) -> &'static str {
+        match self {
+            MarketType::OnDemand => "ON_DEMAND",
+            MarketType::Spot => "SPOT",
+        }
+    }
+}
+
+impl ::std::str::FromStr for MarketType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ON_DEMAND" => Ok(MarketType::OnDemand),
+            "SPOT" => Ok(MarketType::Spot),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>A CloudWatch dimension, which is specified using a <code>Key</code> (known as a <code>Name</code> in CloudWatch), <code>Value</code> pair. By default, Amazon EMR uses one dimension whose <code>Key</code> is <code>JobFlowID</code> and <code>Value</code> is a variable representing the cluster ID, which is <code>${emr.clusterId}</code>. This enables the rule to bootstrap when the cluster ID becomes available.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct MetricDimension {
@@ -1912,6 +2764,41 @@ pub struct RunJobFlowOutput {
     pub job_flow_id: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ScaleDownBehavior {
+    TerminateAtInstanceHour,
+    TerminateAtTaskCompletion,
+}
+
+impl Into<String> for ScaleDownBehavior {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ScaleDownBehavior {
+    fn into(self) -> &'static str {
+        match self {
+            ScaleDownBehavior::TerminateAtInstanceHour => "TERMINATE_AT_INSTANCE_HOUR",
+            ScaleDownBehavior::TerminateAtTaskCompletion => "TERMINATE_AT_TASK_COMPLETION",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScaleDownBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "TERMINATE_AT_INSTANCE_HOUR" => Ok(ScaleDownBehavior::TerminateAtInstanceHour),
+            "TERMINATE_AT_TASK_COMPLETION" => Ok(ScaleDownBehavior::TerminateAtTaskCompletion),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>The type of adjustment the automatic scaling activity makes when triggered, and the periodicity of the adjustment.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ScalingAction {
@@ -2052,6 +2939,85 @@ pub struct SpotProvisioningSpecification {
     pub timeout_duration_minutes: i64,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SpotProvisioningTimeoutAction {
+    SwitchToOnDemand,
+    TerminateCluster,
+}
+
+impl Into<String> for SpotProvisioningTimeoutAction {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SpotProvisioningTimeoutAction {
+    fn into(self) -> &'static str {
+        match self {
+            SpotProvisioningTimeoutAction::SwitchToOnDemand => "SWITCH_TO_ON_DEMAND",
+            SpotProvisioningTimeoutAction::TerminateCluster => "TERMINATE_CLUSTER",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SpotProvisioningTimeoutAction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "SWITCH_TO_ON_DEMAND" => Ok(SpotProvisioningTimeoutAction::SwitchToOnDemand),
+            "TERMINATE_CLUSTER" => Ok(SpotProvisioningTimeoutAction::TerminateCluster),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Statistic {
+    Average,
+    Maximum,
+    Minimum,
+    SampleCount,
+    Sum,
+}
+
+impl Into<String> for Statistic {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Statistic {
+    fn into(self) -> &'static str {
+        match self {
+            Statistic::Average => "AVERAGE",
+            Statistic::Maximum => "MAXIMUM",
+            Statistic::Minimum => "MINIMUM",
+            Statistic::SampleCount => "SAMPLE_COUNT",
+            Statistic::Sum => "SUM",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Statistic {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AVERAGE" => Ok(Statistic::Average),
+            "MAXIMUM" => Ok(Statistic::Maximum),
+            "MINIMUM" => Ok(Statistic::Minimum),
+            "SAMPLE_COUNT" => Ok(Statistic::SampleCount),
+            "SUM" => Ok(Statistic::Sum),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>This represents a step in a cluster.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Step {
@@ -2103,6 +3069,56 @@ pub struct StepDetail {
     pub step_config: StepConfig,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum StepExecutionState {
+    Cancelled,
+    Completed,
+    Continue,
+    Failed,
+    Interrupted,
+    Pending,
+    Running,
+}
+
+impl Into<String> for StepExecutionState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for StepExecutionState {
+    fn into(self) -> &'static str {
+        match self {
+            StepExecutionState::Cancelled => "CANCELLED",
+            StepExecutionState::Completed => "COMPLETED",
+            StepExecutionState::Continue => "CONTINUE",
+            StepExecutionState::Failed => "FAILED",
+            StepExecutionState::Interrupted => "INTERRUPTED",
+            StepExecutionState::Pending => "PENDING",
+            StepExecutionState::Running => "RUNNING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for StepExecutionState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CANCELLED" => Ok(StepExecutionState::Cancelled),
+            "COMPLETED" => Ok(StepExecutionState::Completed),
+            "CONTINUE" => Ok(StepExecutionState::Continue),
+            "FAILED" => Ok(StepExecutionState::Failed),
+            "INTERRUPTED" => Ok(StepExecutionState::Interrupted),
+            "PENDING" => Ok(StepExecutionState::Pending),
+            "RUNNING" => Ok(StepExecutionState::Running),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>The execution state of a step.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct StepExecutionStatusDetail {
@@ -2126,6 +3142,56 @@ pub struct StepExecutionStatusDetail {
     pub state: String,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum StepState {
+    Cancelled,
+    CancelPending,
+    Completed,
+    Failed,
+    Interrupted,
+    Pending,
+    Running,
+}
+
+impl Into<String> for StepState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for StepState {
+    fn into(self) -> &'static str {
+        match self {
+            StepState::Cancelled => "CANCELLED",
+            StepState::CancelPending => "CANCEL_PENDING",
+            StepState::Completed => "COMPLETED",
+            StepState::Failed => "FAILED",
+            StepState::Interrupted => "INTERRUPTED",
+            StepState::Pending => "PENDING",
+            StepState::Running => "RUNNING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for StepState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CANCELLED" => Ok(StepState::Cancelled),
+            "CANCEL_PENDING" => Ok(StepState::CancelPending),
+            "COMPLETED" => Ok(StepState::Completed),
+            "FAILED" => Ok(StepState::Failed),
+            "INTERRUPTED" => Ok(StepState::Interrupted),
+            "PENDING" => Ok(StepState::Pending),
+            "RUNNING" => Ok(StepState::Running),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>The details of the step state change reason.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct StepStateChangeReason {
@@ -2137,6 +3203,38 @@ pub struct StepStateChangeReason {
     #[serde(rename="Message")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum StepStateChangeReasonCode {
+    None,
+}
+
+impl Into<String> for StepStateChangeReasonCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for StepStateChangeReasonCode {
+    fn into(self) -> &'static str {
+        match self {
+            StepStateChangeReasonCode::None => "NONE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for StepStateChangeReasonCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "NONE" => Ok(StepStateChangeReasonCode::None),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>The execution status details of the cluster step.</p>"]
@@ -2234,6 +3332,116 @@ pub struct TerminateJobFlowsInput {
     #[doc="<p>A list of job flows to be shutdown.</p>"]
     #[serde(rename="JobFlowIds")]
     pub job_flow_ids: Vec<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Unit {
+    Bits,
+    BitsPerSecond,
+    Bytes,
+    BytesPerSecond,
+    Count,
+    CountPerSecond,
+    GigaBits,
+    GigaBitsPerSecond,
+    GigaBytes,
+    GigaBytesPerSecond,
+    KiloBits,
+    KiloBitsPerSecond,
+    KiloBytes,
+    KiloBytesPerSecond,
+    MegaBits,
+    MegaBitsPerSecond,
+    MegaBytes,
+    MegaBytesPerSecond,
+    MicroSeconds,
+    MilliSeconds,
+    None,
+    Percent,
+    Seconds,
+    TeraBits,
+    TeraBitsPerSecond,
+    TeraBytes,
+    TeraBytesPerSecond,
+}
+
+impl Into<String> for Unit {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Unit {
+    fn into(self) -> &'static str {
+        match self {
+            Unit::Bits => "BITS",
+            Unit::BitsPerSecond => "BITS_PER_SECOND",
+            Unit::Bytes => "BYTES",
+            Unit::BytesPerSecond => "BYTES_PER_SECOND",
+            Unit::Count => "COUNT",
+            Unit::CountPerSecond => "COUNT_PER_SECOND",
+            Unit::GigaBits => "GIGA_BITS",
+            Unit::GigaBitsPerSecond => "GIGA_BITS_PER_SECOND",
+            Unit::GigaBytes => "GIGA_BYTES",
+            Unit::GigaBytesPerSecond => "GIGA_BYTES_PER_SECOND",
+            Unit::KiloBits => "KILO_BITS",
+            Unit::KiloBitsPerSecond => "KILO_BITS_PER_SECOND",
+            Unit::KiloBytes => "KILO_BYTES",
+            Unit::KiloBytesPerSecond => "KILO_BYTES_PER_SECOND",
+            Unit::MegaBits => "MEGA_BITS",
+            Unit::MegaBitsPerSecond => "MEGA_BITS_PER_SECOND",
+            Unit::MegaBytes => "MEGA_BYTES",
+            Unit::MegaBytesPerSecond => "MEGA_BYTES_PER_SECOND",
+            Unit::MicroSeconds => "MICRO_SECONDS",
+            Unit::MilliSeconds => "MILLI_SECONDS",
+            Unit::None => "NONE",
+            Unit::Percent => "PERCENT",
+            Unit::Seconds => "SECONDS",
+            Unit::TeraBits => "TERA_BITS",
+            Unit::TeraBitsPerSecond => "TERA_BITS_PER_SECOND",
+            Unit::TeraBytes => "TERA_BYTES",
+            Unit::TeraBytesPerSecond => "TERA_BYTES_PER_SECOND",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Unit {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "BITS" => Ok(Unit::Bits),
+            "BITS_PER_SECOND" => Ok(Unit::BitsPerSecond),
+            "BYTES" => Ok(Unit::Bytes),
+            "BYTES_PER_SECOND" => Ok(Unit::BytesPerSecond),
+            "COUNT" => Ok(Unit::Count),
+            "COUNT_PER_SECOND" => Ok(Unit::CountPerSecond),
+            "GIGA_BITS" => Ok(Unit::GigaBits),
+            "GIGA_BITS_PER_SECOND" => Ok(Unit::GigaBitsPerSecond),
+            "GIGA_BYTES" => Ok(Unit::GigaBytes),
+            "GIGA_BYTES_PER_SECOND" => Ok(Unit::GigaBytesPerSecond),
+            "KILO_BITS" => Ok(Unit::KiloBits),
+            "KILO_BITS_PER_SECOND" => Ok(Unit::KiloBitsPerSecond),
+            "KILO_BYTES" => Ok(Unit::KiloBytes),
+            "KILO_BYTES_PER_SECOND" => Ok(Unit::KiloBytesPerSecond),
+            "MEGA_BITS" => Ok(Unit::MegaBits),
+            "MEGA_BITS_PER_SECOND" => Ok(Unit::MegaBitsPerSecond),
+            "MEGA_BYTES" => Ok(Unit::MegaBytes),
+            "MEGA_BYTES_PER_SECOND" => Ok(Unit::MegaBytesPerSecond),
+            "MICRO_SECONDS" => Ok(Unit::MicroSeconds),
+            "MILLI_SECONDS" => Ok(Unit::MilliSeconds),
+            "NONE" => Ok(Unit::None),
+            "PERCENT" => Ok(Unit::Percent),
+            "SECONDS" => Ok(Unit::Seconds),
+            "TERA_BITS" => Ok(Unit::TeraBits),
+            "TERA_BITS_PER_SECOND" => Ok(Unit::TeraBitsPerSecond),
+            "TERA_BYTES" => Ok(Unit::TeraBytes),
+            "TERA_BYTES_PER_SECOND" => Ok(Unit::TeraBytesPerSecond),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>EBS volume specifications such as volume type, IOPS, and size (GiB) that will be requested for the EBS volume attached to an EC2 instance in the cluster.</p>"]
@@ -4550,7 +5758,7 @@ impl<P, D> Emr for EmrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AddInstanceFleetOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4577,7 +5785,7 @@ impl<P, D> Emr for EmrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AddInstanceGroupsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4604,7 +5812,7 @@ impl<P, D> Emr for EmrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AddJobFlowStepsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4629,7 +5837,7 @@ impl<P, D> Emr for EmrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<AddTagsOutput>(String::from_utf8_lossy(&response.body)
                                                              .as_ref())
                            .unwrap())
@@ -4655,7 +5863,7 @@ impl<P, D> Emr for EmrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CancelStepsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(CancelStepsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -4681,7 +5889,7 @@ impl<P, D> Emr for EmrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateSecurityConfigurationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(CreateSecurityConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -4707,7 +5915,7 @@ impl<P, D> Emr for EmrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteSecurityConfigurationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DeleteSecurityConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -4731,7 +5939,7 @@ impl<P, D> Emr for EmrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeClusterOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4758,7 +5966,7 @@ impl<P, D> Emr for EmrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeJobFlowsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4787,7 +5995,7 @@ impl<P, D> Emr for EmrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeSecurityConfigurationOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeSecurityConfigurationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -4811,7 +6019,7 @@ impl<P, D> Emr for EmrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeStepOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4837,7 +6045,7 @@ impl<P, D> Emr for EmrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListBootstrapActionsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4864,7 +6072,7 @@ impl<P, D> Emr for EmrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListClustersOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4890,7 +6098,7 @@ impl<P, D> Emr for EmrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListInstanceFleetsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4917,7 +6125,7 @@ impl<P, D> Emr for EmrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListInstanceGroupsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4944,7 +6152,7 @@ impl<P, D> Emr for EmrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListInstancesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4972,7 +6180,7 @@ impl<P, D> Emr for EmrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListSecurityConfigurationsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListSecurityConfigurationsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -4994,7 +6202,7 @@ impl<P, D> Emr for EmrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<ListStepsOutput>(String::from_utf8_lossy(&response.body)
                                                                .as_ref())
                            .unwrap())
@@ -5020,7 +6228,7 @@ impl<P, D> Emr for EmrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(ModifyInstanceFleetError::from_body(String::from_utf8_lossy(&response.body)
                                                             .as_ref()))
@@ -5045,7 +6253,7 @@ impl<P, D> Emr for EmrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(ModifyInstanceGroupsError::from_body(String::from_utf8_lossy(&response.body)
                                                              .as_ref()))
@@ -5070,7 +6278,7 @@ impl<P, D> Emr for EmrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<PutAutoScalingPolicyOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5098,7 +6306,7 @@ impl<P, D> Emr for EmrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<RemoveAutoScalingPolicyOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(RemoveAutoScalingPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5120,7 +6328,7 @@ impl<P, D> Emr for EmrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<RemoveTagsOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(RemoveTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5142,7 +6350,7 @@ impl<P, D> Emr for EmrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<RunJobFlowOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(RunJobFlowError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5166,7 +6374,7 @@ impl<P, D> Emr for EmrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(SetTerminationProtectionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -5188,7 +6396,7 @@ impl<P, D> Emr for EmrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(SetVisibleToAllUsersError::from_body(String::from_utf8_lossy(&response.body)
                                                              .as_ref()))
@@ -5213,7 +6421,7 @@ impl<P, D> Emr for EmrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(TerminateJobFlowsError::from_body(String::from_utf8_lossy(&response.body)
                                                           .as_ref()))

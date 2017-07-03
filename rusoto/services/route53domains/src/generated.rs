@@ -11,15 +11,11 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -132,6 +128,766 @@ pub struct ContactDetail {
     pub zip_code: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ContactType {
+    Association,
+    Company,
+    Person,
+    PublicBody,
+    Reseller,
+}
+
+impl Into<String> for ContactType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ContactType {
+    fn into(self) -> &'static str {
+        match self {
+            ContactType::Association => "ASSOCIATION",
+            ContactType::Company => "COMPANY",
+            ContactType::Person => "PERSON",
+            ContactType::PublicBody => "PUBLIC_BODY",
+            ContactType::Reseller => "RESELLER",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContactType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ASSOCIATION" => Ok(ContactType::Association),
+            "COMPANY" => Ok(ContactType::Company),
+            "PERSON" => Ok(ContactType::Person),
+            "PUBLIC_BODY" => Ok(ContactType::PublicBody),
+            "RESELLER" => Ok(ContactType::Reseller),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CountryCode {
+    Ad,
+    Ae,
+    Af,
+    Ag,
+    Ai,
+    Al,
+    Am,
+    An,
+    Ao,
+    Aq,
+    Ar,
+    As,
+    At,
+    Au,
+    Aw,
+    Az,
+    Ba,
+    Bb,
+    Bd,
+    Be,
+    Bf,
+    Bg,
+    Bh,
+    Bi,
+    Bj,
+    Bl,
+    Bm,
+    Bn,
+    Bo,
+    Br,
+    Bs,
+    Bt,
+    Bw,
+    By,
+    Bz,
+    Ca,
+    Cc,
+    Cd,
+    Cf,
+    Cg,
+    Ch,
+    Ci,
+    Ck,
+    Cl,
+    Cm,
+    Cn,
+    Co,
+    Cr,
+    Cu,
+    Cv,
+    Cx,
+    Cy,
+    Cz,
+    De,
+    Dj,
+    Dk,
+    Dm,
+    Do,
+    Dz,
+    Ec,
+    Ee,
+    Eg,
+    Er,
+    Es,
+    Et,
+    Fi,
+    Fj,
+    Fk,
+    Fm,
+    Fo,
+    Fr,
+    Ga,
+    Gb,
+    Gd,
+    Ge,
+    Gh,
+    Gi,
+    Gl,
+    Gm,
+    Gn,
+    Gq,
+    Gr,
+    Gt,
+    Gu,
+    Gw,
+    Gy,
+    Hk,
+    Hn,
+    Hr,
+    Ht,
+    Hu,
+    Id,
+    Ie,
+    Il,
+    Im,
+    In,
+    Iq,
+    Ir,
+    Is,
+    It,
+    Jm,
+    Jo,
+    Jp,
+    Ke,
+    Kg,
+    Kh,
+    Ki,
+    Km,
+    Kn,
+    Kp,
+    Kr,
+    Kw,
+    Ky,
+    Kz,
+    La,
+    Lb,
+    Lc,
+    Li,
+    Lk,
+    Lr,
+    Ls,
+    Lt,
+    Lu,
+    Lv,
+    Ly,
+    Ma,
+    Mc,
+    Md,
+    Me,
+    Mf,
+    Mg,
+    Mh,
+    Mk,
+    Ml,
+    Mm,
+    Mn,
+    Mo,
+    Mp,
+    Mr,
+    Ms,
+    Mt,
+    Mu,
+    Mv,
+    Mw,
+    Mx,
+    My,
+    Mz,
+    Na,
+    Nc,
+    Ne,
+    Ng,
+    Ni,
+    Nl,
+    No,
+    Np,
+    Nr,
+    Nu,
+    Nz,
+    Om,
+    Pa,
+    Pe,
+    Pf,
+    Pg,
+    Ph,
+    Pk,
+    Pl,
+    Pm,
+    Pn,
+    Pr,
+    Pt,
+    Pw,
+    Py,
+    Qa,
+    Ro,
+    Rs,
+    Ru,
+    Rw,
+    Sa,
+    Sb,
+    Sc,
+    Sd,
+    Se,
+    Sg,
+    Sh,
+    Si,
+    Sk,
+    Sl,
+    Sm,
+    Sn,
+    So,
+    Sr,
+    St,
+    Sv,
+    Sy,
+    Sz,
+    Tc,
+    Td,
+    Tg,
+    Th,
+    Tj,
+    Tk,
+    Tl,
+    Tm,
+    Tn,
+    To,
+    Tr,
+    Tt,
+    Tv,
+    Tw,
+    Tz,
+    Ua,
+    Ug,
+    Us,
+    Uy,
+    Uz,
+    Va,
+    Vc,
+    Ve,
+    Vg,
+    Vi,
+    Vn,
+    Vu,
+    Wf,
+    Ws,
+    Ye,
+    Yt,
+    Za,
+    Zm,
+    Zw,
+}
+
+impl Into<String> for CountryCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CountryCode {
+    fn into(self) -> &'static str {
+        match self {
+            CountryCode::Ad => "AD",
+            CountryCode::Ae => "AE",
+            CountryCode::Af => "AF",
+            CountryCode::Ag => "AG",
+            CountryCode::Ai => "AI",
+            CountryCode::Al => "AL",
+            CountryCode::Am => "AM",
+            CountryCode::An => "AN",
+            CountryCode::Ao => "AO",
+            CountryCode::Aq => "AQ",
+            CountryCode::Ar => "AR",
+            CountryCode::As => "AS",
+            CountryCode::At => "AT",
+            CountryCode::Au => "AU",
+            CountryCode::Aw => "AW",
+            CountryCode::Az => "AZ",
+            CountryCode::Ba => "BA",
+            CountryCode::Bb => "BB",
+            CountryCode::Bd => "BD",
+            CountryCode::Be => "BE",
+            CountryCode::Bf => "BF",
+            CountryCode::Bg => "BG",
+            CountryCode::Bh => "BH",
+            CountryCode::Bi => "BI",
+            CountryCode::Bj => "BJ",
+            CountryCode::Bl => "BL",
+            CountryCode::Bm => "BM",
+            CountryCode::Bn => "BN",
+            CountryCode::Bo => "BO",
+            CountryCode::Br => "BR",
+            CountryCode::Bs => "BS",
+            CountryCode::Bt => "BT",
+            CountryCode::Bw => "BW",
+            CountryCode::By => "BY",
+            CountryCode::Bz => "BZ",
+            CountryCode::Ca => "CA",
+            CountryCode::Cc => "CC",
+            CountryCode::Cd => "CD",
+            CountryCode::Cf => "CF",
+            CountryCode::Cg => "CG",
+            CountryCode::Ch => "CH",
+            CountryCode::Ci => "CI",
+            CountryCode::Ck => "CK",
+            CountryCode::Cl => "CL",
+            CountryCode::Cm => "CM",
+            CountryCode::Cn => "CN",
+            CountryCode::Co => "CO",
+            CountryCode::Cr => "CR",
+            CountryCode::Cu => "CU",
+            CountryCode::Cv => "CV",
+            CountryCode::Cx => "CX",
+            CountryCode::Cy => "CY",
+            CountryCode::Cz => "CZ",
+            CountryCode::De => "DE",
+            CountryCode::Dj => "DJ",
+            CountryCode::Dk => "DK",
+            CountryCode::Dm => "DM",
+            CountryCode::Do => "DO",
+            CountryCode::Dz => "DZ",
+            CountryCode::Ec => "EC",
+            CountryCode::Ee => "EE",
+            CountryCode::Eg => "EG",
+            CountryCode::Er => "ER",
+            CountryCode::Es => "ES",
+            CountryCode::Et => "ET",
+            CountryCode::Fi => "FI",
+            CountryCode::Fj => "FJ",
+            CountryCode::Fk => "FK",
+            CountryCode::Fm => "FM",
+            CountryCode::Fo => "FO",
+            CountryCode::Fr => "FR",
+            CountryCode::Ga => "GA",
+            CountryCode::Gb => "GB",
+            CountryCode::Gd => "GD",
+            CountryCode::Ge => "GE",
+            CountryCode::Gh => "GH",
+            CountryCode::Gi => "GI",
+            CountryCode::Gl => "GL",
+            CountryCode::Gm => "GM",
+            CountryCode::Gn => "GN",
+            CountryCode::Gq => "GQ",
+            CountryCode::Gr => "GR",
+            CountryCode::Gt => "GT",
+            CountryCode::Gu => "GU",
+            CountryCode::Gw => "GW",
+            CountryCode::Gy => "GY",
+            CountryCode::Hk => "HK",
+            CountryCode::Hn => "HN",
+            CountryCode::Hr => "HR",
+            CountryCode::Ht => "HT",
+            CountryCode::Hu => "HU",
+            CountryCode::Id => "ID",
+            CountryCode::Ie => "IE",
+            CountryCode::Il => "IL",
+            CountryCode::Im => "IM",
+            CountryCode::In => "IN",
+            CountryCode::Iq => "IQ",
+            CountryCode::Ir => "IR",
+            CountryCode::Is => "IS",
+            CountryCode::It => "IT",
+            CountryCode::Jm => "JM",
+            CountryCode::Jo => "JO",
+            CountryCode::Jp => "JP",
+            CountryCode::Ke => "KE",
+            CountryCode::Kg => "KG",
+            CountryCode::Kh => "KH",
+            CountryCode::Ki => "KI",
+            CountryCode::Km => "KM",
+            CountryCode::Kn => "KN",
+            CountryCode::Kp => "KP",
+            CountryCode::Kr => "KR",
+            CountryCode::Kw => "KW",
+            CountryCode::Ky => "KY",
+            CountryCode::Kz => "KZ",
+            CountryCode::La => "LA",
+            CountryCode::Lb => "LB",
+            CountryCode::Lc => "LC",
+            CountryCode::Li => "LI",
+            CountryCode::Lk => "LK",
+            CountryCode::Lr => "LR",
+            CountryCode::Ls => "LS",
+            CountryCode::Lt => "LT",
+            CountryCode::Lu => "LU",
+            CountryCode::Lv => "LV",
+            CountryCode::Ly => "LY",
+            CountryCode::Ma => "MA",
+            CountryCode::Mc => "MC",
+            CountryCode::Md => "MD",
+            CountryCode::Me => "ME",
+            CountryCode::Mf => "MF",
+            CountryCode::Mg => "MG",
+            CountryCode::Mh => "MH",
+            CountryCode::Mk => "MK",
+            CountryCode::Ml => "ML",
+            CountryCode::Mm => "MM",
+            CountryCode::Mn => "MN",
+            CountryCode::Mo => "MO",
+            CountryCode::Mp => "MP",
+            CountryCode::Mr => "MR",
+            CountryCode::Ms => "MS",
+            CountryCode::Mt => "MT",
+            CountryCode::Mu => "MU",
+            CountryCode::Mv => "MV",
+            CountryCode::Mw => "MW",
+            CountryCode::Mx => "MX",
+            CountryCode::My => "MY",
+            CountryCode::Mz => "MZ",
+            CountryCode::Na => "NA",
+            CountryCode::Nc => "NC",
+            CountryCode::Ne => "NE",
+            CountryCode::Ng => "NG",
+            CountryCode::Ni => "NI",
+            CountryCode::Nl => "NL",
+            CountryCode::No => "NO",
+            CountryCode::Np => "NP",
+            CountryCode::Nr => "NR",
+            CountryCode::Nu => "NU",
+            CountryCode::Nz => "NZ",
+            CountryCode::Om => "OM",
+            CountryCode::Pa => "PA",
+            CountryCode::Pe => "PE",
+            CountryCode::Pf => "PF",
+            CountryCode::Pg => "PG",
+            CountryCode::Ph => "PH",
+            CountryCode::Pk => "PK",
+            CountryCode::Pl => "PL",
+            CountryCode::Pm => "PM",
+            CountryCode::Pn => "PN",
+            CountryCode::Pr => "PR",
+            CountryCode::Pt => "PT",
+            CountryCode::Pw => "PW",
+            CountryCode::Py => "PY",
+            CountryCode::Qa => "QA",
+            CountryCode::Ro => "RO",
+            CountryCode::Rs => "RS",
+            CountryCode::Ru => "RU",
+            CountryCode::Rw => "RW",
+            CountryCode::Sa => "SA",
+            CountryCode::Sb => "SB",
+            CountryCode::Sc => "SC",
+            CountryCode::Sd => "SD",
+            CountryCode::Se => "SE",
+            CountryCode::Sg => "SG",
+            CountryCode::Sh => "SH",
+            CountryCode::Si => "SI",
+            CountryCode::Sk => "SK",
+            CountryCode::Sl => "SL",
+            CountryCode::Sm => "SM",
+            CountryCode::Sn => "SN",
+            CountryCode::So => "SO",
+            CountryCode::Sr => "SR",
+            CountryCode::St => "ST",
+            CountryCode::Sv => "SV",
+            CountryCode::Sy => "SY",
+            CountryCode::Sz => "SZ",
+            CountryCode::Tc => "TC",
+            CountryCode::Td => "TD",
+            CountryCode::Tg => "TG",
+            CountryCode::Th => "TH",
+            CountryCode::Tj => "TJ",
+            CountryCode::Tk => "TK",
+            CountryCode::Tl => "TL",
+            CountryCode::Tm => "TM",
+            CountryCode::Tn => "TN",
+            CountryCode::To => "TO",
+            CountryCode::Tr => "TR",
+            CountryCode::Tt => "TT",
+            CountryCode::Tv => "TV",
+            CountryCode::Tw => "TW",
+            CountryCode::Tz => "TZ",
+            CountryCode::Ua => "UA",
+            CountryCode::Ug => "UG",
+            CountryCode::Us => "US",
+            CountryCode::Uy => "UY",
+            CountryCode::Uz => "UZ",
+            CountryCode::Va => "VA",
+            CountryCode::Vc => "VC",
+            CountryCode::Ve => "VE",
+            CountryCode::Vg => "VG",
+            CountryCode::Vi => "VI",
+            CountryCode::Vn => "VN",
+            CountryCode::Vu => "VU",
+            CountryCode::Wf => "WF",
+            CountryCode::Ws => "WS",
+            CountryCode::Ye => "YE",
+            CountryCode::Yt => "YT",
+            CountryCode::Za => "ZA",
+            CountryCode::Zm => "ZM",
+            CountryCode::Zw => "ZW",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CountryCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AD" => Ok(CountryCode::Ad),
+            "AE" => Ok(CountryCode::Ae),
+            "AF" => Ok(CountryCode::Af),
+            "AG" => Ok(CountryCode::Ag),
+            "AI" => Ok(CountryCode::Ai),
+            "AL" => Ok(CountryCode::Al),
+            "AM" => Ok(CountryCode::Am),
+            "AN" => Ok(CountryCode::An),
+            "AO" => Ok(CountryCode::Ao),
+            "AQ" => Ok(CountryCode::Aq),
+            "AR" => Ok(CountryCode::Ar),
+            "AS" => Ok(CountryCode::As),
+            "AT" => Ok(CountryCode::At),
+            "AU" => Ok(CountryCode::Au),
+            "AW" => Ok(CountryCode::Aw),
+            "AZ" => Ok(CountryCode::Az),
+            "BA" => Ok(CountryCode::Ba),
+            "BB" => Ok(CountryCode::Bb),
+            "BD" => Ok(CountryCode::Bd),
+            "BE" => Ok(CountryCode::Be),
+            "BF" => Ok(CountryCode::Bf),
+            "BG" => Ok(CountryCode::Bg),
+            "BH" => Ok(CountryCode::Bh),
+            "BI" => Ok(CountryCode::Bi),
+            "BJ" => Ok(CountryCode::Bj),
+            "BL" => Ok(CountryCode::Bl),
+            "BM" => Ok(CountryCode::Bm),
+            "BN" => Ok(CountryCode::Bn),
+            "BO" => Ok(CountryCode::Bo),
+            "BR" => Ok(CountryCode::Br),
+            "BS" => Ok(CountryCode::Bs),
+            "BT" => Ok(CountryCode::Bt),
+            "BW" => Ok(CountryCode::Bw),
+            "BY" => Ok(CountryCode::By),
+            "BZ" => Ok(CountryCode::Bz),
+            "CA" => Ok(CountryCode::Ca),
+            "CC" => Ok(CountryCode::Cc),
+            "CD" => Ok(CountryCode::Cd),
+            "CF" => Ok(CountryCode::Cf),
+            "CG" => Ok(CountryCode::Cg),
+            "CH" => Ok(CountryCode::Ch),
+            "CI" => Ok(CountryCode::Ci),
+            "CK" => Ok(CountryCode::Ck),
+            "CL" => Ok(CountryCode::Cl),
+            "CM" => Ok(CountryCode::Cm),
+            "CN" => Ok(CountryCode::Cn),
+            "CO" => Ok(CountryCode::Co),
+            "CR" => Ok(CountryCode::Cr),
+            "CU" => Ok(CountryCode::Cu),
+            "CV" => Ok(CountryCode::Cv),
+            "CX" => Ok(CountryCode::Cx),
+            "CY" => Ok(CountryCode::Cy),
+            "CZ" => Ok(CountryCode::Cz),
+            "DE" => Ok(CountryCode::De),
+            "DJ" => Ok(CountryCode::Dj),
+            "DK" => Ok(CountryCode::Dk),
+            "DM" => Ok(CountryCode::Dm),
+            "DO" => Ok(CountryCode::Do),
+            "DZ" => Ok(CountryCode::Dz),
+            "EC" => Ok(CountryCode::Ec),
+            "EE" => Ok(CountryCode::Ee),
+            "EG" => Ok(CountryCode::Eg),
+            "ER" => Ok(CountryCode::Er),
+            "ES" => Ok(CountryCode::Es),
+            "ET" => Ok(CountryCode::Et),
+            "FI" => Ok(CountryCode::Fi),
+            "FJ" => Ok(CountryCode::Fj),
+            "FK" => Ok(CountryCode::Fk),
+            "FM" => Ok(CountryCode::Fm),
+            "FO" => Ok(CountryCode::Fo),
+            "FR" => Ok(CountryCode::Fr),
+            "GA" => Ok(CountryCode::Ga),
+            "GB" => Ok(CountryCode::Gb),
+            "GD" => Ok(CountryCode::Gd),
+            "GE" => Ok(CountryCode::Ge),
+            "GH" => Ok(CountryCode::Gh),
+            "GI" => Ok(CountryCode::Gi),
+            "GL" => Ok(CountryCode::Gl),
+            "GM" => Ok(CountryCode::Gm),
+            "GN" => Ok(CountryCode::Gn),
+            "GQ" => Ok(CountryCode::Gq),
+            "GR" => Ok(CountryCode::Gr),
+            "GT" => Ok(CountryCode::Gt),
+            "GU" => Ok(CountryCode::Gu),
+            "GW" => Ok(CountryCode::Gw),
+            "GY" => Ok(CountryCode::Gy),
+            "HK" => Ok(CountryCode::Hk),
+            "HN" => Ok(CountryCode::Hn),
+            "HR" => Ok(CountryCode::Hr),
+            "HT" => Ok(CountryCode::Ht),
+            "HU" => Ok(CountryCode::Hu),
+            "ID" => Ok(CountryCode::Id),
+            "IE" => Ok(CountryCode::Ie),
+            "IL" => Ok(CountryCode::Il),
+            "IM" => Ok(CountryCode::Im),
+            "IN" => Ok(CountryCode::In),
+            "IQ" => Ok(CountryCode::Iq),
+            "IR" => Ok(CountryCode::Ir),
+            "IS" => Ok(CountryCode::Is),
+            "IT" => Ok(CountryCode::It),
+            "JM" => Ok(CountryCode::Jm),
+            "JO" => Ok(CountryCode::Jo),
+            "JP" => Ok(CountryCode::Jp),
+            "KE" => Ok(CountryCode::Ke),
+            "KG" => Ok(CountryCode::Kg),
+            "KH" => Ok(CountryCode::Kh),
+            "KI" => Ok(CountryCode::Ki),
+            "KM" => Ok(CountryCode::Km),
+            "KN" => Ok(CountryCode::Kn),
+            "KP" => Ok(CountryCode::Kp),
+            "KR" => Ok(CountryCode::Kr),
+            "KW" => Ok(CountryCode::Kw),
+            "KY" => Ok(CountryCode::Ky),
+            "KZ" => Ok(CountryCode::Kz),
+            "LA" => Ok(CountryCode::La),
+            "LB" => Ok(CountryCode::Lb),
+            "LC" => Ok(CountryCode::Lc),
+            "LI" => Ok(CountryCode::Li),
+            "LK" => Ok(CountryCode::Lk),
+            "LR" => Ok(CountryCode::Lr),
+            "LS" => Ok(CountryCode::Ls),
+            "LT" => Ok(CountryCode::Lt),
+            "LU" => Ok(CountryCode::Lu),
+            "LV" => Ok(CountryCode::Lv),
+            "LY" => Ok(CountryCode::Ly),
+            "MA" => Ok(CountryCode::Ma),
+            "MC" => Ok(CountryCode::Mc),
+            "MD" => Ok(CountryCode::Md),
+            "ME" => Ok(CountryCode::Me),
+            "MF" => Ok(CountryCode::Mf),
+            "MG" => Ok(CountryCode::Mg),
+            "MH" => Ok(CountryCode::Mh),
+            "MK" => Ok(CountryCode::Mk),
+            "ML" => Ok(CountryCode::Ml),
+            "MM" => Ok(CountryCode::Mm),
+            "MN" => Ok(CountryCode::Mn),
+            "MO" => Ok(CountryCode::Mo),
+            "MP" => Ok(CountryCode::Mp),
+            "MR" => Ok(CountryCode::Mr),
+            "MS" => Ok(CountryCode::Ms),
+            "MT" => Ok(CountryCode::Mt),
+            "MU" => Ok(CountryCode::Mu),
+            "MV" => Ok(CountryCode::Mv),
+            "MW" => Ok(CountryCode::Mw),
+            "MX" => Ok(CountryCode::Mx),
+            "MY" => Ok(CountryCode::My),
+            "MZ" => Ok(CountryCode::Mz),
+            "NA" => Ok(CountryCode::Na),
+            "NC" => Ok(CountryCode::Nc),
+            "NE" => Ok(CountryCode::Ne),
+            "NG" => Ok(CountryCode::Ng),
+            "NI" => Ok(CountryCode::Ni),
+            "NL" => Ok(CountryCode::Nl),
+            "NO" => Ok(CountryCode::No),
+            "NP" => Ok(CountryCode::Np),
+            "NR" => Ok(CountryCode::Nr),
+            "NU" => Ok(CountryCode::Nu),
+            "NZ" => Ok(CountryCode::Nz),
+            "OM" => Ok(CountryCode::Om),
+            "PA" => Ok(CountryCode::Pa),
+            "PE" => Ok(CountryCode::Pe),
+            "PF" => Ok(CountryCode::Pf),
+            "PG" => Ok(CountryCode::Pg),
+            "PH" => Ok(CountryCode::Ph),
+            "PK" => Ok(CountryCode::Pk),
+            "PL" => Ok(CountryCode::Pl),
+            "PM" => Ok(CountryCode::Pm),
+            "PN" => Ok(CountryCode::Pn),
+            "PR" => Ok(CountryCode::Pr),
+            "PT" => Ok(CountryCode::Pt),
+            "PW" => Ok(CountryCode::Pw),
+            "PY" => Ok(CountryCode::Py),
+            "QA" => Ok(CountryCode::Qa),
+            "RO" => Ok(CountryCode::Ro),
+            "RS" => Ok(CountryCode::Rs),
+            "RU" => Ok(CountryCode::Ru),
+            "RW" => Ok(CountryCode::Rw),
+            "SA" => Ok(CountryCode::Sa),
+            "SB" => Ok(CountryCode::Sb),
+            "SC" => Ok(CountryCode::Sc),
+            "SD" => Ok(CountryCode::Sd),
+            "SE" => Ok(CountryCode::Se),
+            "SG" => Ok(CountryCode::Sg),
+            "SH" => Ok(CountryCode::Sh),
+            "SI" => Ok(CountryCode::Si),
+            "SK" => Ok(CountryCode::Sk),
+            "SL" => Ok(CountryCode::Sl),
+            "SM" => Ok(CountryCode::Sm),
+            "SN" => Ok(CountryCode::Sn),
+            "SO" => Ok(CountryCode::So),
+            "SR" => Ok(CountryCode::Sr),
+            "ST" => Ok(CountryCode::St),
+            "SV" => Ok(CountryCode::Sv),
+            "SY" => Ok(CountryCode::Sy),
+            "SZ" => Ok(CountryCode::Sz),
+            "TC" => Ok(CountryCode::Tc),
+            "TD" => Ok(CountryCode::Td),
+            "TG" => Ok(CountryCode::Tg),
+            "TH" => Ok(CountryCode::Th),
+            "TJ" => Ok(CountryCode::Tj),
+            "TK" => Ok(CountryCode::Tk),
+            "TL" => Ok(CountryCode::Tl),
+            "TM" => Ok(CountryCode::Tm),
+            "TN" => Ok(CountryCode::Tn),
+            "TO" => Ok(CountryCode::To),
+            "TR" => Ok(CountryCode::Tr),
+            "TT" => Ok(CountryCode::Tt),
+            "TV" => Ok(CountryCode::Tv),
+            "TW" => Ok(CountryCode::Tw),
+            "TZ" => Ok(CountryCode::Tz),
+            "UA" => Ok(CountryCode::Ua),
+            "UG" => Ok(CountryCode::Ug),
+            "US" => Ok(CountryCode::Us),
+            "UY" => Ok(CountryCode::Uy),
+            "UZ" => Ok(CountryCode::Uz),
+            "VA" => Ok(CountryCode::Va),
+            "VC" => Ok(CountryCode::Vc),
+            "VE" => Ok(CountryCode::Ve),
+            "VG" => Ok(CountryCode::Vg),
+            "VI" => Ok(CountryCode::Vi),
+            "VN" => Ok(CountryCode::Vn),
+            "VU" => Ok(CountryCode::Vu),
+            "WF" => Ok(CountryCode::Wf),
+            "WS" => Ok(CountryCode::Ws),
+            "YE" => Ok(CountryCode::Ye),
+            "YT" => Ok(CountryCode::Yt),
+            "ZA" => Ok(CountryCode::Za),
+            "ZM" => Ok(CountryCode::Zm),
+            "ZW" => Ok(CountryCode::Zw),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>The DeleteTagsForDomainRequest includes the following elements.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteTagsForDomainRequest {
@@ -170,6 +926,59 @@ pub struct DisableDomainTransferLockResponse {
     #[doc="<p>Identifier for tracking the progress of the request. To use this ID to query the operation status, use <a>GetOperationDetail</a>.</p>"]
     #[serde(rename="OperationId")]
     pub operation_id: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DomainAvailability {
+    Available,
+    AvailablePreorder,
+    AvailableReserved,
+    DontKnow,
+    Reserved,
+    Unavailable,
+    UnavailablePremium,
+    UnavailableRestricted,
+}
+
+impl Into<String> for DomainAvailability {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DomainAvailability {
+    fn into(self) -> &'static str {
+        match self {
+            DomainAvailability::Available => "AVAILABLE",
+            DomainAvailability::AvailablePreorder => "AVAILABLE_PREORDER",
+            DomainAvailability::AvailableReserved => "AVAILABLE_RESERVED",
+            DomainAvailability::DontKnow => "DONT_KNOW",
+            DomainAvailability::Reserved => "RESERVED",
+            DomainAvailability::Unavailable => "UNAVAILABLE",
+            DomainAvailability::UnavailablePremium => "UNAVAILABLE_PREMIUM",
+            DomainAvailability::UnavailableRestricted => "UNAVAILABLE_RESTRICTED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DomainAvailability {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AVAILABLE" => Ok(DomainAvailability::Available),
+            "AVAILABLE_PREORDER" => Ok(DomainAvailability::AvailablePreorder),
+            "AVAILABLE_RESERVED" => Ok(DomainAvailability::AvailableReserved),
+            "DONT_KNOW" => Ok(DomainAvailability::DontKnow),
+            "RESERVED" => Ok(DomainAvailability::Reserved),
+            "UNAVAILABLE" => Ok(DomainAvailability::Unavailable),
+            "UNAVAILABLE_PREMIUM" => Ok(DomainAvailability::UnavailablePremium),
+            "UNAVAILABLE_RESTRICTED" => Ok(DomainAvailability::UnavailableRestricted),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Information about one suggested domain name.</p>"]
@@ -240,6 +1049,98 @@ pub struct ExtraParam {
     #[doc="<p>Values corresponding to the additional parameter names required by some top-level domains.</p>"]
     #[serde(rename="Value")]
     pub value: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ExtraParamName {
+    AuIdNumber,
+    AuIdType,
+    BirthCity,
+    BirthCountry,
+    BirthDateInYyyyMmDd,
+    BirthDepartment,
+    BrandNumber,
+    CaBusinessEntityType,
+    CaLegalType,
+    DocumentNumber,
+    DunsNumber,
+    EsIdentification,
+    EsIdentificationType,
+    EsLegalForm,
+    FiBusinessNumber,
+    FiIdNumber,
+    ItPin,
+    RuPassportData,
+    SeIdNumber,
+    SgIdNumber,
+    VatNumber,
+}
+
+impl Into<String> for ExtraParamName {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ExtraParamName {
+    fn into(self) -> &'static str {
+        match self {
+            ExtraParamName::AuIdNumber => "AU_ID_NUMBER",
+            ExtraParamName::AuIdType => "AU_ID_TYPE",
+            ExtraParamName::BirthCity => "BIRTH_CITY",
+            ExtraParamName::BirthCountry => "BIRTH_COUNTRY",
+            ExtraParamName::BirthDateInYyyyMmDd => "BIRTH_DATE_IN_YYYY_MM_DD",
+            ExtraParamName::BirthDepartment => "BIRTH_DEPARTMENT",
+            ExtraParamName::BrandNumber => "BRAND_NUMBER",
+            ExtraParamName::CaBusinessEntityType => "CA_BUSINESS_ENTITY_TYPE",
+            ExtraParamName::CaLegalType => "CA_LEGAL_TYPE",
+            ExtraParamName::DocumentNumber => "DOCUMENT_NUMBER",
+            ExtraParamName::DunsNumber => "DUNS_NUMBER",
+            ExtraParamName::EsIdentification => "ES_IDENTIFICATION",
+            ExtraParamName::EsIdentificationType => "ES_IDENTIFICATION_TYPE",
+            ExtraParamName::EsLegalForm => "ES_LEGAL_FORM",
+            ExtraParamName::FiBusinessNumber => "FI_BUSINESS_NUMBER",
+            ExtraParamName::FiIdNumber => "FI_ID_NUMBER",
+            ExtraParamName::ItPin => "IT_PIN",
+            ExtraParamName::RuPassportData => "RU_PASSPORT_DATA",
+            ExtraParamName::SeIdNumber => "SE_ID_NUMBER",
+            ExtraParamName::SgIdNumber => "SG_ID_NUMBER",
+            ExtraParamName::VatNumber => "VAT_NUMBER",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExtraParamName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AU_ID_NUMBER" => Ok(ExtraParamName::AuIdNumber),
+            "AU_ID_TYPE" => Ok(ExtraParamName::AuIdType),
+            "BIRTH_CITY" => Ok(ExtraParamName::BirthCity),
+            "BIRTH_COUNTRY" => Ok(ExtraParamName::BirthCountry),
+            "BIRTH_DATE_IN_YYYY_MM_DD" => Ok(ExtraParamName::BirthDateInYyyyMmDd),
+            "BIRTH_DEPARTMENT" => Ok(ExtraParamName::BirthDepartment),
+            "BRAND_NUMBER" => Ok(ExtraParamName::BrandNumber),
+            "CA_BUSINESS_ENTITY_TYPE" => Ok(ExtraParamName::CaBusinessEntityType),
+            "CA_LEGAL_TYPE" => Ok(ExtraParamName::CaLegalType),
+            "DOCUMENT_NUMBER" => Ok(ExtraParamName::DocumentNumber),
+            "DUNS_NUMBER" => Ok(ExtraParamName::DunsNumber),
+            "ES_IDENTIFICATION" => Ok(ExtraParamName::EsIdentification),
+            "ES_IDENTIFICATION_TYPE" => Ok(ExtraParamName::EsIdentificationType),
+            "ES_LEGAL_FORM" => Ok(ExtraParamName::EsLegalForm),
+            "FI_BUSINESS_NUMBER" => Ok(ExtraParamName::FiBusinessNumber),
+            "FI_ID_NUMBER" => Ok(ExtraParamName::FiIdNumber),
+            "IT_PIN" => Ok(ExtraParamName::ItPin),
+            "RU_PASSPORT_DATA" => Ok(ExtraParamName::RuPassportData),
+            "SE_ID_NUMBER" => Ok(ExtraParamName::SeIdNumber),
+            "SG_ID_NUMBER" => Ok(ExtraParamName::SgIdNumber),
+            "VAT_NUMBER" => Ok(ExtraParamName::VatNumber),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -490,6 +1391,50 @@ pub struct Nameserver {
     pub name: String,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum OperationStatus {
+    Error,
+    Failed,
+    InProgress,
+    Submitted,
+    Successful,
+}
+
+impl Into<String> for OperationStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for OperationStatus {
+    fn into(self) -> &'static str {
+        match self {
+            OperationStatus::Error => "ERROR",
+            OperationStatus::Failed => "FAILED",
+            OperationStatus::InProgress => "IN_PROGRESS",
+            OperationStatus::Submitted => "SUBMITTED",
+            OperationStatus::Successful => "SUCCESSFUL",
+        }
+    }
+}
+
+impl ::std::str::FromStr for OperationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ERROR" => Ok(OperationStatus::Error),
+            "FAILED" => Ok(OperationStatus::Failed),
+            "IN_PROGRESS" => Ok(OperationStatus::InProgress),
+            "SUBMITTED" => Ok(OperationStatus::Submitted),
+            "SUCCESSFUL" => Ok(OperationStatus::Successful),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>OperationSummary includes the following elements.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct OperationSummary {
@@ -505,6 +1450,94 @@ pub struct OperationSummary {
     #[doc="<p>Type of the action requested.</p>"]
     #[serde(rename="Type")]
     pub type_: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum OperationType {
+    ChangePrivacyProtection,
+    DeleteDomain,
+    DomainLock,
+    RegisterDomain,
+    TransferInDomain,
+    UpdateDomainContact,
+    UpdateNameserver,
+}
+
+impl Into<String> for OperationType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for OperationType {
+    fn into(self) -> &'static str {
+        match self {
+            OperationType::ChangePrivacyProtection => "CHANGE_PRIVACY_PROTECTION",
+            OperationType::DeleteDomain => "DELETE_DOMAIN",
+            OperationType::DomainLock => "DOMAIN_LOCK",
+            OperationType::RegisterDomain => "REGISTER_DOMAIN",
+            OperationType::TransferInDomain => "TRANSFER_IN_DOMAIN",
+            OperationType::UpdateDomainContact => "UPDATE_DOMAIN_CONTACT",
+            OperationType::UpdateNameserver => "UPDATE_NAMESERVER",
+        }
+    }
+}
+
+impl ::std::str::FromStr for OperationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CHANGE_PRIVACY_PROTECTION" => Ok(OperationType::ChangePrivacyProtection),
+            "DELETE_DOMAIN" => Ok(OperationType::DeleteDomain),
+            "DOMAIN_LOCK" => Ok(OperationType::DomainLock),
+            "REGISTER_DOMAIN" => Ok(OperationType::RegisterDomain),
+            "TRANSFER_IN_DOMAIN" => Ok(OperationType::TransferInDomain),
+            "UPDATE_DOMAIN_CONTACT" => Ok(OperationType::UpdateDomainContact),
+            "UPDATE_NAMESERVER" => Ok(OperationType::UpdateNameserver),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ReachabilityStatus {
+    Done,
+    Expired,
+    Pending,
+}
+
+impl Into<String> for ReachabilityStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ReachabilityStatus {
+    fn into(self) -> &'static str {
+        match self {
+            ReachabilityStatus::Done => "DONE",
+            ReachabilityStatus::Expired => "EXPIRED",
+            ReachabilityStatus::Pending => "PENDING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReachabilityStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DONE" => Ok(ReachabilityStatus::Done),
+            "EXPIRED" => Ok(ReachabilityStatus::Expired),
+            "PENDING" => Ok(ReachabilityStatus::Pending),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>The RegisterDomain request includes the following elements.</p>"]
@@ -3009,7 +4042,7 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CheckDomainAvailabilityResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(CheckDomainAvailabilityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -3034,7 +4067,7 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteTagsForDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -3063,7 +4096,7 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DisableDomainAutoRenewResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -3092,7 +4125,7 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DisableDomainTransferLockResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DisableDomainTransferLockError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -3118,7 +4151,7 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<EnableDomainAutoRenewResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -3147,7 +4180,7 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<EnableDomainTransferLockResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(EnableDomainTransferLockError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -3173,7 +4206,7 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetContactReachabilityStatusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(GetContactReachabilityStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -3197,7 +4230,7 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetDomainDetailResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -3226,7 +4259,7 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetDomainSuggestionsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -3254,7 +4287,7 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetOperationDetailResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -3281,7 +4314,7 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListDomainsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListDomainsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -3305,7 +4338,7 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListOperationsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -3332,7 +4365,7 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListTagsForDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -3359,7 +4392,7 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<RegisterDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -3386,7 +4419,7 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<RenewDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(RenewDomainError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -3412,7 +4445,7 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ResendContactReachabilityEmailResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ResendContactReachabilityEmailError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -3438,7 +4471,7 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<RetrieveDomainAuthCodeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -3465,7 +4498,7 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<TransferDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -3493,7 +4526,7 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateDomainContactResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -3522,7 +4555,7 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateDomainContactPrivacyResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(UpdateDomainContactPrivacyError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -3548,7 +4581,7 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateDomainNameserversResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(UpdateDomainNameserversError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -3573,7 +4606,7 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateTagsForDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -3600,7 +4633,7 @@ impl<P, D> Route53Domains for Route53DomainsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ViewBillingResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ViewBillingError::from_body(String::from_utf8_lossy(&response.body).as_ref())),

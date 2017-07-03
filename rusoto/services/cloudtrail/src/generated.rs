@@ -11,15 +11,11 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -397,6 +393,53 @@ pub struct LookupAttribute {
     pub attribute_value: String,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum LookupAttributeKey {
+    EventId,
+    EventName,
+    EventSource,
+    ResourceName,
+    ResourceType,
+    Username,
+}
+
+impl Into<String> for LookupAttributeKey {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for LookupAttributeKey {
+    fn into(self) -> &'static str {
+        match self {
+            LookupAttributeKey::EventId => "EventId",
+            LookupAttributeKey::EventName => "EventName",
+            LookupAttributeKey::EventSource => "EventSource",
+            LookupAttributeKey::ResourceName => "ResourceName",
+            LookupAttributeKey::ResourceType => "ResourceType",
+            LookupAttributeKey::Username => "Username",
+        }
+    }
+}
+
+impl ::std::str::FromStr for LookupAttributeKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "EventId" => Ok(LookupAttributeKey::EventId),
+            "EventName" => Ok(LookupAttributeKey::EventName),
+            "EventSource" => Ok(LookupAttributeKey::EventSource),
+            "ResourceName" => Ok(LookupAttributeKey::ResourceName),
+            "ResourceType" => Ok(LookupAttributeKey::ResourceType),
+            "Username" => Ok(LookupAttributeKey::Username),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Contains a request for LookupEvents.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct LookupEventsRequest {
@@ -480,6 +523,44 @@ pub struct PutEventSelectorsResponse {
     #[serde(rename="TrailARN")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub trail_arn: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ReadWriteType {
+    All,
+    ReadOnly,
+    WriteOnly,
+}
+
+impl Into<String> for ReadWriteType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ReadWriteType {
+    fn into(self) -> &'static str {
+        match self {
+            ReadWriteType::All => "All",
+            ReadWriteType::ReadOnly => "ReadOnly",
+            ReadWriteType::WriteOnly => "WriteOnly",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReadWriteType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "All" => Ok(ReadWriteType::All),
+            "ReadOnly" => Ok(ReadWriteType::ReadOnly),
+            "WriteOnly" => Ok(ReadWriteType::WriteOnly),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Specifies the tags to remove from a trail.</p>"]
@@ -2341,7 +2422,7 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<AddTagsResponse>(String::from_utf8_lossy(&response.body)
                                                                .as_ref())
                            .unwrap())
@@ -2368,7 +2449,7 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateTrailResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(CreateTrailError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2393,7 +2474,7 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteTrailResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DeleteTrailError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2418,7 +2499,7 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeTrailsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2445,7 +2526,7 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetEventSelectorsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2473,7 +2554,7 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetTrailStatusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2501,7 +2582,7 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListPublicKeysResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2527,7 +2608,7 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListTagsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2552,7 +2633,7 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<LookupEventsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2578,7 +2659,7 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<PutEventSelectorsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2606,7 +2687,7 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<RemoveTagsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(RemoveTagsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2631,7 +2712,7 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<StartLoggingResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2658,7 +2739,7 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<StopLoggingResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(StopLoggingError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2683,7 +2764,7 @@ impl<P, D> CloudTrail for CloudTrailClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateTrailResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(UpdateTrailError::from_body(String::from_utf8_lossy(&response.body).as_ref())),

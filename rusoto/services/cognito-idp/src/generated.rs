@@ -11,15 +11,11 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -517,6 +513,85 @@ pub struct AdminUserGlobalSignOutRequest {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct AdminUserGlobalSignOutResponse;
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AliasAttributeType {
+    Email,
+    PhoneNumber,
+    PreferredUsername,
+}
+
+impl Into<String> for AliasAttributeType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AliasAttributeType {
+    fn into(self) -> &'static str {
+        match self {
+            AliasAttributeType::Email => "email",
+            AliasAttributeType::PhoneNumber => "phone_number",
+            AliasAttributeType::PreferredUsername => "preferred_username",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AliasAttributeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "email" => Ok(AliasAttributeType::Email),
+            "phone_number" => Ok(AliasAttributeType::PhoneNumber),
+            "preferred_username" => Ok(AliasAttributeType::PreferredUsername),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AttributeDataType {
+    Boolean,
+    DateTime,
+    Number,
+    String,
+}
+
+impl Into<String> for AttributeDataType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AttributeDataType {
+    fn into(self) -> &'static str {
+        match self {
+            AttributeDataType::Boolean => "Boolean",
+            AttributeDataType::DateTime => "DateTime",
+            AttributeDataType::Number => "Number",
+            AttributeDataType::String => "String",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AttributeDataType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Boolean" => Ok(AttributeDataType::Boolean),
+            "DateTime" => Ok(AttributeDataType::DateTime),
+            "Number" => Ok(AttributeDataType::Number),
+            "String" => Ok(AttributeDataType::String),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Specifies whether the attribute is standard or custom.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct AttributeType {
@@ -527,6 +602,50 @@ pub struct AttributeType {
     #[serde(rename="Value")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AuthFlowType {
+    AdminNoSrpAuth,
+    CustomAuth,
+    RefreshToken,
+    RefreshTokenAuth,
+    UserSrpAuth,
+}
+
+impl Into<String> for AuthFlowType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AuthFlowType {
+    fn into(self) -> &'static str {
+        match self {
+            AuthFlowType::AdminNoSrpAuth => "ADMIN_NO_SRP_AUTH",
+            AuthFlowType::CustomAuth => "CUSTOM_AUTH",
+            AuthFlowType::RefreshToken => "REFRESH_TOKEN",
+            AuthFlowType::RefreshTokenAuth => "REFRESH_TOKEN_AUTH",
+            AuthFlowType::UserSrpAuth => "USER_SRP_AUTH",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AuthFlowType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ADMIN_NO_SRP_AUTH" => Ok(AuthFlowType::AdminNoSrpAuth),
+            "CUSTOM_AUTH" => Ok(AuthFlowType::CustomAuth),
+            "REFRESH_TOKEN" => Ok(AuthFlowType::RefreshToken),
+            "REFRESH_TOKEN_AUTH" => Ok(AuthFlowType::RefreshTokenAuth),
+            "USER_SRP_AUTH" => Ok(AuthFlowType::UserSrpAuth),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>The result type of the authentication result.</p>"]
@@ -556,6 +675,56 @@ pub struct AuthenticationResultType {
     #[serde(rename="TokenType")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub token_type: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ChallengeNameType {
+    AdminNoSrpAuth,
+    CustomChallenge,
+    DevicePasswordVerifier,
+    DeviceSrpAuth,
+    NewPasswordRequired,
+    PasswordVerifier,
+    SmsMfa,
+}
+
+impl Into<String> for ChallengeNameType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ChallengeNameType {
+    fn into(self) -> &'static str {
+        match self {
+            ChallengeNameType::AdminNoSrpAuth => "ADMIN_NO_SRP_AUTH",
+            ChallengeNameType::CustomChallenge => "CUSTOM_CHALLENGE",
+            ChallengeNameType::DevicePasswordVerifier => "DEVICE_PASSWORD_VERIFIER",
+            ChallengeNameType::DeviceSrpAuth => "DEVICE_SRP_AUTH",
+            ChallengeNameType::NewPasswordRequired => "NEW_PASSWORD_REQUIRED",
+            ChallengeNameType::PasswordVerifier => "PASSWORD_VERIFIER",
+            ChallengeNameType::SmsMfa => "SMS_MFA",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChallengeNameType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ADMIN_NO_SRP_AUTH" => Ok(ChallengeNameType::AdminNoSrpAuth),
+            "CUSTOM_CHALLENGE" => Ok(ChallengeNameType::CustomChallenge),
+            "DEVICE_PASSWORD_VERIFIER" => Ok(ChallengeNameType::DevicePasswordVerifier),
+            "DEVICE_SRP_AUTH" => Ok(ChallengeNameType::DeviceSrpAuth),
+            "NEW_PASSWORD_REQUIRED" => Ok(ChallengeNameType::NewPasswordRequired),
+            "PASSWORD_VERIFIER" => Ok(ChallengeNameType::PasswordVerifier),
+            "SMS_MFA" => Ok(ChallengeNameType::SmsMfa),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Represents the request to change a user password.</p>"]
@@ -989,6 +1158,41 @@ pub struct DeleteUserRequest {
     pub access_token: String,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DeliveryMediumType {
+    Email,
+    Sms,
+}
+
+impl Into<String> for DeliveryMediumType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DeliveryMediumType {
+    fn into(self) -> &'static str {
+        match self {
+            DeliveryMediumType::Email => "EMAIL",
+            DeliveryMediumType::Sms => "SMS",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeliveryMediumType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "EMAIL" => Ok(DeliveryMediumType::Email),
+            "SMS" => Ok(DeliveryMediumType::Sms),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DescribeIdentityProviderRequest {
     #[doc="<p>The identity provider name.</p>"]
@@ -1091,6 +1295,41 @@ pub struct DeviceConfigurationType {
     pub device_only_remembered_on_user_prompt: Option<bool>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DeviceRememberedStatusType {
+    NotRemembered,
+    Remembered,
+}
+
+impl Into<String> for DeviceRememberedStatusType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DeviceRememberedStatusType {
+    fn into(self) -> &'static str {
+        match self {
+            DeviceRememberedStatusType::NotRemembered => "not_remembered",
+            DeviceRememberedStatusType::Remembered => "remembered",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeviceRememberedStatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "not_remembered" => Ok(DeviceRememberedStatusType::NotRemembered),
+            "remembered" => Ok(DeviceRememberedStatusType::Remembered),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>The device verifier against which it will be authenticated.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeviceSecretVerifierConfigType {
@@ -1162,6 +1401,47 @@ pub struct DomainDescriptionType {
     pub version: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DomainStatusType {
+    Active,
+    Creating,
+    Deleting,
+    Updating,
+}
+
+impl Into<String> for DomainStatusType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DomainStatusType {
+    fn into(self) -> &'static str {
+        match self {
+            DomainStatusType::Active => "ACTIVE",
+            DomainStatusType::Creating => "CREATING",
+            DomainStatusType::Deleting => "DELETING",
+            DomainStatusType::Updating => "UPDATING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DomainStatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACTIVE" => Ok(DomainStatusType::Active),
+            "CREATING" => Ok(DomainStatusType::Creating),
+            "DELETING" => Ok(DomainStatusType::Deleting),
+            "UPDATING" => Ok(DomainStatusType::Updating),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>The email configuration type.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct EmailConfigurationType {
@@ -1173,6 +1453,41 @@ pub struct EmailConfigurationType {
     #[serde(rename="SourceArn")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub source_arn: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ExplicitAuthFlowsType {
+    AdminNoSrpAuth,
+    CustomAuthFlowOnly,
+}
+
+impl Into<String> for ExplicitAuthFlowsType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ExplicitAuthFlowsType {
+    fn into(self) -> &'static str {
+        match self {
+            ExplicitAuthFlowsType::AdminNoSrpAuth => "ADMIN_NO_SRP_AUTH",
+            ExplicitAuthFlowsType::CustomAuthFlowOnly => "CUSTOM_AUTH_FLOW_ONLY",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExplicitAuthFlowsType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ADMIN_NO_SRP_AUTH" => Ok(ExplicitAuthFlowsType::AdminNoSrpAuth),
+            "CUSTOM_AUTH_FLOW_ONLY" => Ok(ExplicitAuthFlowsType::CustomAuthFlowOnly),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Represents the request to forget the device.</p>"]
@@ -1410,6 +1725,38 @@ pub struct IdentityProviderType {
     #[serde(rename="UserPoolId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub user_pool_id: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum IdentityProviderTypeType {
+    Saml,
+}
+
+impl Into<String> for IdentityProviderTypeType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for IdentityProviderTypeType {
+    fn into(self) -> &'static str {
+        match self {
+            IdentityProviderTypeType::Saml => "SAML",
+        }
+    }
+}
+
+impl ::std::str::FromStr for IdentityProviderTypeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "SAML" => Ok(IdentityProviderTypeType::Saml),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Initiates the authentication request.</p>"]
@@ -1733,6 +2080,41 @@ pub struct MFAOptionType {
     pub delivery_medium: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum MessageActionType {
+    Resend,
+    Suppress,
+}
+
+impl Into<String> for MessageActionType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for MessageActionType {
+    fn into(self) -> &'static str {
+        match self {
+            MessageActionType::Resend => "RESEND",
+            MessageActionType::Suppress => "SUPPRESS",
+        }
+    }
+}
+
+impl ::std::str::FromStr for MessageActionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "RESEND" => Ok(MessageActionType::Resend),
+            "SUPPRESS" => Ok(MessageActionType::Suppress),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>The message template structure.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct MessageTemplateType {
@@ -1774,6 +2156,44 @@ pub struct NumberAttributeConstraintsType {
     #[serde(rename="MinValue")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub min_value: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum OAuthFlowType {
+    ClientCredentials,
+    Code,
+    Implicit,
+}
+
+impl Into<String> for OAuthFlowType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for OAuthFlowType {
+    fn into(self) -> &'static str {
+        match self {
+            OAuthFlowType::ClientCredentials => "client_credentials",
+            OAuthFlowType::Code => "code",
+            OAuthFlowType::Implicit => "implicit",
+        }
+    }
+}
+
+impl ::std::str::FromStr for OAuthFlowType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "client_credentials" => Ok(OAuthFlowType::ClientCredentials),
+            "code" => Ok(OAuthFlowType::Code),
+            "implicit" => Ok(OAuthFlowType::Implicit),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>The password policy type.</p>"]
@@ -2005,6 +2425,41 @@ pub struct StartUserImportJobResponse {
     #[serde(rename="UserImportJob")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub user_import_job: Option<UserImportJobType>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum StatusType {
+    Disabled,
+    Enabled,
+}
+
+impl Into<String> for StatusType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for StatusType {
+    fn into(self) -> &'static str {
+        match self {
+            StatusType::Disabled => "Disabled",
+            StatusType::Enabled => "Enabled",
+        }
+    }
+}
+
+impl ::std::str::FromStr for StatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Disabled" => Ok(StatusType::Disabled),
+            "Enabled" => Ok(StatusType::Enabled),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Represents the request to stop the user import job.</p>"]
@@ -2270,6 +2725,59 @@ pub struct UpdateUserPoolRequest {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct UpdateUserPoolResponse;
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum UserImportJobStatusType {
+    Created,
+    Expired,
+    Failed,
+    InProgress,
+    Pending,
+    Stopped,
+    Stopping,
+    Succeeded,
+}
+
+impl Into<String> for UserImportJobStatusType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for UserImportJobStatusType {
+    fn into(self) -> &'static str {
+        match self {
+            UserImportJobStatusType::Created => "Created",
+            UserImportJobStatusType::Expired => "Expired",
+            UserImportJobStatusType::Failed => "Failed",
+            UserImportJobStatusType::InProgress => "InProgress",
+            UserImportJobStatusType::Pending => "Pending",
+            UserImportJobStatusType::Stopped => "Stopped",
+            UserImportJobStatusType::Stopping => "Stopping",
+            UserImportJobStatusType::Succeeded => "Succeeded",
+        }
+    }
+}
+
+impl ::std::str::FromStr for UserImportJobStatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Created" => Ok(UserImportJobStatusType::Created),
+            "Expired" => Ok(UserImportJobStatusType::Expired),
+            "Failed" => Ok(UserImportJobStatusType::Failed),
+            "InProgress" => Ok(UserImportJobStatusType::InProgress),
+            "Pending" => Ok(UserImportJobStatusType::Pending),
+            "Stopped" => Ok(UserImportJobStatusType::Stopped),
+            "Stopping" => Ok(UserImportJobStatusType::Stopping),
+            "Succeeded" => Ok(UserImportJobStatusType::Succeeded),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>The user import job type.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct UserImportJobType {
@@ -2446,6 +2954,44 @@ pub struct UserPoolDescriptionType {
     pub status: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum UserPoolMfaType {
+    Off,
+    On,
+    Optional,
+}
+
+impl Into<String> for UserPoolMfaType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for UserPoolMfaType {
+    fn into(self) -> &'static str {
+        match self {
+            UserPoolMfaType::Off => "OFF",
+            UserPoolMfaType::On => "ON",
+            UserPoolMfaType::Optional => "OPTIONAL",
+        }
+    }
+}
+
+impl ::std::str::FromStr for UserPoolMfaType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "OFF" => Ok(UserPoolMfaType::Off),
+            "ON" => Ok(UserPoolMfaType::On),
+            "OPTIONAL" => Ok(UserPoolMfaType::Optional),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>The type of policy in a user pool.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct UserPoolPolicyType {
@@ -2552,6 +3098,56 @@ pub struct UserPoolType {
     pub user_pool_tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum UserStatusType {
+    Archived,
+    Compromised,
+    Confirmed,
+    ForceChangePassword,
+    ResetRequired,
+    Unconfirmed,
+    Unknown,
+}
+
+impl Into<String> for UserStatusType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for UserStatusType {
+    fn into(self) -> &'static str {
+        match self {
+            UserStatusType::Archived => "ARCHIVED",
+            UserStatusType::Compromised => "COMPROMISED",
+            UserStatusType::Confirmed => "CONFIRMED",
+            UserStatusType::ForceChangePassword => "FORCE_CHANGE_PASSWORD",
+            UserStatusType::ResetRequired => "RESET_REQUIRED",
+            UserStatusType::Unconfirmed => "UNCONFIRMED",
+            UserStatusType::Unknown => "UNKNOWN",
+        }
+    }
+}
+
+impl ::std::str::FromStr for UserStatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ARCHIVED" => Ok(UserStatusType::Archived),
+            "COMPROMISED" => Ok(UserStatusType::Compromised),
+            "CONFIRMED" => Ok(UserStatusType::Confirmed),
+            "FORCE_CHANGE_PASSWORD" => Ok(UserStatusType::ForceChangePassword),
+            "RESET_REQUIRED" => Ok(UserStatusType::ResetRequired),
+            "UNCONFIRMED" => Ok(UserStatusType::Unconfirmed),
+            "UNKNOWN" => Ok(UserStatusType::Unknown),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>The user type.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct UserType {
@@ -2583,6 +3179,41 @@ pub struct UserType {
     #[serde(rename="Username")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub username: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum VerifiedAttributeType {
+    Email,
+    PhoneNumber,
+}
+
+impl Into<String> for VerifiedAttributeType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for VerifiedAttributeType {
+    fn into(self) -> &'static str {
+        match self {
+            VerifiedAttributeType::Email => "email",
+            VerifiedAttributeType::PhoneNumber => "phone_number",
+        }
+    }
+}
+
+impl ::std::str::FromStr for VerifiedAttributeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "email" => Ok(VerifiedAttributeType::Email),
+            "phone_number" => Ok(VerifiedAttributeType::PhoneNumber),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Represents the request to verify user attributes.</p>"]
@@ -11630,7 +12261,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AddCustomAttributesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -11658,7 +12289,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(AdminAddUserToGroupError::from_body(String::from_utf8_lossy(&response.body)
                                                             .as_ref()))
@@ -11684,7 +12315,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AdminConfirmSignUpResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -11712,7 +12343,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AdminCreateUserResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -11740,7 +12371,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(AdminDeleteUserError::from_body(String::from_utf8_lossy(&response.body)
                                                         .as_ref()))
@@ -11767,7 +12398,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AdminDeleteUserAttributesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(AdminDeleteUserAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -11792,7 +12423,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AdminDisableUserResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -11820,7 +12451,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AdminEnableUserResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -11848,7 +12479,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(AdminForgetDeviceError::from_body(String::from_utf8_lossy(&response.body)
                                                           .as_ref()))
@@ -11874,7 +12505,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AdminGetDeviceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -11902,7 +12533,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AdminGetUserResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -11929,7 +12560,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AdminInitiateAuthResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -11957,7 +12588,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AdminListDevicesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -11986,7 +12617,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AdminListGroupsForUserResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -12014,7 +12645,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(AdminRemoveUserFromGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -12038,7 +12669,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AdminResetUserPasswordResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -12067,7 +12698,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AdminRespondToAuthChallengeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(AdminRespondToAuthChallengeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -12093,7 +12724,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AdminSetUserSettingsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -12122,7 +12753,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AdminUpdateDeviceStatusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(AdminUpdateDeviceStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -12148,7 +12779,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AdminUpdateUserAttributesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(AdminUpdateUserAttributesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -12174,7 +12805,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AdminUserGlobalSignOutResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -12202,7 +12833,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ChangePasswordResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -12230,7 +12861,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ConfirmDeviceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -12258,7 +12889,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ConfirmForgotPasswordResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -12286,7 +12917,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ConfirmSignUpResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -12313,7 +12944,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateGroupResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(CreateGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -12339,7 +12970,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateIdentityProviderResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -12367,7 +12998,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateUserImportJobResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -12395,7 +13026,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateUserPoolResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -12424,7 +13055,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateUserPoolClientResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -12453,7 +13084,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateUserPoolDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -12479,7 +13110,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(DeleteGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -12502,7 +13133,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(DeleteIdentityProviderError::from_body(String::from_utf8_lossy(&response.body)
                                                                .as_ref()))
@@ -12526,7 +13157,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(DeleteUserError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -12550,7 +13181,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteUserAttributesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -12576,7 +13207,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(DeleteUserPoolError::from_body(String::from_utf8_lossy(&response.body)
                                                        .as_ref()))
@@ -12602,7 +13233,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(DeleteUserPoolClientError::from_body(String::from_utf8_lossy(&response.body)
                                                              .as_ref()))
@@ -12629,7 +13260,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteUserPoolDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -12658,7 +13289,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeIdentityProviderResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeIdentityProviderError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -12684,7 +13315,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeUserImportJobResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -12712,7 +13343,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeUserPoolResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -12741,7 +13372,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeUserPoolClientResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -12770,7 +13401,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeUserPoolDomainResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -12796,7 +13427,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(ForgetDeviceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
             }
@@ -12821,7 +13452,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ForgotPasswordResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -12849,7 +13480,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetCSVHeaderResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -12874,7 +13505,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetDeviceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(GetDeviceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -12896,7 +13527,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetGroupResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(GetGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -12922,7 +13553,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetIdentityProviderByIdentifierResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(GetIdentityProviderByIdentifierError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -12944,7 +13575,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<GetUserResponse>(String::from_utf8_lossy(&response.body)
                                                                .as_ref())
                            .unwrap())
@@ -12972,7 +13603,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetUserAttributeVerificationCodeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(GetUserAttributeVerificationCodeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -12997,7 +13628,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GlobalSignOutResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -13024,7 +13655,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<InitiateAuthResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -13051,7 +13682,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListDevicesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListDevicesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -13076,7 +13707,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListGroupsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListGroupsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -13102,7 +13733,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListIdentityProvidersResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -13130,7 +13761,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListUserImportJobsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -13158,7 +13789,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListUserPoolClientsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -13186,7 +13817,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListUserPoolsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -13211,7 +13842,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListUsersResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListUsersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -13236,7 +13867,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListUsersInGroupResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -13265,7 +13896,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ResendConfirmationCodeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -13294,7 +13925,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<RespondToAuthChallengeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -13322,7 +13953,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<SetUserSettingsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -13347,7 +13978,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<SignUpResponse>(String::from_utf8_lossy(&response.body)
                                                               .as_ref())
                            .unwrap())
@@ -13374,7 +14005,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<StartUserImportJobResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -13402,7 +14033,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<StopUserImportJobResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -13430,7 +14061,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateDeviceStatusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -13458,7 +14089,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateGroupResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(UpdateGroupError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -13484,7 +14115,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateIdentityProviderResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -13513,7 +14144,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateUserAttributesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -13541,7 +14172,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateUserPoolResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -13570,7 +14201,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateUserPoolClientResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -13598,7 +14229,7 @@ impl<P, D> CognitoIdentityProvider for CognitoIdentityProviderClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<VerifyUserAttributeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {

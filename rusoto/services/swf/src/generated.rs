@@ -11,15 +11,11 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -197,6 +193,47 @@ pub struct ActivityTaskTimedOutEventAttributes {
     pub timeout_type: String,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ActivityTaskTimeoutType {
+    Heartbeat,
+    ScheduleToClose,
+    ScheduleToStart,
+    StartToClose,
+}
+
+impl Into<String> for ActivityTaskTimeoutType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ActivityTaskTimeoutType {
+    fn into(self) -> &'static str {
+        match self {
+            ActivityTaskTimeoutType::Heartbeat => "HEARTBEAT",
+            ActivityTaskTimeoutType::ScheduleToClose => "SCHEDULE_TO_CLOSE",
+            ActivityTaskTimeoutType::ScheduleToStart => "SCHEDULE_TO_START",
+            ActivityTaskTimeoutType::StartToClose => "START_TO_CLOSE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ActivityTaskTimeoutType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "HEARTBEAT" => Ok(ActivityTaskTimeoutType::Heartbeat),
+            "SCHEDULE_TO_CLOSE" => Ok(ActivityTaskTimeoutType::ScheduleToClose),
+            "SCHEDULE_TO_START" => Ok(ActivityTaskTimeoutType::ScheduleToStart),
+            "START_TO_CLOSE" => Ok(ActivityTaskTimeoutType::StartToClose),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Represents an activity type.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ActivityType {
@@ -290,6 +327,41 @@ pub struct CancelTimerDecisionAttributes {
     pub timer_id: String,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CancelTimerFailedCause {
+    OperationNotPermitted,
+    TimerIdUnknown,
+}
+
+impl Into<String> for CancelTimerFailedCause {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CancelTimerFailedCause {
+    fn into(self) -> &'static str {
+        match self {
+            CancelTimerFailedCause::OperationNotPermitted => "OPERATION_NOT_PERMITTED",
+            CancelTimerFailedCause::TimerIdUnknown => "TIMER_ID_UNKNOWN",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CancelTimerFailedCause {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "OPERATION_NOT_PERMITTED" => Ok(CancelTimerFailedCause::OperationNotPermitted),
+            "TIMER_ID_UNKNOWN" => Ok(CancelTimerFailedCause::TimerIdUnknown),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Provides details of the <code>CancelTimerFailed</code> event.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct CancelTimerFailedEventAttributes {
@@ -313,6 +385,43 @@ pub struct CancelWorkflowExecutionDecisionAttributes {
     pub details: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CancelWorkflowExecutionFailedCause {
+    OperationNotPermitted,
+    UnhandledDecision,
+}
+
+impl Into<String> for CancelWorkflowExecutionFailedCause {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CancelWorkflowExecutionFailedCause {
+    fn into(self) -> &'static str {
+        match self {
+            CancelWorkflowExecutionFailedCause::OperationNotPermitted => "OPERATION_NOT_PERMITTED",
+            CancelWorkflowExecutionFailedCause::UnhandledDecision => "UNHANDLED_DECISION",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CancelWorkflowExecutionFailedCause {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "OPERATION_NOT_PERMITTED" => {
+                Ok(CancelWorkflowExecutionFailedCause::OperationNotPermitted)
+            }
+            "UNHANDLED_DECISION" => Ok(CancelWorkflowExecutionFailedCause::UnhandledDecision),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Provides details of the <code>CancelWorkflowExecutionFailed</code> event.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct CancelWorkflowExecutionFailedEventAttributes {
@@ -322,6 +431,44 @@ pub struct CancelWorkflowExecutionFailedEventAttributes {
     #[doc="<p>The ID of the <code>DecisionTaskCompleted</code> event corresponding to the decision task that resulted in the <code>CancelWorkflowExecution</code> decision for this cancellation request. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>"]
     #[serde(rename="decisionTaskCompletedEventId")]
     pub decision_task_completed_event_id: i64,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ChildPolicy {
+    Abandon,
+    RequestCancel,
+    Terminate,
+}
+
+impl Into<String> for ChildPolicy {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ChildPolicy {
+    fn into(self) -> &'static str {
+        match self {
+            ChildPolicy::Abandon => "ABANDON",
+            ChildPolicy::RequestCancel => "REQUEST_CANCEL",
+            ChildPolicy::Terminate => "TERMINATE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChildPolicy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ABANDON" => Ok(ChildPolicy::Abandon),
+            "REQUEST_CANCEL" => Ok(ChildPolicy::RequestCancel),
+            "TERMINATE" => Ok(ChildPolicy::Terminate),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Provide details of the <code>ChildWorkflowExecutionCanceled</code> event.</p>"]
@@ -442,6 +589,53 @@ pub struct ChildWorkflowExecutionTimedOutEventAttributes {
     pub workflow_type: WorkflowType,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CloseStatus {
+    Canceled,
+    Completed,
+    ContinuedAsNew,
+    Failed,
+    Terminated,
+    TimedOut,
+}
+
+impl Into<String> for CloseStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CloseStatus {
+    fn into(self) -> &'static str {
+        match self {
+            CloseStatus::Canceled => "CANCELED",
+            CloseStatus::Completed => "COMPLETED",
+            CloseStatus::ContinuedAsNew => "CONTINUED_AS_NEW",
+            CloseStatus::Failed => "FAILED",
+            CloseStatus::Terminated => "TERMINATED",
+            CloseStatus::TimedOut => "TIMED_OUT",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CloseStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CANCELED" => Ok(CloseStatus::Canceled),
+            "COMPLETED" => Ok(CloseStatus::Completed),
+            "CONTINUED_AS_NEW" => Ok(CloseStatus::ContinuedAsNew),
+            "FAILED" => Ok(CloseStatus::Failed),
+            "TERMINATED" => Ok(CloseStatus::Terminated),
+            "TIMED_OUT" => Ok(CloseStatus::TimedOut),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Used to filter the closed workflow executions in visibility APIs by their close status.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CloseStatusFilter {
@@ -457,6 +651,45 @@ pub struct CompleteWorkflowExecutionDecisionAttributes {
     #[serde(rename="result")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub result: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CompleteWorkflowExecutionFailedCause {
+    OperationNotPermitted,
+    UnhandledDecision,
+}
+
+impl Into<String> for CompleteWorkflowExecutionFailedCause {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CompleteWorkflowExecutionFailedCause {
+    fn into(self) -> &'static str {
+        match self {
+            CompleteWorkflowExecutionFailedCause::OperationNotPermitted => {
+                "OPERATION_NOT_PERMITTED"
+            }
+            CompleteWorkflowExecutionFailedCause::UnhandledDecision => "UNHANDLED_DECISION",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CompleteWorkflowExecutionFailedCause {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "OPERATION_NOT_PERMITTED" => {
+                Ok(CompleteWorkflowExecutionFailedCause::OperationNotPermitted)
+            }
+            "UNHANDLED_DECISION" => Ok(CompleteWorkflowExecutionFailedCause::UnhandledDecision),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Provides details of the <code>CompleteWorkflowExecutionFailed</code> event.</p>"]
@@ -507,6 +740,86 @@ pub struct ContinueAsNewWorkflowExecutionDecisionAttributes {
     #[serde(rename="workflowTypeVersion")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub workflow_type_version: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ContinueAsNewWorkflowExecutionFailedCause {
+    ContinueAsNewWorkflowExecutionRateExceeded,
+    DefaultChildPolicyUndefined,
+    DefaultExecutionStartToCloseTimeoutUndefined,
+    DefaultTaskListUndefined,
+    DefaultTaskStartToCloseTimeoutUndefined,
+    OperationNotPermitted,
+    UnhandledDecision,
+    WorkflowTypeDeprecated,
+    WorkflowTypeDoesNotExist,
+}
+
+impl Into<String> for ContinueAsNewWorkflowExecutionFailedCause {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ContinueAsNewWorkflowExecutionFailedCause {
+    fn into(self) -> &'static str {
+        match self {
+            ContinueAsNewWorkflowExecutionFailedCause::ContinueAsNewWorkflowExecutionRateExceeded => "CONTINUE_AS_NEW_WORKFLOW_EXECUTION_RATE_EXCEEDED",
+            ContinueAsNewWorkflowExecutionFailedCause::DefaultChildPolicyUndefined => {
+                "DEFAULT_CHILD_POLICY_UNDEFINED"
+            }
+            ContinueAsNewWorkflowExecutionFailedCause::DefaultExecutionStartToCloseTimeoutUndefined => "DEFAULT_EXECUTION_START_TO_CLOSE_TIMEOUT_UNDEFINED",
+            ContinueAsNewWorkflowExecutionFailedCause::DefaultTaskListUndefined => {
+                "DEFAULT_TASK_LIST_UNDEFINED"
+            }
+            ContinueAsNewWorkflowExecutionFailedCause::DefaultTaskStartToCloseTimeoutUndefined => {
+                "DEFAULT_TASK_START_TO_CLOSE_TIMEOUT_UNDEFINED"
+            }
+            ContinueAsNewWorkflowExecutionFailedCause::OperationNotPermitted => {
+                "OPERATION_NOT_PERMITTED"
+            }
+            ContinueAsNewWorkflowExecutionFailedCause::UnhandledDecision => "UNHANDLED_DECISION",
+            ContinueAsNewWorkflowExecutionFailedCause::WorkflowTypeDeprecated => {
+                "WORKFLOW_TYPE_DEPRECATED"
+            }
+            ContinueAsNewWorkflowExecutionFailedCause::WorkflowTypeDoesNotExist => {
+                "WORKFLOW_TYPE_DOES_NOT_EXIST"
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContinueAsNewWorkflowExecutionFailedCause {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CONTINUE_AS_NEW_WORKFLOW_EXECUTION_RATE_EXCEEDED" => Ok(ContinueAsNewWorkflowExecutionFailedCause::ContinueAsNewWorkflowExecutionRateExceeded),
+            "DEFAULT_CHILD_POLICY_UNDEFINED" => {
+                Ok(ContinueAsNewWorkflowExecutionFailedCause::DefaultChildPolicyUndefined)
+            }
+            "DEFAULT_EXECUTION_START_TO_CLOSE_TIMEOUT_UNDEFINED" => Ok(ContinueAsNewWorkflowExecutionFailedCause::DefaultExecutionStartToCloseTimeoutUndefined),
+            "DEFAULT_TASK_LIST_UNDEFINED" => {
+                Ok(ContinueAsNewWorkflowExecutionFailedCause::DefaultTaskListUndefined)
+            }
+            "DEFAULT_TASK_START_TO_CLOSE_TIMEOUT_UNDEFINED" => Ok(ContinueAsNewWorkflowExecutionFailedCause::DefaultTaskStartToCloseTimeoutUndefined),
+            "OPERATION_NOT_PERMITTED" => {
+                Ok(ContinueAsNewWorkflowExecutionFailedCause::OperationNotPermitted)
+            }
+            "UNHANDLED_DECISION" => {
+                Ok(ContinueAsNewWorkflowExecutionFailedCause::UnhandledDecision)
+            }
+            "WORKFLOW_TYPE_DEPRECATED" => {
+                Ok(ContinueAsNewWorkflowExecutionFailedCause::WorkflowTypeDeprecated)
+            }
+            "WORKFLOW_TYPE_DOES_NOT_EXIST" => {
+                Ok(ContinueAsNewWorkflowExecutionFailedCause::WorkflowTypeDoesNotExist)
+            }
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Provides details of the <code>ContinueAsNewWorkflowExecutionFailed</code> event.</p>"]
@@ -747,6 +1060,110 @@ pub struct DecisionTaskTimedOutEventAttributes {
     pub timeout_type: String,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DecisionTaskTimeoutType {
+    StartToClose,
+}
+
+impl Into<String> for DecisionTaskTimeoutType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DecisionTaskTimeoutType {
+    fn into(self) -> &'static str {
+        match self {
+            DecisionTaskTimeoutType::StartToClose => "START_TO_CLOSE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DecisionTaskTimeoutType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "START_TO_CLOSE" => Ok(DecisionTaskTimeoutType::StartToClose),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DecisionType {
+    CancelTimer,
+    CancelWorkflowExecution,
+    CompleteWorkflowExecution,
+    ContinueAsNewWorkflowExecution,
+    FailWorkflowExecution,
+    RecordMarker,
+    RequestCancelActivityTask,
+    RequestCancelExternalWorkflowExecution,
+    ScheduleActivityTask,
+    ScheduleLambdaFunction,
+    SignalExternalWorkflowExecution,
+    StartChildWorkflowExecution,
+    StartTimer,
+}
+
+impl Into<String> for DecisionType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DecisionType {
+    fn into(self) -> &'static str {
+        match self {
+            DecisionType::CancelTimer => "CancelTimer",
+            DecisionType::CancelWorkflowExecution => "CancelWorkflowExecution",
+            DecisionType::CompleteWorkflowExecution => "CompleteWorkflowExecution",
+            DecisionType::ContinueAsNewWorkflowExecution => "ContinueAsNewWorkflowExecution",
+            DecisionType::FailWorkflowExecution => "FailWorkflowExecution",
+            DecisionType::RecordMarker => "RecordMarker",
+            DecisionType::RequestCancelActivityTask => "RequestCancelActivityTask",
+            DecisionType::RequestCancelExternalWorkflowExecution => {
+                "RequestCancelExternalWorkflowExecution"
+            }
+            DecisionType::ScheduleActivityTask => "ScheduleActivityTask",
+            DecisionType::ScheduleLambdaFunction => "ScheduleLambdaFunction",
+            DecisionType::SignalExternalWorkflowExecution => "SignalExternalWorkflowExecution",
+            DecisionType::StartChildWorkflowExecution => "StartChildWorkflowExecution",
+            DecisionType::StartTimer => "StartTimer",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DecisionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CancelTimer" => Ok(DecisionType::CancelTimer),
+            "CancelWorkflowExecution" => Ok(DecisionType::CancelWorkflowExecution),
+            "CompleteWorkflowExecution" => Ok(DecisionType::CompleteWorkflowExecution),
+            "ContinueAsNewWorkflowExecution" => Ok(DecisionType::ContinueAsNewWorkflowExecution),
+            "FailWorkflowExecution" => Ok(DecisionType::FailWorkflowExecution),
+            "RecordMarker" => Ok(DecisionType::RecordMarker),
+            "RequestCancelActivityTask" => Ok(DecisionType::RequestCancelActivityTask),
+            "RequestCancelExternalWorkflowExecution" => {
+                Ok(DecisionType::RequestCancelExternalWorkflowExecution)
+            }
+            "ScheduleActivityTask" => Ok(DecisionType::ScheduleActivityTask),
+            "ScheduleLambdaFunction" => Ok(DecisionType::ScheduleLambdaFunction),
+            "SignalExternalWorkflowExecution" => Ok(DecisionType::SignalExternalWorkflowExecution),
+            "StartChildWorkflowExecution" => Ok(DecisionType::StartChildWorkflowExecution),
+            "StartTimer" => Ok(DecisionType::StartTimer),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeprecateActivityTypeInput {
     #[doc="<p>The activity type to deprecate.</p>"]
@@ -855,6 +1272,260 @@ pub struct DomainInfos {
     pub next_page_token: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum EventType {
+    ActivityTaskCancelRequested,
+    ActivityTaskCanceled,
+    ActivityTaskCompleted,
+    ActivityTaskFailed,
+    ActivityTaskScheduled,
+    ActivityTaskStarted,
+    ActivityTaskTimedOut,
+    CancelTimerFailed,
+    CancelWorkflowExecutionFailed,
+    ChildWorkflowExecutionCanceled,
+    ChildWorkflowExecutionCompleted,
+    ChildWorkflowExecutionFailed,
+    ChildWorkflowExecutionStarted,
+    ChildWorkflowExecutionTerminated,
+    ChildWorkflowExecutionTimedOut,
+    CompleteWorkflowExecutionFailed,
+    ContinueAsNewWorkflowExecutionFailed,
+    DecisionTaskCompleted,
+    DecisionTaskScheduled,
+    DecisionTaskStarted,
+    DecisionTaskTimedOut,
+    ExternalWorkflowExecutionCancelRequested,
+    ExternalWorkflowExecutionSignaled,
+    FailWorkflowExecutionFailed,
+    LambdaFunctionCompleted,
+    LambdaFunctionFailed,
+    LambdaFunctionScheduled,
+    LambdaFunctionStarted,
+    LambdaFunctionTimedOut,
+    MarkerRecorded,
+    RecordMarkerFailed,
+    RequestCancelActivityTaskFailed,
+    RequestCancelExternalWorkflowExecutionFailed,
+    RequestCancelExternalWorkflowExecutionInitiated,
+    ScheduleActivityTaskFailed,
+    ScheduleLambdaFunctionFailed,
+    SignalExternalWorkflowExecutionFailed,
+    SignalExternalWorkflowExecutionInitiated,
+    StartChildWorkflowExecutionFailed,
+    StartChildWorkflowExecutionInitiated,
+    StartLambdaFunctionFailed,
+    StartTimerFailed,
+    TimerCanceled,
+    TimerFired,
+    TimerStarted,
+    WorkflowExecutionCancelRequested,
+    WorkflowExecutionCanceled,
+    WorkflowExecutionCompleted,
+    WorkflowExecutionContinuedAsNew,
+    WorkflowExecutionFailed,
+    WorkflowExecutionSignaled,
+    WorkflowExecutionStarted,
+    WorkflowExecutionTerminated,
+    WorkflowExecutionTimedOut,
+}
+
+impl Into<String> for EventType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for EventType {
+    fn into(self) -> &'static str {
+        match self {
+            EventType::ActivityTaskCancelRequested => "ActivityTaskCancelRequested",
+            EventType::ActivityTaskCanceled => "ActivityTaskCanceled",
+            EventType::ActivityTaskCompleted => "ActivityTaskCompleted",
+            EventType::ActivityTaskFailed => "ActivityTaskFailed",
+            EventType::ActivityTaskScheduled => "ActivityTaskScheduled",
+            EventType::ActivityTaskStarted => "ActivityTaskStarted",
+            EventType::ActivityTaskTimedOut => "ActivityTaskTimedOut",
+            EventType::CancelTimerFailed => "CancelTimerFailed",
+            EventType::CancelWorkflowExecutionFailed => "CancelWorkflowExecutionFailed",
+            EventType::ChildWorkflowExecutionCanceled => "ChildWorkflowExecutionCanceled",
+            EventType::ChildWorkflowExecutionCompleted => "ChildWorkflowExecutionCompleted",
+            EventType::ChildWorkflowExecutionFailed => "ChildWorkflowExecutionFailed",
+            EventType::ChildWorkflowExecutionStarted => "ChildWorkflowExecutionStarted",
+            EventType::ChildWorkflowExecutionTerminated => "ChildWorkflowExecutionTerminated",
+            EventType::ChildWorkflowExecutionTimedOut => "ChildWorkflowExecutionTimedOut",
+            EventType::CompleteWorkflowExecutionFailed => "CompleteWorkflowExecutionFailed",
+            EventType::ContinueAsNewWorkflowExecutionFailed => {
+                "ContinueAsNewWorkflowExecutionFailed"
+            }
+            EventType::DecisionTaskCompleted => "DecisionTaskCompleted",
+            EventType::DecisionTaskScheduled => "DecisionTaskScheduled",
+            EventType::DecisionTaskStarted => "DecisionTaskStarted",
+            EventType::DecisionTaskTimedOut => "DecisionTaskTimedOut",
+            EventType::ExternalWorkflowExecutionCancelRequested => {
+                "ExternalWorkflowExecutionCancelRequested"
+            }
+            EventType::ExternalWorkflowExecutionSignaled => "ExternalWorkflowExecutionSignaled",
+            EventType::FailWorkflowExecutionFailed => "FailWorkflowExecutionFailed",
+            EventType::LambdaFunctionCompleted => "LambdaFunctionCompleted",
+            EventType::LambdaFunctionFailed => "LambdaFunctionFailed",
+            EventType::LambdaFunctionScheduled => "LambdaFunctionScheduled",
+            EventType::LambdaFunctionStarted => "LambdaFunctionStarted",
+            EventType::LambdaFunctionTimedOut => "LambdaFunctionTimedOut",
+            EventType::MarkerRecorded => "MarkerRecorded",
+            EventType::RecordMarkerFailed => "RecordMarkerFailed",
+            EventType::RequestCancelActivityTaskFailed => "RequestCancelActivityTaskFailed",
+            EventType::RequestCancelExternalWorkflowExecutionFailed => {
+                "RequestCancelExternalWorkflowExecutionFailed"
+            }
+            EventType::RequestCancelExternalWorkflowExecutionInitiated => {
+                "RequestCancelExternalWorkflowExecutionInitiated"
+            }
+            EventType::ScheduleActivityTaskFailed => "ScheduleActivityTaskFailed",
+            EventType::ScheduleLambdaFunctionFailed => "ScheduleLambdaFunctionFailed",
+            EventType::SignalExternalWorkflowExecutionFailed => {
+                "SignalExternalWorkflowExecutionFailed"
+            }
+            EventType::SignalExternalWorkflowExecutionInitiated => {
+                "SignalExternalWorkflowExecutionInitiated"
+            }
+            EventType::StartChildWorkflowExecutionFailed => "StartChildWorkflowExecutionFailed",
+            EventType::StartChildWorkflowExecutionInitiated => {
+                "StartChildWorkflowExecutionInitiated"
+            }
+            EventType::StartLambdaFunctionFailed => "StartLambdaFunctionFailed",
+            EventType::StartTimerFailed => "StartTimerFailed",
+            EventType::TimerCanceled => "TimerCanceled",
+            EventType::TimerFired => "TimerFired",
+            EventType::TimerStarted => "TimerStarted",
+            EventType::WorkflowExecutionCancelRequested => "WorkflowExecutionCancelRequested",
+            EventType::WorkflowExecutionCanceled => "WorkflowExecutionCanceled",
+            EventType::WorkflowExecutionCompleted => "WorkflowExecutionCompleted",
+            EventType::WorkflowExecutionContinuedAsNew => "WorkflowExecutionContinuedAsNew",
+            EventType::WorkflowExecutionFailed => "WorkflowExecutionFailed",
+            EventType::WorkflowExecutionSignaled => "WorkflowExecutionSignaled",
+            EventType::WorkflowExecutionStarted => "WorkflowExecutionStarted",
+            EventType::WorkflowExecutionTerminated => "WorkflowExecutionTerminated",
+            EventType::WorkflowExecutionTimedOut => "WorkflowExecutionTimedOut",
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ActivityTaskCancelRequested" => Ok(EventType::ActivityTaskCancelRequested),
+            "ActivityTaskCanceled" => Ok(EventType::ActivityTaskCanceled),
+            "ActivityTaskCompleted" => Ok(EventType::ActivityTaskCompleted),
+            "ActivityTaskFailed" => Ok(EventType::ActivityTaskFailed),
+            "ActivityTaskScheduled" => Ok(EventType::ActivityTaskScheduled),
+            "ActivityTaskStarted" => Ok(EventType::ActivityTaskStarted),
+            "ActivityTaskTimedOut" => Ok(EventType::ActivityTaskTimedOut),
+            "CancelTimerFailed" => Ok(EventType::CancelTimerFailed),
+            "CancelWorkflowExecutionFailed" => Ok(EventType::CancelWorkflowExecutionFailed),
+            "ChildWorkflowExecutionCanceled" => Ok(EventType::ChildWorkflowExecutionCanceled),
+            "ChildWorkflowExecutionCompleted" => Ok(EventType::ChildWorkflowExecutionCompleted),
+            "ChildWorkflowExecutionFailed" => Ok(EventType::ChildWorkflowExecutionFailed),
+            "ChildWorkflowExecutionStarted" => Ok(EventType::ChildWorkflowExecutionStarted),
+            "ChildWorkflowExecutionTerminated" => Ok(EventType::ChildWorkflowExecutionTerminated),
+            "ChildWorkflowExecutionTimedOut" => Ok(EventType::ChildWorkflowExecutionTimedOut),
+            "CompleteWorkflowExecutionFailed" => Ok(EventType::CompleteWorkflowExecutionFailed),
+            "ContinueAsNewWorkflowExecutionFailed" => {
+                Ok(EventType::ContinueAsNewWorkflowExecutionFailed)
+            }
+            "DecisionTaskCompleted" => Ok(EventType::DecisionTaskCompleted),
+            "DecisionTaskScheduled" => Ok(EventType::DecisionTaskScheduled),
+            "DecisionTaskStarted" => Ok(EventType::DecisionTaskStarted),
+            "DecisionTaskTimedOut" => Ok(EventType::DecisionTaskTimedOut),
+            "ExternalWorkflowExecutionCancelRequested" => {
+                Ok(EventType::ExternalWorkflowExecutionCancelRequested)
+            }
+            "ExternalWorkflowExecutionSignaled" => Ok(EventType::ExternalWorkflowExecutionSignaled),
+            "FailWorkflowExecutionFailed" => Ok(EventType::FailWorkflowExecutionFailed),
+            "LambdaFunctionCompleted" => Ok(EventType::LambdaFunctionCompleted),
+            "LambdaFunctionFailed" => Ok(EventType::LambdaFunctionFailed),
+            "LambdaFunctionScheduled" => Ok(EventType::LambdaFunctionScheduled),
+            "LambdaFunctionStarted" => Ok(EventType::LambdaFunctionStarted),
+            "LambdaFunctionTimedOut" => Ok(EventType::LambdaFunctionTimedOut),
+            "MarkerRecorded" => Ok(EventType::MarkerRecorded),
+            "RecordMarkerFailed" => Ok(EventType::RecordMarkerFailed),
+            "RequestCancelActivityTaskFailed" => Ok(EventType::RequestCancelActivityTaskFailed),
+            "RequestCancelExternalWorkflowExecutionFailed" => {
+                Ok(EventType::RequestCancelExternalWorkflowExecutionFailed)
+            }
+            "RequestCancelExternalWorkflowExecutionInitiated" => {
+                Ok(EventType::RequestCancelExternalWorkflowExecutionInitiated)
+            }
+            "ScheduleActivityTaskFailed" => Ok(EventType::ScheduleActivityTaskFailed),
+            "ScheduleLambdaFunctionFailed" => Ok(EventType::ScheduleLambdaFunctionFailed),
+            "SignalExternalWorkflowExecutionFailed" => {
+                Ok(EventType::SignalExternalWorkflowExecutionFailed)
+            }
+            "SignalExternalWorkflowExecutionInitiated" => {
+                Ok(EventType::SignalExternalWorkflowExecutionInitiated)
+            }
+            "StartChildWorkflowExecutionFailed" => Ok(EventType::StartChildWorkflowExecutionFailed),
+            "StartChildWorkflowExecutionInitiated" => {
+                Ok(EventType::StartChildWorkflowExecutionInitiated)
+            }
+            "StartLambdaFunctionFailed" => Ok(EventType::StartLambdaFunctionFailed),
+            "StartTimerFailed" => Ok(EventType::StartTimerFailed),
+            "TimerCanceled" => Ok(EventType::TimerCanceled),
+            "TimerFired" => Ok(EventType::TimerFired),
+            "TimerStarted" => Ok(EventType::TimerStarted),
+            "WorkflowExecutionCancelRequested" => Ok(EventType::WorkflowExecutionCancelRequested),
+            "WorkflowExecutionCanceled" => Ok(EventType::WorkflowExecutionCanceled),
+            "WorkflowExecutionCompleted" => Ok(EventType::WorkflowExecutionCompleted),
+            "WorkflowExecutionContinuedAsNew" => Ok(EventType::WorkflowExecutionContinuedAsNew),
+            "WorkflowExecutionFailed" => Ok(EventType::WorkflowExecutionFailed),
+            "WorkflowExecutionSignaled" => Ok(EventType::WorkflowExecutionSignaled),
+            "WorkflowExecutionStarted" => Ok(EventType::WorkflowExecutionStarted),
+            "WorkflowExecutionTerminated" => Ok(EventType::WorkflowExecutionTerminated),
+            "WorkflowExecutionTimedOut" => Ok(EventType::WorkflowExecutionTimedOut),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ExecutionStatus {
+    Closed,
+    Open,
+}
+
+impl Into<String> for ExecutionStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ExecutionStatus {
+    fn into(self) -> &'static str {
+        match self {
+            ExecutionStatus::Closed => "CLOSED",
+            ExecutionStatus::Open => "OPEN",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExecutionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CLOSED" => Ok(ExecutionStatus::Closed),
+            "OPEN" => Ok(ExecutionStatus::Open),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Used to filter the workflow executions in visibility APIs by various time-based rules. Each parameter, if specified, defines a rule that must be satisfied by each returned query result. The parameter values are in the <a href=\"https://en.wikipedia.org/wiki/Unix_time\">Unix Time format</a>. For example: <code>\"oldestDate\": 1325376070.</code></p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ExecutionTimeFilter {
@@ -900,6 +1571,43 @@ pub struct FailWorkflowExecutionDecisionAttributes {
     #[serde(rename="reason")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub reason: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum FailWorkflowExecutionFailedCause {
+    OperationNotPermitted,
+    UnhandledDecision,
+}
+
+impl Into<String> for FailWorkflowExecutionFailedCause {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for FailWorkflowExecutionFailedCause {
+    fn into(self) -> &'static str {
+        match self {
+            FailWorkflowExecutionFailedCause::OperationNotPermitted => "OPERATION_NOT_PERMITTED",
+            FailWorkflowExecutionFailedCause::UnhandledDecision => "UNHANDLED_DECISION",
+        }
+    }
+}
+
+impl ::std::str::FromStr for FailWorkflowExecutionFailedCause {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "OPERATION_NOT_PERMITTED" => {
+                Ok(FailWorkflowExecutionFailedCause::OperationNotPermitted)
+            }
+            "UNHANDLED_DECISION" => Ok(FailWorkflowExecutionFailedCause::UnhandledDecision),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Provides details of the <code>FailWorkflowExecutionFailed</code> event.</p>"]
@@ -1284,6 +1992,38 @@ pub struct LambdaFunctionTimedOutEventAttributes {
     pub timeout_type: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum LambdaFunctionTimeoutType {
+    StartToClose,
+}
+
+impl Into<String> for LambdaFunctionTimeoutType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for LambdaFunctionTimeoutType {
+    fn into(self) -> &'static str {
+        match self {
+            LambdaFunctionTimeoutType::StartToClose => "START_TO_CLOSE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for LambdaFunctionTimeoutType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "START_TO_CLOSE" => Ok(LambdaFunctionTimeoutType::StartToClose),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListActivityTypesInput {
     #[doc="<p>The name of the domain in which the activity types have been registered.</p>"]
@@ -1522,6 +2262,38 @@ pub struct RecordMarkerDecisionAttributes {
     pub marker_name: String,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RecordMarkerFailedCause {
+    OperationNotPermitted,
+}
+
+impl Into<String> for RecordMarkerFailedCause {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RecordMarkerFailedCause {
+    fn into(self) -> &'static str {
+        match self {
+            RecordMarkerFailedCause::OperationNotPermitted => "OPERATION_NOT_PERMITTED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RecordMarkerFailedCause {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "OPERATION_NOT_PERMITTED" => Ok(RecordMarkerFailedCause::OperationNotPermitted),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Provides details of the <code>RecordMarkerFailed</code> event.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct RecordMarkerFailedEventAttributes {
@@ -1632,12 +2404,86 @@ pub struct RegisterWorkflowTypeInput {
     pub version: String,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RegistrationStatus {
+    Deprecated,
+    Registered,
+}
+
+impl Into<String> for RegistrationStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RegistrationStatus {
+    fn into(self) -> &'static str {
+        match self {
+            RegistrationStatus::Deprecated => "DEPRECATED",
+            RegistrationStatus::Registered => "REGISTERED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RegistrationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DEPRECATED" => Ok(RegistrationStatus::Deprecated),
+            "REGISTERED" => Ok(RegistrationStatus::Registered),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Provides details of the <code>RequestCancelActivityTask</code> decision.</p> <p><b>Access Control</b></p> <p>You can use IAM policies to control this decision's access to Amazon SWF resources as follows:</p> <ul> <li>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</li> <li>Use an <code>Action</code> element to allow or deny permission to call this action.</li> <li>You cannot use an IAM policy to constrain this action's parameters.</li> </ul> <p>If the caller does not have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <b>cause</b> parameter will be set to OPERATION_NOT_PERMITTED. For details and example IAM policies, see <a href=\"http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html\">Using IAM to Manage Access to Amazon SWF Workflows</a>.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct RequestCancelActivityTaskDecisionAttributes {
     #[doc="<p>The <code>activityId</code> of the activity task to be canceled.</p>"]
     #[serde(rename="activityId")]
     pub activity_id: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RequestCancelActivityTaskFailedCause {
+    ActivityIdUnknown,
+    OperationNotPermitted,
+}
+
+impl Into<String> for RequestCancelActivityTaskFailedCause {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RequestCancelActivityTaskFailedCause {
+    fn into(self) -> &'static str {
+        match self {
+            RequestCancelActivityTaskFailedCause::ActivityIdUnknown => "ACTIVITY_ID_UNKNOWN",
+            RequestCancelActivityTaskFailedCause::OperationNotPermitted => {
+                "OPERATION_NOT_PERMITTED"
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for RequestCancelActivityTaskFailedCause {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACTIVITY_ID_UNKNOWN" => Ok(RequestCancelActivityTaskFailedCause::ActivityIdUnknown),
+            "OPERATION_NOT_PERMITTED" => {
+                Ok(RequestCancelActivityTaskFailedCause::OperationNotPermitted)
+            }
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Provides details of the <code>RequestCancelActivityTaskFailed</code> event.</p>"]
@@ -1668,6 +2514,50 @@ pub struct RequestCancelExternalWorkflowExecutionDecisionAttributes {
     #[doc="<p><b>Required.</b> The <code>workflowId</code> of the external workflow execution to cancel.</p>"]
     #[serde(rename="workflowId")]
     pub workflow_id: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RequestCancelExternalWorkflowExecutionFailedCause {
+    OperationNotPermitted,
+    RequestCancelExternalWorkflowExecutionRateExceeded,
+    UnknownExternalWorkflowExecution,
+}
+
+impl Into<String> for RequestCancelExternalWorkflowExecutionFailedCause {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RequestCancelExternalWorkflowExecutionFailedCause {
+    fn into(self) -> &'static str {
+        match self {
+            RequestCancelExternalWorkflowExecutionFailedCause::OperationNotPermitted => {
+                "OPERATION_NOT_PERMITTED"
+            }
+            RequestCancelExternalWorkflowExecutionFailedCause::RequestCancelExternalWorkflowExecutionRateExceeded => "REQUEST_CANCEL_EXTERNAL_WORKFLOW_EXECUTION_RATE_EXCEEDED",
+            RequestCancelExternalWorkflowExecutionFailedCause::UnknownExternalWorkflowExecution => {
+                "UNKNOWN_EXTERNAL_WORKFLOW_EXECUTION"
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for RequestCancelExternalWorkflowExecutionFailedCause {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "OPERATION_NOT_PERMITTED" => {
+                Ok(RequestCancelExternalWorkflowExecutionFailedCause::OperationNotPermitted)
+            }
+            "REQUEST_CANCEL_EXTERNAL_WORKFLOW_EXECUTION_RATE_EXCEEDED" => Ok(RequestCancelExternalWorkflowExecutionFailedCause::RequestCancelExternalWorkflowExecutionRateExceeded),
+            "UNKNOWN_EXTERNAL_WORKFLOW_EXECUTION" => Ok(RequestCancelExternalWorkflowExecutionFailedCause::UnknownExternalWorkflowExecution),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Provides details of the <code>RequestCancelExternalWorkflowExecutionFailed</code> event.</p>"]
@@ -1831,6 +2721,104 @@ pub struct ScheduleActivityTaskDecisionAttributes {
     pub task_priority: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ScheduleActivityTaskFailedCause {
+    ActivityCreationRateExceeded,
+    ActivityIdAlreadyInUse,
+    ActivityTypeDeprecated,
+    ActivityTypeDoesNotExist,
+    DefaultHeartbeatTimeoutUndefined,
+    DefaultScheduleToCloseTimeoutUndefined,
+    DefaultScheduleToStartTimeoutUndefined,
+    DefaultStartToCloseTimeoutUndefined,
+    DefaultTaskListUndefined,
+    OpenActivitiesLimitExceeded,
+    OperationNotPermitted,
+}
+
+impl Into<String> for ScheduleActivityTaskFailedCause {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ScheduleActivityTaskFailedCause {
+    fn into(self) -> &'static str {
+        match self {
+            ScheduleActivityTaskFailedCause::ActivityCreationRateExceeded => {
+                "ACTIVITY_CREATION_RATE_EXCEEDED"
+            }
+            ScheduleActivityTaskFailedCause::ActivityIdAlreadyInUse => "ACTIVITY_ID_ALREADY_IN_USE",
+            ScheduleActivityTaskFailedCause::ActivityTypeDeprecated => "ACTIVITY_TYPE_DEPRECATED",
+            ScheduleActivityTaskFailedCause::ActivityTypeDoesNotExist => {
+                "ACTIVITY_TYPE_DOES_NOT_EXIST"
+            }
+            ScheduleActivityTaskFailedCause::DefaultHeartbeatTimeoutUndefined => {
+                "DEFAULT_HEARTBEAT_TIMEOUT_UNDEFINED"
+            }
+            ScheduleActivityTaskFailedCause::DefaultScheduleToCloseTimeoutUndefined => {
+                "DEFAULT_SCHEDULE_TO_CLOSE_TIMEOUT_UNDEFINED"
+            }
+            ScheduleActivityTaskFailedCause::DefaultScheduleToStartTimeoutUndefined => {
+                "DEFAULT_SCHEDULE_TO_START_TIMEOUT_UNDEFINED"
+            }
+            ScheduleActivityTaskFailedCause::DefaultStartToCloseTimeoutUndefined => {
+                "DEFAULT_START_TO_CLOSE_TIMEOUT_UNDEFINED"
+            }
+            ScheduleActivityTaskFailedCause::DefaultTaskListUndefined => {
+                "DEFAULT_TASK_LIST_UNDEFINED"
+            }
+            ScheduleActivityTaskFailedCause::OpenActivitiesLimitExceeded => {
+                "OPEN_ACTIVITIES_LIMIT_EXCEEDED"
+            }
+            ScheduleActivityTaskFailedCause::OperationNotPermitted => "OPERATION_NOT_PERMITTED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScheduleActivityTaskFailedCause {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACTIVITY_CREATION_RATE_EXCEEDED" => {
+                Ok(ScheduleActivityTaskFailedCause::ActivityCreationRateExceeded)
+            }
+            "ACTIVITY_ID_ALREADY_IN_USE" => {
+                Ok(ScheduleActivityTaskFailedCause::ActivityIdAlreadyInUse)
+            }
+            "ACTIVITY_TYPE_DEPRECATED" => {
+                Ok(ScheduleActivityTaskFailedCause::ActivityTypeDeprecated)
+            }
+            "ACTIVITY_TYPE_DOES_NOT_EXIST" => {
+                Ok(ScheduleActivityTaskFailedCause::ActivityTypeDoesNotExist)
+            }
+            "DEFAULT_HEARTBEAT_TIMEOUT_UNDEFINED" => {
+                Ok(ScheduleActivityTaskFailedCause::DefaultHeartbeatTimeoutUndefined)
+            }
+            "DEFAULT_SCHEDULE_TO_CLOSE_TIMEOUT_UNDEFINED" => {
+                Ok(ScheduleActivityTaskFailedCause::DefaultScheduleToCloseTimeoutUndefined)
+            }
+            "DEFAULT_SCHEDULE_TO_START_TIMEOUT_UNDEFINED" => {
+                Ok(ScheduleActivityTaskFailedCause::DefaultScheduleToStartTimeoutUndefined)
+            }
+            "DEFAULT_START_TO_CLOSE_TIMEOUT_UNDEFINED" => {
+                Ok(ScheduleActivityTaskFailedCause::DefaultStartToCloseTimeoutUndefined)
+            }
+            "DEFAULT_TASK_LIST_UNDEFINED" => {
+                Ok(ScheduleActivityTaskFailedCause::DefaultTaskListUndefined)
+            }
+            "OPEN_ACTIVITIES_LIMIT_EXCEEDED" => {
+                Ok(ScheduleActivityTaskFailedCause::OpenActivitiesLimitExceeded)
+            }
+            "OPERATION_NOT_PERMITTED" => Ok(ScheduleActivityTaskFailedCause::OperationNotPermitted),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Provides details of the <code>ScheduleActivityTaskFailed</code> event.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ScheduleActivityTaskFailedEventAttributes {
@@ -1865,6 +2853,59 @@ pub struct ScheduleLambdaFunctionDecisionAttributes {
     #[serde(rename="startToCloseTimeout")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub start_to_close_timeout: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ScheduleLambdaFunctionFailedCause {
+    IdAlreadyInUse,
+    LambdaFunctionCreationRateExceeded,
+    LambdaServiceNotAvailableInRegion,
+    OpenLambdaFunctionsLimitExceeded,
+}
+
+impl Into<String> for ScheduleLambdaFunctionFailedCause {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ScheduleLambdaFunctionFailedCause {
+    fn into(self) -> &'static str {
+        match self {
+            ScheduleLambdaFunctionFailedCause::IdAlreadyInUse => "ID_ALREADY_IN_USE",
+            ScheduleLambdaFunctionFailedCause::LambdaFunctionCreationRateExceeded => {
+                "LAMBDA_FUNCTION_CREATION_RATE_EXCEEDED"
+            }
+            ScheduleLambdaFunctionFailedCause::LambdaServiceNotAvailableInRegion => {
+                "LAMBDA_SERVICE_NOT_AVAILABLE_IN_REGION"
+            }
+            ScheduleLambdaFunctionFailedCause::OpenLambdaFunctionsLimitExceeded => {
+                "OPEN_LAMBDA_FUNCTIONS_LIMIT_EXCEEDED"
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScheduleLambdaFunctionFailedCause {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ID_ALREADY_IN_USE" => Ok(ScheduleLambdaFunctionFailedCause::IdAlreadyInUse),
+            "LAMBDA_FUNCTION_CREATION_RATE_EXCEEDED" => {
+                Ok(ScheduleLambdaFunctionFailedCause::LambdaFunctionCreationRateExceeded)
+            }
+            "LAMBDA_SERVICE_NOT_AVAILABLE_IN_REGION" => {
+                Ok(ScheduleLambdaFunctionFailedCause::LambdaServiceNotAvailableInRegion)
+            }
+            "OPEN_LAMBDA_FUNCTIONS_LIMIT_EXCEEDED" => {
+                Ok(ScheduleLambdaFunctionFailedCause::OpenLambdaFunctionsLimitExceeded)
+            }
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Provides details for the <code>ScheduleLambdaFunctionFailed</code> event.</p>"]
@@ -1905,6 +2946,52 @@ pub struct SignalExternalWorkflowExecutionDecisionAttributes {
     #[doc="<p><b>Required.</b> The <code>workflowId</code> of the workflow execution to be signaled.</p>"]
     #[serde(rename="workflowId")]
     pub workflow_id: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SignalExternalWorkflowExecutionFailedCause {
+    OperationNotPermitted,
+    SignalExternalWorkflowExecutionRateExceeded,
+    UnknownExternalWorkflowExecution,
+}
+
+impl Into<String> for SignalExternalWorkflowExecutionFailedCause {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SignalExternalWorkflowExecutionFailedCause {
+    fn into(self) -> &'static str {
+        match self {
+            SignalExternalWorkflowExecutionFailedCause::OperationNotPermitted => {
+                "OPERATION_NOT_PERMITTED"
+            }
+            SignalExternalWorkflowExecutionFailedCause::SignalExternalWorkflowExecutionRateExceeded => "SIGNAL_EXTERNAL_WORKFLOW_EXECUTION_RATE_EXCEEDED",
+            SignalExternalWorkflowExecutionFailedCause::UnknownExternalWorkflowExecution => {
+                "UNKNOWN_EXTERNAL_WORKFLOW_EXECUTION"
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for SignalExternalWorkflowExecutionFailedCause {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "OPERATION_NOT_PERMITTED" => {
+                Ok(SignalExternalWorkflowExecutionFailedCause::OperationNotPermitted)
+            }
+            "SIGNAL_EXTERNAL_WORKFLOW_EXECUTION_RATE_EXCEEDED" => Ok(SignalExternalWorkflowExecutionFailedCause::SignalExternalWorkflowExecutionRateExceeded),
+            "UNKNOWN_EXTERNAL_WORKFLOW_EXECUTION" => {
+                Ok(SignalExternalWorkflowExecutionFailedCause::UnknownExternalWorkflowExecution)
+            }
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Provides details of the <code>SignalExternalWorkflowExecutionFailed</code> event.</p>"]
@@ -2025,6 +3112,108 @@ pub struct StartChildWorkflowExecutionDecisionAttributes {
     pub workflow_type: WorkflowType,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum StartChildWorkflowExecutionFailedCause {
+    ChildCreationRateExceeded,
+    DefaultChildPolicyUndefined,
+    DefaultExecutionStartToCloseTimeoutUndefined,
+    DefaultTaskListUndefined,
+    DefaultTaskStartToCloseTimeoutUndefined,
+    OpenChildrenLimitExceeded,
+    OpenWorkflowsLimitExceeded,
+    OperationNotPermitted,
+    WorkflowAlreadyRunning,
+    WorkflowTypeDeprecated,
+    WorkflowTypeDoesNotExist,
+}
+
+impl Into<String> for StartChildWorkflowExecutionFailedCause {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for StartChildWorkflowExecutionFailedCause {
+    fn into(self) -> &'static str {
+        match self {
+            StartChildWorkflowExecutionFailedCause::ChildCreationRateExceeded => {
+                "CHILD_CREATION_RATE_EXCEEDED"
+            }
+            StartChildWorkflowExecutionFailedCause::DefaultChildPolicyUndefined => {
+                "DEFAULT_CHILD_POLICY_UNDEFINED"
+            }
+            StartChildWorkflowExecutionFailedCause::DefaultExecutionStartToCloseTimeoutUndefined => "DEFAULT_EXECUTION_START_TO_CLOSE_TIMEOUT_UNDEFINED",
+            StartChildWorkflowExecutionFailedCause::DefaultTaskListUndefined => {
+                "DEFAULT_TASK_LIST_UNDEFINED"
+            }
+            StartChildWorkflowExecutionFailedCause::DefaultTaskStartToCloseTimeoutUndefined => {
+                "DEFAULT_TASK_START_TO_CLOSE_TIMEOUT_UNDEFINED"
+            }
+            StartChildWorkflowExecutionFailedCause::OpenChildrenLimitExceeded => {
+                "OPEN_CHILDREN_LIMIT_EXCEEDED"
+            }
+            StartChildWorkflowExecutionFailedCause::OpenWorkflowsLimitExceeded => {
+                "OPEN_WORKFLOWS_LIMIT_EXCEEDED"
+            }
+            StartChildWorkflowExecutionFailedCause::OperationNotPermitted => {
+                "OPERATION_NOT_PERMITTED"
+            }
+            StartChildWorkflowExecutionFailedCause::WorkflowAlreadyRunning => {
+                "WORKFLOW_ALREADY_RUNNING"
+            }
+            StartChildWorkflowExecutionFailedCause::WorkflowTypeDeprecated => {
+                "WORKFLOW_TYPE_DEPRECATED"
+            }
+            StartChildWorkflowExecutionFailedCause::WorkflowTypeDoesNotExist => {
+                "WORKFLOW_TYPE_DOES_NOT_EXIST"
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for StartChildWorkflowExecutionFailedCause {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CHILD_CREATION_RATE_EXCEEDED" => {
+                Ok(StartChildWorkflowExecutionFailedCause::ChildCreationRateExceeded)
+            }
+            "DEFAULT_CHILD_POLICY_UNDEFINED" => {
+                Ok(StartChildWorkflowExecutionFailedCause::DefaultChildPolicyUndefined)
+            }
+            "DEFAULT_EXECUTION_START_TO_CLOSE_TIMEOUT_UNDEFINED" => Ok(StartChildWorkflowExecutionFailedCause::DefaultExecutionStartToCloseTimeoutUndefined),
+            "DEFAULT_TASK_LIST_UNDEFINED" => {
+                Ok(StartChildWorkflowExecutionFailedCause::DefaultTaskListUndefined)
+            }
+            "DEFAULT_TASK_START_TO_CLOSE_TIMEOUT_UNDEFINED" => {
+                Ok(StartChildWorkflowExecutionFailedCause::DefaultTaskStartToCloseTimeoutUndefined)
+            }
+            "OPEN_CHILDREN_LIMIT_EXCEEDED" => {
+                Ok(StartChildWorkflowExecutionFailedCause::OpenChildrenLimitExceeded)
+            }
+            "OPEN_WORKFLOWS_LIMIT_EXCEEDED" => {
+                Ok(StartChildWorkflowExecutionFailedCause::OpenWorkflowsLimitExceeded)
+            }
+            "OPERATION_NOT_PERMITTED" => {
+                Ok(StartChildWorkflowExecutionFailedCause::OperationNotPermitted)
+            }
+            "WORKFLOW_ALREADY_RUNNING" => {
+                Ok(StartChildWorkflowExecutionFailedCause::WorkflowAlreadyRunning)
+            }
+            "WORKFLOW_TYPE_DEPRECATED" => {
+                Ok(StartChildWorkflowExecutionFailedCause::WorkflowTypeDeprecated)
+            }
+            "WORKFLOW_TYPE_DOES_NOT_EXIST" => {
+                Ok(StartChildWorkflowExecutionFailedCause::WorkflowTypeDoesNotExist)
+            }
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Provides details of the <code>StartChildWorkflowExecutionFailed</code> event.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct StartChildWorkflowExecutionFailedEventAttributes {
@@ -2096,6 +3285,38 @@ pub struct StartChildWorkflowExecutionInitiatedEventAttributes {
     pub workflow_type: WorkflowType,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum StartLambdaFunctionFailedCause {
+    AssumeRoleFailed,
+}
+
+impl Into<String> for StartLambdaFunctionFailedCause {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for StartLambdaFunctionFailedCause {
+    fn into(self) -> &'static str {
+        match self {
+            StartLambdaFunctionFailedCause::AssumeRoleFailed => "ASSUME_ROLE_FAILED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for StartLambdaFunctionFailedCause {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ASSUME_ROLE_FAILED" => Ok(StartLambdaFunctionFailedCause::AssumeRoleFailed),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Provides details for the <code>StartLambdaFunctionFailed</code> event.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct StartLambdaFunctionFailedEventAttributes {
@@ -2126,6 +3347,47 @@ pub struct StartTimerDecisionAttributes {
     #[doc="<p><b>Required.</b> The unique ID of the timer.</p> <p>The specified string must not start or end with whitespace. It must not contain a <code>:</code> (colon), <code>/</code> (slash), <code>|</code> (vertical bar), or any control characters (\\u0000-\\u001f | \\u007f - \\u009f). Also, it must not contain the literal string quotarnquot.</p>"]
     #[serde(rename="timerId")]
     pub timer_id: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum StartTimerFailedCause {
+    OpenTimersLimitExceeded,
+    OperationNotPermitted,
+    TimerCreationRateExceeded,
+    TimerIdAlreadyInUse,
+}
+
+impl Into<String> for StartTimerFailedCause {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for StartTimerFailedCause {
+    fn into(self) -> &'static str {
+        match self {
+            StartTimerFailedCause::OpenTimersLimitExceeded => "OPEN_TIMERS_LIMIT_EXCEEDED",
+            StartTimerFailedCause::OperationNotPermitted => "OPERATION_NOT_PERMITTED",
+            StartTimerFailedCause::TimerCreationRateExceeded => "TIMER_CREATION_RATE_EXCEEDED",
+            StartTimerFailedCause::TimerIdAlreadyInUse => "TIMER_ID_ALREADY_IN_USE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for StartTimerFailedCause {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "OPEN_TIMERS_LIMIT_EXCEEDED" => Ok(StartTimerFailedCause::OpenTimersLimitExceeded),
+            "OPERATION_NOT_PERMITTED" => Ok(StartTimerFailedCause::OperationNotPermitted),
+            "TIMER_CREATION_RATE_EXCEEDED" => Ok(StartTimerFailedCause::TimerCreationRateExceeded),
+            "TIMER_ID_ALREADY_IN_USE" => Ok(StartTimerFailedCause::TimerIdAlreadyInUse),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Provides details of the <code>StartTimerFailed</code> event.</p>"]
@@ -2281,6 +3543,38 @@ pub struct WorkflowExecution {
     #[doc="<p>The user defined identifier associated with the workflow execution.</p>"]
     #[serde(rename="workflowId")]
     pub workflow_id: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum WorkflowExecutionCancelRequestedCause {
+    ChildPolicyApplied,
+}
+
+impl Into<String> for WorkflowExecutionCancelRequestedCause {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for WorkflowExecutionCancelRequestedCause {
+    fn into(self) -> &'static str {
+        match self {
+            WorkflowExecutionCancelRequestedCause::ChildPolicyApplied => "CHILD_POLICY_APPLIED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for WorkflowExecutionCancelRequestedCause {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CHILD_POLICY_APPLIED" => Ok(WorkflowExecutionCancelRequestedCause::ChildPolicyApplied),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Provides details of the <code>WorkflowExecutionCancelRequested</code> event.</p>"]
@@ -2587,6 +3881,44 @@ pub struct WorkflowExecutionStartedEventAttributes {
     pub workflow_type: WorkflowType,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum WorkflowExecutionTerminatedCause {
+    ChildPolicyApplied,
+    EventLimitExceeded,
+    OperatorInitiated,
+}
+
+impl Into<String> for WorkflowExecutionTerminatedCause {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for WorkflowExecutionTerminatedCause {
+    fn into(self) -> &'static str {
+        match self {
+            WorkflowExecutionTerminatedCause::ChildPolicyApplied => "CHILD_POLICY_APPLIED",
+            WorkflowExecutionTerminatedCause::EventLimitExceeded => "EVENT_LIMIT_EXCEEDED",
+            WorkflowExecutionTerminatedCause::OperatorInitiated => "OPERATOR_INITIATED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for WorkflowExecutionTerminatedCause {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CHILD_POLICY_APPLIED" => Ok(WorkflowExecutionTerminatedCause::ChildPolicyApplied),
+            "EVENT_LIMIT_EXCEEDED" => Ok(WorkflowExecutionTerminatedCause::EventLimitExceeded),
+            "OPERATOR_INITIATED" => Ok(WorkflowExecutionTerminatedCause::OperatorInitiated),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Provides details of the <code>WorkflowExecutionTerminated</code> event.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct WorkflowExecutionTerminatedEventAttributes {
@@ -2616,6 +3948,38 @@ pub struct WorkflowExecutionTimedOutEventAttributes {
     #[doc="<p>The type of timeout that caused this event.</p>"]
     #[serde(rename="timeoutType")]
     pub timeout_type: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum WorkflowExecutionTimeoutType {
+    StartToClose,
+}
+
+impl Into<String> for WorkflowExecutionTimeoutType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for WorkflowExecutionTimeoutType {
+    fn into(self) -> &'static str {
+        match self {
+            WorkflowExecutionTimeoutType::StartToClose => "START_TO_CLOSE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for WorkflowExecutionTimeoutType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "START_TO_CLOSE" => Ok(WorkflowExecutionTimeoutType::StartToClose),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Represents a workflow type.</p>"]
@@ -5455,7 +6819,7 @@ impl<P, D> Swf for SwfClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<WorkflowExecutionCount>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(CountClosedWorkflowExecutionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5481,7 +6845,7 @@ impl<P, D> Swf for SwfClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<WorkflowExecutionCount>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(CountOpenWorkflowExecutionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5506,7 +6870,7 @@ impl<P, D> Swf for SwfClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<PendingTaskCount>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(CountPendingActivityTasksError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5531,7 +6895,7 @@ impl<P, D> Swf for SwfClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<PendingTaskCount>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(CountPendingDecisionTasksError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5556,7 +6920,7 @@ impl<P, D> Swf for SwfClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(DeprecateActivityTypeError::from_body(String::from_utf8_lossy(&response.body)
                                                               .as_ref()))
@@ -5579,7 +6943,7 @@ impl<P, D> Swf for SwfClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(DeprecateDomainError::from_body(String::from_utf8_lossy(&response.body)
                                                         .as_ref()))
@@ -5605,7 +6969,7 @@ impl<P, D> Swf for SwfClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(DeprecateWorkflowTypeError::from_body(String::from_utf8_lossy(&response.body)
                                                               .as_ref()))
@@ -5630,7 +6994,7 @@ impl<P, D> Swf for SwfClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ActivityTypeDetail>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5657,7 +7021,7 @@ impl<P, D> Swf for SwfClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<DomainDetail>(String::from_utf8_lossy(&response.body)
                                                             .as_ref())
                            .unwrap())
@@ -5688,7 +7052,7 @@ impl<P, D> Swf for SwfClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<WorkflowExecutionDetail>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeWorkflowExecutionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5712,7 +7076,7 @@ impl<P, D> Swf for SwfClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<WorkflowTypeDetail>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5740,7 +7104,7 @@ impl<P, D> Swf for SwfClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<History>(String::from_utf8_lossy(&response.body)
                                                        .as_ref())
                            .unwrap())
@@ -5766,7 +7130,7 @@ impl<P, D> Swf for SwfClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ActivityTypeInfos>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5795,7 +7159,7 @@ impl<P, D> Swf for SwfClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<WorkflowExecutionInfos>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListClosedWorkflowExecutionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5817,7 +7181,7 @@ impl<P, D> Swf for SwfClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<DomainInfos>(String::from_utf8_lossy(&response.body)
                                                            .as_ref())
                            .unwrap())
@@ -5845,7 +7209,7 @@ impl<P, D> Swf for SwfClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<WorkflowExecutionInfos>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListOpenWorkflowExecutionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5869,7 +7233,7 @@ impl<P, D> Swf for SwfClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<WorkflowTypeInfos>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5896,7 +7260,7 @@ impl<P, D> Swf for SwfClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<ActivityTask>(String::from_utf8_lossy(&response.body)
                                                             .as_ref())
                            .unwrap())
@@ -5925,7 +7289,7 @@ impl<P, D> Swf for SwfClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<DecisionTask>(String::from_utf8_lossy(&response.body)
                                                             .as_ref())
                            .unwrap())
@@ -5956,7 +7320,7 @@ impl<P, D> Swf for SwfClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ActivityTaskStatus>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(RecordActivityTaskHeartbeatError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5980,7 +7344,7 @@ impl<P, D> Swf for SwfClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(RegisterActivityTypeError::from_body(String::from_utf8_lossy(&response.body)
                                                              .as_ref()))
@@ -6003,7 +7367,7 @@ impl<P, D> Swf for SwfClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(RegisterDomainError::from_body(String::from_utf8_lossy(&response.body)
                                                        .as_ref()))
@@ -6028,7 +7392,7 @@ impl<P, D> Swf for SwfClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(RegisterWorkflowTypeError::from_body(String::from_utf8_lossy(&response.body)
                                                              .as_ref()))
@@ -6054,7 +7418,7 @@ impl<P, D> Swf for SwfClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(RequestCancelWorkflowExecutionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -6077,7 +7441,7 @@ impl<P, D> Swf for SwfClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(RespondActivityTaskCanceledError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -6100,7 +7464,7 @@ impl<P, D> Swf for SwfClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(RespondActivityTaskCompletedError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -6123,7 +7487,7 @@ impl<P, D> Swf for SwfClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(RespondActivityTaskFailedError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -6146,7 +7510,7 @@ impl<P, D> Swf for SwfClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(RespondDecisionTaskCompletedError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -6169,7 +7533,7 @@ impl<P, D> Swf for SwfClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(SignalWorkflowExecutionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -6192,7 +7556,7 @@ impl<P, D> Swf for SwfClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<Run>(String::from_utf8_lossy(&response.body).as_ref())
                        .unwrap())
             }
@@ -6221,7 +7585,7 @@ impl<P, D> Swf for SwfClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(TerminateWorkflowExecutionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }

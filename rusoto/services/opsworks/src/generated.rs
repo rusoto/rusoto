@@ -11,15 +11,11 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -100,6 +96,132 @@ pub struct App {
     pub type_: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AppAttributesKeys {
+    AutoBundleOnDeploy,
+    AwsFlowRubySettings,
+    DocumentRoot,
+    RailsEnv,
+}
+
+impl Into<String> for AppAttributesKeys {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AppAttributesKeys {
+    fn into(self) -> &'static str {
+        match self {
+            AppAttributesKeys::AutoBundleOnDeploy => "AutoBundleOnDeploy",
+            AppAttributesKeys::AwsFlowRubySettings => "AwsFlowRubySettings",
+            AppAttributesKeys::DocumentRoot => "DocumentRoot",
+            AppAttributesKeys::RailsEnv => "RailsEnv",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AppAttributesKeys {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AutoBundleOnDeploy" => Ok(AppAttributesKeys::AutoBundleOnDeploy),
+            "AwsFlowRubySettings" => Ok(AppAttributesKeys::AwsFlowRubySettings),
+            "DocumentRoot" => Ok(AppAttributesKeys::DocumentRoot),
+            "RailsEnv" => Ok(AppAttributesKeys::RailsEnv),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AppType {
+    AwsFlowRuby,
+    Java,
+    Nodejs,
+    Other,
+    Php,
+    Rails,
+    Static,
+}
+
+impl Into<String> for AppType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AppType {
+    fn into(self) -> &'static str {
+        match self {
+            AppType::AwsFlowRuby => "aws-flow-ruby",
+            AppType::Java => "java",
+            AppType::Nodejs => "nodejs",
+            AppType::Other => "other",
+            AppType::Php => "php",
+            AppType::Rails => "rails",
+            AppType::Static => "static",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AppType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "aws-flow-ruby" => Ok(AppType::AwsFlowRuby),
+            "java" => Ok(AppType::Java),
+            "nodejs" => Ok(AppType::Nodejs),
+            "other" => Ok(AppType::Other),
+            "php" => Ok(AppType::Php),
+            "rails" => Ok(AppType::Rails),
+            "static" => Ok(AppType::Static),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Architecture {
+    I386,
+    X8664,
+}
+
+impl Into<String> for Architecture {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Architecture {
+    fn into(self) -> &'static str {
+        match self {
+            Architecture::I386 => "i386",
+            Architecture::X8664 => "x86_64",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Architecture {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "i386" => Ok(Architecture::I386),
+            "x86_64" => Ok(Architecture::X8664),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct AssignInstanceRequest {
     #[doc="<p>The instance ID.</p>"]
@@ -173,6 +295,41 @@ pub struct AutoScalingThresholds {
     #[serde(rename="ThresholdsWaitTime")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub thresholds_wait_time: Option<i64>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AutoScalingType {
+    Load,
+    Timer,
+}
+
+impl Into<String> for AutoScalingType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AutoScalingType {
+    fn into(self) -> &'static str {
+        match self {
+            AutoScalingType::Load => "load",
+            AutoScalingType::Timer => "timer",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AutoScalingType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "load" => Ok(AutoScalingType::Load),
+            "timer" => Ok(AutoScalingType::Timer),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Describes a block device mapping. This data type maps directly to the Amazon EC2 <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_BlockDeviceMapping.html\">BlockDeviceMapping</a> data type. </p>"]
@@ -320,6 +477,346 @@ pub struct CloudWatchLogsConfiguration {
     pub log_streams: Option<Vec<CloudWatchLogsLogStream>>,
 }
 
+#[doc="<p>Specifies the encoding of the log file so that the file can be read correctly. The default is <code>utf_8</code>. Encodings supported by Python <code>codecs.decode()</code> can be used here.</p>"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CloudWatchLogsEncoding {
+    Ascii,
+    Big5,
+    Big5Hkscs,
+    Cp037,
+    Cp1006,
+    Cp1026,
+    Cp1140,
+    Cp1250,
+    Cp1251,
+    Cp1252,
+    Cp1253,
+    Cp1254,
+    Cp1255,
+    Cp1256,
+    Cp1257,
+    Cp1258,
+    Cp424,
+    Cp437,
+    Cp500,
+    Cp720,
+    Cp737,
+    Cp775,
+    Cp850,
+    Cp852,
+    Cp855,
+    Cp856,
+    Cp857,
+    Cp858,
+    Cp860,
+    Cp861,
+    Cp862,
+    Cp863,
+    Cp864,
+    Cp865,
+    Cp866,
+    Cp869,
+    Cp874,
+    Cp875,
+    Cp932,
+    Cp949,
+    Cp950,
+    EucJis2004,
+    EucJisx0213,
+    EucJp,
+    EucKr,
+    Gb18030,
+    Gb2312,
+    Gbk,
+    Hz,
+    Iso2022Jp,
+    Iso2022Jp1,
+    Iso2022Jp2,
+    Iso2022Jp2004,
+    Iso2022Jp3,
+    Iso2022JpExt,
+    Iso2022Kr,
+    Iso885910,
+    Iso885913,
+    Iso885914,
+    Iso885915,
+    Iso885916,
+    Iso88592,
+    Iso88593,
+    Iso88594,
+    Iso88595,
+    Iso88596,
+    Iso88597,
+    Iso88598,
+    Iso88599,
+    Johab,
+    Koi8R,
+    Koi8U,
+    Latin1,
+    MacCyrillic,
+    MacGreek,
+    MacIceland,
+    MacLatin2,
+    MacRoman,
+    MacTurkish,
+    Ptcp154,
+    ShiftJis,
+    ShiftJis2004,
+    ShiftJisx0213,
+    Utf16,
+    Utf16Be,
+    Utf16Le,
+    Utf32,
+    Utf32Be,
+    Utf32Le,
+    Utf7,
+    Utf8,
+    Utf8Sig,
+}
+
+impl Into<String> for CloudWatchLogsEncoding {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CloudWatchLogsEncoding {
+    fn into(self) -> &'static str {
+        match self {
+            CloudWatchLogsEncoding::Ascii => "ascii",
+            CloudWatchLogsEncoding::Big5 => "big5",
+            CloudWatchLogsEncoding::Big5Hkscs => "big5hkscs",
+            CloudWatchLogsEncoding::Cp037 => "cp037",
+            CloudWatchLogsEncoding::Cp1006 => "cp1006",
+            CloudWatchLogsEncoding::Cp1026 => "cp1026",
+            CloudWatchLogsEncoding::Cp1140 => "cp1140",
+            CloudWatchLogsEncoding::Cp1250 => "cp1250",
+            CloudWatchLogsEncoding::Cp1251 => "cp1251",
+            CloudWatchLogsEncoding::Cp1252 => "cp1252",
+            CloudWatchLogsEncoding::Cp1253 => "cp1253",
+            CloudWatchLogsEncoding::Cp1254 => "cp1254",
+            CloudWatchLogsEncoding::Cp1255 => "cp1255",
+            CloudWatchLogsEncoding::Cp1256 => "cp1256",
+            CloudWatchLogsEncoding::Cp1257 => "cp1257",
+            CloudWatchLogsEncoding::Cp1258 => "cp1258",
+            CloudWatchLogsEncoding::Cp424 => "cp424",
+            CloudWatchLogsEncoding::Cp437 => "cp437",
+            CloudWatchLogsEncoding::Cp500 => "cp500",
+            CloudWatchLogsEncoding::Cp720 => "cp720",
+            CloudWatchLogsEncoding::Cp737 => "cp737",
+            CloudWatchLogsEncoding::Cp775 => "cp775",
+            CloudWatchLogsEncoding::Cp850 => "cp850",
+            CloudWatchLogsEncoding::Cp852 => "cp852",
+            CloudWatchLogsEncoding::Cp855 => "cp855",
+            CloudWatchLogsEncoding::Cp856 => "cp856",
+            CloudWatchLogsEncoding::Cp857 => "cp857",
+            CloudWatchLogsEncoding::Cp858 => "cp858",
+            CloudWatchLogsEncoding::Cp860 => "cp860",
+            CloudWatchLogsEncoding::Cp861 => "cp861",
+            CloudWatchLogsEncoding::Cp862 => "cp862",
+            CloudWatchLogsEncoding::Cp863 => "cp863",
+            CloudWatchLogsEncoding::Cp864 => "cp864",
+            CloudWatchLogsEncoding::Cp865 => "cp865",
+            CloudWatchLogsEncoding::Cp866 => "cp866",
+            CloudWatchLogsEncoding::Cp869 => "cp869",
+            CloudWatchLogsEncoding::Cp874 => "cp874",
+            CloudWatchLogsEncoding::Cp875 => "cp875",
+            CloudWatchLogsEncoding::Cp932 => "cp932",
+            CloudWatchLogsEncoding::Cp949 => "cp949",
+            CloudWatchLogsEncoding::Cp950 => "cp950",
+            CloudWatchLogsEncoding::EucJis2004 => "euc_jis_2004",
+            CloudWatchLogsEncoding::EucJisx0213 => "euc_jisx0213",
+            CloudWatchLogsEncoding::EucJp => "euc_jp",
+            CloudWatchLogsEncoding::EucKr => "euc_kr",
+            CloudWatchLogsEncoding::Gb18030 => "gb18030",
+            CloudWatchLogsEncoding::Gb2312 => "gb2312",
+            CloudWatchLogsEncoding::Gbk => "gbk",
+            CloudWatchLogsEncoding::Hz => "hz",
+            CloudWatchLogsEncoding::Iso2022Jp => "iso2022_jp",
+            CloudWatchLogsEncoding::Iso2022Jp1 => "iso2022_jp_1",
+            CloudWatchLogsEncoding::Iso2022Jp2 => "iso2022_jp_2",
+            CloudWatchLogsEncoding::Iso2022Jp2004 => "iso2022_jp_2004",
+            CloudWatchLogsEncoding::Iso2022Jp3 => "iso2022_jp_3",
+            CloudWatchLogsEncoding::Iso2022JpExt => "iso2022_jp_ext",
+            CloudWatchLogsEncoding::Iso2022Kr => "iso2022_kr",
+            CloudWatchLogsEncoding::Iso885910 => "iso8859_10",
+            CloudWatchLogsEncoding::Iso885913 => "iso8859_13",
+            CloudWatchLogsEncoding::Iso885914 => "iso8859_14",
+            CloudWatchLogsEncoding::Iso885915 => "iso8859_15",
+            CloudWatchLogsEncoding::Iso885916 => "iso8859_16",
+            CloudWatchLogsEncoding::Iso88592 => "iso8859_2",
+            CloudWatchLogsEncoding::Iso88593 => "iso8859_3",
+            CloudWatchLogsEncoding::Iso88594 => "iso8859_4",
+            CloudWatchLogsEncoding::Iso88595 => "iso8859_5",
+            CloudWatchLogsEncoding::Iso88596 => "iso8859_6",
+            CloudWatchLogsEncoding::Iso88597 => "iso8859_7",
+            CloudWatchLogsEncoding::Iso88598 => "iso8859_8",
+            CloudWatchLogsEncoding::Iso88599 => "iso8859_9",
+            CloudWatchLogsEncoding::Johab => "johab",
+            CloudWatchLogsEncoding::Koi8R => "koi8_r",
+            CloudWatchLogsEncoding::Koi8U => "koi8_u",
+            CloudWatchLogsEncoding::Latin1 => "latin_1",
+            CloudWatchLogsEncoding::MacCyrillic => "mac_cyrillic",
+            CloudWatchLogsEncoding::MacGreek => "mac_greek",
+            CloudWatchLogsEncoding::MacIceland => "mac_iceland",
+            CloudWatchLogsEncoding::MacLatin2 => "mac_latin2",
+            CloudWatchLogsEncoding::MacRoman => "mac_roman",
+            CloudWatchLogsEncoding::MacTurkish => "mac_turkish",
+            CloudWatchLogsEncoding::Ptcp154 => "ptcp154",
+            CloudWatchLogsEncoding::ShiftJis => "shift_jis",
+            CloudWatchLogsEncoding::ShiftJis2004 => "shift_jis_2004",
+            CloudWatchLogsEncoding::ShiftJisx0213 => "shift_jisx0213",
+            CloudWatchLogsEncoding::Utf16 => "utf_16",
+            CloudWatchLogsEncoding::Utf16Be => "utf_16_be",
+            CloudWatchLogsEncoding::Utf16Le => "utf_16_le",
+            CloudWatchLogsEncoding::Utf32 => "utf_32",
+            CloudWatchLogsEncoding::Utf32Be => "utf_32_be",
+            CloudWatchLogsEncoding::Utf32Le => "utf_32_le",
+            CloudWatchLogsEncoding::Utf7 => "utf_7",
+            CloudWatchLogsEncoding::Utf8 => "utf_8",
+            CloudWatchLogsEncoding::Utf8Sig => "utf_8_sig",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CloudWatchLogsEncoding {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ascii" => Ok(CloudWatchLogsEncoding::Ascii),
+            "big5" => Ok(CloudWatchLogsEncoding::Big5),
+            "big5hkscs" => Ok(CloudWatchLogsEncoding::Big5Hkscs),
+            "cp037" => Ok(CloudWatchLogsEncoding::Cp037),
+            "cp1006" => Ok(CloudWatchLogsEncoding::Cp1006),
+            "cp1026" => Ok(CloudWatchLogsEncoding::Cp1026),
+            "cp1140" => Ok(CloudWatchLogsEncoding::Cp1140),
+            "cp1250" => Ok(CloudWatchLogsEncoding::Cp1250),
+            "cp1251" => Ok(CloudWatchLogsEncoding::Cp1251),
+            "cp1252" => Ok(CloudWatchLogsEncoding::Cp1252),
+            "cp1253" => Ok(CloudWatchLogsEncoding::Cp1253),
+            "cp1254" => Ok(CloudWatchLogsEncoding::Cp1254),
+            "cp1255" => Ok(CloudWatchLogsEncoding::Cp1255),
+            "cp1256" => Ok(CloudWatchLogsEncoding::Cp1256),
+            "cp1257" => Ok(CloudWatchLogsEncoding::Cp1257),
+            "cp1258" => Ok(CloudWatchLogsEncoding::Cp1258),
+            "cp424" => Ok(CloudWatchLogsEncoding::Cp424),
+            "cp437" => Ok(CloudWatchLogsEncoding::Cp437),
+            "cp500" => Ok(CloudWatchLogsEncoding::Cp500),
+            "cp720" => Ok(CloudWatchLogsEncoding::Cp720),
+            "cp737" => Ok(CloudWatchLogsEncoding::Cp737),
+            "cp775" => Ok(CloudWatchLogsEncoding::Cp775),
+            "cp850" => Ok(CloudWatchLogsEncoding::Cp850),
+            "cp852" => Ok(CloudWatchLogsEncoding::Cp852),
+            "cp855" => Ok(CloudWatchLogsEncoding::Cp855),
+            "cp856" => Ok(CloudWatchLogsEncoding::Cp856),
+            "cp857" => Ok(CloudWatchLogsEncoding::Cp857),
+            "cp858" => Ok(CloudWatchLogsEncoding::Cp858),
+            "cp860" => Ok(CloudWatchLogsEncoding::Cp860),
+            "cp861" => Ok(CloudWatchLogsEncoding::Cp861),
+            "cp862" => Ok(CloudWatchLogsEncoding::Cp862),
+            "cp863" => Ok(CloudWatchLogsEncoding::Cp863),
+            "cp864" => Ok(CloudWatchLogsEncoding::Cp864),
+            "cp865" => Ok(CloudWatchLogsEncoding::Cp865),
+            "cp866" => Ok(CloudWatchLogsEncoding::Cp866),
+            "cp869" => Ok(CloudWatchLogsEncoding::Cp869),
+            "cp874" => Ok(CloudWatchLogsEncoding::Cp874),
+            "cp875" => Ok(CloudWatchLogsEncoding::Cp875),
+            "cp932" => Ok(CloudWatchLogsEncoding::Cp932),
+            "cp949" => Ok(CloudWatchLogsEncoding::Cp949),
+            "cp950" => Ok(CloudWatchLogsEncoding::Cp950),
+            "euc_jis_2004" => Ok(CloudWatchLogsEncoding::EucJis2004),
+            "euc_jisx0213" => Ok(CloudWatchLogsEncoding::EucJisx0213),
+            "euc_jp" => Ok(CloudWatchLogsEncoding::EucJp),
+            "euc_kr" => Ok(CloudWatchLogsEncoding::EucKr),
+            "gb18030" => Ok(CloudWatchLogsEncoding::Gb18030),
+            "gb2312" => Ok(CloudWatchLogsEncoding::Gb2312),
+            "gbk" => Ok(CloudWatchLogsEncoding::Gbk),
+            "hz" => Ok(CloudWatchLogsEncoding::Hz),
+            "iso2022_jp" => Ok(CloudWatchLogsEncoding::Iso2022Jp),
+            "iso2022_jp_1" => Ok(CloudWatchLogsEncoding::Iso2022Jp1),
+            "iso2022_jp_2" => Ok(CloudWatchLogsEncoding::Iso2022Jp2),
+            "iso2022_jp_2004" => Ok(CloudWatchLogsEncoding::Iso2022Jp2004),
+            "iso2022_jp_3" => Ok(CloudWatchLogsEncoding::Iso2022Jp3),
+            "iso2022_jp_ext" => Ok(CloudWatchLogsEncoding::Iso2022JpExt),
+            "iso2022_kr" => Ok(CloudWatchLogsEncoding::Iso2022Kr),
+            "iso8859_10" => Ok(CloudWatchLogsEncoding::Iso885910),
+            "iso8859_13" => Ok(CloudWatchLogsEncoding::Iso885913),
+            "iso8859_14" => Ok(CloudWatchLogsEncoding::Iso885914),
+            "iso8859_15" => Ok(CloudWatchLogsEncoding::Iso885915),
+            "iso8859_16" => Ok(CloudWatchLogsEncoding::Iso885916),
+            "iso8859_2" => Ok(CloudWatchLogsEncoding::Iso88592),
+            "iso8859_3" => Ok(CloudWatchLogsEncoding::Iso88593),
+            "iso8859_4" => Ok(CloudWatchLogsEncoding::Iso88594),
+            "iso8859_5" => Ok(CloudWatchLogsEncoding::Iso88595),
+            "iso8859_6" => Ok(CloudWatchLogsEncoding::Iso88596),
+            "iso8859_7" => Ok(CloudWatchLogsEncoding::Iso88597),
+            "iso8859_8" => Ok(CloudWatchLogsEncoding::Iso88598),
+            "iso8859_9" => Ok(CloudWatchLogsEncoding::Iso88599),
+            "johab" => Ok(CloudWatchLogsEncoding::Johab),
+            "koi8_r" => Ok(CloudWatchLogsEncoding::Koi8R),
+            "koi8_u" => Ok(CloudWatchLogsEncoding::Koi8U),
+            "latin_1" => Ok(CloudWatchLogsEncoding::Latin1),
+            "mac_cyrillic" => Ok(CloudWatchLogsEncoding::MacCyrillic),
+            "mac_greek" => Ok(CloudWatchLogsEncoding::MacGreek),
+            "mac_iceland" => Ok(CloudWatchLogsEncoding::MacIceland),
+            "mac_latin2" => Ok(CloudWatchLogsEncoding::MacLatin2),
+            "mac_roman" => Ok(CloudWatchLogsEncoding::MacRoman),
+            "mac_turkish" => Ok(CloudWatchLogsEncoding::MacTurkish),
+            "ptcp154" => Ok(CloudWatchLogsEncoding::Ptcp154),
+            "shift_jis" => Ok(CloudWatchLogsEncoding::ShiftJis),
+            "shift_jis_2004" => Ok(CloudWatchLogsEncoding::ShiftJis2004),
+            "shift_jisx0213" => Ok(CloudWatchLogsEncoding::ShiftJisx0213),
+            "utf_16" => Ok(CloudWatchLogsEncoding::Utf16),
+            "utf_16_be" => Ok(CloudWatchLogsEncoding::Utf16Be),
+            "utf_16_le" => Ok(CloudWatchLogsEncoding::Utf16Le),
+            "utf_32" => Ok(CloudWatchLogsEncoding::Utf32),
+            "utf_32_be" => Ok(CloudWatchLogsEncoding::Utf32Be),
+            "utf_32_le" => Ok(CloudWatchLogsEncoding::Utf32Le),
+            "utf_7" => Ok(CloudWatchLogsEncoding::Utf7),
+            "utf_8" => Ok(CloudWatchLogsEncoding::Utf8),
+            "utf_8_sig" => Ok(CloudWatchLogsEncoding::Utf8Sig),
+            _ => Err(()),
+        }
+    }
+}
+
+#[doc="<p>Specifies where to start to read data (start_of_file or end_of_file). The default is start_of_file. It's only used if there is no state persisted for that log stream.</p>"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CloudWatchLogsInitialPosition {
+    EndOfFile,
+    StartOfFile,
+}
+
+impl Into<String> for CloudWatchLogsInitialPosition {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CloudWatchLogsInitialPosition {
+    fn into(self) -> &'static str {
+        match self {
+            CloudWatchLogsInitialPosition::EndOfFile => "end_of_file",
+            CloudWatchLogsInitialPosition::StartOfFile => "start_of_file",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CloudWatchLogsInitialPosition {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "end_of_file" => Ok(CloudWatchLogsInitialPosition::EndOfFile),
+            "start_of_file" => Ok(CloudWatchLogsInitialPosition::StartOfFile),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Describes the Amazon CloudWatch logs configuration for a layer. For detailed information about members of this data type, see the <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AgentReference.html\">CloudWatch Logs Agent Reference</a>.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct CloudWatchLogsLogStream {
@@ -367,6 +864,41 @@ pub struct CloudWatchLogsLogStream {
     #[serde(rename="TimeZone")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub time_zone: Option<String>,
+}
+
+#[doc="<p>The preferred time zone for logs streamed to CloudWatch Logs. Valid values are <code>LOCAL</code> and <code>UTC</code>, for Coordinated Universal Time.</p>"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CloudWatchLogsTimeZone {
+    Local,
+    Utc,
+}
+
+impl Into<String> for CloudWatchLogsTimeZone {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CloudWatchLogsTimeZone {
+    fn into(self) -> &'static str {
+        match self {
+            CloudWatchLogsTimeZone::Local => "LOCAL",
+            CloudWatchLogsTimeZone::Utc => "UTC",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CloudWatchLogsTimeZone {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "LOCAL" => Ok(CloudWatchLogsTimeZone::Local),
+            "UTC" => Ok(CloudWatchLogsTimeZone::Utc),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Describes a command.</p>"]
@@ -908,6 +1440,71 @@ pub struct DeploymentCommand {
     #[doc="<p>Specifies the operation. You can specify only one command.</p> <p>For stacks, the following commands are available:</p> <ul> <li> <p> <code>execute_recipes</code>: Execute one or more recipes. To specify the recipes, set an <code>Args</code> parameter named <code>recipes</code> to the list of recipes to be executed. For example, to execute <code>phpapp::appsetup</code>, set <code>Args</code> to <code>{\"recipes\":[\"phpapp::appsetup\"]}</code>.</p> </li> <li> <p> <code>install_dependencies</code>: Install the stack's dependencies.</p> </li> <li> <p> <code>update_custom_cookbooks</code>: Update the stack's custom cookbooks.</p> </li> <li> <p> <code>update_dependencies</code>: Update the stack's dependencies.</p> </li> </ul> <note> <p>The update_dependencies and install_dependencies commands are supported only for Linux instances. You can run the commands successfully on Windows instances, but they do nothing.</p> </note> <p>For apps, the following commands are available:</p> <ul> <li> <p> <code>deploy</code>: Deploy an app. Ruby on Rails apps have an optional <code>Args</code> parameter named <code>migrate</code>. Set <code>Args</code> to {\"migrate\":[\"true\"]} to migrate the database. The default setting is {\"migrate\":[\"false\"]}.</p> </li> <li> <p> <code>rollback</code> Roll the app back to the previous version. When you update an app, AWS OpsWorks Stacks stores the previous version, up to a maximum of five versions. You can use this command to roll an app back as many as four versions.</p> </li> <li> <p> <code>start</code>: Start the app's web or application server.</p> </li> <li> <p> <code>stop</code>: Stop the app's web or application server.</p> </li> <li> <p> <code>restart</code>: Restart the app's web or application server.</p> </li> <li> <p> <code>undeploy</code>: Undeploy the app.</p> </li> </ul>"]
     #[serde(rename="Name")]
     pub name: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DeploymentCommandName {
+    Configure,
+    Deploy,
+    ExecuteRecipes,
+    InstallDependencies,
+    Restart,
+    Rollback,
+    Setup,
+    Start,
+    Stop,
+    Undeploy,
+    UpdateCustomCookbooks,
+    UpdateDependencies,
+}
+
+impl Into<String> for DeploymentCommandName {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DeploymentCommandName {
+    fn into(self) -> &'static str {
+        match self {
+            DeploymentCommandName::Configure => "configure",
+            DeploymentCommandName::Deploy => "deploy",
+            DeploymentCommandName::ExecuteRecipes => "execute_recipes",
+            DeploymentCommandName::InstallDependencies => "install_dependencies",
+            DeploymentCommandName::Restart => "restart",
+            DeploymentCommandName::Rollback => "rollback",
+            DeploymentCommandName::Setup => "setup",
+            DeploymentCommandName::Start => "start",
+            DeploymentCommandName::Stop => "stop",
+            DeploymentCommandName::Undeploy => "undeploy",
+            DeploymentCommandName::UpdateCustomCookbooks => "update_custom_cookbooks",
+            DeploymentCommandName::UpdateDependencies => "update_dependencies",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeploymentCommandName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "configure" => Ok(DeploymentCommandName::Configure),
+            "deploy" => Ok(DeploymentCommandName::Deploy),
+            "execute_recipes" => Ok(DeploymentCommandName::ExecuteRecipes),
+            "install_dependencies" => Ok(DeploymentCommandName::InstallDependencies),
+            "restart" => Ok(DeploymentCommandName::Restart),
+            "rollback" => Ok(DeploymentCommandName::Rollback),
+            "setup" => Ok(DeploymentCommandName::Setup),
+            "start" => Ok(DeploymentCommandName::Start),
+            "stop" => Ok(DeploymentCommandName::Stop),
+            "undeploy" => Ok(DeploymentCommandName::Undeploy),
+            "update_custom_cookbooks" => Ok(DeploymentCommandName::UpdateCustomCookbooks),
+            "update_dependencies" => Ok(DeploymentCommandName::UpdateDependencies),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -1934,6 +2531,175 @@ pub struct Layer {
     pub volume_configurations: Option<Vec<VolumeConfiguration>>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum LayerAttributesKeys {
+    BundlerVersion,
+    EcsClusterArn,
+    EnableHaproxyStats,
+    GangliaPassword,
+    GangliaUrl,
+    GangliaUser,
+    HaproxyHealthCheckMethod,
+    HaproxyHealthCheckUrl,
+    HaproxyStatsPassword,
+    HaproxyStatsUrl,
+    HaproxyStatsUser,
+    JavaAppServer,
+    JavaAppServerVersion,
+    Jvm,
+    JvmOptions,
+    JvmVersion,
+    ManageBundler,
+    MemcachedMemory,
+    MysqlRootPassword,
+    MysqlRootPasswordUbiquitous,
+    NodejsVersion,
+    PassengerVersion,
+    RailsStack,
+    RubyVersion,
+    RubygemsVersion,
+}
+
+impl Into<String> for LayerAttributesKeys {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for LayerAttributesKeys {
+    fn into(self) -> &'static str {
+        match self {
+            LayerAttributesKeys::BundlerVersion => "BundlerVersion",
+            LayerAttributesKeys::EcsClusterArn => "EcsClusterArn",
+            LayerAttributesKeys::EnableHaproxyStats => "EnableHaproxyStats",
+            LayerAttributesKeys::GangliaPassword => "GangliaPassword",
+            LayerAttributesKeys::GangliaUrl => "GangliaUrl",
+            LayerAttributesKeys::GangliaUser => "GangliaUser",
+            LayerAttributesKeys::HaproxyHealthCheckMethod => "HaproxyHealthCheckMethod",
+            LayerAttributesKeys::HaproxyHealthCheckUrl => "HaproxyHealthCheckUrl",
+            LayerAttributesKeys::HaproxyStatsPassword => "HaproxyStatsPassword",
+            LayerAttributesKeys::HaproxyStatsUrl => "HaproxyStatsUrl",
+            LayerAttributesKeys::HaproxyStatsUser => "HaproxyStatsUser",
+            LayerAttributesKeys::JavaAppServer => "JavaAppServer",
+            LayerAttributesKeys::JavaAppServerVersion => "JavaAppServerVersion",
+            LayerAttributesKeys::Jvm => "Jvm",
+            LayerAttributesKeys::JvmOptions => "JvmOptions",
+            LayerAttributesKeys::JvmVersion => "JvmVersion",
+            LayerAttributesKeys::ManageBundler => "ManageBundler",
+            LayerAttributesKeys::MemcachedMemory => "MemcachedMemory",
+            LayerAttributesKeys::MysqlRootPassword => "MysqlRootPassword",
+            LayerAttributesKeys::MysqlRootPasswordUbiquitous => "MysqlRootPasswordUbiquitous",
+            LayerAttributesKeys::NodejsVersion => "NodejsVersion",
+            LayerAttributesKeys::PassengerVersion => "PassengerVersion",
+            LayerAttributesKeys::RailsStack => "RailsStack",
+            LayerAttributesKeys::RubyVersion => "RubyVersion",
+            LayerAttributesKeys::RubygemsVersion => "RubygemsVersion",
+        }
+    }
+}
+
+impl ::std::str::FromStr for LayerAttributesKeys {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "BundlerVersion" => Ok(LayerAttributesKeys::BundlerVersion),
+            "EcsClusterArn" => Ok(LayerAttributesKeys::EcsClusterArn),
+            "EnableHaproxyStats" => Ok(LayerAttributesKeys::EnableHaproxyStats),
+            "GangliaPassword" => Ok(LayerAttributesKeys::GangliaPassword),
+            "GangliaUrl" => Ok(LayerAttributesKeys::GangliaUrl),
+            "GangliaUser" => Ok(LayerAttributesKeys::GangliaUser),
+            "HaproxyHealthCheckMethod" => Ok(LayerAttributesKeys::HaproxyHealthCheckMethod),
+            "HaproxyHealthCheckUrl" => Ok(LayerAttributesKeys::HaproxyHealthCheckUrl),
+            "HaproxyStatsPassword" => Ok(LayerAttributesKeys::HaproxyStatsPassword),
+            "HaproxyStatsUrl" => Ok(LayerAttributesKeys::HaproxyStatsUrl),
+            "HaproxyStatsUser" => Ok(LayerAttributesKeys::HaproxyStatsUser),
+            "JavaAppServer" => Ok(LayerAttributesKeys::JavaAppServer),
+            "JavaAppServerVersion" => Ok(LayerAttributesKeys::JavaAppServerVersion),
+            "Jvm" => Ok(LayerAttributesKeys::Jvm),
+            "JvmOptions" => Ok(LayerAttributesKeys::JvmOptions),
+            "JvmVersion" => Ok(LayerAttributesKeys::JvmVersion),
+            "ManageBundler" => Ok(LayerAttributesKeys::ManageBundler),
+            "MemcachedMemory" => Ok(LayerAttributesKeys::MemcachedMemory),
+            "MysqlRootPassword" => Ok(LayerAttributesKeys::MysqlRootPassword),
+            "MysqlRootPasswordUbiquitous" => Ok(LayerAttributesKeys::MysqlRootPasswordUbiquitous),
+            "NodejsVersion" => Ok(LayerAttributesKeys::NodejsVersion),
+            "PassengerVersion" => Ok(LayerAttributesKeys::PassengerVersion),
+            "RailsStack" => Ok(LayerAttributesKeys::RailsStack),
+            "RubyVersion" => Ok(LayerAttributesKeys::RubyVersion),
+            "RubygemsVersion" => Ok(LayerAttributesKeys::RubygemsVersion),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum LayerType {
+    AwsFlowRuby,
+    Custom,
+    DbMaster,
+    EcsCluster,
+    JavaApp,
+    Lb,
+    Memcached,
+    MonitoringMaster,
+    NodejsApp,
+    PhpApp,
+    RailsApp,
+    Web,
+}
+
+impl Into<String> for LayerType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for LayerType {
+    fn into(self) -> &'static str {
+        match self {
+            LayerType::AwsFlowRuby => "aws-flow-ruby",
+            LayerType::Custom => "custom",
+            LayerType::DbMaster => "db-master",
+            LayerType::EcsCluster => "ecs-cluster",
+            LayerType::JavaApp => "java-app",
+            LayerType::Lb => "lb",
+            LayerType::Memcached => "memcached",
+            LayerType::MonitoringMaster => "monitoring-master",
+            LayerType::NodejsApp => "nodejs-app",
+            LayerType::PhpApp => "php-app",
+            LayerType::RailsApp => "rails-app",
+            LayerType::Web => "web",
+        }
+    }
+}
+
+impl ::std::str::FromStr for LayerType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "aws-flow-ruby" => Ok(LayerType::AwsFlowRuby),
+            "custom" => Ok(LayerType::Custom),
+            "db-master" => Ok(LayerType::DbMaster),
+            "ecs-cluster" => Ok(LayerType::EcsCluster),
+            "java-app" => Ok(LayerType::JavaApp),
+            "lb" => Ok(LayerType::Lb),
+            "memcached" => Ok(LayerType::Memcached),
+            "monitoring-master" => Ok(LayerType::MonitoringMaster),
+            "nodejs-app" => Ok(LayerType::NodejsApp),
+            "php-app" => Ok(LayerType::PhpApp),
+            "rails-app" => Ok(LayerType::RailsApp),
+            "web" => Ok(LayerType::Web),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Specifies the lifecycle event configuration</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct LifecycleEventConfiguration {
@@ -2278,6 +3044,41 @@ pub struct ReportedOs {
     pub version: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RootDeviceType {
+    Ebs,
+    InstanceStore,
+}
+
+impl Into<String> for RootDeviceType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RootDeviceType {
+    fn into(self) -> &'static str {
+        match self {
+            RootDeviceType::Ebs => "ebs",
+            RootDeviceType::InstanceStore => "instance-store",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RootDeviceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ebs" => Ok(RootDeviceType::Ebs),
+            "instance-store" => Ok(RootDeviceType::InstanceStore),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Describes a user's SSH information.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct SelfUserProfile {
@@ -2422,6 +3223,47 @@ pub struct Source {
     pub username: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SourceType {
+    Archive,
+    Git,
+    S3,
+    Svn,
+}
+
+impl Into<String> for SourceType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SourceType {
+    fn into(self) -> &'static str {
+        match self {
+            SourceType::Archive => "archive",
+            SourceType::Git => "git",
+            SourceType::S3 => "s3",
+            SourceType::Svn => "svn",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "archive" => Ok(SourceType::Archive),
+            "git" => Ok(SourceType::Git),
+            "s3" => Ok(SourceType::S3),
+            "svn" => Ok(SourceType::Svn),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Describes an app's SSL configuration.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct SslConfiguration {
@@ -2527,6 +3369,38 @@ pub struct Stack {
     #[serde(rename="VpcId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_id: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum StackAttributesKeys {
+    Color,
+}
+
+impl Into<String> for StackAttributesKeys {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for StackAttributesKeys {
+    fn into(self) -> &'static str {
+        match self {
+            StackAttributesKeys::Color => "Color",
+        }
+    }
+}
+
+impl ::std::str::FromStr for StackAttributesKeys {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Color" => Ok(StackAttributesKeys::Color),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Describes the configuration manager.</p>"]
@@ -3003,6 +3877,41 @@ pub struct UserProfile {
     pub ssh_username: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum VirtualizationType {
+    Hvm,
+    Paravirtual,
+}
+
+impl Into<String> for VirtualizationType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for VirtualizationType {
+    fn into(self) -> &'static str {
+        match self {
+            VirtualizationType::Hvm => "hvm",
+            VirtualizationType::Paravirtual => "paravirtual",
+        }
+    }
+}
+
+impl ::std::str::FromStr for VirtualizationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "hvm" => Ok(VirtualizationType::Hvm),
+            "paravirtual" => Ok(VirtualizationType::Paravirtual),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Describes an instance's Amazon EBS volume.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Volume {
@@ -3084,6 +3993,44 @@ pub struct VolumeConfiguration {
     #[serde(rename="VolumeType")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub volume_type: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum VolumeType {
+    Gp2,
+    Io1,
+    Standard,
+}
+
+impl Into<String> for VolumeType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for VolumeType {
+    fn into(self) -> &'static str {
+        match self {
+            VolumeType::Gp2 => "gp2",
+            VolumeType::Io1 => "io1",
+            VolumeType::Standard => "standard",
+        }
+    }
+}
+
+impl ::std::str::FromStr for VolumeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "gp2" => Ok(VolumeType::Gp2),
+            "io1" => Ok(VolumeType::Io1),
+            "standard" => Ok(VolumeType::Standard),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Describes a time-based instance's auto scaling schedule. The schedule consists of a set of key-value pairs.</p> <ul> <li> <p>The key is the time period (a UTC hour) and must be an integer from 0 - 23.</p> </li> <li> <p>The value indicates whether the instance should be online or offline for the specified period, and must be set to \"on\" or \"off\"</p> </li> </ul> <p>The default setting for all time periods is off, so you use the following parameters primarily to specify the online periods. You don't have to explicitly specify offline periods unless you want to change an online period to an offline period.</p> <p>The following example specifies that the instance should be online for four hours, from UTC 1200 - 1600. It will be off for the remainder of the day.</p> <p> <code> { \"12\":\"on\", \"13\":\"on\", \"14\":\"on\", \"15\":\"on\" } </code> </p>"]
@@ -8985,7 +9932,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(AssignInstanceError::from_body(String::from_utf8_lossy(&response.body)
                                                        .as_ref()))
@@ -9008,7 +9955,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(AssignVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
             }
@@ -9032,7 +9979,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(AssociateElasticIpError::from_body(String::from_utf8_lossy(&response.body)
                                                            .as_ref()))
@@ -9058,7 +10005,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(AttachElasticLoadBalancerError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -9078,7 +10025,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CloneStackResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(CloneStackError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -9100,7 +10047,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<CreateAppResult>(String::from_utf8_lossy(&response.body)
                                                                .as_ref())
                            .unwrap())
@@ -9126,7 +10073,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateDeploymentResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -9153,7 +10100,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateInstanceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -9180,7 +10127,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateLayerResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(CreateLayerError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -9204,7 +10151,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateStackResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(CreateStackError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -9228,7 +10175,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateUserProfileResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -9253,7 +10200,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(DeleteAppError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -9273,7 +10220,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(DeleteInstanceError::from_body(String::from_utf8_lossy(&response.body)
                                                        .as_ref()))
@@ -9296,7 +10243,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(DeleteLayerError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -9316,7 +10263,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(DeleteStackError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -9338,7 +10285,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(DeleteUserProfileError::from_body(String::from_utf8_lossy(&response.body)
                                                           .as_ref()))
@@ -9363,7 +10310,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(DeregisterEcsClusterError::from_body(String::from_utf8_lossy(&response.body)
                                                              .as_ref()))
@@ -9388,7 +10335,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(DeregisterElasticIpError::from_body(String::from_utf8_lossy(&response.body)
                                                             .as_ref()))
@@ -9413,7 +10360,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(DeregisterInstanceError::from_body(String::from_utf8_lossy(&response.body)
                                                            .as_ref()))
@@ -9438,7 +10385,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(DeregisterRdsDbInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -9460,7 +10407,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(DeregisterVolumeError::from_body(String::from_utf8_lossy(&response.body)
                                                          .as_ref()))
@@ -9486,7 +10433,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeAgentVersionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -9513,7 +10460,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeAppsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -9539,7 +10486,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeCommandsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -9566,7 +10513,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeDeploymentsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -9593,7 +10540,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeEcsClustersResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -9620,7 +10567,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeElasticIpsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -9649,7 +10596,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeElasticLoadBalancersResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeElasticLoadBalancersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -9673,7 +10620,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeInstancesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -9700,7 +10647,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeLayersResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -9729,7 +10676,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeLoadBasedAutoScalingResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeLoadBasedAutoScalingError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -9752,7 +10699,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeMyUserProfileResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -9779,7 +10726,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribePermissionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -9806,7 +10753,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeRaidArraysResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -9834,7 +10781,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeRdsDbInstancesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -9862,7 +10809,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeServiceErrorsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -9892,7 +10839,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeStackProvisioningParametersResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeStackProvisioningParametersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -9916,7 +10863,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeStackSummaryResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -9943,7 +10890,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeStacksResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -9972,7 +10919,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeTimeBasedAutoScalingResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeTimeBasedAutoScalingError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -9996,7 +10943,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeUserProfilesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -10023,7 +10970,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeVolumesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -10051,7 +10998,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(DetachElasticLoadBalancerError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -10073,7 +11020,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(DisassociateElasticIpError::from_body(String::from_utf8_lossy(&response.body)
                                                               .as_ref()))
@@ -10099,7 +11046,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetHostnameSuggestionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -10126,7 +11073,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GrantAccessResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(GrantAccessError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -10148,7 +11095,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<ListTagsResult>(String::from_utf8_lossy(&response.body)
                                                               .as_ref())
                            .unwrap())
@@ -10172,7 +11119,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(RebootInstanceError::from_body(String::from_utf8_lossy(&response.body)
                                                        .as_ref()))
@@ -10197,7 +11144,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<RegisterEcsClusterResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -10224,7 +11171,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<RegisterElasticIpResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -10251,7 +11198,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<RegisterInstanceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -10278,7 +11225,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(RegisterRdsDbInstanceError::from_body(String::from_utf8_lossy(&response.body)
                                                               .as_ref()))
@@ -10303,7 +11250,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<RegisterVolumeResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -10330,7 +11277,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(SetLoadBasedAutoScalingError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -10350,7 +11297,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(SetPermissionError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
             }
@@ -10374,7 +11321,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(SetTimeBasedAutoScalingError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -10394,7 +11341,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(StartInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
             }
@@ -10416,7 +11363,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(StartStackError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -10436,7 +11383,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(StopInstanceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
             }
@@ -10458,7 +11405,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(StopStackError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -10478,7 +11425,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(TagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -10500,7 +11447,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(UnassignInstanceError::from_body(String::from_utf8_lossy(&response.body)
                                                          .as_ref()))
@@ -10523,7 +11470,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(UnassignVolumeError::from_body(String::from_utf8_lossy(&response.body)
                                                        .as_ref()))
@@ -10546,7 +11493,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(UntagResourceError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
             }
@@ -10568,7 +11515,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(UpdateAppError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -10590,7 +11537,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(UpdateElasticIpError::from_body(String::from_utf8_lossy(&response.body)
                                                         .as_ref()))
@@ -10613,7 +11560,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(UpdateInstanceError::from_body(String::from_utf8_lossy(&response.body)
                                                        .as_ref()))
@@ -10636,7 +11583,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(UpdateLayerError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -10658,7 +11605,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(UpdateMyUserProfileError::from_body(String::from_utf8_lossy(&response.body)
                                                             .as_ref()))
@@ -10683,7 +11630,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(UpdateRdsDbInstanceError::from_body(String::from_utf8_lossy(&response.body)
                                                             .as_ref()))
@@ -10706,7 +11653,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(UpdateStackError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -10728,7 +11675,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(UpdateUserProfileError::from_body(String::from_utf8_lossy(&response.body)
                                                           .as_ref()))
@@ -10751,7 +11698,7 @@ impl<P, D> OpsWorks for OpsWorksClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(UpdateVolumeError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
             }

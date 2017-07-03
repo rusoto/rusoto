@@ -11,21 +11,153 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DataSetType {
+    CustomerProfileByGeography,
+    CustomerProfileByIndustry,
+    CustomerProfileByRevenue,
+    CustomerSubscriberAnnualSubscriptions,
+    CustomerSubscriberHourlyMonthlySubscriptions,
+    DailyBusinessCanceledProductSubscribers,
+    DailyBusinessFees,
+    DailyBusinessFreeTrialConversions,
+    DailyBusinessNewInstances,
+    DailyBusinessNewProductSubscribers,
+    DailyBusinessUsageByInstanceType,
+    DisbursedAmountByAgeOfDisbursedFunds,
+    DisbursedAmountByAgeOfUncollectedFunds,
+    DisbursedAmountByCustomerGeo,
+    DisbursedAmountByInstanceHours,
+    DisbursedAmountByProduct,
+    DisbursedAmountByProductWithUncollectedFunds,
+    MonthlyRevenueAnnualSubscriptions,
+    MonthlyRevenueBillingAndRevenueData,
+    SalesCompensationBilledRevenue,
+    UsSalesAndUseTaxRecords,
+}
+
+impl Into<String> for DataSetType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DataSetType {
+    fn into(self) -> &'static str {
+        match self {
+            DataSetType::CustomerProfileByGeography => "customer_profile_by_geography",
+            DataSetType::CustomerProfileByIndustry => "customer_profile_by_industry",
+            DataSetType::CustomerProfileByRevenue => "customer_profile_by_revenue",
+            DataSetType::CustomerSubscriberAnnualSubscriptions => {
+                "customer_subscriber_annual_subscriptions"
+            }
+            DataSetType::CustomerSubscriberHourlyMonthlySubscriptions => {
+                "customer_subscriber_hourly_monthly_subscriptions"
+            }
+            DataSetType::DailyBusinessCanceledProductSubscribers => {
+                "daily_business_canceled_product_subscribers"
+            }
+            DataSetType::DailyBusinessFees => "daily_business_fees",
+            DataSetType::DailyBusinessFreeTrialConversions => {
+                "daily_business_free_trial_conversions"
+            }
+            DataSetType::DailyBusinessNewInstances => "daily_business_new_instances",
+            DataSetType::DailyBusinessNewProductSubscribers => {
+                "daily_business_new_product_subscribers"
+            }
+            DataSetType::DailyBusinessUsageByInstanceType => {
+                "daily_business_usage_by_instance_type"
+            }
+            DataSetType::DisbursedAmountByAgeOfDisbursedFunds => {
+                "disbursed_amount_by_age_of_disbursed_funds"
+            }
+            DataSetType::DisbursedAmountByAgeOfUncollectedFunds => {
+                "disbursed_amount_by_age_of_uncollected_funds"
+            }
+            DataSetType::DisbursedAmountByCustomerGeo => "disbursed_amount_by_customer_geo",
+            DataSetType::DisbursedAmountByInstanceHours => "disbursed_amount_by_instance_hours",
+            DataSetType::DisbursedAmountByProduct => "disbursed_amount_by_product",
+            DataSetType::DisbursedAmountByProductWithUncollectedFunds => {
+                "disbursed_amount_by_product_with_uncollected_funds"
+            }
+            DataSetType::MonthlyRevenueAnnualSubscriptions => {
+                "monthly_revenue_annual_subscriptions"
+            }
+            DataSetType::MonthlyRevenueBillingAndRevenueData => {
+                "monthly_revenue_billing_and_revenue_data"
+            }
+            DataSetType::SalesCompensationBilledRevenue => "sales_compensation_billed_revenue",
+            DataSetType::UsSalesAndUseTaxRecords => "us_sales_and_use_tax_records",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DataSetType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "customer_profile_by_geography" => Ok(DataSetType::CustomerProfileByGeography),
+            "customer_profile_by_industry" => Ok(DataSetType::CustomerProfileByIndustry),
+            "customer_profile_by_revenue" => Ok(DataSetType::CustomerProfileByRevenue),
+            "customer_subscriber_annual_subscriptions" => {
+                Ok(DataSetType::CustomerSubscriberAnnualSubscriptions)
+            }
+            "customer_subscriber_hourly_monthly_subscriptions" => {
+                Ok(DataSetType::CustomerSubscriberHourlyMonthlySubscriptions)
+            }
+            "daily_business_canceled_product_subscribers" => {
+                Ok(DataSetType::DailyBusinessCanceledProductSubscribers)
+            }
+            "daily_business_fees" => Ok(DataSetType::DailyBusinessFees),
+            "daily_business_free_trial_conversions" => {
+                Ok(DataSetType::DailyBusinessFreeTrialConversions)
+            }
+            "daily_business_new_instances" => Ok(DataSetType::DailyBusinessNewInstances),
+            "daily_business_new_product_subscribers" => {
+                Ok(DataSetType::DailyBusinessNewProductSubscribers)
+            }
+            "daily_business_usage_by_instance_type" => {
+                Ok(DataSetType::DailyBusinessUsageByInstanceType)
+            }
+            "disbursed_amount_by_age_of_disbursed_funds" => {
+                Ok(DataSetType::DisbursedAmountByAgeOfDisbursedFunds)
+            }
+            "disbursed_amount_by_age_of_uncollected_funds" => {
+                Ok(DataSetType::DisbursedAmountByAgeOfUncollectedFunds)
+            }
+            "disbursed_amount_by_customer_geo" => Ok(DataSetType::DisbursedAmountByCustomerGeo),
+            "disbursed_amount_by_instance_hours" => Ok(DataSetType::DisbursedAmountByInstanceHours),
+            "disbursed_amount_by_product" => Ok(DataSetType::DisbursedAmountByProduct),
+            "disbursed_amount_by_product_with_uncollected_funds" => {
+                Ok(DataSetType::DisbursedAmountByProductWithUncollectedFunds)
+            }
+            "monthly_revenue_annual_subscriptions" => {
+                Ok(DataSetType::MonthlyRevenueAnnualSubscriptions)
+            }
+            "monthly_revenue_billing_and_revenue_data" => {
+                Ok(DataSetType::MonthlyRevenueBillingAndRevenueData)
+            }
+            "sales_compensation_billed_revenue" => Ok(DataSetType::SalesCompensationBilledRevenue),
+            "us_sales_and_use_tax_records" => Ok(DataSetType::UsSalesAndUseTaxRecords),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="Container for the parameters to the GenerateDataSet operation."]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GenerateDataSetRequest {
@@ -98,6 +230,45 @@ pub struct StartSupportDataExportResult {
     #[serde(rename="dataSetRequestId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub data_set_request_id: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SupportDataSetType {
+    CustomerSupportContactsData,
+    TestCustomerSupportContactsData,
+}
+
+impl Into<String> for SupportDataSetType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SupportDataSetType {
+    fn into(self) -> &'static str {
+        match self {
+            SupportDataSetType::CustomerSupportContactsData => "customer_support_contacts_data",
+            SupportDataSetType::TestCustomerSupportContactsData => {
+                "test_customer_support_contacts_data"
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for SupportDataSetType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "customer_support_contacts_data" => Ok(SupportDataSetType::CustomerSupportContactsData),
+            "test_customer_support_contacts_data" => {
+                Ok(SupportDataSetType::TestCustomerSupportContactsData)
+            }
+            _ => Err(()),
+        }
+    }
 }
 
 /// Errors returned by GenerateDataSet
@@ -305,7 +476,7 @@ impl<P, D> MarketplaceCommerceAnalytics for MarketplaceCommerceAnalyticsClient<P
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GenerateDataSetResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -335,7 +506,7 @@ impl<P, D> MarketplaceCommerceAnalytics for MarketplaceCommerceAnalyticsClient<P
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<StartSupportDataExportResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {

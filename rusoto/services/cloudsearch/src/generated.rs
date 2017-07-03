@@ -11,18 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
-use std::str::FromStr;
 use xml::EventReader;
 use xml::reader::ParserConfig;
 use rusoto_core::param::{Params, ServiceParams};
@@ -118,6 +113,47 @@ impl AccessPoliciesStatusDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AlgorithmicStemming {
+    Full,
+    Light,
+    Minimal,
+    None,
+}
+
+impl Into<String> for AlgorithmicStemming {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AlgorithmicStemming {
+    fn into(self) -> &'static str {
+        match self {
+            AlgorithmicStemming::Full => "full",
+            AlgorithmicStemming::Light => "light",
+            AlgorithmicStemming::Minimal => "minimal",
+            AlgorithmicStemming::None => "none",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AlgorithmicStemming {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "full" => Ok(AlgorithmicStemming::Full),
+            "light" => Ok(AlgorithmicStemming::Light),
+            "minimal" => Ok(AlgorithmicStemming::Minimal),
+            "none" => Ok(AlgorithmicStemming::None),
+            _ => Err(()),
+        }
+    }
+}
+
 struct AlgorithmicStemmingDeserializer;
 impl AlgorithmicStemmingDeserializer {
     #[allow(unused_variables)]
@@ -323,6 +359,140 @@ impl AnalysisSchemeSerializer {
     }
 }
 
+#[doc="<p>An <a href=\"http://tools.ietf.org/html/rfc4646\" target=\"_blank\">IETF RFC 4646</a> language code or <code>mul</code> for multiple languages.</p>"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AnalysisSchemeLanguage {
+    Ar,
+    Bg,
+    Ca,
+    Cs,
+    Da,
+    De,
+    El,
+    En,
+    Es,
+    Eu,
+    Fa,
+    Fi,
+    Fr,
+    Ga,
+    Gl,
+    He,
+    Hi,
+    Hu,
+    Hy,
+    Id,
+    It,
+    Ja,
+    Ko,
+    Lv,
+    Mul,
+    Nl,
+    No,
+    Pt,
+    Ro,
+    Ru,
+    Sv,
+    Th,
+    Tr,
+    ZhHans,
+    ZhHant,
+}
+
+impl Into<String> for AnalysisSchemeLanguage {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AnalysisSchemeLanguage {
+    fn into(self) -> &'static str {
+        match self {
+            AnalysisSchemeLanguage::Ar => "ar",
+            AnalysisSchemeLanguage::Bg => "bg",
+            AnalysisSchemeLanguage::Ca => "ca",
+            AnalysisSchemeLanguage::Cs => "cs",
+            AnalysisSchemeLanguage::Da => "da",
+            AnalysisSchemeLanguage::De => "de",
+            AnalysisSchemeLanguage::El => "el",
+            AnalysisSchemeLanguage::En => "en",
+            AnalysisSchemeLanguage::Es => "es",
+            AnalysisSchemeLanguage::Eu => "eu",
+            AnalysisSchemeLanguage::Fa => "fa",
+            AnalysisSchemeLanguage::Fi => "fi",
+            AnalysisSchemeLanguage::Fr => "fr",
+            AnalysisSchemeLanguage::Ga => "ga",
+            AnalysisSchemeLanguage::Gl => "gl",
+            AnalysisSchemeLanguage::He => "he",
+            AnalysisSchemeLanguage::Hi => "hi",
+            AnalysisSchemeLanguage::Hu => "hu",
+            AnalysisSchemeLanguage::Hy => "hy",
+            AnalysisSchemeLanguage::Id => "id",
+            AnalysisSchemeLanguage::It => "it",
+            AnalysisSchemeLanguage::Ja => "ja",
+            AnalysisSchemeLanguage::Ko => "ko",
+            AnalysisSchemeLanguage::Lv => "lv",
+            AnalysisSchemeLanguage::Mul => "mul",
+            AnalysisSchemeLanguage::Nl => "nl",
+            AnalysisSchemeLanguage::No => "no",
+            AnalysisSchemeLanguage::Pt => "pt",
+            AnalysisSchemeLanguage::Ro => "ro",
+            AnalysisSchemeLanguage::Ru => "ru",
+            AnalysisSchemeLanguage::Sv => "sv",
+            AnalysisSchemeLanguage::Th => "th",
+            AnalysisSchemeLanguage::Tr => "tr",
+            AnalysisSchemeLanguage::ZhHans => "zh-Hans",
+            AnalysisSchemeLanguage::ZhHant => "zh-Hant",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AnalysisSchemeLanguage {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ar" => Ok(AnalysisSchemeLanguage::Ar),
+            "bg" => Ok(AnalysisSchemeLanguage::Bg),
+            "ca" => Ok(AnalysisSchemeLanguage::Ca),
+            "cs" => Ok(AnalysisSchemeLanguage::Cs),
+            "da" => Ok(AnalysisSchemeLanguage::Da),
+            "de" => Ok(AnalysisSchemeLanguage::De),
+            "el" => Ok(AnalysisSchemeLanguage::El),
+            "en" => Ok(AnalysisSchemeLanguage::En),
+            "es" => Ok(AnalysisSchemeLanguage::Es),
+            "eu" => Ok(AnalysisSchemeLanguage::Eu),
+            "fa" => Ok(AnalysisSchemeLanguage::Fa),
+            "fi" => Ok(AnalysisSchemeLanguage::Fi),
+            "fr" => Ok(AnalysisSchemeLanguage::Fr),
+            "ga" => Ok(AnalysisSchemeLanguage::Ga),
+            "gl" => Ok(AnalysisSchemeLanguage::Gl),
+            "he" => Ok(AnalysisSchemeLanguage::He),
+            "hi" => Ok(AnalysisSchemeLanguage::Hi),
+            "hu" => Ok(AnalysisSchemeLanguage::Hu),
+            "hy" => Ok(AnalysisSchemeLanguage::Hy),
+            "id" => Ok(AnalysisSchemeLanguage::Id),
+            "it" => Ok(AnalysisSchemeLanguage::It),
+            "ja" => Ok(AnalysisSchemeLanguage::Ja),
+            "ko" => Ok(AnalysisSchemeLanguage::Ko),
+            "lv" => Ok(AnalysisSchemeLanguage::Lv),
+            "mul" => Ok(AnalysisSchemeLanguage::Mul),
+            "nl" => Ok(AnalysisSchemeLanguage::Nl),
+            "no" => Ok(AnalysisSchemeLanguage::No),
+            "pt" => Ok(AnalysisSchemeLanguage::Pt),
+            "ro" => Ok(AnalysisSchemeLanguage::Ro),
+            "ru" => Ok(AnalysisSchemeLanguage::Ru),
+            "sv" => Ok(AnalysisSchemeLanguage::Sv),
+            "th" => Ok(AnalysisSchemeLanguage::Th),
+            "tr" => Ok(AnalysisSchemeLanguage::Tr),
+            "zh-Hans" => Ok(AnalysisSchemeLanguage::ZhHans),
+            "zh-Hant" => Ok(AnalysisSchemeLanguage::ZhHant),
+            _ => Err(()),
+        }
+    }
+}
+
 struct AnalysisSchemeLanguageDeserializer;
 impl AnalysisSchemeLanguageDeserializer {
     #[allow(unused_variables)]
@@ -492,7 +662,7 @@ impl BooleanDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -2492,7 +2662,7 @@ impl DoubleDeserializer {
                                        stack: &mut T)
                                        -> Result<f64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = f64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<f64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -3380,6 +3550,68 @@ impl IndexFieldStatusListDeserializer {
 
     }
 }
+#[doc="<p>The type of field. The valid options for a field depend on the field type. For more information about the supported field types, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-index-fields.html\" target=\"_blank\">Configuring Index Fields</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum IndexFieldType {
+    Date,
+    DateArray,
+    Double,
+    DoubleArray,
+    Int,
+    IntArray,
+    Latlon,
+    Literal,
+    LiteralArray,
+    Text,
+    TextArray,
+}
+
+impl Into<String> for IndexFieldType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for IndexFieldType {
+    fn into(self) -> &'static str {
+        match self {
+            IndexFieldType::Date => "date",
+            IndexFieldType::DateArray => "date-array",
+            IndexFieldType::Double => "double",
+            IndexFieldType::DoubleArray => "double-array",
+            IndexFieldType::Int => "int",
+            IndexFieldType::IntArray => "int-array",
+            IndexFieldType::Latlon => "latlon",
+            IndexFieldType::Literal => "literal",
+            IndexFieldType::LiteralArray => "literal-array",
+            IndexFieldType::Text => "text",
+            IndexFieldType::TextArray => "text-array",
+        }
+    }
+}
+
+impl ::std::str::FromStr for IndexFieldType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "date" => Ok(IndexFieldType::Date),
+            "date-array" => Ok(IndexFieldType::DateArray),
+            "double" => Ok(IndexFieldType::Double),
+            "double-array" => Ok(IndexFieldType::DoubleArray),
+            "int" => Ok(IndexFieldType::Int),
+            "int-array" => Ok(IndexFieldType::IntArray),
+            "latlon" => Ok(IndexFieldType::Latlon),
+            "literal" => Ok(IndexFieldType::Literal),
+            "literal-array" => Ok(IndexFieldType::LiteralArray),
+            "text" => Ok(IndexFieldType::Text),
+            "text-array" => Ok(IndexFieldType::TextArray),
+            _ => Err(()),
+        }
+    }
+}
+
 struct IndexFieldTypeDeserializer;
 impl IndexFieldTypeDeserializer {
     #[allow(unused_variables)]
@@ -3401,7 +3633,7 @@ impl InstanceCountDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -4092,7 +4324,7 @@ impl LongDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -4106,7 +4338,7 @@ impl MaximumPartitionCountDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -4120,7 +4352,7 @@ impl MaximumReplicationCountDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -4134,13 +4366,54 @@ impl MultiAZDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
 
     }
 }
+#[doc="<p>The state of processing a change to an option. One of:</p> <ul> <li>RequiresIndexDocuments: The option's latest value will not be deployed until <a>IndexDocuments</a> has been called and indexing is complete.</li> <li>Processing: The option's latest value is in the process of being activated.</li> <li>Active: The option's latest value is fully deployed. </li> <li>FailedToValidate: The option value is not compatible with the domain's data and cannot be used to index the data. You must either modify the option value or update or remove the incompatible documents.</li> </ul>"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum OptionState {
+    Active,
+    FailedToValidate,
+    Processing,
+    RequiresIndexDocuments,
+}
+
+impl Into<String> for OptionState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for OptionState {
+    fn into(self) -> &'static str {
+        match self {
+            OptionState::Active => "Active",
+            OptionState::FailedToValidate => "FailedToValidate",
+            OptionState::Processing => "Processing",
+            OptionState::RequiresIndexDocuments => "RequiresIndexDocuments",
+        }
+    }
+}
+
+impl ::std::str::FromStr for OptionState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Active" => Ok(OptionState::Active),
+            "FailedToValidate" => Ok(OptionState::FailedToValidate),
+            "Processing" => Ok(OptionState::Processing),
+            "RequiresIndexDocuments" => Ok(OptionState::RequiresIndexDocuments),
+            _ => Err(()),
+        }
+    }
+}
+
 struct OptionStateDeserializer;
 impl OptionStateDeserializer {
     #[allow(unused_variables)]
@@ -4237,13 +4510,66 @@ impl PartitionCountDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
 
     }
 }
+#[doc="<p>The instance type (such as <code>search.m1.small</code>) on which an index partition is hosted.</p>"]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PartitionInstanceType {
+    SearchM1Large,
+    SearchM1Small,
+    SearchM22Xlarge,
+    SearchM2Xlarge,
+    SearchM32Xlarge,
+    SearchM3Large,
+    SearchM3Medium,
+    SearchM3Xlarge,
+}
+
+impl Into<String> for PartitionInstanceType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PartitionInstanceType {
+    fn into(self) -> &'static str {
+        match self {
+            PartitionInstanceType::SearchM1Large => "search.m1.large",
+            PartitionInstanceType::SearchM1Small => "search.m1.small",
+            PartitionInstanceType::SearchM22Xlarge => "search.m2.2xlarge",
+            PartitionInstanceType::SearchM2Xlarge => "search.m2.xlarge",
+            PartitionInstanceType::SearchM32Xlarge => "search.m3.2xlarge",
+            PartitionInstanceType::SearchM3Large => "search.m3.large",
+            PartitionInstanceType::SearchM3Medium => "search.m3.medium",
+            PartitionInstanceType::SearchM3Xlarge => "search.m3.xlarge",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PartitionInstanceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "search.m1.large" => Ok(PartitionInstanceType::SearchM1Large),
+            "search.m1.small" => Ok(PartitionInstanceType::SearchM1Small),
+            "search.m2.2xlarge" => Ok(PartitionInstanceType::SearchM22Xlarge),
+            "search.m2.xlarge" => Ok(PartitionInstanceType::SearchM2Xlarge),
+            "search.m3.2xlarge" => Ok(PartitionInstanceType::SearchM32Xlarge),
+            "search.m3.large" => Ok(PartitionInstanceType::SearchM3Large),
+            "search.m3.medium" => Ok(PartitionInstanceType::SearchM3Medium),
+            "search.m3.xlarge" => Ok(PartitionInstanceType::SearchM3Xlarge),
+            _ => Err(()),
+        }
+    }
+}
+
 struct PartitionInstanceTypeDeserializer;
 impl PartitionInstanceTypeDeserializer {
     #[allow(unused_variables)]
@@ -4606,6 +4932,44 @@ impl SuggesterSerializer {
     }
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SuggesterFuzzyMatching {
+    High,
+    Low,
+    None,
+}
+
+impl Into<String> for SuggesterFuzzyMatching {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SuggesterFuzzyMatching {
+    fn into(self) -> &'static str {
+        match self {
+            SuggesterFuzzyMatching::High => "high",
+            SuggesterFuzzyMatching::Low => "low",
+            SuggesterFuzzyMatching::None => "none",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SuggesterFuzzyMatching {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "high" => Ok(SuggesterFuzzyMatching::High),
+            "low" => Ok(SuggesterFuzzyMatching::Low),
+            "none" => Ok(SuggesterFuzzyMatching::None),
+            _ => Err(()),
+        }
+    }
+}
+
 struct SuggesterFuzzyMatchingDeserializer;
 impl SuggesterFuzzyMatchingDeserializer {
     #[allow(unused_variables)]
@@ -4946,7 +5310,7 @@ impl UIntValueDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -7398,7 +7762,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -7442,7 +7806,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -7486,7 +7850,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -7531,7 +7895,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -7575,7 +7939,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -7619,7 +7983,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -7664,7 +8028,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -7709,7 +8073,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -7752,7 +8116,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -7796,7 +8160,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -7840,7 +8204,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -7885,7 +8249,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -7930,7 +8294,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -7972,7 +8336,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -8016,7 +8380,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -8060,7 +8424,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -8105,7 +8469,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -8148,7 +8512,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -8190,7 +8554,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -8234,7 +8598,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -8276,7 +8640,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -8321,7 +8685,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -8364,7 +8728,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -8409,7 +8773,7 @@ impl<P, D> CloudSearch for CloudSearchClient<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 

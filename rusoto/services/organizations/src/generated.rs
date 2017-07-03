@@ -11,15 +11,11 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -74,6 +70,114 @@ pub struct Account {
     pub status: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AccountJoinedMethod {
+    Created,
+    Invited,
+}
+
+impl Into<String> for AccountJoinedMethod {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AccountJoinedMethod {
+    fn into(self) -> &'static str {
+        match self {
+            AccountJoinedMethod::Created => "CREATED",
+            AccountJoinedMethod::Invited => "INVITED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AccountJoinedMethod {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CREATED" => Ok(AccountJoinedMethod::Created),
+            "INVITED" => Ok(AccountJoinedMethod::Invited),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AccountStatus {
+    Active,
+    Suspended,
+}
+
+impl Into<String> for AccountStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AccountStatus {
+    fn into(self) -> &'static str {
+        match self {
+            AccountStatus::Active => "ACTIVE",
+            AccountStatus::Suspended => "SUSPENDED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AccountStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACTIVE" => Ok(AccountStatus::Active),
+            "SUSPENDED" => Ok(AccountStatus::Suspended),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ActionType {
+    ApproveAllFeatures,
+    EnableAllFeatures,
+    Invite,
+}
+
+impl Into<String> for ActionType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ActionType {
+    fn into(self) -> &'static str {
+        match self {
+            ActionType::ApproveAllFeatures => "APPROVE_ALL_FEATURES",
+            ActionType::EnableAllFeatures => "ENABLE_ALL_FEATURES",
+            ActionType::Invite => "INVITE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ActionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "APPROVE_ALL_FEATURES" => Ok(ActionType::ApproveAllFeatures),
+            "ENABLE_ALL_FEATURES" => Ok(ActionType::EnableAllFeatures),
+            "INVITE" => Ok(ActionType::Invite),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct AttachPolicyRequest {
     #[doc="<p>The unique identifier (ID) of the policy that you want to attach to the target. You can get the ID for the policy by calling the <a>ListPolicies</a> operation.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> for a policy ID string requires \"p-\" followed by from 8 to 128 lower-case letters or digits.</p>"]
@@ -112,6 +216,208 @@ pub struct Child {
     pub type_: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ChildType {
+    Account,
+    OrganizationalUnit,
+}
+
+impl Into<String> for ChildType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ChildType {
+    fn into(self) -> &'static str {
+        match self {
+            ChildType::Account => "ACCOUNT",
+            ChildType::OrganizationalUnit => "ORGANIZATIONAL_UNIT",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChildType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACCOUNT" => Ok(ChildType::Account),
+            "ORGANIZATIONAL_UNIT" => Ok(ChildType::OrganizationalUnit),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ConstraintViolationExceptionReason {
+    AccountCannotLeaveOrganization,
+    AccountCannotLeaveWithoutEula,
+    AccountCannotLeaveWithoutPhoneVerification,
+    AccountCreationRateLimitExceeded,
+    AccountNumberLimitExceeded,
+    HandshakeRateLimitExceeded,
+    MasterAccountAddressDoesNotMatchMarketplace,
+    MasterAccountPaymentInstrumentRequired,
+    MaxPolicyTypeAttachmentLimitExceeded,
+    MemberAccountPaymentInstrumentRequired,
+    MinPolicyTypeAttachmentLimitExceeded,
+    OuDepthLimitExceeded,
+    OuNumberLimitExceeded,
+    PolicyNumberLimitExceeded,
+}
+
+impl Into<String> for ConstraintViolationExceptionReason {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ConstraintViolationExceptionReason {
+    fn into(self) -> &'static str {
+        match self {
+            ConstraintViolationExceptionReason::AccountCannotLeaveOrganization => {
+                "ACCOUNT_CANNOT_LEAVE_ORGANIZATION"
+            }
+            ConstraintViolationExceptionReason::AccountCannotLeaveWithoutEula => {
+                "ACCOUNT_CANNOT_LEAVE_WITHOUT_EULA"
+            }
+            ConstraintViolationExceptionReason::AccountCannotLeaveWithoutPhoneVerification => {
+                "ACCOUNT_CANNOT_LEAVE_WITHOUT_PHONE_VERIFICATION"
+            }
+            ConstraintViolationExceptionReason::AccountCreationRateLimitExceeded => {
+                "ACCOUNT_CREATION_RATE_LIMIT_EXCEEDED"
+            }
+            ConstraintViolationExceptionReason::AccountNumberLimitExceeded => {
+                "ACCOUNT_NUMBER_LIMIT_EXCEEDED"
+            }
+            ConstraintViolationExceptionReason::HandshakeRateLimitExceeded => {
+                "HANDSHAKE_RATE_LIMIT_EXCEEDED"
+            }
+            ConstraintViolationExceptionReason::MasterAccountAddressDoesNotMatchMarketplace => {
+                "MASTER_ACCOUNT_ADDRESS_DOES_NOT_MATCH_MARKETPLACE"
+            }
+            ConstraintViolationExceptionReason::MasterAccountPaymentInstrumentRequired => {
+                "MASTER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED"
+            }
+            ConstraintViolationExceptionReason::MaxPolicyTypeAttachmentLimitExceeded => {
+                "MAX_POLICY_TYPE_ATTACHMENT_LIMIT_EXCEEDED"
+            }
+            ConstraintViolationExceptionReason::MemberAccountPaymentInstrumentRequired => {
+                "MEMBER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED"
+            }
+            ConstraintViolationExceptionReason::MinPolicyTypeAttachmentLimitExceeded => {
+                "MIN_POLICY_TYPE_ATTACHMENT_LIMIT_EXCEEDED"
+            }
+            ConstraintViolationExceptionReason::OuDepthLimitExceeded => "OU_DEPTH_LIMIT_EXCEEDED",
+            ConstraintViolationExceptionReason::OuNumberLimitExceeded => "OU_NUMBER_LIMIT_EXCEEDED",
+            ConstraintViolationExceptionReason::PolicyNumberLimitExceeded => {
+                "POLICY_NUMBER_LIMIT_EXCEEDED"
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConstraintViolationExceptionReason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACCOUNT_CANNOT_LEAVE_ORGANIZATION" => {
+                Ok(ConstraintViolationExceptionReason::AccountCannotLeaveOrganization)
+            }
+            "ACCOUNT_CANNOT_LEAVE_WITHOUT_EULA" => {
+                Ok(ConstraintViolationExceptionReason::AccountCannotLeaveWithoutEula)
+            }
+            "ACCOUNT_CANNOT_LEAVE_WITHOUT_PHONE_VERIFICATION" => {
+                Ok(ConstraintViolationExceptionReason::AccountCannotLeaveWithoutPhoneVerification)
+            }
+            "ACCOUNT_CREATION_RATE_LIMIT_EXCEEDED" => {
+                Ok(ConstraintViolationExceptionReason::AccountCreationRateLimitExceeded)
+            }
+            "ACCOUNT_NUMBER_LIMIT_EXCEEDED" => {
+                Ok(ConstraintViolationExceptionReason::AccountNumberLimitExceeded)
+            }
+            "HANDSHAKE_RATE_LIMIT_EXCEEDED" => {
+                Ok(ConstraintViolationExceptionReason::HandshakeRateLimitExceeded)
+            }
+            "MASTER_ACCOUNT_ADDRESS_DOES_NOT_MATCH_MARKETPLACE" => {
+                Ok(ConstraintViolationExceptionReason::MasterAccountAddressDoesNotMatchMarketplace)
+            }
+            "MASTER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED" => {
+                Ok(ConstraintViolationExceptionReason::MasterAccountPaymentInstrumentRequired)
+            }
+            "MAX_POLICY_TYPE_ATTACHMENT_LIMIT_EXCEEDED" => {
+                Ok(ConstraintViolationExceptionReason::MaxPolicyTypeAttachmentLimitExceeded)
+            }
+            "MEMBER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED" => {
+                Ok(ConstraintViolationExceptionReason::MemberAccountPaymentInstrumentRequired)
+            }
+            "MIN_POLICY_TYPE_ATTACHMENT_LIMIT_EXCEEDED" => {
+                Ok(ConstraintViolationExceptionReason::MinPolicyTypeAttachmentLimitExceeded)
+            }
+            "OU_DEPTH_LIMIT_EXCEEDED" => {
+                Ok(ConstraintViolationExceptionReason::OuDepthLimitExceeded)
+            }
+            "OU_NUMBER_LIMIT_EXCEEDED" => {
+                Ok(ConstraintViolationExceptionReason::OuNumberLimitExceeded)
+            }
+            "POLICY_NUMBER_LIMIT_EXCEEDED" => {
+                Ok(ConstraintViolationExceptionReason::PolicyNumberLimitExceeded)
+            }
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CreateAccountFailureReason {
+    AccountLimitExceeded,
+    EmailAlreadyExists,
+    InternalFailure,
+    InvalidAddress,
+    InvalidEmail,
+}
+
+impl Into<String> for CreateAccountFailureReason {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CreateAccountFailureReason {
+    fn into(self) -> &'static str {
+        match self {
+            CreateAccountFailureReason::AccountLimitExceeded => "ACCOUNT_LIMIT_EXCEEDED",
+            CreateAccountFailureReason::EmailAlreadyExists => "EMAIL_ALREADY_EXISTS",
+            CreateAccountFailureReason::InternalFailure => "INTERNAL_FAILURE",
+            CreateAccountFailureReason::InvalidAddress => "INVALID_ADDRESS",
+            CreateAccountFailureReason::InvalidEmail => "INVALID_EMAIL",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CreateAccountFailureReason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACCOUNT_LIMIT_EXCEEDED" => Ok(CreateAccountFailureReason::AccountLimitExceeded),
+            "EMAIL_ALREADY_EXISTS" => Ok(CreateAccountFailureReason::EmailAlreadyExists),
+            "INTERNAL_FAILURE" => Ok(CreateAccountFailureReason::InternalFailure),
+            "INVALID_ADDRESS" => Ok(CreateAccountFailureReason::InvalidAddress),
+            "INVALID_EMAIL" => Ok(CreateAccountFailureReason::InvalidEmail),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateAccountRequest {
     #[doc="<p>The friendly name of the member account.</p>"]
@@ -136,6 +442,44 @@ pub struct CreateAccountResponse {
     #[serde(rename="CreateAccountStatus")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub create_account_status: Option<CreateAccountStatus>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CreateAccountState {
+    Failed,
+    InProgress,
+    Succeeded,
+}
+
+impl Into<String> for CreateAccountState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CreateAccountState {
+    fn into(self) -> &'static str {
+        match self {
+            CreateAccountState::Failed => "FAILED",
+            CreateAccountState::InProgress => "IN_PROGRESS",
+            CreateAccountState::Succeeded => "SUCCEEDED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CreateAccountState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "FAILED" => Ok(CreateAccountState::Failed),
+            "IN_PROGRESS" => Ok(CreateAccountState::InProgress),
+            "SUCCEEDED" => Ok(CreateAccountState::Succeeded),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Contains the status about a <a>CreateAccount</a> request to create an AWS account in an organization.</p>"]
@@ -435,6 +779,81 @@ pub struct Handshake {
     pub state: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum HandshakeConstraintViolationExceptionReason {
+    AccountNumberLimitExceeded,
+    AlreadyInAnOrganization,
+    HandshakeRateLimitExceeded,
+    InviteDisabledDuringEnableAllFeatures,
+    OrganizationAlreadyHasAllFeatures,
+    OrganizationFromDifferentSellerOfRecord,
+    OrganizationMembershipChangeRateLimitExceeded,
+    PaymentInstrumentRequired,
+}
+
+impl Into<String> for HandshakeConstraintViolationExceptionReason {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for HandshakeConstraintViolationExceptionReason {
+    fn into(self) -> &'static str {
+        match self {
+            HandshakeConstraintViolationExceptionReason::AccountNumberLimitExceeded => {
+                "ACCOUNT_NUMBER_LIMIT_EXCEEDED"
+            }
+            HandshakeConstraintViolationExceptionReason::AlreadyInAnOrganization => {
+                "ALREADY_IN_AN_ORGANIZATION"
+            }
+            HandshakeConstraintViolationExceptionReason::HandshakeRateLimitExceeded => {
+                "HANDSHAKE_RATE_LIMIT_EXCEEDED"
+            }
+            HandshakeConstraintViolationExceptionReason::InviteDisabledDuringEnableAllFeatures => {
+                "INVITE_DISABLED_DURING_ENABLE_ALL_FEATURES"
+            }
+            HandshakeConstraintViolationExceptionReason::OrganizationAlreadyHasAllFeatures => {
+                "ORGANIZATION_ALREADY_HAS_ALL_FEATURES"
+            }
+            HandshakeConstraintViolationExceptionReason::OrganizationFromDifferentSellerOfRecord => "ORGANIZATION_FROM_DIFFERENT_SELLER_OF_RECORD",
+            HandshakeConstraintViolationExceptionReason::OrganizationMembershipChangeRateLimitExceeded => "ORGANIZATION_MEMBERSHIP_CHANGE_RATE_LIMIT_EXCEEDED",
+            HandshakeConstraintViolationExceptionReason::PaymentInstrumentRequired => {
+                "PAYMENT_INSTRUMENT_REQUIRED"
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for HandshakeConstraintViolationExceptionReason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACCOUNT_NUMBER_LIMIT_EXCEEDED" => {
+                Ok(HandshakeConstraintViolationExceptionReason::AccountNumberLimitExceeded)
+            }
+            "ALREADY_IN_AN_ORGANIZATION" => {
+                Ok(HandshakeConstraintViolationExceptionReason::AlreadyInAnOrganization)
+            }
+            "HANDSHAKE_RATE_LIMIT_EXCEEDED" => {
+                Ok(HandshakeConstraintViolationExceptionReason::HandshakeRateLimitExceeded)
+            }
+            "INVITE_DISABLED_DURING_ENABLE_ALL_FEATURES" => Ok(HandshakeConstraintViolationExceptionReason::InviteDisabledDuringEnableAllFeatures),
+            "ORGANIZATION_ALREADY_HAS_ALL_FEATURES" => {
+                Ok(HandshakeConstraintViolationExceptionReason::OrganizationAlreadyHasAllFeatures)
+            }
+            "ORGANIZATION_FROM_DIFFERENT_SELLER_OF_RECORD" => Ok(HandshakeConstraintViolationExceptionReason::OrganizationFromDifferentSellerOfRecord),
+            "ORGANIZATION_MEMBERSHIP_CHANGE_RATE_LIMIT_EXCEEDED" => Ok(HandshakeConstraintViolationExceptionReason::OrganizationMembershipChangeRateLimitExceeded),
+            "PAYMENT_INSTRUMENT_REQUIRED" => {
+                Ok(HandshakeConstraintViolationExceptionReason::PaymentInstrumentRequired)
+            }
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Specifies the criteria that are used to select the handshakes for the operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct HandshakeFilter {
@@ -461,6 +880,44 @@ pub struct HandshakeParty {
     pub type_: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum HandshakePartyType {
+    Account,
+    Email,
+    Organization,
+}
+
+impl Into<String> for HandshakePartyType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for HandshakePartyType {
+    fn into(self) -> &'static str {
+        match self {
+            HandshakePartyType::Account => "ACCOUNT",
+            HandshakePartyType::Email => "EMAIL",
+            HandshakePartyType::Organization => "ORGANIZATION",
+        }
+    }
+}
+
+impl ::std::str::FromStr for HandshakePartyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACCOUNT" => Ok(HandshakePartyType::Account),
+            "EMAIL" => Ok(HandshakePartyType::Email),
+            "ORGANIZATION" => Ok(HandshakePartyType::Organization),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Contains additional data that is needed to process a handshake.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct HandshakeResource {
@@ -476,6 +933,229 @@ pub struct HandshakeResource {
     #[serde(rename="Value")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum HandshakeResourceType {
+    Account,
+    Email,
+    MasterEmail,
+    MasterName,
+    Notes,
+    Organization,
+    OrganizationFeatureSet,
+    ParentHandshake,
+}
+
+impl Into<String> for HandshakeResourceType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for HandshakeResourceType {
+    fn into(self) -> &'static str {
+        match self {
+            HandshakeResourceType::Account => "ACCOUNT",
+            HandshakeResourceType::Email => "EMAIL",
+            HandshakeResourceType::MasterEmail => "MASTER_EMAIL",
+            HandshakeResourceType::MasterName => "MASTER_NAME",
+            HandshakeResourceType::Notes => "NOTES",
+            HandshakeResourceType::Organization => "ORGANIZATION",
+            HandshakeResourceType::OrganizationFeatureSet => "ORGANIZATION_FEATURE_SET",
+            HandshakeResourceType::ParentHandshake => "PARENT_HANDSHAKE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for HandshakeResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACCOUNT" => Ok(HandshakeResourceType::Account),
+            "EMAIL" => Ok(HandshakeResourceType::Email),
+            "MASTER_EMAIL" => Ok(HandshakeResourceType::MasterEmail),
+            "MASTER_NAME" => Ok(HandshakeResourceType::MasterName),
+            "NOTES" => Ok(HandshakeResourceType::Notes),
+            "ORGANIZATION" => Ok(HandshakeResourceType::Organization),
+            "ORGANIZATION_FEATURE_SET" => Ok(HandshakeResourceType::OrganizationFeatureSet),
+            "PARENT_HANDSHAKE" => Ok(HandshakeResourceType::ParentHandshake),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum HandshakeState {
+    Accepted,
+    Canceled,
+    Declined,
+    Expired,
+    Open,
+    Requested,
+}
+
+impl Into<String> for HandshakeState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for HandshakeState {
+    fn into(self) -> &'static str {
+        match self {
+            HandshakeState::Accepted => "ACCEPTED",
+            HandshakeState::Canceled => "CANCELED",
+            HandshakeState::Declined => "DECLINED",
+            HandshakeState::Expired => "EXPIRED",
+            HandshakeState::Open => "OPEN",
+            HandshakeState::Requested => "REQUESTED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for HandshakeState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACCEPTED" => Ok(HandshakeState::Accepted),
+            "CANCELED" => Ok(HandshakeState::Canceled),
+            "DECLINED" => Ok(HandshakeState::Declined),
+            "EXPIRED" => Ok(HandshakeState::Expired),
+            "OPEN" => Ok(HandshakeState::Open),
+            "REQUESTED" => Ok(HandshakeState::Requested),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum IAMUserAccessToBilling {
+    Allow,
+    Deny,
+}
+
+impl Into<String> for IAMUserAccessToBilling {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for IAMUserAccessToBilling {
+    fn into(self) -> &'static str {
+        match self {
+            IAMUserAccessToBilling::Allow => "ALLOW",
+            IAMUserAccessToBilling::Deny => "DENY",
+        }
+    }
+}
+
+impl ::std::str::FromStr for IAMUserAccessToBilling {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ALLOW" => Ok(IAMUserAccessToBilling::Allow),
+            "DENY" => Ok(IAMUserAccessToBilling::Deny),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InvalidInputExceptionReason {
+    ImmutablePolicy,
+    InputRequired,
+    InvalidEnum,
+    InvalidFullNameTarget,
+    InvalidListMember,
+    InvalidNextToken,
+    InvalidPartyTypeTarget,
+    InvalidPattern,
+    InvalidPatternTargetId,
+    InvalidSyntaxOrganizationArn,
+    InvalidSyntaxPolicyId,
+    MaxLengthExceeded,
+    MaxLimitExceededFilter,
+    MaxValueExceeded,
+    MinLengthExceeded,
+    MinValueExceeded,
+    MovingAccountBetweenDifferentRoots,
+}
+
+impl Into<String> for InvalidInputExceptionReason {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InvalidInputExceptionReason {
+    fn into(self) -> &'static str {
+        match self {
+            InvalidInputExceptionReason::ImmutablePolicy => "IMMUTABLE_POLICY",
+            InvalidInputExceptionReason::InputRequired => "INPUT_REQUIRED",
+            InvalidInputExceptionReason::InvalidEnum => "INVALID_ENUM",
+            InvalidInputExceptionReason::InvalidFullNameTarget => "INVALID_FULL_NAME_TARGET",
+            InvalidInputExceptionReason::InvalidListMember => "INVALID_LIST_MEMBER",
+            InvalidInputExceptionReason::InvalidNextToken => "INVALID_NEXT_TOKEN",
+            InvalidInputExceptionReason::InvalidPartyTypeTarget => "INVALID_PARTY_TYPE_TARGET",
+            InvalidInputExceptionReason::InvalidPattern => "INVALID_PATTERN",
+            InvalidInputExceptionReason::InvalidPatternTargetId => "INVALID_PATTERN_TARGET_ID",
+            InvalidInputExceptionReason::InvalidSyntaxOrganizationArn => {
+                "INVALID_SYNTAX_ORGANIZATION_ARN"
+            }
+            InvalidInputExceptionReason::InvalidSyntaxPolicyId => "INVALID_SYNTAX_POLICY_ID",
+            InvalidInputExceptionReason::MaxLengthExceeded => "MAX_LENGTH_EXCEEDED",
+            InvalidInputExceptionReason::MaxLimitExceededFilter => "MAX_LIMIT_EXCEEDED_FILTER",
+            InvalidInputExceptionReason::MaxValueExceeded => "MAX_VALUE_EXCEEDED",
+            InvalidInputExceptionReason::MinLengthExceeded => "MIN_LENGTH_EXCEEDED",
+            InvalidInputExceptionReason::MinValueExceeded => "MIN_VALUE_EXCEEDED",
+            InvalidInputExceptionReason::MovingAccountBetweenDifferentRoots => {
+                "MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS"
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for InvalidInputExceptionReason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "IMMUTABLE_POLICY" => Ok(InvalidInputExceptionReason::ImmutablePolicy),
+            "INPUT_REQUIRED" => Ok(InvalidInputExceptionReason::InputRequired),
+            "INVALID_ENUM" => Ok(InvalidInputExceptionReason::InvalidEnum),
+            "INVALID_FULL_NAME_TARGET" => Ok(InvalidInputExceptionReason::InvalidFullNameTarget),
+            "INVALID_LIST_MEMBER" => Ok(InvalidInputExceptionReason::InvalidListMember),
+            "INVALID_NEXT_TOKEN" => Ok(InvalidInputExceptionReason::InvalidNextToken),
+            "INVALID_PARTY_TYPE_TARGET" => Ok(InvalidInputExceptionReason::InvalidPartyTypeTarget),
+            "INVALID_PATTERN" => Ok(InvalidInputExceptionReason::InvalidPattern),
+            "INVALID_PATTERN_TARGET_ID" => Ok(InvalidInputExceptionReason::InvalidPatternTargetId),
+            "INVALID_SYNTAX_ORGANIZATION_ARN" => {
+                Ok(InvalidInputExceptionReason::InvalidSyntaxOrganizationArn)
+            }
+            "INVALID_SYNTAX_POLICY_ID" => Ok(InvalidInputExceptionReason::InvalidSyntaxPolicyId),
+            "MAX_LENGTH_EXCEEDED" => Ok(InvalidInputExceptionReason::MaxLengthExceeded),
+            "MAX_LIMIT_EXCEEDED_FILTER" => Ok(InvalidInputExceptionReason::MaxLimitExceededFilter),
+            "MAX_VALUE_EXCEEDED" => Ok(InvalidInputExceptionReason::MaxValueExceeded),
+            "MIN_LENGTH_EXCEEDED" => Ok(InvalidInputExceptionReason::MinLengthExceeded),
+            "MIN_VALUE_EXCEEDED" => Ok(InvalidInputExceptionReason::MinValueExceeded),
+            "MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS" => {
+                Ok(InvalidInputExceptionReason::MovingAccountBetweenDifferentRoots)
+            }
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -870,6 +1550,41 @@ pub struct Organization {
     pub master_account_id: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum OrganizationFeatureSet {
+    All,
+    ConsolidatedBilling,
+}
+
+impl Into<String> for OrganizationFeatureSet {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for OrganizationFeatureSet {
+    fn into(self) -> &'static str {
+        match self {
+            OrganizationFeatureSet::All => "ALL",
+            OrganizationFeatureSet::ConsolidatedBilling => "CONSOLIDATED_BILLING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for OrganizationFeatureSet {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ALL" => Ok(OrganizationFeatureSet::All),
+            "CONSOLIDATED_BILLING" => Ok(OrganizationFeatureSet::ConsolidatedBilling),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Contains details about an organizational unit (OU). An OU is a container of AWS accounts within a root of an organization. Policies that are attached to an OU apply to all accounts contained in that OU and in any child OUs.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct OrganizationalUnit {
@@ -898,6 +1613,41 @@ pub struct Parent {
     #[serde(rename="Type")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub type_: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ParentType {
+    OrganizationalUnit,
+    Root,
+}
+
+impl Into<String> for ParentType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ParentType {
+    fn into(self) -> &'static str {
+        match self {
+            ParentType::OrganizationalUnit => "ORGANIZATIONAL_UNIT",
+            ParentType::Root => "ROOT",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ParentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ORGANIZATIONAL_UNIT" => Ok(ParentType::OrganizationalUnit),
+            "ROOT" => Ok(ParentType::Root),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Contains rules to be applied to the affected accounts. Policies can be attached directly to accounts, or to roots and OUs to affect all accounts in those hierarchies.</p>"]
@@ -963,6 +1713,76 @@ pub struct PolicyTargetSummary {
     pub type_: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PolicyType {
+    ServiceControlPolicy,
+}
+
+impl Into<String> for PolicyType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PolicyType {
+    fn into(self) -> &'static str {
+        match self {
+            PolicyType::ServiceControlPolicy => "SERVICE_CONTROL_POLICY",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PolicyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "SERVICE_CONTROL_POLICY" => Ok(PolicyType::ServiceControlPolicy),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PolicyTypeStatus {
+    Enabled,
+    PendingDisable,
+    PendingEnable,
+}
+
+impl Into<String> for PolicyTypeStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PolicyTypeStatus {
+    fn into(self) -> &'static str {
+        match self {
+            PolicyTypeStatus::Enabled => "ENABLED",
+            PolicyTypeStatus::PendingDisable => "PENDING_DISABLE",
+            PolicyTypeStatus::PendingEnable => "PENDING_ENABLE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PolicyTypeStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ENABLED" => Ok(PolicyTypeStatus::Enabled),
+            "PENDING_DISABLE" => Ok(PolicyTypeStatus::PendingDisable),
+            "PENDING_ENABLE" => Ok(PolicyTypeStatus::PendingEnable),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Contains information about a policy type and its status in the associated root.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct PolicyTypeSummary {
@@ -1002,6 +1822,44 @@ pub struct Root {
     #[serde(rename="PolicyTypes")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub policy_types: Option<Vec<PolicyTypeSummary>>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum TargetType {
+    Account,
+    OrganizationalUnit,
+    Root,
+}
+
+impl Into<String> for TargetType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for TargetType {
+    fn into(self) -> &'static str {
+        match self {
+            TargetType::Account => "ACCOUNT",
+            TargetType::OrganizationalUnit => "ORGANIZATIONAL_UNIT",
+            TargetType::Root => "ROOT",
+        }
+    }
+}
+
+impl ::std::str::FromStr for TargetType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACCOUNT" => Ok(TargetType::Account),
+            "ORGANIZATIONAL_UNIT" => Ok(TargetType::OrganizationalUnit),
+            "ROOT" => Ok(TargetType::Root),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -5589,7 +6447,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AcceptHandshakeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5614,7 +6472,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(AttachPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
             }
@@ -5638,7 +6496,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CancelHandshakeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5665,7 +6523,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateAccountResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5692,7 +6550,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateOrganizationResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5721,7 +6579,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateOrganizationalUnitResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(CreateOrganizationalUnitError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5745,7 +6603,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreatePolicyResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5771,7 +6629,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeclineHandshakeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5796,7 +6654,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(DeleteOrganizationError::from_body(String::from_utf8_lossy(&response.body)
                                                            .as_ref()))
@@ -5822,7 +6680,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(DeleteOrganizationalUnitError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -5842,7 +6700,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(DeletePolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
             }
@@ -5866,7 +6724,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeAccountResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5895,7 +6753,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeCreateAccountStatusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeCreateAccountStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5920,7 +6778,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeHandshakeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5946,7 +6804,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeOrganizationResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5975,7 +6833,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeOrganizationalUnitResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeOrganizationalUnitError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5999,7 +6857,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribePolicyResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6024,7 +6882,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(DetachPolicyError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
             }
@@ -6049,7 +6907,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DisablePolicyTypeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6074,7 +6932,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<EnableAllFeaturesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6101,7 +6959,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<EnablePolicyTypeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6130,7 +6988,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<InviteAccountToOrganizationResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(InviteAccountToOrganizationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -6152,7 +7010,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(LeaveOrganizationError::from_body(String::from_utf8_lossy(&response.body)
                                                           .as_ref()))
@@ -6177,7 +7035,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListAccountsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6205,7 +7063,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListAccountsForParentResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6232,7 +7090,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListChildrenResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6260,7 +7118,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListCreateAccountStatusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListCreateAccountStatusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -6286,7 +7144,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListHandshakesForAccountResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListHandshakesForAccountError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -6312,7 +7170,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListHandshakesForOrganizationResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListHandshakesForOrganizationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -6338,7 +7196,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListOrganizationalUnitsForParentResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListOrganizationalUnitsForParentError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -6362,7 +7220,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListParentsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListParentsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -6386,7 +7244,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListPoliciesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6414,7 +7272,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListPoliciesForTargetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6439,7 +7297,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListRootsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListRootsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -6465,7 +7323,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListTargetsForPolicyResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6490,7 +7348,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(MoveAccountError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -6513,7 +7371,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(RemoveAccountFromOrganizationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -6537,7 +7395,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateOrganizationalUnitResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(UpdateOrganizationalUnitError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -6561,7 +7419,7 @@ impl<P, D> Organizations for OrganizationsClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdatePolicyResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {

@@ -11,15 +11,11 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -75,6 +71,44 @@ pub struct BranchInfo {
     #[serde(rename="commitId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub commit_id: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ChangeTypeEnum {
+    A,
+    D,
+    M,
+}
+
+impl Into<String> for ChangeTypeEnum {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ChangeTypeEnum {
+    fn into(self) -> &'static str {
+        match self {
+            ChangeTypeEnum::A => "A",
+            ChangeTypeEnum::D => "D",
+            ChangeTypeEnum::M => "M",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChangeTypeEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "A" => Ok(ChangeTypeEnum::A),
+            "D" => Ok(ChangeTypeEnum::D),
+            "M" => Ok(ChangeTypeEnum::M),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Returns information about a specific commit.</p>"]
@@ -375,6 +409,41 @@ pub struct ListRepositoriesOutput {
     pub repositories: Option<Vec<RepositoryNameIdPair>>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum OrderEnum {
+    Ascending,
+    Descending,
+}
+
+impl Into<String> for OrderEnum {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for OrderEnum {
+    fn into(self) -> &'static str {
+        match self {
+            OrderEnum::Ascending => "ascending",
+            OrderEnum::Descending => "descending",
+        }
+    }
+}
+
+impl ::std::str::FromStr for OrderEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ascending" => Ok(OrderEnum::Ascending),
+            "descending" => Ok(OrderEnum::Descending),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Represents the input ofa put repository triggers operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct PutRepositoryTriggersInput {
@@ -475,6 +544,47 @@ pub struct RepositoryTrigger {
     pub name: String,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RepositoryTriggerEventEnum {
+    All,
+    CreateReference,
+    DeleteReference,
+    UpdateReference,
+}
+
+impl Into<String> for RepositoryTriggerEventEnum {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RepositoryTriggerEventEnum {
+    fn into(self) -> &'static str {
+        match self {
+            RepositoryTriggerEventEnum::All => "all",
+            RepositoryTriggerEventEnum::CreateReference => "createReference",
+            RepositoryTriggerEventEnum::DeleteReference => "deleteReference",
+            RepositoryTriggerEventEnum::UpdateReference => "updateReference",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RepositoryTriggerEventEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "all" => Ok(RepositoryTriggerEventEnum::All),
+            "createReference" => Ok(RepositoryTriggerEventEnum::CreateReference),
+            "deleteReference" => Ok(RepositoryTriggerEventEnum::DeleteReference),
+            "updateReference" => Ok(RepositoryTriggerEventEnum::UpdateReference),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>A trigger failed to run.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct RepositoryTriggerExecutionFailure {
@@ -486,6 +596,41 @@ pub struct RepositoryTriggerExecutionFailure {
     #[serde(rename="trigger")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub trigger: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SortByEnum {
+    LastModifiedDate,
+    RepositoryName,
+}
+
+impl Into<String> for SortByEnum {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SortByEnum {
+    fn into(self) -> &'static str {
+        match self {
+            SortByEnum::LastModifiedDate => "lastModifiedDate",
+            SortByEnum::RepositoryName => "repositoryName",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SortByEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "lastModifiedDate" => Ok(SortByEnum::LastModifiedDate),
+            "repositoryName" => Ok(SortByEnum::RepositoryName),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Represents the input of a test repository triggers operation.</p>"]
@@ -2802,7 +2947,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<BatchGetRepositoriesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2827,7 +2972,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(CreateBranchError::from_body(String::from_utf8_lossy(&response.body).as_ref()))
             }
@@ -2851,7 +2996,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateRepositoryOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2878,7 +3023,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteRepositoryOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2903,7 +3048,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<GetBlobOutput>(String::from_utf8_lossy(&response.body)
                                                              .as_ref())
                            .unwrap())
@@ -2927,7 +3072,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<GetBranchOutput>(String::from_utf8_lossy(&response.body)
                                                                .as_ref())
                            .unwrap())
@@ -2951,7 +3096,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<GetCommitOutput>(String::from_utf8_lossy(&response.body)
                                                                .as_ref())
                            .unwrap())
@@ -2977,7 +3122,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetDifferencesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -3004,7 +3149,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetRepositoryOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -3031,7 +3176,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetRepositoryTriggersOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -3058,7 +3203,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListBranchesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -3084,7 +3229,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListRepositoriesOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -3112,7 +3257,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<PutRepositoryTriggersOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -3140,7 +3285,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<TestRepositoryTriggersOutput>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -3167,7 +3312,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(UpdateDefaultBranchError::from_body(String::from_utf8_lossy(&response.body)
                                                             .as_ref()))
@@ -3193,7 +3338,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => Err(UpdateRepositoryDescriptionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
         }
     }
@@ -3215,7 +3360,7 @@ impl<P, D> CodeCommit for CodeCommitClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => Ok(()),
+            ::hyper::status::StatusCode::Ok => Ok(()),
             _ => {
                 Err(UpdateRepositoryNameError::from_body(String::from_utf8_lossy(&response.body)
                                                              .as_ref()))

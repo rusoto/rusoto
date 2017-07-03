@@ -11,15 +11,11 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -733,6 +729,141 @@ pub struct DirectoryLimits {
     pub connected_directories_limit_reached: Option<bool>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DirectorySize {
+    Large,
+    Small,
+}
+
+impl Into<String> for DirectorySize {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DirectorySize {
+    fn into(self) -> &'static str {
+        match self {
+            DirectorySize::Large => "Large",
+            DirectorySize::Small => "Small",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DirectorySize {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Large" => Ok(DirectorySize::Large),
+            "Small" => Ok(DirectorySize::Small),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DirectoryStage {
+    Active,
+    Created,
+    Creating,
+    Deleted,
+    Deleting,
+    Failed,
+    Impaired,
+    Inoperable,
+    Requested,
+    RestoreFailed,
+    Restoring,
+}
+
+impl Into<String> for DirectoryStage {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DirectoryStage {
+    fn into(self) -> &'static str {
+        match self {
+            DirectoryStage::Active => "Active",
+            DirectoryStage::Created => "Created",
+            DirectoryStage::Creating => "Creating",
+            DirectoryStage::Deleted => "Deleted",
+            DirectoryStage::Deleting => "Deleting",
+            DirectoryStage::Failed => "Failed",
+            DirectoryStage::Impaired => "Impaired",
+            DirectoryStage::Inoperable => "Inoperable",
+            DirectoryStage::Requested => "Requested",
+            DirectoryStage::RestoreFailed => "RestoreFailed",
+            DirectoryStage::Restoring => "Restoring",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DirectoryStage {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Active" => Ok(DirectoryStage::Active),
+            "Created" => Ok(DirectoryStage::Created),
+            "Creating" => Ok(DirectoryStage::Creating),
+            "Deleted" => Ok(DirectoryStage::Deleted),
+            "Deleting" => Ok(DirectoryStage::Deleting),
+            "Failed" => Ok(DirectoryStage::Failed),
+            "Impaired" => Ok(DirectoryStage::Impaired),
+            "Inoperable" => Ok(DirectoryStage::Inoperable),
+            "Requested" => Ok(DirectoryStage::Requested),
+            "RestoreFailed" => Ok(DirectoryStage::RestoreFailed),
+            "Restoring" => Ok(DirectoryStage::Restoring),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DirectoryType {
+    Adconnector,
+    MicrosoftAD,
+    SimpleAD,
+}
+
+impl Into<String> for DirectoryType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DirectoryType {
+    fn into(self) -> &'static str {
+        match self {
+            DirectoryType::Adconnector => "ADConnector",
+            DirectoryType::MicrosoftAD => "MicrosoftAD",
+            DirectoryType::SimpleAD => "SimpleAD",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DirectoryType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ADConnector" => Ok(DirectoryType::Adconnector),
+            "MicrosoftAD" => Ok(DirectoryType::MicrosoftAD),
+            "SimpleAD" => Ok(DirectoryType::SimpleAD),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Contains VPC information for the <a>CreateDirectory</a> or <a>CreateMicrosoftAD</a> operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DirectoryVpcSettings {
@@ -929,6 +1060,53 @@ pub struct IpRouteInfo {
     pub ip_route_status_reason: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum IpRouteStatusMsg {
+    AddFailed,
+    Added,
+    Adding,
+    RemoveFailed,
+    Removed,
+    Removing,
+}
+
+impl Into<String> for IpRouteStatusMsg {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for IpRouteStatusMsg {
+    fn into(self) -> &'static str {
+        match self {
+            IpRouteStatusMsg::AddFailed => "AddFailed",
+            IpRouteStatusMsg::Added => "Added",
+            IpRouteStatusMsg::Adding => "Adding",
+            IpRouteStatusMsg::RemoveFailed => "RemoveFailed",
+            IpRouteStatusMsg::Removed => "Removed",
+            IpRouteStatusMsg::Removing => "Removing",
+        }
+    }
+}
+
+impl ::std::str::FromStr for IpRouteStatusMsg {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AddFailed" => Ok(IpRouteStatusMsg::AddFailed),
+            "Added" => Ok(IpRouteStatusMsg::Added),
+            "Adding" => Ok(IpRouteStatusMsg::Adding),
+            "RemoveFailed" => Ok(IpRouteStatusMsg::RemoveFailed),
+            "Removed" => Ok(IpRouteStatusMsg::Removed),
+            "Removing" => Ok(IpRouteStatusMsg::Removing),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListIpRoutesRequest {
     #[doc="<p>Identifier (ID) of the directory for which you want to retrieve the IP addresses.</p>"]
@@ -1010,6 +1188,47 @@ pub struct ListTagsForResourceResult {
     pub tags: Option<Vec<Tag>>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RadiusAuthenticationProtocol {
+    Chap,
+    MsChapv1,
+    MsChapv2,
+    Pap,
+}
+
+impl Into<String> for RadiusAuthenticationProtocol {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RadiusAuthenticationProtocol {
+    fn into(self) -> &'static str {
+        match self {
+            RadiusAuthenticationProtocol::Chap => "CHAP",
+            RadiusAuthenticationProtocol::MsChapv1 => "MS-CHAPv1",
+            RadiusAuthenticationProtocol::MsChapv2 => "MS-CHAPv2",
+            RadiusAuthenticationProtocol::Pap => "PAP",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RadiusAuthenticationProtocol {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CHAP" => Ok(RadiusAuthenticationProtocol::Chap),
+            "MS-CHAPv1" => Ok(RadiusAuthenticationProtocol::MsChapv1),
+            "MS-CHAPv2" => Ok(RadiusAuthenticationProtocol::MsChapv2),
+            "PAP" => Ok(RadiusAuthenticationProtocol::Pap),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Contains information about a Remote Authentication Dial In User Service (RADIUS) server.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RadiusSettings {
@@ -1045,6 +1264,44 @@ pub struct RadiusSettings {
     #[serde(rename="UseSameUsername")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub use_same_username: Option<bool>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RadiusStatus {
+    Completed,
+    Creating,
+    Failed,
+}
+
+impl Into<String> for RadiusStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RadiusStatus {
+    fn into(self) -> &'static str {
+        match self {
+            RadiusStatus::Completed => "Completed",
+            RadiusStatus::Creating => "Creating",
+            RadiusStatus::Failed => "Failed",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RadiusStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Completed" => Ok(RadiusStatus::Completed),
+            "Creating" => Ok(RadiusStatus::Creating),
+            "Failed" => Ok(RadiusStatus::Failed),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Registers a new event topic.</p>"]
@@ -1087,6 +1344,38 @@ pub struct RemoveTagsFromResourceRequest {
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct RemoveTagsFromResourceResult;
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ReplicationScope {
+    Domain,
+}
+
+impl Into<String> for ReplicationScope {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ReplicationScope {
+    fn into(self) -> &'static str {
+        match self {
+            ReplicationScope::Domain => "Domain",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReplicationScope {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Domain" => Ok(ReplicationScope::Domain),
+            _ => Err(()),
+        }
+    }
+}
 
 #[doc="<p>An object representing the inputs for the <a>RestoreFromSnapshot</a> operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
@@ -1131,6 +1420,62 @@ pub struct SchemaExtensionInfo {
     #[serde(rename="StartDateTime")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub start_date_time: Option<f64>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SchemaExtensionStatus {
+    CancelInProgress,
+    Cancelled,
+    Completed,
+    CreatingSnapshot,
+    Failed,
+    Initializing,
+    Replicating,
+    RollbackInProgress,
+    UpdatingSchema,
+}
+
+impl Into<String> for SchemaExtensionStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SchemaExtensionStatus {
+    fn into(self) -> &'static str {
+        match self {
+            SchemaExtensionStatus::CancelInProgress => "CancelInProgress",
+            SchemaExtensionStatus::Cancelled => "Cancelled",
+            SchemaExtensionStatus::Completed => "Completed",
+            SchemaExtensionStatus::CreatingSnapshot => "CreatingSnapshot",
+            SchemaExtensionStatus::Failed => "Failed",
+            SchemaExtensionStatus::Initializing => "Initializing",
+            SchemaExtensionStatus::Replicating => "Replicating",
+            SchemaExtensionStatus::RollbackInProgress => "RollbackInProgress",
+            SchemaExtensionStatus::UpdatingSchema => "UpdatingSchema",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SchemaExtensionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CancelInProgress" => Ok(SchemaExtensionStatus::CancelInProgress),
+            "Cancelled" => Ok(SchemaExtensionStatus::Cancelled),
+            "Completed" => Ok(SchemaExtensionStatus::Completed),
+            "CreatingSnapshot" => Ok(SchemaExtensionStatus::CreatingSnapshot),
+            "Failed" => Ok(SchemaExtensionStatus::Failed),
+            "Initializing" => Ok(SchemaExtensionStatus::Initializing),
+            "Replicating" => Ok(SchemaExtensionStatus::Replicating),
+            "RollbackInProgress" => Ok(SchemaExtensionStatus::RollbackInProgress),
+            "UpdatingSchema" => Ok(SchemaExtensionStatus::UpdatingSchema),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Describes a directory snapshot.</p>"]
@@ -1179,6 +1524,79 @@ pub struct SnapshotLimits {
     pub manual_snapshots_limit_reached: Option<bool>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SnapshotStatus {
+    Completed,
+    Creating,
+    Failed,
+}
+
+impl Into<String> for SnapshotStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SnapshotStatus {
+    fn into(self) -> &'static str {
+        match self {
+            SnapshotStatus::Completed => "Completed",
+            SnapshotStatus::Creating => "Creating",
+            SnapshotStatus::Failed => "Failed",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SnapshotStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Completed" => Ok(SnapshotStatus::Completed),
+            "Creating" => Ok(SnapshotStatus::Creating),
+            "Failed" => Ok(SnapshotStatus::Failed),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SnapshotType {
+    Auto,
+    Manual,
+}
+
+impl Into<String> for SnapshotType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SnapshotType {
+    fn into(self) -> &'static str {
+        match self {
+            SnapshotType::Auto => "Auto",
+            SnapshotType::Manual => "Manual",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SnapshotType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Auto" => Ok(SnapshotType::Auto),
+            "Manual" => Ok(SnapshotType::Manual),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct StartSchemaExtensionRequest {
     #[doc="<p>If true, creates a snapshot of the directory before applying the schema extension.</p>"]
@@ -1212,6 +1630,47 @@ pub struct Tag {
     #[doc="<p>The optional value of the tag. The string value can be Unicode characters. The string can contain only the set of Unicode letters, digits, white-space, '_', '.', '/', '=', '+', '-' (Java regex: \"^([\\\\p{L}\\\\p{Z}\\\\p{N}_.:/=+\\\\-]*)$\").</p>"]
     #[serde(rename="Value")]
     pub value: String,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum TopicStatus {
+    Deleted,
+    Failed,
+    Registered,
+    TopicNotFound,
+}
+
+impl Into<String> for TopicStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for TopicStatus {
+    fn into(self) -> &'static str {
+        match self {
+            TopicStatus::Deleted => "Deleted",
+            TopicStatus::Failed => "Failed",
+            TopicStatus::Registered => "Registered",
+            TopicStatus::TopicNotFound => "Topic not found",
+        }
+    }
+}
+
+impl ::std::str::FromStr for TopicStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Deleted" => Ok(TopicStatus::Deleted),
+            "Failed" => Ok(TopicStatus::Failed),
+            "Registered" => Ok(TopicStatus::Registered),
+            "Topic not found" => Ok(TopicStatus::TopicNotFound),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Describes a trust relationship between an Microsoft AD in the AWS cloud and an external domain.</p>"]
@@ -1257,6 +1716,129 @@ pub struct Trust {
     #[serde(rename="TrustType")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub trust_type: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum TrustDirection {
+    OneWayIncoming,
+    OneWayOutgoing,
+    TwoWay,
+}
+
+impl Into<String> for TrustDirection {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for TrustDirection {
+    fn into(self) -> &'static str {
+        match self {
+            TrustDirection::OneWayIncoming => "One-Way: Incoming",
+            TrustDirection::OneWayOutgoing => "One-Way: Outgoing",
+            TrustDirection::TwoWay => "Two-Way",
+        }
+    }
+}
+
+impl ::std::str::FromStr for TrustDirection {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "One-Way: Incoming" => Ok(TrustDirection::OneWayIncoming),
+            "One-Way: Outgoing" => Ok(TrustDirection::OneWayOutgoing),
+            "Two-Way" => Ok(TrustDirection::TwoWay),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum TrustState {
+    Created,
+    Creating,
+    Deleted,
+    Deleting,
+    Failed,
+    Verified,
+    VerifyFailed,
+    Verifying,
+}
+
+impl Into<String> for TrustState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for TrustState {
+    fn into(self) -> &'static str {
+        match self {
+            TrustState::Created => "Created",
+            TrustState::Creating => "Creating",
+            TrustState::Deleted => "Deleted",
+            TrustState::Deleting => "Deleting",
+            TrustState::Failed => "Failed",
+            TrustState::Verified => "Verified",
+            TrustState::VerifyFailed => "VerifyFailed",
+            TrustState::Verifying => "Verifying",
+        }
+    }
+}
+
+impl ::std::str::FromStr for TrustState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Created" => Ok(TrustState::Created),
+            "Creating" => Ok(TrustState::Creating),
+            "Deleted" => Ok(TrustState::Deleted),
+            "Deleting" => Ok(TrustState::Deleting),
+            "Failed" => Ok(TrustState::Failed),
+            "Verified" => Ok(TrustState::Verified),
+            "VerifyFailed" => Ok(TrustState::VerifyFailed),
+            "Verifying" => Ok(TrustState::Verifying),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum TrustType {
+    Forest,
+}
+
+impl Into<String> for TrustType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for TrustType {
+    fn into(self) -> &'static str {
+        match self {
+            TrustType::Forest => "Forest",
+        }
+    }
+}
+
+impl ::std::str::FromStr for TrustType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Forest" => Ok(TrustType::Forest),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Updates a conditional forwarder.</p>"]
@@ -5191,7 +5773,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AddIpRoutesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(AddIpRoutesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5216,7 +5798,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AddTagsToResourceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5245,7 +5827,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CancelSchemaExtensionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5272,7 +5854,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ConnectDirectoryResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5299,7 +5881,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateAliasResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(CreateAliasError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5323,7 +5905,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateComputerResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5352,7 +5934,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateConditionalForwarderResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(CreateConditionalForwarderError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5376,7 +5958,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateDirectoryResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5404,7 +5986,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateMicrosoftADResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5431,7 +6013,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateSnapshotResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5458,7 +6040,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateTrustResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(CreateTrustError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5484,7 +6066,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteConditionalForwarderResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DeleteConditionalForwarderError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5508,7 +6090,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteDirectoryResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5535,7 +6117,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteSnapshotResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5562,7 +6144,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteTrustResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DeleteTrustError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5587,7 +6169,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeregisterEventTopicResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5616,7 +6198,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeConditionalForwardersResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeConditionalForwardersError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5641,7 +6223,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeDirectoriesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5669,7 +6251,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeEventTopicsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5697,7 +6279,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeSnapshotsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5724,7 +6306,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeTrustsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5751,7 +6333,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DisableRadiusResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5775,7 +6357,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DisableSsoResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DisableSsoError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5799,7 +6381,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<EnableRadiusResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5823,7 +6405,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<EnableSsoResult>(String::from_utf8_lossy(&response.body)
                                                                .as_ref())
                            .unwrap())
@@ -5847,7 +6429,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetDirectoryLimitsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5875,7 +6457,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetSnapshotLimitsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5902,7 +6484,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListIpRoutesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5929,7 +6511,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListSchemaExtensionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5957,7 +6539,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListTagsForResourceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5985,7 +6567,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<RegisterEventTopicResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6012,7 +6594,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<RemoveIpRoutesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6041,7 +6623,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<RemoveTagsFromResourceResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6069,7 +6651,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<RestoreFromSnapshotResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6097,7 +6679,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<StartSchemaExtensionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6126,7 +6708,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateConditionalForwarderResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(UpdateConditionalForwarderError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -6150,7 +6732,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateRadiusResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6176,7 +6758,7 @@ impl<P, D> DirectoryService for DirectoryServiceClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<VerifyTrustResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(VerifyTrustError::from_body(String::from_utf8_lossy(&response.body).as_ref())),

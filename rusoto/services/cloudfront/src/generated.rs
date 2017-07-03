@@ -11,19 +11,14 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 
-use std::str::FromStr;
 use xml::reader::ParserConfig;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
@@ -362,7 +357,7 @@ impl BooleanDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -729,6 +724,44 @@ impl CachedMethodsSerializer {
         serialized += &format!("<Quantity>{value}</Quantity>", value = obj.quantity);
         serialized += &format!("</{name}>", name = name);
         serialized
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CertificateSource {
+    Acm,
+    Cloudfront,
+    Iam,
+}
+
+impl Into<String> for CertificateSource {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CertificateSource {
+    fn into(self) -> &'static str {
+        match self {
+            CertificateSource::Acm => "acm",
+            CertificateSource::Cloudfront => "cloudfront",
+            CertificateSource::Iam => "iam",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CertificateSource {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "acm" => Ok(CertificateSource::Acm),
+            "cloudfront" => Ok(CertificateSource::Cloudfront),
+            "iam" => Ok(CertificateSource::Iam),
+            _ => Err(()),
+        }
     }
 }
 
@@ -2752,6 +2785,47 @@ impl DistributionSummaryListDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum EventType {
+    OriginRequest,
+    OriginResponse,
+    ViewerRequest,
+    ViewerResponse,
+}
+
+impl Into<String> for EventType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for EventType {
+    fn into(self) -> &'static str {
+        match self {
+            EventType::OriginRequest => "origin-request",
+            EventType::OriginResponse => "origin-response",
+            EventType::ViewerRequest => "viewer-request",
+            EventType::ViewerResponse => "viewer-response",
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "origin-request" => Ok(EventType::OriginRequest),
+            "origin-response" => Ok(EventType::OriginResponse),
+            "viewer-request" => Ok(EventType::ViewerRequest),
+            "viewer-response" => Ok(EventType::ViewerResponse),
+            _ => Err(()),
+        }
+    }
+}
+
 struct EventTypeDeserializer;
 impl EventTypeDeserializer {
     #[allow(unused_variables)]
@@ -2941,6 +3015,44 @@ impl GeoRestrictionSerializer {
                 value = obj.restriction_type);
         serialized += &format!("</{name}>", name = name);
         serialized
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum GeoRestrictionType {
+    Blacklist,
+    None,
+    Whitelist,
+}
+
+impl Into<String> for GeoRestrictionType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for GeoRestrictionType {
+    fn into(self) -> &'static str {
+        match self {
+            GeoRestrictionType::Blacklist => "blacklist",
+            GeoRestrictionType::None => "none",
+            GeoRestrictionType::Whitelist => "whitelist",
+        }
+    }
+}
+
+impl ::std::str::FromStr for GeoRestrictionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "blacklist" => Ok(GeoRestrictionType::Blacklist),
+            "none" => Ok(GeoRestrictionType::None),
+            "whitelist" => Ok(GeoRestrictionType::Whitelist),
+            _ => Err(()),
+        }
     }
 }
 
@@ -3505,6 +3617,41 @@ impl HeadersSerializer {
     }
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum HttpVersion {
+    Http11,
+    Http2,
+}
+
+impl Into<String> for HttpVersion {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for HttpVersion {
+    fn into(self) -> &'static str {
+        match self {
+            HttpVersion::Http11 => "http1.1",
+            HttpVersion::Http2 => "http2",
+        }
+    }
+}
+
+impl ::std::str::FromStr for HttpVersion {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "http1.1" => Ok(HttpVersion::Http11),
+            "http2" => Ok(HttpVersion::Http2),
+            _ => Err(()),
+        }
+    }
+}
+
 struct HttpVersionDeserializer;
 impl HttpVersionDeserializer {
     #[allow(unused_variables)]
@@ -3537,7 +3684,7 @@ impl IntegerDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -3867,6 +4014,44 @@ impl InvalidationSummaryListDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ItemSelection {
+    All,
+    None,
+    Whitelist,
+}
+
+impl Into<String> for ItemSelection {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ItemSelection {
+    fn into(self) -> &'static str {
+        match self {
+            ItemSelection::All => "all",
+            ItemSelection::None => "none",
+            ItemSelection::Whitelist => "whitelist",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ItemSelection {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "all" => Ok(ItemSelection::All),
+            "none" => Ok(ItemSelection::None),
+            "whitelist" => Ok(ItemSelection::Whitelist),
+            _ => Err(()),
+        }
+    }
+}
+
 struct ItemSelectionDeserializer;
 impl ItemSelectionDeserializer {
     #[allow(unused_variables)]
@@ -4683,7 +4868,7 @@ impl LongDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -4698,6 +4883,56 @@ impl LongSerializer {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Method {
+    Delete,
+    Get,
+    Head,
+    Options,
+    Patch,
+    Post,
+    Put,
+}
+
+impl Into<String> for Method {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Method {
+    fn into(self) -> &'static str {
+        match self {
+            Method::Delete => "DELETE",
+            Method::Get => "GET",
+            Method::Head => "HEAD",
+            Method::Options => "OPTIONS",
+            Method::Patch => "PATCH",
+            Method::Post => "POST",
+            Method::Put => "PUT",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Method {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DELETE" => Ok(Method::Delete),
+            "GET" => Ok(Method::Get),
+            "HEAD" => Ok(Method::Head),
+            "OPTIONS" => Ok(Method::Options),
+            "PATCH" => Ok(Method::Patch),
+            "POST" => Ok(Method::Post),
+            "PUT" => Ok(Method::Put),
+            _ => Err(()),
+        }
     }
 }
 
@@ -4779,6 +5014,41 @@ impl MethodsListSerializer {
         }
         parts.push(format!("</{}>", name));
         parts.join("")
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum MinimumProtocolVersion {
+    Sslv3,
+    Tlsv1,
+}
+
+impl Into<String> for MinimumProtocolVersion {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for MinimumProtocolVersion {
+    fn into(self) -> &'static str {
+        match self {
+            MinimumProtocolVersion::Sslv3 => "SSLv3",
+            MinimumProtocolVersion::Tlsv1 => "TLSv1",
+        }
+    }
+}
+
+impl ::std::str::FromStr for MinimumProtocolVersion {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "SSLv3" => Ok(MinimumProtocolVersion::Sslv3),
+            "TLSv1" => Ok(MinimumProtocolVersion::Tlsv1),
+            _ => Err(()),
+        }
     }
 }
 
@@ -5094,6 +5364,44 @@ impl OriginListSerializer {
     }
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum OriginProtocolPolicy {
+    HttpOnly,
+    HttpsOnly,
+    MatchViewer,
+}
+
+impl Into<String> for OriginProtocolPolicy {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for OriginProtocolPolicy {
+    fn into(self) -> &'static str {
+        match self {
+            OriginProtocolPolicy::HttpOnly => "http-only",
+            OriginProtocolPolicy::HttpsOnly => "https-only",
+            OriginProtocolPolicy::MatchViewer => "match-viewer",
+        }
+    }
+}
+
+impl ::std::str::FromStr for OriginProtocolPolicy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "http-only" => Ok(OriginProtocolPolicy::HttpOnly),
+            "https-only" => Ok(OriginProtocolPolicy::HttpsOnly),
+            "match-viewer" => Ok(OriginProtocolPolicy::MatchViewer),
+            _ => Err(()),
+        }
+    }
+}
+
 struct OriginProtocolPolicyDeserializer;
 impl OriginProtocolPolicyDeserializer {
     #[allow(unused_variables)]
@@ -5380,6 +5688,44 @@ impl PathsSerializer {
         serialized += &format!("<Quantity>{value}</Quantity>", value = obj.quantity);
         serialized += &format!("</{name}>", name = name);
         serialized
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PriceClass {
+    PriceClass100,
+    PriceClass200,
+    PriceClassAll,
+}
+
+impl Into<String> for PriceClass {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PriceClass {
+    fn into(self) -> &'static str {
+        match self {
+            PriceClass::PriceClass100 => "PriceClass_100",
+            PriceClass::PriceClass200 => "PriceClass_200",
+            PriceClass::PriceClassAll => "PriceClass_All",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PriceClass {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "PriceClass_100" => Ok(PriceClass::PriceClass100),
+            "PriceClass_200" => Ok(PriceClass::PriceClass200),
+            "PriceClass_All" => Ok(PriceClass::PriceClassAll),
+            _ => Err(()),
+        }
     }
 }
 
@@ -5737,6 +6083,41 @@ impl S3OriginConfigSerializer {
     }
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SSLSupportMethod {
+    SniOnly,
+    Vip,
+}
+
+impl Into<String> for SSLSupportMethod {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SSLSupportMethod {
+    fn into(self) -> &'static str {
+        match self {
+            SSLSupportMethod::SniOnly => "sni-only",
+            SSLSupportMethod::Vip => "vip",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SSLSupportMethod {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "sni-only" => Ok(SSLSupportMethod::SniOnly),
+            "vip" => Ok(SSLSupportMethod::Vip),
+            _ => Err(()),
+        }
+    }
+}
+
 struct SSLSupportMethodDeserializer;
 impl SSLSupportMethodDeserializer {
     #[allow(unused_variables)]
@@ -5860,6 +6241,47 @@ impl SignerListDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SslProtocol {
+    Sslv3,
+    Tlsv1,
+    Tlsv11,
+    Tlsv12,
+}
+
+impl Into<String> for SslProtocol {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SslProtocol {
+    fn into(self) -> &'static str {
+        match self {
+            SslProtocol::Sslv3 => "SSLv3",
+            SslProtocol::Tlsv1 => "TLSv1",
+            SslProtocol::Tlsv11 => "TLSv1.1",
+            SslProtocol::Tlsv12 => "TLSv1.2",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SslProtocol {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "SSLv3" => Ok(SslProtocol::Sslv3),
+            "TLSv1" => Ok(SslProtocol::Tlsv1),
+            "TLSv1.1" => Ok(SslProtocol::Tlsv11),
+            "TLSv1.2" => Ok(SslProtocol::Tlsv12),
+            _ => Err(()),
+        }
+    }
+}
+
 struct SslProtocolDeserializer;
 impl SslProtocolDeserializer {
     #[allow(unused_variables)]
@@ -7161,6 +7583,44 @@ impl ViewerCertificateSerializer {
         }
         serialized += &format!("</{name}>", name = name);
         serialized
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ViewerProtocolPolicy {
+    AllowAll,
+    HttpsOnly,
+    RedirectToHttps,
+}
+
+impl Into<String> for ViewerProtocolPolicy {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ViewerProtocolPolicy {
+    fn into(self) -> &'static str {
+        match self {
+            ViewerProtocolPolicy::AllowAll => "allow-all",
+            ViewerProtocolPolicy::HttpsOnly => "https-only",
+            ViewerProtocolPolicy::RedirectToHttps => "redirect-to-https",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ViewerProtocolPolicy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "allow-all" => Ok(ViewerProtocolPolicy::AllowAll),
+            "https-only" => Ok(ViewerProtocolPolicy::HttpsOnly),
+            "redirect-to-https" => Ok(ViewerProtocolPolicy::RedirectToHttps),
+            _ => Err(()),
+        }
     }
 }
 
@@ -10147,9 +10607,9 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -10206,9 +10666,9 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -10269,9 +10729,9 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -10328,9 +10788,9 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -10387,9 +10847,9 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -10446,9 +10906,9 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -10504,9 +10964,9 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -10541,9 +11001,9 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -10581,9 +11041,9 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -10616,9 +11076,9 @@ impl<P, D> CloudFront for CloudFrontClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -10665,9 +11125,9 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -10715,9 +11175,9 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -10770,9 +11230,9 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -10825,9 +11285,9 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -10877,9 +11337,9 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -10928,9 +11388,9 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -10987,9 +11447,9 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -11041,9 +11501,9 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -11101,9 +11561,9 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -11155,9 +11615,9 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -11215,9 +11675,9 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -11262,9 +11722,9 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -11315,9 +11775,9 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -11350,9 +11810,9 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
                 let result = ();
 
                 Ok(result)
@@ -11395,9 +11855,9 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -11453,9 +11913,9 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 
@@ -11515,9 +11975,9 @@ fn get_cloud_front_origin_access_identity_config(&self, input: &GetCloudFrontOri
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok |
-            StatusCode::NoContent |
-            StatusCode::PartialContent => {
+            ::hyper::status::StatusCode::Ok |
+            ::hyper::status::StatusCode::NoContent |
+            ::hyper::status::StatusCode::PartialContent => {
 
                 let mut result;
 

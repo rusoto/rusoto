@@ -11,18 +11,13 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
-use std::str::FromStr;
 use xml::EventReader;
 use xml::reader::ParserConfig;
 use rusoto_core::param::{Params, ServiceParams};
@@ -304,6 +299,41 @@ impl AccountAttributeListDeserializer {
     }
 }
 
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AccountAttributeName {
+    DefaultVpc,
+    SupportedPlatforms,
+}
+
+impl Into<String> for AccountAttributeName {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AccountAttributeName {
+    fn into(self) -> &'static str {
+        match self {
+            AccountAttributeName::DefaultVpc => "default-vpc",
+            AccountAttributeName::SupportedPlatforms => "supported-platforms",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AccountAttributeName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "default-vpc" => Ok(AccountAttributeName::DefaultVpc),
+            "supported-platforms" => Ok(AccountAttributeName::SupportedPlatforms),
+            _ => Err(()),
+        }
+    }
+}
+
+
 /// Serialize `AccountAttributeNameStringList` contents to a `SignedRequest`.
 struct AccountAttributeNameStringListSerializer;
 impl AccountAttributeNameStringListSerializer {
@@ -517,6 +547,47 @@ impl ActiveInstanceSetDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ActivityStatus {
+    Error,
+    Fulfilled,
+    PendingFulfillment,
+    PendingTermination,
+}
+
+impl Into<String> for ActivityStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ActivityStatus {
+    fn into(self) -> &'static str {
+        match self {
+            ActivityStatus::Error => "error",
+            ActivityStatus::Fulfilled => "fulfilled",
+            ActivityStatus::PendingFulfillment => "pending_fulfillment",
+            ActivityStatus::PendingTermination => "pending_termination",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ActivityStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "error" => Ok(ActivityStatus::Error),
+            "fulfilled" => Ok(ActivityStatus::Fulfilled),
+            "pending_fulfillment" => Ok(ActivityStatus::PendingFulfillment),
+            "pending_termination" => Ok(ActivityStatus::PendingTermination),
+            _ => Err(()),
+        }
+    }
+}
+
 struct ActivityStatusDeserializer;
 impl ActivityStatusDeserializer {
     #[allow(unused_variables)]
@@ -666,6 +737,41 @@ impl AddressListDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Affinity {
+    Default,
+    Host,
+}
+
+impl Into<String> for Affinity {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Affinity {
+    fn into(self) -> &'static str {
+        match self {
+            Affinity::Default => "default",
+            Affinity::Host => "host",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Affinity {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "default" => Ok(Affinity::Default),
+            "host" => Ok(Affinity::Host),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Contains the parameters for AllocateAddress.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct AllocateAddressRequest {
@@ -858,6 +964,50 @@ impl AllocationIdListSerializer {
     }
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AllocationState {
+    Available,
+    PermanentFailure,
+    Released,
+    ReleasedPermanentFailure,
+    UnderAssessment,
+}
+
+impl Into<String> for AllocationState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AllocationState {
+    fn into(self) -> &'static str {
+        match self {
+            AllocationState::Available => "available",
+            AllocationState::PermanentFailure => "permanent-failure",
+            AllocationState::Released => "released",
+            AllocationState::ReleasedPermanentFailure => "released-permanent-failure",
+            AllocationState::UnderAssessment => "under-assessment",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AllocationState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "available" => Ok(AllocationState::Available),
+            "permanent-failure" => Ok(AllocationState::PermanentFailure),
+            "released" => Ok(AllocationState::Released),
+            "released-permanent-failure" => Ok(AllocationState::ReleasedPermanentFailure),
+            "under-assessment" => Ok(AllocationState::UnderAssessment),
+            _ => Err(()),
+        }
+    }
+}
+
 struct AllocationStateDeserializer;
 impl AllocationStateDeserializer {
     #[allow(unused_variables)]
@@ -872,6 +1022,41 @@ impl AllocationStateDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AllocationStrategy {
+    Diversified,
+    LowestPrice,
+}
+
+impl Into<String> for AllocationStrategy {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AllocationStrategy {
+    fn into(self) -> &'static str {
+        match self {
+            AllocationStrategy::Diversified => "diversified",
+            AllocationStrategy::LowestPrice => "lowestPrice",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AllocationStrategy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "diversified" => Ok(AllocationStrategy::Diversified),
+            "lowestPrice" => Ok(AllocationStrategy::LowestPrice),
+            _ => Err(()),
+        }
+    }
+}
+
 struct AllocationStrategyDeserializer;
 impl AllocationStrategyDeserializer {
     #[allow(unused_variables)]
@@ -886,6 +1071,41 @@ impl AllocationStrategyDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ArchitectureValues {
+    I386,
+    X8664,
+}
+
+impl Into<String> for ArchitectureValues {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ArchitectureValues {
+    fn into(self) -> &'static str {
+        match self {
+            ArchitectureValues::I386 => "i386",
+            ArchitectureValues::X8664 => "x86_64",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ArchitectureValues {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "i386" => Ok(ArchitectureValues::I386),
+            "x86_64" => Ok(ArchitectureValues::X8664),
+            _ => Err(()),
+        }
+    }
+}
+
 struct ArchitectureValuesDeserializer;
 impl ArchitectureValuesDeserializer {
     #[allow(unused_variables)]
@@ -1809,6 +2029,47 @@ impl AttachVpnGatewayResultDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AttachmentStatus {
+    Attached,
+    Attaching,
+    Detached,
+    Detaching,
+}
+
+impl Into<String> for AttachmentStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AttachmentStatus {
+    fn into(self) -> &'static str {
+        match self {
+            AttachmentStatus::Attached => "attached",
+            AttachmentStatus::Attaching => "attaching",
+            AttachmentStatus::Detached => "detached",
+            AttachmentStatus::Detaching => "detaching",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AttachmentStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "attached" => Ok(AttachmentStatus::Attached),
+            "attaching" => Ok(AttachmentStatus::Attaching),
+            "detached" => Ok(AttachmentStatus::Detached),
+            "detaching" => Ok(AttachmentStatus::Detaching),
+            _ => Err(()),
+        }
+    }
+}
+
 struct AttachmentStatusDeserializer;
 impl AttachmentStatusDeserializer {
     #[allow(unused_variables)]
@@ -2095,6 +2356,41 @@ impl AuthorizeSecurityGroupIngressRequestSerializer {
     }
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AutoPlacement {
+    Off,
+    On,
+}
+
+impl Into<String> for AutoPlacement {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AutoPlacement {
+    fn into(self) -> &'static str {
+        match self {
+            AutoPlacement::Off => "off",
+            AutoPlacement::On => "on",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AutoPlacement {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "off" => Ok(AutoPlacement::Off),
+            "on" => Ok(AutoPlacement::On),
+            _ => Err(()),
+        }
+    }
+}
+
 struct AutoPlacementDeserializer;
 impl AutoPlacementDeserializer {
     #[allow(unused_variables)]
@@ -2308,6 +2604,47 @@ impl AvailabilityZoneMessageListDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AvailabilityZoneState {
+    Available,
+    Impaired,
+    Information,
+    Unavailable,
+}
+
+impl Into<String> for AvailabilityZoneState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AvailabilityZoneState {
+    fn into(self) -> &'static str {
+        match self {
+            AvailabilityZoneState::Available => "available",
+            AvailabilityZoneState::Impaired => "impaired",
+            AvailabilityZoneState::Information => "information",
+            AvailabilityZoneState::Unavailable => "unavailable",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AvailabilityZoneState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "available" => Ok(AvailabilityZoneState::Available),
+            "impaired" => Ok(AvailabilityZoneState::Impaired),
+            "information" => Ok(AvailabilityZoneState::Information),
+            "unavailable" => Ok(AvailabilityZoneState::Unavailable),
+            _ => Err(()),
+        }
+    }
+}
+
 struct AvailabilityZoneStateDeserializer;
 impl AvailabilityZoneStateDeserializer {
     #[allow(unused_variables)]
@@ -2418,6 +2755,56 @@ impl AvailableInstanceCapacityListDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum BatchState {
+    Active,
+    Cancelled,
+    CancelledRunning,
+    CancelledTerminating,
+    Failed,
+    Modifying,
+    Submitted,
+}
+
+impl Into<String> for BatchState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for BatchState {
+    fn into(self) -> &'static str {
+        match self {
+            BatchState::Active => "active",
+            BatchState::Cancelled => "cancelled",
+            BatchState::CancelledRunning => "cancelled_running",
+            BatchState::CancelledTerminating => "cancelled_terminating",
+            BatchState::Failed => "failed",
+            BatchState::Modifying => "modifying",
+            BatchState::Submitted => "submitted",
+        }
+    }
+}
+
+impl ::std::str::FromStr for BatchState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "active" => Ok(BatchState::Active),
+            "cancelled" => Ok(BatchState::Cancelled),
+            "cancelled_running" => Ok(BatchState::CancelledRunning),
+            "cancelled_terminating" => Ok(BatchState::CancelledTerminating),
+            "failed" => Ok(BatchState::Failed),
+            "modifying" => Ok(BatchState::Modifying),
+            "submitted" => Ok(BatchState::Submitted),
+            _ => Err(()),
+        }
+    }
+}
+
 struct BatchStateDeserializer;
 impl BatchStateDeserializer {
     #[allow(unused_variables)]
@@ -2648,7 +3035,7 @@ impl BooleanDeserializer {
                                        stack: &mut T)
                                        -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<bool>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -2934,6 +3321,56 @@ impl BundleTaskListDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum BundleTaskState {
+    Bundling,
+    Cancelling,
+    Complete,
+    Failed,
+    Pending,
+    Storing,
+    WaitingForShutdown,
+}
+
+impl Into<String> for BundleTaskState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for BundleTaskState {
+    fn into(self) -> &'static str {
+        match self {
+            BundleTaskState::Bundling => "bundling",
+            BundleTaskState::Cancelling => "cancelling",
+            BundleTaskState::Complete => "complete",
+            BundleTaskState::Failed => "failed",
+            BundleTaskState::Pending => "pending",
+            BundleTaskState::Storing => "storing",
+            BundleTaskState::WaitingForShutdown => "waiting-for-shutdown",
+        }
+    }
+}
+
+impl ::std::str::FromStr for BundleTaskState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "bundling" => Ok(BundleTaskState::Bundling),
+            "cancelling" => Ok(BundleTaskState::Cancelling),
+            "complete" => Ok(BundleTaskState::Complete),
+            "failed" => Ok(BundleTaskState::Failed),
+            "pending" => Ok(BundleTaskState::Pending),
+            "storing" => Ok(BundleTaskState::Storing),
+            "waiting-for-shutdown" => Ok(BundleTaskState::WaitingForShutdown),
+            _ => Err(()),
+        }
+    }
+}
+
 struct BundleTaskStateDeserializer;
 impl BundleTaskStateDeserializer {
     #[allow(unused_variables)]
@@ -2948,6 +3385,51 @@ impl BundleTaskStateDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CancelBatchErrorCode {
+    FleetRequestIdDoesNotExist,
+    FleetRequestIdMalformed,
+    FleetRequestNotInCancellableState,
+    UnexpectedError,
+}
+
+impl Into<String> for CancelBatchErrorCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CancelBatchErrorCode {
+    fn into(self) -> &'static str {
+        match self {
+            CancelBatchErrorCode::FleetRequestIdDoesNotExist => "fleetRequestIdDoesNotExist",
+            CancelBatchErrorCode::FleetRequestIdMalformed => "fleetRequestIdMalformed",
+            CancelBatchErrorCode::FleetRequestNotInCancellableState => {
+                "fleetRequestNotInCancellableState"
+            }
+            CancelBatchErrorCode::UnexpectedError => "unexpectedError",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CancelBatchErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "fleetRequestIdDoesNotExist" => Ok(CancelBatchErrorCode::FleetRequestIdDoesNotExist),
+            "fleetRequestIdMalformed" => Ok(CancelBatchErrorCode::FleetRequestIdMalformed),
+            "fleetRequestNotInCancellableState" => {
+                Ok(CancelBatchErrorCode::FleetRequestNotInCancellableState)
+            }
+            "unexpectedError" => Ok(CancelBatchErrorCode::UnexpectedError),
+            _ => Err(()),
+        }
+    }
+}
+
 struct CancelBatchErrorCodeDeserializer;
 impl CancelBatchErrorCodeDeserializer {
     #[allow(unused_variables)]
@@ -3607,6 +4089,50 @@ impl CancelSpotFleetRequestsSuccessSetDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CancelSpotInstanceRequestState {
+    Active,
+    Cancelled,
+    Closed,
+    Completed,
+    Open,
+}
+
+impl Into<String> for CancelSpotInstanceRequestState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CancelSpotInstanceRequestState {
+    fn into(self) -> &'static str {
+        match self {
+            CancelSpotInstanceRequestState::Active => "active",
+            CancelSpotInstanceRequestState::Cancelled => "cancelled",
+            CancelSpotInstanceRequestState::Closed => "closed",
+            CancelSpotInstanceRequestState::Completed => "completed",
+            CancelSpotInstanceRequestState::Open => "open",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CancelSpotInstanceRequestState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "active" => Ok(CancelSpotInstanceRequestState::Active),
+            "cancelled" => Ok(CancelSpotInstanceRequestState::Cancelled),
+            "closed" => Ok(CancelSpotInstanceRequestState::Closed),
+            "completed" => Ok(CancelSpotInstanceRequestState::Completed),
+            "open" => Ok(CancelSpotInstanceRequestState::Open),
+            _ => Err(()),
+        }
+    }
+}
+
 struct CancelSpotInstanceRequestStateDeserializer;
 impl CancelSpotInstanceRequestStateDeserializer {
     #[allow(unused_variables)]
@@ -4130,6 +4656,38 @@ impl ConfirmProductInstanceResultDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ContainerFormat {
+    Ova,
+}
+
+impl Into<String> for ContainerFormat {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ContainerFormat {
+    fn into(self) -> &'static str {
+        match self {
+            ContainerFormat::Ova => "ova",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContainerFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ova" => Ok(ContainerFormat::Ova),
+            _ => Err(()),
+        }
+    }
+}
+
 struct ContainerFormatDeserializer;
 impl ContainerFormatDeserializer {
     #[allow(unused_variables)]
@@ -4242,6 +4800,47 @@ impl ConversionTaskDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ConversionTaskState {
+    Active,
+    Cancelled,
+    Cancelling,
+    Completed,
+}
+
+impl Into<String> for ConversionTaskState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ConversionTaskState {
+    fn into(self) -> &'static str {
+        match self {
+            ConversionTaskState::Active => "active",
+            ConversionTaskState::Cancelled => "cancelled",
+            ConversionTaskState::Cancelling => "cancelling",
+            ConversionTaskState::Completed => "completed",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConversionTaskState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "active" => Ok(ConversionTaskState::Active),
+            "cancelled" => Ok(ConversionTaskState::Cancelled),
+            "cancelling" => Ok(ConversionTaskState::Cancelling),
+            "completed" => Ok(ConversionTaskState::Completed),
+            _ => Err(()),
+        }
+    }
+}
+
 struct ConversionTaskStateDeserializer;
 impl ConversionTaskStateDeserializer {
     #[allow(unused_variables)]
@@ -6912,6 +7511,38 @@ impl CreateVpnGatewayResultDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CurrencyCodeValues {
+    Usd,
+}
+
+impl Into<String> for CurrencyCodeValues {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CurrencyCodeValues {
+    fn into(self) -> &'static str {
+        match self {
+            CurrencyCodeValues::Usd => "USD",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CurrencyCodeValues {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "USD" => Ok(CurrencyCodeValues::Usd),
+            _ => Err(()),
+        }
+    }
+}
+
 struct CurrencyCodeValuesDeserializer;
 impl CurrencyCodeValuesDeserializer {
     #[allow(unused_variables)]
@@ -7057,6 +7688,41 @@ impl CustomerGatewayListDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DatafeedSubscriptionState {
+    Active,
+    Inactive,
+}
+
+impl Into<String> for DatafeedSubscriptionState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DatafeedSubscriptionState {
+    fn into(self) -> &'static str {
+        match self {
+            DatafeedSubscriptionState::Active => "Active",
+            DatafeedSubscriptionState::Inactive => "Inactive",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DatafeedSubscriptionState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Active" => Ok(DatafeedSubscriptionState::Active),
+            "Inactive" => Ok(DatafeedSubscriptionState::Inactive),
+            _ => Err(()),
+        }
+    }
+}
+
 struct DatafeedSubscriptionStateDeserializer;
 impl DatafeedSubscriptionStateDeserializer {
     #[allow(unused_variables)]
@@ -14809,6 +15475,41 @@ impl DetachVpnGatewayRequestSerializer {
     }
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DeviceType {
+    Ebs,
+    InstanceStore,
+}
+
+impl Into<String> for DeviceType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DeviceType {
+    fn into(self) -> &'static str {
+        match self {
+            DeviceType::Ebs => "ebs",
+            DeviceType::InstanceStore => "instance-store",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeviceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ebs" => Ok(DeviceType::Ebs),
+            "instance-store" => Ok(DeviceType::InstanceStore),
+            _ => Err(()),
+        }
+    }
+}
+
 struct DeviceTypeDeserializer;
 impl DeviceTypeDeserializer {
     #[allow(unused_variables)]
@@ -15665,6 +16366,44 @@ impl DiskImageDetailSerializer {
     }
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DiskImageFormat {
+    Raw,
+    Vhd,
+    Vmdk,
+}
+
+impl Into<String> for DiskImageFormat {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DiskImageFormat {
+    fn into(self) -> &'static str {
+        match self {
+            DiskImageFormat::Raw => "RAW",
+            DiskImageFormat::Vhd => "VHD",
+            DiskImageFormat::Vmdk => "VMDK",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DiskImageFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "RAW" => Ok(DiskImageFormat::Raw),
+            "VHD" => Ok(DiskImageFormat::Vhd),
+            "VMDK" => Ok(DiskImageFormat::Vmdk),
+            _ => Err(()),
+        }
+    }
+}
+
 struct DiskImageFormatDeserializer;
 impl DiskImageFormatDeserializer {
     #[allow(unused_variables)]
@@ -15744,6 +16483,41 @@ impl DiskImageVolumeDescriptionDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DomainType {
+    Standard,
+    Vpc,
+}
+
+impl Into<String> for DomainType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DomainType {
+    fn into(self) -> &'static str {
+        match self {
+            DomainType::Standard => "standard",
+            DomainType::Vpc => "vpc",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DomainType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "standard" => Ok(DomainType::Standard),
+            "vpc" => Ok(DomainType::Vpc),
+            _ => Err(()),
+        }
+    }
+}
+
 struct DomainTypeDeserializer;
 impl DomainTypeDeserializer {
     #[allow(unused_variables)]
@@ -15765,7 +16539,7 @@ impl DoubleDeserializer {
                                        stack: &mut T)
                                        -> Result<f64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = f64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<f64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -16310,6 +17084,50 @@ impl EnableVpcClassicLinkResultDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum EventCode {
+    InstanceReboot,
+    InstanceRetirement,
+    InstanceStop,
+    SystemMaintenance,
+    SystemReboot,
+}
+
+impl Into<String> for EventCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for EventCode {
+    fn into(self) -> &'static str {
+        match self {
+            EventCode::InstanceReboot => "instance-reboot",
+            EventCode::InstanceRetirement => "instance-retirement",
+            EventCode::InstanceStop => "instance-stop",
+            EventCode::SystemMaintenance => "system-maintenance",
+            EventCode::SystemReboot => "system-reboot",
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "instance-reboot" => Ok(EventCode::InstanceReboot),
+            "instance-retirement" => Ok(EventCode::InstanceRetirement),
+            "instance-stop" => Ok(EventCode::InstanceStop),
+            "system-maintenance" => Ok(EventCode::SystemMaintenance),
+            "system-reboot" => Ok(EventCode::SystemReboot),
+            _ => Err(()),
+        }
+    }
+}
+
 struct EventCodeDeserializer;
 impl EventCodeDeserializer {
     #[allow(unused_variables)]
@@ -16386,6 +17204,44 @@ impl EventInformationDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum EventType {
+    Error,
+    FleetRequestChange,
+    InstanceChange,
+}
+
+impl Into<String> for EventType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for EventType {
+    fn into(self) -> &'static str {
+        match self {
+            EventType::Error => "error",
+            EventType::FleetRequestChange => "fleetRequestChange",
+            EventType::InstanceChange => "instanceChange",
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "error" => Ok(EventType::Error),
+            "fleetRequestChange" => Ok(EventType::FleetRequestChange),
+            "instanceChange" => Ok(EventType::InstanceChange),
+            _ => Err(()),
+        }
+    }
+}
+
 struct EventTypeDeserializer;
 impl EventTypeDeserializer {
     #[allow(unused_variables)]
@@ -16400,6 +17256,41 @@ impl EventTypeDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ExcessCapacityTerminationPolicy {
+    Default,
+    NoTermination,
+}
+
+impl Into<String> for ExcessCapacityTerminationPolicy {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ExcessCapacityTerminationPolicy {
+    fn into(self) -> &'static str {
+        match self {
+            ExcessCapacityTerminationPolicy::Default => "default",
+            ExcessCapacityTerminationPolicy::NoTermination => "noTermination",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExcessCapacityTerminationPolicy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "default" => Ok(ExcessCapacityTerminationPolicy::Default),
+            "noTermination" => Ok(ExcessCapacityTerminationPolicy::NoTermination),
+            _ => Err(()),
+        }
+    }
+}
+
 struct ExcessCapacityTerminationPolicyDeserializer;
 impl ExcessCapacityTerminationPolicyDeserializer {
     #[allow(unused_variables)]
@@ -16422,6 +17313,44 @@ impl ExecutableByStringListSerializer {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ExportEnvironment {
+    Citrix,
+    Microsoft,
+    Vmware,
+}
+
+impl Into<String> for ExportEnvironment {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ExportEnvironment {
+    fn into(self) -> &'static str {
+        match self {
+            ExportEnvironment::Citrix => "citrix",
+            ExportEnvironment::Microsoft => "microsoft",
+            ExportEnvironment::Vmware => "vmware",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExportEnvironment {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "citrix" => Ok(ExportEnvironment::Citrix),
+            "microsoft" => Ok(ExportEnvironment::Microsoft),
+            "vmware" => Ok(ExportEnvironment::Vmware),
+            _ => Err(()),
         }
     }
 }
@@ -16574,6 +17503,47 @@ impl ExportTaskListDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ExportTaskState {
+    Active,
+    Cancelled,
+    Cancelling,
+    Completed,
+}
+
+impl Into<String> for ExportTaskState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ExportTaskState {
+    fn into(self) -> &'static str {
+        match self {
+            ExportTaskState::Active => "active",
+            ExportTaskState::Cancelled => "cancelled",
+            ExportTaskState::Cancelling => "cancelling",
+            ExportTaskState::Completed => "completed",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExportTaskState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "active" => Ok(ExportTaskState::Active),
+            "cancelled" => Ok(ExportTaskState::Cancelled),
+            "cancelling" => Ok(ExportTaskState::Cancelling),
+            "completed" => Ok(ExportTaskState::Completed),
+            _ => Err(()),
+        }
+    }
+}
+
 struct ExportTaskStateDeserializer;
 impl ExportTaskStateDeserializer {
     #[allow(unused_variables)]
@@ -16739,6 +17709,41 @@ impl FilterListSerializer {
     }
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum FleetType {
+    Maintain,
+    Request,
+}
+
+impl Into<String> for FleetType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for FleetType {
+    fn into(self) -> &'static str {
+        match self {
+            FleetType::Maintain => "maintain",
+            FleetType::Request => "request",
+        }
+    }
+}
+
+impl ::std::str::FromStr for FleetType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "maintain" => Ok(FleetType::Maintain),
+            "request" => Ok(FleetType::Request),
+            _ => Err(()),
+        }
+    }
+}
+
 struct FleetTypeDeserializer;
 impl FleetTypeDeserializer {
     #[allow(unused_variables)]
@@ -16760,7 +17765,7 @@ impl FloatDeserializer {
                                        stack: &mut T)
                                        -> Result<f32, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = f32::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<f32>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -16910,6 +17915,44 @@ impl FlowLogSetDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum FlowLogsResourceType {
+    NetworkInterface,
+    Subnet,
+    Vpc,
+}
+
+impl Into<String> for FlowLogsResourceType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for FlowLogsResourceType {
+    fn into(self) -> &'static str {
+        match self {
+            FlowLogsResourceType::NetworkInterface => "NetworkInterface",
+            FlowLogsResourceType::Subnet => "Subnet",
+            FlowLogsResourceType::Vpc => "VPC",
+        }
+    }
+}
+
+impl ::std::str::FromStr for FlowLogsResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "NetworkInterface" => Ok(FlowLogsResourceType::NetworkInterface),
+            "Subnet" => Ok(FlowLogsResourceType::Subnet),
+            "VPC" => Ok(FlowLogsResourceType::Vpc),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Describes an Amazon FPGA image (AFI).</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct FpgaImage {
@@ -17139,6 +18182,47 @@ impl FpgaImageStateDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum FpgaImageStateCode {
+    Available,
+    Failed,
+    Pending,
+    Unavailable,
+}
+
+impl Into<String> for FpgaImageStateCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for FpgaImageStateCode {
+    fn into(self) -> &'static str {
+        match self {
+            FpgaImageStateCode::Available => "available",
+            FpgaImageStateCode::Failed => "failed",
+            FpgaImageStateCode::Pending => "pending",
+            FpgaImageStateCode::Unavailable => "unavailable",
+        }
+    }
+}
+
+impl ::std::str::FromStr for FpgaImageStateCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "available" => Ok(FpgaImageStateCode::Available),
+            "failed" => Ok(FpgaImageStateCode::Failed),
+            "pending" => Ok(FpgaImageStateCode::Pending),
+            "unavailable" => Ok(FpgaImageStateCode::Unavailable),
+            _ => Err(()),
+        }
+    }
+}
+
 struct FpgaImageStateCodeDeserializer;
 impl FpgaImageStateCodeDeserializer {
     #[allow(unused_variables)]
@@ -17153,6 +18237,38 @@ impl FpgaImageStateCodeDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum GatewayType {
+    Ipsec1,
+}
+
+impl Into<String> for GatewayType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for GatewayType {
+    fn into(self) -> &'static str {
+        match self {
+            GatewayType::Ipsec1 => "ipsec.1",
+        }
+    }
+}
+
+impl ::std::str::FromStr for GatewayType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ipsec.1" => Ok(GatewayType::Ipsec1),
+            _ => Err(()),
+        }
+    }
+}
+
 struct GatewayTypeDeserializer;
 impl GatewayTypeDeserializer {
     #[allow(unused_variables)]
@@ -18547,6 +19663,76 @@ impl HostReservationSetDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum HostTenancy {
+    Dedicated,
+    Host,
+}
+
+impl Into<String> for HostTenancy {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for HostTenancy {
+    fn into(self) -> &'static str {
+        match self {
+            HostTenancy::Dedicated => "dedicated",
+            HostTenancy::Host => "host",
+        }
+    }
+}
+
+impl ::std::str::FromStr for HostTenancy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "dedicated" => Ok(HostTenancy::Dedicated),
+            "host" => Ok(HostTenancy::Host),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum HypervisorType {
+    Ovm,
+    Xen,
+}
+
+impl Into<String> for HypervisorType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for HypervisorType {
+    fn into(self) -> &'static str {
+        match self {
+            HypervisorType::Ovm => "ovm",
+            HypervisorType::Xen => "xen",
+        }
+    }
+}
+
+impl ::std::str::FromStr for HypervisorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ovm" => Ok(HypervisorType::Ovm),
+            "xen" => Ok(HypervisorType::Xen),
+            _ => Err(()),
+        }
+    }
+}
+
 struct HypervisorTypeDeserializer;
 impl HypervisorTypeDeserializer {
     #[allow(unused_variables)]
@@ -18729,6 +19915,47 @@ impl IamInstanceProfileAssociationSetDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum IamInstanceProfileAssociationState {
+    Associated,
+    Associating,
+    Disassociated,
+    Disassociating,
+}
+
+impl Into<String> for IamInstanceProfileAssociationState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for IamInstanceProfileAssociationState {
+    fn into(self) -> &'static str {
+        match self {
+            IamInstanceProfileAssociationState::Associated => "associated",
+            IamInstanceProfileAssociationState::Associating => "associating",
+            IamInstanceProfileAssociationState::Disassociated => "disassociated",
+            IamInstanceProfileAssociationState::Disassociating => "disassociating",
+        }
+    }
+}
+
+impl ::std::str::FromStr for IamInstanceProfileAssociationState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "associated" => Ok(IamInstanceProfileAssociationState::Associated),
+            "associating" => Ok(IamInstanceProfileAssociationState::Associating),
+            "disassociated" => Ok(IamInstanceProfileAssociationState::Disassociated),
+            "disassociating" => Ok(IamInstanceProfileAssociationState::Disassociating),
+            _ => Err(()),
+        }
+    }
+}
+
 struct IamInstanceProfileAssociationStateDeserializer;
 impl IamInstanceProfileAssociationStateDeserializer {
     #[allow(unused_variables)]
@@ -19288,6 +20515,56 @@ impl ImageAttributeDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ImageAttributeName {
+    BlockDeviceMapping,
+    Description,
+    Kernel,
+    LaunchPermission,
+    ProductCodes,
+    Ramdisk,
+    SriovNetSupport,
+}
+
+impl Into<String> for ImageAttributeName {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ImageAttributeName {
+    fn into(self) -> &'static str {
+        match self {
+            ImageAttributeName::BlockDeviceMapping => "blockDeviceMapping",
+            ImageAttributeName::Description => "description",
+            ImageAttributeName::Kernel => "kernel",
+            ImageAttributeName::LaunchPermission => "launchPermission",
+            ImageAttributeName::ProductCodes => "productCodes",
+            ImageAttributeName::Ramdisk => "ramdisk",
+            ImageAttributeName::SriovNetSupport => "sriovNetSupport",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ImageAttributeName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "blockDeviceMapping" => Ok(ImageAttributeName::BlockDeviceMapping),
+            "description" => Ok(ImageAttributeName::Description),
+            "kernel" => Ok(ImageAttributeName::Kernel),
+            "launchPermission" => Ok(ImageAttributeName::LaunchPermission),
+            "productCodes" => Ok(ImageAttributeName::ProductCodes),
+            "ramdisk" => Ok(ImageAttributeName::Ramdisk),
+            "sriovNetSupport" => Ok(ImageAttributeName::SriovNetSupport),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Describes the disk container object for an import image task.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct ImageDiskContainer {
@@ -19404,6 +20681,56 @@ impl ImageListDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ImageState {
+    Available,
+    Deregistered,
+    Error,
+    Failed,
+    Invalid,
+    Pending,
+    Transient,
+}
+
+impl Into<String> for ImageState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ImageState {
+    fn into(self) -> &'static str {
+        match self {
+            ImageState::Available => "available",
+            ImageState::Deregistered => "deregistered",
+            ImageState::Error => "error",
+            ImageState::Failed => "failed",
+            ImageState::Invalid => "invalid",
+            ImageState::Pending => "pending",
+            ImageState::Transient => "transient",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ImageState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "available" => Ok(ImageState::Available),
+            "deregistered" => Ok(ImageState::Deregistered),
+            "error" => Ok(ImageState::Error),
+            "failed" => Ok(ImageState::Failed),
+            "invalid" => Ok(ImageState::Invalid),
+            "pending" => Ok(ImageState::Pending),
+            "transient" => Ok(ImageState::Transient),
+            _ => Err(()),
+        }
+    }
+}
+
 struct ImageStateDeserializer;
 impl ImageStateDeserializer {
     #[allow(unused_variables)]
@@ -19418,6 +20745,44 @@ impl ImageStateDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ImageTypeValues {
+    Kernel,
+    Machine,
+    Ramdisk,
+}
+
+impl Into<String> for ImageTypeValues {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ImageTypeValues {
+    fn into(self) -> &'static str {
+        match self {
+            ImageTypeValues::Kernel => "kernel",
+            ImageTypeValues::Machine => "machine",
+            ImageTypeValues::Ramdisk => "ramdisk",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ImageTypeValues {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "kernel" => Ok(ImageTypeValues::Kernel),
+            "machine" => Ok(ImageTypeValues::Machine),
+            "ramdisk" => Ok(ImageTypeValues::Ramdisk),
+            _ => Err(()),
+        }
+    }
+}
+
 struct ImageTypeValuesDeserializer;
 impl ImageTypeValuesDeserializer {
     #[allow(unused_variables)]
@@ -21056,6 +22421,81 @@ impl InstanceAttributeDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InstanceAttributeName {
+    BlockDeviceMapping,
+    DisableApiTermination,
+    EbsOptimized,
+    EnaSupport,
+    GroupSet,
+    InstanceInitiatedShutdownBehavior,
+    InstanceType,
+    Kernel,
+    ProductCodes,
+    Ramdisk,
+    RootDeviceName,
+    SourceDestCheck,
+    SriovNetSupport,
+    UserData,
+}
+
+impl Into<String> for InstanceAttributeName {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InstanceAttributeName {
+    fn into(self) -> &'static str {
+        match self {
+            InstanceAttributeName::BlockDeviceMapping => "blockDeviceMapping",
+            InstanceAttributeName::DisableApiTermination => "disableApiTermination",
+            InstanceAttributeName::EbsOptimized => "ebsOptimized",
+            InstanceAttributeName::EnaSupport => "enaSupport",
+            InstanceAttributeName::GroupSet => "groupSet",
+            InstanceAttributeName::InstanceInitiatedShutdownBehavior => {
+                "instanceInitiatedShutdownBehavior"
+            }
+            InstanceAttributeName::InstanceType => "instanceType",
+            InstanceAttributeName::Kernel => "kernel",
+            InstanceAttributeName::ProductCodes => "productCodes",
+            InstanceAttributeName::Ramdisk => "ramdisk",
+            InstanceAttributeName::RootDeviceName => "rootDeviceName",
+            InstanceAttributeName::SourceDestCheck => "sourceDestCheck",
+            InstanceAttributeName::SriovNetSupport => "sriovNetSupport",
+            InstanceAttributeName::UserData => "userData",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceAttributeName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "blockDeviceMapping" => Ok(InstanceAttributeName::BlockDeviceMapping),
+            "disableApiTermination" => Ok(InstanceAttributeName::DisableApiTermination),
+            "ebsOptimized" => Ok(InstanceAttributeName::EbsOptimized),
+            "enaSupport" => Ok(InstanceAttributeName::EnaSupport),
+            "groupSet" => Ok(InstanceAttributeName::GroupSet),
+            "instanceInitiatedShutdownBehavior" => {
+                Ok(InstanceAttributeName::InstanceInitiatedShutdownBehavior)
+            }
+            "instanceType" => Ok(InstanceAttributeName::InstanceType),
+            "kernel" => Ok(InstanceAttributeName::Kernel),
+            "productCodes" => Ok(InstanceAttributeName::ProductCodes),
+            "ramdisk" => Ok(InstanceAttributeName::Ramdisk),
+            "rootDeviceName" => Ok(InstanceAttributeName::RootDeviceName),
+            "sourceDestCheck" => Ok(InstanceAttributeName::SourceDestCheck),
+            "sriovNetSupport" => Ok(InstanceAttributeName::SriovNetSupport),
+            "userData" => Ok(InstanceAttributeName::UserData),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Describes a block device mapping.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct InstanceBlockDeviceMapping {
@@ -21428,6 +22868,41 @@ impl InstanceExportDetailsDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InstanceHealthStatus {
+    Healthy,
+    Unhealthy,
+}
+
+impl Into<String> for InstanceHealthStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InstanceHealthStatus {
+    fn into(self) -> &'static str {
+        match self {
+            InstanceHealthStatus::Healthy => "healthy",
+            InstanceHealthStatus::Unhealthy => "unhealthy",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceHealthStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "healthy" => Ok(InstanceHealthStatus::Healthy),
+            "unhealthy" => Ok(InstanceHealthStatus::Unhealthy),
+            _ => Err(()),
+        }
+    }
+}
+
 struct InstanceHealthStatusDeserializer;
 impl InstanceHealthStatusDeserializer {
     #[allow(unused_variables)]
@@ -21610,6 +23085,41 @@ impl InstanceIpv6AddressListSerializer {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             InstanceIpv6AddressSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InstanceLifecycleType {
+    Scheduled,
+    Spot,
+}
+
+impl Into<String> for InstanceLifecycleType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InstanceLifecycleType {
+    fn into(self) -> &'static str {
+        match self {
+            InstanceLifecycleType::Scheduled => "scheduled",
+            InstanceLifecycleType::Spot => "spot",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceLifecycleType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "scheduled" => Ok(InstanceLifecycleType::Scheduled),
+            "spot" => Ok(InstanceLifecycleType::Spot),
+            _ => Err(()),
         }
     }
 }
@@ -22595,6 +24105,53 @@ impl InstanceStateChangeListDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InstanceStateName {
+    Pending,
+    Running,
+    ShuttingDown,
+    Stopped,
+    Stopping,
+    Terminated,
+}
+
+impl Into<String> for InstanceStateName {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InstanceStateName {
+    fn into(self) -> &'static str {
+        match self {
+            InstanceStateName::Pending => "pending",
+            InstanceStateName::Running => "running",
+            InstanceStateName::ShuttingDown => "shutting-down",
+            InstanceStateName::Stopped => "stopped",
+            InstanceStateName::Stopping => "stopping",
+            InstanceStateName::Terminated => "terminated",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceStateName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "pending" => Ok(InstanceStateName::Pending),
+            "running" => Ok(InstanceStateName::Running),
+            "shutting-down" => Ok(InstanceStateName::ShuttingDown),
+            "stopped" => Ok(InstanceStateName::Stopped),
+            "stopping" => Ok(InstanceStateName::Stopping),
+            "terminated" => Ok(InstanceStateName::Terminated),
+            _ => Err(()),
+        }
+    }
+}
+
 struct InstanceStateNameDeserializer;
 impl InstanceStateNameDeserializer {
     #[allow(unused_variables)]
@@ -23000,6 +24557,266 @@ impl InstanceStatusSummaryDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum InstanceType {
+    C1Medium,
+    C1Xlarge,
+    C32Xlarge,
+    C34Xlarge,
+    C38Xlarge,
+    C3Large,
+    C3Xlarge,
+    C42Xlarge,
+    C44Xlarge,
+    C48Xlarge,
+    C4Large,
+    C4Xlarge,
+    Cc14Xlarge,
+    Cc28Xlarge,
+    Cg14Xlarge,
+    Cr18Xlarge,
+    D22Xlarge,
+    D24Xlarge,
+    D28Xlarge,
+    D2Xlarge,
+    F116Xlarge,
+    F12Xlarge,
+    G22Xlarge,
+    G28Xlarge,
+    Hi14Xlarge,
+    Hs18Xlarge,
+    I22Xlarge,
+    I24Xlarge,
+    I28Xlarge,
+    I2Xlarge,
+    I316Xlarge,
+    I32Xlarge,
+    I34Xlarge,
+    I38Xlarge,
+    I3Large,
+    I3Xlarge,
+    M1Large,
+    M1Medium,
+    M1Small,
+    M1Xlarge,
+    M22Xlarge,
+    M24Xlarge,
+    M2Xlarge,
+    M32Xlarge,
+    M3Large,
+    M3Medium,
+    M3Xlarge,
+    M410Xlarge,
+    M416Xlarge,
+    M42Xlarge,
+    M44Xlarge,
+    M4Large,
+    M4Xlarge,
+    P216Xlarge,
+    P28Xlarge,
+    P2Xlarge,
+    R32Xlarge,
+    R34Xlarge,
+    R38Xlarge,
+    R3Large,
+    R3Xlarge,
+    R416Xlarge,
+    R42Xlarge,
+    R44Xlarge,
+    R48Xlarge,
+    R4Large,
+    R4Xlarge,
+    T1Micro,
+    T22Xlarge,
+    T2Large,
+    T2Medium,
+    T2Micro,
+    T2Nano,
+    T2Small,
+    T2Xlarge,
+    X116Xlarge,
+    X132Xlarge,
+}
+
+impl Into<String> for InstanceType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for InstanceType {
+    fn into(self) -> &'static str {
+        match self {
+            InstanceType::C1Medium => "c1.medium",
+            InstanceType::C1Xlarge => "c1.xlarge",
+            InstanceType::C32Xlarge => "c3.2xlarge",
+            InstanceType::C34Xlarge => "c3.4xlarge",
+            InstanceType::C38Xlarge => "c3.8xlarge",
+            InstanceType::C3Large => "c3.large",
+            InstanceType::C3Xlarge => "c3.xlarge",
+            InstanceType::C42Xlarge => "c4.2xlarge",
+            InstanceType::C44Xlarge => "c4.4xlarge",
+            InstanceType::C48Xlarge => "c4.8xlarge",
+            InstanceType::C4Large => "c4.large",
+            InstanceType::C4Xlarge => "c4.xlarge",
+            InstanceType::Cc14Xlarge => "cc1.4xlarge",
+            InstanceType::Cc28Xlarge => "cc2.8xlarge",
+            InstanceType::Cg14Xlarge => "cg1.4xlarge",
+            InstanceType::Cr18Xlarge => "cr1.8xlarge",
+            InstanceType::D22Xlarge => "d2.2xlarge",
+            InstanceType::D24Xlarge => "d2.4xlarge",
+            InstanceType::D28Xlarge => "d2.8xlarge",
+            InstanceType::D2Xlarge => "d2.xlarge",
+            InstanceType::F116Xlarge => "f1.16xlarge",
+            InstanceType::F12Xlarge => "f1.2xlarge",
+            InstanceType::G22Xlarge => "g2.2xlarge",
+            InstanceType::G28Xlarge => "g2.8xlarge",
+            InstanceType::Hi14Xlarge => "hi1.4xlarge",
+            InstanceType::Hs18Xlarge => "hs1.8xlarge",
+            InstanceType::I22Xlarge => "i2.2xlarge",
+            InstanceType::I24Xlarge => "i2.4xlarge",
+            InstanceType::I28Xlarge => "i2.8xlarge",
+            InstanceType::I2Xlarge => "i2.xlarge",
+            InstanceType::I316Xlarge => "i3.16xlarge",
+            InstanceType::I32Xlarge => "i3.2xlarge",
+            InstanceType::I34Xlarge => "i3.4xlarge",
+            InstanceType::I38Xlarge => "i3.8xlarge",
+            InstanceType::I3Large => "i3.large",
+            InstanceType::I3Xlarge => "i3.xlarge",
+            InstanceType::M1Large => "m1.large",
+            InstanceType::M1Medium => "m1.medium",
+            InstanceType::M1Small => "m1.small",
+            InstanceType::M1Xlarge => "m1.xlarge",
+            InstanceType::M22Xlarge => "m2.2xlarge",
+            InstanceType::M24Xlarge => "m2.4xlarge",
+            InstanceType::M2Xlarge => "m2.xlarge",
+            InstanceType::M32Xlarge => "m3.2xlarge",
+            InstanceType::M3Large => "m3.large",
+            InstanceType::M3Medium => "m3.medium",
+            InstanceType::M3Xlarge => "m3.xlarge",
+            InstanceType::M410Xlarge => "m4.10xlarge",
+            InstanceType::M416Xlarge => "m4.16xlarge",
+            InstanceType::M42Xlarge => "m4.2xlarge",
+            InstanceType::M44Xlarge => "m4.4xlarge",
+            InstanceType::M4Large => "m4.large",
+            InstanceType::M4Xlarge => "m4.xlarge",
+            InstanceType::P216Xlarge => "p2.16xlarge",
+            InstanceType::P28Xlarge => "p2.8xlarge",
+            InstanceType::P2Xlarge => "p2.xlarge",
+            InstanceType::R32Xlarge => "r3.2xlarge",
+            InstanceType::R34Xlarge => "r3.4xlarge",
+            InstanceType::R38Xlarge => "r3.8xlarge",
+            InstanceType::R3Large => "r3.large",
+            InstanceType::R3Xlarge => "r3.xlarge",
+            InstanceType::R416Xlarge => "r4.16xlarge",
+            InstanceType::R42Xlarge => "r4.2xlarge",
+            InstanceType::R44Xlarge => "r4.4xlarge",
+            InstanceType::R48Xlarge => "r4.8xlarge",
+            InstanceType::R4Large => "r4.large",
+            InstanceType::R4Xlarge => "r4.xlarge",
+            InstanceType::T1Micro => "t1.micro",
+            InstanceType::T22Xlarge => "t2.2xlarge",
+            InstanceType::T2Large => "t2.large",
+            InstanceType::T2Medium => "t2.medium",
+            InstanceType::T2Micro => "t2.micro",
+            InstanceType::T2Nano => "t2.nano",
+            InstanceType::T2Small => "t2.small",
+            InstanceType::T2Xlarge => "t2.xlarge",
+            InstanceType::X116Xlarge => "x1.16xlarge",
+            InstanceType::X132Xlarge => "x1.32xlarge",
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "c1.medium" => Ok(InstanceType::C1Medium),
+            "c1.xlarge" => Ok(InstanceType::C1Xlarge),
+            "c3.2xlarge" => Ok(InstanceType::C32Xlarge),
+            "c3.4xlarge" => Ok(InstanceType::C34Xlarge),
+            "c3.8xlarge" => Ok(InstanceType::C38Xlarge),
+            "c3.large" => Ok(InstanceType::C3Large),
+            "c3.xlarge" => Ok(InstanceType::C3Xlarge),
+            "c4.2xlarge" => Ok(InstanceType::C42Xlarge),
+            "c4.4xlarge" => Ok(InstanceType::C44Xlarge),
+            "c4.8xlarge" => Ok(InstanceType::C48Xlarge),
+            "c4.large" => Ok(InstanceType::C4Large),
+            "c4.xlarge" => Ok(InstanceType::C4Xlarge),
+            "cc1.4xlarge" => Ok(InstanceType::Cc14Xlarge),
+            "cc2.8xlarge" => Ok(InstanceType::Cc28Xlarge),
+            "cg1.4xlarge" => Ok(InstanceType::Cg14Xlarge),
+            "cr1.8xlarge" => Ok(InstanceType::Cr18Xlarge),
+            "d2.2xlarge" => Ok(InstanceType::D22Xlarge),
+            "d2.4xlarge" => Ok(InstanceType::D24Xlarge),
+            "d2.8xlarge" => Ok(InstanceType::D28Xlarge),
+            "d2.xlarge" => Ok(InstanceType::D2Xlarge),
+            "f1.16xlarge" => Ok(InstanceType::F116Xlarge),
+            "f1.2xlarge" => Ok(InstanceType::F12Xlarge),
+            "g2.2xlarge" => Ok(InstanceType::G22Xlarge),
+            "g2.8xlarge" => Ok(InstanceType::G28Xlarge),
+            "hi1.4xlarge" => Ok(InstanceType::Hi14Xlarge),
+            "hs1.8xlarge" => Ok(InstanceType::Hs18Xlarge),
+            "i2.2xlarge" => Ok(InstanceType::I22Xlarge),
+            "i2.4xlarge" => Ok(InstanceType::I24Xlarge),
+            "i2.8xlarge" => Ok(InstanceType::I28Xlarge),
+            "i2.xlarge" => Ok(InstanceType::I2Xlarge),
+            "i3.16xlarge" => Ok(InstanceType::I316Xlarge),
+            "i3.2xlarge" => Ok(InstanceType::I32Xlarge),
+            "i3.4xlarge" => Ok(InstanceType::I34Xlarge),
+            "i3.8xlarge" => Ok(InstanceType::I38Xlarge),
+            "i3.large" => Ok(InstanceType::I3Large),
+            "i3.xlarge" => Ok(InstanceType::I3Xlarge),
+            "m1.large" => Ok(InstanceType::M1Large),
+            "m1.medium" => Ok(InstanceType::M1Medium),
+            "m1.small" => Ok(InstanceType::M1Small),
+            "m1.xlarge" => Ok(InstanceType::M1Xlarge),
+            "m2.2xlarge" => Ok(InstanceType::M22Xlarge),
+            "m2.4xlarge" => Ok(InstanceType::M24Xlarge),
+            "m2.xlarge" => Ok(InstanceType::M2Xlarge),
+            "m3.2xlarge" => Ok(InstanceType::M32Xlarge),
+            "m3.large" => Ok(InstanceType::M3Large),
+            "m3.medium" => Ok(InstanceType::M3Medium),
+            "m3.xlarge" => Ok(InstanceType::M3Xlarge),
+            "m4.10xlarge" => Ok(InstanceType::M410Xlarge),
+            "m4.16xlarge" => Ok(InstanceType::M416Xlarge),
+            "m4.2xlarge" => Ok(InstanceType::M42Xlarge),
+            "m4.4xlarge" => Ok(InstanceType::M44Xlarge),
+            "m4.large" => Ok(InstanceType::M4Large),
+            "m4.xlarge" => Ok(InstanceType::M4Xlarge),
+            "p2.16xlarge" => Ok(InstanceType::P216Xlarge),
+            "p2.8xlarge" => Ok(InstanceType::P28Xlarge),
+            "p2.xlarge" => Ok(InstanceType::P2Xlarge),
+            "r3.2xlarge" => Ok(InstanceType::R32Xlarge),
+            "r3.4xlarge" => Ok(InstanceType::R34Xlarge),
+            "r3.8xlarge" => Ok(InstanceType::R38Xlarge),
+            "r3.large" => Ok(InstanceType::R3Large),
+            "r3.xlarge" => Ok(InstanceType::R3Xlarge),
+            "r4.16xlarge" => Ok(InstanceType::R416Xlarge),
+            "r4.2xlarge" => Ok(InstanceType::R42Xlarge),
+            "r4.4xlarge" => Ok(InstanceType::R44Xlarge),
+            "r4.8xlarge" => Ok(InstanceType::R48Xlarge),
+            "r4.large" => Ok(InstanceType::R4Large),
+            "r4.xlarge" => Ok(InstanceType::R4Xlarge),
+            "t1.micro" => Ok(InstanceType::T1Micro),
+            "t2.2xlarge" => Ok(InstanceType::T22Xlarge),
+            "t2.large" => Ok(InstanceType::T2Large),
+            "t2.medium" => Ok(InstanceType::T2Medium),
+            "t2.micro" => Ok(InstanceType::T2Micro),
+            "t2.nano" => Ok(InstanceType::T2Nano),
+            "t2.small" => Ok(InstanceType::T2Small),
+            "t2.xlarge" => Ok(InstanceType::T2Xlarge),
+            "x1.16xlarge" => Ok(InstanceType::X116Xlarge),
+            "x1.32xlarge" => Ok(InstanceType::X132Xlarge),
+            _ => Err(()),
+        }
+    }
+}
+
 struct InstanceTypeDeserializer;
 impl InstanceTypeDeserializer {
     #[allow(unused_variables)]
@@ -23033,7 +24850,7 @@ impl IntegerDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -24367,6 +26184,47 @@ impl LaunchSpecsListSerializer {
     }
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ListingState {
+    Available,
+    Cancelled,
+    Pending,
+    Sold,
+}
+
+impl Into<String> for ListingState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ListingState {
+    fn into(self) -> &'static str {
+        match self {
+            ListingState::Available => "available",
+            ListingState::Cancelled => "cancelled",
+            ListingState::Pending => "pending",
+            ListingState::Sold => "sold",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ListingState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "available" => Ok(ListingState::Available),
+            "cancelled" => Ok(ListingState::Cancelled),
+            "pending" => Ok(ListingState::Pending),
+            "sold" => Ok(ListingState::Sold),
+            _ => Err(()),
+        }
+    }
+}
+
 struct ListingStateDeserializer;
 impl ListingStateDeserializer {
     #[allow(unused_variables)]
@@ -24381,6 +26239,47 @@ impl ListingStateDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ListingStatus {
+    Active,
+    Cancelled,
+    Closed,
+    Pending,
+}
+
+impl Into<String> for ListingStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ListingStatus {
+    fn into(self) -> &'static str {
+        match self {
+            ListingStatus::Active => "active",
+            ListingStatus::Cancelled => "cancelled",
+            ListingStatus::Closed => "closed",
+            ListingStatus::Pending => "pending",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ListingStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "active" => Ok(ListingStatus::Active),
+            "cancelled" => Ok(ListingStatus::Cancelled),
+            "closed" => Ok(ListingStatus::Closed),
+            "pending" => Ok(ListingStatus::Pending),
+            _ => Err(()),
+        }
+    }
+}
+
 struct ListingStatusDeserializer;
 impl ListingStatusDeserializer {
     #[allow(unused_variables)]
@@ -24402,7 +26301,7 @@ impl LongDeserializer {
                                        stack: &mut T)
                                        -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        let obj = try!(characters(stack)).parse::<i64>().unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -25664,6 +27563,47 @@ impl MonitoringDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum MonitoringState {
+    Disabled,
+    Disabling,
+    Enabled,
+    Pending,
+}
+
+impl Into<String> for MonitoringState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for MonitoringState {
+    fn into(self) -> &'static str {
+        match self {
+            MonitoringState::Disabled => "disabled",
+            MonitoringState::Disabling => "disabling",
+            MonitoringState::Enabled => "enabled",
+            MonitoringState::Pending => "pending",
+        }
+    }
+}
+
+impl ::std::str::FromStr for MonitoringState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "disabled" => Ok(MonitoringState::Disabled),
+            "disabling" => Ok(MonitoringState::Disabling),
+            "enabled" => Ok(MonitoringState::Enabled),
+            "pending" => Ok(MonitoringState::Pending),
+            _ => Err(()),
+        }
+    }
+}
+
 struct MonitoringStateDeserializer;
 impl MonitoringStateDeserializer {
     #[allow(unused_variables)]
@@ -25760,6 +27700,41 @@ impl MoveAddressToVpcResultDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum MoveStatus {
+    MovingToVpc,
+    RestoringToClassic,
+}
+
+impl Into<String> for MoveStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for MoveStatus {
+    fn into(self) -> &'static str {
+        match self {
+            MoveStatus::MovingToVpc => "movingToVpc",
+            MoveStatus::RestoringToClassic => "restoringToClassic",
+        }
+    }
+}
+
+impl ::std::str::FromStr for MoveStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "movingToVpc" => Ok(MoveStatus::MovingToVpc),
+            "restoringToClassic" => Ok(MoveStatus::RestoringToClassic),
+            _ => Err(()),
+        }
+    }
+}
+
 struct MoveStatusDeserializer;
 impl MoveStatusDeserializer {
     #[allow(unused_variables)]
@@ -26127,6 +28102,50 @@ impl NatGatewayListDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum NatGatewayState {
+    Available,
+    Deleted,
+    Deleting,
+    Failed,
+    Pending,
+}
+
+impl Into<String> for NatGatewayState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for NatGatewayState {
+    fn into(self) -> &'static str {
+        match self {
+            NatGatewayState::Available => "available",
+            NatGatewayState::Deleted => "deleted",
+            NatGatewayState::Deleting => "deleting",
+            NatGatewayState::Failed => "failed",
+            NatGatewayState::Pending => "pending",
+        }
+    }
+}
+
+impl ::std::str::FromStr for NatGatewayState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "available" => Ok(NatGatewayState::Available),
+            "deleted" => Ok(NatGatewayState::Deleted),
+            "deleting" => Ok(NatGatewayState::Deleting),
+            "failed" => Ok(NatGatewayState::Failed),
+            "pending" => Ok(NatGatewayState::Pending),
+            _ => Err(()),
+        }
+    }
+}
+
 struct NatGatewayStateDeserializer;
 impl NatGatewayStateDeserializer {
     #[allow(unused_variables)]
@@ -26859,6 +28878,47 @@ impl NetworkInterfaceAttachmentChangesSerializer {
 }
 
 
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum NetworkInterfaceAttribute {
+    Attachment,
+    Description,
+    GroupSet,
+    SourceDestCheck,
+}
+
+impl Into<String> for NetworkInterfaceAttribute {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for NetworkInterfaceAttribute {
+    fn into(self) -> &'static str {
+        match self {
+            NetworkInterfaceAttribute::Attachment => "attachment",
+            NetworkInterfaceAttribute::Description => "description",
+            NetworkInterfaceAttribute::GroupSet => "groupSet",
+            NetworkInterfaceAttribute::SourceDestCheck => "sourceDestCheck",
+        }
+    }
+}
+
+impl ::std::str::FromStr for NetworkInterfaceAttribute {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "attachment" => Ok(NetworkInterfaceAttribute::Attachment),
+            "description" => Ok(NetworkInterfaceAttribute::Description),
+            "groupSet" => Ok(NetworkInterfaceAttribute::GroupSet),
+            "sourceDestCheck" => Ok(NetworkInterfaceAttribute::SourceDestCheck),
+            _ => Err(()),
+        }
+    }
+}
+
+
 /// Serialize `NetworkInterfaceIdList` contents to a `SignedRequest`.
 struct NetworkInterfaceIdListSerializer;
 impl NetworkInterfaceIdListSerializer {
@@ -27114,6 +29174,47 @@ impl NetworkInterfacePrivateIpAddressListDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum NetworkInterfaceStatus {
+    Attaching,
+    Available,
+    Detaching,
+    InUse,
+}
+
+impl Into<String> for NetworkInterfaceStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for NetworkInterfaceStatus {
+    fn into(self) -> &'static str {
+        match self {
+            NetworkInterfaceStatus::Attaching => "attaching",
+            NetworkInterfaceStatus::Available => "available",
+            NetworkInterfaceStatus::Detaching => "detaching",
+            NetworkInterfaceStatus::InUse => "in-use",
+        }
+    }
+}
+
+impl ::std::str::FromStr for NetworkInterfaceStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "attaching" => Ok(NetworkInterfaceStatus::Attaching),
+            "available" => Ok(NetworkInterfaceStatus::Available),
+            "detaching" => Ok(NetworkInterfaceStatus::Detaching),
+            "in-use" => Ok(NetworkInterfaceStatus::InUse),
+            _ => Err(()),
+        }
+    }
+}
+
 struct NetworkInterfaceStatusDeserializer;
 impl NetworkInterfaceStatusDeserializer {
     #[allow(unused_variables)]
@@ -27128,6 +29229,41 @@ impl NetworkInterfaceStatusDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum NetworkInterfaceType {
+    Interface,
+    NatGateway,
+}
+
+impl Into<String> for NetworkInterfaceType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for NetworkInterfaceType {
+    fn into(self) -> &'static str {
+        match self {
+            NetworkInterfaceType::Interface => "interface",
+            NetworkInterfaceType::NatGateway => "natGateway",
+        }
+    }
+}
+
+impl ::std::str::FromStr for NetworkInterfaceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "interface" => Ok(NetworkInterfaceType::Interface),
+            "natGateway" => Ok(NetworkInterfaceType::NatGateway),
+            _ => Err(()),
+        }
+    }
+}
+
 struct NetworkInterfaceTypeDeserializer;
 impl NetworkInterfaceTypeDeserializer {
     #[allow(unused_variables)]
@@ -27249,6 +29385,41 @@ impl OccurrenceDaySetDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum OfferingClassType {
+    Convertible,
+    Standard,
+}
+
+impl Into<String> for OfferingClassType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for OfferingClassType {
+    fn into(self) -> &'static str {
+        match self {
+            OfferingClassType::Convertible => "convertible",
+            OfferingClassType::Standard => "standard",
+        }
+    }
+}
+
+impl ::std::str::FromStr for OfferingClassType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "convertible" => Ok(OfferingClassType::Convertible),
+            "standard" => Ok(OfferingClassType::Standard),
+            _ => Err(()),
+        }
+    }
+}
+
 struct OfferingClassTypeDeserializer;
 impl OfferingClassTypeDeserializer {
     #[allow(unused_variables)]
@@ -27263,6 +29434,53 @@ impl OfferingClassTypeDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum OfferingTypeValues {
+    AllUpfront,
+    HeavyUtilization,
+    LightUtilization,
+    MediumUtilization,
+    NoUpfront,
+    PartialUpfront,
+}
+
+impl Into<String> for OfferingTypeValues {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for OfferingTypeValues {
+    fn into(self) -> &'static str {
+        match self {
+            OfferingTypeValues::AllUpfront => "All Upfront",
+            OfferingTypeValues::HeavyUtilization => "Heavy Utilization",
+            OfferingTypeValues::LightUtilization => "Light Utilization",
+            OfferingTypeValues::MediumUtilization => "Medium Utilization",
+            OfferingTypeValues::NoUpfront => "No Upfront",
+            OfferingTypeValues::PartialUpfront => "Partial Upfront",
+        }
+    }
+}
+
+impl ::std::str::FromStr for OfferingTypeValues {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "All Upfront" => Ok(OfferingTypeValues::AllUpfront),
+            "Heavy Utilization" => Ok(OfferingTypeValues::HeavyUtilization),
+            "Light Utilization" => Ok(OfferingTypeValues::LightUtilization),
+            "Medium Utilization" => Ok(OfferingTypeValues::MediumUtilization),
+            "No Upfront" => Ok(OfferingTypeValues::NoUpfront),
+            "Partial Upfront" => Ok(OfferingTypeValues::PartialUpfront),
+            _ => Err(()),
+        }
+    }
+}
+
 struct OfferingTypeValuesDeserializer;
 impl OfferingTypeValuesDeserializer {
     #[allow(unused_variables)]
@@ -27278,6 +29496,41 @@ impl OfferingTypeValuesDeserializer {
     }
 }
 
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum OperationType {
+    Add,
+    Remove,
+}
+
+impl Into<String> for OperationType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for OperationType {
+    fn into(self) -> &'static str {
+        match self {
+            OperationType::Add => "add",
+            OperationType::Remove => "remove",
+        }
+    }
+}
+
+impl ::std::str::FromStr for OperationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "add" => Ok(OperationType::Add),
+            "remove" => Ok(OperationType::Remove),
+            _ => Err(()),
+        }
+    }
+}
+
+
 /// Serialize `OwnerStringList` contents to a `SignedRequest`.
 struct OwnerStringListSerializer;
 impl OwnerStringListSerializer {
@@ -27285,6 +29538,44 @@ impl OwnerStringListSerializer {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PaymentOption {
+    AllUpfront,
+    NoUpfront,
+    PartialUpfront,
+}
+
+impl Into<String> for PaymentOption {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PaymentOption {
+    fn into(self) -> &'static str {
+        match self {
+            PaymentOption::AllUpfront => "AllUpfront",
+            PaymentOption::NoUpfront => "NoUpfront",
+            PaymentOption::PartialUpfront => "PartialUpfront",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PaymentOption {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AllUpfront" => Ok(PaymentOption::AllUpfront),
+            "NoUpfront" => Ok(PaymentOption::NoUpfront),
+            "PartialUpfront" => Ok(PaymentOption::PartialUpfront),
+            _ => Err(()),
         }
     }
 }
@@ -27469,6 +29760,38 @@ impl PeeringConnectionOptionsRequestSerializer {
                        &field_value.to_string());
         }
 
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PermissionGroup {
+    All,
+}
+
+impl Into<String> for PermissionGroup {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PermissionGroup {
+    fn into(self) -> &'static str {
+        match self {
+            PermissionGroup::All => "all",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PermissionGroup {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "all" => Ok(PermissionGroup::All),
+            _ => Err(()),
+        }
     }
 }
 
@@ -27702,6 +30025,47 @@ impl PlacementGroupListDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PlacementGroupState {
+    Available,
+    Deleted,
+    Deleting,
+    Pending,
+}
+
+impl Into<String> for PlacementGroupState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PlacementGroupState {
+    fn into(self) -> &'static str {
+        match self {
+            PlacementGroupState::Available => "available",
+            PlacementGroupState::Deleted => "deleted",
+            PlacementGroupState::Deleting => "deleting",
+            PlacementGroupState::Pending => "pending",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PlacementGroupState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "available" => Ok(PlacementGroupState::Available),
+            "deleted" => Ok(PlacementGroupState::Deleted),
+            "deleting" => Ok(PlacementGroupState::Deleting),
+            "pending" => Ok(PlacementGroupState::Pending),
+            _ => Err(()),
+        }
+    }
+}
+
 struct PlacementGroupStateDeserializer;
 impl PlacementGroupStateDeserializer {
     #[allow(unused_variables)]
@@ -27728,6 +30092,38 @@ impl PlacementGroupStringListSerializer {
     }
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PlacementStrategy {
+    Cluster,
+}
+
+impl Into<String> for PlacementStrategy {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PlacementStrategy {
+    fn into(self) -> &'static str {
+        match self {
+            PlacementStrategy::Cluster => "cluster",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PlacementStrategy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "cluster" => Ok(PlacementStrategy::Cluster),
+            _ => Err(()),
+        }
+    }
+}
+
 struct PlacementStrategyDeserializer;
 impl PlacementStrategyDeserializer {
     #[allow(unused_variables)]
@@ -27742,6 +30138,38 @@ impl PlacementStrategyDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum PlatformValues {
+    Windows,
+}
+
+impl Into<String> for PlatformValues {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for PlatformValues {
+    fn into(self) -> &'static str {
+        match self {
+            PlatformValues::Windows => "Windows",
+        }
+    }
+}
+
+impl ::std::str::FromStr for PlatformValues {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Windows" => Ok(PlatformValues::Windows),
+            _ => Err(()),
+        }
+    }
+}
+
 struct PlatformValuesDeserializer;
 impl PlatformValuesDeserializer {
     #[allow(unused_variables)]
@@ -28604,6 +31032,41 @@ impl ProductCodeStringListSerializer {
     }
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ProductCodeValues {
+    Devpay,
+    Marketplace,
+}
+
+impl Into<String> for ProductCodeValues {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ProductCodeValues {
+    fn into(self) -> &'static str {
+        match self {
+            ProductCodeValues::Devpay => "devpay",
+            ProductCodeValues::Marketplace => "marketplace",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProductCodeValues {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "devpay" => Ok(ProductCodeValues::Devpay),
+            "marketplace" => Ok(ProductCodeValues::Marketplace),
+            _ => Err(()),
+        }
+    }
+}
+
 struct ProductCodeValuesDeserializer;
 impl ProductCodeValuesDeserializer {
     #[allow(unused_variables)]
@@ -29312,6 +31775,47 @@ impl PurchasedScheduledInstanceSetDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RIProductDescription {
+    LinuxUNIX,
+    LinuxUNIXAmazonVPC,
+    Windows,
+    WindowsAmazonVPC,
+}
+
+impl Into<String> for RIProductDescription {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RIProductDescription {
+    fn into(self) -> &'static str {
+        match self {
+            RIProductDescription::LinuxUNIX => "Linux/UNIX",
+            RIProductDescription::LinuxUNIXAmazonVPC => "Linux/UNIX (Amazon VPC)",
+            RIProductDescription::Windows => "Windows",
+            RIProductDescription::WindowsAmazonVPC => "Windows (Amazon VPC)",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RIProductDescription {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Linux/UNIX" => Ok(RIProductDescription::LinuxUNIX),
+            "Linux/UNIX (Amazon VPC)" => Ok(RIProductDescription::LinuxUNIXAmazonVPC),
+            "Windows" => Ok(RIProductDescription::Windows),
+            "Windows (Amazon VPC)" => Ok(RIProductDescription::WindowsAmazonVPC),
+            _ => Err(()),
+        }
+    }
+}
+
 struct RIProductDescriptionDeserializer;
 impl RIProductDescriptionDeserializer {
     #[allow(unused_variables)]
@@ -29421,6 +31925,38 @@ impl RecurringChargeDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RecurringChargeFrequency {
+    Hourly,
+}
+
+impl Into<String> for RecurringChargeFrequency {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RecurringChargeFrequency {
+    fn into(self) -> &'static str {
+        match self {
+            RecurringChargeFrequency::Hourly => "Hourly",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RecurringChargeFrequency {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Hourly" => Ok(RecurringChargeFrequency::Hourly),
+            _ => Err(()),
+        }
+    }
+}
+
 struct RecurringChargeFrequencyDeserializer;
 impl RecurringChargeFrequencyDeserializer {
     #[allow(unused_variables)]
@@ -30297,6 +32833,62 @@ impl ReplaceRouteTableAssociationResultDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ReportInstanceReasonCodes {
+    InstanceStuckInState,
+    NotAcceptingCredentials,
+    Other,
+    PasswordNotAvailable,
+    PerformanceEbsVolume,
+    PerformanceInstanceStore,
+    PerformanceNetwork,
+    PerformanceOther,
+    Unresponsive,
+}
+
+impl Into<String> for ReportInstanceReasonCodes {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ReportInstanceReasonCodes {
+    fn into(self) -> &'static str {
+        match self {
+            ReportInstanceReasonCodes::InstanceStuckInState => "instance-stuck-in-state",
+            ReportInstanceReasonCodes::NotAcceptingCredentials => "not-accepting-credentials",
+            ReportInstanceReasonCodes::Other => "other",
+            ReportInstanceReasonCodes::PasswordNotAvailable => "password-not-available",
+            ReportInstanceReasonCodes::PerformanceEbsVolume => "performance-ebs-volume",
+            ReportInstanceReasonCodes::PerformanceInstanceStore => "performance-instance-store",
+            ReportInstanceReasonCodes::PerformanceNetwork => "performance-network",
+            ReportInstanceReasonCodes::PerformanceOther => "performance-other",
+            ReportInstanceReasonCodes::Unresponsive => "unresponsive",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReportInstanceReasonCodes {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "instance-stuck-in-state" => Ok(ReportInstanceReasonCodes::InstanceStuckInState),
+            "not-accepting-credentials" => Ok(ReportInstanceReasonCodes::NotAcceptingCredentials),
+            "other" => Ok(ReportInstanceReasonCodes::Other),
+            "password-not-available" => Ok(ReportInstanceReasonCodes::PasswordNotAvailable),
+            "performance-ebs-volume" => Ok(ReportInstanceReasonCodes::PerformanceEbsVolume),
+            "performance-instance-store" => Ok(ReportInstanceReasonCodes::PerformanceInstanceStore),
+            "performance-network" => Ok(ReportInstanceReasonCodes::PerformanceNetwork),
+            "performance-other" => Ok(ReportInstanceReasonCodes::PerformanceOther),
+            "unresponsive" => Ok(ReportInstanceReasonCodes::Unresponsive),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Contains the parameters for ReportInstanceStatus.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct ReportInstanceStatusRequest {
@@ -30346,6 +32938,41 @@ impl ReportInstanceStatusRequestSerializer {
         }
         params.put(&format!("{}{}", prefix, "Status"), &obj.status);
 
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ReportStatusType {
+    Impaired,
+    Ok,
+}
+
+impl Into<String> for ReportStatusType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ReportStatusType {
+    fn into(self) -> &'static str {
+        match self {
+            ReportStatusType::Impaired => "impaired",
+            ReportStatusType::Ok => "ok",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReportStatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "impaired" => Ok(ReportStatusType::Impaired),
+            "ok" => Ok(ReportStatusType::Ok),
+            _ => Err(()),
+        }
     }
 }
 
@@ -30820,6 +33447,47 @@ impl ReservationListDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ReservationState {
+    Active,
+    PaymentFailed,
+    PaymentPending,
+    Retired,
+}
+
+impl Into<String> for ReservationState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ReservationState {
+    fn into(self) -> &'static str {
+        match self {
+            ReservationState::Active => "active",
+            ReservationState::PaymentFailed => "payment-failed",
+            ReservationState::PaymentPending => "payment-pending",
+            ReservationState::Retired => "retired",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReservationState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "active" => Ok(ReservationState::Active),
+            "payment-failed" => Ok(ReservationState::PaymentFailed),
+            "payment-pending" => Ok(ReservationState::PaymentPending),
+            "retired" => Ok(ReservationState::Retired),
+            _ => Err(()),
+        }
+    }
+}
+
 struct ReservationStateDeserializer;
 impl ReservationStateDeserializer {
     #[allow(unused_variables)]
@@ -31038,6 +33706,47 @@ impl ReservedInstanceReservationValueSetDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ReservedInstanceState {
+    Active,
+    PaymentFailed,
+    PaymentPending,
+    Retired,
+}
+
+impl Into<String> for ReservedInstanceState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ReservedInstanceState {
+    fn into(self) -> &'static str {
+        match self {
+            ReservedInstanceState::Active => "active",
+            ReservedInstanceState::PaymentFailed => "payment-failed",
+            ReservedInstanceState::PaymentPending => "payment-pending",
+            ReservedInstanceState::Retired => "retired",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReservedInstanceState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "active" => Ok(ReservedInstanceState::Active),
+            "payment-failed" => Ok(ReservedInstanceState::PaymentFailed),
+            "payment-pending" => Ok(ReservedInstanceState::PaymentPending),
+            "retired" => Ok(ReservedInstanceState::Retired),
+            _ => Err(()),
+        }
+    }
+}
+
 struct ReservedInstanceStateDeserializer;
 impl ReservedInstanceStateDeserializer {
     #[allow(unused_variables)]
@@ -32069,6 +34778,38 @@ impl ReservedIntancesIdsDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ResetImageAttributeName {
+    LaunchPermission,
+}
+
+impl Into<String> for ResetImageAttributeName {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ResetImageAttributeName {
+    fn into(self) -> &'static str {
+        match self {
+            ResetImageAttributeName::LaunchPermission => "launchPermission",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResetImageAttributeName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "launchPermission" => Ok(ResetImageAttributeName::LaunchPermission),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Contains the parameters for ResetImageAttribute.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct ResetImageAttributeRequest {
@@ -32200,6 +34941,86 @@ impl ResourceIdListSerializer {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ResourceType {
+    CustomerGateway,
+    DhcpOptions,
+    Image,
+    Instance,
+    InternetGateway,
+    NetworkAcl,
+    NetworkInterface,
+    ReservedInstances,
+    RouteTable,
+    SecurityGroup,
+    Snapshot,
+    SpotInstancesRequest,
+    Subnet,
+    Volume,
+    Vpc,
+    VpnConnection,
+    VpnGateway,
+}
+
+impl Into<String> for ResourceType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ResourceType {
+    fn into(self) -> &'static str {
+        match self {
+            ResourceType::CustomerGateway => "customer-gateway",
+            ResourceType::DhcpOptions => "dhcp-options",
+            ResourceType::Image => "image",
+            ResourceType::Instance => "instance",
+            ResourceType::InternetGateway => "internet-gateway",
+            ResourceType::NetworkAcl => "network-acl",
+            ResourceType::NetworkInterface => "network-interface",
+            ResourceType::ReservedInstances => "reserved-instances",
+            ResourceType::RouteTable => "route-table",
+            ResourceType::SecurityGroup => "security-group",
+            ResourceType::Snapshot => "snapshot",
+            ResourceType::SpotInstancesRequest => "spot-instances-request",
+            ResourceType::Subnet => "subnet",
+            ResourceType::Volume => "volume",
+            ResourceType::Vpc => "vpc",
+            ResourceType::VpnConnection => "vpn-connection",
+            ResourceType::VpnGateway => "vpn-gateway",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "customer-gateway" => Ok(ResourceType::CustomerGateway),
+            "dhcp-options" => Ok(ResourceType::DhcpOptions),
+            "image" => Ok(ResourceType::Image),
+            "instance" => Ok(ResourceType::Instance),
+            "internet-gateway" => Ok(ResourceType::InternetGateway),
+            "network-acl" => Ok(ResourceType::NetworkAcl),
+            "network-interface" => Ok(ResourceType::NetworkInterface),
+            "reserved-instances" => Ok(ResourceType::ReservedInstances),
+            "route-table" => Ok(ResourceType::RouteTable),
+            "security-group" => Ok(ResourceType::SecurityGroup),
+            "snapshot" => Ok(ResourceType::Snapshot),
+            "spot-instances-request" => Ok(ResourceType::SpotInstancesRequest),
+            "subnet" => Ok(ResourceType::Subnet),
+            "volume" => Ok(ResourceType::Volume),
+            "vpc" => Ok(ResourceType::Vpc),
+            "vpn-connection" => Ok(ResourceType::VpnConnection),
+            "vpn-gateway" => Ok(ResourceType::VpnGateway),
+            _ => Err(()),
         }
     }
 }
@@ -32698,6 +35519,44 @@ impl RouteListDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RouteOrigin {
+    CreateRoute,
+    CreateRouteTable,
+    EnableVgwRoutePropagation,
+}
+
+impl Into<String> for RouteOrigin {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RouteOrigin {
+    fn into(self) -> &'static str {
+        match self {
+            RouteOrigin::CreateRoute => "CreateRoute",
+            RouteOrigin::CreateRouteTable => "CreateRouteTable",
+            RouteOrigin::EnableVgwRoutePropagation => "EnableVgwRoutePropagation",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RouteOrigin {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CreateRoute" => Ok(RouteOrigin::CreateRoute),
+            "CreateRouteTable" => Ok(RouteOrigin::CreateRouteTable),
+            "EnableVgwRoutePropagation" => Ok(RouteOrigin::EnableVgwRoutePropagation),
+            _ => Err(()),
+        }
+    }
+}
+
 struct RouteOriginDeserializer;
 impl RouteOriginDeserializer {
     #[allow(unused_variables)]
@@ -32712,6 +35571,41 @@ impl RouteOriginDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RouteState {
+    Active,
+    Blackhole,
+}
+
+impl Into<String> for RouteState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RouteState {
+    fn into(self) -> &'static str {
+        match self {
+            RouteState::Active => "active",
+            RouteState::Blackhole => "blackhole",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RouteState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "active" => Ok(RouteState::Active),
+            "blackhole" => Ok(RouteState::Blackhole),
+            _ => Err(()),
+        }
+    }
+}
+
 struct RouteStateDeserializer;
 impl RouteStateDeserializer {
     #[allow(unused_variables)]
@@ -32955,6 +35849,41 @@ impl RouteTableListDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RuleAction {
+    Allow,
+    Deny,
+}
+
+impl Into<String> for RuleAction {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RuleAction {
+    fn into(self) -> &'static str {
+        match self {
+            RuleAction::Allow => "allow",
+            RuleAction::Deny => "deny",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RuleAction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "allow" => Ok(RuleAction::Allow),
+            "deny" => Ok(RuleAction::Deny),
+            _ => Err(()),
+        }
+    }
+}
+
 struct RuleActionDeserializer;
 impl RuleActionDeserializer {
     #[allow(unused_variables)]
@@ -34386,6 +37315,41 @@ impl ScheduledInstancesSecurityGroupIdSetSerializer {
     }
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Scope {
+    AvailabilityZone,
+    Region,
+}
+
+impl Into<String> for Scope {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Scope {
+    fn into(self) -> &'static str {
+        match self {
+            Scope::AvailabilityZone => "Availability Zone",
+            Scope::Region => "Region",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Scope {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Availability Zone" => Ok(Scope::AvailabilityZone),
+            "Region" => Ok(Scope::Region),
+            _ => Err(()),
+        }
+    }
+}
+
 struct ScopeDeserializer;
 impl ScopeDeserializer {
     #[allow(unused_variables)]
@@ -34702,6 +37666,41 @@ impl SecurityGroupStringListSerializer {
     }
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ShutdownBehavior {
+    Stop,
+    Terminate,
+}
+
+impl Into<String> for ShutdownBehavior {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ShutdownBehavior {
+    fn into(self) -> &'static str {
+        match self {
+            ShutdownBehavior::Stop => "stop",
+            ShutdownBehavior::Terminate => "terminate",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ShutdownBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "stop" => Ok(ShutdownBehavior::Stop),
+            "terminate" => Ok(ShutdownBehavior::Terminate),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Describes the time period for a Scheduled Instance to start its first schedule. The time period must span less than one day.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct SlotDateTimeRangeRequest {
@@ -34884,6 +37883,41 @@ impl SnapshotDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SnapshotAttributeName {
+    CreateVolumePermission,
+    ProductCodes,
+}
+
+impl Into<String> for SnapshotAttributeName {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SnapshotAttributeName {
+    fn into(self) -> &'static str {
+        match self {
+            SnapshotAttributeName::CreateVolumePermission => "createVolumePermission",
+            SnapshotAttributeName::ProductCodes => "productCodes",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SnapshotAttributeName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "createVolumePermission" => Ok(SnapshotAttributeName::CreateVolumePermission),
+            "productCodes" => Ok(SnapshotAttributeName::ProductCodes),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Describes the snapshot created from the imported disk.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct SnapshotDetail {
@@ -35122,6 +38156,44 @@ impl SnapshotListDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SnapshotState {
+    Completed,
+    Error,
+    Pending,
+}
+
+impl Into<String> for SnapshotState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SnapshotState {
+    fn into(self) -> &'static str {
+        match self {
+            SnapshotState::Completed => "completed",
+            SnapshotState::Error => "error",
+            SnapshotState::Pending => "pending",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SnapshotState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "completed" => Ok(SnapshotState::Completed),
+            "error" => Ok(SnapshotState::Error),
+            "pending" => Ok(SnapshotState::Pending),
+            _ => Err(()),
+        }
+    }
+}
+
 struct SnapshotStateDeserializer;
 impl SnapshotStateDeserializer {
     #[allow(unused_variables)]
@@ -36119,6 +39191,50 @@ impl SpotInstanceRequestListDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SpotInstanceState {
+    Active,
+    Cancelled,
+    Closed,
+    Failed,
+    Open,
+}
+
+impl Into<String> for SpotInstanceState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SpotInstanceState {
+    fn into(self) -> &'static str {
+        match self {
+            SpotInstanceState::Active => "active",
+            SpotInstanceState::Cancelled => "cancelled",
+            SpotInstanceState::Closed => "closed",
+            SpotInstanceState::Failed => "failed",
+            SpotInstanceState::Open => "open",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SpotInstanceState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "active" => Ok(SpotInstanceState::Active),
+            "cancelled" => Ok(SpotInstanceState::Cancelled),
+            "closed" => Ok(SpotInstanceState::Closed),
+            "failed" => Ok(SpotInstanceState::Failed),
+            "open" => Ok(SpotInstanceState::Open),
+            _ => Err(()),
+        }
+    }
+}
+
 struct SpotInstanceStateDeserializer;
 impl SpotInstanceStateDeserializer {
     #[allow(unused_variables)]
@@ -36247,6 +39363,41 @@ impl SpotInstanceStatusDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SpotInstanceType {
+    OneTime,
+    Persistent,
+}
+
+impl Into<String> for SpotInstanceType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SpotInstanceType {
+    fn into(self) -> &'static str {
+        match self {
+            SpotInstanceType::OneTime => "one-time",
+            SpotInstanceType::Persistent => "persistent",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SpotInstanceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "one-time" => Ok(SpotInstanceType::OneTime),
+            "persistent" => Ok(SpotInstanceType::Persistent),
+            _ => Err(()),
+        }
+    }
+}
+
 struct SpotInstanceTypeDeserializer;
 impl SpotInstanceTypeDeserializer {
     #[allow(unused_variables)]
@@ -36790,6 +39941,47 @@ impl StartInstancesResultDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum State {
+    Available,
+    Deleted,
+    Deleting,
+    Pending,
+}
+
+impl Into<String> for State {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for State {
+    fn into(self) -> &'static str {
+        match self {
+            State::Available => "Available",
+            State::Deleted => "Deleted",
+            State::Deleting => "Deleting",
+            State::Pending => "Pending",
+        }
+    }
+}
+
+impl ::std::str::FromStr for State {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Available" => Ok(State::Available),
+            "Deleted" => Ok(State::Deleted),
+            "Deleting" => Ok(State::Deleting),
+            "Pending" => Ok(State::Pending),
+            _ => Err(()),
+        }
+    }
+}
+
 struct StateDeserializer;
 impl StateDeserializer {
     #[allow(unused_variables)]
@@ -36858,6 +40050,44 @@ impl StateReasonDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Status {
+    InClassic,
+    InVpc,
+    MoveInProgress,
+}
+
+impl Into<String> for Status {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Status {
+    fn into(self) -> &'static str {
+        match self {
+            Status::InClassic => "InClassic",
+            Status::InVpc => "InVpc",
+            Status::MoveInProgress => "MoveInProgress",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Status {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "InClassic" => Ok(Status::InClassic),
+            "InVpc" => Ok(Status::InVpc),
+            "MoveInProgress" => Ok(Status::MoveInProgress),
+            _ => Err(()),
+        }
+    }
+}
+
 struct StatusDeserializer;
 impl StatusDeserializer {
     #[allow(unused_variables)]
@@ -36872,6 +40102,38 @@ impl StatusDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum StatusName {
+    Reachability,
+}
+
+impl Into<String> for StatusName {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for StatusName {
+    fn into(self) -> &'static str {
+        match self {
+            StatusName::Reachability => "reachability",
+        }
+    }
+}
+
+impl ::std::str::FromStr for StatusName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "reachability" => Ok(StatusName::Reachability),
+            _ => Err(()),
+        }
+    }
+}
+
 struct StatusNameDeserializer;
 impl StatusNameDeserializer {
     #[allow(unused_variables)]
@@ -36886,6 +40148,47 @@ impl StatusNameDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum StatusType {
+    Failed,
+    Initializing,
+    InsufficientData,
+    Passed,
+}
+
+impl Into<String> for StatusType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for StatusType {
+    fn into(self) -> &'static str {
+        match self {
+            StatusType::Failed => "failed",
+            StatusType::Initializing => "initializing",
+            StatusType::InsufficientData => "insufficient-data",
+            StatusType::Passed => "passed",
+        }
+    }
+}
+
+impl ::std::str::FromStr for StatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "failed" => Ok(StatusType::Failed),
+            "initializing" => Ok(StatusType::Initializing),
+            "insufficient-data" => Ok(StatusType::InsufficientData),
+            "passed" => Ok(StatusType::Passed),
+            _ => Err(()),
+        }
+    }
+}
+
 struct StatusTypeDeserializer;
 impl StatusTypeDeserializer {
     #[allow(unused_variables)]
@@ -37258,6 +40561,53 @@ impl SubnetCidrBlockStateDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SubnetCidrBlockStateCode {
+    Associated,
+    Associating,
+    Disassociated,
+    Disassociating,
+    Failed,
+    Failing,
+}
+
+impl Into<String> for SubnetCidrBlockStateCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SubnetCidrBlockStateCode {
+    fn into(self) -> &'static str {
+        match self {
+            SubnetCidrBlockStateCode::Associated => "associated",
+            SubnetCidrBlockStateCode::Associating => "associating",
+            SubnetCidrBlockStateCode::Disassociated => "disassociated",
+            SubnetCidrBlockStateCode::Disassociating => "disassociating",
+            SubnetCidrBlockStateCode::Failed => "failed",
+            SubnetCidrBlockStateCode::Failing => "failing",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SubnetCidrBlockStateCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "associated" => Ok(SubnetCidrBlockStateCode::Associated),
+            "associating" => Ok(SubnetCidrBlockStateCode::Associating),
+            "disassociated" => Ok(SubnetCidrBlockStateCode::Disassociated),
+            "disassociating" => Ok(SubnetCidrBlockStateCode::Disassociating),
+            "failed" => Ok(SubnetCidrBlockStateCode::Failed),
+            "failing" => Ok(SubnetCidrBlockStateCode::Failing),
+            _ => Err(()),
+        }
+    }
+}
+
 struct SubnetCidrBlockStateCodeDeserializer;
 impl SubnetCidrBlockStateCodeDeserializer {
     #[allow(unused_variables)]
@@ -37429,6 +40779,41 @@ impl SubnetListDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SubnetState {
+    Available,
+    Pending,
+}
+
+impl Into<String> for SubnetState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SubnetState {
+    fn into(self) -> &'static str {
+        match self {
+            SubnetState::Available => "available",
+            SubnetState::Pending => "pending",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SubnetState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "available" => Ok(SubnetState::Available),
+            "pending" => Ok(SubnetState::Pending),
+            _ => Err(()),
+        }
+    }
+}
+
 struct SubnetStateDeserializer;
 impl SubnetStateDeserializer {
     #[allow(unused_variables)]
@@ -37443,6 +40828,50 @@ impl SubnetStateDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SummaryStatus {
+    Impaired,
+    Initializing,
+    InsufficientData,
+    NotApplicable,
+    Ok,
+}
+
+impl Into<String> for SummaryStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SummaryStatus {
+    fn into(self) -> &'static str {
+        match self {
+            SummaryStatus::Impaired => "impaired",
+            SummaryStatus::Initializing => "initializing",
+            SummaryStatus::InsufficientData => "insufficient-data",
+            SummaryStatus::NotApplicable => "not-applicable",
+            SummaryStatus::Ok => "ok",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SummaryStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "impaired" => Ok(SummaryStatus::Impaired),
+            "initializing" => Ok(SummaryStatus::Initializing),
+            "insufficient-data" => Ok(SummaryStatus::InsufficientData),
+            "not-applicable" => Ok(SummaryStatus::NotApplicable),
+            "ok" => Ok(SummaryStatus::Ok),
+            _ => Err(()),
+        }
+    }
+}
+
 struct SummaryStatusDeserializer;
 impl SummaryStatusDeserializer {
     #[allow(unused_variables)]
@@ -37926,6 +41355,41 @@ impl TargetReservationValueSetDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum TelemetryStatus {
+    Down,
+    Up,
+}
+
+impl Into<String> for TelemetryStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for TelemetryStatus {
+    fn into(self) -> &'static str {
+        match self {
+            TelemetryStatus::Down => "DOWN",
+            TelemetryStatus::Up => "UP",
+        }
+    }
+}
+
+impl ::std::str::FromStr for TelemetryStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DOWN" => Ok(TelemetryStatus::Down),
+            "UP" => Ok(TelemetryStatus::Up),
+            _ => Err(()),
+        }
+    }
+}
+
 struct TelemetryStatusDeserializer;
 impl TelemetryStatusDeserializer {
     #[allow(unused_variables)]
@@ -37940,6 +41404,44 @@ impl TelemetryStatusDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Tenancy {
+    Dedicated,
+    Default,
+    Host,
+}
+
+impl Into<String> for Tenancy {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Tenancy {
+    fn into(self) -> &'static str {
+        match self {
+            Tenancy::Dedicated => "dedicated",
+            Tenancy::Default => "default",
+            Tenancy::Host => "host",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Tenancy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "dedicated" => Ok(Tenancy::Dedicated),
+            "default" => Ok(Tenancy::Default),
+            "host" => Ok(Tenancy::Host),
+            _ => Err(()),
+        }
+    }
+}
+
 struct TenancyDeserializer;
 impl TenancyDeserializer {
     #[allow(unused_variables)]
@@ -38033,6 +41535,44 @@ impl TerminateInstancesResultDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum TrafficType {
+    Accept,
+    All,
+    Reject,
+}
+
+impl Into<String> for TrafficType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for TrafficType {
+    fn into(self) -> &'static str {
+        match self {
+            TrafficType::Accept => "ACCEPT",
+            TrafficType::All => "ALL",
+            TrafficType::Reject => "REJECT",
+        }
+    }
+}
+
+impl ::std::str::FromStr for TrafficType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ACCEPT" => Ok(TrafficType::Accept),
+            "ALL" => Ok(TrafficType::All),
+            "REJECT" => Ok(TrafficType::Reject),
+            _ => Err(()),
+        }
+    }
+}
+
 struct TrafficTypeDeserializer;
 impl TrafficTypeDeserializer {
     #[allow(unused_variables)]
@@ -38939,6 +42479,41 @@ impl VgwTelemetryListDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum VirtualizationType {
+    Hvm,
+    Paravirtual,
+}
+
+impl Into<String> for VirtualizationType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for VirtualizationType {
+    fn into(self) -> &'static str {
+        match self {
+            VirtualizationType::Hvm => "hvm",
+            VirtualizationType::Paravirtual => "paravirtual",
+        }
+    }
+}
+
+impl ::std::str::FromStr for VirtualizationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "hvm" => Ok(VirtualizationType::Hvm),
+            "paravirtual" => Ok(VirtualizationType::Paravirtual),
+            _ => Err(()),
+        }
+    }
+}
+
 struct VirtualizationTypeDeserializer;
 impl VirtualizationTypeDeserializer {
     #[allow(unused_variables)]
@@ -39191,6 +42766,47 @@ impl VolumeAttachmentListDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum VolumeAttachmentState {
+    Attached,
+    Attaching,
+    Detached,
+    Detaching,
+}
+
+impl Into<String> for VolumeAttachmentState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for VolumeAttachmentState {
+    fn into(self) -> &'static str {
+        match self {
+            VolumeAttachmentState::Attached => "attached",
+            VolumeAttachmentState::Attaching => "attaching",
+            VolumeAttachmentState::Detached => "detached",
+            VolumeAttachmentState::Detaching => "detaching",
+        }
+    }
+}
+
+impl ::std::str::FromStr for VolumeAttachmentState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "attached" => Ok(VolumeAttachmentState::Attached),
+            "attaching" => Ok(VolumeAttachmentState::Attaching),
+            "detached" => Ok(VolumeAttachmentState::Detached),
+            "detaching" => Ok(VolumeAttachmentState::Detaching),
+            _ => Err(()),
+        }
+    }
+}
+
 struct VolumeAttachmentStateDeserializer;
 impl VolumeAttachmentStateDeserializer {
     #[allow(unused_variables)]
@@ -39205,6 +42821,41 @@ impl VolumeAttachmentStateDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum VolumeAttributeName {
+    AutoEnableIO,
+    ProductCodes,
+}
+
+impl Into<String> for VolumeAttributeName {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for VolumeAttributeName {
+    fn into(self) -> &'static str {
+        match self {
+            VolumeAttributeName::AutoEnableIO => "autoEnableIO",
+            VolumeAttributeName::ProductCodes => "productCodes",
+        }
+    }
+}
+
+impl ::std::str::FromStr for VolumeAttributeName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "autoEnableIO" => Ok(VolumeAttributeName::AutoEnableIO),
+            "productCodes" => Ok(VolumeAttributeName::ProductCodes),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Describes an EBS volume.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct VolumeDetail {
@@ -39439,6 +43090,47 @@ impl VolumeModificationListDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum VolumeModificationState {
+    Completed,
+    Failed,
+    Modifying,
+    Optimizing,
+}
+
+impl Into<String> for VolumeModificationState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for VolumeModificationState {
+    fn into(self) -> &'static str {
+        match self {
+            VolumeModificationState::Completed => "completed",
+            VolumeModificationState::Failed => "failed",
+            VolumeModificationState::Modifying => "modifying",
+            VolumeModificationState::Optimizing => "optimizing",
+        }
+    }
+}
+
+impl ::std::str::FromStr for VolumeModificationState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "completed" => Ok(VolumeModificationState::Completed),
+            "failed" => Ok(VolumeModificationState::Failed),
+            "modifying" => Ok(VolumeModificationState::Modifying),
+            "optimizing" => Ok(VolumeModificationState::Optimizing),
+            _ => Err(()),
+        }
+    }
+}
+
 struct VolumeModificationStateDeserializer;
 impl VolumeModificationStateDeserializer {
     #[allow(unused_variables)]
@@ -39453,6 +43145,53 @@ impl VolumeModificationStateDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum VolumeState {
+    Available,
+    Creating,
+    Deleted,
+    Deleting,
+    Error,
+    InUse,
+}
+
+impl Into<String> for VolumeState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for VolumeState {
+    fn into(self) -> &'static str {
+        match self {
+            VolumeState::Available => "available",
+            VolumeState::Creating => "creating",
+            VolumeState::Deleted => "deleted",
+            VolumeState::Deleting => "deleting",
+            VolumeState::Error => "error",
+            VolumeState::InUse => "in-use",
+        }
+    }
+}
+
+impl ::std::str::FromStr for VolumeState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "available" => Ok(VolumeState::Available),
+            "creating" => Ok(VolumeState::Creating),
+            "deleted" => Ok(VolumeState::Deleted),
+            "deleting" => Ok(VolumeState::Deleting),
+            "error" => Ok(VolumeState::Error),
+            "in-use" => Ok(VolumeState::InUse),
+            _ => Err(()),
+        }
+    }
+}
+
 struct VolumeStateDeserializer;
 impl VolumeStateDeserializer {
     #[allow(unused_variables)]
@@ -39841,6 +43580,44 @@ impl VolumeStatusInfoDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum VolumeStatusInfoStatus {
+    Impaired,
+    InsufficientData,
+    Ok,
+}
+
+impl Into<String> for VolumeStatusInfoStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for VolumeStatusInfoStatus {
+    fn into(self) -> &'static str {
+        match self {
+            VolumeStatusInfoStatus::Impaired => "impaired",
+            VolumeStatusInfoStatus::InsufficientData => "insufficient-data",
+            VolumeStatusInfoStatus::Ok => "ok",
+        }
+    }
+}
+
+impl ::std::str::FromStr for VolumeStatusInfoStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "impaired" => Ok(VolumeStatusInfoStatus::Impaired),
+            "insufficient-data" => Ok(VolumeStatusInfoStatus::InsufficientData),
+            "ok" => Ok(VolumeStatusInfoStatus::Ok),
+            _ => Err(()),
+        }
+    }
+}
+
 struct VolumeStatusInfoStatusDeserializer;
 impl VolumeStatusInfoStatusDeserializer {
     #[allow(unused_variables)]
@@ -39973,6 +43750,41 @@ impl VolumeStatusListDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum VolumeStatusName {
+    IoEnabled,
+    IoPerformance,
+}
+
+impl Into<String> for VolumeStatusName {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for VolumeStatusName {
+    fn into(self) -> &'static str {
+        match self {
+            VolumeStatusName::IoEnabled => "io-enabled",
+            VolumeStatusName::IoPerformance => "io-performance",
+        }
+    }
+}
+
+impl ::std::str::FromStr for VolumeStatusName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "io-enabled" => Ok(VolumeStatusName::IoEnabled),
+            "io-performance" => Ok(VolumeStatusName::IoPerformance),
+            _ => Err(()),
+        }
+    }
+}
+
 struct VolumeStatusNameDeserializer;
 impl VolumeStatusNameDeserializer {
     #[allow(unused_variables)]
@@ -39987,6 +43799,50 @@ impl VolumeStatusNameDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum VolumeType {
+    Gp2,
+    Io1,
+    Sc1,
+    St1,
+    Standard,
+}
+
+impl Into<String> for VolumeType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for VolumeType {
+    fn into(self) -> &'static str {
+        match self {
+            VolumeType::Gp2 => "gp2",
+            VolumeType::Io1 => "io1",
+            VolumeType::Sc1 => "sc1",
+            VolumeType::St1 => "st1",
+            VolumeType::Standard => "standard",
+        }
+    }
+}
+
+impl ::std::str::FromStr for VolumeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "gp2" => Ok(VolumeType::Gp2),
+            "io1" => Ok(VolumeType::Io1),
+            "sc1" => Ok(VolumeType::Sc1),
+            "st1" => Ok(VolumeType::St1),
+            "standard" => Ok(VolumeType::Standard),
+            _ => Err(()),
+        }
+    }
+}
+
 struct VolumeTypeDeserializer;
 impl VolumeTypeDeserializer {
     #[allow(unused_variables)]
@@ -40189,6 +44045,41 @@ impl VpcAttachmentListDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum VpcAttributeName {
+    EnableDnsHostnames,
+    EnableDnsSupport,
+}
+
+impl Into<String> for VpcAttributeName {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for VpcAttributeName {
+    fn into(self) -> &'static str {
+        match self {
+            VpcAttributeName::EnableDnsHostnames => "enableDnsHostnames",
+            VpcAttributeName::EnableDnsSupport => "enableDnsSupport",
+        }
+    }
+}
+
+impl ::std::str::FromStr for VpcAttributeName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "enableDnsHostnames" => Ok(VpcAttributeName::EnableDnsHostnames),
+            "enableDnsSupport" => Ok(VpcAttributeName::EnableDnsSupport),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Describes the state of a CIDR block.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct VpcCidrBlockState {
@@ -40245,6 +44136,53 @@ impl VpcCidrBlockStateDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum VpcCidrBlockStateCode {
+    Associated,
+    Associating,
+    Disassociated,
+    Disassociating,
+    Failed,
+    Failing,
+}
+
+impl Into<String> for VpcCidrBlockStateCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for VpcCidrBlockStateCode {
+    fn into(self) -> &'static str {
+        match self {
+            VpcCidrBlockStateCode::Associated => "associated",
+            VpcCidrBlockStateCode::Associating => "associating",
+            VpcCidrBlockStateCode::Disassociated => "disassociated",
+            VpcCidrBlockStateCode::Disassociating => "disassociating",
+            VpcCidrBlockStateCode::Failed => "failed",
+            VpcCidrBlockStateCode::Failing => "failing",
+        }
+    }
+}
+
+impl ::std::str::FromStr for VpcCidrBlockStateCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "associated" => Ok(VpcCidrBlockStateCode::Associated),
+            "associating" => Ok(VpcCidrBlockStateCode::Associating),
+            "disassociated" => Ok(VpcCidrBlockStateCode::Disassociated),
+            "disassociating" => Ok(VpcCidrBlockStateCode::Disassociating),
+            "failed" => Ok(VpcCidrBlockStateCode::Failed),
+            "failing" => Ok(VpcCidrBlockStateCode::Failing),
+            _ => Err(()),
+        }
+    }
+}
+
 struct VpcCidrBlockStateCodeDeserializer;
 impl VpcCidrBlockStateCodeDeserializer {
     #[allow(unused_variables)]
@@ -40900,6 +44838,62 @@ impl VpcPeeringConnectionStateReasonDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum VpcPeeringConnectionStateReasonCode {
+    Active,
+    Deleted,
+    Deleting,
+    Expired,
+    Failed,
+    InitiatingRequest,
+    PendingAcceptance,
+    Provisioning,
+    Rejected,
+}
+
+impl Into<String> for VpcPeeringConnectionStateReasonCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for VpcPeeringConnectionStateReasonCode {
+    fn into(self) -> &'static str {
+        match self {
+            VpcPeeringConnectionStateReasonCode::Active => "active",
+            VpcPeeringConnectionStateReasonCode::Deleted => "deleted",
+            VpcPeeringConnectionStateReasonCode::Deleting => "deleting",
+            VpcPeeringConnectionStateReasonCode::Expired => "expired",
+            VpcPeeringConnectionStateReasonCode::Failed => "failed",
+            VpcPeeringConnectionStateReasonCode::InitiatingRequest => "initiating-request",
+            VpcPeeringConnectionStateReasonCode::PendingAcceptance => "pending-acceptance",
+            VpcPeeringConnectionStateReasonCode::Provisioning => "provisioning",
+            VpcPeeringConnectionStateReasonCode::Rejected => "rejected",
+        }
+    }
+}
+
+impl ::std::str::FromStr for VpcPeeringConnectionStateReasonCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "active" => Ok(VpcPeeringConnectionStateReasonCode::Active),
+            "deleted" => Ok(VpcPeeringConnectionStateReasonCode::Deleted),
+            "deleting" => Ok(VpcPeeringConnectionStateReasonCode::Deleting),
+            "expired" => Ok(VpcPeeringConnectionStateReasonCode::Expired),
+            "failed" => Ok(VpcPeeringConnectionStateReasonCode::Failed),
+            "initiating-request" => Ok(VpcPeeringConnectionStateReasonCode::InitiatingRequest),
+            "pending-acceptance" => Ok(VpcPeeringConnectionStateReasonCode::PendingAcceptance),
+            "provisioning" => Ok(VpcPeeringConnectionStateReasonCode::Provisioning),
+            "rejected" => Ok(VpcPeeringConnectionStateReasonCode::Rejected),
+            _ => Err(()),
+        }
+    }
+}
+
 struct VpcPeeringConnectionStateReasonCodeDeserializer;
 impl VpcPeeringConnectionStateReasonCodeDeserializer {
     #[allow(unused_variables)]
@@ -40987,6 +44981,41 @@ impl VpcPeeringConnectionVpcInfoDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum VpcState {
+    Available,
+    Pending,
+}
+
+impl Into<String> for VpcState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for VpcState {
+    fn into(self) -> &'static str {
+        match self {
+            VpcState::Available => "available",
+            VpcState::Pending => "pending",
+        }
+    }
+}
+
+impl ::std::str::FromStr for VpcState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "available" => Ok(VpcState::Available),
+            "pending" => Ok(VpcState::Pending),
+            _ => Err(()),
+        }
+    }
+}
+
 struct VpcStateDeserializer;
 impl VpcStateDeserializer {
     #[allow(unused_variables)]
@@ -41372,6 +45401,47 @@ impl VpnGatewayListDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum VpnState {
+    Available,
+    Deleted,
+    Deleting,
+    Pending,
+}
+
+impl Into<String> for VpnState {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for VpnState {
+    fn into(self) -> &'static str {
+        match self {
+            VpnState::Available => "available",
+            VpnState::Deleted => "deleted",
+            VpnState::Deleting => "deleting",
+            VpnState::Pending => "pending",
+        }
+    }
+}
+
+impl ::std::str::FromStr for VpnState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "available" => Ok(VpnState::Available),
+            "deleted" => Ok(VpnState::Deleted),
+            "deleting" => Ok(VpnState::Deleting),
+            "pending" => Ok(VpnState::Pending),
+            _ => Err(()),
+        }
+    }
+}
+
 struct VpnStateDeserializer;
 impl VpnStateDeserializer {
     #[allow(unused_variables)]
@@ -41490,6 +45560,38 @@ impl VpnStaticRouteListDeserializer {
 
     }
 }
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum VpnStaticRouteSource {
+    Static,
+}
+
+impl Into<String> for VpnStaticRouteSource {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for VpnStaticRouteSource {
+    fn into(self) -> &'static str {
+        match self {
+            VpnStaticRouteSource::Static => "Static",
+        }
+    }
+}
+
+impl ::std::str::FromStr for VpnStaticRouteSource {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Static" => Ok(VpnStaticRouteSource::Static),
+            _ => Err(()),
+        }
+    }
+}
+
 struct VpnStaticRouteSourceDeserializer;
 impl VpnStaticRouteSourceDeserializer {
     #[allow(unused_variables)]
@@ -57487,7 +61589,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -57527,7 +61629,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -57566,7 +61668,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -57607,7 +61709,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -57647,7 +61749,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -57689,7 +61791,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -57715,7 +61817,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -57757,7 +61859,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -57785,7 +61887,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -57824,7 +61926,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -57867,7 +61969,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -57907,7 +62009,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -57947,7 +62049,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -57989,7 +62091,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -58017,7 +62119,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -58057,7 +62159,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -58097,7 +62199,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -58139,7 +62241,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -58165,7 +62267,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -58191,7 +62293,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -58232,7 +62334,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -58274,7 +62376,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -58301,7 +62403,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -58328,7 +62430,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -58371,7 +62473,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -58411,7 +62513,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -58451,7 +62553,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -58491,7 +62593,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -58529,7 +62631,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -58567,7 +62669,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -58608,7 +62710,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -58648,7 +62750,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -58691,7 +62793,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -58730,7 +62832,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -58771,7 +62873,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -58812,7 +62914,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -58851,7 +62953,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -58891,7 +62993,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -58929,7 +63031,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -58968,7 +63070,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -59010,7 +63112,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -59052,7 +63154,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -59080,7 +63182,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -59120,7 +63222,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -59148,7 +63250,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -59187,7 +63289,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -59225,7 +63327,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -59267,7 +63369,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -59309,7 +63411,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -59350,7 +63452,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -59389,7 +63491,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -59427,7 +63529,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -59449,7 +63551,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -59486,7 +63588,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -59524,7 +63626,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -59567,7 +63669,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -59606,7 +63708,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -59648,7 +63750,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -59674,7 +63776,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -59716,7 +63818,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -59743,7 +63845,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -59771,7 +63873,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -59810,7 +63912,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -59851,7 +63953,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -59876,7 +63978,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -59902,7 +64004,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -59944,7 +64046,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -59971,7 +64073,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -59998,7 +64100,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -60025,7 +64127,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -60050,7 +64152,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -60074,7 +64176,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -60101,7 +64203,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -60126,7 +64228,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -60153,7 +64255,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -60177,7 +64279,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -60201,7 +64303,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -60223,7 +64325,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -60247,7 +64349,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -60271,7 +64373,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -60314,7 +64416,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -60353,7 +64455,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -60380,7 +64482,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -60406,7 +64508,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -60431,7 +64533,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -60459,7 +64561,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -60498,7 +64600,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -60541,7 +64643,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -60580,7 +64682,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -60623,7 +64725,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -60663,7 +64765,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -60703,7 +64805,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -60742,7 +64844,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -60786,7 +64888,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -60825,7 +64927,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -60867,7 +64969,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -60909,7 +65011,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -60952,7 +65054,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -60992,7 +65094,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -61031,7 +65133,7 @@ impl<P, D> Ec2 for Ec2Client<P, D>
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -61069,7 +65171,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -61108,7 +65210,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -61151,7 +65253,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -61190,7 +65292,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -61231,7 +65333,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -61273,7 +65375,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -61313,7 +65415,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -61352,7 +65454,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -61393,7 +65495,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -61433,7 +65535,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -61476,7 +65578,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -61515,7 +65617,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -61558,7 +65660,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -61597,7 +65699,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -61639,7 +65741,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -61682,7 +65784,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -61722,7 +65824,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -61762,7 +65864,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -61801,7 +65903,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -61843,7 +65945,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -61885,7 +65987,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -61925,7 +66027,7 @@ fn describe_iam_instance_profile_associations(&self, input: &DescribeIamInstance
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -61962,7 +66064,7 @@ fn describe_reserved_instances_modifications(&self, input: &DescribeReservedInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -62003,7 +66105,7 @@ fn describe_reserved_instances_modifications(&self, input: &DescribeReservedInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -62042,7 +66144,7 @@ fn describe_reserved_instances_modifications(&self, input: &DescribeReservedInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -62082,7 +66184,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -62122,7 +66224,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -62162,7 +66264,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -62202,7 +66304,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -62243,7 +66345,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -62282,7 +66384,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -62325,7 +66427,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -62365,7 +66467,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -62405,7 +66507,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -62445,7 +66547,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -62485,7 +66587,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -62525,7 +66627,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -62565,7 +66667,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -62604,7 +66706,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -62645,7 +66747,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -62686,7 +66788,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -62725,7 +66827,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -62767,7 +66869,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -62809,7 +66911,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -62848,7 +66950,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -62891,7 +66993,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -62932,7 +67034,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -62972,7 +67074,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -63011,7 +67113,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -63054,7 +67156,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -63093,7 +67195,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -63134,7 +67236,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -63174,7 +67276,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -63216,7 +67318,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -63258,7 +67360,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -63285,7 +67387,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -63312,7 +67414,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -63352,7 +67454,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -63379,7 +67481,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -63406,7 +67508,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -63447,7 +67549,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -63486,7 +67588,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -63514,7 +67616,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -63553,7 +67655,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -63581,7 +67683,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -63621,7 +67723,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -63660,7 +67762,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -63684,7 +67786,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -63711,7 +67813,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -63754,7 +67856,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -63793,7 +67895,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -63835,7 +67937,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -63878,7 +67980,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -63917,7 +68019,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -63959,7 +68061,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -63998,7 +68100,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -64036,7 +68138,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -64077,7 +68179,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -64117,7 +68219,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -64158,7 +68260,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -64198,7 +68300,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -64234,7 +68336,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -64261,7 +68363,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -64288,7 +68390,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -64315,7 +68417,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -64342,7 +68444,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -64381,7 +68483,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -64408,7 +68510,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -64447,7 +68549,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -64474,7 +68576,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -64514,7 +68616,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -64541,7 +68643,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -64581,7 +68683,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -64608,7 +68710,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -64635,7 +68737,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -64678,7 +68780,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -64717,7 +68819,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -64759,7 +68861,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -64802,7 +68904,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -64842,7 +68944,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -64882,7 +68984,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -64919,7 +69021,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -64946,7 +69048,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -64987,7 +69089,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -65024,7 +69126,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -65051,7 +69153,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -65093,7 +69195,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -65133,7 +69235,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -65172,7 +69274,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -65197,7 +69299,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -65224,7 +69326,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -65263,7 +69365,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -65290,7 +69392,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -65332,7 +69434,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -65374,7 +69476,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -65401,7 +69503,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -65428,7 +69530,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -65454,7 +69556,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -65482,7 +69584,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -65521,7 +69623,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -65547,7 +69649,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -65571,7 +69673,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -65612,7 +69714,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -65652,7 +69754,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -65693,7 +69795,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -65733,7 +69835,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -65776,7 +69878,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 
@@ -65816,7 +69918,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 let result = ();
                 Ok(result)
             }
@@ -65842,7 +69944,7 @@ fn describe_scheduled_instance_availability(&self, input: &DescribeScheduledInst
         request.sign(&try!(self.credentials_provider.credentials()));
         let response = try!(self.dispatcher.dispatch(&request));
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let result;
 

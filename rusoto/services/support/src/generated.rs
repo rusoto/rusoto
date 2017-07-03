@@ -11,15 +11,11 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -1937,7 +1933,7 @@ impl<P, D> AWSSupport for AWSSupportClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AddAttachmentsToSetResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -1965,7 +1961,7 @@ impl<P, D> AWSSupport for AWSSupportClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AddCommunicationToCaseResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -1992,7 +1988,7 @@ impl<P, D> AWSSupport for AWSSupportClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateCaseResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(CreateCaseError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2016,7 +2012,7 @@ impl<P, D> AWSSupport for AWSSupportClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeAttachmentResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2043,7 +2039,7 @@ impl<P, D> AWSSupport for AWSSupportClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeCasesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2070,7 +2066,7 @@ impl<P, D> AWSSupport for AWSSupportClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeCommunicationsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2097,7 +2093,7 @@ impl<P, D> AWSSupport for AWSSupportClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeServicesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2125,7 +2121,7 @@ impl<P, D> AWSSupport for AWSSupportClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeSeverityLevelsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2151,7 +2147,7 @@ fn describe_trusted_advisor_check_refresh_statuses(&self, input: &DescribeTruste
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeTrustedAdvisorCheckRefreshStatusesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeTrustedAdvisorCheckRefreshStatusesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2178,7 +2174,7 @@ fn describe_trusted_advisor_check_refresh_statuses(&self, input: &DescribeTruste
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeTrustedAdvisorCheckResultResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeTrustedAdvisorCheckResultError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2201,7 +2197,7 @@ fn describe_trusted_advisor_check_summaries(&self, input: &DescribeTrustedAdviso
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeTrustedAdvisorCheckSummariesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeTrustedAdvisorCheckSummariesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2227,7 +2223,7 @@ fn describe_trusted_advisor_check_summaries(&self, input: &DescribeTrustedAdviso
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeTrustedAdvisorChecksResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeTrustedAdvisorChecksError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2253,7 +2249,7 @@ fn describe_trusted_advisor_check_summaries(&self, input: &DescribeTrustedAdviso
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<RefreshTrustedAdvisorCheckResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(RefreshTrustedAdvisorCheckError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2277,7 +2273,7 @@ fn describe_trusted_advisor_check_summaries(&self, input: &DescribeTrustedAdviso
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ResolveCaseResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ResolveCaseError::from_body(String::from_utf8_lossy(&response.body).as_ref())),

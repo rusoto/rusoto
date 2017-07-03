@@ -11,15 +11,11 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -82,6 +78,183 @@ pub struct Artifact {
     #[serde(rename="url")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub url: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ArtifactCategory {
+    File,
+    Log,
+    Screenshot,
+}
+
+impl Into<String> for ArtifactCategory {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ArtifactCategory {
+    fn into(self) -> &'static str {
+        match self {
+            ArtifactCategory::File => "FILE",
+            ArtifactCategory::Log => "LOG",
+            ArtifactCategory::Screenshot => "SCREENSHOT",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ArtifactCategory {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "FILE" => Ok(ArtifactCategory::File),
+            "LOG" => Ok(ArtifactCategory::Log),
+            "SCREENSHOT" => Ok(ArtifactCategory::Screenshot),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ArtifactType {
+    AppiumJavaOutput,
+    AppiumJavaXmlOutput,
+    AppiumPythonOutput,
+    AppiumPythonXmlOutput,
+    AppiumServerOutput,
+    ApplicationCrashReport,
+    AutomationOutput,
+    CalabashJavaXmlOutput,
+    CalabashJsonOutput,
+    CalabashPrettyOutput,
+    CalabashStandardOutput,
+    DeviceLog,
+    ExerciserMonkeyOutput,
+    ExplorerEventLog,
+    ExplorerSummaryLog,
+    InstrumentationOutput,
+    MessageLog,
+    ResultLog,
+    Screenshot,
+    ServiceLog,
+    Unknown,
+    Video,
+    VideoLog,
+    WebkitLog,
+    XctestLog,
+}
+
+impl Into<String> for ArtifactType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ArtifactType {
+    fn into(self) -> &'static str {
+        match self {
+            ArtifactType::AppiumJavaOutput => "APPIUM_JAVA_OUTPUT",
+            ArtifactType::AppiumJavaXmlOutput => "APPIUM_JAVA_XML_OUTPUT",
+            ArtifactType::AppiumPythonOutput => "APPIUM_PYTHON_OUTPUT",
+            ArtifactType::AppiumPythonXmlOutput => "APPIUM_PYTHON_XML_OUTPUT",
+            ArtifactType::AppiumServerOutput => "APPIUM_SERVER_OUTPUT",
+            ArtifactType::ApplicationCrashReport => "APPLICATION_CRASH_REPORT",
+            ArtifactType::AutomationOutput => "AUTOMATION_OUTPUT",
+            ArtifactType::CalabashJavaXmlOutput => "CALABASH_JAVA_XML_OUTPUT",
+            ArtifactType::CalabashJsonOutput => "CALABASH_JSON_OUTPUT",
+            ArtifactType::CalabashPrettyOutput => "CALABASH_PRETTY_OUTPUT",
+            ArtifactType::CalabashStandardOutput => "CALABASH_STANDARD_OUTPUT",
+            ArtifactType::DeviceLog => "DEVICE_LOG",
+            ArtifactType::ExerciserMonkeyOutput => "EXERCISER_MONKEY_OUTPUT",
+            ArtifactType::ExplorerEventLog => "EXPLORER_EVENT_LOG",
+            ArtifactType::ExplorerSummaryLog => "EXPLORER_SUMMARY_LOG",
+            ArtifactType::InstrumentationOutput => "INSTRUMENTATION_OUTPUT",
+            ArtifactType::MessageLog => "MESSAGE_LOG",
+            ArtifactType::ResultLog => "RESULT_LOG",
+            ArtifactType::Screenshot => "SCREENSHOT",
+            ArtifactType::ServiceLog => "SERVICE_LOG",
+            ArtifactType::Unknown => "UNKNOWN",
+            ArtifactType::Video => "VIDEO",
+            ArtifactType::VideoLog => "VIDEO_LOG",
+            ArtifactType::WebkitLog => "WEBKIT_LOG",
+            ArtifactType::XctestLog => "XCTEST_LOG",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ArtifactType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "APPIUM_JAVA_OUTPUT" => Ok(ArtifactType::AppiumJavaOutput),
+            "APPIUM_JAVA_XML_OUTPUT" => Ok(ArtifactType::AppiumJavaXmlOutput),
+            "APPIUM_PYTHON_OUTPUT" => Ok(ArtifactType::AppiumPythonOutput),
+            "APPIUM_PYTHON_XML_OUTPUT" => Ok(ArtifactType::AppiumPythonXmlOutput),
+            "APPIUM_SERVER_OUTPUT" => Ok(ArtifactType::AppiumServerOutput),
+            "APPLICATION_CRASH_REPORT" => Ok(ArtifactType::ApplicationCrashReport),
+            "AUTOMATION_OUTPUT" => Ok(ArtifactType::AutomationOutput),
+            "CALABASH_JAVA_XML_OUTPUT" => Ok(ArtifactType::CalabashJavaXmlOutput),
+            "CALABASH_JSON_OUTPUT" => Ok(ArtifactType::CalabashJsonOutput),
+            "CALABASH_PRETTY_OUTPUT" => Ok(ArtifactType::CalabashPrettyOutput),
+            "CALABASH_STANDARD_OUTPUT" => Ok(ArtifactType::CalabashStandardOutput),
+            "DEVICE_LOG" => Ok(ArtifactType::DeviceLog),
+            "EXERCISER_MONKEY_OUTPUT" => Ok(ArtifactType::ExerciserMonkeyOutput),
+            "EXPLORER_EVENT_LOG" => Ok(ArtifactType::ExplorerEventLog),
+            "EXPLORER_SUMMARY_LOG" => Ok(ArtifactType::ExplorerSummaryLog),
+            "INSTRUMENTATION_OUTPUT" => Ok(ArtifactType::InstrumentationOutput),
+            "MESSAGE_LOG" => Ok(ArtifactType::MessageLog),
+            "RESULT_LOG" => Ok(ArtifactType::ResultLog),
+            "SCREENSHOT" => Ok(ArtifactType::Screenshot),
+            "SERVICE_LOG" => Ok(ArtifactType::ServiceLog),
+            "UNKNOWN" => Ok(ArtifactType::Unknown),
+            "VIDEO" => Ok(ArtifactType::Video),
+            "VIDEO_LOG" => Ok(ArtifactType::VideoLog),
+            "WEBKIT_LOG" => Ok(ArtifactType::WebkitLog),
+            "XCTEST_LOG" => Ok(ArtifactType::XctestLog),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum BillingMethod {
+    Metered,
+    Unmetered,
+}
+
+impl Into<String> for BillingMethod {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for BillingMethod {
+    fn into(self) -> &'static str {
+        match self {
+            BillingMethod::Metered => "METERED",
+            BillingMethod::Unmetered => "UNMETERED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for BillingMethod {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "METERED" => Ok(BillingMethod::Metered),
+            "UNMETERED" => Ok(BillingMethod::Unmetered),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Represents the amount of CPU that an app is using on a physical device.</p> <p>Note that this does not represent system-wide CPU usage.</p>"]
@@ -304,6 +477,38 @@ pub struct CreateUploadResult {
     pub upload: Option<Upload>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CurrencyCode {
+    Usd,
+}
+
+impl Into<String> for CurrencyCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CurrencyCode {
+    fn into(self) -> &'static str {
+        match self {
+            CurrencyCode::Usd => "USD",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CurrencyCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "USD" => Ok(CurrencyCode::Usd),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Represents a request to the delete device pool operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteDevicePoolRequest {
@@ -447,6 +652,88 @@ pub struct Device {
     pub resolution: Option<Resolution>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DeviceAttribute {
+    AppiumVersion,
+    Arn,
+    FormFactor,
+    Manufacturer,
+    Platform,
+    RemoteAccessEnabled,
+}
+
+impl Into<String> for DeviceAttribute {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DeviceAttribute {
+    fn into(self) -> &'static str {
+        match self {
+            DeviceAttribute::AppiumVersion => "APPIUM_VERSION",
+            DeviceAttribute::Arn => "ARN",
+            DeviceAttribute::FormFactor => "FORM_FACTOR",
+            DeviceAttribute::Manufacturer => "MANUFACTURER",
+            DeviceAttribute::Platform => "PLATFORM",
+            DeviceAttribute::RemoteAccessEnabled => "REMOTE_ACCESS_ENABLED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeviceAttribute {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "APPIUM_VERSION" => Ok(DeviceAttribute::AppiumVersion),
+            "ARN" => Ok(DeviceAttribute::Arn),
+            "FORM_FACTOR" => Ok(DeviceAttribute::FormFactor),
+            "MANUFACTURER" => Ok(DeviceAttribute::Manufacturer),
+            "PLATFORM" => Ok(DeviceAttribute::Platform),
+            "REMOTE_ACCESS_ENABLED" => Ok(DeviceAttribute::RemoteAccessEnabled),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DeviceFormFactor {
+    Phone,
+    Tablet,
+}
+
+impl Into<String> for DeviceFormFactor {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DeviceFormFactor {
+    fn into(self) -> &'static str {
+        match self {
+            DeviceFormFactor::Phone => "PHONE",
+            DeviceFormFactor::Tablet => "TABLET",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeviceFormFactor {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "PHONE" => Ok(DeviceFormFactor::Phone),
+            "TABLET" => Ok(DeviceFormFactor::Tablet),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Represents the total (metered or unmetered) minutes used by the resource to run tests. Contains the sum of minutes consumed by all children.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DeviceMinutes {
@@ -462,6 +749,41 @@ pub struct DeviceMinutes {
     #[serde(rename="unmetered")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub unmetered: Option<f64>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DevicePlatform {
+    Android,
+    Ios,
+}
+
+impl Into<String> for DevicePlatform {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DevicePlatform {
+    fn into(self) -> &'static str {
+        match self {
+            DevicePlatform::Android => "ANDROID",
+            DevicePlatform::Ios => "IOS",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DevicePlatform {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ANDROID" => Ok(DevicePlatform::Android),
+            "IOS" => Ok(DevicePlatform::Ios),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Represents a collection of device types.</p>"]
@@ -506,6 +828,41 @@ pub struct DevicePoolCompatibilityResult {
     pub incompatibility_messages: Option<Vec<IncompatibilityMessage>>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum DevicePoolType {
+    Curated,
+    Private,
+}
+
+impl Into<String> for DevicePoolType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for DevicePoolType {
+    fn into(self) -> &'static str {
+        match self {
+            DevicePoolType::Curated => "CURATED",
+            DevicePoolType::Private => "PRIVATE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for DevicePoolType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CURATED" => Ok(DevicePoolType::Curated),
+            "PRIVATE" => Ok(DevicePoolType::Private),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Represents configuration information about a test run, such as the execution timeout (in minutes).</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ExecutionConfiguration {
@@ -521,6 +878,112 @@ pub struct ExecutionConfiguration {
     #[serde(rename="jobTimeoutMinutes")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub job_timeout_minutes: Option<i64>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ExecutionResult {
+    Errored,
+    Failed,
+    Passed,
+    Pending,
+    Skipped,
+    Stopped,
+    Warned,
+}
+
+impl Into<String> for ExecutionResult {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ExecutionResult {
+    fn into(self) -> &'static str {
+        match self {
+            ExecutionResult::Errored => "ERRORED",
+            ExecutionResult::Failed => "FAILED",
+            ExecutionResult::Passed => "PASSED",
+            ExecutionResult::Pending => "PENDING",
+            ExecutionResult::Skipped => "SKIPPED",
+            ExecutionResult::Stopped => "STOPPED",
+            ExecutionResult::Warned => "WARNED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExecutionResult {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ERRORED" => Ok(ExecutionResult::Errored),
+            "FAILED" => Ok(ExecutionResult::Failed),
+            "PASSED" => Ok(ExecutionResult::Passed),
+            "PENDING" => Ok(ExecutionResult::Pending),
+            "SKIPPED" => Ok(ExecutionResult::Skipped),
+            "STOPPED" => Ok(ExecutionResult::Stopped),
+            "WARNED" => Ok(ExecutionResult::Warned),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ExecutionStatus {
+    Completed,
+    Pending,
+    PendingConcurrency,
+    PendingDevice,
+    Preparing,
+    Processing,
+    Running,
+    Scheduling,
+    Stopping,
+}
+
+impl Into<String> for ExecutionStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ExecutionStatus {
+    fn into(self) -> &'static str {
+        match self {
+            ExecutionStatus::Completed => "COMPLETED",
+            ExecutionStatus::Pending => "PENDING",
+            ExecutionStatus::PendingConcurrency => "PENDING_CONCURRENCY",
+            ExecutionStatus::PendingDevice => "PENDING_DEVICE",
+            ExecutionStatus::Preparing => "PREPARING",
+            ExecutionStatus::Processing => "PROCESSING",
+            ExecutionStatus::Running => "RUNNING",
+            ExecutionStatus::Scheduling => "SCHEDULING",
+            ExecutionStatus::Stopping => "STOPPING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExecutionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "COMPLETED" => Ok(ExecutionStatus::Completed),
+            "PENDING" => Ok(ExecutionStatus::Pending),
+            "PENDING_CONCURRENCY" => Ok(ExecutionStatus::PendingConcurrency),
+            "PENDING_DEVICE" => Ok(ExecutionStatus::PendingDevice),
+            "PREPARING" => Ok(ExecutionStatus::Preparing),
+            "PROCESSING" => Ok(ExecutionStatus::Processing),
+            "RUNNING" => Ok(ExecutionStatus::Running),
+            "SCHEDULING" => Ok(ExecutionStatus::Scheduling),
+            "STOPPING" => Ok(ExecutionStatus::Stopping),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Represents the request sent to retrieve the account settings.</p>"]
@@ -1326,6 +1789,41 @@ pub struct NetworkProfile {
     pub uplink_loss_percent: Option<i64>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum NetworkProfileType {
+    Curated,
+    Private,
+}
+
+impl Into<String> for NetworkProfileType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for NetworkProfileType {
+    fn into(self) -> &'static str {
+        match self {
+            NetworkProfileType::Curated => "CURATED",
+            NetworkProfileType::Private => "PRIVATE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for NetworkProfileType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CURATED" => Ok(NetworkProfileType::Curated),
+            "PRIVATE" => Ok(NetworkProfileType::Private),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Represents the metadata of a device offering.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Offering {
@@ -1408,6 +1906,76 @@ pub struct OfferingTransaction {
     #[serde(rename="transactionId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub transaction_id: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum OfferingTransactionType {
+    Purchase,
+    Renew,
+    System,
+}
+
+impl Into<String> for OfferingTransactionType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for OfferingTransactionType {
+    fn into(self) -> &'static str {
+        match self {
+            OfferingTransactionType::Purchase => "PURCHASE",
+            OfferingTransactionType::Renew => "RENEW",
+            OfferingTransactionType::System => "SYSTEM",
+        }
+    }
+}
+
+impl ::std::str::FromStr for OfferingTransactionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "PURCHASE" => Ok(OfferingTransactionType::Purchase),
+            "RENEW" => Ok(OfferingTransactionType::Renew),
+            "SYSTEM" => Ok(OfferingTransactionType::System),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum OfferingType {
+    Recurring,
+}
+
+impl Into<String> for OfferingType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for OfferingType {
+    fn into(self) -> &'static str {
+        match self {
+            OfferingType::Recurring => "RECURRING",
+        }
+    }
+}
+
+impl ::std::str::FromStr for OfferingType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "RECURRING" => Ok(OfferingType::Recurring),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Represents a specific warning or failure.</p>"]
@@ -1537,6 +2105,38 @@ pub struct RecurringCharge {
     pub frequency: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RecurringChargeFrequency {
+    Monthly,
+}
+
+impl Into<String> for RecurringChargeFrequency {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RecurringChargeFrequency {
+    fn into(self) -> &'static str {
+        match self {
+            RecurringChargeFrequency::Monthly => "MONTHLY",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RecurringChargeFrequency {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "MONTHLY" => Ok(RecurringChargeFrequency::Monthly),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Represents information about the remote access session.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct RemoteAccessSession {
@@ -1642,6 +2242,53 @@ pub struct Rule {
     pub value: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum RuleOperator {
+    Contains,
+    Equals,
+    GreaterThan,
+    In,
+    LessThan,
+    NotIn,
+}
+
+impl Into<String> for RuleOperator {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for RuleOperator {
+    fn into(self) -> &'static str {
+        match self {
+            RuleOperator::Contains => "CONTAINS",
+            RuleOperator::Equals => "EQUALS",
+            RuleOperator::GreaterThan => "GREATER_THAN",
+            RuleOperator::In => "IN",
+            RuleOperator::LessThan => "LESS_THAN",
+            RuleOperator::NotIn => "NOT_IN",
+        }
+    }
+}
+
+impl ::std::str::FromStr for RuleOperator {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CONTAINS" => Ok(RuleOperator::Contains),
+            "EQUALS" => Ok(RuleOperator::Equals),
+            "GREATER_THAN" => Ok(RuleOperator::GreaterThan),
+            "IN" => Ok(RuleOperator::In),
+            "LESS_THAN" => Ok(RuleOperator::LessThan),
+            "NOT_IN" => Ok(RuleOperator::NotIn),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Represents an app on a set of devices with a specific test and configuration.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Run {
@@ -1726,6 +2373,86 @@ pub struct Sample {
     #[serde(rename="url")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub url: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SampleType {
+    Cpu,
+    Memory,
+    NativeAvgDrawtime,
+    NativeFps,
+    NativeFrames,
+    NativeMaxDrawtime,
+    NativeMinDrawtime,
+    OpenglAvgDrawtime,
+    OpenglFps,
+    OpenglFrames,
+    OpenglMaxDrawtime,
+    OpenglMinDrawtime,
+    Rx,
+    RxRate,
+    Threads,
+    Tx,
+    TxRate,
+}
+
+impl Into<String> for SampleType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SampleType {
+    fn into(self) -> &'static str {
+        match self {
+            SampleType::Cpu => "CPU",
+            SampleType::Memory => "MEMORY",
+            SampleType::NativeAvgDrawtime => "NATIVE_AVG_DRAWTIME",
+            SampleType::NativeFps => "NATIVE_FPS",
+            SampleType::NativeFrames => "NATIVE_FRAMES",
+            SampleType::NativeMaxDrawtime => "NATIVE_MAX_DRAWTIME",
+            SampleType::NativeMinDrawtime => "NATIVE_MIN_DRAWTIME",
+            SampleType::OpenglAvgDrawtime => "OPENGL_AVG_DRAWTIME",
+            SampleType::OpenglFps => "OPENGL_FPS",
+            SampleType::OpenglFrames => "OPENGL_FRAMES",
+            SampleType::OpenglMaxDrawtime => "OPENGL_MAX_DRAWTIME",
+            SampleType::OpenglMinDrawtime => "OPENGL_MIN_DRAWTIME",
+            SampleType::Rx => "RX",
+            SampleType::RxRate => "RX_RATE",
+            SampleType::Threads => "THREADS",
+            SampleType::Tx => "TX",
+            SampleType::TxRate => "TX_RATE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SampleType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "CPU" => Ok(SampleType::Cpu),
+            "MEMORY" => Ok(SampleType::Memory),
+            "NATIVE_AVG_DRAWTIME" => Ok(SampleType::NativeAvgDrawtime),
+            "NATIVE_FPS" => Ok(SampleType::NativeFps),
+            "NATIVE_FRAMES" => Ok(SampleType::NativeFrames),
+            "NATIVE_MAX_DRAWTIME" => Ok(SampleType::NativeMaxDrawtime),
+            "NATIVE_MIN_DRAWTIME" => Ok(SampleType::NativeMinDrawtime),
+            "OPENGL_AVG_DRAWTIME" => Ok(SampleType::OpenglAvgDrawtime),
+            "OPENGL_FPS" => Ok(SampleType::OpenglFps),
+            "OPENGL_FRAMES" => Ok(SampleType::OpenglFrames),
+            "OPENGL_MAX_DRAWTIME" => Ok(SampleType::OpenglMaxDrawtime),
+            "OPENGL_MIN_DRAWTIME" => Ok(SampleType::OpenglMinDrawtime),
+            "RX" => Ok(SampleType::Rx),
+            "RX_RATE" => Ok(SampleType::RxRate),
+            "THREADS" => Ok(SampleType::Threads),
+            "TX" => Ok(SampleType::Tx),
+            "TX_RATE" => Ok(SampleType::TxRate),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>Represents the settings for a run. Includes things like location, radio states, auxiliary apps, and network profiles.</p>"]
@@ -1952,6 +2679,77 @@ pub struct Test {
     pub type_: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum TestType {
+    AppiumJavaJunit,
+    AppiumJavaTestng,
+    AppiumPython,
+    AppiumWebJavaJunit,
+    AppiumWebJavaTestng,
+    AppiumWebPython,
+    BuiltinExplorer,
+    BuiltinFuzz,
+    Calabash,
+    Instrumentation,
+    Uiautomation,
+    Uiautomator,
+    Xctest,
+    XctestUi,
+}
+
+impl Into<String> for TestType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for TestType {
+    fn into(self) -> &'static str {
+        match self {
+            TestType::AppiumJavaJunit => "APPIUM_JAVA_JUNIT",
+            TestType::AppiumJavaTestng => "APPIUM_JAVA_TESTNG",
+            TestType::AppiumPython => "APPIUM_PYTHON",
+            TestType::AppiumWebJavaJunit => "APPIUM_WEB_JAVA_JUNIT",
+            TestType::AppiumWebJavaTestng => "APPIUM_WEB_JAVA_TESTNG",
+            TestType::AppiumWebPython => "APPIUM_WEB_PYTHON",
+            TestType::BuiltinExplorer => "BUILTIN_EXPLORER",
+            TestType::BuiltinFuzz => "BUILTIN_FUZZ",
+            TestType::Calabash => "CALABASH",
+            TestType::Instrumentation => "INSTRUMENTATION",
+            TestType::Uiautomation => "UIAUTOMATION",
+            TestType::Uiautomator => "UIAUTOMATOR",
+            TestType::Xctest => "XCTEST",
+            TestType::XctestUi => "XCTEST_UI",
+        }
+    }
+}
+
+impl ::std::str::FromStr for TestType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "APPIUM_JAVA_JUNIT" => Ok(TestType::AppiumJavaJunit),
+            "APPIUM_JAVA_TESTNG" => Ok(TestType::AppiumJavaTestng),
+            "APPIUM_PYTHON" => Ok(TestType::AppiumPython),
+            "APPIUM_WEB_JAVA_JUNIT" => Ok(TestType::AppiumWebJavaJunit),
+            "APPIUM_WEB_JAVA_TESTNG" => Ok(TestType::AppiumWebJavaTestng),
+            "APPIUM_WEB_PYTHON" => Ok(TestType::AppiumWebPython),
+            "BUILTIN_EXPLORER" => Ok(TestType::BuiltinExplorer),
+            "BUILTIN_FUZZ" => Ok(TestType::BuiltinFuzz),
+            "CALABASH" => Ok(TestType::Calabash),
+            "INSTRUMENTATION" => Ok(TestType::Instrumentation),
+            "UIAUTOMATION" => Ok(TestType::Uiautomation),
+            "UIAUTOMATOR" => Ok(TestType::Uiautomator),
+            "XCTEST" => Ok(TestType::Xctest),
+            "XCTEST_UI" => Ok(TestType::XctestUi),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>Represents information about free trial device minutes for an AWS account.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct TrialMinutes {
@@ -2130,6 +2928,124 @@ pub struct Upload {
     #[serde(rename="url")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub url: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum UploadStatus {
+    Failed,
+    Initialized,
+    Processing,
+    Succeeded,
+}
+
+impl Into<String> for UploadStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for UploadStatus {
+    fn into(self) -> &'static str {
+        match self {
+            UploadStatus::Failed => "FAILED",
+            UploadStatus::Initialized => "INITIALIZED",
+            UploadStatus::Processing => "PROCESSING",
+            UploadStatus::Succeeded => "SUCCEEDED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for UploadStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "FAILED" => Ok(UploadStatus::Failed),
+            "INITIALIZED" => Ok(UploadStatus::Initialized),
+            "PROCESSING" => Ok(UploadStatus::Processing),
+            "SUCCEEDED" => Ok(UploadStatus::Succeeded),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum UploadType {
+    AndroidApp,
+    AppiumJavaJunitTestPackage,
+    AppiumJavaTestngTestPackage,
+    AppiumPythonTestPackage,
+    AppiumWebJavaJunitTestPackage,
+    AppiumWebJavaTestngTestPackage,
+    AppiumWebPythonTestPackage,
+    CalabashTestPackage,
+    ExternalData,
+    InstrumentationTestPackage,
+    IosApp,
+    UiautomationTestPackage,
+    UiautomatorTestPackage,
+    WebApp,
+    XctestTestPackage,
+    XctestUiTestPackage,
+}
+
+impl Into<String> for UploadType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for UploadType {
+    fn into(self) -> &'static str {
+        match self {
+            UploadType::AndroidApp => "ANDROID_APP",
+            UploadType::AppiumJavaJunitTestPackage => "APPIUM_JAVA_JUNIT_TEST_PACKAGE",
+            UploadType::AppiumJavaTestngTestPackage => "APPIUM_JAVA_TESTNG_TEST_PACKAGE",
+            UploadType::AppiumPythonTestPackage => "APPIUM_PYTHON_TEST_PACKAGE",
+            UploadType::AppiumWebJavaJunitTestPackage => "APPIUM_WEB_JAVA_JUNIT_TEST_PACKAGE",
+            UploadType::AppiumWebJavaTestngTestPackage => "APPIUM_WEB_JAVA_TESTNG_TEST_PACKAGE",
+            UploadType::AppiumWebPythonTestPackage => "APPIUM_WEB_PYTHON_TEST_PACKAGE",
+            UploadType::CalabashTestPackage => "CALABASH_TEST_PACKAGE",
+            UploadType::ExternalData => "EXTERNAL_DATA",
+            UploadType::InstrumentationTestPackage => "INSTRUMENTATION_TEST_PACKAGE",
+            UploadType::IosApp => "IOS_APP",
+            UploadType::UiautomationTestPackage => "UIAUTOMATION_TEST_PACKAGE",
+            UploadType::UiautomatorTestPackage => "UIAUTOMATOR_TEST_PACKAGE",
+            UploadType::WebApp => "WEB_APP",
+            UploadType::XctestTestPackage => "XCTEST_TEST_PACKAGE",
+            UploadType::XctestUiTestPackage => "XCTEST_UI_TEST_PACKAGE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for UploadType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ANDROID_APP" => Ok(UploadType::AndroidApp),
+            "APPIUM_JAVA_JUNIT_TEST_PACKAGE" => Ok(UploadType::AppiumJavaJunitTestPackage),
+            "APPIUM_JAVA_TESTNG_TEST_PACKAGE" => Ok(UploadType::AppiumJavaTestngTestPackage),
+            "APPIUM_PYTHON_TEST_PACKAGE" => Ok(UploadType::AppiumPythonTestPackage),
+            "APPIUM_WEB_JAVA_JUNIT_TEST_PACKAGE" => Ok(UploadType::AppiumWebJavaJunitTestPackage),
+            "APPIUM_WEB_JAVA_TESTNG_TEST_PACKAGE" => Ok(UploadType::AppiumWebJavaTestngTestPackage),
+            "APPIUM_WEB_PYTHON_TEST_PACKAGE" => Ok(UploadType::AppiumWebPythonTestPackage),
+            "CALABASH_TEST_PACKAGE" => Ok(UploadType::CalabashTestPackage),
+            "EXTERNAL_DATA" => Ok(UploadType::ExternalData),
+            "INSTRUMENTATION_TEST_PACKAGE" => Ok(UploadType::InstrumentationTestPackage),
+            "IOS_APP" => Ok(UploadType::IosApp),
+            "UIAUTOMATION_TEST_PACKAGE" => Ok(UploadType::UiautomationTestPackage),
+            "UIAUTOMATOR_TEST_PACKAGE" => Ok(UploadType::UiautomatorTestPackage),
+            "WEB_APP" => Ok(UploadType::WebApp),
+            "XCTEST_TEST_PACKAGE" => Ok(UploadType::XctestTestPackage),
+            "XCTEST_UI_TEST_PACKAGE" => Ok(UploadType::XctestUiTestPackage),
+            _ => Err(()),
+        }
+    }
 }
 
 /// Errors returned by CreateDevicePool
@@ -6925,7 +7841,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateDevicePoolResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6952,7 +7868,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateNetworkProfileResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -6979,7 +7895,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateProjectResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7007,7 +7923,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateRemoteAccessSessionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(CreateRemoteAccessSessionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -7031,7 +7947,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateUploadResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7057,7 +7973,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteDevicePoolResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7084,7 +8000,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteNetworkProfileResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7111,7 +8027,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteProjectResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7139,7 +8055,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteRemoteAccessSessionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DeleteRemoteAccessSessionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -7161,7 +8077,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<DeleteRunResult>(String::from_utf8_lossy(&response.body)
                                                                .as_ref())
                            .unwrap())
@@ -7187,7 +8103,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteUploadResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7210,7 +8126,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetAccountSettingsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7235,7 +8151,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<GetDeviceResult>(String::from_utf8_lossy(&response.body)
                                                                .as_ref())
                            .unwrap())
@@ -7261,7 +8177,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetDevicePoolResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7289,7 +8205,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetDevicePoolCompatibilityResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(GetDevicePoolCompatibilityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -7311,7 +8227,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<GetJobResult>(String::from_utf8_lossy(&response.body)
                                                             .as_ref())
                            .unwrap())
@@ -7337,7 +8253,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetNetworkProfileResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7364,7 +8280,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetOfferingStatusResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7389,7 +8305,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetProjectResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(GetProjectError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -7414,7 +8330,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetRemoteAccessSessionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7439,7 +8355,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<GetRunResult>(String::from_utf8_lossy(&response.body)
                                                             .as_ref())
                            .unwrap())
@@ -7463,7 +8379,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<GetSuiteResult>(String::from_utf8_lossy(&response.body)
                                                               .as_ref())
                            .unwrap())
@@ -7487,7 +8403,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<GetTestResult>(String::from_utf8_lossy(&response.body)
                                                              .as_ref())
                            .unwrap())
@@ -7511,7 +8427,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<GetUploadResult>(String::from_utf8_lossy(&response.body)
                                                                .as_ref())
                            .unwrap())
@@ -7539,7 +8455,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<InstallToRemoteAccessSessionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(InstallToRemoteAccessSessionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -7563,7 +8479,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListArtifactsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7589,7 +8505,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListDevicePoolsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7616,7 +8532,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListDevicesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListDevicesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -7638,7 +8554,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<ListJobsResult>(String::from_utf8_lossy(&response.body)
                                                               .as_ref())
                            .unwrap())
@@ -7664,7 +8580,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListNetworkProfilesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7692,7 +8608,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListOfferingPromotionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7721,7 +8637,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListOfferingTransactionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListOfferingTransactionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -7745,7 +8661,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListOfferingsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7771,7 +8687,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListProjectsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7799,7 +8715,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListRemoteAccessSessionsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListRemoteAccessSessionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -7821,7 +8737,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<ListRunsResult>(String::from_utf8_lossy(&response.body)
                                                               .as_ref())
                            .unwrap())
@@ -7847,7 +8763,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListSamplesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListSamplesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -7869,7 +8785,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListSuitesResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListSuitesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -7891,7 +8807,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<ListTestsResult>(String::from_utf8_lossy(&response.body)
                                                                .as_ref())
                            .unwrap())
@@ -7917,7 +8833,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListUniqueProblemsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7944,7 +8860,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListUploadsResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListUploadsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -7968,7 +8884,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<PurchaseOfferingResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -7995,7 +8911,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<RenewOfferingResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -8021,7 +8937,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ScheduleRunResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ScheduleRunError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -8047,7 +8963,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<StopRemoteAccessSessionResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(StopRemoteAccessSessionError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -8069,7 +8985,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<StopRunResult>(String::from_utf8_lossy(&response.body)
                                                              .as_ref())
                            .unwrap())
@@ -8095,7 +9011,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateDevicePoolResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -8122,7 +9038,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateNetworkProfileResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -8149,7 +9065,7 @@ impl<P, D> DeviceFarm for DeviceFarmClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateProjectResult>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {

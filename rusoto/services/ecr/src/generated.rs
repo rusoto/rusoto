@@ -11,15 +11,11 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -444,6 +440,50 @@ pub struct ImageFailure {
     pub image_id: Option<ImageIdentifier>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ImageFailureCode {
+    ImageNotFound,
+    ImageTagDoesNotMatchDigest,
+    InvalidImageDigest,
+    InvalidImageTag,
+    MissingDigestAndTag,
+}
+
+impl Into<String> for ImageFailureCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ImageFailureCode {
+    fn into(self) -> &'static str {
+        match self {
+            ImageFailureCode::ImageNotFound => "ImageNotFound",
+            ImageFailureCode::ImageTagDoesNotMatchDigest => "ImageTagDoesNotMatchDigest",
+            ImageFailureCode::InvalidImageDigest => "InvalidImageDigest",
+            ImageFailureCode::InvalidImageTag => "InvalidImageTag",
+            ImageFailureCode::MissingDigestAndTag => "MissingDigestAndTag",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ImageFailureCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ImageNotFound" => Ok(ImageFailureCode::ImageNotFound),
+            "ImageTagDoesNotMatchDigest" => Ok(ImageFailureCode::ImageTagDoesNotMatchDigest),
+            "InvalidImageDigest" => Ok(ImageFailureCode::InvalidImageDigest),
+            "InvalidImageTag" => Ok(ImageFailureCode::InvalidImageTag),
+            "MissingDigestAndTag" => Ok(ImageFailureCode::MissingDigestAndTag),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>An object with identifying information for an Amazon ECR image.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ImageIdentifier {
@@ -501,6 +541,41 @@ pub struct Layer {
     pub media_type: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum LayerAvailability {
+    Available,
+    Unavailable,
+}
+
+impl Into<String> for LayerAvailability {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for LayerAvailability {
+    fn into(self) -> &'static str {
+        match self {
+            LayerAvailability::Available => "AVAILABLE",
+            LayerAvailability::Unavailable => "UNAVAILABLE",
+        }
+    }
+}
+
+impl ::std::str::FromStr for LayerAvailability {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AVAILABLE" => Ok(LayerAvailability::Available),
+            "UNAVAILABLE" => Ok(LayerAvailability::Unavailable),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p>An object representing an Amazon ECR image layer failure.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct LayerFailure {
@@ -516,6 +591,41 @@ pub struct LayerFailure {
     #[serde(rename="layerDigest")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub layer_digest: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum LayerFailureCode {
+    InvalidLayerDigest,
+    MissingLayerDigest,
+}
+
+impl Into<String> for LayerFailureCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for LayerFailureCode {
+    fn into(self) -> &'static str {
+        match self {
+            LayerFailureCode::InvalidLayerDigest => "InvalidLayerDigest",
+            LayerFailureCode::MissingLayerDigest => "MissingLayerDigest",
+        }
+    }
+}
+
+impl ::std::str::FromStr for LayerFailureCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "InvalidLayerDigest" => Ok(LayerFailureCode::InvalidLayerDigest),
+            "MissingLayerDigest" => Ok(LayerFailureCode::MissingLayerDigest),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p>An object representing a filter on a <a>ListImages</a> operation.</p>"]
@@ -645,6 +755,41 @@ pub struct SetRepositoryPolicyResponse {
     #[serde(rename="repositoryName")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub repository_name: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum TagStatus {
+    Tagged,
+    Untagged,
+}
+
+impl Into<String> for TagStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for TagStatus {
+    fn into(self) -> &'static str {
+        match self {
+            TagStatus::Tagged => "TAGGED",
+            TagStatus::Untagged => "UNTAGGED",
+        }
+    }
+}
+
+impl ::std::str::FromStr for TagStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "TAGGED" => Ok(TagStatus::Tagged),
+            "UNTAGGED" => Ok(TagStatus::Untagged),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -2399,7 +2544,7 @@ impl<P, D> Ecr for EcrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<BatchCheckLayerAvailabilityResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(BatchCheckLayerAvailabilityError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2424,7 +2569,7 @@ impl<P, D> Ecr for EcrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<BatchDeleteImageResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2452,7 +2597,7 @@ impl<P, D> Ecr for EcrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<BatchGetImageResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2479,7 +2624,7 @@ impl<P, D> Ecr for EcrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CompleteLayerUploadResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2507,7 +2652,7 @@ impl<P, D> Ecr for EcrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateRepositoryResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2535,7 +2680,7 @@ impl<P, D> Ecr for EcrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteRepositoryResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2564,7 +2709,7 @@ impl<P, D> Ecr for EcrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteRepositoryPolicyResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2592,7 +2737,7 @@ impl<P, D> Ecr for EcrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeImagesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2620,7 +2765,7 @@ impl<P, D> Ecr for EcrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeRepositoriesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2649,7 +2794,7 @@ impl<P, D> Ecr for EcrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetAuthorizationTokenResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2678,7 +2823,7 @@ impl<P, D> Ecr for EcrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetDownloadUrlForLayerResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2706,7 +2851,7 @@ impl<P, D> Ecr for EcrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetRepositoryPolicyResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2734,7 +2879,7 @@ impl<P, D> Ecr for EcrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<InitiateLayerUploadResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2762,7 +2907,7 @@ impl<P, D> Ecr for EcrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListImagesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListImagesError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2785,7 +2930,7 @@ impl<P, D> Ecr for EcrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<PutImageResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(PutImageError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -2810,7 +2955,7 @@ impl<P, D> Ecr for EcrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<SetRepositoryPolicyResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -2838,7 +2983,7 @@ impl<P, D> Ecr for EcrClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UploadLayerPartResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {

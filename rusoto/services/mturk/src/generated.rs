@@ -11,15 +11,11 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -111,6 +107,44 @@ pub struct Assignment {
     pub worker_id: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AssignmentStatus {
+    Approved,
+    Rejected,
+    Submitted,
+}
+
+impl Into<String> for AssignmentStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AssignmentStatus {
+    fn into(self) -> &'static str {
+        match self {
+            AssignmentStatus::Approved => "Approved",
+            AssignmentStatus::Rejected => "Rejected",
+            AssignmentStatus::Submitted => "Submitted",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AssignmentStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Approved" => Ok(AssignmentStatus::Approved),
+            "Rejected" => Ok(AssignmentStatus::Rejected),
+            "Submitted" => Ok(AssignmentStatus::Submitted),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct AssociateQualificationWithWorkerRequest {
     #[doc="<p>The value of the Qualification to assign.</p>"]
@@ -154,6 +188,65 @@ pub struct BonusPayment {
     #[serde(rename="WorkerId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub worker_id: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum Comparator {
+    DoesNotExist,
+    EqualTo,
+    Exists,
+    GreaterThan,
+    GreaterThanOrEqualTo,
+    In,
+    LessThan,
+    LessThanOrEqualTo,
+    NotEqualTo,
+    NotIn,
+}
+
+impl Into<String> for Comparator {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for Comparator {
+    fn into(self) -> &'static str {
+        match self {
+            Comparator::DoesNotExist => "DoesNotExist",
+            Comparator::EqualTo => "EqualTo",
+            Comparator::Exists => "Exists",
+            Comparator::GreaterThan => "GreaterThan",
+            Comparator::GreaterThanOrEqualTo => "GreaterThanOrEqualTo",
+            Comparator::In => "In",
+            Comparator::LessThan => "LessThan",
+            Comparator::LessThanOrEqualTo => "LessThanOrEqualTo",
+            Comparator::NotEqualTo => "NotEqualTo",
+            Comparator::NotIn => "NotIn",
+        }
+    }
+}
+
+impl ::std::str::FromStr for Comparator {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DoesNotExist" => Ok(Comparator::DoesNotExist),
+            "EqualTo" => Ok(Comparator::EqualTo),
+            "Exists" => Ok(Comparator::Exists),
+            "GreaterThan" => Ok(Comparator::GreaterThan),
+            "GreaterThanOrEqualTo" => Ok(Comparator::GreaterThanOrEqualTo),
+            "In" => Ok(Comparator::In),
+            "LessThan" => Ok(Comparator::LessThan),
+            "LessThanOrEqualTo" => Ok(Comparator::LessThanOrEqualTo),
+            "NotEqualTo" => Ok(Comparator::NotEqualTo),
+            "NotIn" => Ok(Comparator::NotIn),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -444,6 +537,71 @@ pub struct DisassociateQualificationFromWorkerRequest {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DisassociateQualificationFromWorkerResponse;
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum EventType {
+    AssignmentAbandoned,
+    AssignmentAccepted,
+    AssignmentApproved,
+    AssignmentRejected,
+    AssignmentReturned,
+    AssignmentSubmitted,
+    Hitcreated,
+    Hitdisposed,
+    Hitexpired,
+    Hitextended,
+    Hitreviewable,
+    Ping,
+}
+
+impl Into<String> for EventType {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for EventType {
+    fn into(self) -> &'static str {
+        match self {
+            EventType::AssignmentAbandoned => "AssignmentAbandoned",
+            EventType::AssignmentAccepted => "AssignmentAccepted",
+            EventType::AssignmentApproved => "AssignmentApproved",
+            EventType::AssignmentRejected => "AssignmentRejected",
+            EventType::AssignmentReturned => "AssignmentReturned",
+            EventType::AssignmentSubmitted => "AssignmentSubmitted",
+            EventType::Hitcreated => "HITCreated",
+            EventType::Hitdisposed => "HITDisposed",
+            EventType::Hitexpired => "HITExpired",
+            EventType::Hitextended => "HITExtended",
+            EventType::Hitreviewable => "HITReviewable",
+            EventType::Ping => "Ping",
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "AssignmentAbandoned" => Ok(EventType::AssignmentAbandoned),
+            "AssignmentAccepted" => Ok(EventType::AssignmentAccepted),
+            "AssignmentApproved" => Ok(EventType::AssignmentApproved),
+            "AssignmentRejected" => Ok(EventType::AssignmentRejected),
+            "AssignmentReturned" => Ok(EventType::AssignmentReturned),
+            "AssignmentSubmitted" => Ok(EventType::AssignmentSubmitted),
+            "HITCreated" => Ok(EventType::Hitcreated),
+            "HITDisposed" => Ok(EventType::Hitdisposed),
+            "HITExpired" => Ok(EventType::Hitexpired),
+            "HITExtended" => Ok(EventType::Hitextended),
+            "HITReviewable" => Ok(EventType::Hitreviewable),
+            "Ping" => Ok(EventType::Ping),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetAccountBalanceRequest;
 
@@ -641,6 +799,91 @@ pub struct HITLayoutParameter {
     #[serde(rename="Value")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum HITReviewStatus {
+    MarkedForReview,
+    NotReviewed,
+    ReviewedAppropriate,
+    ReviewedInappropriate,
+}
+
+impl Into<String> for HITReviewStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for HITReviewStatus {
+    fn into(self) -> &'static str {
+        match self {
+            HITReviewStatus::MarkedForReview => "MarkedForReview",
+            HITReviewStatus::NotReviewed => "NotReviewed",
+            HITReviewStatus::ReviewedAppropriate => "ReviewedAppropriate",
+            HITReviewStatus::ReviewedInappropriate => "ReviewedInappropriate",
+        }
+    }
+}
+
+impl ::std::str::FromStr for HITReviewStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "MarkedForReview" => Ok(HITReviewStatus::MarkedForReview),
+            "NotReviewed" => Ok(HITReviewStatus::NotReviewed),
+            "ReviewedAppropriate" => Ok(HITReviewStatus::ReviewedAppropriate),
+            "ReviewedInappropriate" => Ok(HITReviewStatus::ReviewedInappropriate),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum HITStatus {
+    Assignable,
+    Disposed,
+    Reviewable,
+    Reviewing,
+    Unassignable,
+}
+
+impl Into<String> for HITStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for HITStatus {
+    fn into(self) -> &'static str {
+        match self {
+            HITStatus::Assignable => "Assignable",
+            HITStatus::Disposed => "Disposed",
+            HITStatus::Reviewable => "Reviewable",
+            HITStatus::Reviewing => "Reviewing",
+            HITStatus::Unassignable => "Unassignable",
+        }
+    }
+}
+
+impl ::std::str::FromStr for HITStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Assignable" => Ok(HITStatus::Assignable),
+            "Disposed" => Ok(HITStatus::Disposed),
+            "Reviewable" => Ok(HITStatus::Reviewable),
+            "Reviewing" => Ok(HITStatus::Reviewing),
+            "Unassignable" => Ok(HITStatus::Unassignable),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -1013,6 +1256,76 @@ pub struct NotificationSpecification {
     pub version: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum NotificationTransport {
+    Email,
+    Sqs,
+}
+
+impl Into<String> for NotificationTransport {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for NotificationTransport {
+    fn into(self) -> &'static str {
+        match self {
+            NotificationTransport::Email => "Email",
+            NotificationTransport::Sqs => "SQS",
+        }
+    }
+}
+
+impl ::std::str::FromStr for NotificationTransport {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Email" => Ok(NotificationTransport::Email),
+            "SQS" => Ok(NotificationTransport::Sqs),
+            _ => Err(()),
+        }
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum NotifyWorkersFailureCode {
+    HardFailure,
+    SoftFailure,
+}
+
+impl Into<String> for NotifyWorkersFailureCode {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for NotifyWorkersFailureCode {
+    fn into(self) -> &'static str {
+        match self {
+            NotifyWorkersFailureCode::HardFailure => "HardFailure",
+            NotifyWorkersFailureCode::SoftFailure => "SoftFailure",
+        }
+    }
+}
+
+impl ::std::str::FromStr for NotifyWorkersFailureCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "HardFailure" => Ok(NotifyWorkersFailureCode::HardFailure),
+            "SoftFailure" => Ok(NotifyWorkersFailureCode::SoftFailure),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p> When MTurk encounters an issue with notifying the Workers you specified, it returns back this object with failure details. </p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct NotifyWorkersFailureStatus {
@@ -1161,6 +1474,41 @@ pub struct QualificationRequirement {
     pub required_to_preview: Option<bool>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum QualificationStatus {
+    Granted,
+    Revoked,
+}
+
+impl Into<String> for QualificationStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for QualificationStatus {
+    fn into(self) -> &'static str {
+        match self {
+            QualificationStatus::Granted => "Granted",
+            QualificationStatus::Revoked => "Revoked",
+        }
+    }
+}
+
+impl ::std::str::FromStr for QualificationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Granted" => Ok(QualificationStatus::Granted),
+            "Revoked" => Ok(QualificationStatus::Revoked),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p> The QualificationType data structure represents a Qualification type, a description of a property of a Worker that must match the requirements of a HIT for the Worker to be able to accept the HIT. The type also describes how a Worker can obtain a Qualification of that type, such as through a Qualification test. </p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct QualificationType {
@@ -1216,6 +1564,41 @@ pub struct QualificationType {
     #[serde(rename="TestDurationInSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub test_duration_in_seconds: Option<i64>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum QualificationTypeStatus {
+    Active,
+    Inactive,
+}
+
+impl Into<String> for QualificationTypeStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for QualificationTypeStatus {
+    fn into(self) -> &'static str {
+        match self {
+            QualificationTypeStatus::Active => "Active",
+            QualificationTypeStatus::Inactive => "Inactive",
+        }
+    }
+}
+
+impl ::std::str::FromStr for QualificationTypeStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Active" => Ok(QualificationTypeStatus::Active),
+            "Inactive" => Ok(QualificationTypeStatus::Inactive),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -1283,6 +1666,47 @@ pub struct ReviewActionDetail {
     pub target_type: Option<String>,
 }
 
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ReviewActionStatus {
+    Cancelled,
+    Failed,
+    Intended,
+    Succeeded,
+}
+
+impl Into<String> for ReviewActionStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ReviewActionStatus {
+    fn into(self) -> &'static str {
+        match self {
+            ReviewActionStatus::Cancelled => "Cancelled",
+            ReviewActionStatus::Failed => "Failed",
+            ReviewActionStatus::Intended => "Intended",
+            ReviewActionStatus::Succeeded => "Succeeded",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReviewActionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Cancelled" => Ok(ReviewActionStatus::Cancelled),
+            "Failed" => Ok(ReviewActionStatus::Failed),
+            "Intended" => Ok(ReviewActionStatus::Intended),
+            "Succeeded" => Ok(ReviewActionStatus::Succeeded),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="<p> HIT Review Policy data structures represent HIT review policies, which you specify when you create a HIT. </p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReviewPolicy {
@@ -1294,6 +1718,41 @@ pub struct ReviewPolicy {
     #[serde(rename="PolicyName")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub policy_name: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ReviewPolicyLevel {
+    Assignment,
+    Hit,
+}
+
+impl Into<String> for ReviewPolicyLevel {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ReviewPolicyLevel {
+    fn into(self) -> &'static str {
+        match self {
+            ReviewPolicyLevel::Assignment => "Assignment",
+            ReviewPolicyLevel::Hit => "HIT",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReviewPolicyLevel {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Assignment" => Ok(ReviewPolicyLevel::Assignment),
+            "HIT" => Ok(ReviewPolicyLevel::Hit),
+            _ => Err(()),
+        }
+    }
 }
 
 #[doc="<p> Contains both ReviewResult and ReviewAction elements for a particular HIT. </p>"]
@@ -1336,6 +1795,41 @@ pub struct ReviewResultDetail {
     #[serde(rename="Value")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub value: Option<String>,
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ReviewableHITStatus {
+    Reviewable,
+    Reviewing,
+}
+
+impl Into<String> for ReviewableHITStatus {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ReviewableHITStatus {
+    fn into(self) -> &'static str {
+        match self {
+            ReviewableHITStatus::Reviewable => "Reviewable",
+            ReviewableHITStatus::Reviewing => "Reviewing",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReviewableHITStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Reviewable" => Ok(ReviewableHITStatus::Reviewable),
+            "Reviewing" => Ok(ReviewableHITStatus::Reviewing),
+            _ => Err(()),
+        }
+    }
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -4901,7 +5395,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AcceptQualificationRequestResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(AcceptQualificationRequestError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -4926,7 +5420,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ApproveAssignmentResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -4955,7 +5449,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<AssociateQualificationWithWorkerResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(AssociateQualificationWithWorkerError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -4982,7 +5476,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateAdditionalAssignmentsForHITResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(CreateAdditionalAssignmentsForHITError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5004,7 +5498,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateHITResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(CreateHITError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5029,7 +5523,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateHITTypeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5057,7 +5551,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateHITWithHITTypeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5086,7 +5580,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateQualificationTypeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(CreateQualificationTypeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5111,7 +5605,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<CreateWorkerBlockResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5136,7 +5630,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteHITResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DeleteHITError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5162,7 +5656,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteQualificationTypeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DeleteQualificationTypeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5187,7 +5681,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteWorkerBlockResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5217,7 +5711,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DisassociateQualificationFromWorkerResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DisassociateQualificationFromWorkerError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5239,7 +5733,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetAccountBalanceResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5267,7 +5761,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetAssignmentResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5294,7 +5788,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetFileUploadURLResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5319,7 +5813,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                 Ok(serde_json::from_str::<GetHITResponse>(String::from_utf8_lossy(&response.body)
                                                               .as_ref())
                            .unwrap())
@@ -5347,7 +5841,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetQualificationScoreResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5376,7 +5870,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<GetQualificationTypeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5405,7 +5899,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListAssignmentsForHITResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5433,7 +5927,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListBonusPaymentsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5458,7 +5952,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListHITsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListHITsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5484,7 +5978,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListHITsForQualificationTypeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListHITsForQualificationTypeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5510,7 +6004,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListQualificationRequestsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListQualificationRequestsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5536,7 +6030,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListQualificationTypesResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5565,7 +6059,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListReviewPolicyResultsForHITResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListReviewPolicyResultsForHITError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5590,7 +6084,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListReviewableHITsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5618,7 +6112,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListWorkerBlocksResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5647,7 +6141,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<ListWorkersWithQualificationTypeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(ListWorkersWithQualificationTypeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5672,7 +6166,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<NotifyWorkersResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5699,7 +6193,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<RejectAssignmentResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5728,7 +6222,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<RejectQualificationRequestResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(RejectQualificationRequestError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5750,7 +6244,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<SendBonusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(SendBonusError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5776,7 +6270,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<SendTestEventNotificationResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(SendTestEventNotificationError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5802,7 +6296,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateExpirationForHITResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5831,7 +6325,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateHITReviewStatusResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5859,7 +6353,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateHITTypeOfHITResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -5888,7 +6382,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateNotificationSettingsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(UpdateNotificationSettingsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -5914,7 +6408,7 @@ impl<P, D> MechanicalTurk for MechanicalTurkClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<UpdateQualificationTypeResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(UpdateQualificationTypeError::from_body(String::from_utf8_lossy(&response.body).as_ref())),

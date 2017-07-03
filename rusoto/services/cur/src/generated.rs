@@ -11,21 +11,140 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
+#[doc="Region of customer S3 bucket."]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AWSRegion {
+    ApNortheast1,
+    ApSoutheast1,
+    ApSoutheast2,
+    EuCentral1,
+    EuWest1,
+    UsEast1,
+    UsWest1,
+    UsWest2,
+}
+
+impl Into<String> for AWSRegion {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AWSRegion {
+    fn into(self) -> &'static str {
+        match self {
+            AWSRegion::ApNortheast1 => "ap-northeast-1",
+            AWSRegion::ApSoutheast1 => "ap-southeast-1",
+            AWSRegion::ApSoutheast2 => "ap-southeast-2",
+            AWSRegion::EuCentral1 => "eu-central-1",
+            AWSRegion::EuWest1 => "eu-west-1",
+            AWSRegion::UsEast1 => "us-east-1",
+            AWSRegion::UsWest1 => "us-west-1",
+            AWSRegion::UsWest2 => "us-west-2",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AWSRegion {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ap-northeast-1" => Ok(AWSRegion::ApNortheast1),
+            "ap-southeast-1" => Ok(AWSRegion::ApSoutheast1),
+            "ap-southeast-2" => Ok(AWSRegion::ApSoutheast2),
+            "eu-central-1" => Ok(AWSRegion::EuCentral1),
+            "eu-west-1" => Ok(AWSRegion::EuWest1),
+            "us-east-1" => Ok(AWSRegion::UsEast1),
+            "us-west-1" => Ok(AWSRegion::UsWest1),
+            "us-west-2" => Ok(AWSRegion::UsWest2),
+            _ => Err(()),
+        }
+    }
+}
+
+#[doc="Enable support for Redshift and/or QuickSight."]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum AdditionalArtifact {
+    Quicksight,
+    Redshift,
+}
+
+impl Into<String> for AdditionalArtifact {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for AdditionalArtifact {
+    fn into(self) -> &'static str {
+        match self {
+            AdditionalArtifact::Quicksight => "QUICKSIGHT",
+            AdditionalArtifact::Redshift => "REDSHIFT",
+        }
+    }
+}
+
+impl ::std::str::FromStr for AdditionalArtifact {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "QUICKSIGHT" => Ok(AdditionalArtifact::Quicksight),
+            "REDSHIFT" => Ok(AdditionalArtifact::Redshift),
+            _ => Err(()),
+        }
+    }
+}
+
+#[doc="Preferred compression format for report."]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum CompressionFormat {
+    Gzip,
+    Zip,
+}
+
+impl Into<String> for CompressionFormat {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for CompressionFormat {
+    fn into(self) -> &'static str {
+        match self {
+            CompressionFormat::Gzip => "GZIP",
+            CompressionFormat::Zip => "ZIP",
+        }
+    }
+}
+
+impl ::std::str::FromStr for CompressionFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "GZIP" => Ok(CompressionFormat::Gzip),
+            "ZIP" => Ok(CompressionFormat::Zip),
+            _ => Err(()),
+        }
+    }
+}
+
 #[doc="Request of DeleteReportDefinition"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteReportDefinitionRequest {
@@ -97,6 +216,105 @@ pub struct ReportDefinition {
     pub s3_region: String,
     #[serde(rename="TimeUnit")]
     pub time_unit: String,
+}
+
+#[doc="Preferred format for report."]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum ReportFormat {
+    TextORcsv,
+}
+
+impl Into<String> for ReportFormat {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for ReportFormat {
+    fn into(self) -> &'static str {
+        match self {
+            ReportFormat::TextORcsv => "textORcsv",
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReportFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "textORcsv" => Ok(ReportFormat::TextORcsv),
+            _ => Err(()),
+        }
+    }
+}
+
+#[doc="Preference of including Resource IDs. You can include additional details about individual resource IDs in your report."]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum SchemaElement {
+    Resources,
+}
+
+impl Into<String> for SchemaElement {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for SchemaElement {
+    fn into(self) -> &'static str {
+        match self {
+            SchemaElement::Resources => "RESOURCES",
+        }
+    }
+}
+
+impl ::std::str::FromStr for SchemaElement {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "RESOURCES" => Ok(SchemaElement::Resources),
+            _ => Err(()),
+        }
+    }
+}
+
+#[doc="The frequency on which report data are measured and displayed."]
+#[allow(non_camel_case_types)]
+#[derive(Clone,Debug,Eq,PartialEq)]
+pub enum TimeUnit {
+    Daily,
+    Hourly,
+}
+
+impl Into<String> for TimeUnit {
+    fn into(self) -> String {
+        let s: &'static str = self.into();
+        s.to_owned()
+    }
+}
+
+impl Into<&'static str> for TimeUnit {
+    fn into(self) -> &'static str {
+        match self {
+            TimeUnit::Daily => "DAILY",
+            TimeUnit::Hourly => "HOURLY",
+        }
+    }
+}
+
+impl ::std::str::FromStr for TimeUnit {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "DAILY" => Ok(TimeUnit::Daily),
+            "HOURLY" => Ok(TimeUnit::Hourly),
+            _ => Err(()),
+        }
+    }
 }
 
 /// Errors returned by DeleteReportDefinition
@@ -405,7 +623,7 @@ impl<P, D> CostAndUsageReport for CostAndUsageReportClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DeleteReportDefinitionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {
@@ -434,7 +652,7 @@ impl<P, D> CostAndUsageReport for CostAndUsageReportClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<DescribeReportDefinitionsResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => Err(DescribeReportDefinitionsError::from_body(String::from_utf8_lossy(&response.body).as_ref())),
@@ -459,7 +677,7 @@ impl<P, D> CostAndUsageReport for CostAndUsageReportClient<P, D>
         let response = try!(self.dispatcher.dispatch(&request));
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
                             Ok(serde_json::from_str::<PutReportDefinitionResponse>(String::from_utf8_lossy(&response.body).as_ref()).unwrap())
                         }
             _ => {

@@ -11,15 +11,11 @@
 //
 // =================================================================
 
-#[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
-use rusoto_core::request::DispatchSignedRequest;
-use rusoto_core::region;
-
 use std::fmt;
 use std::error::Error;
-use rusoto_core::request::HttpDispatchError;
+
+use rusoto_core::region;
+use rusoto_core::request::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
@@ -3115,7 +3111,7 @@ impl<P, D> Ets for EtsClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Accepted => {
+            ::hyper::status::StatusCode::Accepted => {
 
                 let mut body = response.body;
 
@@ -3155,7 +3151,7 @@ impl<P, D> Ets for EtsClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body = response.body;
 
@@ -3197,7 +3193,7 @@ impl<P, D> Ets for EtsClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body = response.body;
 
@@ -3242,7 +3238,7 @@ impl<P, D> Ets for EtsClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Created => {
+            ::hyper::status::StatusCode::Created => {
 
                 let mut body = response.body;
 
@@ -3286,7 +3282,7 @@ impl<P, D> Ets for EtsClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Accepted => {
+            ::hyper::status::StatusCode::Accepted => {
 
                 let mut body = response.body;
 
@@ -3331,7 +3327,7 @@ impl<P, D> Ets for EtsClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Accepted => {
+            ::hyper::status::StatusCode::Accepted => {
 
                 let mut body = response.body;
 
@@ -3382,7 +3378,7 @@ impl<P, D> Ets for EtsClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body = response.body;
 
@@ -3433,7 +3429,7 @@ impl<P, D> Ets for EtsClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body = response.body;
 
@@ -3484,7 +3480,7 @@ impl<P, D> Ets for EtsClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body = response.body;
 
@@ -3534,7 +3530,7 @@ impl<P, D> Ets for EtsClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body = response.body;
 
@@ -3573,7 +3569,7 @@ impl<P, D> Ets for EtsClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body = response.body;
 
@@ -3614,7 +3610,7 @@ impl<P, D> Ets for EtsClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body = response.body;
 
@@ -3657,7 +3653,7 @@ impl<P, D> Ets for EtsClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body = response.body;
 
@@ -3697,7 +3693,7 @@ impl<P, D> Ets for EtsClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body = response.body;
 
@@ -3738,7 +3734,7 @@ impl<P, D> Ets for EtsClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body = response.body;
 
@@ -3784,7 +3780,7 @@ impl<P, D> Ets for EtsClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body = response.body;
 
@@ -3828,7 +3824,7 @@ impl<P, D> Ets for EtsClient<P, D>
         let response = self.dispatcher.dispatch(&request)?;
 
         match response.status {
-            StatusCode::Ok => {
+            ::hyper::status::StatusCode::Ok => {
 
                 let mut body = response.body;
 
