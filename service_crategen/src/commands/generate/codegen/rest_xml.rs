@@ -26,32 +26,13 @@ impl GenerateProtocol for RestXmlGenerator {
     fn generate_method_impls(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
 
         for (operation_name, operation) in service.operations().iter() {
-
-            // botocore includes + for greedy parameters and we don't care about it
-            let (request_uri, maybe_params) = parse_query_string(&operation.http.request_uri);
-
-            let add_uri_parameters = match maybe_params {
-                Some(key) => {
-                    // Sometimes the key has the query param already set, like "list-type=2"
-                    match key.find("=") {
-                        Some(_) => {
-                            let key_val_vec: Vec<&str> = key.split("=").collect();
-                            format!("params.put(\"{}\", \"{}\");", key_val_vec[0], key_val_vec[1])
-                        },
-                        None => format!("params.put_key(\"{}\");", key),
-                    }
-                },
-                _ => "".to_owned(),
-            };
-
+            let (request_uri, _) = rest_request_generator::parse_query_string(&operation.http.request_uri);
             writeln!(writer,
                      "{documentation}
                 #[allow(unused_variables, warnings)]
                 {method_signature} {{
-                    let mut params = Params::new();
                     let mut request_uri = \"{request_uri}\".to_string();
 
-                    {add_uri_parameters}
                     {modify_uri}
 
                     let mut request = SignedRequest::new(\"{http_method}\", \"{endpoint_prefix}\", self.region, &request_uri);
@@ -60,7 +41,6 @@ impl GenerateProtocol for RestXmlGenerator {
                     {set_parameters}
                     {build_payload}
 
-                    request.set_params(params);
                     request.sign(&try!(self.credentials_provider.credentials()));
 
                     let response = try!(self.dispatcher.dispatch(&request));
@@ -81,14 +61,12 @@ impl GenerateProtocol for RestXmlGenerator {
                      method_signature = generate_method_signature(operation_name, operation),
                      error_type = error_type_name(operation_name),
                      request_uri = request_uri,
-                     add_uri_parameters = add_uri_parameters,
                      build_payload = generate_method_input_serialization(service, operation)
                          .unwrap_or("".to_string()),
                      modify_uri = generate_uri_modification(service, operation)
                          .unwrap_or("".to_string()),
                      set_headers = rest_request_generator::generate_headers(service, operation).unwrap_or("".to_string()),
-                     set_parameters = generate_parameters(service, operation)
-                         .unwrap_or("".to_string()),
+                     set_parameters = rest_request_generator::generate_params_loading_string(service, operation).unwrap_or("".to_string()),
                      parse_non_payload =
                          rest_response_parser::generate_response_headers_parser(service,
                                                                                 operation)
@@ -230,35 +208,6 @@ fn generate_uri_modification(service: &Service, operation: &Operation) -> Option
     }).collect::<Vec<String>>().join("\n"))
 }
 
-fn generate_parameters(service: &Service, operation: &Operation) -> Option<String> {
-    // nothing to do if there's no input type
-    if operation.input.is_none() {
-        return None;
-    }
-
-    let shape = service.get_shape(&operation.input.as_ref().unwrap().shape).unwrap();
-
-    Some(shape.members.as_ref().unwrap().iter().filter_map(|(member_name, member)| {
-        match member.location.as_ref().to_owned() {
-            Some(location) if location == "querystring" => {
-                if shape.required(member_name) {
-                    Some(format!("params.put(\"{location_name}\", &input.{field_name});",
-                        location_name = member.location_name.as_ref().unwrap(),
-                        field_name = member_name.to_snake_case()))
-                } else {
-                    Some(format!("
-                        if let Some(ref {field_name}) = input.{field_name} {{
-                            params.put(\"{location_name}\", {field_name});
-                        }}",
-                        location_name = member.location_name.as_ref().unwrap(),
-                        field_name = member_name.to_snake_case()))
-                }
-            },
-            _ => None
-        }
-    }).collect::<Vec<String>>().join("\n"))
-}
-
 fn generate_service_specific_code(service: &Service, operation: &Operation) -> Option<String> {
     // S3 needs some special handholding.  Others may later.
     // See `handlers.py` in botocore for more details
@@ -285,20 +234,6 @@ fn generate_service_specific_code(service: &Service, operation: &Operation) -> O
             }
         }
         _ => None,
-    }
-}
-
-fn parse_query_string(uri: &str) -> (String, Option<String>) {
-    // botocore query strings for S3 are variations on "/{Bucket}/{Key+}?foobar"
-    // the query string needs to be split out and put in the params hash,
-    // and the + isn't useful information for us
-    let base_uri = uri.replace("+", "");
-    let parts: Vec<&str> = base_uri.split('?').collect();
-
-    match parts.len() {
-        1 => (parts[0].to_owned(), None),
-        2 => (parts[0].to_owned(), Some(parts[1].to_owned())),
-        _ => panic!("Unknown uri structure {}", uri),
     }
 }
 

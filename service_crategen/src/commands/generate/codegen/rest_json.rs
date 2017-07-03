@@ -7,7 +7,7 @@ use hyper::status::StatusCode;
 use botocore::{Member, Operation, Shape, ShapeType};
 use ::Service;
 use super::{GenerateProtocol, error_type_name, FileWriter, IoResult, rest_response_parser,
-            rest_request_generator, generate_field_name};
+            rest_request_generator};
 
 pub struct RestJsonGenerator;
 
@@ -41,6 +41,8 @@ impl GenerateProtocol for RestJsonGenerator {
 
             // Retrieve the `Shape` for the input for this operation.
             let input_shape = &service.get_shape(input_type).unwrap();
+
+            let (request_uri, _) = rest_request_generator::parse_query_string(&operation.http.request_uri);
 
             // Construct a list of format strings which will be used to format
             // the request URI, mapping the input struct to the URI arguments.
@@ -101,11 +103,11 @@ impl GenerateProtocol for RestJsonGenerator {
                 parse_headers = rest_response_parser::generate_response_headers_parser(service, operation)
                     .unwrap_or_else(|| "".to_owned()),
                 request_uri_formatter = generate_uri_formatter(
-                    &generate_snake_case_uri(&operation.http.request_uri),
+                    &generate_snake_case_uri(&request_uri),
                     &member_uri_strings
                 ),
                 load_payload = generate_payload_loading_string(load_payload),
-                load_params = generate_params_loading_string(service, input_shape),
+                load_params = rest_request_generator::generate_params_loading_string(service, operation).unwrap_or("".to_string()),
                 encode_input = generate_encoding_string(load_payload),
                 set_headers = generate_headers(service).unwrap_or("".to_string()),
             )?
@@ -123,8 +125,7 @@ impl GenerateProtocol for RestJsonGenerator {
 
         writeln!(writer,
                  "use rusoto_core::signature::SignedRequest;
-        use serde_json::from_str;
-        \
+                  use serde_json::from_str;
                   use serde_json::Value as SerdeJsonValue;")
 
     }
@@ -230,24 +231,6 @@ fn generate_snake_case_uri(request_uri: &str) -> String {
         .to_string()
 }
 
-fn generate_params_loading_string(service: &Service, input_shape: &Shape) -> String {
-
-    // Construct a list of strings which will be used to load request
-    // parameters from the input struct into a `Params` vec, which will
-    // then be added to the request.
-    let param_strings = generate_shape_member_param_strings(service, input_shape);
-
-    match param_strings.len() {
-        0 => "".to_owned(),
-        _ => {
-            format!("let mut params = Params::new();
-                {param_strings}
-                request.set_params(params);",
-                    param_strings = param_strings.join("\n"))
-        }
-    }
-}
-
 // Do any input operations in the entire service use query parameters?
 fn service_has_query_parameters(service: &Service) -> bool {
     service.operations()
@@ -255,85 +238,6 @@ fn service_has_query_parameters(service: &Service) -> bool {
         .map(|(_, operation)| operation.input_shape())
         .map(|input_type| service.get_shape(input_type).unwrap())
         .any(|input_shape| input_shape.has_query_parameters())
-}
-
-fn generate_shape_member_param_strings(service: &Service, shape: &Shape) -> Vec<String> {
-    shape.members
-        .as_ref()
-        .unwrap()
-        .iter()
-        .filter_map(|(member_name, member)| {
-            member.location.as_ref().and_then(|loc| {
-                if !member.deprecated() && loc == "querystring" {
-                    let member_shape = service.shape_for_member(member).unwrap();
-                    Some(generate_param_load_string(member_name,
-                                                    member_shape,
-                                                    shape.required(member_name)))
-                } else {
-                    None
-                }
-            })
-        })
-        .collect::<Vec<String>>()
-}
-
-fn generate_param_load_string(member_name: &str,
-                              member_shape: &Shape,
-                              is_required: bool)
-                              -> String {
-    let field_name = generate_field_name(member_name);
-    match (member_shape.shape_type, is_required) {
-        (ShapeType::List, true) => {
-            format!("for item in input.{field_name}.iter() {{
-                    \
-                     params.put(\"{member_name}\", item);
-                }}",
-                    member_name = member_name,
-                    field_name = field_name)
-        }
-        (ShapeType::List, false) => {
-            format!(
-                "if let Some(ref x) = input.{field_name} {{
-                    for item in x.iter() {{
-                        params.put(\"{member_name}\", item);
-                    }}
-                }}",
-                member_name = member_name,
-                field_name = field_name,
-            )
-        }
-        (ShapeType::Map, true) => {
-            format!("for (key, val) in input.{field_name}.iter() {{
-                    \
-                     params.put(key, val);
-                }}",
-                    field_name = member_name.to_snake_case())
-        }
-        (ShapeType::Map, false) => {
-            format!(
-                "if let Some(ref x) = input.{field_name} {{
-                    for (key, val) in x.iter() {{
-                        params.put(key, val);
-                    }}
-                }}",
-                field_name = member_name.to_snake_case(),
-            )
-        }
-        (_, true) => {
-            format!("params.put(\"{member_name}\", &input.{field_name});",
-                    member_name = member_name,
-                    field_name = field_name)
-        }
-        (_, false) => {
-            format!(
-                "if let Some(ref x) = input.{field_name} {{
-                    params.put(\"{member_name}\", x);
-                }}",
-                member_name = member_name,
-                field_name = field_name,
-            )
-        }
-    }
 }
 
 fn generate_uri_formatter(request_uri: &str, uri_strings: &[String]) -> String {
