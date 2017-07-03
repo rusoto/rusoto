@@ -1,10 +1,9 @@
 use std::io::Write;
 
-use inflector::Inflector;
-use regex::{Captures, Regex};
 use hyper::status::StatusCode;
+use inflector::Inflector;
 
-use botocore::{Member, Operation, Shape, ShapeType};
+use botocore::{Operation, Shape, ShapeType};
 use ::Service;
 use super::{GenerateProtocol, error_type_name, FileWriter, IoResult, rest_response_parser,
             rest_request_generator};
@@ -42,11 +41,8 @@ impl GenerateProtocol for RestJsonGenerator {
             // Retrieve the `Shape` for the input for this operation.
             let input_shape = &service.get_shape(input_type).unwrap();
 
-            let (request_uri, _) = rest_request_generator::parse_query_string(&operation.http.request_uri);
-
-            // Construct a list of format strings which will be used to format
-            // the request URI, mapping the input struct to the URI arguments.
-            let member_uri_strings = generate_shape_member_uri_strings(input_shape);
+            let (request_uri, _) = rest_request_generator::parse_query_string(&operation.http
+                .request_uri);
 
             // A boolean controlling whether or not the payload should be loaded
             // into the request.
@@ -102,10 +98,11 @@ impl GenerateProtocol for RestJsonGenerator {
                 load_headers = rest_request_generator::generate_headers(service, operation).unwrap_or("".to_string()),
                 parse_headers = rest_response_parser::generate_response_headers_parser(service, operation)
                     .unwrap_or_else(|| "".to_owned()),
-                request_uri_formatter = generate_uri_formatter(
-                    &generate_snake_case_uri(&request_uri),
-                    &member_uri_strings
-                ),
+                request_uri_formatter = rest_request_generator::generate_uri_formatter(
+                    &request_uri,
+                    service,
+                    operation
+                ).unwrap_or("".to_string()),
                 load_payload = generate_payload_loading_string(load_payload),
                 load_params = rest_request_generator::generate_params_loading_string(service, operation).unwrap_or("".to_string()),
                 encode_input = generate_encoding_string(load_payload),
@@ -219,18 +216,6 @@ fn generate_payload_loading_string(load_payload: bool) -> String {
     }
 }
 
-fn generate_snake_case_uri(request_uri: &str) -> String {
-    lazy_static! {
-        static ref URI_ARGS_REGEX: Regex = Regex::new(r"\{([\w\d]+)\}").unwrap();
-    }
-
-    URI_ARGS_REGEX.replace_all(request_uri, |caps: &Captures| {
-            format!("{{{}}}",
-                    caps.get(1).map(|c| Inflector::to_snake_case(c.as_str())).unwrap())
-        })
-        .to_string()
-}
-
 // Do any input operations in the entire service use query parameters?
 fn service_has_query_parameters(service: &Service) -> bool {
     service.operations()
@@ -238,57 +223,6 @@ fn service_has_query_parameters(service: &Service) -> bool {
         .map(|(_, operation)| operation.input_shape())
         .map(|input_type| service.get_shape(input_type).unwrap())
         .any(|input_shape| input_shape.has_query_parameters())
-}
-
-fn generate_uri_formatter(request_uri: &str, uri_strings: &[String]) -> String {
-    match uri_strings.len() {
-        0 => {
-            format!(
-                "let request_uri = \"{request_uri}\";",
-                request_uri = request_uri,
-            )
-        }
-        _ => {
-            format!("let request_uri = format!(\"{request_uri}\", {uri_strings});",
-                    request_uri = request_uri,
-                    uri_strings = uri_strings.join(", "))
-        }
-    }
-}
-
-fn generate_shape_member_uri_strings(shape: &Shape) -> Vec<String> {
-    shape.members
-        .as_ref()
-        .unwrap()
-        .iter()
-        .filter_map(|(member_name, member)| {
-            generate_member_format_string(&member_name.to_snake_case(), member)
-        })
-        .collect::<Vec<String>>()
-}
-
-fn generate_member_format_string(member_name: &str, member: &Member) -> Option<String> {
-    match member.location {
-        Some(ref x) if x == "uri" => {
-            match member.location_name {
-                Some(ref loc_name) => {
-                    Some(format!(
-                        "{member_name} = input.{field_name}",
-                        field_name = member_name,
-                        member_name = loc_name.to_snake_case(),
-                    ))
-                }
-                None => {
-                    Some(format!(
-                        "{member_name} = input.{field_name}",
-                        field_name = member_name,
-                        member_name = member_name,
-                    ))
-                }
-            }
-        }
-        Some(_) | None => None,
-    }
 }
 
 fn generate_documentation(operation: &Operation) -> Option<String> {
@@ -305,7 +239,8 @@ fn generate_status_code_parser(operation: &Operation, service: &Service) -> Stri
     }
 
     let shape_name = &operation.output.as_ref().unwrap().shape;
-    let output_shape = &service.get_shape(shape_name).expect("Shape missing from service definition");
+    let output_shape = &service.get_shape(shape_name)
+        .expect("Shape missing from service definition");
 
     let mut status_code_parser = "".to_string();
 
@@ -313,9 +248,11 @@ fn generate_status_code_parser(operation: &Operation, service: &Service) -> Stri
         if let Some(ref location) = member.location {
             if location == "statusCode" {
                 if output_shape.required(member_name) {
-                    status_code_parser += &format!("result.{} = StatusCode::to_u16(&response.status);", member_name.to_snake_case());
+                    status_code_parser += &format!("result.{} = StatusCode::to_u16(&response.status);",
+                                                   member_name.to_snake_case());
                 } else {
-                    status_code_parser += &format!("result.{} = Some(StatusCode::to_u16(&response.status) as i64);", member_name.to_snake_case());
+                    status_code_parser += &format!("result.{} = Some(StatusCode::to_u16(&response.status) as i64);",
+                                                   member_name.to_snake_case());
                 }
             }
         }
@@ -323,7 +260,6 @@ fn generate_status_code_parser(operation: &Operation, service: &Service) -> Stri
 
     status_code_parser
 }
-
 
 /// Generate code to parse the http response body, either as a JSON object
 /// deserialized with serde, or as a raw payload that's assigned to one of
@@ -339,19 +275,22 @@ fn generate_body_parser(operation: &Operation, service: &Service) -> String {
     }
 
     let shape_name = &operation.output.as_ref().unwrap().shape;
-    let output_shape = &service.get_shape(shape_name).expect("Shape missing from service definition");
+    let output_shape = &service.get_shape(shape_name)
+        .expect("Shape missing from service definition");
 
     let mutable_result = output_shape.members
-                .as_ref()
-                .unwrap()
-                .iter()
-                .any(|(_, member)| member.location.is_some());
+        .as_ref()
+        .unwrap()
+        .iter()
+        .any(|(_, member)| member.location.is_some());
 
     match output_shape.payload {
         None => json_body_parser(shape_name, mutable_result),
         Some(ref payload_member_name) => {
-            let payload_member_shape = &output_shape.members.as_ref().unwrap()[payload_member_name].shape;
-            let payload_shape = &service.get_shape(payload_member_shape).expect("Shape missing from service definition");
+            let payload_member_shape = &output_shape.members.as_ref().unwrap()[payload_member_name]
+                .shape;
+            let payload_shape = &service.get_shape(payload_member_shape)
+                .expect("Shape missing from service definition");
             match payload_shape.shape_type {
                 payload_type if payload_type == ShapeType::Blob ||
                                 payload_type == ShapeType::String => {

@@ -1,6 +1,7 @@
 use ::Service;
 use botocore::{Member, Operation, Shape, ShapeType};
 use inflector::Inflector;
+use regex::{Captures, Regex};
 use super::generate_field_name;
 
 // Add request headers for any shape members marked as headers
@@ -25,7 +26,7 @@ pub fn generate_headers(service: &Service, operation: &Operation) -> Option<Stri
                         Some(format!("request.add_header(\"{location_name}\", 
                                       &input.{field_name});",
                                      location_name = member.location_name.as_ref().unwrap(),
-                                     field_name = member_name.to_snake_case()))
+                                     field_name = generate_field_name(member_name)))
                     } else {
                         Some(format!("
                         if let Some(ref {field_name}) = 
@@ -34,7 +35,7 @@ pub fn generate_headers(service: &Service, operation: &Operation) -> Option<Stri
                                       &{field_name}.to_string());
                         }}",
                                      location_name = member.location_name.as_ref().unwrap(),
-                                     field_name = member_name.to_snake_case()))
+                                     field_name = generate_field_name(member_name)))
                     }
                 }
                 _ => None,
@@ -71,6 +72,61 @@ pub fn generate_params_loading_string(service: &Service, operation: &Operation) 
     Some(load_params)
 }
 
+pub fn generate_uri_formatter(request_uri: &str,
+                              service: &Service,
+                              operation: &Operation)
+                              -> Option<String> {
+    if operation.input.is_some() {
+        let input_shape = &service.get_shape(operation.input_shape()).unwrap();
+        let uri_strings = generate_shape_member_uri_strings(input_shape);
+
+        if uri_strings.len() > 0 {
+            return Some(format!("let request_uri = format!(\"{request_uri}\", {uri_strings});",
+                                request_uri = generate_snake_case_uri(request_uri),
+                                uri_strings = uri_strings.join(", ")));
+
+        }
+    }
+
+    Some(format!("let request_uri = \"{request_uri}\";",
+                 request_uri = request_uri))
+}
+
+fn generate_shape_member_uri_strings(shape: &Shape) -> Vec<String> {
+    shape.members
+        .as_ref()
+        .unwrap()
+        .iter()
+        .filter_map(|(member_name, member)| {
+            generate_member_format_string(&generate_field_name(member_name), member)
+        })
+        .collect::<Vec<String>>()
+}
+
+fn generate_member_format_string(member_name: &str, member: &Member) -> Option<String> {
+    match member.location {
+        Some(ref x) if x == "uri" => {
+            match member.location_name {
+                Some(ref loc_name) => {
+                    Some(format!(
+                        "{member_name} = input.{field_name}",
+                        field_name = member_name,
+                        member_name = loc_name.to_snake_case(),
+                    ))
+                }
+                None => {
+                    Some(format!(
+                        "{member_name} = input.{field_name}",
+                        field_name = member_name,
+                        member_name = member_name.to_snake_case(),
+                    ))
+                }
+            }
+        }
+        Some(_) | None => None,
+    }
+}
+
 fn generate_static_param_strings(operation: &Operation) -> Vec<String> {
 
     // botocore includes + for greedy parameters and we don't care about it
@@ -94,6 +150,18 @@ fn generate_static_param_strings(operation: &Operation) -> Vec<String> {
     };
 
     static_params
+}
+
+fn generate_snake_case_uri(request_uri: &str) -> String {
+    lazy_static! {
+        static ref URI_ARGS_REGEX: Regex = Regex::new(r"\{([\w\d]+)\}").unwrap();
+    }
+
+    URI_ARGS_REGEX.replace_all(request_uri, |caps: &Captures| {
+            format!("{{{}}}",
+                    caps.get(1).map(|c| Inflector::to_snake_case(c.as_str())).unwrap())
+        })
+        .to_string()
 }
 
 fn generate_shape_member_param_strings(service: &Service, shape: &Shape) -> Vec<String> {
@@ -150,7 +218,7 @@ fn generate_param_load_string(member_name: &str,
             format!("for (key, val) in input.{field_name}.iter() {{
                      params.put(key, val);
                 }}",
-                    field_name = member_name.to_snake_case())
+                    field_name = field_name)
         }
         (ShapeType::Map, false) => {
             format!(
@@ -159,7 +227,7 @@ fn generate_param_load_string(member_name: &str,
                         params.put(key, val);
                     }}
                 }}",
-                field_name = member_name.to_snake_case(),
+                field_name = field_name,
             )
         }
         (_, true) => {

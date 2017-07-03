@@ -3,7 +3,8 @@ use inflector::Inflector;
 
 use ::Service;
 use botocore::{Member, Operation, Shape, ShapeType};
-use super::{xml_payload_parser, rest_response_parser, rest_request_generator, get_rust_type, mutate_type_name};
+use super::{xml_payload_parser, rest_response_parser, rest_request_generator, get_rust_type,
+            mutate_type_name};
 use super::{GenerateProtocol, generate_field_name, error_type_name};
 use super::{IoResult, FileWriter};
 
@@ -26,47 +27,51 @@ impl GenerateProtocol for RestXmlGenerator {
     fn generate_method_impls(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
 
         for (operation_name, operation) in service.operations().iter() {
-            let (request_uri, _) = rest_request_generator::parse_query_string(&operation.http.request_uri);
+            let (request_uri, _) = rest_request_generator::parse_query_string(&operation.http
+                .request_uri);
             writeln!(writer,
                      "{documentation}
-                #[allow(unused_variables, warnings)]
-                {method_signature} {{
-                    let mut request_uri = \"{request_uri}\".to_string();
+                    #[allow(unused_variables, warnings)]
+                    {method_signature} {{
+                        {modify_uri}
 
-                    {modify_uri}
+                        let mut request = SignedRequest::new(\"{http_method}\", \"{endpoint_prefix}\", self.region, &request_uri);
 
-                    let mut request = SignedRequest::new(\"{http_method}\", \"{endpoint_prefix}\", self.region, &request_uri);
+                        {set_headers}
+                        {set_parameters}
+                        {build_payload}
 
-                    {set_headers}
-                    {set_parameters}
-                    {build_payload}
+                        request.sign(&try!(self.credentials_provider.credentials()));
 
-                    request.sign(&try!(self.credentials_provider.credentials()));
+                        let response = try!(self.dispatcher.dispatch(&request));
 
-                    let response = try!(self.dispatcher.dispatch(&request));
-
-                    match response.status {{
-                        StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {{
-                            {parse_response_body}
-                            {parse_non_payload}
-                            Ok(result)
-                        }},
-                        _ => Err({error_type}::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                        match response.status {{
+                            StatusCode::Ok|StatusCode::NoContent|StatusCode::PartialContent => {{
+                                {parse_response_body}
+                                {parse_non_payload}
+                                Ok(result)
+                            }},
+                            _ => Err({error_type}::from_body(String::from_utf8_lossy(&response.body).as_ref()))
+                        }}
                     }}
-                }}
-                ",
+                    ",
                      documentation = generate_documentation(operation),
                      http_method = &operation.http.method,
                      endpoint_prefix = service.endpoint_prefix(),
                      method_signature = generate_method_signature(operation_name, operation),
                      error_type = error_type_name(operation_name),
-                     request_uri = request_uri,
                      build_payload = generate_method_input_serialization(service, operation)
                          .unwrap_or("".to_string()),
-                     modify_uri = generate_uri_modification(service, operation)
+                     modify_uri = rest_request_generator::generate_uri_formatter(&request_uri,
+                                                                                 service,
+                                                                                 operation)
                          .unwrap_or("".to_string()),
-                     set_headers = rest_request_generator::generate_headers(service, operation).unwrap_or("".to_string()),
-                     set_parameters = rest_request_generator::generate_params_loading_string(service, operation).unwrap_or("".to_string()),
+                     set_headers = rest_request_generator::generate_headers(service, operation)
+                         .unwrap_or("".to_string()),
+                     set_parameters =
+                         rest_request_generator::generate_params_loading_string(service,
+                                                                                operation)
+                             .unwrap_or("".to_string()),
                      parse_non_payload =
                          rest_response_parser::generate_response_headers_parser(service,
                                                                                 operation)
@@ -104,10 +109,7 @@ impl GenerateProtocol for RestXmlGenerator {
         writeln!(writer, "{}", imports)
     }
 
-    fn generate_struct_attributes(&self,
-                                  _serialized: bool,
-                                  _deserialized: bool)
-                                  -> String {
+    fn generate_struct_attributes(&self, _serialized: bool, _deserialized: bool) -> String {
         let derived = vec!["Default", "Clone", "Debug"];
 
         format!("#[derive({})]", derived.join(","))
@@ -177,35 +179,6 @@ fn generate_method_input_serialization(service: &Service, operation: &Operation)
     }
 
     Some(parts.join("\n"))
-}
-
-fn generate_uri_modification(service: &Service, operation: &Operation) -> Option<String> {
-    // nothing to do if there's no input type
-    if operation.input.is_none() {
-        return None;
-    }
-
-    let shape = service.get_shape(&operation.input.as_ref().unwrap().shape).unwrap();
-
-    Some(shape.members.as_ref().unwrap().iter().filter_map(|(member_name, member)| {
-        if member.location.is_none() {
-            return None;
-        }
-        match &member.location.as_ref().unwrap()[..] {
-            "uri" => {
-                if shape.required(member_name) {
-                    Some(format!("request_uri = request_uri.replace(\"{{{location_name}}}\", &input.{field_name}.to_string());",
-                        location_name = member.location_name.as_ref().unwrap(),
-                        field_name = generate_field_name(member_name)))
-                } else {
-                    Some(format!("request_uri = request_uri.replace(\"{{{location_name}}}\", &input.{field_name}.unwrap().to_string());",
-                        location_name = member.location_name.as_ref().unwrap(),
-                        field_name = generate_field_name(member_name)))
-                }
-            },
-            _ => None
-        }
-    }).collect::<Vec<String>>().join("\n"))
 }
 
 fn generate_service_specific_code(service: &Service, operation: &Operation) -> Option<String> {
