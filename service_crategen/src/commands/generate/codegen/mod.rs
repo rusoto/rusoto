@@ -98,7 +98,8 @@ fn generate<P, E>(writer: &mut FileWriter,
           E: GenerateErrorTypes
 {
 
-    writeln!(writer, "
+    writeln!(writer,
+             "
         // =================================================================
         //
         //                           * WARNING *
@@ -183,7 +184,11 @@ fn generate_client<P>(writer: &mut FileWriter,
     writeln!(writer, "}}")
 }
 
-pub fn get_rust_type(service: &Service, shape_name: &str, shape: &Shape, for_timestamps: &str) -> String {
+pub fn get_rust_type(service: &Service,
+                     shape_name: &str,
+                     shape: &Shape,
+                     for_timestamps: &str)
+                     -> String {
     match shape.shape_type {
         ShapeType::Blob => "Vec<u8>".into(),
         ShapeType::Boolean => "bool".into(),
@@ -193,7 +198,13 @@ pub fn get_rust_type(service: &Service, shape_name: &str, shape: &Shape, for_tim
         ShapeType::Long => "i64".into(),
         ShapeType::String => "String".into(),
         ShapeType::Timestamp => for_timestamps.into(),
-        ShapeType::List => format!("Vec<{}>", get_rust_type(service, shape.member_type(), service.get_shape(&shape.member_type()).unwrap(), for_timestamps)),
+        ShapeType::List => {
+            format!("Vec<{}>",
+                    get_rust_type(service,
+                                  shape.member_type(),
+                                  service.get_shape(&shape.member_type()).unwrap(),
+                                  for_timestamps))
+        }
         ShapeType::Map => {
             format!(
                 "::std::collections::HashMap<{}, {}>",
@@ -215,7 +226,7 @@ fn mutate_type_name(type_name: &str) -> String {
     match &without_underscores[..] {
         // S3 has an 'Error' shape that collides with Rust's Error trait
         "Error" => "S3Error".to_owned(),
-        
+
         // EC2 has a CancelSpotFleetRequestsError struct, avoid collision with our error enum
         "CancelSpotFleetRequests" => "EC2CancelSpotFleetRequests".to_owned(),
 
@@ -234,32 +245,35 @@ fn generate_types<P>(writer: &mut FileWriter, service: &Service, protocol_genera
     let (serialized_types, deserialized_types) = filter_types(service);
 
     for (name, shape) in service.shapes().iter() {
-        let type_name = mutate_type_name(&name);
 
         // We generate enums for error types, so no need to create model objects for them
         if shape.exception() {
             continue;
         }
 
-        // If botocore includes documentation, clean it up a bit and use it
-        if let Some(ref docs) = shape.documentation {
-            writeln!(writer,
-                     "#[doc=\"{}\"]",
-                     docs.replace("\\", "\\\\").replace("\"", "\\\""))?;
-        }
+        let type_name = mutate_type_name(&name);
 
         let deserialized = deserialized_types.contains(&type_name);
         let serialized = serialized_types.contains(&type_name);
 
-        // generate a rust type for the shape
-        if type_name != "String" && shape.shape_type == ShapeType::Structure {
-            let generated = generate_struct(service,
-                                            &type_name,
-                                            &shape,
-                                            serialized,
-                                            deserialized,
-                                            protocol_generator);
-            writeln!(writer, "{}", generated)?;
+        if shape.shape_type == ShapeType::Structure {
+            // If botocore includes documentation, clean it up a bit and use it
+            if let Some(ref docs) = shape.documentation {
+                writeln!(writer,
+                         "#[doc=\"{}\"]",
+                         docs.replace("\\", "\\\\").replace("\"", "\\\""))?;
+            }
+
+            // generate a rust type for the shape
+            if type_name != "String" {
+                let generated = generate_struct(service,
+                                                &type_name,
+                                                &shape,
+                                                serialized,
+                                                deserialized,
+                                                protocol_generator);
+                writeln!(writer, "{}", generated)?;
+            }
         }
 
         if deserialized {
@@ -350,15 +364,15 @@ fn generate_struct_fields<P: GenerateProtocol>(service: &Service,
         }
 
         let member_shape = service.shape_for_member(member).unwrap();
-        let ty = get_rust_type(service, &member.shape, &member_shape, protocol_generator.timestamp_type());
+        let rs_type = get_rust_type(service, &member.shape, &member_shape, protocol_generator.timestamp_type());
         let name = generate_field_name(member_name);
 
         if shape.required(member_name) {
-            lines.push(format!("pub {}: {},", name, ty))
+            lines.push(format!("pub {}: {},", name, rs_type))
         } else if name == "type" {
-            lines.push(format!("pub aws_{}: Option<{}>,", name, ty))
+            lines.push(format!("pub aws_{}: Option<{}>,", name,rs_type))
         } else {
-            lines.push(format!("pub {}: Option<{}>,", name, ty))
+            lines.push(format!("pub {}: Option<{}>,", name, rs_type))
         }
 
         Some(lines.join("\n"))
