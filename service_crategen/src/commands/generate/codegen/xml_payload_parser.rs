@@ -268,12 +268,12 @@ fn generate_map_deserializer(shape: &Shape) -> String {
 fn generate_primitive_deserializer(shape: &Shape) -> String {
     let statement = match shape.shape_type {
         ShapeType::String | ShapeType::Timestamp => "try!(characters(stack))",
-        ShapeType::Integer => "i64::from_str(try!(characters(stack)).as_ref()).unwrap()",
-        ShapeType::Long => "i64::from_str(try!(characters(stack)).as_ref()).unwrap()",
-        ShapeType::Double => "f64::from_str(try!(characters(stack)).as_ref()).unwrap()",
-        ShapeType::Float => "f32::from_str(try!(characters(stack)).as_ref()).unwrap()",
+        ShapeType::Integer => "try!(characters(stack)).parse::<i64>().unwrap()",
+        ShapeType::Long => "try!(characters(stack)).parse::<i64>().unwrap()",
+        ShapeType::Double => "try!(characters(stack)).parse::<f64>().unwrap()",
+        ShapeType::Float => "try!(characters(stack)).parse::<f32>().unwrap()",
         ShapeType::Blob => "try!(characters(stack)).into_bytes()",
-        ShapeType::Boolean => "bool::from_str(try!(characters(stack)).as_ref()).unwrap()",
+        ShapeType::Boolean => "try!(characters(stack)).parse::<bool>().unwrap()",
         _ => panic!("Unknown primitive shape type"),
     };
 

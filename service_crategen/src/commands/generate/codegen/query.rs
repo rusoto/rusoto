@@ -41,7 +41,7 @@ impl GenerateProtocol for QueryGenerator {
                     request.sign(&try!(self.credentials_provider.credentials()));
                     let response = try!(self.dispatcher.dispatch(&request));
                     match response.status {{
-                        StatusCode::Ok => {{
+                        ::hyper::status::StatusCode::Ok => {{
                             {parse_payload}
                             Ok(result)
                         }}
@@ -68,8 +68,7 @@ impl GenerateProtocol for QueryGenerator {
 
     fn generate_prelude(&self, writer: &mut FileWriter, _service: &Service) -> IoResult {
         writeln!(writer,
-                 "use std::str::FromStr;
-            use xml::EventReader;
+                 "use xml::EventReader;
             use xml::reader::ParserConfig;
             use rusoto_core::param::{{Params, ServiceParams}};
             use rusoto_core::signature::SignedRequest;
