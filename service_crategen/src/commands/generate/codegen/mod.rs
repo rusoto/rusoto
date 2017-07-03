@@ -1,3 +1,4 @@
+use std::collections::BTreeMap;
 use std::collections::BTreeSet;
 use std::fs::File;
 use std::io::{BufWriter, Write};
@@ -470,14 +471,14 @@ where
         let deserialized = deserialized_types.contains(&type_name);
         let serialized = serialized_types.contains(&type_name);
 
-        if shape.shape_type == ShapeType::Structure {
+        if shape.shape_type == ShapeType::Structure || shape.shape_enum.is_some() {
             // If botocore includes documentation, clean it up a bit and use it
             if let Some(ref docs) = shape.documentation {
                 writeln!(writer, "{}", crate::doco::Item(docs))?;
             }
 
             // generate a rust type for the shape
-            if type_name != "String" {
+            if type_name != "String" && shape.shape_type == ShapeType::Structure {
                 let generated = if shape.eventstream() {
                     generate_event_enum(service, &type_name, shape, protocol_generator)
                 } else {
@@ -492,6 +493,13 @@ where
                     )
                 };
                 writeln!(writer, "{}", generated)?;
+            }
+
+            if let Some(ref variants) = shape.shape_enum {
+                if variants.len() > 0 {
+                    let generated = generate_enum(&type_name, variants);
+                    writeln!(writer, "{}", generated)?;
+                }
             }
         }
 
@@ -523,6 +531,75 @@ where
         }
     }
     Ok(())
+}
+
+fn get_variant_name(variant: &str) -> String {
+    // There are a few enum types that use numbers. These are not possible to turn into
+    // enums normally due to them not meeting naming conventions, so we replace '.' with
+    // an underscore as well as prepend one to make them valid identifiers.
+    if variant.parse::<f32>().is_ok() || variant.parse::<u32>().is_ok() {
+        format!("_{}", variant.replace(".", "_"))
+    } else {
+        variant
+            .replace(|c| !char::is_alphanumeric(c), "_")
+            .to_pascal_case()
+    }
+}
+
+fn generate_enum(name: &str, variants: &Vec<String>) -> String {
+    let variant_names: BTreeMap<String, String> = variants
+        .iter()
+        .map(|v| (v.clone(), get_variant_name(&v)))
+        .collect();
+
+    format!("
+        #[allow(non_camel_case_types)]
+        #[derive(Clone,Debug,Eq,PartialEq)]
+        pub enum {name} {{
+            {variants}
+        }}
+
+        impl Into<String> for {name} {{
+            fn into(self) -> String {{
+                let s: &'static str = self.into();
+                s.to_owned()
+            }}
+        }}
+
+        impl Into<&'static str> for {name} {{
+            fn into(self) -> &'static str {{
+                match self {{
+                    {matches}
+                }}
+            }}
+        }}
+
+        impl ::std::str::FromStr for {name} {{
+            type Err = ();
+            fn from_str(s: &str) -> Result<Self, Self::Err> {{
+                match s {{
+                    {reverse_matches},
+                    _ => Err(())
+                }}
+            }}
+        }}
+        ",
+            name = name,
+            variants = variant_names
+                .values()
+                .cloned()
+                .collect::<Vec<_>>()
+                .join(",\n"),
+            matches = variant_names
+                .iter()
+                .map(|(s, v)| format!("{}::{} => \"{}\"", name, v, s))
+                .collect::<Vec<_>>()
+                .join(",\n"),
+            reverse_matches = variant_names
+                .iter()
+                .map(|(s, v)| format!("\"{}\" => Ok({}::{})", s, name, v))
+                .collect::<Vec<_>>()
+                .join(",\n"))
 }
 
 fn generate_event_enum<P>(
