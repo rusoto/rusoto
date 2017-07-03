@@ -27,6 +27,9 @@ build: off
 test_script:
   - cargo update
   - cargo test --all --lib -v
+  - ( cd integration_tests && \
+      cargo test --features "all" --no-run && \
+      cd .. )
 
 branches:
   only:

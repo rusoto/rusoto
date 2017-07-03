@@ -41,6 +41,11 @@ script:
         cd .. )
   - echo "Running Rusoto tests" && cargo update && cargo test --lib --all -v
   - |
+      echo "Building integration tests" &&
+      ( cd integration_tests && \
+        cargo test --features "all" --no-run && \
+        cd .. )
+  - |
       echo "Running cargo docs on stable Rust on Linux" &&
       if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
         cargo doc --all --no-deps
