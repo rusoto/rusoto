@@ -26,85 +26,71 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-#[doc="The AMI id for the image resulting from a Replication Run."]
-pub type AmiId = String;
 #[doc="Object representing a Connector"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Connector {
     #[serde(rename="associatedOn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub associated_on: Option<Timestamp>,
+    pub associated_on: Option<f64>,
     #[serde(rename="capabilityList")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub capability_list: Option<ConnectorCapabilityList>,
+    pub capability_list: Option<Vec<String>>,
     #[serde(rename="connectorId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub connector_id: Option<ConnectorId>,
+    pub connector_id: Option<String>,
     #[serde(rename="ipAddress")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ip_address: Option<IpAddress>,
+    pub ip_address: Option<String>,
     #[serde(rename="macAddress")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub mac_address: Option<MacAddress>,
+    pub mac_address: Option<String>,
     #[serde(rename="status")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status: Option<ConnectorStatus>,
+    pub status: Option<String>,
     #[serde(rename="version")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub version: Option<ConnectorVersion>,
+    pub version: Option<String>,
     #[serde(rename="vmManagerId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub vm_manager_id: Option<VmManagerId>,
+    pub vm_manager_id: Option<String>,
     #[serde(rename="vmManagerName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub vm_manager_name: Option<VmManagerName>,
+    pub vm_manager_name: Option<String>,
     #[serde(rename="vmManagerType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub vm_manager_type: Option<VmManagerType>,
+    pub vm_manager_type: Option<String>,
 }
 
-#[doc="Capabilities for a Connector"]
-pub type ConnectorCapability = String;
-#[doc="List of Connector Capabilities"]
-pub type ConnectorCapabilityList = Vec<ConnectorCapability>;
-#[doc="Unique Identifier for Connector"]
-pub type ConnectorId = String;
-#[doc="List of connectors"]
-pub type ConnectorList = Vec<Connector>;
-#[doc="Status of on-premise Connector"]
-pub type ConnectorStatus = String;
-#[doc="Connector version string"]
-pub type ConnectorVersion = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateReplicationJobRequest {
     #[serde(rename="description")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[serde(rename="frequency")]
-    pub frequency: Frequency,
+    pub frequency: i64,
     #[serde(rename="licenseType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub license_type: Option<LicenseType>,
+    pub license_type: Option<String>,
     #[serde(rename="roleName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub role_name: Option<RoleName>,
+    pub role_name: Option<String>,
     #[serde(rename="seedReplicationTime")]
-    pub seed_replication_time: Timestamp,
+    pub seed_replication_time: f64,
     #[serde(rename="serverId")]
-    pub server_id: ServerId,
+    pub server_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct CreateReplicationJobResponse {
     #[serde(rename="replicationJobId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub replication_job_id: Option<ReplicationJobId>,
+    pub replication_job_id: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteReplicationJobRequest {
     #[serde(rename="replicationJobId")]
-    pub replication_job_id: ReplicationJobId,
+    pub replication_job_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -116,113 +102,107 @@ pub struct DeleteServerCatalogRequest;
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DeleteServerCatalogResponse;
 
-#[doc="The description for a Replication Job/Run."]
-pub type Description = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DisassociateConnectorRequest {
     #[serde(rename="connectorId")]
-    pub connector_id: ConnectorId,
+    pub connector_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DisassociateConnectorResponse;
 
-#[doc="Error Message string"]
-pub type ErrorMessage = String;
-#[doc="Interval between Replication Runs. This value is specified in hours, and represents the time between consecutive Replication Runs."]
-pub type Frequency = i64;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetConnectorsRequest {
     #[serde(rename="maxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<MaxResults>,
+    pub max_results: Option<i64>,
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GetConnectorsResponse {
     #[serde(rename="connectorList")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub connector_list: Option<ConnectorList>,
+    pub connector_list: Option<Vec<Connector>>,
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetReplicationJobsRequest {
     #[serde(rename="maxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<MaxResults>,
+    pub max_results: Option<i64>,
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
     #[serde(rename="replicationJobId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub replication_job_id: Option<ReplicationJobId>,
+    pub replication_job_id: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GetReplicationJobsResponse {
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
     #[serde(rename="replicationJobList")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub replication_job_list: Option<ReplicationJobList>,
+    pub replication_job_list: Option<Vec<ReplicationJob>>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetReplicationRunsRequest {
     #[serde(rename="maxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<MaxResults>,
+    pub max_results: Option<i64>,
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
     #[serde(rename="replicationJobId")]
-    pub replication_job_id: ReplicationJobId,
+    pub replication_job_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GetReplicationRunsResponse {
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
     #[serde(rename="replicationJob")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub replication_job: Option<ReplicationJob>,
     #[serde(rename="replicationRunList")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub replication_run_list: Option<ReplicationRunList>,
+    pub replication_run_list: Option<Vec<ReplicationRun>>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetServersRequest {
     #[serde(rename="maxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<MaxResults>,
+    pub max_results: Option<i64>,
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GetServersResponse {
     #[serde(rename="lastModifiedOn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub last_modified_on: Option<Timestamp>,
+    pub last_modified_on: Option<f64>,
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
     #[serde(rename="serverCatalogStatus")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub server_catalog_status: Option<ServerCatalogStatus>,
+    pub server_catalog_status: Option<String>,
     #[serde(rename="serverList")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub server_list: Option<ServerList>,
+    pub server_list: Option<Vec<Server>>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -231,211 +211,157 @@ pub struct ImportServerCatalogRequest;
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ImportServerCatalogResponse;
 
-#[doc="Internet Protocol (IP) Address"]
-pub type IpAddress = String;
-#[doc="The license type to be used for the Amazon Machine Image (AMI) created after a successful ReplicationRun."]
-pub type LicenseType = String;
-#[doc="Hardware (MAC) address"]
-pub type MacAddress = String;
-#[doc="The maximum number of results to return in one API call. If left empty, this will default to 50."]
-pub type MaxResults = i64;
-#[doc="Pagination token to pass as input to API call"]
-pub type NextToken = String;
 #[doc="Object representing a Replication Job"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ReplicationJob {
     #[serde(rename="description")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[serde(rename="frequency")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub frequency: Option<Frequency>,
+    pub frequency: Option<i64>,
     #[serde(rename="latestAmiId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub latest_ami_id: Option<AmiId>,
+    pub latest_ami_id: Option<String>,
     #[serde(rename="licenseType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub license_type: Option<LicenseType>,
+    pub license_type: Option<String>,
     #[serde(rename="nextReplicationRunStartTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_replication_run_start_time: Option<Timestamp>,
+    pub next_replication_run_start_time: Option<f64>,
     #[serde(rename="replicationJobId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub replication_job_id: Option<ReplicationJobId>,
+    pub replication_job_id: Option<String>,
     #[serde(rename="replicationRunList")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub replication_run_list: Option<ReplicationRunList>,
+    pub replication_run_list: Option<Vec<ReplicationRun>>,
     #[serde(rename="roleName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub role_name: Option<RoleName>,
+    pub role_name: Option<String>,
     #[serde(rename="seedReplicationTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub seed_replication_time: Option<Timestamp>,
+    pub seed_replication_time: Option<f64>,
     #[serde(rename="serverId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub server_id: Option<ServerId>,
+    pub server_id: Option<String>,
     #[serde(rename="serverType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub server_type: Option<ServerType>,
+    pub server_type: Option<String>,
     #[serde(rename="state")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub state: Option<ReplicationJobState>,
+    pub state: Option<String>,
     #[serde(rename="statusMessage")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status_message: Option<ReplicationJobStatusMessage>,
+    pub status_message: Option<String>,
     #[serde(rename="vmServer")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub vm_server: Option<VmServer>,
 }
 
-#[doc="The unique identifier for a Replication Job."]
-pub type ReplicationJobId = String;
-#[doc="List of Replication Jobs"]
-pub type ReplicationJobList = Vec<ReplicationJob>;
-#[doc="Current state of Replication Job"]
-pub type ReplicationJobState = String;
-#[doc="String describing current status of Replication Job"]
-pub type ReplicationJobStatusMessage = String;
-#[doc="An indicator of the Replication Job being deleted or failed."]
-pub type ReplicationJobTerminated = bool;
 #[doc="Object representing a Replication Run"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ReplicationRun {
     #[serde(rename="amiId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ami_id: Option<AmiId>,
+    pub ami_id: Option<String>,
     #[serde(rename="completedTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub completed_time: Option<Timestamp>,
+    pub completed_time: Option<f64>,
     #[serde(rename="description")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[serde(rename="replicationRunId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub replication_run_id: Option<ReplicationRunId>,
+    pub replication_run_id: Option<String>,
     #[serde(rename="scheduledStartTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub scheduled_start_time: Option<Timestamp>,
+    pub scheduled_start_time: Option<f64>,
     #[serde(rename="state")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub state: Option<ReplicationRunState>,
+    pub state: Option<String>,
     #[serde(rename="statusMessage")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status_message: Option<ReplicationRunStatusMessage>,
+    pub status_message: Option<String>,
     #[serde(rename="type")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub type_: Option<ReplicationRunType>,
+    pub type_: Option<String>,
 }
 
-#[doc="The unique identifier for a Replication Run."]
-pub type ReplicationRunId = String;
-#[doc="List of Replication Runs"]
-pub type ReplicationRunList = Vec<ReplicationRun>;
-#[doc="Current state of Replication Run"]
-pub type ReplicationRunState = String;
-#[doc="String describing current status of Replication Run"]
-pub type ReplicationRunStatusMessage = String;
-#[doc="Type of Replication Run"]
-pub type ReplicationRunType = String;
-#[doc="Name of service role in customer's account to be used by SMS service."]
-pub type RoleName = String;
 #[doc="Object representing a server"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Server {
     #[serde(rename="replicationJobId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub replication_job_id: Option<ReplicationJobId>,
+    pub replication_job_id: Option<String>,
     #[serde(rename="replicationJobTerminated")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub replication_job_terminated: Option<ReplicationJobTerminated>,
+    pub replication_job_terminated: Option<bool>,
     #[serde(rename="serverId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub server_id: Option<ServerId>,
+    pub server_id: Option<String>,
     #[serde(rename="serverType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub server_type: Option<ServerType>,
+    pub server_type: Option<String>,
     #[serde(rename="vmServer")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub vm_server: Option<VmServer>,
 }
 
-#[doc="Status of Server catalog"]
-pub type ServerCatalogStatus = String;
-#[doc="Unique Identifier for a server"]
-pub type ServerId = String;
-#[doc="List of servers from catalog"]
-pub type ServerList = Vec<Server>;
-#[doc="Type of server."]
-pub type ServerType = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct StartOnDemandReplicationRunRequest {
     #[serde(rename="description")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[serde(rename="replicationJobId")]
-    pub replication_job_id: ReplicationJobId,
+    pub replication_job_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct StartOnDemandReplicationRunResponse {
     #[serde(rename="replicationRunId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub replication_run_id: Option<ReplicationRunId>,
+    pub replication_run_id: Option<String>,
 }
 
-#[doc="Timestamp of an operation"]
-pub type Timestamp = f64;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateReplicationJobRequest {
     #[serde(rename="description")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[serde(rename="frequency")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub frequency: Option<Frequency>,
+    pub frequency: Option<i64>,
     #[serde(rename="licenseType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub license_type: Option<LicenseType>,
+    pub license_type: Option<String>,
     #[serde(rename="nextReplicationRunStartTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_replication_run_start_time: Option<Timestamp>,
+    pub next_replication_run_start_time: Option<f64>,
     #[serde(rename="replicationJobId")]
-    pub replication_job_id: ReplicationJobId,
+    pub replication_job_id: String,
     #[serde(rename="roleName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub role_name: Option<RoleName>,
+    pub role_name: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct UpdateReplicationJobResponse;
 
-#[doc="Unique Identifier for a VM"]
-pub type VmId = String;
-#[doc="Unique Identifier for VM Manager"]
-pub type VmManagerId = String;
-#[doc="VM Manager Name"]
-pub type VmManagerName = String;
-#[doc="VM Management Product"]
-pub type VmManagerType = String;
-#[doc="Name of Virtual Machine"]
-pub type VmName = String;
-#[doc="Path to VM"]
-pub type VmPath = String;
 #[doc="Object representing a VM server"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct VmServer {
     #[serde(rename="vmManagerName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub vm_manager_name: Option<VmManagerName>,
+    pub vm_manager_name: Option<String>,
     #[serde(rename="vmManagerType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub vm_manager_type: Option<VmManagerType>,
+    pub vm_manager_type: Option<String>,
     #[serde(rename="vmName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub vm_name: Option<VmName>,
+    pub vm_name: Option<String>,
     #[serde(rename="vmPath")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub vm_path: Option<VmPath>,
+    pub vm_path: Option<String>,
     #[serde(rename="vmServerAddress")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub vm_server_address: Option<VmServerAddress>,
@@ -446,10 +372,10 @@ pub struct VmServer {
 pub struct VmServerAddress {
     #[serde(rename="vmId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub vm_id: Option<VmId>,
+    pub vm_id: Option<String>,
     #[serde(rename="vmManagerId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub vm_manager_id: Option<VmManagerId>,
+    pub vm_manager_id: Option<String>,
 }
 
 /// Errors returned by CreateReplicationJob

@@ -41,15 +41,15 @@ enum DeserializerNext {
 #[derive(Default,Debug,Clone)]
 pub struct AccessKey {
     #[doc="<p>The ID for this access key.</p>"]
-    pub access_key_id: AccessKeyIdType,
+    pub access_key_id: String,
     #[doc="<p>The date when the access key was created.</p>"]
-    pub create_date: Option<DateType>,
+    pub create_date: Option<String>,
     #[doc="<p>The secret key used to sign requests.</p>"]
-    pub secret_access_key: AccessKeySecretType,
+    pub secret_access_key: String,
     #[doc="<p>The status of the access key. <code>Active</code> means the key is valid for API calls, while <code>Inactive</code> means it is not. </p>"]
-    pub status: StatusType,
+    pub status: String,
     #[doc="<p>The name of the IAM user that the access key is associated with.</p>"]
-    pub user_name: UserNameType,
+    pub user_name: String,
 }
 
 struct AccessKeyDeserializer;
@@ -111,13 +111,12 @@ impl AccessKeyDeserializer {
 
     }
 }
-pub type AccessKeyIdType = String;
 struct AccessKeyIdTypeDeserializer;
 impl AccessKeyIdTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AccessKeyIdType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -130,11 +129,11 @@ impl AccessKeyIdTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct AccessKeyLastUsed {
     #[doc="<p>The date and time, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>, when the access key was most recently used. This field is null when:</p> <ul> <li> <p>The user does not have an access key.</p> </li> <li> <p>An access key exists but has never been used, at least not since IAM started tracking this information on April 22nd, 2015.</p> </li> <li> <p>There is no sign-in data associated with the user</p> </li> </ul>"]
-    pub last_used_date: DateType,
+    pub last_used_date: String,
     #[doc="<p>The AWS region where this access key was most recently used. This field is displays \"N/A\" when:</p> <ul> <li> <p>The user does not have an access key.</p> </li> <li> <p>An access key exists but has never been used, at least not since IAM started tracking this information on April 22nd, 2015.</p> </li> <li> <p>There is no sign-in data associated with the user</p> </li> </ul> <p>For more information about AWS regions, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/rande.html\">Regions and Endpoints</a> in the Amazon Web Services General Reference.</p>"]
-    pub region: StringType,
+    pub region: String,
     #[doc="<p>The name of the AWS service with which this access key was most recently used. This field displays \"N/A\" when:</p> <ul> <li> <p>The user does not have an access key.</p> </li> <li> <p>An access key exists but has never been used, at least not since IAM started tracking this information on April 22nd, 2015.</p> </li> <li> <p>There is no sign-in data associated with the user</p> </li> </ul>"]
-    pub service_name: StringType,
+    pub service_name: String,
 }
 
 struct AccessKeyLastUsedDeserializer;
@@ -190,13 +189,13 @@ impl AccessKeyLastUsedDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct AccessKeyMetadata {
     #[doc="<p>The ID for this access key.</p>"]
-    pub access_key_id: Option<AccessKeyIdType>,
+    pub access_key_id: Option<String>,
     #[doc="<p>The date when the access key was created.</p>"]
-    pub create_date: Option<DateType>,
+    pub create_date: Option<String>,
     #[doc="<p>The status of the access key. <code>Active</code> means the key is valid for API calls; <code>Inactive</code> means it is not.</p>"]
-    pub status: Option<StatusType>,
+    pub status: Option<String>,
     #[doc="<p>The name of the IAM user that the key is associated with.</p>"]
-    pub user_name: Option<UserNameType>,
+    pub user_name: Option<String>,
 }
 
 struct AccessKeyMetadataDeserializer;
@@ -255,14 +254,12 @@ impl AccessKeyMetadataDeserializer {
 
     }
 }
-#[doc="<p>Contains a list of access key metadata.</p> <p>This data type is used as a response element in the <a>ListAccessKeys</a> action.</p>"]
-pub type AccessKeyMetadataListType = Vec<AccessKeyMetadata>;
 struct AccessKeyMetadataListTypeDeserializer;
 impl AccessKeyMetadataListTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AccessKeyMetadataListType, XmlParseError> {
+                                       -> Result<Vec<AccessKeyMetadata>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -298,13 +295,12 @@ impl AccessKeyMetadataListTypeDeserializer {
 
     }
 }
-pub type AccessKeySecretType = String;
 struct AccessKeySecretTypeDeserializer;
 impl AccessKeySecretTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AccessKeySecretType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -313,13 +309,12 @@ impl AccessKeySecretTypeDeserializer {
 
     }
 }
-pub type AccountAliasListType = Vec<AccountAliasType>;
 struct AccountAliasListTypeDeserializer;
 impl AccountAliasListTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AccountAliasListType, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -355,13 +350,12 @@ impl AccountAliasListTypeDeserializer {
 
     }
 }
-pub type AccountAliasType = String;
 struct AccountAliasTypeDeserializer;
 impl AccountAliasTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AccountAliasType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -370,12 +364,11 @@ impl AccountAliasTypeDeserializer {
 
     }
 }
-pub type ActionNameListType = Vec<ActionNameType>;
 
 /// Serialize `ActionNameListType` contents to a `SignedRequest`.
 struct ActionNameListTypeSerializer;
 impl ActionNameListTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ActionNameListType) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -383,13 +376,12 @@ impl ActionNameListTypeSerializer {
     }
 }
 
-pub type ActionNameType = String;
 struct ActionNameTypeDeserializer;
 impl ActionNameTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ActionNameType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -401,9 +393,9 @@ impl ActionNameTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct AddClientIDToOpenIDConnectProviderRequest {
     #[doc="<p>The client ID (also known as audience) to add to the IAM OpenID Connect provider resource.</p>"]
-    pub client_id: ClientIDType,
+    pub client_id: String,
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM OpenID Connect (OIDC) provider resource to add the client ID to. You can get a list of OIDC provider ARNs by using the <a>ListOpenIDConnectProviders</a> action.</p>"]
-    pub open_id_connect_provider_arn: ArnType,
+    pub open_id_connect_provider_arn: String,
 }
 
 
@@ -428,9 +420,9 @@ impl AddClientIDToOpenIDConnectProviderRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct AddRoleToInstanceProfileRequest {
     #[doc="<p>The name of the instance profile to update.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub instance_profile_name: InstanceProfileNameType,
+    pub instance_profile_name: String,
     #[doc="<p>The name of the role to add.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>"]
-    pub role_name: RoleNameType,
+    pub role_name: String,
 }
 
 
@@ -453,9 +445,9 @@ impl AddRoleToInstanceProfileRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct AddUserToGroupRequest {
     #[doc="<p>The name of the group to update.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub group_name: GroupNameType,
+    pub group_name: String,
     #[doc="<p>The name of the user to add.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: ExistingUserNameType,
+    pub user_name: String,
 }
 
 
@@ -474,14 +466,12 @@ impl AddUserToGroupRequestSerializer {
     }
 }
 
-#[doc="<p>The Amazon Resource Name (ARN). ARNs are unique identifiers for AWS resources.</p> <p>For more information about ARNs, go to <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>. </p>"]
-pub type ArnType = String;
 struct ArnTypeDeserializer;
 impl ArnTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ArnType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -490,13 +480,12 @@ impl ArnTypeDeserializer {
 
     }
 }
-pub type AssignmentStatusType = String;
 #[derive(Default,Debug,Clone)]
 pub struct AttachGroupPolicyRequest {
     #[doc="<p>The name (friendly name, not ARN) of the group to attach the policy to.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub group_name: GroupNameType,
+    pub group_name: String,
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM policy you want to attach.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
-    pub policy_arn: ArnType,
+    pub policy_arn: String,
 }
 
 
@@ -518,9 +507,9 @@ impl AttachGroupPolicyRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct AttachRolePolicyRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM policy you want to attach.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
-    pub policy_arn: ArnType,
+    pub policy_arn: String,
     #[doc="<p>The name (friendly name, not ARN) of the role to attach the policy to.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>"]
-    pub role_name: RoleNameType,
+    pub role_name: String,
 }
 
 
@@ -542,9 +531,9 @@ impl AttachRolePolicyRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct AttachUserPolicyRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM policy you want to attach.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
-    pub policy_arn: ArnType,
+    pub policy_arn: String,
     #[doc="<p>The name (friendly name, not ARN) of the IAM user to attach the policy to.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: UserNameType,
+    pub user_name: String,
 }
 
 
@@ -563,13 +552,12 @@ impl AttachUserPolicyRequestSerializer {
     }
 }
 
-pub type AttachedPoliciesListType = Vec<AttachedPolicy>;
 struct AttachedPoliciesListTypeDeserializer;
 impl AttachedPoliciesListTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AttachedPoliciesListType, XmlParseError> {
+                                       -> Result<Vec<AttachedPolicy>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -608,9 +596,9 @@ impl AttachedPoliciesListTypeDeserializer {
 #[doc="<p>Contains information about an attached policy.</p> <p>An attached policy is a managed policy that has been attached to a user, group, or role. This data type is used as a response element in the <a>ListAttachedGroupPolicies</a>, <a>ListAttachedRolePolicies</a>, <a>ListAttachedUserPolicies</a>, and <a>GetAccountAuthorizationDetails</a> actions. </p> <p>For more information about managed policies, refer to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>Using IAM</i> guide. </p>"]
 #[derive(Default,Debug,Clone)]
 pub struct AttachedPolicy {
-    pub policy_arn: Option<ArnType>,
+    pub policy_arn: Option<String>,
     #[doc="<p>The friendly name of the attached policy.</p>"]
-    pub policy_name: Option<PolicyNameType>,
+    pub policy_name: Option<String>,
 }
 
 struct AttachedPolicyDeserializer;
@@ -660,13 +648,12 @@ impl AttachedPolicyDeserializer {
 
     }
 }
-pub type AttachmentCountType = i64;
 struct AttachmentCountTypeDeserializer;
 impl AttachmentCountTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AttachmentCountType, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -675,14 +662,12 @@ impl AttachmentCountTypeDeserializer {
 
     }
 }
-pub type AuthenticationCodeType = String;
-pub type BooleanObjectType = bool;
 struct BooleanObjectTypeDeserializer;
 impl BooleanObjectTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<BooleanObjectType, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -691,13 +676,12 @@ impl BooleanObjectTypeDeserializer {
 
     }
 }
-pub type BooleanType = bool;
 struct BooleanTypeDeserializer;
 impl BooleanTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<BooleanType, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -706,13 +690,12 @@ impl BooleanTypeDeserializer {
 
     }
 }
-pub type BootstrapDatum = Vec<u8>;
 struct BootstrapDatumDeserializer;
 impl BootstrapDatumDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<BootstrapDatum, XmlParseError> {
+                                       -> Result<Vec<u8>, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack)).into_bytes();
         try!(end_element(tag_name, stack));
@@ -721,13 +704,12 @@ impl BootstrapDatumDeserializer {
 
     }
 }
-pub type CertificateBodyType = String;
 struct CertificateBodyTypeDeserializer;
 impl CertificateBodyTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CertificateBodyType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -736,13 +718,12 @@ impl CertificateBodyTypeDeserializer {
 
     }
 }
-pub type CertificateChainType = String;
 struct CertificateChainTypeDeserializer;
 impl CertificateChainTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CertificateChainType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -751,13 +732,12 @@ impl CertificateChainTypeDeserializer {
 
     }
 }
-pub type CertificateIdType = String;
 struct CertificateIdTypeDeserializer;
 impl CertificateIdTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CertificateIdType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -766,14 +746,12 @@ impl CertificateIdTypeDeserializer {
 
     }
 }
-#[doc="<p>Contains a list of signing certificates.</p> <p>This data type is used as a response element in the <a>ListSigningCertificates</a> action.</p>"]
-pub type CertificateListType = Vec<SigningCertificate>;
 struct CertificateListTypeDeserializer;
 impl CertificateListTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CertificateListType, XmlParseError> {
+                                       -> Result<Vec<SigningCertificate>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -813,9 +791,9 @@ impl CertificateListTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ChangePasswordRequest {
     #[doc="<p>The new password. The new password must conform to the AWS account's password policy, if one exists.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of almost any printable ASCII character from the space (\\u0020) through the end of the ASCII character range (\\u00FF). You can also include the tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D) characters. Although any of these characters are valid in a password, note that many tools, such as the AWS Management Console, might restrict the ability to enter certain characters because they have special meaning within that tool.</p>"]
-    pub new_password: PasswordType,
+    pub new_password: String,
     #[doc="<p>The IAM user's current password.</p>"]
-    pub old_password: PasswordType,
+    pub old_password: String,
 }
 
 
@@ -834,13 +812,12 @@ impl ChangePasswordRequestSerializer {
     }
 }
 
-pub type ClientIDListType = Vec<ClientIDType>;
 struct ClientIDListTypeDeserializer;
 impl ClientIDListTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ClientIDListType, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -880,7 +857,7 @@ impl ClientIDListTypeDeserializer {
 /// Serialize `ClientIDListType` contents to a `SignedRequest`.
 struct ClientIDListTypeSerializer;
 impl ClientIDListTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ClientIDListType) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -888,13 +865,12 @@ impl ClientIDListTypeSerializer {
     }
 }
 
-pub type ClientIDType = String;
 struct ClientIDTypeDeserializer;
 impl ClientIDTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ClientIDType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -903,13 +879,12 @@ impl ClientIDTypeDeserializer {
 
     }
 }
-pub type ColumnNumber = i64;
 struct ColumnNumberDeserializer;
 impl ColumnNumberDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ColumnNumber, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -922,11 +897,11 @@ impl ColumnNumberDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ContextEntry {
     #[doc="<p>The full name of a condition context key, including the service prefix. For example, <code>aws:SourceIp</code> or <code>s3:VersionId</code>.</p>"]
-    pub context_key_name: Option<ContextKeyNameType>,
+    pub context_key_name: Option<String>,
     #[doc="<p>The data type of the value (or values) specified in the <code>ContextKeyValues</code> parameter.</p>"]
-    pub context_key_type: Option<ContextKeyTypeEnum>,
+    pub context_key_type: Option<String>,
     #[doc="<p>The value (or values, if the condition context key supports multiple values) to provide to the simulation for use when the key is referenced by a <code>Condition</code> element in an input policy.</p>"]
-    pub context_key_values: Option<ContextKeyValueListType>,
+    pub context_key_values: Option<Vec<String>>,
 }
 
 
@@ -956,12 +931,11 @@ impl ContextEntrySerializer {
     }
 }
 
-pub type ContextEntryListType = Vec<ContextEntry>;
 
 /// Serialize `ContextEntryListType` contents to a `SignedRequest`.
 struct ContextEntryListTypeSerializer;
 impl ContextEntryListTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ContextEntryListType) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<ContextEntry>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             ContextEntrySerializer::serialize(params, &key, obj);
@@ -969,13 +943,12 @@ impl ContextEntryListTypeSerializer {
     }
 }
 
-pub type ContextKeyNameType = String;
 struct ContextKeyNameTypeDeserializer;
 impl ContextKeyNameTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ContextKeyNameType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -984,13 +957,12 @@ impl ContextKeyNameTypeDeserializer {
 
     }
 }
-pub type ContextKeyNamesResultListType = Vec<ContextKeyNameType>;
 struct ContextKeyNamesResultListTypeDeserializer;
 impl ContextKeyNamesResultListTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ContextKeyNamesResultListType, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -1027,13 +999,11 @@ impl ContextKeyNamesResultListTypeDeserializer {
 
     }
 }
-pub type ContextKeyTypeEnum = String;
-pub type ContextKeyValueListType = Vec<ContextKeyValueType>;
 
 /// Serialize `ContextKeyValueListType` contents to a `SignedRequest`.
 struct ContextKeyValueListTypeSerializer;
 impl ContextKeyValueListTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ContextKeyValueListType) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -1041,11 +1011,10 @@ impl ContextKeyValueListTypeSerializer {
     }
 }
 
-pub type ContextKeyValueType = String;
 #[derive(Default,Debug,Clone)]
 pub struct CreateAccessKeyRequest {
     #[doc="<p>The name of the IAM user that the new key will belong to.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: Option<ExistingUserNameType>,
+    pub user_name: Option<String>,
 }
 
 
@@ -1117,7 +1086,7 @@ impl CreateAccessKeyResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateAccountAliasRequest {
     #[doc="<p>The account alias to create.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of lowercase letters, digits, and dashes. You cannot start or finish with a dash, nor can you have two dashes in a row.</p>"]
-    pub account_alias: AccountAliasType,
+    pub account_alias: String,
 }
 
 
@@ -1138,9 +1107,9 @@ impl CreateAccountAliasRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateGroupRequest {
     #[doc="<p>The name of the group to create. Do not include the path in this value.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-. The group name must be unique within the account. Group names are not distinguished by case. For example, you cannot create groups named both \"ADMINS\" and \"admins\".</p>"]
-    pub group_name: GroupNameType,
+    pub group_name: String,
     #[doc="<p> The path to the group. For more information about paths, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/).</p> <p>This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
-    pub path: Option<PathType>,
+    pub path: Option<String>,
 }
 
 
@@ -1212,9 +1181,9 @@ impl CreateGroupResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateInstanceProfileRequest {
     #[doc="<p>The name of the instance profile to create.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub instance_profile_name: InstanceProfileNameType,
+    pub instance_profile_name: String,
     #[doc="<p> The path to the instance profile. For more information about paths, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/).</p> <p>This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
-    pub path: Option<PathType>,
+    pub path: Option<String>,
 }
 
 
@@ -1289,11 +1258,11 @@ impl CreateInstanceProfileResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateLoginProfileRequest {
     #[doc="<p>The new password for the user.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of almost any printable ASCII character from the space (\\u0020) through the end of the ASCII character range (\\u00FF). You can also include the tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D) characters. Although any of these characters are valid in a password, note that many tools, such as the AWS Management Console, might restrict the ability to enter certain characters because they have special meaning within that tool.</p>"]
-    pub password: PasswordType,
+    pub password: String,
     #[doc="<p>Specifies whether the user is required to set a new password on next sign-in.</p>"]
-    pub password_reset_required: Option<BooleanType>,
+    pub password_reset_required: Option<bool>,
     #[doc="<p>The name of the IAM user to create a password for. The user must already exist.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: UserNameType,
+    pub user_name: String,
 }
 
 
@@ -1368,11 +1337,11 @@ impl CreateLoginProfileResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateOpenIDConnectProviderRequest {
     #[doc="<p>A list of client IDs (also known as audiences). When a mobile or web app registers with an OpenID Connect provider, they establish a value that identifies the application. (This is the value that's sent as the <code>client_id</code> parameter on OAuth requests.)</p> <p>You can register multiple client IDs with the same provider. For example, you might have multiple applications that use the same OIDC provider. You cannot register more than 100 client IDs with a single IAM OIDC provider.</p> <p>There is no defined format for a client ID. The <code>CreateOpenIDConnectProviderRequest</code> action accepts client IDs up to 255 characters long.</p>"]
-    pub client_id_list: Option<ClientIDListType>,
+    pub client_id_list: Option<Vec<String>>,
     #[doc="<p>A list of server certificate thumbprints for the OpenID Connect (OIDC) identity provider's server certificate(s). Typically this list includes only one entry. However, IAM lets you have up to five thumbprints for an OIDC provider. This lets you maintain multiple thumbprints if the identity provider is rotating certificates.</p> <p>The server certificate thumbprint is the hex-encoded SHA-1 hash value of the X.509 certificate used by the domain where the OpenID Connect provider makes its keys available. It is always a 40-character string.</p> <p>You must provide at least one thumbprint when creating an IAM OIDC provider. For example, if the OIDC provider is <code>server.example.com</code> and the provider stores its keys at \"https://keys.server.example.com/openid-connect\", the thumbprint string would be the hex-encoded SHA-1 hash value of the certificate used by https://keys.server.example.com.</p> <p>For more information about obtaining the OIDC provider's thumbprint, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/identity-providers-oidc-obtain-thumbprint.html\">Obtaining the Thumbprint for an OpenID Connect Provider</a> in the <i>IAM User Guide</i>.</p>"]
-    pub thumbprint_list: ThumbprintListType,
+    pub thumbprint_list: Vec<String>,
     #[doc="<p>The URL of the identity provider. The URL must begin with \"https://\" and should correspond to the <code>iss</code> claim in the provider's OpenID Connect ID tokens. Per the OIDC standard, path components are allowed but query parameters are not. Typically the URL consists of only a host name, like \"https://server.example.org\" or \"https://example.com\".</p> <p>You cannot register the same provider multiple times in a single AWS account. If you try to submit a URL that has already been used for an OpenID Connect provider in the AWS account, you will get an error.</p>"]
-    pub url: OpenIDConnectProviderUrlType,
+    pub url: String,
 }
 
 
@@ -1402,7 +1371,7 @@ impl CreateOpenIDConnectProviderRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateOpenIDConnectProviderResponse {
     #[doc="<p>The Amazon Resource Name (ARN) of the new IAM OpenID Connect provider that is created. For more information, see <a>OpenIDConnectProviderListEntry</a>. </p>"]
-    pub open_id_connect_provider_arn: Option<ArnType>,
+    pub open_id_connect_provider_arn: Option<String>,
 }
 
 struct CreateOpenIDConnectProviderResponseDeserializer;
@@ -1452,13 +1421,13 @@ impl CreateOpenIDConnectProviderResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreatePolicyRequest {
     #[doc="<p>A friendly description of the policy.</p> <p>Typically used to store information about the permissions defined in the policy. For example, \"Grants access to production DynamoDB tables.\"</p> <p>The policy description is immutable. After a value is assigned, it cannot be changed.</p>"]
-    pub description: Option<PolicyDescriptionType>,
+    pub description: Option<String>,
     #[doc="<p>The path for the policy.</p> <p>For more information about paths, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/).</p> <p>This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
-    pub path: Option<PolicyPathType>,
+    pub path: Option<String>,
     #[doc="<p>The JSON policy document that you want to use as the content for the new policy.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
-    pub policy_document: PolicyDocumentType,
+    pub policy_document: String,
     #[doc="<p>The friendly name of the policy.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub policy_name: PolicyNameType,
+    pub policy_name: String,
 }
 
 
@@ -1536,11 +1505,11 @@ impl CreatePolicyResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreatePolicyVersionRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM policy to which you want to add a new version.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
-    pub policy_arn: ArnType,
+    pub policy_arn: String,
     #[doc="<p>The JSON policy document that you want to use as the content for this new version of the policy.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
-    pub policy_document: PolicyDocumentType,
+    pub policy_document: String,
     #[doc="<p>Specifies whether to set this version as the policy's default version.</p> <p>When this parameter is <code>true</code>, the new policy version becomes the operative version; that is, the version that is in effect for the IAM users, groups, and roles that the policy is attached to.</p> <p>For more information about managed policy versions, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html\">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>"]
-    pub set_as_default: Option<BooleanType>,
+    pub set_as_default: Option<bool>,
 }
 
 
@@ -1617,13 +1586,13 @@ impl CreatePolicyVersionResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateRoleRequest {
     #[doc="<p>The trust relationship policy document that grants an entity permission to assume the role.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
-    pub assume_role_policy_document: PolicyDocumentType,
+    pub assume_role_policy_document: String,
     #[doc="<p>A customer-provided description of the role.</p>"]
-    pub description: Option<RoleDescriptionType>,
+    pub description: Option<String>,
     #[doc="<p> The path to the role. For more information about paths, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/).</p> <p>This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
-    pub path: Option<PathType>,
+    pub path: Option<String>,
     #[doc="<p>The name of the role to create.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p> <p>Role names are not distinguished by case. For example, you cannot create roles named both \"PRODROLE\" and \"prodrole\".</p>"]
-    pub role_name: RoleNameType,
+    pub role_name: String,
 }
 
 
@@ -1700,9 +1669,9 @@ impl CreateRoleResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateSAMLProviderRequest {
     #[doc="<p>The name of the provider to create.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub name: SAMLProviderNameType,
+    pub name: String,
     #[doc="<p>An XML document generated by an identity provider (IdP) that supports SAML 2.0. The document includes the issuer's name, expiration information, and keys that can be used to validate the SAML authentication response (assertions) that are received from the IdP. You must generate the metadata document using the identity management software that is used as your organization's IdP.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_saml.html\">About SAML 2.0-based Federation</a> in the <i>IAM User Guide</i> </p>"]
-    pub saml_metadata_document: SAMLMetadataDocumentType,
+    pub saml_metadata_document: String,
 }
 
 
@@ -1726,7 +1695,7 @@ impl CreateSAMLProviderRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateSAMLProviderResponse {
     #[doc="<p>The Amazon Resource Name (ARN) of the new SAML provider resource in IAM.</p>"]
-    pub saml_provider_arn: Option<ArnType>,
+    pub saml_provider_arn: Option<String>,
 }
 
 struct CreateSAMLProviderResponseDeserializer;
@@ -1775,11 +1744,11 @@ impl CreateSAMLProviderResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateServiceLinkedRoleRequest {
     #[doc="<p>The AWS service to which this role is attached. You use a string similar to a URL but without the http:// in front. For example: <code>elasticbeanstalk.amazonaws.com</code> </p>"]
-    pub aws_service_name: GroupNameType,
+    pub aws_service_name: String,
     #[doc="<p>A string that you provide, which is combined with the service name to form the complete role name. If you make multiple requests for the same service, then you must supply a different <code>CustomSuffix</code> for each request. Otherwise the request fails with a duplicate role name error. For example, you could add <code>-1</code> or <code>-debug</code> to the suffix.</p>"]
-    pub custom_suffix: Option<CustomSuffixType>,
+    pub custom_suffix: Option<String>,
     #[doc="<p>The description of the role.</p>"]
-    pub description: Option<RoleDescriptionType>,
+    pub description: Option<String>,
 }
 
 
@@ -1855,9 +1824,9 @@ impl CreateServiceLinkedRoleResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateServiceSpecificCredentialRequest {
     #[doc="<p>The name of the AWS service that is to be associated with the credentials. The service you specify here is the only service that can be accessed using these credentials.</p>"]
-    pub service_name: ServiceName,
+    pub service_name: String,
     #[doc="<p>The name of the IAM user that is to be associated with the credentials. The new service-specific credentials have the same permissions as the associated user except that they can be used only to access the specified service.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: UserNameType,
+    pub user_name: String,
 }
 
 
@@ -1927,9 +1896,9 @@ impl CreateServiceSpecificCredentialResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateUserRequest {
     #[doc="<p> The path for the user name. For more information about paths, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/).</p> <p>This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
-    pub path: Option<PathType>,
+    pub path: Option<String>,
     #[doc="<p>The name of the user to create.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-. User names are not distinguished by case. For example, you cannot create users named both \"TESTUSER\" and \"testuser\".</p>"]
-    pub user_name: UserNameType,
+    pub user_name: String,
 }
 
 
@@ -2001,9 +1970,9 @@ impl CreateUserResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateVirtualMFADeviceRequest {
     #[doc="<p> The path for the virtual MFA device. For more information about paths, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/).</p> <p>This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
-    pub path: Option<PathType>,
+    pub path: Option<String>,
     #[doc="<p>The name of the virtual MFA device. Use with path to uniquely identify a virtual MFA device.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub virtual_mfa_device_name: VirtualMFADeviceName,
+    pub virtual_mfa_device_name: String,
 }
 
 
@@ -2075,17 +2044,12 @@ impl CreateVirtualMFADeviceResponseDeserializer {
 
     }
 }
-pub type CredentialReportExpiredExceptionMessage = String;
-pub type CredentialReportNotPresentExceptionMessage = String;
-pub type CredentialReportNotReadyExceptionMessage = String;
-pub type CustomSuffixType = String;
-pub type DateType = String;
 struct DateTypeDeserializer;
 impl DateTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DateType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2097,9 +2061,9 @@ impl DateTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeactivateMFADeviceRequest {
     #[doc="<p>The serial number that uniquely identifies the MFA device. For virtual MFA devices, the serial number is the device ARN.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@:/-</p>"]
-    pub serial_number: SerialNumberType,
+    pub serial_number: String,
     #[doc="<p>The name of the user whose MFA device you want to deactivate.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: ExistingUserNameType,
+    pub user_name: String,
 }
 
 
@@ -2121,9 +2085,9 @@ impl DeactivateMFADeviceRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteAccessKeyRequest {
     #[doc="<p>The access key ID for the access key ID and secret access key you want to delete.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>"]
-    pub access_key_id: AccessKeyIdType,
+    pub access_key_id: String,
     #[doc="<p>The name of the user whose access key pair you want to delete.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: Option<ExistingUserNameType>,
+    pub user_name: Option<String>,
 }
 
 
@@ -2147,7 +2111,7 @@ impl DeleteAccessKeyRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteAccountAliasRequest {
     #[doc="<p>The name of the account alias to delete.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of lowercase letters, digits, and dashes. You cannot start or finish with a dash, nor can you have two dashes in a row.</p>"]
-    pub account_alias: AccountAliasType,
+    pub account_alias: String,
 }
 
 
@@ -2165,13 +2129,12 @@ impl DeleteAccountAliasRequestSerializer {
     }
 }
 
-pub type DeleteConflictMessage = String;
 #[derive(Default,Debug,Clone)]
 pub struct DeleteGroupPolicyRequest {
     #[doc="<p>The name (friendly name, not ARN) identifying the group that the policy is embedded in.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub group_name: GroupNameType,
+    pub group_name: String,
     #[doc="<p>The name identifying the policy document to delete.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub policy_name: PolicyNameType,
+    pub policy_name: String,
 }
 
 
@@ -2193,7 +2156,7 @@ impl DeleteGroupPolicyRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteGroupRequest {
     #[doc="<p>The name of the IAM group to delete.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub group_name: GroupNameType,
+    pub group_name: String,
 }
 
 
@@ -2214,7 +2177,7 @@ impl DeleteGroupRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteInstanceProfileRequest {
     #[doc="<p>The name of the instance profile to delete.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub instance_profile_name: InstanceProfileNameType,
+    pub instance_profile_name: String,
 }
 
 
@@ -2236,7 +2199,7 @@ impl DeleteInstanceProfileRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteLoginProfileRequest {
     #[doc="<p>The name of the user whose password you want to delete.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: UserNameType,
+    pub user_name: String,
 }
 
 
@@ -2257,7 +2220,7 @@ impl DeleteLoginProfileRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteOpenIDConnectProviderRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM OpenID Connect provider resource object to delete. You can get a list of OpenID Connect provider resource ARNs by using the <a>ListOpenIDConnectProviders</a> action.</p>"]
-    pub open_id_connect_provider_arn: ArnType,
+    pub open_id_connect_provider_arn: String,
 }
 
 
@@ -2279,7 +2242,7 @@ impl DeleteOpenIDConnectProviderRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeletePolicyRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM policy you want to delete.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
-    pub policy_arn: ArnType,
+    pub policy_arn: String,
 }
 
 
@@ -2300,9 +2263,9 @@ impl DeletePolicyRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeletePolicyVersionRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM policy from which you want to delete a version.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
-    pub policy_arn: ArnType,
+    pub policy_arn: String,
     #[doc="<p>The policy version to delete.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters that consists of the lowercase letter 'v' followed by one or two digits, and optionally followed by a period '.' and a string of letters and digits.</p> <p>For more information about managed policy versions, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html\">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>"]
-    pub version_id: PolicyVersionIdType,
+    pub version_id: String,
 }
 
 
@@ -2324,9 +2287,9 @@ impl DeletePolicyVersionRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteRolePolicyRequest {
     #[doc="<p>The name of the inline policy to delete from the specified IAM role.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub policy_name: PolicyNameType,
+    pub policy_name: String,
     #[doc="<p>The name (friendly name, not ARN) identifying the role that the policy is embedded in.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>"]
-    pub role_name: RoleNameType,
+    pub role_name: String,
 }
 
 
@@ -2348,7 +2311,7 @@ impl DeleteRolePolicyRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteRoleRequest {
     #[doc="<p>The name of the role to delete.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>"]
-    pub role_name: RoleNameType,
+    pub role_name: String,
 }
 
 
@@ -2369,7 +2332,7 @@ impl DeleteRoleRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteSAMLProviderRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the SAML provider to delete.</p>"]
-    pub saml_provider_arn: ArnType,
+    pub saml_provider_arn: String,
 }
 
 
@@ -2391,9 +2354,9 @@ impl DeleteSAMLProviderRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteSSHPublicKeyRequest {
     #[doc="<p>The unique identifier for the SSH public key.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>"]
-    pub ssh_public_key_id: PublicKeyIdType,
+    pub ssh_public_key_id: String,
     #[doc="<p>The name of the IAM user associated with the SSH public key.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: UserNameType,
+    pub user_name: String,
 }
 
 
@@ -2416,7 +2379,7 @@ impl DeleteSSHPublicKeyRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteServerCertificateRequest {
     #[doc="<p>The name of the server certificate you want to delete.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub server_certificate_name: ServerCertificateNameType,
+    pub server_certificate_name: String,
 }
 
 
@@ -2438,9 +2401,9 @@ impl DeleteServerCertificateRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteServiceSpecificCredentialRequest {
     #[doc="<p>The unique identifier of the service-specific credential. You can get this value by calling <a>ListServiceSpecificCredentials</a>.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>"]
-    pub service_specific_credential_id: ServiceSpecificCredentialId,
+    pub service_specific_credential_id: String,
     #[doc="<p>The name of the IAM user associated with the service-specific credential. If this value is not specified, then the operation assumes the user whose credentials are used to call the operation.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: Option<UserNameType>,
+    pub user_name: Option<String>,
 }
 
 
@@ -2465,9 +2428,9 @@ impl DeleteServiceSpecificCredentialRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteSigningCertificateRequest {
     #[doc="<p>The ID of the signing certificate to delete.</p> <p>The format of this parameter, as described by its <a href=\"http://wikipedia.org/wiki/regex\">regex</a> pattern, is a string of characters that can be upper- or lower-cased letters or digits.</p>"]
-    pub certificate_id: CertificateIdType,
+    pub certificate_id: String,
     #[doc="<p>The name of the user the signing certificate belongs to.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: Option<ExistingUserNameType>,
+    pub user_name: Option<String>,
 }
 
 
@@ -2492,9 +2455,9 @@ impl DeleteSigningCertificateRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteUserPolicyRequest {
     #[doc="<p>The name identifying the policy document to delete.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub policy_name: PolicyNameType,
+    pub policy_name: String,
     #[doc="<p>The name (friendly name, not ARN) identifying the user that the policy is embedded in.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: ExistingUserNameType,
+    pub user_name: String,
 }
 
 
@@ -2516,7 +2479,7 @@ impl DeleteUserPolicyRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteUserRequest {
     #[doc="<p>The name of the user to delete.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: ExistingUserNameType,
+    pub user_name: String,
 }
 
 
@@ -2537,7 +2500,7 @@ impl DeleteUserRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteVirtualMFADeviceRequest {
     #[doc="<p>The serial number that uniquely identifies the MFA device. For virtual MFA devices, the serial number is the same as the ARN.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@:/-</p>"]
-    pub serial_number: SerialNumberType,
+    pub serial_number: String,
 }
 
 
@@ -2558,9 +2521,9 @@ impl DeleteVirtualMFADeviceRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DetachGroupPolicyRequest {
     #[doc="<p>The name (friendly name, not ARN) of the IAM group to detach the policy from.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub group_name: GroupNameType,
+    pub group_name: String,
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM policy you want to detach.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
-    pub policy_arn: ArnType,
+    pub policy_arn: String,
 }
 
 
@@ -2582,9 +2545,9 @@ impl DetachGroupPolicyRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DetachRolePolicyRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM policy you want to detach.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
-    pub policy_arn: ArnType,
+    pub policy_arn: String,
     #[doc="<p>The name (friendly name, not ARN) of the IAM role to detach the policy from.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>"]
-    pub role_name: RoleNameType,
+    pub role_name: String,
 }
 
 
@@ -2606,9 +2569,9 @@ impl DetachRolePolicyRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DetachUserPolicyRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM policy you want to detach.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
-    pub policy_arn: ArnType,
+    pub policy_arn: String,
     #[doc="<p>The name (friendly name, not ARN) of the IAM user to detach the policy from.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: UserNameType,
+    pub user_name: String,
 }
 
 
@@ -2627,18 +2590,16 @@ impl DetachUserPolicyRequestSerializer {
     }
 }
 
-pub type DuplicateCertificateMessage = String;
-pub type DuplicateSSHPublicKeyMessage = String;
 #[derive(Default,Debug,Clone)]
 pub struct EnableMFADeviceRequest {
     #[doc="<p>An authentication code emitted by the device. </p> <p>The format for this parameter is a string of 6 digits.</p> <important> <p>Submit your request immediately after generating the authentication codes. If you generate the codes and then wait too long to submit the request, the MFA device successfully associates with the user but the MFA device becomes out of sync. This happens because time-based one-time passwords (TOTP) expire after a short period of time. If this happens, you can <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_sync.html\">resync the device</a>.</p> </important>"]
-    pub authentication_code_1: AuthenticationCodeType,
+    pub authentication_code_1: String,
     #[doc="<p>A subsequent authentication code emitted by the device.</p> <p>The format for this parameter is a string of 6 digits.</p> <important> <p>Submit your request immediately after generating the authentication codes. If you generate the codes and then wait too long to submit the request, the MFA device successfully associates with the user but the MFA device becomes out of sync. This happens because time-based one-time passwords (TOTP) expire after a short period of time. If this happens, you can <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_sync.html\">resync the device</a>.</p> </important>"]
-    pub authentication_code_2: AuthenticationCodeType,
+    pub authentication_code_2: String,
     #[doc="<p>The serial number that uniquely identifies the MFA device. For virtual MFA devices, the serial number is the device ARN.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@:/-</p>"]
-    pub serial_number: SerialNumberType,
+    pub serial_number: String,
     #[doc="<p>The name of the IAM user for whom you want to enable the MFA device.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: ExistingUserNameType,
+    pub user_name: String,
 }
 
 
@@ -2661,14 +2622,11 @@ impl EnableMFADeviceRequestSerializer {
     }
 }
 
-pub type EncodingType = String;
-pub type EntityAlreadyExistsMessage = String;
-pub type EntityListType = Vec<EntityType>;
 
 /// Serialize `EntityListType` contents to a `SignedRequest`.
 struct EntityListTypeSerializer;
 impl EntityListTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &EntityListType) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -2676,16 +2634,13 @@ impl EntityListTypeSerializer {
     }
 }
 
-pub type EntityTemporarilyUnmodifiableMessage = String;
-pub type EntityType = String;
-pub type EvalDecisionDetailsType = ::std::collections::HashMap<EvalDecisionSourceType,
-                                                               PolicyEvaluationDecisionType>;
 struct EvalDecisionDetailsTypeDeserializer;
 impl EvalDecisionDetailsTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<EvalDecisionDetailsType, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<::std::collections::HashMap<String, String>, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = ::std::collections::HashMap::new();
@@ -2703,13 +2658,12 @@ impl EvalDecisionDetailsTypeDeserializer {
 
     }
 }
-pub type EvalDecisionSourceType = String;
 struct EvalDecisionSourceTypeDeserializer;
 impl EvalDecisionSourceTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EvalDecisionSourceType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2722,21 +2676,21 @@ impl EvalDecisionSourceTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct EvaluationResult {
     #[doc="<p>The name of the API action tested on the indicated resource.</p>"]
-    pub eval_action_name: ActionNameType,
+    pub eval_action_name: String,
     #[doc="<p>The result of the simulation.</p>"]
-    pub eval_decision: PolicyEvaluationDecisionType,
+    pub eval_decision: String,
     #[doc="<p>Additional details about the results of the evaluation decision. When there are both IAM policies and resource policies, this parameter explains how each set of policies contributes to the final evaluation decision. When simulating cross-account access to a resource, both the resource-based policy and the caller's IAM policy must grant access. See <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_compare-resource-policies.html\">How IAM Roles Differ from Resource-based Policies</a> </p>"]
-    pub eval_decision_details: Option<EvalDecisionDetailsType>,
+    pub eval_decision_details: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>The ARN of the resource that the indicated API action was tested on.</p>"]
-    pub eval_resource_name: Option<ResourceNameType>,
+    pub eval_resource_name: Option<String>,
     #[doc="<p>A list of the statements in the input policies that determine the result for this scenario. Remember that even if multiple statements allow the action on the resource, if only one statement denies that action, then the explicit deny overrides any allow, and the deny statement is the only entry included in the result.</p>"]
-    pub matched_statements: Option<StatementListType>,
+    pub matched_statements: Option<Vec<Statement>>,
     #[doc="<p>A list of context keys that are required by the included input policies but that were not provided by one of the input parameters. This list is used when the resource in a simulation is \"*\", either explicitly, or when the <code>ResourceArns</code> parameter blank. If you include a list of resources, then any missing context values are instead included under the <code>ResourceSpecificResults</code> section. To discover the context keys used by a set of policies, you can call <a>GetContextKeysForCustomPolicy</a> or <a>GetContextKeysForPrincipalPolicy</a>.</p>"]
-    pub missing_context_values: Option<ContextKeyNamesResultListType>,
+    pub missing_context_values: Option<Vec<String>>,
     #[doc="<p>A structure that details how AWS Organizations and its service control policies affect the results of the simulation. Only applies if the simulated user's account is part of an organization.</p>"]
     pub organizations_decision_detail: Option<OrganizationsDecisionDetail>,
     #[doc="<p>The individual results of the simulation of the API action specified in EvalActionName on each resource.</p>"]
-    pub resource_specific_results: Option<ResourceSpecificResultListType>,
+    pub resource_specific_results: Option<Vec<ResourceSpecificResult>>,
 }
 
 struct EvaluationResultDeserializer;
@@ -2811,13 +2765,12 @@ impl EvaluationResultDeserializer {
 
     }
 }
-pub type EvaluationResultsListType = Vec<EvaluationResult>;
 struct EvaluationResultsListTypeDeserializer;
 impl EvaluationResultsListTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EvaluationResultsListType, XmlParseError> {
+                                       -> Result<Vec<EvaluationResult>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -2853,13 +2806,12 @@ impl EvaluationResultsListTypeDeserializer {
 
     }
 }
-pub type ExistingUserNameType = String;
 struct ExistingUserNameTypeDeserializer;
 impl ExistingUserNameTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ExistingUserNameType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2872,9 +2824,9 @@ impl ExistingUserNameTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct GenerateCredentialReportResponse {
     #[doc="<p>Information about the credential report.</p>"]
-    pub description: Option<ReportStateDescriptionType>,
+    pub description: Option<String>,
     #[doc="<p>Information about the state of the credential report.</p>"]
-    pub state: Option<ReportStateType>,
+    pub state: Option<String>,
 }
 
 struct GenerateCredentialReportResponseDeserializer;
@@ -2926,7 +2878,7 @@ impl GenerateCredentialReportResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetAccessKeyLastUsedRequest {
     #[doc="<p>The identifier of an access key.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>"]
-    pub access_key_id: AccessKeyIdType,
+    pub access_key_id: String,
 }
 
 
@@ -2950,7 +2902,7 @@ pub struct GetAccessKeyLastUsedResponse {
     #[doc="<p>Contains information about the last time the access key was used.</p>"]
     pub access_key_last_used: Option<AccessKeyLastUsed>,
     #[doc="<p>The name of the AWS IAM user that owns this access key.</p> <p/>"]
-    pub user_name: Option<ExistingUserNameType>,
+    pub user_name: Option<String>,
 }
 
 struct GetAccessKeyLastUsedResponseDeserializer;
@@ -3004,11 +2956,11 @@ impl GetAccessKeyLastUsedResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetAccountAuthorizationDetailsRequest {
     #[doc="<p>A list of entity types used to filter the results. Only the entities that match the types you specify are included in the output. Use the value <code>LocalManagedPolicy</code> to include customer managed policies.</p> <p>The format for this parameter is a comma-separated (if more than one) list of strings. Each string value in the list must be one of the valid values listed below.</p>"]
-    pub filter: Option<EntityListType>,
+    pub filter: Option<Vec<String>>,
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
-    pub max_items: Option<MaxItemsType>,
+    pub max_items: Option<i64>,
 }
 
 
@@ -3041,17 +2993,17 @@ impl GetAccountAuthorizationDetailsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetAccountAuthorizationDetailsResponse {
     #[doc="<p>A list containing information about IAM groups.</p>"]
-    pub group_detail_list: Option<GroupDetailListType>,
+    pub group_detail_list: Option<Vec<GroupDetail>>,
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
-    pub is_truncated: Option<BooleanType>,
+    pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>A list containing information about managed policies.</p>"]
-    pub policies: Option<ManagedPolicyDetailListType>,
+    pub policies: Option<Vec<ManagedPolicyDetail>>,
     #[doc="<p>A list containing information about IAM roles.</p>"]
-    pub role_detail_list: Option<RoleDetailListType>,
+    pub role_detail_list: Option<Vec<RoleDetail>>,
     #[doc="<p>A list containing information about IAM users.</p>"]
-    pub user_detail_list: Option<UserDetailListType>,
+    pub user_detail_list: Option<Vec<UserDetail>>,
 }
 
 struct GetAccountAuthorizationDetailsResponseDeserializer;
@@ -3175,7 +3127,7 @@ impl GetAccountPasswordPolicyResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetAccountSummaryResponse {
     #[doc="<p>A set of key value pairs containing information about IAM entity usage and IAM quotas.</p>"]
-    pub summary_map: Option<SummaryMapType>,
+    pub summary_map: Option<::std::collections::HashMap<String, i64>>,
 }
 
 struct GetAccountSummaryResponseDeserializer;
@@ -3224,7 +3176,7 @@ impl GetAccountSummaryResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetContextKeysForCustomPolicyRequest {
     #[doc="<p>A list of policies for which you want the list of context keys referenced in those policies. Each document is specified as a string containing the complete, valid JSON text of an IAM policy.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
-    pub policy_input_list: SimulationPolicyListType,
+    pub policy_input_list: Vec<String>,
 }
 
 
@@ -3248,7 +3200,7 @@ impl GetContextKeysForCustomPolicyRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetContextKeysForPolicyResponse {
     #[doc="<p>The list of context keys that are referenced in the input policies.</p>"]
-    pub context_key_names: Option<ContextKeyNamesResultListType>,
+    pub context_key_names: Option<Vec<String>>,
 }
 
 struct GetContextKeysForPolicyResponseDeserializer;
@@ -3296,9 +3248,9 @@ impl GetContextKeysForPolicyResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetContextKeysForPrincipalPolicyRequest {
     #[doc="<p>An optional list of additional policies for which you want the list of context keys that are referenced.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
-    pub policy_input_list: Option<SimulationPolicyListType>,
+    pub policy_input_list: Option<Vec<String>>,
     #[doc="<p>The ARN of a user, group, or role whose policies contain the context keys that you want listed. If you specify a user, the list includes context keys that are found in all policies attached to the user as well as to all groups that the user is a member of. If you pick a group or a role, then it includes only those context keys that are found in policies attached to that entity. Note that all parameters are shown in unencoded form here for clarity, but must be URL encoded to be included as a part of a real HTML request.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
-    pub policy_source_arn: ArnType,
+    pub policy_source_arn: String,
 }
 
 
@@ -3328,11 +3280,11 @@ impl GetContextKeysForPrincipalPolicyRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetCredentialReportResponse {
     #[doc="<p>Contains the credential report. The report is Base64-encoded.</p>"]
-    pub content: Option<ReportContentType>,
+    pub content: Option<Vec<u8>>,
     #[doc="<p> The date and time when the credential report was created, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>.</p>"]
-    pub generated_time: Option<DateType>,
+    pub generated_time: Option<String>,
     #[doc="<p>The format (MIME type) of the credential report.</p>"]
-    pub report_format: Option<ReportFormatType>,
+    pub report_format: Option<String>,
 }
 
 struct GetCredentialReportResponseDeserializer;
@@ -3391,9 +3343,9 @@ impl GetCredentialReportResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetGroupPolicyRequest {
     #[doc="<p>The name of the group the policy is associated with.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub group_name: GroupNameType,
+    pub group_name: String,
     #[doc="<p>The name of the policy document to get.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub policy_name: PolicyNameType,
+    pub policy_name: String,
 }
 
 
@@ -3416,11 +3368,11 @@ impl GetGroupPolicyRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetGroupPolicyResponse {
     #[doc="<p>The group the policy is associated with.</p>"]
-    pub group_name: GroupNameType,
+    pub group_name: String,
     #[doc="<p>The policy document.</p>"]
-    pub policy_document: PolicyDocumentType,
+    pub policy_document: String,
     #[doc="<p>The name of the policy.</p>"]
-    pub policy_name: PolicyNameType,
+    pub policy_name: String,
 }
 
 struct GetGroupPolicyResponseDeserializer;
@@ -3477,11 +3429,11 @@ impl GetGroupPolicyResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetGroupRequest {
     #[doc="<p>The name of the group.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub group_name: GroupNameType,
+    pub group_name: String,
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
-    pub max_items: Option<MaxItemsType>,
+    pub max_items: Option<i64>,
 }
 
 
@@ -3512,11 +3464,11 @@ pub struct GetGroupResponse {
     #[doc="<p>A structure that contains details about the group.</p>"]
     pub group: Group,
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
-    pub is_truncated: Option<BooleanType>,
+    pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>A list of users in the group.</p>"]
-    pub users: UserListType,
+    pub users: Vec<User>,
 }
 
 struct GetGroupResponseDeserializer;
@@ -3575,7 +3527,7 @@ impl GetGroupResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetInstanceProfileRequest {
     #[doc="<p>The name of the instance profile to get information about.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub instance_profile_name: InstanceProfileNameType,
+    pub instance_profile_name: String,
 }
 
 
@@ -3647,7 +3599,7 @@ impl GetInstanceProfileResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetLoginProfileRequest {
     #[doc="<p>The name of the user whose login profile you want to retrieve.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: UserNameType,
+    pub user_name: String,
 }
 
 
@@ -3717,7 +3669,7 @@ impl GetLoginProfileResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetOpenIDConnectProviderRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the OIDC provider resource object in IAM to get information for. You can get a list of OIDC provider resource ARNs by using the <a>ListOpenIDConnectProviders</a> action.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
-    pub open_id_connect_provider_arn: ArnType,
+    pub open_id_connect_provider_arn: String,
 }
 
 
@@ -3740,13 +3692,13 @@ impl GetOpenIDConnectProviderRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetOpenIDConnectProviderResponse {
     #[doc="<p>A list of client IDs (also known as audiences) that are associated with the specified IAM OIDC provider resource object. For more information, see <a>CreateOpenIDConnectProvider</a>.</p>"]
-    pub client_id_list: Option<ClientIDListType>,
+    pub client_id_list: Option<Vec<String>>,
     #[doc="<p>The date and time when the IAM OIDC provider resource object was created in the AWS account.</p>"]
-    pub create_date: Option<DateType>,
+    pub create_date: Option<String>,
     #[doc="<p>A list of certificate thumbprints that are associated with the specified IAM OIDC provider resource object. For more information, see <a>CreateOpenIDConnectProvider</a>. </p>"]
-    pub thumbprint_list: Option<ThumbprintListType>,
+    pub thumbprint_list: Option<Vec<String>>,
     #[doc="<p>The URL that the IAM OIDC provider resource object is associated with. For more information, see <a>CreateOpenIDConnectProvider</a>.</p>"]
-    pub url: Option<OpenIDConnectProviderUrlType>,
+    pub url: Option<String>,
 }
 
 struct GetOpenIDConnectProviderResponseDeserializer;
@@ -3808,7 +3760,7 @@ impl GetOpenIDConnectProviderResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetPolicyRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the managed policy that you want information about.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
-    pub policy_arn: ArnType,
+    pub policy_arn: String,
 }
 
 
@@ -3878,9 +3830,9 @@ impl GetPolicyResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetPolicyVersionRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the managed policy that you want information about.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
-    pub policy_arn: ArnType,
+    pub policy_arn: String,
     #[doc="<p>Identifies the policy version to retrieve.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters that consists of the lowercase letter 'v' followed by one or two digits, and optionally followed by a period '.' and a string of letters and digits.</p>"]
-    pub version_id: PolicyVersionIdType,
+    pub version_id: String,
 }
 
 
@@ -3952,9 +3904,9 @@ impl GetPolicyVersionResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetRolePolicyRequest {
     #[doc="<p>The name of the policy document to get.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub policy_name: PolicyNameType,
+    pub policy_name: String,
     #[doc="<p>The name of the role associated with the policy.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>"]
-    pub role_name: RoleNameType,
+    pub role_name: String,
 }
 
 
@@ -3977,11 +3929,11 @@ impl GetRolePolicyRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetRolePolicyResponse {
     #[doc="<p>The policy document.</p>"]
-    pub policy_document: PolicyDocumentType,
+    pub policy_document: String,
     #[doc="<p>The name of the policy.</p>"]
-    pub policy_name: PolicyNameType,
+    pub policy_name: String,
     #[doc="<p>The role the policy is associated with.</p>"]
-    pub role_name: RoleNameType,
+    pub role_name: String,
 }
 
 struct GetRolePolicyResponseDeserializer;
@@ -4038,7 +3990,7 @@ impl GetRolePolicyResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetRoleRequest {
     #[doc="<p>The name of the IAM role to get information about.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>"]
-    pub role_name: RoleNameType,
+    pub role_name: String,
 }
 
 
@@ -4107,7 +4059,7 @@ impl GetRoleResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetSAMLProviderRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the SAML provider resource object in IAM to get information about.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
-    pub saml_provider_arn: ArnType,
+    pub saml_provider_arn: String,
 }
 
 
@@ -4130,11 +4082,11 @@ impl GetSAMLProviderRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetSAMLProviderResponse {
     #[doc="<p>The date and time when the SAML provider was created.</p>"]
-    pub create_date: Option<DateType>,
+    pub create_date: Option<String>,
     #[doc="<p>The XML metadata document that includes information about an identity provider.</p>"]
-    pub saml_metadata_document: Option<SAMLMetadataDocumentType>,
+    pub saml_metadata_document: Option<String>,
     #[doc="<p>The expiration date and time for the SAML provider.</p>"]
-    pub valid_until: Option<DateType>,
+    pub valid_until: Option<String>,
 }
 
 struct GetSAMLProviderResponseDeserializer;
@@ -4189,11 +4141,11 @@ impl GetSAMLProviderResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetSSHPublicKeyRequest {
     #[doc="<p>Specifies the public key encoding format to use in the response. To retrieve the public key in ssh-rsa format, use <code>SSH</code>. To retrieve the public key in PEM format, use <code>PEM</code>.</p>"]
-    pub encoding: EncodingType,
+    pub encoding: String,
     #[doc="<p>The unique identifier for the SSH public key.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>"]
-    pub ssh_public_key_id: PublicKeyIdType,
+    pub ssh_public_key_id: String,
     #[doc="<p>The name of the IAM user associated with the SSH public key.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: UserNameType,
+    pub user_name: String,
 }
 
 
@@ -4267,7 +4219,7 @@ impl GetSSHPublicKeyResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetServerCertificateRequest {
     #[doc="<p>The name of the server certificate you want to retrieve information about.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub server_certificate_name: ServerCertificateNameType,
+    pub server_certificate_name: String,
 }
 
 
@@ -4339,9 +4291,9 @@ impl GetServerCertificateResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetUserPolicyRequest {
     #[doc="<p>The name of the policy document to get.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub policy_name: PolicyNameType,
+    pub policy_name: String,
     #[doc="<p>The name of the user who the policy is associated with.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: ExistingUserNameType,
+    pub user_name: String,
 }
 
 
@@ -4364,11 +4316,11 @@ impl GetUserPolicyRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetUserPolicyResponse {
     #[doc="<p>The policy document.</p>"]
-    pub policy_document: PolicyDocumentType,
+    pub policy_document: String,
     #[doc="<p>The name of the policy.</p>"]
-    pub policy_name: PolicyNameType,
+    pub policy_name: String,
     #[doc="<p>The user the policy is associated with.</p>"]
-    pub user_name: ExistingUserNameType,
+    pub user_name: String,
 }
 
 struct GetUserPolicyResponseDeserializer;
@@ -4426,7 +4378,7 @@ impl GetUserPolicyResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetUserRequest {
     #[doc="<p>The name of the user to get information about.</p> <p>This parameter is optional. If it is not included, it defaults to the user making the request. This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: Option<ExistingUserNameType>,
+    pub user_name: Option<String>,
 }
 
 
@@ -4498,15 +4450,15 @@ impl GetUserResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct Group {
     #[doc="<p> The Amazon Resource Name (ARN) specifying the group. For more information about ARNs and how to use them in policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>"]
-    pub arn: ArnType,
+    pub arn: String,
     #[doc="<p>The date and time, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>, when the group was created.</p>"]
-    pub create_date: DateType,
+    pub create_date: String,
     #[doc="<p> The stable and unique string identifying the group. For more information about IDs, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>"]
-    pub group_id: IdType,
+    pub group_id: String,
     #[doc="<p>The friendly name that identifies the group.</p>"]
-    pub group_name: GroupNameType,
+    pub group_name: String,
     #[doc="<p>The path to the group. For more information about paths, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>"]
-    pub path: PathType,
+    pub path: String,
 }
 
 struct GroupDeserializer;
@@ -4567,19 +4519,19 @@ impl GroupDeserializer {
 #[doc="<p>Contains information about an IAM group, including all of the group's policies.</p> <p>This data type is used as a response element in the <a>GetAccountAuthorizationDetails</a> action.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct GroupDetail {
-    pub arn: Option<ArnType>,
+    pub arn: Option<String>,
     #[doc="<p>A list of the managed policies attached to the group.</p>"]
-    pub attached_managed_policies: Option<AttachedPoliciesListType>,
+    pub attached_managed_policies: Option<Vec<AttachedPolicy>>,
     #[doc="<p>The date and time, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>, when the group was created.</p>"]
-    pub create_date: Option<DateType>,
+    pub create_date: Option<String>,
     #[doc="<p>The stable and unique string identifying the group. For more information about IDs, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>"]
-    pub group_id: Option<IdType>,
+    pub group_id: Option<String>,
     #[doc="<p>The friendly name that identifies the group.</p>"]
-    pub group_name: Option<GroupNameType>,
+    pub group_name: Option<String>,
     #[doc="<p>A list of the inline policies embedded in the group.</p>"]
-    pub group_policy_list: Option<PolicyDetailListType>,
+    pub group_policy_list: Option<Vec<PolicyDetail>>,
     #[doc="<p>The path to the group. For more information about paths, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>"]
-    pub path: Option<PathType>,
+    pub path: Option<String>,
 }
 
 struct GroupDetailDeserializer;
@@ -4647,13 +4599,12 @@ impl GroupDetailDeserializer {
 
     }
 }
-pub type GroupDetailListType = Vec<GroupDetail>;
 struct GroupDetailListTypeDeserializer;
 impl GroupDetailListTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<GroupDetailListType, XmlParseError> {
+                                       -> Result<Vec<GroupDetail>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4689,14 +4640,12 @@ impl GroupDetailListTypeDeserializer {
 
     }
 }
-#[doc="<p>Contains a list of IAM groups.</p> <p>This data type is used as a response element in the <a>ListGroups</a> action.</p>"]
-pub type GroupListType = Vec<Group>;
 struct GroupListTypeDeserializer;
 impl GroupListTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<GroupListType, XmlParseError> {
+                                       -> Result<Vec<Group>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4732,13 +4681,12 @@ impl GroupListTypeDeserializer {
 
     }
 }
-pub type GroupNameListType = Vec<GroupNameType>;
 struct GroupNameListTypeDeserializer;
 impl GroupNameListTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<GroupNameListType, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4774,13 +4722,12 @@ impl GroupNameListTypeDeserializer {
 
     }
 }
-pub type GroupNameType = String;
 struct GroupNameTypeDeserializer;
 impl GroupNameTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<GroupNameType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4789,13 +4736,12 @@ impl GroupNameTypeDeserializer {
 
     }
 }
-pub type IdType = String;
 struct IdTypeDeserializer;
 impl IdTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<IdType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4808,17 +4754,17 @@ impl IdTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct InstanceProfile {
     #[doc="<p> The Amazon Resource Name (ARN) specifying the instance profile. For more information about ARNs and how to use them in policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>"]
-    pub arn: ArnType,
+    pub arn: String,
     #[doc="<p>The date when the instance profile was created.</p>"]
-    pub create_date: DateType,
+    pub create_date: String,
     #[doc="<p> The stable and unique string identifying the instance profile. For more information about IDs, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>"]
-    pub instance_profile_id: IdType,
+    pub instance_profile_id: String,
     #[doc="<p>The name identifying the instance profile.</p>"]
-    pub instance_profile_name: InstanceProfileNameType,
+    pub instance_profile_name: String,
     #[doc="<p> The path to the instance profile. For more information about paths, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>"]
-    pub path: PathType,
+    pub path: String,
     #[doc="<p>The role associated with the instance profile.</p>"]
-    pub roles: RoleListType,
+    pub roles: Vec<Role>,
 }
 
 struct InstanceProfileDeserializer;
@@ -4881,14 +4827,12 @@ impl InstanceProfileDeserializer {
 
     }
 }
-#[doc="<p>Contains a list of instance profiles.</p>"]
-pub type InstanceProfileListType = Vec<InstanceProfile>;
 struct InstanceProfileListTypeDeserializer;
 impl InstanceProfileListTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<InstanceProfileListType, XmlParseError> {
+                                       -> Result<Vec<InstanceProfile>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4924,13 +4868,12 @@ impl InstanceProfileListTypeDeserializer {
 
     }
 }
-pub type InstanceProfileNameType = String;
 struct InstanceProfileNameTypeDeserializer;
 impl InstanceProfileNameTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<InstanceProfileNameType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4939,20 +4882,12 @@ impl InstanceProfileNameTypeDeserializer {
 
     }
 }
-pub type InvalidAuthenticationCodeMessage = String;
-pub type InvalidCertificateMessage = String;
-pub type InvalidInputMessage = String;
-pub type InvalidPublicKeyMessage = String;
-pub type InvalidUserTypeMessage = String;
-pub type KeyPairMismatchMessage = String;
-pub type LimitExceededMessage = String;
-pub type LineNumber = i64;
 struct LineNumberDeserializer;
 impl LineNumberDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LineNumber, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -4964,11 +4899,11 @@ impl LineNumberDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListAccessKeysRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
-    pub max_items: Option<MaxItemsType>,
+    pub max_items: Option<i64>,
     #[doc="<p>The name of the user.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: Option<ExistingUserNameType>,
+    pub user_name: Option<String>,
 }
 
 
@@ -4999,11 +4934,11 @@ impl ListAccessKeysRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListAccessKeysResponse {
     #[doc="<p>A list of objects containing metadata about the access keys.</p>"]
-    pub access_key_metadata: AccessKeyMetadataListType,
+    pub access_key_metadata: Vec<AccessKeyMetadata>,
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
-    pub is_truncated: Option<BooleanType>,
+    pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
 }
 
 struct ListAccessKeysResponseDeserializer;
@@ -5061,9 +4996,9 @@ impl ListAccessKeysResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListAccountAliasesRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
-    pub max_items: Option<MaxItemsType>,
+    pub max_items: Option<i64>,
 }
 
 
@@ -5091,11 +5026,11 @@ impl ListAccountAliasesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListAccountAliasesResponse {
     #[doc="<p>A list of aliases associated with the account. AWS supports only one alias per account.</p>"]
-    pub account_aliases: AccountAliasListType,
+    pub account_aliases: Vec<String>,
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
-    pub is_truncated: Option<BooleanType>,
+    pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
 }
 
 struct ListAccountAliasesResponseDeserializer;
@@ -5153,13 +5088,13 @@ impl ListAccountAliasesResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListAttachedGroupPoliciesRequest {
     #[doc="<p>The name (friendly name, not ARN) of the group to list attached policies for.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub group_name: GroupNameType,
+    pub group_name: String,
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
-    pub max_items: Option<MaxItemsType>,
+    pub max_items: Option<i64>,
     #[doc="<p>The path prefix for filtering the results. This parameter is optional. If it is not included, it defaults to a slash (/), listing all policies.</p> <p>This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
-    pub path_prefix: Option<PolicyPathType>,
+    pub path_prefix: Option<String>,
 }
 
 
@@ -5191,11 +5126,11 @@ impl ListAttachedGroupPoliciesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListAttachedGroupPoliciesResponse {
     #[doc="<p>A list of the attached policies.</p>"]
-    pub attached_policies: Option<AttachedPoliciesListType>,
+    pub attached_policies: Option<Vec<AttachedPolicy>>,
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
-    pub is_truncated: Option<BooleanType>,
+    pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
 }
 
 struct ListAttachedGroupPoliciesResponseDeserializer;
@@ -5252,13 +5187,13 @@ impl ListAttachedGroupPoliciesResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListAttachedRolePoliciesRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
-    pub max_items: Option<MaxItemsType>,
+    pub max_items: Option<i64>,
     #[doc="<p>The path prefix for filtering the results. This parameter is optional. If it is not included, it defaults to a slash (/), listing all policies.</p> <p>This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
-    pub path_prefix: Option<PolicyPathType>,
+    pub path_prefix: Option<String>,
     #[doc="<p>The name (friendly name, not ARN) of the role to list attached policies for.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>"]
-    pub role_name: RoleNameType,
+    pub role_name: String,
 }
 
 
@@ -5290,11 +5225,11 @@ impl ListAttachedRolePoliciesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListAttachedRolePoliciesResponse {
     #[doc="<p>A list of the attached policies.</p>"]
-    pub attached_policies: Option<AttachedPoliciesListType>,
+    pub attached_policies: Option<Vec<AttachedPolicy>>,
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
-    pub is_truncated: Option<BooleanType>,
+    pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
 }
 
 struct ListAttachedRolePoliciesResponseDeserializer;
@@ -5351,13 +5286,13 @@ impl ListAttachedRolePoliciesResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListAttachedUserPoliciesRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
-    pub max_items: Option<MaxItemsType>,
+    pub max_items: Option<i64>,
     #[doc="<p>The path prefix for filtering the results. This parameter is optional. If it is not included, it defaults to a slash (/), listing all policies.</p> <p>This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
-    pub path_prefix: Option<PolicyPathType>,
+    pub path_prefix: Option<String>,
     #[doc="<p>The name (friendly name, not ARN) of the user to list attached policies for.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: UserNameType,
+    pub user_name: String,
 }
 
 
@@ -5389,11 +5324,11 @@ impl ListAttachedUserPoliciesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListAttachedUserPoliciesResponse {
     #[doc="<p>A list of the attached policies.</p>"]
-    pub attached_policies: Option<AttachedPoliciesListType>,
+    pub attached_policies: Option<Vec<AttachedPolicy>>,
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
-    pub is_truncated: Option<BooleanType>,
+    pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
 }
 
 struct ListAttachedUserPoliciesResponseDeserializer;
@@ -5450,15 +5385,15 @@ impl ListAttachedUserPoliciesResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListEntitiesForPolicyRequest {
     #[doc="<p>The entity type to use for filtering the results.</p> <p>For example, when <code>EntityFilter</code> is <code>Role</code>, only the roles that are attached to the specified policy are returned. This parameter is optional. If it is not included, all attached entities (users, groups, and roles) are returned. The argument for this parameter must be one of the valid values listed below.</p>"]
-    pub entity_filter: Option<EntityType>,
+    pub entity_filter: Option<String>,
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
-    pub max_items: Option<MaxItemsType>,
+    pub max_items: Option<i64>,
     #[doc="<p>The path prefix for filtering the results. This parameter is optional. If it is not included, it defaults to a slash (/), listing all entities.</p> <p>This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
-    pub path_prefix: Option<PathType>,
+    pub path_prefix: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM policy for which you want the versions.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
-    pub policy_arn: ArnType,
+    pub policy_arn: String,
 }
 
 
@@ -5493,15 +5428,15 @@ impl ListEntitiesForPolicyRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListEntitiesForPolicyResponse {
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
-    pub is_truncated: Option<BooleanType>,
+    pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>A list of IAM groups that the policy is attached to.</p>"]
-    pub policy_groups: Option<PolicyGroupListType>,
+    pub policy_groups: Option<Vec<PolicyGroup>>,
     #[doc="<p>A list of IAM roles that the policy is attached to.</p>"]
-    pub policy_roles: Option<PolicyRoleListType>,
+    pub policy_roles: Option<Vec<PolicyRole>>,
     #[doc="<p>A list of IAM users that the policy is attached to.</p>"]
-    pub policy_users: Option<PolicyUserListType>,
+    pub policy_users: Option<Vec<PolicyUser>>,
 }
 
 struct ListEntitiesForPolicyResponseDeserializer;
@@ -5569,11 +5504,11 @@ impl ListEntitiesForPolicyResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListGroupPoliciesRequest {
     #[doc="<p>The name of the group to list policies for.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub group_name: GroupNameType,
+    pub group_name: String,
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
-    pub max_items: Option<MaxItemsType>,
+    pub max_items: Option<i64>,
 }
 
 
@@ -5602,11 +5537,11 @@ impl ListGroupPoliciesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListGroupPoliciesResponse {
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
-    pub is_truncated: Option<BooleanType>,
+    pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>A list of policy names.</p>"]
-    pub policy_names: PolicyNameListType,
+    pub policy_names: Vec<String>,
 }
 
 struct ListGroupPoliciesResponseDeserializer;
@@ -5664,11 +5599,11 @@ impl ListGroupPoliciesResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListGroupsForUserRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
-    pub max_items: Option<MaxItemsType>,
+    pub max_items: Option<i64>,
     #[doc="<p>The name of the user to list groups for.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: ExistingUserNameType,
+    pub user_name: String,
 }
 
 
@@ -5697,11 +5632,11 @@ impl ListGroupsForUserRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListGroupsForUserResponse {
     #[doc="<p>A list of groups.</p>"]
-    pub groups: GroupListType,
+    pub groups: Vec<Group>,
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
-    pub is_truncated: Option<BooleanType>,
+    pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
 }
 
 struct ListGroupsForUserResponseDeserializer;
@@ -5758,11 +5693,11 @@ impl ListGroupsForUserResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListGroupsRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
-    pub max_items: Option<MaxItemsType>,
+    pub max_items: Option<i64>,
     #[doc="<p> The path prefix for filtering the results. For example, the prefix <code>/division_abc/subdivision_xyz/</code> gets all groups whose path starts with <code>/division_abc/subdivision_xyz/</code>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/), listing all groups. This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
-    pub path_prefix: Option<PathPrefixType>,
+    pub path_prefix: Option<String>,
 }
 
 
@@ -5793,11 +5728,11 @@ impl ListGroupsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListGroupsResponse {
     #[doc="<p>A list of groups.</p>"]
-    pub groups: GroupListType,
+    pub groups: Vec<Group>,
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
-    pub is_truncated: Option<BooleanType>,
+    pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
 }
 
 struct ListGroupsResponseDeserializer;
@@ -5854,11 +5789,11 @@ impl ListGroupsResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListInstanceProfilesForRoleRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
-    pub max_items: Option<MaxItemsType>,
+    pub max_items: Option<i64>,
     #[doc="<p>The name of the role to list instance profiles for.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>"]
-    pub role_name: RoleNameType,
+    pub role_name: String,
 }
 
 
@@ -5887,11 +5822,11 @@ impl ListInstanceProfilesForRoleRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListInstanceProfilesForRoleResponse {
     #[doc="<p>A list of instance profiles.</p>"]
-    pub instance_profiles: InstanceProfileListType,
+    pub instance_profiles: Vec<InstanceProfile>,
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
-    pub is_truncated: Option<BooleanType>,
+    pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
 }
 
 struct ListInstanceProfilesForRoleResponseDeserializer;
@@ -5950,11 +5885,11 @@ impl ListInstanceProfilesForRoleResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListInstanceProfilesRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
-    pub max_items: Option<MaxItemsType>,
+    pub max_items: Option<i64>,
     #[doc="<p> The path prefix for filtering the results. For example, the prefix <code>/application_abc/component_xyz/</code> gets all instance profiles whose path starts with <code>/application_abc/component_xyz/</code>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/), listing all instance profiles. This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
-    pub path_prefix: Option<PathPrefixType>,
+    pub path_prefix: Option<String>,
 }
 
 
@@ -5985,11 +5920,11 @@ impl ListInstanceProfilesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListInstanceProfilesResponse {
     #[doc="<p>A list of instance profiles.</p>"]
-    pub instance_profiles: InstanceProfileListType,
+    pub instance_profiles: Vec<InstanceProfile>,
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
-    pub is_truncated: Option<BooleanType>,
+    pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
 }
 
 struct ListInstanceProfilesResponseDeserializer;
@@ -6047,11 +5982,11 @@ impl ListInstanceProfilesResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListMFADevicesRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
-    pub max_items: Option<MaxItemsType>,
+    pub max_items: Option<i64>,
     #[doc="<p>The name of the user whose MFA devices you want to list.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: Option<ExistingUserNameType>,
+    pub user_name: Option<String>,
 }
 
 
@@ -6082,11 +6017,11 @@ impl ListMFADevicesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListMFADevicesResponse {
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
-    pub is_truncated: Option<BooleanType>,
+    pub is_truncated: Option<bool>,
     #[doc="<p>A list of MFA devices.</p>"]
-    pub mfa_devices: MfaDeviceListType,
+    pub mfa_devices: Vec<MFADevice>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
 }
 
 struct ListMFADevicesResponseDeserializer;
@@ -6163,7 +6098,7 @@ impl ListOpenIDConnectProvidersRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListOpenIDConnectProvidersResponse {
     #[doc="<p>The list of IAM OIDC provider resource objects defined in the AWS account.</p>"]
-    pub open_id_connect_provider_list: Option<OpenIDConnectProviderListType>,
+    pub open_id_connect_provider_list: Option<Vec<OpenIDConnectProviderListEntry>>,
 }
 
 struct ListOpenIDConnectProvidersResponseDeserializer;
@@ -6211,15 +6146,15 @@ impl ListOpenIDConnectProvidersResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListPoliciesRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
-    pub max_items: Option<MaxItemsType>,
+    pub max_items: Option<i64>,
     #[doc="<p>A flag to filter the results to only the attached policies.</p> <p>When <code>OnlyAttached</code> is <code>true</code>, the returned list contains only the policies that are attached to an IAM user, group, or role. When <code>OnlyAttached</code> is <code>false</code>, or when the parameter is not included, all policies are returned.</p>"]
-    pub only_attached: Option<BooleanType>,
+    pub only_attached: Option<bool>,
     #[doc="<p>The path prefix for filtering the results. This parameter is optional. If it is not included, it defaults to a slash (/), listing all policies. This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
-    pub path_prefix: Option<PolicyPathType>,
+    pub path_prefix: Option<String>,
     #[doc="<p>The scope to use for filtering the results.</p> <p>To list only AWS managed policies, set <code>Scope</code> to <code>AWS</code>. To list only the customer managed policies in your AWS account, set <code>Scope</code> to <code>Local</code>.</p> <p>This parameter is optional. If it is not included, or if it is set to <code>All</code>, all policies are returned.</p>"]
-    pub scope: Option<PolicyScopeType>,
+    pub scope: Option<String>,
 }
 
 
@@ -6257,11 +6192,11 @@ impl ListPoliciesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListPoliciesResponse {
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
-    pub is_truncated: Option<BooleanType>,
+    pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>A list of policies.</p>"]
-    pub policies: Option<PolicyListType>,
+    pub policies: Option<Vec<Policy>>,
 }
 
 struct ListPoliciesResponseDeserializer;
@@ -6319,11 +6254,11 @@ impl ListPoliciesResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListPolicyVersionsRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
-    pub max_items: Option<MaxItemsType>,
+    pub max_items: Option<i64>,
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM policy for which you want the versions.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
-    pub policy_arn: ArnType,
+    pub policy_arn: String,
 }
 
 
@@ -6352,11 +6287,11 @@ impl ListPolicyVersionsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListPolicyVersionsResponse {
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
-    pub is_truncated: Option<BooleanType>,
+    pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>A list of policy versions.</p> <p>For more information about managed policy versions, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html\">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>"]
-    pub versions: Option<PolicyDocumentVersionListType>,
+    pub versions: Option<Vec<PolicyVersion>>,
 }
 
 struct ListPolicyVersionsResponseDeserializer;
@@ -6412,11 +6347,11 @@ impl ListPolicyVersionsResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListRolePoliciesRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
-    pub max_items: Option<MaxItemsType>,
+    pub max_items: Option<i64>,
     #[doc="<p>The name of the role to list policies for.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>"]
-    pub role_name: RoleNameType,
+    pub role_name: String,
 }
 
 
@@ -6445,11 +6380,11 @@ impl ListRolePoliciesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListRolePoliciesResponse {
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
-    pub is_truncated: Option<BooleanType>,
+    pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>A list of policy names.</p>"]
-    pub policy_names: PolicyNameListType,
+    pub policy_names: Vec<String>,
 }
 
 struct ListRolePoliciesResponseDeserializer;
@@ -6507,11 +6442,11 @@ impl ListRolePoliciesResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListRolesRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
-    pub max_items: Option<MaxItemsType>,
+    pub max_items: Option<i64>,
     #[doc="<p> The path prefix for filtering the results. For example, the prefix <code>/application_abc/component_xyz/</code> gets all roles whose path starts with <code>/application_abc/component_xyz/</code>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/), listing all roles. This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
-    pub path_prefix: Option<PathPrefixType>,
+    pub path_prefix: Option<String>,
 }
 
 
@@ -6542,11 +6477,11 @@ impl ListRolesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListRolesResponse {
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
-    pub is_truncated: Option<BooleanType>,
+    pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>A list of roles.</p>"]
-    pub roles: RoleListType,
+    pub roles: Vec<Role>,
 }
 
 struct ListRolesResponseDeserializer;
@@ -6621,7 +6556,7 @@ impl ListSAMLProvidersRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListSAMLProvidersResponse {
     #[doc="<p>The list of SAML provider resource objects defined in IAM for this AWS account.</p>"]
-    pub saml_provider_list: Option<SAMLProviderListType>,
+    pub saml_provider_list: Option<Vec<SAMLProviderListEntry>>,
 }
 
 struct ListSAMLProvidersResponseDeserializer;
@@ -6670,11 +6605,11 @@ impl ListSAMLProvidersResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListSSHPublicKeysRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
-    pub max_items: Option<MaxItemsType>,
+    pub max_items: Option<i64>,
     #[doc="<p>The name of the IAM user to list SSH public keys for. If none is specified, the UserName field is determined implicitly based on the AWS access key used to sign the request.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: Option<UserNameType>,
+    pub user_name: Option<String>,
 }
 
 
@@ -6705,11 +6640,11 @@ impl ListSSHPublicKeysRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListSSHPublicKeysResponse {
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
-    pub is_truncated: Option<BooleanType>,
+    pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>A list of the SSH public keys assigned to IAM user.</p>"]
-    pub ssh_public_keys: Option<SSHPublicKeyListType>,
+    pub ssh_public_keys: Option<Vec<SSHPublicKeyMetadata>>,
 }
 
 struct ListSSHPublicKeysResponseDeserializer;
@@ -6767,11 +6702,11 @@ impl ListSSHPublicKeysResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListServerCertificatesRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
-    pub max_items: Option<MaxItemsType>,
+    pub max_items: Option<i64>,
     #[doc="<p> The path prefix for filtering the results. For example: <code>/company/servercerts</code> would get all server certificates for which the path starts with <code>/company/servercerts</code>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/), listing all server certificates. This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
-    pub path_prefix: Option<PathPrefixType>,
+    pub path_prefix: Option<String>,
 }
 
 
@@ -6802,11 +6737,11 @@ impl ListServerCertificatesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListServerCertificatesResponse {
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
-    pub is_truncated: Option<BooleanType>,
+    pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>A list of server certificates.</p>"]
-    pub server_certificate_metadata_list: ServerCertificateMetadataListType,
+    pub server_certificate_metadata_list: Vec<ServerCertificateMetadata>,
 }
 
 struct ListServerCertificatesResponseDeserializer;
@@ -6862,9 +6797,9 @@ impl ListServerCertificatesResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListServiceSpecificCredentialsRequest {
     #[doc="<p>Filters the returned results to only those for the specified AWS service. If not specified, then AWS returns service-specific credentials for all services.</p>"]
-    pub service_name: Option<ServiceName>,
+    pub service_name: Option<String>,
     #[doc="<p>The name of the user whose service-specific credentials you want information about. If this value is not specified then the operation assumes the user whose credentials are used to call the operation.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: Option<UserNameType>,
+    pub user_name: Option<String>,
 }
 
 
@@ -6890,7 +6825,7 @@ impl ListServiceSpecificCredentialsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListServiceSpecificCredentialsResponse {
     #[doc="<p>A list of structures that each contain details about a service-specific credential.</p>"]
-    pub service_specific_credentials: Option<ServiceSpecificCredentialsListType>,
+    pub service_specific_credentials: Option<Vec<ServiceSpecificCredentialMetadata>>,
 }
 
 struct ListServiceSpecificCredentialsResponseDeserializer;
@@ -6938,11 +6873,11 @@ impl ListServiceSpecificCredentialsResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListSigningCertificatesRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
-    pub max_items: Option<MaxItemsType>,
+    pub max_items: Option<i64>,
     #[doc="<p>The name of the IAM user whose signing certificates you want to examine.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: Option<ExistingUserNameType>,
+    pub user_name: Option<String>,
 }
 
 
@@ -6973,11 +6908,11 @@ impl ListSigningCertificatesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListSigningCertificatesResponse {
     #[doc="<p>A list of the user's signing certificate information.</p>"]
-    pub certificates: CertificateListType,
+    pub certificates: Vec<SigningCertificate>,
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
-    pub is_truncated: Option<BooleanType>,
+    pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
 }
 
 struct ListSigningCertificatesResponseDeserializer;
@@ -7036,11 +6971,11 @@ impl ListSigningCertificatesResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListUserPoliciesRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
-    pub max_items: Option<MaxItemsType>,
+    pub max_items: Option<i64>,
     #[doc="<p>The name of the user to list policies for.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: ExistingUserNameType,
+    pub user_name: String,
 }
 
 
@@ -7069,11 +7004,11 @@ impl ListUserPoliciesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListUserPoliciesResponse {
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
-    pub is_truncated: Option<BooleanType>,
+    pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>A list of policy names.</p>"]
-    pub policy_names: PolicyNameListType,
+    pub policy_names: Vec<String>,
 }
 
 struct ListUserPoliciesResponseDeserializer;
@@ -7131,11 +7066,11 @@ impl ListUserPoliciesResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListUsersRequest {
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
-    pub max_items: Option<MaxItemsType>,
+    pub max_items: Option<i64>,
     #[doc="<p> The path prefix for filtering the results. For example: <code>/division_abc/subdivision_xyz/</code>, which would get all user names whose path starts with <code>/division_abc/subdivision_xyz/</code>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/), listing all user names. This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
-    pub path_prefix: Option<PathPrefixType>,
+    pub path_prefix: Option<String>,
 }
 
 
@@ -7166,11 +7101,11 @@ impl ListUsersRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListUsersResponse {
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
-    pub is_truncated: Option<BooleanType>,
+    pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>A list of users.</p>"]
-    pub users: UserListType,
+    pub users: Vec<User>,
 }
 
 struct ListUsersResponseDeserializer;
@@ -7226,11 +7161,11 @@ impl ListUsersResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListVirtualMFADevicesRequest {
     #[doc="<p> The status (<code>Unassigned</code> or <code>Assigned</code>) of the devices to list. If you do not specify an <code>AssignmentStatus</code>, the action defaults to <code>Any</code> which lists both assigned and unassigned virtual MFA devices.</p>"]
-    pub assignment_status: Option<AssignmentStatusType>,
+    pub assignment_status: Option<String>,
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
-    pub max_items: Option<MaxItemsType>,
+    pub max_items: Option<i64>,
 }
 
 
@@ -7261,11 +7196,11 @@ impl ListVirtualMFADevicesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListVirtualMFADevicesResponse {
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
-    pub is_truncated: Option<BooleanType>,
+    pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p> The list of virtual MFA devices in the current account that match the <code>AssignmentStatus</code> value that was passed in the request.</p>"]
-    pub virtual_mfa_devices: VirtualMFADeviceListType,
+    pub virtual_mfa_devices: Vec<VirtualMFADevice>,
 }
 
 struct ListVirtualMFADevicesResponseDeserializer;
@@ -7324,11 +7259,11 @@ impl ListVirtualMFADevicesResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct LoginProfile {
     #[doc="<p>The date when the password for the user was created.</p>"]
-    pub create_date: DateType,
+    pub create_date: String,
     #[doc="<p>Specifies whether the user is required to set a new password on next sign-in.</p>"]
-    pub password_reset_required: Option<BooleanType>,
+    pub password_reset_required: Option<bool>,
     #[doc="<p>The name of the user, which can be used for signing in to the AWS Management Console.</p>"]
-    pub user_name: UserNameType,
+    pub user_name: String,
 }
 
 struct LoginProfileDeserializer;
@@ -7386,11 +7321,11 @@ impl LoginProfileDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct MFADevice {
     #[doc="<p>The date when the MFA device was enabled for the user.</p>"]
-    pub enable_date: DateType,
+    pub enable_date: String,
     #[doc="<p>The serial number that uniquely identifies the MFA device. For virtual MFA devices, the serial number is the device ARN.</p>"]
-    pub serial_number: SerialNumberType,
+    pub serial_number: String,
     #[doc="<p>The user with whom the MFA device is associated.</p>"]
-    pub user_name: UserNameType,
+    pub user_name: String,
 }
 
 struct MFADeviceDeserializer;
@@ -7444,32 +7379,30 @@ impl MFADeviceDeserializer {
 
     }
 }
-pub type MalformedCertificateMessage = String;
-pub type MalformedPolicyDocumentMessage = String;
 #[doc="<p>Contains information about a managed policy, including the policy's ARN, versions, and the number of principal entities (users, groups, and roles) that the policy is attached to.</p> <p>This data type is used as a response element in the <a>GetAccountAuthorizationDetails</a> action.</p> <p>For more information about managed policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>Using IAM</i> guide. </p>"]
 #[derive(Default,Debug,Clone)]
 pub struct ManagedPolicyDetail {
-    pub arn: Option<ArnType>,
+    pub arn: Option<String>,
     #[doc="<p>The number of principal entities (users, groups, and roles) that the policy is attached to.</p>"]
-    pub attachment_count: Option<AttachmentCountType>,
+    pub attachment_count: Option<i64>,
     #[doc="<p>The date and time, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>, when the policy was created.</p>"]
-    pub create_date: Option<DateType>,
+    pub create_date: Option<String>,
     #[doc="<p>The identifier for the version of the policy that is set as the default (operative) version.</p> <p>For more information about policy versions, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html\">Versioning for Managed Policies</a> in the <i>Using IAM</i> guide. </p>"]
-    pub default_version_id: Option<PolicyVersionIdType>,
+    pub default_version_id: Option<String>,
     #[doc="<p>A friendly description of the policy.</p>"]
-    pub description: Option<PolicyDescriptionType>,
+    pub description: Option<String>,
     #[doc="<p>Specifies whether the policy can be attached to an IAM user, group, or role.</p>"]
-    pub is_attachable: Option<BooleanType>,
+    pub is_attachable: Option<bool>,
     #[doc="<p>The path to the policy.</p> <p>For more information about paths, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>"]
-    pub path: Option<PolicyPathType>,
+    pub path: Option<String>,
     #[doc="<p>The stable and unique string identifying the policy.</p> <p>For more information about IDs, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>"]
-    pub policy_id: Option<IdType>,
+    pub policy_id: Option<String>,
     #[doc="<p>The friendly name (not ARN) identifying the policy.</p>"]
-    pub policy_name: Option<PolicyNameType>,
+    pub policy_name: Option<String>,
     #[doc="<p>A list containing information about the versions of the policy.</p>"]
-    pub policy_version_list: Option<PolicyDocumentVersionListType>,
+    pub policy_version_list: Option<Vec<PolicyVersion>>,
     #[doc="<p>The date and time, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>, when the policy was last updated.</p> <p>When a policy has only one version, this field contains the date and time when the policy was created. When a policy has more than one version, this field contains the date and time when the most recent policy version was created.</p>"]
-    pub update_date: Option<DateType>,
+    pub update_date: Option<String>,
 }
 
 struct ManagedPolicyDetailDeserializer;
@@ -7557,13 +7490,12 @@ impl ManagedPolicyDetailDeserializer {
 
     }
 }
-pub type ManagedPolicyDetailListType = Vec<ManagedPolicyDetail>;
 struct ManagedPolicyDetailListTypeDeserializer;
 impl ManagedPolicyDetailListTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ManagedPolicyDetailListType, XmlParseError> {
+                                       -> Result<Vec<ManagedPolicyDetail>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -7600,13 +7532,12 @@ impl ManagedPolicyDetailListTypeDeserializer {
 
     }
 }
-pub type MarkerType = String;
 struct MarkerTypeDeserializer;
 impl MarkerTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<MarkerType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7615,14 +7546,12 @@ impl MarkerTypeDeserializer {
 
     }
 }
-pub type MaxItemsType = i64;
-pub type MaxPasswordAgeType = i64;
 struct MaxPasswordAgeTypeDeserializer;
 impl MaxPasswordAgeTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<MaxPasswordAgeType, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -7631,14 +7560,12 @@ impl MaxPasswordAgeTypeDeserializer {
 
     }
 }
-#[doc="<p>Contains a list of MFA devices.</p> <p>This data type is used as a response element in the <a>ListMFADevices</a> and <a>ListVirtualMFADevices</a> actions. </p>"]
-pub type MfaDeviceListType = Vec<MFADevice>;
 struct MfaDeviceListTypeDeserializer;
 impl MfaDeviceListTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<MfaDeviceListType, XmlParseError> {
+                                       -> Result<Vec<MFADevice>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -7674,13 +7601,12 @@ impl MfaDeviceListTypeDeserializer {
 
     }
 }
-pub type MinimumPasswordLengthType = i64;
 struct MinimumPasswordLengthTypeDeserializer;
 impl MinimumPasswordLengthTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<MinimumPasswordLengthType, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -7689,11 +7615,10 @@ impl MinimumPasswordLengthTypeDeserializer {
 
     }
 }
-pub type NoSuchEntityMessage = String;
 #[doc="<p>Contains the Amazon Resource Name (ARN) for an IAM OpenID Connect provider.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct OpenIDConnectProviderListEntry {
-    pub arn: Option<ArnType>,
+    pub arn: Option<String>,
 }
 
 struct OpenIDConnectProviderListEntryDeserializer;
@@ -7737,14 +7662,13 @@ impl OpenIDConnectProviderListEntryDeserializer {
 
     }
 }
-#[doc="<p>Contains a list of IAM OpenID Connect providers.</p>"]
-pub type OpenIDConnectProviderListType = Vec<OpenIDConnectProviderListEntry>;
 struct OpenIDConnectProviderListTypeDeserializer;
 impl OpenIDConnectProviderListTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<OpenIDConnectProviderListType, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<Vec<OpenIDConnectProviderListEntry>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -7780,14 +7704,12 @@ impl OpenIDConnectProviderListTypeDeserializer {
 
     }
 }
-#[doc="<p>Contains a URL that specifies the endpoint for an OpenID Connect provider.</p>"]
-pub type OpenIDConnectProviderUrlType = String;
 struct OpenIDConnectProviderUrlTypeDeserializer;
 impl OpenIDConnectProviderUrlTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<OpenIDConnectProviderUrlType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7800,7 +7722,7 @@ impl OpenIDConnectProviderUrlTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct OrganizationsDecisionDetail {
     #[doc="<p>Specifies whether the simulated action is allowed by the AWS Organizations service control policies that impact the simulated user's account.</p>"]
-    pub allowed_by_organizations: Option<BooleanType>,
+    pub allowed_by_organizations: Option<bool>,
 }
 
 struct OrganizationsDecisionDetailDeserializer;
@@ -7850,25 +7772,25 @@ impl OrganizationsDecisionDetailDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct PasswordPolicy {
     #[doc="<p>Specifies whether IAM users are allowed to change their own password.</p>"]
-    pub allow_users_to_change_password: Option<BooleanType>,
+    pub allow_users_to_change_password: Option<bool>,
     #[doc="<p>Indicates whether passwords in the account expire. Returns true if MaxPasswordAge is contains a value greater than 0. Returns false if MaxPasswordAge is 0 or not present.</p>"]
-    pub expire_passwords: Option<BooleanType>,
+    pub expire_passwords: Option<bool>,
     #[doc="<p>Specifies whether IAM users are prevented from setting a new password after their password has expired.</p>"]
-    pub hard_expiry: Option<BooleanObjectType>,
+    pub hard_expiry: Option<bool>,
     #[doc="<p>The number of days that an IAM user password is valid.</p>"]
-    pub max_password_age: Option<MaxPasswordAgeType>,
+    pub max_password_age: Option<i64>,
     #[doc="<p>Minimum length to require for IAM user passwords.</p>"]
-    pub minimum_password_length: Option<MinimumPasswordLengthType>,
+    pub minimum_password_length: Option<i64>,
     #[doc="<p>Specifies the number of previous passwords that IAM users are prevented from reusing.</p>"]
-    pub password_reuse_prevention: Option<PasswordReusePreventionType>,
+    pub password_reuse_prevention: Option<i64>,
     #[doc="<p>Specifies whether to require lowercase characters for IAM user passwords.</p>"]
-    pub require_lowercase_characters: Option<BooleanType>,
+    pub require_lowercase_characters: Option<bool>,
     #[doc="<p>Specifies whether to require numbers for IAM user passwords.</p>"]
-    pub require_numbers: Option<BooleanType>,
+    pub require_numbers: Option<bool>,
     #[doc="<p>Specifies whether to require symbols for IAM user passwords.</p>"]
-    pub require_symbols: Option<BooleanType>,
+    pub require_symbols: Option<bool>,
     #[doc="<p>Specifies whether to require uppercase characters for IAM user passwords.</p>"]
-    pub require_uppercase_characters: Option<BooleanType>,
+    pub require_uppercase_characters: Option<bool>,
 }
 
 struct PasswordPolicyDeserializer;
@@ -7955,14 +7877,12 @@ impl PasswordPolicyDeserializer {
 
     }
 }
-pub type PasswordPolicyViolationMessage = String;
-pub type PasswordReusePreventionType = i64;
 struct PasswordReusePreventionTypeDeserializer;
 impl PasswordReusePreventionTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PasswordReusePreventionType, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -7971,15 +7891,12 @@ impl PasswordReusePreventionTypeDeserializer {
 
     }
 }
-pub type PasswordType = String;
-pub type PathPrefixType = String;
-pub type PathType = String;
 struct PathTypeDeserializer;
 impl PathTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PathType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7991,25 +7908,25 @@ impl PathTypeDeserializer {
 #[doc="<p>Contains information about a managed policy.</p> <p>This data type is used as a response element in the <a>CreatePolicy</a>, <a>GetPolicy</a>, and <a>ListPolicies</a> actions. </p> <p>For more information about managed policies, refer to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>Using IAM</i> guide. </p>"]
 #[derive(Default,Debug,Clone)]
 pub struct Policy {
-    pub arn: Option<ArnType>,
+    pub arn: Option<String>,
     #[doc="<p>The number of entities (users, groups, and roles) that the policy is attached to.</p>"]
-    pub attachment_count: Option<AttachmentCountType>,
+    pub attachment_count: Option<i64>,
     #[doc="<p>The date and time, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>, when the policy was created.</p>"]
-    pub create_date: Option<DateType>,
+    pub create_date: Option<String>,
     #[doc="<p>The identifier for the version of the policy that is set as the default version.</p>"]
-    pub default_version_id: Option<PolicyVersionIdType>,
+    pub default_version_id: Option<String>,
     #[doc="<p>A friendly description of the policy.</p> <p>This element is included in the response to the <a>GetPolicy</a> operation. It is not included in the response to the <a>ListPolicies</a> operation. </p>"]
-    pub description: Option<PolicyDescriptionType>,
+    pub description: Option<String>,
     #[doc="<p>Specifies whether the policy can be attached to an IAM user, group, or role.</p>"]
-    pub is_attachable: Option<BooleanType>,
+    pub is_attachable: Option<bool>,
     #[doc="<p>The path to the policy.</p> <p>For more information about paths, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>"]
-    pub path: Option<PolicyPathType>,
+    pub path: Option<String>,
     #[doc="<p>The stable and unique string identifying the policy.</p> <p>For more information about IDs, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>"]
-    pub policy_id: Option<IdType>,
+    pub policy_id: Option<String>,
     #[doc="<p>The friendly name (not ARN) identifying the policy.</p>"]
-    pub policy_name: Option<PolicyNameType>,
+    pub policy_name: Option<String>,
     #[doc="<p>The date and time, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>, when the policy was last updated.</p> <p>When a policy has only one version, this field contains the date and time when the policy was created. When a policy has more than one version, this field contains the date and time when the most recent policy version was created.</p>"]
-    pub update_date: Option<DateType>,
+    pub update_date: Option<String>,
 }
 
 struct PolicyDeserializer;
@@ -8094,13 +8011,12 @@ impl PolicyDeserializer {
 
     }
 }
-pub type PolicyDescriptionType = String;
 struct PolicyDescriptionTypeDeserializer;
 impl PolicyDescriptionTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PolicyDescriptionType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -8113,9 +8029,9 @@ impl PolicyDescriptionTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct PolicyDetail {
     #[doc="<p>The policy document.</p>"]
-    pub policy_document: Option<PolicyDocumentType>,
+    pub policy_document: Option<String>,
     #[doc="<p>The name of the policy.</p>"]
-    pub policy_name: Option<PolicyNameType>,
+    pub policy_name: Option<String>,
 }
 
 struct PolicyDetailDeserializer;
@@ -8166,13 +8082,12 @@ impl PolicyDetailDeserializer {
 
     }
 }
-pub type PolicyDetailListType = Vec<PolicyDetail>;
 struct PolicyDetailListTypeDeserializer;
 impl PolicyDetailListTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PolicyDetailListType, XmlParseError> {
+                                       -> Result<Vec<PolicyDetail>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -8208,13 +8123,12 @@ impl PolicyDetailListTypeDeserializer {
 
     }
 }
-pub type PolicyDocumentType = String;
 struct PolicyDocumentTypeDeserializer;
 impl PolicyDocumentTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PolicyDocumentType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -8223,13 +8137,12 @@ impl PolicyDocumentTypeDeserializer {
 
     }
 }
-pub type PolicyDocumentVersionListType = Vec<PolicyVersion>;
 struct PolicyDocumentVersionListTypeDeserializer;
 impl PolicyDocumentVersionListTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PolicyDocumentVersionListType, XmlParseError> {
+                                       -> Result<Vec<PolicyVersion>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -8265,13 +8178,12 @@ impl PolicyDocumentVersionListTypeDeserializer {
 
     }
 }
-pub type PolicyEvaluationDecisionType = String;
 struct PolicyEvaluationDecisionTypeDeserializer;
 impl PolicyEvaluationDecisionTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PolicyEvaluationDecisionType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -8280,14 +8192,13 @@ impl PolicyEvaluationDecisionTypeDeserializer {
 
     }
 }
-pub type PolicyEvaluationErrorMessage = String;
 #[doc="<p>Contains information about a group that a managed policy is attached to.</p> <p>This data type is used as a response element in the <a>ListEntitiesForPolicy</a> action. </p> <p>For more information about managed policies, refer to <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html\">Managed Policies and Inline Policies</a> in the <i>Using IAM</i> guide. </p>"]
 #[derive(Default,Debug,Clone)]
 pub struct PolicyGroup {
     #[doc="<p>The stable and unique string identifying the group. For more information about IDs, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html\">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p>"]
-    pub group_id: Option<IdType>,
+    pub group_id: Option<String>,
     #[doc="<p>The name (friendly name, not ARN) identifying the group.</p>"]
-    pub group_name: Option<GroupNameType>,
+    pub group_name: Option<String>,
 }
 
 struct PolicyGroupDeserializer;
@@ -8337,13 +8248,12 @@ impl PolicyGroupDeserializer {
 
     }
 }
-pub type PolicyGroupListType = Vec<PolicyGroup>;
 struct PolicyGroupListTypeDeserializer;
 impl PolicyGroupListTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PolicyGroupListType, XmlParseError> {
+                                       -> Result<Vec<PolicyGroup>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -8379,13 +8289,12 @@ impl PolicyGroupListTypeDeserializer {
 
     }
 }
-pub type PolicyIdentifierType = String;
 struct PolicyIdentifierTypeDeserializer;
 impl PolicyIdentifierTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PolicyIdentifierType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -8394,13 +8303,12 @@ impl PolicyIdentifierTypeDeserializer {
 
     }
 }
-pub type PolicyListType = Vec<Policy>;
 struct PolicyListTypeDeserializer;
 impl PolicyListTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PolicyListType, XmlParseError> {
+                                       -> Result<Vec<Policy>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -8436,14 +8344,12 @@ impl PolicyListTypeDeserializer {
 
     }
 }
-#[doc="<p>Contains a list of policy names.</p> <p>This data type is used as a response element in the <a>ListPolicies</a> action.</p>"]
-pub type PolicyNameListType = Vec<PolicyNameType>;
 struct PolicyNameListTypeDeserializer;
 impl PolicyNameListTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PolicyNameListType, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -8479,13 +8385,12 @@ impl PolicyNameListTypeDeserializer {
 
     }
 }
-pub type PolicyNameType = String;
 struct PolicyNameTypeDeserializer;
 impl PolicyNameTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PolicyNameType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -8494,13 +8399,12 @@ impl PolicyNameTypeDeserializer {
 
     }
 }
-pub type PolicyPathType = String;
 struct PolicyPathTypeDeserializer;
 impl PolicyPathTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PolicyPathType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -8513,9 +8417,9 @@ impl PolicyPathTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct PolicyRole {
     #[doc="<p>The stable and unique string identifying the role. For more information about IDs, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html\">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p>"]
-    pub role_id: Option<IdType>,
+    pub role_id: Option<String>,
     #[doc="<p>The name (friendly name, not ARN) identifying the role.</p>"]
-    pub role_name: Option<RoleNameType>,
+    pub role_name: Option<String>,
 }
 
 struct PolicyRoleDeserializer;
@@ -8565,13 +8469,12 @@ impl PolicyRoleDeserializer {
 
     }
 }
-pub type PolicyRoleListType = Vec<PolicyRole>;
 struct PolicyRoleListTypeDeserializer;
 impl PolicyRoleListTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PolicyRoleListType, XmlParseError> {
+                                       -> Result<Vec<PolicyRole>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -8607,14 +8510,12 @@ impl PolicyRoleListTypeDeserializer {
 
     }
 }
-pub type PolicyScopeType = String;
-pub type PolicySourceType = String;
 struct PolicySourceTypeDeserializer;
 impl PolicySourceTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PolicySourceType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -8627,9 +8528,9 @@ impl PolicySourceTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct PolicyUser {
     #[doc="<p>The stable and unique string identifying the user. For more information about IDs, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html\">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p>"]
-    pub user_id: Option<IdType>,
+    pub user_id: Option<String>,
     #[doc="<p>The name (friendly name, not ARN) identifying the user.</p>"]
-    pub user_name: Option<UserNameType>,
+    pub user_name: Option<String>,
 }
 
 struct PolicyUserDeserializer;
@@ -8679,13 +8580,12 @@ impl PolicyUserDeserializer {
 
     }
 }
-pub type PolicyUserListType = Vec<PolicyUser>;
 struct PolicyUserListTypeDeserializer;
 impl PolicyUserListTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PolicyUserListType, XmlParseError> {
+                                       -> Result<Vec<PolicyUser>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -8725,13 +8625,13 @@ impl PolicyUserListTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct PolicyVersion {
     #[doc="<p>The date and time, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>, when the policy version was created.</p>"]
-    pub create_date: Option<DateType>,
+    pub create_date: Option<String>,
     #[doc="<p>The policy document.</p> <p>The policy document is returned in the response to the <a>GetPolicyVersion</a> and <a>GetAccountAuthorizationDetails</a> operations. It is not returned in the response to the <a>CreatePolicyVersion</a> or <a>ListPolicyVersions</a> operations. </p>"]
-    pub document: Option<PolicyDocumentType>,
+    pub document: Option<String>,
     #[doc="<p>Specifies whether the policy version is set as the policy's default version.</p>"]
-    pub is_default_version: Option<BooleanType>,
+    pub is_default_version: Option<bool>,
     #[doc="<p>The identifier for the policy version.</p> <p>Policy version identifiers always begin with <code>v</code> (always lowercase). When a policy is created, the first policy version is <code>v1</code>. </p>"]
-    pub version_id: Option<PolicyVersionIdType>,
+    pub version_id: Option<String>,
 }
 
 struct PolicyVersionDeserializer;
@@ -8791,13 +8691,12 @@ impl PolicyVersionDeserializer {
 
     }
 }
-pub type PolicyVersionIdType = String;
 struct PolicyVersionIdTypeDeserializer;
 impl PolicyVersionIdTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PolicyVersionIdType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -8810,9 +8709,9 @@ impl PolicyVersionIdTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct Position {
     #[doc="<p>The column in the line containing the specified position in the document.</p>"]
-    pub column: Option<ColumnNumber>,
+    pub column: Option<i64>,
     #[doc="<p>The line containing the specified position in the document.</p>"]
-    pub line: Option<LineNumber>,
+    pub line: Option<i64>,
 }
 
 struct PositionDeserializer;
@@ -8861,14 +8760,12 @@ impl PositionDeserializer {
 
     }
 }
-pub type PrivateKeyType = String;
-pub type PublicKeyFingerprintType = String;
 struct PublicKeyFingerprintTypeDeserializer;
 impl PublicKeyFingerprintTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PublicKeyFingerprintType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -8877,13 +8774,12 @@ impl PublicKeyFingerprintTypeDeserializer {
 
     }
 }
-pub type PublicKeyIdType = String;
 struct PublicKeyIdTypeDeserializer;
 impl PublicKeyIdTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PublicKeyIdType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -8892,13 +8788,12 @@ impl PublicKeyIdTypeDeserializer {
 
     }
 }
-pub type PublicKeyMaterialType = String;
 struct PublicKeyMaterialTypeDeserializer;
 impl PublicKeyMaterialTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PublicKeyMaterialType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -8910,11 +8805,11 @@ impl PublicKeyMaterialTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct PutGroupPolicyRequest {
     #[doc="<p>The name of the group to associate the policy with.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub group_name: GroupNameType,
+    pub group_name: String,
     #[doc="<p>The policy document.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
-    pub policy_document: PolicyDocumentType,
+    pub policy_document: String,
     #[doc="<p>The name of the policy document.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub policy_name: PolicyNameType,
+    pub policy_name: String,
 }
 
 
@@ -8938,11 +8833,11 @@ impl PutGroupPolicyRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct PutRolePolicyRequest {
     #[doc="<p>The policy document.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
-    pub policy_document: PolicyDocumentType,
+    pub policy_document: String,
     #[doc="<p>The name of the policy document.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub policy_name: PolicyNameType,
+    pub policy_name: String,
     #[doc="<p>The name of the role to associate the policy with.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>"]
-    pub role_name: RoleNameType,
+    pub role_name: String,
 }
 
 
@@ -8966,11 +8861,11 @@ impl PutRolePolicyRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct PutUserPolicyRequest {
     #[doc="<p>The policy document.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
-    pub policy_document: PolicyDocumentType,
+    pub policy_document: String,
     #[doc="<p>The name of the policy document.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub policy_name: PolicyNameType,
+    pub policy_name: String,
     #[doc="<p>The name of the user to associate the policy with.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: ExistingUserNameType,
+    pub user_name: String,
 }
 
 
@@ -8994,9 +8889,9 @@ impl PutUserPolicyRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct RemoveClientIDFromOpenIDConnectProviderRequest {
     #[doc="<p>The client ID (also known as audience) to remove from the IAM OIDC provider resource. For more information about client IDs, see <a>CreateOpenIDConnectProvider</a>.</p>"]
-    pub client_id: ClientIDType,
+    pub client_id: String,
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM OIDC provider resource to remove the client ID from. You can get a list of OIDC provider ARNs by using the <a>ListOpenIDConnectProviders</a> action.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
-    pub open_id_connect_provider_arn: ArnType,
+    pub open_id_connect_provider_arn: String,
 }
 
 
@@ -9021,9 +8916,9 @@ impl RemoveClientIDFromOpenIDConnectProviderRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct RemoveRoleFromInstanceProfileRequest {
     #[doc="<p>The name of the instance profile to update.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub instance_profile_name: InstanceProfileNameType,
+    pub instance_profile_name: String,
     #[doc="<p>The name of the role to remove.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>"]
-    pub role_name: RoleNameType,
+    pub role_name: String,
 }
 
 
@@ -9046,9 +8941,9 @@ impl RemoveRoleFromInstanceProfileRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct RemoveUserFromGroupRequest {
     #[doc="<p>The name of the group to update.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub group_name: GroupNameType,
+    pub group_name: String,
     #[doc="<p>The name of the user to remove.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: ExistingUserNameType,
+    pub user_name: String,
 }
 
 
@@ -9067,13 +8962,12 @@ impl RemoveUserFromGroupRequestSerializer {
     }
 }
 
-pub type ReportContentType = Vec<u8>;
 struct ReportContentTypeDeserializer;
 impl ReportContentTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ReportContentType, XmlParseError> {
+                                       -> Result<Vec<u8>, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack)).into_bytes();
         try!(end_element(tag_name, stack));
@@ -9082,13 +8976,12 @@ impl ReportContentTypeDeserializer {
 
     }
 }
-pub type ReportFormatType = String;
 struct ReportFormatTypeDeserializer;
 impl ReportFormatTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ReportFormatType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -9097,13 +8990,12 @@ impl ReportFormatTypeDeserializer {
 
     }
 }
-pub type ReportStateDescriptionType = String;
 struct ReportStateDescriptionTypeDeserializer;
 impl ReportStateDescriptionTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ReportStateDescriptionType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -9112,13 +9004,12 @@ impl ReportStateDescriptionTypeDeserializer {
 
     }
 }
-pub type ReportStateType = String;
 struct ReportStateTypeDeserializer;
 impl ReportStateTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ReportStateType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -9130,9 +9021,9 @@ impl ReportStateTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ResetServiceSpecificCredentialRequest {
     #[doc="<p>The unique identifier of the service-specific credential.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>"]
-    pub service_specific_credential_id: ServiceSpecificCredentialId,
+    pub service_specific_credential_id: String,
     #[doc="<p>The name of the IAM user associated with the service-specific credential. If this value is not specified, then the operation assumes the user whose credentials are used to call the operation.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: Option<UserNameType>,
+    pub user_name: Option<String>,
 }
 
 
@@ -9202,13 +9093,11 @@ impl ResetServiceSpecificCredentialResponseDeserializer {
 
     }
 }
-pub type ResourceHandlingOptionType = String;
-pub type ResourceNameListType = Vec<ResourceNameType>;
 
 /// Serialize `ResourceNameListType` contents to a `SignedRequest`.
 struct ResourceNameListTypeSerializer;
 impl ResourceNameListTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ResourceNameListType) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -9216,13 +9105,12 @@ impl ResourceNameListTypeSerializer {
     }
 }
 
-pub type ResourceNameType = String;
 struct ResourceNameTypeDeserializer;
 impl ResourceNameTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ResourceNameType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -9235,15 +9123,15 @@ impl ResourceNameTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ResourceSpecificResult {
     #[doc="<p>Additional details about the results of the evaluation decision. When there are both IAM policies and resource policies, this parameter explains how each set of policies contributes to the final evaluation decision. When simulating cross-account access to a resource, both the resource-based policy and the caller's IAM policy must grant access.</p>"]
-    pub eval_decision_details: Option<EvalDecisionDetailsType>,
+    pub eval_decision_details: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>The result of the simulation of the simulated API action on the resource specified in <code>EvalResourceName</code>.</p>"]
-    pub eval_resource_decision: PolicyEvaluationDecisionType,
+    pub eval_resource_decision: String,
     #[doc="<p>The name of the simulated resource, in Amazon Resource Name (ARN) format.</p>"]
-    pub eval_resource_name: ResourceNameType,
+    pub eval_resource_name: String,
     #[doc="<p>A list of the statements in the input policies that determine the result for this part of the simulation. Remember that even if multiple statements allow the action on the resource, if <i>any</i> statement denies that action, then the explicit deny overrides any allow, and the deny statement is the only entry included in the result.</p>"]
-    pub matched_statements: Option<StatementListType>,
+    pub matched_statements: Option<Vec<Statement>>,
     #[doc="<p>A list of context keys that are required by the included input policies but that were not provided by one of the input parameters. This list is used when a list of ARNs is included in the <code>ResourceArns</code> parameter instead of \"*\". If you do not specify individual resources, by setting <code>ResourceArns</code> to \"*\" or by not including the <code>ResourceArns</code> parameter, then any missing context values are instead included under the <code>EvaluationResults</code> section. To discover the context keys used by a set of policies, you can call <a>GetContextKeysForCustomPolicy</a> or <a>GetContextKeysForPrincipalPolicy</a>.</p>"]
-    pub missing_context_values: Option<ContextKeyNamesResultListType>,
+    pub missing_context_values: Option<Vec<String>>,
 }
 
 struct ResourceSpecificResultDeserializer;
@@ -9307,13 +9195,12 @@ impl ResourceSpecificResultDeserializer {
 
     }
 }
-pub type ResourceSpecificResultListType = Vec<ResourceSpecificResult>;
 struct ResourceSpecificResultListTypeDeserializer;
 impl ResourceSpecificResultListTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ResourceSpecificResultListType, XmlParseError> {
+                                       -> Result<Vec<ResourceSpecificResult>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -9353,13 +9240,13 @@ impl ResourceSpecificResultListTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ResyncMFADeviceRequest {
     #[doc="<p>An authentication code emitted by the device.</p> <p>The format for this parameter is a sequence of six digits.</p>"]
-    pub authentication_code_1: AuthenticationCodeType,
+    pub authentication_code_1: String,
     #[doc="<p>A subsequent authentication code emitted by the device.</p> <p>The format for this parameter is a sequence of six digits.</p>"]
-    pub authentication_code_2: AuthenticationCodeType,
+    pub authentication_code_2: String,
     #[doc="<p>Serial number that uniquely identifies the MFA device.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub serial_number: SerialNumberType,
+    pub serial_number: String,
     #[doc="<p>The name of the user whose MFA device you want to resynchronize.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: ExistingUserNameType,
+    pub user_name: String,
 }
 
 
@@ -9386,19 +9273,19 @@ impl ResyncMFADeviceRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct Role {
     #[doc="<p> The Amazon Resource Name (ARN) specifying the role. For more information about ARNs and how to use them in policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>IAM User Guide</i> guide. </p>"]
-    pub arn: ArnType,
+    pub arn: String,
     #[doc="<p>The policy that grants an entity permission to assume the role.</p>"]
-    pub assume_role_policy_document: Option<PolicyDocumentType>,
+    pub assume_role_policy_document: Option<String>,
     #[doc="<p>The date and time, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>, when the role was created.</p>"]
-    pub create_date: DateType,
+    pub create_date: String,
     #[doc="<p>A description of the role that you provide.</p>"]
-    pub description: Option<RoleDescriptionType>,
+    pub description: Option<String>,
     #[doc="<p> The path to the role. For more information about paths, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>"]
-    pub path: PathType,
+    pub path: String,
     #[doc="<p> The stable and unique string identifying the role. For more information about IDs, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>"]
-    pub role_id: IdType,
+    pub role_id: String,
     #[doc="<p>The friendly name that identifies the role.</p>"]
-    pub role_name: RoleNameType,
+    pub role_name: String,
 }
 
 struct RoleDeserializer;
@@ -9466,13 +9353,12 @@ impl RoleDeserializer {
 
     }
 }
-pub type RoleDescriptionType = String;
 struct RoleDescriptionTypeDeserializer;
 impl RoleDescriptionTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<RoleDescriptionType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -9484,23 +9370,23 @@ impl RoleDescriptionTypeDeserializer {
 #[doc="<p>Contains information about an IAM role, including all of the role's policies.</p> <p>This data type is used as a response element in the <a>GetAccountAuthorizationDetails</a> action.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct RoleDetail {
-    pub arn: Option<ArnType>,
+    pub arn: Option<String>,
     #[doc="<p>The trust policy that grants permission to assume the role.</p>"]
-    pub assume_role_policy_document: Option<PolicyDocumentType>,
+    pub assume_role_policy_document: Option<String>,
     #[doc="<p>A list of managed policies attached to the role. These policies are the role's access (permissions) policies.</p>"]
-    pub attached_managed_policies: Option<AttachedPoliciesListType>,
+    pub attached_managed_policies: Option<Vec<AttachedPolicy>>,
     #[doc="<p>The date and time, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>, when the role was created.</p>"]
-    pub create_date: Option<DateType>,
+    pub create_date: Option<String>,
     #[doc="<p>A list of instance profiles that contain this role.</p>"]
-    pub instance_profile_list: Option<InstanceProfileListType>,
+    pub instance_profile_list: Option<Vec<InstanceProfile>>,
     #[doc="<p>The path to the role. For more information about paths, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>"]
-    pub path: Option<PathType>,
+    pub path: Option<String>,
     #[doc="<p>The stable and unique string identifying the role. For more information about IDs, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>"]
-    pub role_id: Option<IdType>,
+    pub role_id: Option<String>,
     #[doc="<p>The friendly name that identifies the role.</p>"]
-    pub role_name: Option<RoleNameType>,
+    pub role_name: Option<String>,
     #[doc="<p>A list of inline policies embedded in the role. These policies are the role's access (permissions) policies.</p>"]
-    pub role_policy_list: Option<PolicyDetailListType>,
+    pub role_policy_list: Option<Vec<PolicyDetail>>,
 }
 
 struct RoleDetailDeserializer;
@@ -9578,13 +9464,12 @@ impl RoleDetailDeserializer {
 
     }
 }
-pub type RoleDetailListType = Vec<RoleDetail>;
 struct RoleDetailListTypeDeserializer;
 impl RoleDetailListTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<RoleDetailListType, XmlParseError> {
+                                       -> Result<Vec<RoleDetail>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -9620,14 +9505,12 @@ impl RoleDetailListTypeDeserializer {
 
     }
 }
-#[doc="<p>Contains a list of IAM roles.</p> <p>This data type is used as a response element in the <a>ListRoles</a> action.</p>"]
-pub type RoleListType = Vec<Role>;
 struct RoleListTypeDeserializer;
 impl RoleListTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<RoleListType, XmlParseError> {
+                                       -> Result<Vec<Role>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -9663,13 +9546,12 @@ impl RoleListTypeDeserializer {
 
     }
 }
-pub type RoleNameType = String;
 struct RoleNameTypeDeserializer;
 impl RoleNameTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<RoleNameType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -9678,13 +9560,12 @@ impl RoleNameTypeDeserializer {
 
     }
 }
-pub type SAMLMetadataDocumentType = String;
 struct SAMLMetadataDocumentTypeDeserializer;
 impl SAMLMetadataDocumentTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SAMLMetadataDocumentType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -9697,11 +9578,11 @@ impl SAMLMetadataDocumentTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct SAMLProviderListEntry {
     #[doc="<p>The Amazon Resource Name (ARN) of the SAML provider.</p>"]
-    pub arn: Option<ArnType>,
+    pub arn: Option<String>,
     #[doc="<p>The date and time when the SAML provider was created.</p>"]
-    pub create_date: Option<DateType>,
+    pub create_date: Option<String>,
     #[doc="<p>The expiration date and time for the SAML provider.</p>"]
-    pub valid_until: Option<DateType>,
+    pub valid_until: Option<String>,
 }
 
 struct SAMLProviderListEntryDeserializer;
@@ -9753,13 +9634,12 @@ impl SAMLProviderListEntryDeserializer {
 
     }
 }
-pub type SAMLProviderListType = Vec<SAMLProviderListEntry>;
 struct SAMLProviderListTypeDeserializer;
 impl SAMLProviderListTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SAMLProviderListType, XmlParseError> {
+                                       -> Result<Vec<SAMLProviderListEntry>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -9796,22 +9676,21 @@ impl SAMLProviderListTypeDeserializer {
 
     }
 }
-pub type SAMLProviderNameType = String;
 #[doc="<p>Contains information about an SSH public key.</p> <p>This data type is used as a response element in the <a>GetSSHPublicKey</a> and <a>UploadSSHPublicKey</a> actions. </p>"]
 #[derive(Default,Debug,Clone)]
 pub struct SSHPublicKey {
     #[doc="<p>The MD5 message digest of the SSH public key.</p>"]
-    pub fingerprint: PublicKeyFingerprintType,
+    pub fingerprint: String,
     #[doc="<p>The SSH public key.</p>"]
-    pub ssh_public_key_body: PublicKeyMaterialType,
+    pub ssh_public_key_body: String,
     #[doc="<p>The unique identifier for the SSH public key.</p>"]
-    pub ssh_public_key_id: PublicKeyIdType,
+    pub ssh_public_key_id: String,
     #[doc="<p>The status of the SSH public key. <code>Active</code> means the key can be used for authentication with an AWS CodeCommit repository. <code>Inactive</code> means the key cannot be used.</p>"]
-    pub status: StatusType,
+    pub status: String,
     #[doc="<p>The date and time, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>, when the SSH public key was uploaded.</p>"]
-    pub upload_date: Option<DateType>,
+    pub upload_date: Option<String>,
     #[doc="<p>The name of the IAM user associated with the SSH public key.</p>"]
-    pub user_name: UserNameType,
+    pub user_name: String,
 }
 
 struct SSHPublicKeyDeserializer;
@@ -9878,13 +9757,12 @@ impl SSHPublicKeyDeserializer {
 
     }
 }
-pub type SSHPublicKeyListType = Vec<SSHPublicKeyMetadata>;
 struct SSHPublicKeyListTypeDeserializer;
 impl SSHPublicKeyListTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SSHPublicKeyListType, XmlParseError> {
+                                       -> Result<Vec<SSHPublicKeyMetadata>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -9925,13 +9803,13 @@ impl SSHPublicKeyListTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct SSHPublicKeyMetadata {
     #[doc="<p>The unique identifier for the SSH public key.</p>"]
-    pub ssh_public_key_id: PublicKeyIdType,
+    pub ssh_public_key_id: String,
     #[doc="<p>The status of the SSH public key. <code>Active</code> means the key can be used for authentication with an AWS CodeCommit repository. <code>Inactive</code> means the key cannot be used.</p>"]
-    pub status: StatusType,
+    pub status: String,
     #[doc="<p>The date and time, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>, when the SSH public key was uploaded.</p>"]
-    pub upload_date: DateType,
+    pub upload_date: String,
     #[doc="<p>The name of the IAM user associated with the SSH public key.</p>"]
-    pub user_name: UserNameType,
+    pub user_name: String,
 }
 
 struct SSHPublicKeyMetadataDeserializer;
@@ -9988,13 +9866,12 @@ impl SSHPublicKeyMetadataDeserializer {
 
     }
 }
-pub type SerialNumberType = String;
 struct SerialNumberTypeDeserializer;
 impl SerialNumberTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SerialNumberType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -10007,9 +9884,9 @@ impl SerialNumberTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ServerCertificate {
     #[doc="<p>The contents of the public key certificate.</p>"]
-    pub certificate_body: CertificateBodyType,
+    pub certificate_body: String,
     #[doc="<p>The contents of the public key certificate chain.</p>"]
-    pub certificate_chain: Option<CertificateChainType>,
+    pub certificate_chain: Option<String>,
     #[doc="<p>The meta information of the server certificate, such as its name, path, ID, and ARN.</p>"]
     pub server_certificate_metadata: ServerCertificateMetadata,
 }
@@ -10071,17 +9948,17 @@ impl ServerCertificateDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ServerCertificateMetadata {
     #[doc="<p> The Amazon Resource Name (ARN) specifying the server certificate. For more information about ARNs and how to use them in policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>"]
-    pub arn: ArnType,
+    pub arn: String,
     #[doc="<p>The date on which the certificate is set to expire.</p>"]
-    pub expiration: Option<DateType>,
+    pub expiration: Option<String>,
     #[doc="<p> The path to the server certificate. For more information about paths, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>"]
-    pub path: PathType,
+    pub path: String,
     #[doc="<p> The stable and unique string identifying the server certificate. For more information about IDs, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>"]
-    pub server_certificate_id: IdType,
+    pub server_certificate_id: String,
     #[doc="<p>The name that identifies the server certificate.</p>"]
-    pub server_certificate_name: ServerCertificateNameType,
+    pub server_certificate_name: String,
     #[doc="<p>The date when the server certificate was uploaded.</p>"]
-    pub upload_date: Option<DateType>,
+    pub upload_date: Option<String>,
 }
 
 struct ServerCertificateMetadataDeserializer;
@@ -10145,14 +10022,12 @@ impl ServerCertificateMetadataDeserializer {
 
     }
 }
-pub type ServerCertificateMetadataListType = Vec<ServerCertificateMetadata>;
 struct ServerCertificateMetadataListTypeDeserializer;
 impl ServerCertificateMetadataListTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<ServerCertificateMetadataListType, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<Vec<ServerCertificateMetadata>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -10189,13 +10064,12 @@ impl ServerCertificateMetadataListTypeDeserializer {
 
     }
 }
-pub type ServerCertificateNameType = String;
 struct ServerCertificateNameTypeDeserializer;
 impl ServerCertificateNameTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ServerCertificateNameType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -10204,14 +10078,12 @@ impl ServerCertificateNameTypeDeserializer {
 
     }
 }
-pub type ServiceFailureExceptionMessage = String;
-pub type ServiceName = String;
 struct ServiceNameDeserializer;
 impl ServiceNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ServiceName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -10220,14 +10092,12 @@ impl ServiceNameDeserializer {
 
     }
 }
-pub type ServiceNotSupportedMessage = String;
-pub type ServicePassword = String;
 struct ServicePasswordDeserializer;
 impl ServicePasswordDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ServicePassword, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -10240,19 +10110,19 @@ impl ServicePasswordDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ServiceSpecificCredential {
     #[doc="<p>The date and time, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>, when the service-specific credential were created.</p>"]
-    pub create_date: DateType,
+    pub create_date: String,
     #[doc="<p>The name of the service associated with the service-specific credential.</p>"]
-    pub service_name: ServiceName,
+    pub service_name: String,
     #[doc="<p>The generated password for the service-specific credential.</p>"]
-    pub service_password: ServicePassword,
+    pub service_password: String,
     #[doc="<p>The unique identifier for the service-specific credential.</p>"]
-    pub service_specific_credential_id: ServiceSpecificCredentialId,
+    pub service_specific_credential_id: String,
     #[doc="<p>The generated user name for the service-specific credential. This value is generated by combining the IAM user's name combined with the ID number of the AWS account, as in <code>jane-at-123456789012</code>, for example. This value cannot be configured by the user.</p>"]
-    pub service_user_name: ServiceUserName,
+    pub service_user_name: String,
     #[doc="<p>The status of the service-specific credential. <code>Active</code> means the key is valid for API calls, while <code>Inactive</code> means it is not.</p>"]
-    pub status: StatusType,
+    pub status: String,
     #[doc="<p>The name of the IAM user associated with the service-specific credential.</p>"]
-    pub user_name: UserNameType,
+    pub user_name: String,
 }
 
 struct ServiceSpecificCredentialDeserializer;
@@ -10323,13 +10193,12 @@ impl ServiceSpecificCredentialDeserializer {
 
     }
 }
-pub type ServiceSpecificCredentialId = String;
 struct ServiceSpecificCredentialIdDeserializer;
 impl ServiceSpecificCredentialIdDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ServiceSpecificCredentialId, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -10342,17 +10211,17 @@ impl ServiceSpecificCredentialIdDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ServiceSpecificCredentialMetadata {
     #[doc="<p>The date and time, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>, when the service-specific credential were created.</p>"]
-    pub create_date: DateType,
+    pub create_date: String,
     #[doc="<p>The name of the service associated with the service-specific credential.</p>"]
-    pub service_name: ServiceName,
+    pub service_name: String,
     #[doc="<p>The unique identifier for the service-specific credential.</p>"]
-    pub service_specific_credential_id: ServiceSpecificCredentialId,
+    pub service_specific_credential_id: String,
     #[doc="<p>The generated user name for the service-specific credential.</p>"]
-    pub service_user_name: ServiceUserName,
+    pub service_user_name: String,
     #[doc="<p>The status of the service-specific credential. <code>Active</code> means the key is valid for API calls, while <code>Inactive</code> means it is not.</p>"]
-    pub status: StatusType,
+    pub status: String,
     #[doc="<p>The name of the IAM user associated with the service-specific credential.</p>"]
-    pub user_name: UserNameType,
+    pub user_name: String,
 }
 
 struct ServiceSpecificCredentialMetadataDeserializer;
@@ -10419,14 +10288,13 @@ impl ServiceSpecificCredentialMetadataDeserializer {
 
     }
 }
-pub type ServiceSpecificCredentialsListType = Vec<ServiceSpecificCredentialMetadata>;
 struct ServiceSpecificCredentialsListTypeDeserializer;
 impl ServiceSpecificCredentialsListTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>
         (tag_name: &str,
          stack: &mut T)
-         -> Result<ServiceSpecificCredentialsListType, XmlParseError> {
+         -> Result<Vec<ServiceSpecificCredentialMetadata>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -10462,13 +10330,12 @@ impl ServiceSpecificCredentialsListTypeDeserializer {
 
     }
 }
-pub type ServiceUserName = String;
 struct ServiceUserNameDeserializer;
 impl ServiceUserNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ServiceUserName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -10480,9 +10347,9 @@ impl ServiceUserNameDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct SetDefaultPolicyVersionRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM policy whose default version you want to set.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
-    pub policy_arn: ArnType,
+    pub policy_arn: String,
     #[doc="<p>The version of the policy to set as the default (operative) version.</p> <p>For more information about managed policy versions, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html\">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>"]
-    pub version_id: PolicyVersionIdType,
+    pub version_id: String,
 }
 
 
@@ -10505,15 +10372,15 @@ impl SetDefaultPolicyVersionRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct SigningCertificate {
     #[doc="<p>The contents of the signing certificate.</p>"]
-    pub certificate_body: CertificateBodyType,
+    pub certificate_body: String,
     #[doc="<p>The ID for the signing certificate.</p>"]
-    pub certificate_id: CertificateIdType,
+    pub certificate_id: String,
     #[doc="<p>The status of the signing certificate. <code>Active</code> means the key is valid for API calls, while <code>Inactive</code> means it is not.</p>"]
-    pub status: StatusType,
+    pub status: String,
     #[doc="<p>The date when the signing certificate was uploaded.</p>"]
-    pub upload_date: Option<DateType>,
+    pub upload_date: Option<String>,
     #[doc="<p>The name of the user the signing certificate is associated with.</p>"]
-    pub user_name: UserNameType,
+    pub user_name: String,
 }
 
 struct SigningCertificateDeserializer;
@@ -10578,25 +10445,25 @@ impl SigningCertificateDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct SimulateCustomPolicyRequest {
     #[doc="<p>A list of names of API actions to evaluate in the simulation. Each action is evaluated against each resource. Each action must include the service identifier, such as <code>iam:CreateUser</code>.</p>"]
-    pub action_names: ActionNameListType,
+    pub action_names: Vec<String>,
     #[doc="<p>The ARN of the IAM user that you want to use as the simulated caller of the APIs. <code>CallerArn</code> is required if you include a <code>ResourcePolicy</code> so that the policy's <code>Principal</code> element has a value to use in evaluating the policy.</p> <p>You can specify only the ARN of an IAM user. You cannot specify the ARN of an assumed role, federated user, or a service principal.</p>"]
-    pub caller_arn: Option<ResourceNameType>,
+    pub caller_arn: Option<String>,
     #[doc="<p>A list of context keys and corresponding values for the simulation to use. Whenever a context key is evaluated in one of the simulated IAM permission policies, the corresponding value is supplied.</p>"]
-    pub context_entries: Option<ContextEntryListType>,
+    pub context_entries: Option<Vec<ContextEntry>>,
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
-    pub max_items: Option<MaxItemsType>,
+    pub max_items: Option<i64>,
     #[doc="<p>A list of policy documents to include in the simulation. Each document is specified as a string containing the complete, valid JSON text of an IAM policy. Do not include any resource-based policies in this parameter. Any resource-based policy must be submitted with the <code>ResourcePolicy</code> parameter. The policies cannot be \"scope-down\" policies, such as you could include in a call to <a href=\"http://docs.aws.amazon.com/IAM/latest/APIReference/API_GetFederationToken.html\">GetFederationToken</a> or one of the <a href=\"http://docs.aws.amazon.com/IAM/latest/APIReference/API_AssumeRole.html\">AssumeRole</a> APIs to restrict what a user can do while using the temporary credentials.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
-    pub policy_input_list: SimulationPolicyListType,
+    pub policy_input_list: Vec<String>,
     #[doc="<p>A list of ARNs of AWS resources to include in the simulation. If this parameter is not provided then the value defaults to <code>*</code> (all resources). Each API in the <code>ActionNames</code> parameter is evaluated for each resource in this list. The simulation determines the access result (allowed or denied) of each combination and reports it in the response.</p> <p>The simulation does not automatically retrieve policies for the specified resources. If you want to include a resource policy in the simulation, then you must include the policy as a string in the <code>ResourcePolicy</code> parameter.</p> <p>If you include a <code>ResourcePolicy</code>, then it must be applicable to all of the resources included in the simulation or you receive an invalid input error.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
-    pub resource_arns: Option<ResourceNameListType>,
+    pub resource_arns: Option<Vec<String>>,
     #[doc="<p>Specifies the type of simulation to run. Different APIs that support resource-based policies require different combinations of resources. By specifying the type of simulation to run, you enable the policy simulator to enforce the presence of the required resources to ensure reliable simulation results. If your simulation does not match one of the following scenarios, then you can omit this parameter. The following list shows each of the supported scenario values and the resources that you must define to run the simulation.</p> <p>Each of the EC2 scenarios requires that you specify instance, image, and security-group resources. If your scenario includes an EBS volume, then you must specify that volume as a resource. If the EC2 scenario includes VPC, then you must supply the network-interface resource. If it includes an IP subnet, then you must specify the subnet resource. For more information on the EC2 scenario options, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-supported-platforms.html\">Supported Platforms</a> in the <i>AWS EC2 User Guide</i>.</p> <ul> <li> <p> <b>EC2-Classic-InstanceStore</b> </p> <p>instance, image, security-group</p> </li> <li> <p> <b>EC2-Classic-EBS</b> </p> <p>instance, image, security-group, volume</p> </li> <li> <p> <b>EC2-VPC-InstanceStore</b> </p> <p>instance, image, security-group, network-interface</p> </li> <li> <p> <b>EC2-VPC-InstanceStore-Subnet</b> </p> <p>instance, image, security-group, network-interface, subnet</p> </li> <li> <p> <b>EC2-VPC-EBS</b> </p> <p>instance, image, security-group, network-interface, volume</p> </li> <li> <p> <b>EC2-VPC-EBS-Subnet</b> </p> <p>instance, image, security-group, network-interface, subnet, volume</p> </li> </ul>"]
-    pub resource_handling_option: Option<ResourceHandlingOptionType>,
+    pub resource_handling_option: Option<String>,
     #[doc="<p>An AWS account ID that specifies the owner of any simulated resource that does not identify its owner in the resource ARN, such as an S3 bucket or object. If <code>ResourceOwner</code> is specified, it is also used as the account owner of any <code>ResourcePolicy</code> included in the simulation. If the <code>ResourceOwner</code> parameter is not specified, then the owner of the resources and the resource policy defaults to the account of the identity provided in <code>CallerArn</code>. This parameter is required only if you specify a resource-based policy and account that owns the resource is different from the account that owns the simulated calling user <code>CallerArn</code>.</p>"]
-    pub resource_owner: Option<ResourceNameType>,
+    pub resource_owner: Option<String>,
     #[doc="<p>A resource-based policy to include in the simulation provided as a string. Each resource in the simulation is treated as if it had this policy attached. You can include only one resource-based policy in a simulation.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
-    pub resource_policy: Option<PolicyDocumentType>,
+    pub resource_policy: Option<String>,
 }
 
 
@@ -10653,11 +10520,11 @@ impl SimulateCustomPolicyRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct SimulatePolicyResponse {
     #[doc="<p>The results of the simulation.</p>"]
-    pub evaluation_results: Option<EvaluationResultsListType>,
+    pub evaluation_results: Option<Vec<EvaluationResult>>,
     #[doc="<p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>"]
-    pub is_truncated: Option<BooleanType>,
+    pub is_truncated: Option<bool>,
     #[doc="<p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
 }
 
 struct SimulatePolicyResponseDeserializer;
@@ -10713,27 +10580,27 @@ impl SimulatePolicyResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct SimulatePrincipalPolicyRequest {
     #[doc="<p>A list of names of API actions to evaluate in the simulation. Each action is evaluated for each resource. Each action must include the service identifier, such as <code>iam:CreateUser</code>.</p>"]
-    pub action_names: ActionNameListType,
+    pub action_names: Vec<String>,
     #[doc="<p>The ARN of the IAM user that you want to specify as the simulated caller of the APIs. If you do not specify a <code>CallerArn</code>, it defaults to the ARN of the user that you specify in <code>PolicySourceArn</code>, if you specified a user. If you include both a <code>PolicySourceArn</code> (for example, <code>arn:aws:iam::123456789012:user/David</code>) and a <code>CallerArn</code> (for example, <code>arn:aws:iam::123456789012:user/Bob</code>), the result is that you simulate calling the APIs as Bob, as if Bob had David's policies.</p> <p>You can specify only the ARN of an IAM user. You cannot specify the ARN of an assumed role, federated user, or a service principal.</p> <p> <code>CallerArn</code> is required if you include a <code>ResourcePolicy</code> and the <code>PolicySourceArn</code> is not the ARN for an IAM user. This is required so that the resource-based policy's <code>Principal</code> element has a value to use in evaluating the policy.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
-    pub caller_arn: Option<ResourceNameType>,
+    pub caller_arn: Option<String>,
     #[doc="<p>A list of context keys and corresponding values for the simulation to use. Whenever a context key is evaluated in one of the simulated IAM permission policies, the corresponding value is supplied.</p>"]
-    pub context_entries: Option<ContextEntryListType>,
+    pub context_entries: Option<Vec<ContextEntry>>,
     #[doc="<p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>"]
-    pub marker: Option<MarkerType>,
+    pub marker: Option<String>,
     #[doc="<p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>"]
-    pub max_items: Option<MaxItemsType>,
+    pub max_items: Option<i64>,
     #[doc="<p>An optional list of additional policy documents to include in the simulation. Each document is specified as a string containing the complete, valid JSON text of an IAM policy.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
-    pub policy_input_list: Option<SimulationPolicyListType>,
+    pub policy_input_list: Option<Vec<String>>,
     #[doc="<p>The Amazon Resource Name (ARN) of a user, group, or role whose policies you want to include in the simulation. If you specify a user, group, or role, the simulation includes all policies that are associated with that entity. If you specify a user, the simulation also includes all policies that are attached to any groups the user belongs to.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
-    pub policy_source_arn: ArnType,
+    pub policy_source_arn: String,
     #[doc="<p>A list of ARNs of AWS resources to include in the simulation. If this parameter is not provided then the value defaults to <code>*</code> (all resources). Each API in the <code>ActionNames</code> parameter is evaluated for each resource in this list. The simulation determines the access result (allowed or denied) of each combination and reports it in the response.</p> <p>The simulation does not automatically retrieve policies for the specified resources. If you want to include a resource policy in the simulation, then you must include the policy as a string in the <code>ResourcePolicy</code> parameter.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
-    pub resource_arns: Option<ResourceNameListType>,
+    pub resource_arns: Option<Vec<String>>,
     #[doc="<p>Specifies the type of simulation to run. Different APIs that support resource-based policies require different combinations of resources. By specifying the type of simulation to run, you enable the policy simulator to enforce the presence of the required resources to ensure reliable simulation results. If your simulation does not match one of the following scenarios, then you can omit this parameter. The following list shows each of the supported scenario values and the resources that you must define to run the simulation.</p> <p>Each of the EC2 scenarios requires that you specify instance, image, and security-group resources. If your scenario includes an EBS volume, then you must specify that volume as a resource. If the EC2 scenario includes VPC, then you must supply the network-interface resource. If it includes an IP subnet, then you must specify the subnet resource. For more information on the EC2 scenario options, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-supported-platforms.html\">Supported Platforms</a> in the <i>AWS EC2 User Guide</i>.</p> <ul> <li> <p> <b>EC2-Classic-InstanceStore</b> </p> <p>instance, image, security-group</p> </li> <li> <p> <b>EC2-Classic-EBS</b> </p> <p>instance, image, security-group, volume</p> </li> <li> <p> <b>EC2-VPC-InstanceStore</b> </p> <p>instance, image, security-group, network-interface</p> </li> <li> <p> <b>EC2-VPC-InstanceStore-Subnet</b> </p> <p>instance, image, security-group, network-interface, subnet</p> </li> <li> <p> <b>EC2-VPC-EBS</b> </p> <p>instance, image, security-group, network-interface, volume</p> </li> <li> <p> <b>EC2-VPC-EBS-Subnet</b> </p> <p>instance, image, security-group, network-interface, subnet, volume</p> </li> </ul>"]
-    pub resource_handling_option: Option<ResourceHandlingOptionType>,
+    pub resource_handling_option: Option<String>,
     #[doc="<p>An AWS account ID that specifies the owner of any simulated resource that does not identify its owner in the resource ARN, such as an S3 bucket or object. If <code>ResourceOwner</code> is specified, it is also used as the account owner of any <code>ResourcePolicy</code> included in the simulation. If the <code>ResourceOwner</code> parameter is not specified, then the owner of the resources and the resource policy defaults to the account of the identity provided in <code>CallerArn</code>. This parameter is required only if you specify a resource-based policy and account that owns the resource is different from the account that owns the simulated calling user <code>CallerArn</code>.</p>"]
-    pub resource_owner: Option<ResourceNameType>,
+    pub resource_owner: Option<String>,
     #[doc="<p>A resource-based policy to include in the simulation provided as a string. Each resource in the simulation is treated as if it had this policy attached. You can include only one resource-based policy in a simulation.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
-    pub resource_policy: Option<PolicyDocumentType>,
+    pub resource_policy: Option<String>,
 }
 
 
@@ -10792,12 +10659,11 @@ impl SimulatePrincipalPolicyRequestSerializer {
     }
 }
 
-pub type SimulationPolicyListType = Vec<PolicyDocumentType>;
 
 /// Serialize `SimulationPolicyListType` contents to a `SignedRequest`.
 struct SimulationPolicyListTypeSerializer;
 impl SimulationPolicyListTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SimulationPolicyListType) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -10811,9 +10677,9 @@ pub struct Statement {
     #[doc="<p>The row and column of the end of a <code>Statement</code> in an IAM policy.</p>"]
     pub end_position: Option<Position>,
     #[doc="<p>The identifier of the policy that was provided as an input.</p>"]
-    pub source_policy_id: Option<PolicyIdentifierType>,
+    pub source_policy_id: Option<String>,
     #[doc="<p>The type of the policy.</p>"]
-    pub source_policy_type: Option<PolicySourceType>,
+    pub source_policy_type: Option<String>,
     #[doc="<p>The row and column of the beginning of the <code>Statement</code> in an IAM policy.</p>"]
     pub start_position: Option<Position>,
 }
@@ -10875,13 +10741,12 @@ impl StatementDeserializer {
 
     }
 }
-pub type StatementListType = Vec<Statement>;
 struct StatementListTypeDeserializer;
 impl StatementListTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<StatementListType, XmlParseError> {
+                                       -> Result<Vec<Statement>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -10917,13 +10782,12 @@ impl StatementListTypeDeserializer {
 
     }
 }
-pub type StatusType = String;
 struct StatusTypeDeserializer;
 impl StatusTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<StatusType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -10932,13 +10796,12 @@ impl StatusTypeDeserializer {
 
     }
 }
-pub type StringType = String;
 struct StringTypeDeserializer;
 impl StringTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<StringType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -10947,13 +10810,12 @@ impl StringTypeDeserializer {
 
     }
 }
-pub type SummaryKeyType = String;
 struct SummaryKeyTypeDeserializer;
 impl SummaryKeyTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SummaryKeyType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -10962,13 +10824,13 @@ impl SummaryKeyTypeDeserializer {
 
     }
 }
-pub type SummaryMapType = ::std::collections::HashMap<SummaryKeyType, SummaryValueType>;
 struct SummaryMapTypeDeserializer;
 impl SummaryMapTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<SummaryMapType, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<::std::collections::HashMap<String, i64>, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = ::std::collections::HashMap::new();
@@ -10986,13 +10848,12 @@ impl SummaryMapTypeDeserializer {
 
     }
 }
-pub type SummaryValueType = i64;
 struct SummaryValueTypeDeserializer;
 impl SummaryValueTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SummaryValueType, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -11001,14 +10862,12 @@ impl SummaryValueTypeDeserializer {
 
     }
 }
-#[doc="<p>Contains a list of thumbprints of identity provider server certificates.</p>"]
-pub type ThumbprintListType = Vec<ThumbprintType>;
 struct ThumbprintListTypeDeserializer;
 impl ThumbprintListTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ThumbprintListType, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -11048,7 +10907,7 @@ impl ThumbprintListTypeDeserializer {
 /// Serialize `ThumbprintListType` contents to a `SignedRequest`.
 struct ThumbprintListTypeSerializer;
 impl ThumbprintListTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ThumbprintListType) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -11056,14 +10915,12 @@ impl ThumbprintListTypeSerializer {
     }
 }
 
-#[doc="<p>Contains a thumbprint for an identity provider's server certificate.</p> <p>The identity provider's server certificate thumbprint is the hex-encoded SHA-1 hash value of the self-signed X.509 certificate used by the domain where the OpenID Connect provider makes its keys available. It is always a 40-character string.</p>"]
-pub type ThumbprintType = String;
 struct ThumbprintTypeDeserializer;
 impl ThumbprintTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ThumbprintType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -11072,16 +10929,14 @@ impl ThumbprintTypeDeserializer {
 
     }
 }
-pub type UnmodifiableEntityMessage = String;
-pub type UnrecognizedPublicKeyEncodingMessage = String;
 #[derive(Default,Debug,Clone)]
 pub struct UpdateAccessKeyRequest {
     #[doc="<p>The access key ID of the secret access key you want to update.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>"]
-    pub access_key_id: AccessKeyIdType,
+    pub access_key_id: String,
     #[doc="<p> The status you want to assign to the secret access key. <code>Active</code> means the key can be used for API calls to AWS, while <code>Inactive</code> means the key cannot be used.</p>"]
-    pub status: StatusType,
+    pub status: String,
     #[doc="<p>The name of the user whose key you want to update.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: Option<ExistingUserNameType>,
+    pub user_name: Option<String>,
 }
 
 
@@ -11106,23 +10961,23 @@ impl UpdateAccessKeyRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct UpdateAccountPasswordPolicyRequest {
     #[doc="<p> Allows all IAM users in your account to use the AWS Management Console to change their own passwords. For more information, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/HowToPwdIAMUser.html\">Letting IAM Users Change Their Own Passwords</a> in the <i>IAM User Guide</i>.</p> <p>Default value: false</p>"]
-    pub allow_users_to_change_password: Option<BooleanType>,
+    pub allow_users_to_change_password: Option<bool>,
     #[doc="<p>Prevents IAM users from setting a new password after their password has expired.</p> <p>Default value: false</p>"]
-    pub hard_expiry: Option<BooleanObjectType>,
+    pub hard_expiry: Option<bool>,
     #[doc="<p>The number of days that an IAM user password is valid. The default value of 0 means IAM user passwords never expire.</p> <p>Default value: 0</p>"]
-    pub max_password_age: Option<MaxPasswordAgeType>,
+    pub max_password_age: Option<i64>,
     #[doc="<p>The minimum number of characters allowed in an IAM user password.</p> <p>Default value: 6</p>"]
-    pub minimum_password_length: Option<MinimumPasswordLengthType>,
+    pub minimum_password_length: Option<i64>,
     #[doc="<p>Specifies the number of previous passwords that IAM users are prevented from reusing. The default value of 0 means IAM users are not prevented from reusing previous passwords.</p> <p>Default value: 0</p>"]
-    pub password_reuse_prevention: Option<PasswordReusePreventionType>,
+    pub password_reuse_prevention: Option<i64>,
     #[doc="<p>Specifies whether IAM user passwords must contain at least one lowercase character from the ISO basic Latin alphabet (a to z).</p> <p>Default value: false</p>"]
-    pub require_lowercase_characters: Option<BooleanType>,
+    pub require_lowercase_characters: Option<bool>,
     #[doc="<p>Specifies whether IAM user passwords must contain at least one numeric character (0 to 9).</p> <p>Default value: false</p>"]
-    pub require_numbers: Option<BooleanType>,
+    pub require_numbers: Option<bool>,
     #[doc="<p>Specifies whether IAM user passwords must contain at least one of the following non-alphanumeric characters:</p> <p>! @ # $ % ^ &amp;amp; * ( ) _ + - = [ ] { } | '</p> <p>Default value: false</p>"]
-    pub require_symbols: Option<BooleanType>,
+    pub require_symbols: Option<bool>,
     #[doc="<p>Specifies whether IAM user passwords must contain at least one uppercase character from the ISO basic Latin alphabet (A to Z).</p> <p>Default value: false</p>"]
-    pub require_uppercase_characters: Option<BooleanType>,
+    pub require_uppercase_characters: Option<bool>,
 }
 
 
@@ -11178,9 +11033,9 @@ impl UpdateAccountPasswordPolicyRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct UpdateAssumeRolePolicyRequest {
     #[doc="<p>The policy that grants an entity permission to assume the role.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
-    pub policy_document: PolicyDocumentType,
+    pub policy_document: String,
     #[doc="<p>The name of the role to update with the new policy.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>"]
-    pub role_name: RoleNameType,
+    pub role_name: String,
 }
 
 
@@ -11203,11 +11058,11 @@ impl UpdateAssumeRolePolicyRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct UpdateGroupRequest {
     #[doc="<p>Name of the IAM group to update. If you're changing the name of the group, this is the original name.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub group_name: GroupNameType,
+    pub group_name: String,
     #[doc="<p>New name for the IAM group. Only include this if changing the group's name.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub new_group_name: Option<GroupNameType>,
+    pub new_group_name: Option<String>,
     #[doc="<p>New path for the IAM group. Only include this if changing the group's path.</p> <p>This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
-    pub new_path: Option<PathType>,
+    pub new_path: Option<String>,
 }
 
 
@@ -11234,11 +11089,11 @@ impl UpdateGroupRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct UpdateLoginProfileRequest {
     #[doc="<p>The new password for the specified IAM user.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D). However, the format can be further restricted by the account administrator by setting a password policy on the AWS account. For more information, see <a>UpdateAccountPasswordPolicy</a>.</p>"]
-    pub password: Option<PasswordType>,
+    pub password: Option<String>,
     #[doc="<p>Allows this new password to be used only once by requiring the specified IAM user to set a new password on next sign-in.</p>"]
-    pub password_reset_required: Option<BooleanObjectType>,
+    pub password_reset_required: Option<bool>,
     #[doc="<p>The name of the user whose password you want to update.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: UserNameType,
+    pub user_name: String,
 }
 
 
@@ -11266,9 +11121,9 @@ impl UpdateLoginProfileRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct UpdateOpenIDConnectProviderThumbprintRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the IAM OIDC provider resource object for which you want to update the thumbprint. You can get a list of OIDC provider ARNs by using the <a>ListOpenIDConnectProviders</a> action.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
-    pub open_id_connect_provider_arn: ArnType,
+    pub open_id_connect_provider_arn: String,
     #[doc="<p>A list of certificate thumbprints that are associated with the specified IAM OpenID Connect provider. For more information, see <a>CreateOpenIDConnectProvider</a>. </p>"]
-    pub thumbprint_list: ThumbprintListType,
+    pub thumbprint_list: Vec<String>,
 }
 
 
@@ -11295,9 +11150,9 @@ impl UpdateOpenIDConnectProviderThumbprintRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct UpdateRoleDescriptionRequest {
     #[doc="<p>The new description that you want to apply to the specified role.</p>"]
-    pub description: RoleDescriptionType,
+    pub description: String,
     #[doc="<p>The name of the role that you want to modify.</p>"]
-    pub role_name: RoleNameType,
+    pub role_name: String,
 }
 
 
@@ -11366,9 +11221,9 @@ impl UpdateRoleDescriptionResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct UpdateSAMLProviderRequest {
     #[doc="<p>An XML document generated by an identity provider (IdP) that supports SAML 2.0. The document includes the issuer's name, expiration information, and keys that can be used to validate the SAML authentication response (assertions) that are received from the IdP. You must generate the metadata document using the identity management software that is used as your organization's IdP.</p>"]
-    pub saml_metadata_document: SAMLMetadataDocumentType,
+    pub saml_metadata_document: String,
     #[doc="<p>The Amazon Resource Name (ARN) of the SAML provider to update.</p> <p>For more information about ARNs, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html\">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>"]
-    pub saml_provider_arn: ArnType,
+    pub saml_provider_arn: String,
 }
 
 
@@ -11393,7 +11248,7 @@ impl UpdateSAMLProviderRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct UpdateSAMLProviderResponse {
     #[doc="<p>The Amazon Resource Name (ARN) of the SAML provider that was updated.</p>"]
-    pub saml_provider_arn: Option<ArnType>,
+    pub saml_provider_arn: Option<String>,
 }
 
 struct UpdateSAMLProviderResponseDeserializer;
@@ -11442,11 +11297,11 @@ impl UpdateSAMLProviderResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct UpdateSSHPublicKeyRequest {
     #[doc="<p>The unique identifier for the SSH public key.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>"]
-    pub ssh_public_key_id: PublicKeyIdType,
+    pub ssh_public_key_id: String,
     #[doc="<p>The status to assign to the SSH public key. <code>Active</code> means the key can be used for authentication with an AWS CodeCommit repository. <code>Inactive</code> means the key cannot be used.</p>"]
-    pub status: StatusType,
+    pub status: String,
     #[doc="<p>The name of the IAM user associated with the SSH public key.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: UserNameType,
+    pub user_name: String,
 }
 
 
@@ -11470,11 +11325,11 @@ impl UpdateSSHPublicKeyRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct UpdateServerCertificateRequest {
     #[doc="<p>The new path for the server certificate. Include this only if you are updating the server certificate's path.</p> <p>This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
-    pub new_path: Option<PathType>,
+    pub new_path: Option<String>,
     #[doc="<p>The new name for the server certificate. Include this only if you are updating the server certificate's name. The name of the certificate cannot contain any spaces.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub new_server_certificate_name: Option<ServerCertificateNameType>,
+    pub new_server_certificate_name: Option<String>,
     #[doc="<p>The name of the server certificate that you want to update.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub server_certificate_name: ServerCertificateNameType,
+    pub server_certificate_name: String,
 }
 
 
@@ -11503,11 +11358,11 @@ impl UpdateServerCertificateRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct UpdateServiceSpecificCredentialRequest {
     #[doc="<p>The unique identifier of the service-specific credential.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>"]
-    pub service_specific_credential_id: ServiceSpecificCredentialId,
+    pub service_specific_credential_id: String,
     #[doc="<p>The status to be assigned to the service-specific credential.</p>"]
-    pub status: StatusType,
+    pub status: String,
     #[doc="<p>The name of the IAM user associated with the service-specific credential. If you do not specify this value, then the operation assumes the user whose credentials are used to call the operation.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: Option<UserNameType>,
+    pub user_name: Option<String>,
 }
 
 
@@ -11533,11 +11388,11 @@ impl UpdateServiceSpecificCredentialRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct UpdateSigningCertificateRequest {
     #[doc="<p>The ID of the signing certificate you want to update.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>"]
-    pub certificate_id: CertificateIdType,
+    pub certificate_id: String,
     #[doc="<p> The status you want to assign to the certificate. <code>Active</code> means the certificate can be used for API calls to AWS, while <code>Inactive</code> means the certificate cannot be used.</p>"]
-    pub status: StatusType,
+    pub status: String,
     #[doc="<p>The name of the IAM user the signing certificate belongs to.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: Option<ExistingUserNameType>,
+    pub user_name: Option<String>,
 }
 
 
@@ -11563,11 +11418,11 @@ impl UpdateSigningCertificateRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct UpdateUserRequest {
     #[doc="<p>New path for the IAM user. Include this parameter only if you're changing the user's path.</p> <p>This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>"]
-    pub new_path: Option<PathType>,
+    pub new_path: Option<String>,
     #[doc="<p>New name for the user. Include this parameter only if you're changing the user's name.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub new_user_name: Option<UserNameType>,
+    pub new_user_name: Option<String>,
     #[doc="<p>Name of the user to update. If you're changing the name of the user, this is the original user name.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: ExistingUserNameType,
+    pub user_name: String,
 }
 
 
@@ -11594,9 +11449,9 @@ impl UpdateUserRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct UploadSSHPublicKeyRequest {
     #[doc="<p>The SSH public key. The public key must be encoded in ssh-rsa format or PEM format.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
-    pub ssh_public_key_body: PublicKeyMaterialType,
+    pub ssh_public_key_body: String,
     #[doc="<p>The name of the IAM user to associate the SSH public key with.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: UserNameType,
+    pub user_name: String,
 }
 
 
@@ -11669,15 +11524,15 @@ impl UploadSSHPublicKeyResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct UploadServerCertificateRequest {
     #[doc="<p>The contents of the public key certificate in PEM-encoded format.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
-    pub certificate_body: CertificateBodyType,
+    pub certificate_body: String,
     #[doc="<p>The contents of the certificate chain. This is typically a concatenation of the PEM-encoded public key certificates of the chain.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
-    pub certificate_chain: Option<CertificateChainType>,
+    pub certificate_chain: Option<String>,
     #[doc="<p>The path for the server certificate. For more information about paths, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/). This paramater allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes, containing any ASCII character from the ! (\\u0021) thru the DEL character (\\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p> <note> <p> If you are uploading a server certificate specifically for use with Amazon CloudFront distributions, you must specify a path using the <code>--path</code> option. The path must begin with <code>/cloudfront</code> and must include a trailing slash (for example, <code>/cloudfront/test/</code>).</p> </note>"]
-    pub path: Option<PathType>,
+    pub path: Option<String>,
     #[doc="<p>The contents of the private key in PEM-encoded format.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
-    pub private_key: PrivateKeyType,
+    pub private_key: String,
     #[doc="<p>The name for the server certificate. Do not include the path in this value. The name of the certificate cannot contain any spaces.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub server_certificate_name: ServerCertificateNameType,
+    pub server_certificate_name: String,
 }
 
 
@@ -11757,9 +11612,9 @@ impl UploadServerCertificateResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct UploadSigningCertificateRequest {
     #[doc="<p>The contents of the signing certificate.</p> <p>The <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \\u00FF). It also includes the special characters tab (\\u0009), line feed (\\u000A), and carriage return (\\u000D).</p>"]
-    pub certificate_body: CertificateBodyType,
+    pub certificate_body: String,
     #[doc="<p>The name of the user the signing certificate is for.</p> <p>This parameter allows (per its <a href=\"http://wikipedia.org/wiki/regex\">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>"]
-    pub user_name: Option<ExistingUserNameType>,
+    pub user_name: Option<String>,
 }
 
 
@@ -11836,17 +11691,17 @@ impl UploadSigningCertificateResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct User {
     #[doc="<p>The Amazon Resource Name (ARN) that identifies the user. For more information about ARNs and how to use ARNs in policies, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>"]
-    pub arn: ArnType,
+    pub arn: String,
     #[doc="<p>The date and time, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>, when the user was created.</p>"]
-    pub create_date: DateType,
+    pub create_date: String,
     #[doc="<p>The date and time, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>, when the user's password was last used to sign in to an AWS website. For a list of AWS websites that capture a user's last sign-in time, see the <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/credential-reports.html\">Credential Reports</a> topic in the <i>Using IAM</i> guide. If a password is used more than once in a five-minute span, only the first use is returned in this field. This field is null (not present) when:</p> <ul> <li> <p>The user does not have a password</p> </li> <li> <p>The password exists but has never been used (at least not since IAM started tracking this information on October 20th, 2014</p> </li> <li> <p>there is no sign-in data associated with the user</p> </li> </ul> <p>This value is returned only in the <a>GetUser</a> and <a>ListUsers</a> actions. </p>"]
-    pub password_last_used: Option<DateType>,
+    pub password_last_used: Option<String>,
     #[doc="<p>The path to the user. For more information about paths, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>"]
-    pub path: PathType,
+    pub path: String,
     #[doc="<p>The stable and unique string identifying the user. For more information about IDs, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>"]
-    pub user_id: IdType,
+    pub user_id: String,
     #[doc="<p>The friendly name identifying the user.</p>"]
-    pub user_name: UserNameType,
+    pub user_name: String,
 }
 
 struct UserDeserializer;
@@ -11912,21 +11767,21 @@ impl UserDeserializer {
 #[doc="<p>Contains information about an IAM user, including all the user's policies and all the IAM groups the user is in.</p> <p>This data type is used as a response element in the <a>GetAccountAuthorizationDetails</a> action.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct UserDetail {
-    pub arn: Option<ArnType>,
+    pub arn: Option<String>,
     #[doc="<p>A list of the managed policies attached to the user.</p>"]
-    pub attached_managed_policies: Option<AttachedPoliciesListType>,
+    pub attached_managed_policies: Option<Vec<AttachedPolicy>>,
     #[doc="<p>The date and time, in <a href=\"http://www.iso.org/iso/iso8601\">ISO 8601 date-time format</a>, when the user was created.</p>"]
-    pub create_date: Option<DateType>,
+    pub create_date: Option<String>,
     #[doc="<p>A list of IAM groups that the user is in.</p>"]
-    pub group_list: Option<GroupNameListType>,
+    pub group_list: Option<Vec<String>>,
     #[doc="<p>The path to the user. For more information about paths, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>"]
-    pub path: Option<PathType>,
+    pub path: Option<String>,
     #[doc="<p>The stable and unique string identifying the user. For more information about IDs, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html\">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>"]
-    pub user_id: Option<IdType>,
+    pub user_id: Option<String>,
     #[doc="<p>The friendly name identifying the user.</p>"]
-    pub user_name: Option<UserNameType>,
+    pub user_name: Option<String>,
     #[doc="<p>A list of the inline policies embedded in the user.</p>"]
-    pub user_policy_list: Option<PolicyDetailListType>,
+    pub user_policy_list: Option<Vec<PolicyDetail>>,
 }
 
 struct UserDetailDeserializer;
@@ -11999,13 +11854,12 @@ impl UserDetailDeserializer {
 
     }
 }
-pub type UserDetailListType = Vec<UserDetail>;
 struct UserDetailListTypeDeserializer;
 impl UserDetailListTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<UserDetailListType, XmlParseError> {
+                                       -> Result<Vec<UserDetail>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -12041,14 +11895,12 @@ impl UserDetailListTypeDeserializer {
 
     }
 }
-#[doc="<p>Contains a list of users.</p> <p>This data type is used as a response element in the <a>GetGroup</a> and <a>ListUsers</a> actions. </p>"]
-pub type UserListType = Vec<User>;
 struct UserListTypeDeserializer;
 impl UserListTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<UserListType, XmlParseError> {
+                                       -> Result<Vec<User>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -12084,13 +11936,12 @@ impl UserListTypeDeserializer {
 
     }
 }
-pub type UserNameType = String;
 struct UserNameTypeDeserializer;
 impl UserNameTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<UserNameType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -12103,13 +11954,13 @@ impl UserNameTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct VirtualMFADevice {
     #[doc="<p> The Base32 seed defined as specified in <a href=\"https://tools.ietf.org/html/rfc3548.txt\">RFC3548</a>. The <code>Base32StringSeed</code> is Base64-encoded. </p>"]
-    pub base_32_string_seed: Option<BootstrapDatum>,
+    pub base_32_string_seed: Option<Vec<u8>>,
     #[doc="<p>The date and time on which the virtual MFA device was enabled.</p>"]
-    pub enable_date: Option<DateType>,
+    pub enable_date: Option<String>,
     #[doc="<p> A QR code PNG image that encodes <code>otpauth://totp/$virtualMFADeviceName@$AccountName?secret=$Base32String</code> where <code>$virtualMFADeviceName</code> is one of the create call arguments, <code>AccountName</code> is the user name if set (otherwise, the account ID otherwise), and <code>Base32String</code> is the seed in Base32 format. The <code>Base32String</code> value is Base64-encoded. </p>"]
-    pub qr_code_png: Option<BootstrapDatum>,
+    pub qr_code_png: Option<Vec<u8>>,
     #[doc="<p>The serial number associated with <code>VirtualMFADevice</code>.</p>"]
-    pub serial_number: SerialNumberType,
+    pub serial_number: String,
     #[doc="<p>The IAM user associated with this virtual MFA device.</p>"]
     pub user: Option<User>,
 }
@@ -12174,13 +12025,12 @@ impl VirtualMFADeviceDeserializer {
 
     }
 }
-pub type VirtualMFADeviceListType = Vec<VirtualMFADevice>;
 struct VirtualMFADeviceListTypeDeserializer;
 impl VirtualMFADeviceListTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VirtualMFADeviceListType, XmlParseError> {
+                                       -> Result<Vec<VirtualMFADevice>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -12216,7 +12066,6 @@ impl VirtualMFADeviceListTypeDeserializer {
 
     }
 }
-pub type VirtualMFADeviceName = String;
 /// Errors returned by AddClientIDToOpenIDConnectProvider
 #[derive(Debug, PartialEq)]
 pub enum AddClientIDToOpenIDConnectProviderError {

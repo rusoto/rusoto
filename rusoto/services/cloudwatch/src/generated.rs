@@ -37,14 +37,12 @@ enum DeserializerNext {
     Skip,
     Element(String),
 }
-pub type ActionPrefix = String;
-pub type ActionsEnabled = bool;
 struct ActionsEnabledDeserializer;
 impl ActionsEnabledDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ActionsEnabled, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -53,13 +51,12 @@ impl ActionsEnabledDeserializer {
 
     }
 }
-pub type AlarmArn = String;
 struct AlarmArnDeserializer;
 impl AlarmArnDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AlarmArn, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -68,13 +65,12 @@ impl AlarmArnDeserializer {
 
     }
 }
-pub type AlarmDescription = String;
 struct AlarmDescriptionDeserializer;
 impl AlarmDescriptionDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AlarmDescription, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -87,15 +83,15 @@ impl AlarmDescriptionDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct AlarmHistoryItem {
     #[doc="<p>The descriptive name for the alarm.</p>"]
-    pub alarm_name: Option<AlarmName>,
+    pub alarm_name: Option<String>,
     #[doc="<p>Data about the alarm, in JSON format.</p>"]
-    pub history_data: Option<HistoryData>,
+    pub history_data: Option<String>,
     #[doc="<p>The type of alarm history item.</p>"]
-    pub history_item_type: Option<HistoryItemType>,
+    pub history_item_type: Option<String>,
     #[doc="<p>A summary of the alarm history, in text format.</p>"]
-    pub history_summary: Option<HistorySummary>,
+    pub history_summary: Option<String>,
     #[doc="<p>The time stamp for the alarm history item.</p>"]
-    pub timestamp: Option<Timestamp>,
+    pub timestamp: Option<String>,
 }
 
 struct AlarmHistoryItemDeserializer;
@@ -159,13 +155,12 @@ impl AlarmHistoryItemDeserializer {
 
     }
 }
-pub type AlarmHistoryItems = Vec<AlarmHistoryItem>;
 struct AlarmHistoryItemsDeserializer;
 impl AlarmHistoryItemsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AlarmHistoryItems, XmlParseError> {
+                                       -> Result<Vec<AlarmHistoryItem>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -201,13 +196,12 @@ impl AlarmHistoryItemsDeserializer {
 
     }
 }
-pub type AlarmName = String;
 struct AlarmNameDeserializer;
 impl AlarmNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AlarmName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -216,13 +210,11 @@ impl AlarmNameDeserializer {
 
     }
 }
-pub type AlarmNamePrefix = String;
-pub type AlarmNames = Vec<AlarmName>;
 
 /// Serialize `AlarmNames` contents to a `SignedRequest`.
 struct AlarmNamesSerializer;
 impl AlarmNamesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AlarmNames) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -230,14 +222,12 @@ impl AlarmNamesSerializer {
     }
 }
 
-pub type AwsQueryErrorMessage = String;
-pub type ComparisonOperator = String;
 struct ComparisonOperatorDeserializer;
 impl ComparisonOperatorDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ComparisonOperator, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -250,21 +240,21 @@ impl ComparisonOperatorDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct Datapoint {
     #[doc="<p>The average of the metric values that correspond to the data point.</p>"]
-    pub average: Option<DatapointValue>,
+    pub average: Option<f64>,
     #[doc="<p>The percentile statistic for the data point.</p>"]
-    pub extended_statistics: Option<DatapointValueMap>,
+    pub extended_statistics: Option<::std::collections::HashMap<String, f64>>,
     #[doc="<p>The maximum metric value for the data point.</p>"]
-    pub maximum: Option<DatapointValue>,
+    pub maximum: Option<f64>,
     #[doc="<p>The minimum metric value for the data point.</p>"]
-    pub minimum: Option<DatapointValue>,
+    pub minimum: Option<f64>,
     #[doc="<p>The number of metric values that contributed to the aggregate value of this data point.</p>"]
-    pub sample_count: Option<DatapointValue>,
+    pub sample_count: Option<f64>,
     #[doc="<p>The sum of the metric values for the data point.</p>"]
-    pub sum: Option<DatapointValue>,
+    pub sum: Option<f64>,
     #[doc="<p>The time stamp used for the data point.</p>"]
-    pub timestamp: Option<Timestamp>,
+    pub timestamp: Option<String>,
     #[doc="<p>The standard unit for the data point.</p>"]
-    pub unit: Option<StandardUnit>,
+    pub unit: Option<String>,
 }
 
 struct DatapointDeserializer;
@@ -342,13 +332,12 @@ impl DatapointDeserializer {
 
     }
 }
-pub type DatapointValue = f64;
 struct DatapointValueDeserializer;
 impl DatapointValueDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DatapointValue, XmlParseError> {
+                                       -> Result<f64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = f64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -357,13 +346,13 @@ impl DatapointValueDeserializer {
 
     }
 }
-pub type DatapointValueMap = ::std::collections::HashMap<ExtendedStatistic, DatapointValue>;
 struct DatapointValueMapDeserializer;
 impl DatapointValueMapDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<DatapointValueMap, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<::std::collections::HashMap<String, f64>, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = ::std::collections::HashMap::new();
@@ -381,13 +370,12 @@ impl DatapointValueMapDeserializer {
 
     }
 }
-pub type Datapoints = Vec<Datapoint>;
 struct DatapointsDeserializer;
 impl DatapointsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Datapoints, XmlParseError> {
+                                       -> Result<Vec<Datapoint>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -426,7 +414,7 @@ impl DatapointsDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteAlarmsInput {
     #[doc="<p>The alarms to be deleted.</p>"]
-    pub alarm_names: AlarmNames,
+    pub alarm_names: Vec<String>,
 }
 
 
@@ -449,17 +437,17 @@ impl DeleteAlarmsInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeAlarmHistoryInput {
     #[doc="<p>The name of the alarm.</p>"]
-    pub alarm_name: Option<AlarmName>,
+    pub alarm_name: Option<String>,
     #[doc="<p>The ending date to retrieve alarm history.</p>"]
-    pub end_date: Option<Timestamp>,
+    pub end_date: Option<String>,
     #[doc="<p>The type of alarm histories to retrieve.</p>"]
-    pub history_item_type: Option<HistoryItemType>,
+    pub history_item_type: Option<String>,
     #[doc="<p>The maximum number of alarm history records to retrieve.</p>"]
-    pub max_records: Option<MaxRecords>,
+    pub max_records: Option<i64>,
     #[doc="<p>The token returned by a previous call to indicate that there is more data available.</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
     #[doc="<p>The starting date to retrieve alarm history.</p>"]
-    pub start_date: Option<Timestamp>,
+    pub start_date: Option<String>,
 }
 
 
@@ -498,9 +486,9 @@ impl DescribeAlarmHistoryInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeAlarmHistoryOutput {
     #[doc="<p>The alarm histories, in JSON format.</p>"]
-    pub alarm_history_items: Option<AlarmHistoryItems>,
+    pub alarm_history_items: Option<Vec<AlarmHistoryItem>>,
     #[doc="<p>The token that marks the start of the next batch of returned results.</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
 struct DescribeAlarmHistoryOutputDeserializer;
@@ -553,19 +541,19 @@ impl DescribeAlarmHistoryOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeAlarmsForMetricInput {
     #[doc="<p>The dimensions associated with the metric. If the metric has any associated dimensions, you must specify them in order for the call to succeed.</p>"]
-    pub dimensions: Option<Dimensions>,
+    pub dimensions: Option<Vec<Dimension>>,
     #[doc="<p>The percentile statistic for the metric. Specify a value between p0.0 and p100.</p>"]
-    pub extended_statistic: Option<ExtendedStatistic>,
+    pub extended_statistic: Option<String>,
     #[doc="<p>The name of the metric.</p>"]
-    pub metric_name: MetricName,
+    pub metric_name: String,
     #[doc="<p>The namespace of the metric.</p>"]
-    pub namespace: Namespace,
+    pub namespace: String,
     #[doc="<p>The period, in seconds, over which the statistic is applied.</p>"]
-    pub period: Option<Period>,
+    pub period: Option<i64>,
     #[doc="<p>The statistic for the metric, other than percentiles. For percentile statistics, use <code>ExtendedStatistics</code>.</p>"]
-    pub statistic: Option<Statistic>,
+    pub statistic: Option<String>,
     #[doc="<p>The unit for the metric.</p>"]
-    pub unit: Option<StandardUnit>,
+    pub unit: Option<String>,
 }
 
 
@@ -604,7 +592,7 @@ impl DescribeAlarmsForMetricInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeAlarmsForMetricOutput {
     #[doc="<p>The information for each alarm with the specified metric.</p>"]
-    pub metric_alarms: Option<MetricAlarms>,
+    pub metric_alarms: Option<Vec<MetricAlarm>>,
 }
 
 struct DescribeAlarmsForMetricOutputDeserializer;
@@ -653,17 +641,17 @@ impl DescribeAlarmsForMetricOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeAlarmsInput {
     #[doc="<p>The action name prefix.</p>"]
-    pub action_prefix: Option<ActionPrefix>,
+    pub action_prefix: Option<String>,
     #[doc="<p>The alarm name prefix. You cannot specify <code>AlarmNames</code> if this parameter is specified.</p>"]
-    pub alarm_name_prefix: Option<AlarmNamePrefix>,
+    pub alarm_name_prefix: Option<String>,
     #[doc="<p>The names of the alarms.</p>"]
-    pub alarm_names: Option<AlarmNames>,
+    pub alarm_names: Option<Vec<String>>,
     #[doc="<p>The maximum number of alarm descriptions to retrieve.</p>"]
-    pub max_records: Option<MaxRecords>,
+    pub max_records: Option<i64>,
     #[doc="<p>The token returned by a previous call to indicate that there is more data available.</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
     #[doc="<p>The state value to be used in matching alarms.</p>"]
-    pub state_value: Option<StateValue>,
+    pub state_value: Option<String>,
 }
 
 
@@ -704,9 +692,9 @@ impl DescribeAlarmsInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeAlarmsOutput {
     #[doc="<p>The information for the specified alarms.</p>"]
-    pub metric_alarms: Option<MetricAlarms>,
+    pub metric_alarms: Option<Vec<MetricAlarm>>,
     #[doc="<p>The token that marks the start of the next batch of returned results.</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
 struct DescribeAlarmsOutputDeserializer;
@@ -760,9 +748,9 @@ impl DescribeAlarmsOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct Dimension {
     #[doc="<p>The name of the dimension.</p>"]
-    pub name: DimensionName,
+    pub name: String,
     #[doc="<p>The value representing the dimension measurement.</p>"]
-    pub value: DimensionValue,
+    pub value: String,
 }
 
 struct DimensionDeserializer;
@@ -830,9 +818,9 @@ impl DimensionSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DimensionFilter {
     #[doc="<p>The dimension name to be matched.</p>"]
-    pub name: DimensionName,
+    pub name: String,
     #[doc="<p>The value of the dimension to be matched.</p>"]
-    pub value: Option<DimensionValue>,
+    pub value: Option<String>,
 }
 
 
@@ -853,12 +841,11 @@ impl DimensionFilterSerializer {
     }
 }
 
-pub type DimensionFilters = Vec<DimensionFilter>;
 
 /// Serialize `DimensionFilters` contents to a `SignedRequest`.
 struct DimensionFiltersSerializer;
 impl DimensionFiltersSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DimensionFilters) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<DimensionFilter>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             DimensionFilterSerializer::serialize(params, &key, obj);
@@ -866,13 +853,12 @@ impl DimensionFiltersSerializer {
     }
 }
 
-pub type DimensionName = String;
 struct DimensionNameDeserializer;
 impl DimensionNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DimensionName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -881,13 +867,12 @@ impl DimensionNameDeserializer {
 
     }
 }
-pub type DimensionValue = String;
 struct DimensionValueDeserializer;
 impl DimensionValueDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DimensionValue, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -896,13 +881,12 @@ impl DimensionValueDeserializer {
 
     }
 }
-pub type Dimensions = Vec<Dimension>;
 struct DimensionsDeserializer;
 impl DimensionsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Dimensions, XmlParseError> {
+                                       -> Result<Vec<Dimension>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -942,7 +926,7 @@ impl DimensionsDeserializer {
 /// Serialize `Dimensions` contents to a `SignedRequest`.
 struct DimensionsSerializer;
 impl DimensionsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Dimensions) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<Dimension>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             DimensionSerializer::serialize(params, &key, obj);
@@ -953,7 +937,7 @@ impl DimensionsSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DisableAlarmActionsInput {
     #[doc="<p>The names of the alarms.</p>"]
-    pub alarm_names: AlarmNames,
+    pub alarm_names: Vec<String>,
 }
 
 
@@ -976,7 +960,7 @@ impl DisableAlarmActionsInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct EnableAlarmActionsInput {
     #[doc="<p>The names of the alarms.</p>"]
-    pub alarm_names: AlarmNames,
+    pub alarm_names: Vec<String>,
 }
 
 
@@ -996,15 +980,12 @@ impl EnableAlarmActionsInputSerializer {
     }
 }
 
-pub type ErrorMessage = String;
-pub type EvaluateLowSampleCountPercentile = String;
 struct EvaluateLowSampleCountPercentileDeserializer;
 impl EvaluateLowSampleCountPercentileDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<EvaluateLowSampleCountPercentile, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1013,13 +994,12 @@ impl EvaluateLowSampleCountPercentileDeserializer {
 
     }
 }
-pub type EvaluationPeriods = i64;
 struct EvaluationPeriodsDeserializer;
 impl EvaluationPeriodsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EvaluationPeriods, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -1028,13 +1008,12 @@ impl EvaluationPeriodsDeserializer {
 
     }
 }
-pub type ExtendedStatistic = String;
 struct ExtendedStatisticDeserializer;
 impl ExtendedStatisticDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ExtendedStatistic, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1043,12 +1022,11 @@ impl ExtendedStatisticDeserializer {
 
     }
 }
-pub type ExtendedStatistics = Vec<ExtendedStatistic>;
 
 /// Serialize `ExtendedStatistics` contents to a `SignedRequest`.
 struct ExtendedStatisticsSerializer;
 impl ExtendedStatisticsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ExtendedStatistics) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -1056,27 +1034,26 @@ impl ExtendedStatisticsSerializer {
     }
 }
 
-pub type FaultDescription = String;
 #[derive(Default,Debug,Clone)]
 pub struct GetMetricStatisticsInput {
     #[doc="<p>The dimensions. If the metric contains multiple dimensions, you must include a value for each dimension. CloudWatch treats each unique combination of dimensions as a separate metric. You can't retrieve statistics using combinations of dimensions that were not specially published. You must specify the same dimensions that were used when the metrics were created. For an example, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html#dimension-combinations\">Dimension Combinations</a> in the <i>Amazon CloudWatch User Guide</i>. For more information on specifying dimensions, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html\">Publishing Metrics</a> in the <i>Amazon CloudWatch User Guide</i>.</p>"]
-    pub dimensions: Option<Dimensions>,
+    pub dimensions: Option<Vec<Dimension>>,
     #[doc="<p>The time stamp that determines the last data point to return.</p> <p>The value specified is exclusive; results will include data points up to the specified time stamp. The time stamp must be in ISO 8601 UTC format (for example, 2016-10-10T23:00:00Z).</p>"]
-    pub end_time: Timestamp,
+    pub end_time: String,
     #[doc="<p>The percentile statistics. Specify values between p0.0 and p100.</p>"]
-    pub extended_statistics: Option<ExtendedStatistics>,
+    pub extended_statistics: Option<Vec<String>>,
     #[doc="<p>The name of the metric, with or without spaces.</p>"]
-    pub metric_name: MetricName,
+    pub metric_name: String,
     #[doc="<p>The namespace of the metric, with or without spaces.</p>"]
-    pub namespace: Namespace,
+    pub namespace: String,
     #[doc="<p>The granularity, in seconds, of the returned data points. A period can be as short as one minute (60 seconds) and must be a multiple of 60. The default value is 60.</p> <p>If the <code>StartTime</code> parameter specifies a time stamp that is greater than 15 days ago, you must specify the period as follows or no data points in that time range is returned:</p> <ul> <li> <p>Start time between 15 and 63 days ago - Use a multiple of 300 seconds (5 minutes).</p> </li> <li> <p>Start time greater than 63 days ago - Use a multiple of 3600 seconds (1 hour).</p> </li> </ul>"]
-    pub period: Period,
+    pub period: i64,
     #[doc="<p>The time stamp that determines the first data point to return. Note that start times are evaluated relative to the time that CloudWatch receives the request.</p> <p>The value specified is inclusive; results include data points with the specified time stamp. The time stamp must be in ISO 8601 UTC format (for example, 2016-10-03T23:00:00Z).</p> <p>CloudWatch rounds the specified time stamp as follows:</p> <ul> <li> <p>Start time less than 15 days ago - Round down to the nearest whole minute. For example, 12:32:34 is rounded down to 12:32:00.</p> </li> <li> <p>Start time between 15 and 63 days ago - Round down to the nearest 5-minute clock interval. For example, 12:32:34 is rounded down to 12:30:00.</p> </li> <li> <p>Start time greater than 63 days ago - Round down to the nearest 1-hour clock interval. For example, 12:32:34 is rounded down to 12:00:00.</p> </li> </ul>"]
-    pub start_time: Timestamp,
+    pub start_time: String,
     #[doc="<p>The metric statistics, other than percentile. For percentile statistics, use <code>ExtendedStatistic</code>.</p>"]
-    pub statistics: Option<Statistics>,
+    pub statistics: Option<Vec<String>>,
     #[doc="<p>The unit for a given metric. Metrics may be reported in multiple units. Not supplying a unit results in all units being returned. If the metric only ever reports one unit, specifying a unit has no effect.</p>"]
-    pub unit: Option<StandardUnit>,
+    pub unit: Option<String>,
 }
 
 
@@ -1119,9 +1096,9 @@ impl GetMetricStatisticsInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetMetricStatisticsOutput {
     #[doc="<p>The data points for the specified metric.</p>"]
-    pub datapoints: Option<Datapoints>,
+    pub datapoints: Option<Vec<Datapoint>>,
     #[doc="<p>A label for the specified metric.</p>"]
-    pub label: Option<MetricLabel>,
+    pub label: Option<String>,
 }
 
 struct GetMetricStatisticsOutputDeserializer;
@@ -1170,13 +1147,12 @@ impl GetMetricStatisticsOutputDeserializer {
 
     }
 }
-pub type HistoryData = String;
 struct HistoryDataDeserializer;
 impl HistoryDataDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<HistoryData, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1185,13 +1161,12 @@ impl HistoryDataDeserializer {
 
     }
 }
-pub type HistoryItemType = String;
 struct HistoryItemTypeDeserializer;
 impl HistoryItemTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<HistoryItemType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1200,13 +1175,12 @@ impl HistoryItemTypeDeserializer {
 
     }
 }
-pub type HistorySummary = String;
 struct HistorySummaryDeserializer;
 impl HistorySummaryDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<HistorySummary, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1218,13 +1192,13 @@ impl HistorySummaryDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListMetricsInput {
     #[doc="<p>The dimensions to filter against.</p>"]
-    pub dimensions: Option<DimensionFilters>,
+    pub dimensions: Option<Vec<DimensionFilter>>,
     #[doc="<p>The name of the metric to filter against.</p>"]
-    pub metric_name: Option<MetricName>,
+    pub metric_name: Option<String>,
     #[doc="<p>The namespace to filter against.</p>"]
-    pub namespace: Option<Namespace>,
+    pub namespace: Option<String>,
     #[doc="<p>The token returned by a previous call to indicate that there is more data available.</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
 
@@ -1258,9 +1232,9 @@ impl ListMetricsInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListMetricsOutput {
     #[doc="<p>The metrics.</p>"]
-    pub metrics: Option<Metrics>,
+    pub metrics: Option<Vec<Metric>>,
     #[doc="<p>The token that marks the start of the next batch of returned results.</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
 struct ListMetricsOutputDeserializer;
@@ -1309,16 +1283,15 @@ impl ListMetricsOutputDeserializer {
 
     }
 }
-pub type MaxRecords = i64;
 #[doc="<p>Represents a specific metric.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct Metric {
     #[doc="<p>The dimensions for the metric.</p>"]
-    pub dimensions: Option<Dimensions>,
+    pub dimensions: Option<Vec<Dimension>>,
     #[doc="<p>The name of the metric.</p>"]
-    pub metric_name: Option<MetricName>,
+    pub metric_name: Option<String>,
     #[doc="<p>The namespace of the metric.</p>"]
-    pub namespace: Option<Namespace>,
+    pub namespace: Option<String>,
 }
 
 struct MetricDeserializer;
@@ -1376,51 +1349,51 @@ impl MetricDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct MetricAlarm {
     #[doc="<p>Indicates whether actions should be executed during any changes to the alarm state.</p>"]
-    pub actions_enabled: Option<ActionsEnabled>,
+    pub actions_enabled: Option<bool>,
     #[doc="<p>The actions to execute when this alarm transitions to the <code>ALARM</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN).</p>"]
-    pub alarm_actions: Option<ResourceList>,
+    pub alarm_actions: Option<Vec<String>>,
     #[doc="<p>The Amazon Resource Name (ARN) of the alarm.</p>"]
-    pub alarm_arn: Option<AlarmArn>,
+    pub alarm_arn: Option<String>,
     #[doc="<p>The time stamp of the last update to the alarm configuration.</p>"]
-    pub alarm_configuration_updated_timestamp: Option<Timestamp>,
+    pub alarm_configuration_updated_timestamp: Option<String>,
     #[doc="<p>The description of the alarm.</p>"]
-    pub alarm_description: Option<AlarmDescription>,
+    pub alarm_description: Option<String>,
     #[doc="<p>The name of the alarm.</p>"]
-    pub alarm_name: Option<AlarmName>,
+    pub alarm_name: Option<String>,
     #[doc="<p>The arithmetic operation to use when comparing the specified statistic and threshold. The specified statistic value is used as the first operand.</p>"]
-    pub comparison_operator: Option<ComparisonOperator>,
+    pub comparison_operator: Option<String>,
     #[doc="<p>The dimensions for the metric associated with the alarm.</p>"]
-    pub dimensions: Option<Dimensions>,
-    pub evaluate_low_sample_count_percentile: Option<EvaluateLowSampleCountPercentile>,
+    pub dimensions: Option<Vec<Dimension>>,
+    pub evaluate_low_sample_count_percentile: Option<String>,
     #[doc="<p>The number of periods over which data is compared to the specified threshold.</p>"]
-    pub evaluation_periods: Option<EvaluationPeriods>,
+    pub evaluation_periods: Option<i64>,
     #[doc="<p>The percentile statistic for the metric associated with the alarm. Specify a value between p0.0 and p100.</p>"]
-    pub extended_statistic: Option<ExtendedStatistic>,
+    pub extended_statistic: Option<String>,
     #[doc="<p>The actions to execute when this alarm transitions to the <code>INSUFFICIENT_DATA</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN).</p>"]
-    pub insufficient_data_actions: Option<ResourceList>,
+    pub insufficient_data_actions: Option<Vec<String>>,
     #[doc="<p>The name of the metric associated with the alarm.</p>"]
-    pub metric_name: Option<MetricName>,
+    pub metric_name: Option<String>,
     #[doc="<p>The namespace of the metric associated with the alarm.</p>"]
-    pub namespace: Option<Namespace>,
+    pub namespace: Option<String>,
     #[doc="<p>The actions to execute when this alarm transitions to the <code>OK</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN).</p>"]
-    pub ok_actions: Option<ResourceList>,
+    pub ok_actions: Option<Vec<String>>,
     #[doc="<p>The period, in seconds, over which the statistic is applied.</p>"]
-    pub period: Option<Period>,
+    pub period: Option<i64>,
     #[doc="<p>An explanation for the alarm state, in text format.</p>"]
-    pub state_reason: Option<StateReason>,
+    pub state_reason: Option<String>,
     #[doc="<p>An explanation for the alarm state, in JSON format.</p>"]
-    pub state_reason_data: Option<StateReasonData>,
+    pub state_reason_data: Option<String>,
     #[doc="<p>The time stamp of the last update to the alarm state.</p>"]
-    pub state_updated_timestamp: Option<Timestamp>,
+    pub state_updated_timestamp: Option<String>,
     #[doc="<p>The state value for the alarm.</p>"]
-    pub state_value: Option<StateValue>,
+    pub state_value: Option<String>,
     #[doc="<p>The statistic for the metric associated with the alarm, other than percentile. For percentile statistics, use <code>ExtendedStatistic</code>.</p>"]
-    pub statistic: Option<Statistic>,
+    pub statistic: Option<String>,
     #[doc="<p>The value to compare with the specified statistic.</p>"]
-    pub threshold: Option<Threshold>,
-    pub treat_missing_data: Option<TreatMissingData>,
+    pub threshold: Option<f64>,
+    pub treat_missing_data: Option<String>,
     #[doc="<p>The unit of the metric associated with the alarm.</p>"]
-    pub unit: Option<StandardUnit>,
+    pub unit: Option<String>,
 }
 
 struct MetricAlarmDeserializer;
@@ -1571,13 +1544,12 @@ impl MetricAlarmDeserializer {
 
     }
 }
-pub type MetricAlarms = Vec<MetricAlarm>;
 struct MetricAlarmsDeserializer;
 impl MetricAlarmsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<MetricAlarms, XmlParseError> {
+                                       -> Result<Vec<MetricAlarm>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -1613,12 +1585,11 @@ impl MetricAlarmsDeserializer {
 
     }
 }
-pub type MetricData = Vec<MetricDatum>;
 
 /// Serialize `MetricData` contents to a `SignedRequest`.
 struct MetricDataSerializer;
 impl MetricDataSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &MetricData) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<MetricDatum>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             MetricDatumSerializer::serialize(params, &key, obj);
@@ -1630,17 +1601,17 @@ impl MetricDataSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct MetricDatum {
     #[doc="<p>The dimensions associated with the metric.</p>"]
-    pub dimensions: Option<Dimensions>,
+    pub dimensions: Option<Vec<Dimension>>,
     #[doc="<p>The name of the metric.</p>"]
-    pub metric_name: MetricName,
+    pub metric_name: String,
     #[doc="<p>The statistical values for the metric.</p>"]
     pub statistic_values: Option<StatisticSet>,
     #[doc="<p>The time the metric data was received, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"]
-    pub timestamp: Option<Timestamp>,
+    pub timestamp: Option<String>,
     #[doc="<p>The unit of the metric.</p>"]
-    pub unit: Option<StandardUnit>,
+    pub unit: Option<String>,
     #[doc="<p>The value for the metric.</p> <p>Although the parameter accepts numbers of type Double, Amazon CloudWatch rejects values that are either too small or too large. Values must be in the range of 8.515920e-109 to 1.174271e+108 (Base 10) or 2e-360 to 2e360 (Base 2). In addition, special values (for example, NaN, +Infinity, -Infinity) are not supported.</p>"]
-    pub value: Option<DatapointValue>,
+    pub value: Option<f64>,
 }
 
 
@@ -1677,13 +1648,12 @@ impl MetricDatumSerializer {
     }
 }
 
-pub type MetricLabel = String;
 struct MetricLabelDeserializer;
 impl MetricLabelDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<MetricLabel, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1692,13 +1662,12 @@ impl MetricLabelDeserializer {
 
     }
 }
-pub type MetricName = String;
 struct MetricNameDeserializer;
 impl MetricNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<MetricName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1707,13 +1676,12 @@ impl MetricNameDeserializer {
 
     }
 }
-pub type Metrics = Vec<Metric>;
 struct MetricsDeserializer;
 impl MetricsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Metrics, XmlParseError> {
+                                       -> Result<Vec<Metric>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -1749,13 +1717,12 @@ impl MetricsDeserializer {
 
     }
 }
-pub type Namespace = String;
 struct NamespaceDeserializer;
 impl NamespaceDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Namespace, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1764,13 +1731,12 @@ impl NamespaceDeserializer {
 
     }
 }
-pub type NextToken = String;
 struct NextTokenDeserializer;
 impl NextTokenDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NextToken, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1779,13 +1745,12 @@ impl NextTokenDeserializer {
 
     }
 }
-pub type Period = i64;
 struct PeriodDeserializer;
 impl PeriodDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Period, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -1797,41 +1762,41 @@ impl PeriodDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct PutMetricAlarmInput {
     #[doc="<p>Indicates whether actions should be executed during any changes to the alarm state.</p>"]
-    pub actions_enabled: Option<ActionsEnabled>,
+    pub actions_enabled: Option<bool>,
     #[doc="<p>The actions to execute when this alarm transitions to the <code>ALARM</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN).</p> <p>Valid Values: arn:aws:automate:<i>region</i>:ec2:stop | arn:aws:automate:<i>region</i>:ec2:terminate | arn:aws:automate:<i>region</i>:ec2:recover</p> <p>Valid Values (for use with IAM roles): arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Stop/1.0 | arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Terminate/1.0 | arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Reboot/1.0</p>"]
-    pub alarm_actions: Option<ResourceList>,
+    pub alarm_actions: Option<Vec<String>>,
     #[doc="<p>The description for the alarm.</p>"]
-    pub alarm_description: Option<AlarmDescription>,
+    pub alarm_description: Option<String>,
     #[doc="<p>The name for the alarm. This name must be unique within the AWS account.</p>"]
-    pub alarm_name: AlarmName,
+    pub alarm_name: String,
     #[doc="<p> The arithmetic operation to use when comparing the specified statistic and threshold. The specified statistic value is used as the first operand.</p>"]
-    pub comparison_operator: ComparisonOperator,
+    pub comparison_operator: String,
     #[doc="<p>The dimensions for the metric associated with the alarm.</p>"]
-    pub dimensions: Option<Dimensions>,
+    pub dimensions: Option<Vec<Dimension>>,
     #[doc="<p> Used only for alarms based on percentiles. If you specify <code>ignore</code>, the alarm state will not change during periods with too few data points to be statistically significant. If you specify <code>evaluate</code> or omit this parameter, the alarm will always be evaluated and possibly change state no matter how many data points are available. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html#percentiles-with-low-samples\">Percentile-Based CloudWatch Alarms and Low Data Samples</a>.</p> <p>Valid Values: <code>evaluate | ignore</code> </p>"]
-    pub evaluate_low_sample_count_percentile: Option<EvaluateLowSampleCountPercentile>,
+    pub evaluate_low_sample_count_percentile: Option<String>,
     #[doc="<p>The number of periods over which data is compared to the specified threshold.</p>"]
-    pub evaluation_periods: EvaluationPeriods,
+    pub evaluation_periods: i64,
     #[doc="<p>The percentile statistic for the metric associated with the alarm. Specify a value between p0.0 and p100.</p>"]
-    pub extended_statistic: Option<ExtendedStatistic>,
+    pub extended_statistic: Option<String>,
     #[doc="<p>The actions to execute when this alarm transitions to the <code>INSUFFICIENT_DATA</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN).</p> <p>Valid Values: arn:aws:automate:<i>region</i>:ec2:stop | arn:aws:automate:<i>region</i>:ec2:terminate | arn:aws:automate:<i>region</i>:ec2:recover</p> <p>Valid Values (for use with IAM roles): arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Stop/1.0 | arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Terminate/1.0 | arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Reboot/1.0</p>"]
-    pub insufficient_data_actions: Option<ResourceList>,
+    pub insufficient_data_actions: Option<Vec<String>>,
     #[doc="<p>The name for the metric associated with the alarm.</p>"]
-    pub metric_name: MetricName,
+    pub metric_name: String,
     #[doc="<p>The namespace for the metric associated with the alarm.</p>"]
-    pub namespace: Namespace,
+    pub namespace: String,
     #[doc="<p>The actions to execute when this alarm transitions to an <code>OK</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN).</p> <p>Valid Values: arn:aws:automate:<i>region</i>:ec2:stop | arn:aws:automate:<i>region</i>:ec2:terminate | arn:aws:automate:<i>region</i>:ec2:recover</p> <p>Valid Values (for use with IAM roles): arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Stop/1.0 | arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Terminate/1.0 | arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Reboot/1.0</p>"]
-    pub ok_actions: Option<ResourceList>,
+    pub ok_actions: Option<Vec<String>>,
     #[doc="<p>The period, in seconds, over which the specified statistic is applied.</p>"]
-    pub period: Period,
+    pub period: i64,
     #[doc="<p>The statistic for the metric associated with the alarm, other than percentile. For percentile statistics, use <code>ExtendedStatistic</code>.</p>"]
-    pub statistic: Option<Statistic>,
+    pub statistic: Option<String>,
     #[doc="<p>The value against which the specified statistic is compared.</p>"]
-    pub threshold: Threshold,
+    pub threshold: f64,
     #[doc="<p> Sets how this alarm is to handle missing data points. If <code>TreatMissingData</code> is omitted, the default behavior of <code>missing</code> is used. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html#alarms-and-missing-data\">Configuring How CloudWatch Alarms Treats Missing Data</a>.</p> <p>Valid Values: <code>breaching | notBreaching | ignore | missing</code> </p>"]
-    pub treat_missing_data: Option<TreatMissingData>,
+    pub treat_missing_data: Option<String>,
     #[doc="<p>The unit of measure for the statistic. For example, the units for the Amazon EC2 NetworkIn metric are Bytes because NetworkIn tracks the number of bytes that an instance receives on all network interfaces. You can also specify a unit when you create a custom metric. Units help provide conceptual meaning to your data. Metric data points that specify a unit of measure, such as Percent, are aggregated separately.</p> <p>If you specify a unit, you must use a unit that is appropriate for the metric. Otherwise, the Amazon CloudWatch alarm can get stuck in the <code>INSUFFICIENT DATA</code> state. </p>"]
-    pub unit: Option<StandardUnit>,
+    pub unit: Option<String>,
 }
 
 
@@ -1904,9 +1869,9 @@ impl PutMetricAlarmInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct PutMetricDataInput {
     #[doc="<p>The data for the metric.</p>"]
-    pub metric_data: MetricData,
+    pub metric_data: Vec<MetricDatum>,
     #[doc="<p>The namespace for the metric data.</p> <p>You cannot specify a namespace that begins with \"AWS/\". Namespaces that begin with \"AWS/\" are reserved for use by Amazon Web Services products.</p>"]
-    pub namespace: Namespace,
+    pub namespace: String,
 }
 
 
@@ -1927,13 +1892,12 @@ impl PutMetricDataInputSerializer {
     }
 }
 
-pub type ResourceList = Vec<ResourceName>;
 struct ResourceListDeserializer;
 impl ResourceListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ResourceList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -1973,7 +1937,7 @@ impl ResourceListDeserializer {
 /// Serialize `ResourceList` contents to a `SignedRequest`.
 struct ResourceListSerializer;
 impl ResourceListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ResourceList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -1981,13 +1945,12 @@ impl ResourceListSerializer {
     }
 }
 
-pub type ResourceName = String;
 struct ResourceNameDeserializer;
 impl ResourceNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ResourceName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1999,13 +1962,13 @@ impl ResourceNameDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct SetAlarmStateInput {
     #[doc="<p>The name for the alarm. This name must be unique within the AWS account. The maximum length is 255 characters.</p>"]
-    pub alarm_name: AlarmName,
+    pub alarm_name: String,
     #[doc="<p>The reason that this alarm is set to this specific state, in text format.</p>"]
-    pub state_reason: StateReason,
+    pub state_reason: String,
     #[doc="<p>The reason that this alarm is set to this specific state, in JSON format.</p>"]
-    pub state_reason_data: Option<StateReasonData>,
+    pub state_reason_data: Option<String>,
     #[doc="<p>The value of the state.</p>"]
-    pub state_value: StateValue,
+    pub state_value: String,
 }
 
 
@@ -2028,13 +1991,12 @@ impl SetAlarmStateInputSerializer {
     }
 }
 
-pub type StandardUnit = String;
 struct StandardUnitDeserializer;
 impl StandardUnitDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<StandardUnit, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2043,13 +2005,12 @@ impl StandardUnitDeserializer {
 
     }
 }
-pub type StateReason = String;
 struct StateReasonDeserializer;
 impl StateReasonDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<StateReason, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2058,13 +2019,12 @@ impl StateReasonDeserializer {
 
     }
 }
-pub type StateReasonData = String;
 struct StateReasonDataDeserializer;
 impl StateReasonDataDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<StateReasonData, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2073,13 +2033,12 @@ impl StateReasonDataDeserializer {
 
     }
 }
-pub type StateValue = String;
 struct StateValueDeserializer;
 impl StateValueDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<StateValue, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2088,13 +2047,12 @@ impl StateValueDeserializer {
 
     }
 }
-pub type Statistic = String;
 struct StatisticDeserializer;
 impl StatisticDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Statistic, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2107,13 +2065,13 @@ impl StatisticDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct StatisticSet {
     #[doc="<p>The maximum value of the sample set.</p>"]
-    pub maximum: DatapointValue,
+    pub maximum: f64,
     #[doc="<p>The minimum value of the sample set.</p>"]
-    pub minimum: DatapointValue,
+    pub minimum: f64,
     #[doc="<p>The number of samples used for the statistic set.</p>"]
-    pub sample_count: DatapointValue,
+    pub sample_count: f64,
     #[doc="<p>The sum of values for the sample set.</p>"]
-    pub sum: DatapointValue,
+    pub sum: f64,
 }
 
 
@@ -2137,12 +2095,11 @@ impl StatisticSetSerializer {
     }
 }
 
-pub type Statistics = Vec<Statistic>;
 
 /// Serialize `Statistics` contents to a `SignedRequest`.
 struct StatisticsSerializer;
 impl StatisticsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Statistics) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -2150,13 +2107,12 @@ impl StatisticsSerializer {
     }
 }
 
-pub type Threshold = f64;
 struct ThresholdDeserializer;
 impl ThresholdDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Threshold, XmlParseError> {
+                                       -> Result<f64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = f64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -2165,13 +2121,12 @@ impl ThresholdDeserializer {
 
     }
 }
-pub type Timestamp = String;
 struct TimestampDeserializer;
 impl TimestampDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Timestamp, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2180,13 +2135,12 @@ impl TimestampDeserializer {
 
     }
 }
-pub type TreatMissingData = String;
 struct TreatMissingDataDeserializer;
 impl TreatMissingDataDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TreatMissingData, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));

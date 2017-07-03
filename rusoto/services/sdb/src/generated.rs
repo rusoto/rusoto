@@ -128,13 +128,12 @@ impl AttributeSerializer {
     }
 }
 
-pub type AttributeList = Vec<Attribute>;
 struct AttributeListDeserializer;
 impl AttributeListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AttributeList, XmlParseError> {
+                                       -> Result<Vec<Attribute>, XmlParseError> {
 
         let mut obj = vec![];
 
@@ -161,7 +160,7 @@ impl AttributeListDeserializer {
 /// Serialize `AttributeList` contents to a `SignedRequest`.
 struct AttributeListSerializer;
 impl AttributeListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AttributeList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<Attribute>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             AttributeSerializer::serialize(params, &key, obj);
@@ -169,12 +168,11 @@ impl AttributeListSerializer {
     }
 }
 
-pub type AttributeNameList = Vec<String>;
 
 /// Serialize `AttributeNameList` contents to a `SignedRequest`.
 struct AttributeNameListSerializer;
 impl AttributeNameListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AttributeNameList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -187,7 +185,7 @@ pub struct BatchDeleteAttributesRequest {
     #[doc="The name of the domain in which the attributes are being deleted."]
     pub domain_name: String,
     #[doc="A list of items on which to perform the operation."]
-    pub items: DeletableItemList,
+    pub items: Vec<DeletableItem>,
 }
 
 
@@ -213,7 +211,7 @@ pub struct BatchPutAttributesRequest {
     #[doc="The name of the domain in which the attributes are being stored."]
     pub domain_name: String,
     #[doc="A list of items on which to perform the operation."]
-    pub items: ReplaceableItemList,
+    pub items: Vec<ReplaceableItem>,
 }
 
 
@@ -234,7 +232,6 @@ impl BatchPutAttributesRequestSerializer {
     }
 }
 
-pub type Boolean = bool;
 #[derive(Default,Debug,Clone)]
 pub struct CreateDomainRequest {
     #[doc="The name of the domain to create. The name can range between 3 and 255 characters and can contain the following characters: a-z, A-Z, 0-9, '_', '-', and '.'."]
@@ -258,7 +255,7 @@ impl CreateDomainRequestSerializer {
 
 #[derive(Default,Debug,Clone)]
 pub struct DeletableItem {
-    pub attributes: Option<AttributeList>,
+    pub attributes: Option<Vec<Attribute>>,
     pub name: String,
 }
 
@@ -282,12 +279,11 @@ impl DeletableItemSerializer {
     }
 }
 
-pub type DeletableItemList = Vec<DeletableItem>;
 
 /// Serialize `DeletableItemList` contents to a `SignedRequest`.
 struct DeletableItemListSerializer;
 impl DeletableItemListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeletableItemList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<DeletableItem>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             DeletableItemSerializer::serialize(params, &key, obj);
@@ -298,7 +294,7 @@ impl DeletableItemListSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteAttributesRequest {
     #[doc="A list of Attributes. Similar to columns on a spreadsheet, attributes represent categories of data that can be assigned to items."]
-    pub attributes: Option<AttributeList>,
+    pub attributes: Option<Vec<Attribute>>,
     #[doc="The name of the domain in which to perform the operation."]
     pub domain_name: String,
     #[doc="The update condition which, if specified, determines whether the specified attributes will be deleted or not. The update condition must be satisfied in order for this request to be processed and the attributes to be deleted."]
@@ -378,19 +374,19 @@ impl DomainMetadataRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DomainMetadataResult {
     #[doc="The number of unique attribute names in the domain."]
-    pub attribute_name_count: Option<Integer>,
+    pub attribute_name_count: Option<i64>,
     #[doc="The total size of all unique attribute names in the domain, in bytes."]
-    pub attribute_names_size_bytes: Option<Long>,
+    pub attribute_names_size_bytes: Option<i64>,
     #[doc="The number of all attribute name/value pairs in the domain."]
-    pub attribute_value_count: Option<Integer>,
+    pub attribute_value_count: Option<i64>,
     #[doc="The total size of all attribute values in the domain, in bytes."]
-    pub attribute_values_size_bytes: Option<Long>,
+    pub attribute_values_size_bytes: Option<i64>,
     #[doc="The number of all items in the domain."]
-    pub item_count: Option<Integer>,
+    pub item_count: Option<i64>,
     #[doc="The total size of all item names in the domain, in bytes."]
-    pub item_names_size_bytes: Option<Long>,
+    pub item_names_size_bytes: Option<i64>,
     #[doc="The data and time when metadata was calculated, in Epoch (UNIX) seconds."]
-    pub timestamp: Option<Integer>,
+    pub timestamp: Option<i64>,
 }
 
 struct DomainMetadataResultDeserializer;
@@ -464,13 +460,12 @@ impl DomainMetadataResultDeserializer {
 
     }
 }
-pub type DomainNameList = Vec<String>;
 struct DomainNameListDeserializer;
 impl DomainNameListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DomainNameList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
 
@@ -493,13 +488,12 @@ impl DomainNameListDeserializer {
 
     }
 }
-pub type Float = f32;
 #[derive(Default,Debug,Clone)]
 pub struct GetAttributesRequest {
     #[doc="The names of the attributes."]
-    pub attribute_names: Option<AttributeNameList>,
+    pub attribute_names: Option<Vec<String>>,
     #[doc="Determines whether or not strong consistency should be enforced when data is read from SimpleDB. If <code>true</code>, any data previously written to SimpleDB will be returned. Otherwise, results will be consistent eventually, and the client may not see data that was written immediately before your read."]
-    pub consistent_read: Option<Boolean>,
+    pub consistent_read: Option<bool>,
     #[doc="The name of the domain in which to perform the operation."]
     pub domain_name: String,
     #[doc="The name of the item."]
@@ -534,7 +528,7 @@ impl GetAttributesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetAttributesResult {
     #[doc="The list of attributes returned by the operation."]
-    pub attributes: Option<AttributeList>,
+    pub attributes: Option<Vec<Attribute>>,
 }
 
 struct GetAttributesResultDeserializer;
@@ -580,13 +574,12 @@ impl GetAttributesResultDeserializer {
 
     }
 }
-pub type Integer = i64;
 struct IntegerDeserializer;
 impl IntegerDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Integer, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -601,7 +594,7 @@ pub struct Item {
     #[doc="<p></p>"]
     pub alternate_name_encoding: Option<String>,
     #[doc="A list of attributes."]
-    pub attributes: AttributeList,
+    pub attributes: Vec<Attribute>,
     #[doc="The name of the item."]
     pub name: String,
 }
@@ -656,13 +649,12 @@ impl ItemDeserializer {
 
     }
 }
-pub type ItemList = Vec<Item>;
 struct ItemListDeserializer;
 impl ItemListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ItemList, XmlParseError> {
+                                       -> Result<Vec<Item>, XmlParseError> {
 
         let mut obj = vec![];
 
@@ -688,7 +680,7 @@ impl ItemListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListDomainsRequest {
     #[doc="The maximum number of domain names you want returned. The range is 1 to 100. The default setting is 100."]
-    pub max_number_of_domains: Option<Integer>,
+    pub max_number_of_domains: Option<i64>,
     #[doc="A string informing Amazon SimpleDB where to start the next list of domain names."]
     pub next_token: Option<String>,
 }
@@ -717,7 +709,7 @@ impl ListDomainsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListDomainsResult {
     #[doc="A list of domain names that match the expression."]
-    pub domain_names: Option<DomainNameList>,
+    pub domain_names: Option<Vec<String>>,
     #[doc="An opaque token indicating that there are more domains than the specified <code>MaxNumberOfDomains</code> still available."]
     pub next_token: Option<String>,
 }
@@ -769,13 +761,12 @@ impl ListDomainsResultDeserializer {
 
     }
 }
-pub type Long = i64;
 struct LongDeserializer;
 impl LongDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Long, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -787,7 +778,7 @@ impl LongDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct PutAttributesRequest {
     #[doc="The list of attributes."]
-    pub attributes: ReplaceableAttributeList,
+    pub attributes: Vec<ReplaceableAttribute>,
     #[doc="The name of the domain in which to perform the operation."]
     pub domain_name: String,
     #[doc="The update condition which, if specified, determines whether the specified attributes will be updated or not. The update condition must be satisfied in order for this request to be processed and the attributes to be updated."]
@@ -826,7 +817,7 @@ pub struct ReplaceableAttribute {
     #[doc="The name of the replaceable attribute."]
     pub name: String,
     #[doc="A flag specifying whether or not to replace the attribute/value pair or to add a new attribute/value pair. The default setting is <code>false</code>."]
-    pub replace: Option<Boolean>,
+    pub replace: Option<bool>,
     #[doc="The value of the replaceable attribute."]
     pub value: String,
 }
@@ -851,12 +842,11 @@ impl ReplaceableAttributeSerializer {
     }
 }
 
-pub type ReplaceableAttributeList = Vec<ReplaceableAttribute>;
 
 /// Serialize `ReplaceableAttributeList` contents to a `SignedRequest`.
 struct ReplaceableAttributeListSerializer;
 impl ReplaceableAttributeListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ReplaceableAttributeList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<ReplaceableAttribute>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             ReplaceableAttributeSerializer::serialize(params, &key, obj);
@@ -868,7 +858,7 @@ impl ReplaceableAttributeListSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ReplaceableItem {
     #[doc="The list of attributes for a replaceable item."]
-    pub attributes: ReplaceableAttributeList,
+    pub attributes: Vec<ReplaceableAttribute>,
     #[doc="The name of the replaceable item."]
     pub name: String,
 }
@@ -891,12 +881,11 @@ impl ReplaceableItemSerializer {
     }
 }
 
-pub type ReplaceableItemList = Vec<ReplaceableItem>;
 
 /// Serialize `ReplaceableItemList` contents to a `SignedRequest`.
 struct ReplaceableItemListSerializer;
 impl ReplaceableItemListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ReplaceableItemList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<ReplaceableItem>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             ReplaceableItemSerializer::serialize(params, &key, obj);
@@ -907,7 +896,7 @@ impl ReplaceableItemListSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct SelectRequest {
     #[doc="Determines whether or not strong consistency should be enforced when data is read from SimpleDB. If <code>true</code>, any data previously written to SimpleDB will be returned. Otherwise, results will be consistent eventually, and the client may not see data that was written immediately before your read."]
-    pub consistent_read: Option<Boolean>,
+    pub consistent_read: Option<bool>,
     #[doc="A string informing Amazon SimpleDB where to start the next list of <code>ItemNames</code>."]
     pub next_token: Option<String>,
     #[doc="The expression used to query the domain."]
@@ -940,7 +929,7 @@ impl SelectRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct SelectResult {
     #[doc="A list of items that match the select expression."]
-    pub items: Option<ItemList>,
+    pub items: Option<Vec<Item>>,
     #[doc="An opaque token indicating that more items than <code>MaxNumberOfItems</code> were matched, the response size exceeded 1 megabyte, or the execution time exceeded 5 seconds."]
     pub next_token: Option<String>,
 }
@@ -1009,7 +998,7 @@ impl StringDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct UpdateCondition {
     #[doc="<p>A value specifying whether or not the specified attribute must exist with the specified value in order for the update condition to be satisfied. Specify <code>true</code> if the attribute must exist for the update condition to be satisfied. Specify <code>false</code> if the attribute should not exist in order for the update condition to be satisfied.</p>"]
-    pub exists: Option<Boolean>,
+    pub exists: Option<bool>,
     #[doc="<p>The name of the attribute involved in the condition.</p>"]
     pub name: Option<String>,
     #[doc="<p>The value of an attribute. This value can only be specified when the <code>Exists</code> parameter is equal to <code>true</code>.</p>"]

@@ -41,7 +41,7 @@ enum DeserializerNext {
 #[derive(Default,Debug,Clone)]
 pub struct AccountAttributesMessage {
     #[doc="<p>A list of <a>AccountQuota</a> objects. Within this list, each quota has a name, a count of usage toward the quota maximum, and a maximum value for the quota.</p>"]
-    pub account_quotas: Option<AccountQuotaList>,
+    pub account_quotas: Option<Vec<AccountQuota>>,
 }
 
 struct AccountAttributesMessageDeserializer;
@@ -93,9 +93,9 @@ pub struct AccountQuota {
     #[doc="<p>The name of the Amazon RDS quota for this AWS account.</p>"]
     pub account_quota_name: Option<String>,
     #[doc="<p>The maximum allowed value for the quota.</p>"]
-    pub max: Option<Long>,
+    pub max: Option<i64>,
     #[doc="<p>The amount currently used toward the quota maximum.</p>"]
-    pub used: Option<Long>,
+    pub used: Option<i64>,
 }
 
 struct AccountQuotaDeserializer;
@@ -147,13 +147,12 @@ impl AccountQuotaDeserializer {
 
     }
 }
-pub type AccountQuotaList = Vec<AccountQuota>;
 struct AccountQuotaListDeserializer;
 impl AccountQuotaListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AccountQuotaList, XmlParseError> {
+                                       -> Result<Vec<AccountQuota>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -297,7 +296,7 @@ pub struct AddTagsToResourceMessage {
     #[doc="<p>The Amazon RDS resource the tags will be added to. This value is an Amazon Resource Name (ARN). For information about creating an ARN, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing\"> Constructing an RDS Amazon Resource Name (ARN)</a>.</p>"]
     pub resource_name: String,
     #[doc="<p>The tags to be assigned to the Amazon RDS resource.</p>"]
-    pub tags: TagList,
+    pub tags: Vec<Tag>,
 }
 
 
@@ -316,13 +315,12 @@ impl AddTagsToResourceMessageSerializer {
     }
 }
 
-pub type ApplyMethod = String;
 struct ApplyMethodDeserializer;
 impl ApplyMethodDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ApplyMethod, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -407,13 +405,12 @@ impl ApplyPendingMaintenanceActionResultDeserializer {
 
     }
 }
-pub type AttributeValueList = Vec<String>;
 struct AttributeValueListDeserializer;
 impl AttributeValueListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AttributeValueList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -453,7 +450,7 @@ impl AttributeValueListDeserializer {
 /// Serialize `AttributeValueList` contents to a `SignedRequest`.
 struct AttributeValueListSerializer;
 impl AttributeValueListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AttributeValueList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -603,13 +600,12 @@ impl AvailabilityZoneDeserializer {
 
     }
 }
-pub type AvailabilityZoneList = Vec<AvailabilityZone>;
 struct AvailabilityZoneListDeserializer;
 impl AvailabilityZoneListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AvailabilityZoneList, XmlParseError> {
+                                       -> Result<Vec<AvailabilityZone>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -646,13 +642,12 @@ impl AvailabilityZoneListDeserializer {
 
     }
 }
-pub type AvailabilityZones = Vec<String>;
 struct AvailabilityZonesDeserializer;
 impl AvailabilityZonesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AvailabilityZones, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -692,7 +687,7 @@ impl AvailabilityZonesDeserializer {
 /// Serialize `AvailabilityZones` contents to a `SignedRequest`.
 struct AvailabilityZonesSerializer;
 impl AvailabilityZonesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AvailabilityZones) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -700,13 +695,12 @@ impl AvailabilityZonesSerializer {
     }
 }
 
-pub type Boolean = bool;
 struct BooleanDeserializer;
 impl BooleanDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Boolean, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -715,13 +709,12 @@ impl BooleanDeserializer {
 
     }
 }
-pub type BooleanOptional = bool;
 struct BooleanOptionalDeserializer;
 impl BooleanOptionalDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<BooleanOptional, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -742,9 +735,9 @@ pub struct Certificate {
     #[doc="<p>The thumbprint of the certificate.</p>"]
     pub thumbprint: Option<String>,
     #[doc="<p>The starting date from which the certificate is valid.</p>"]
-    pub valid_from: Option<TStamp>,
+    pub valid_from: Option<String>,
     #[doc="<p>The final date that the certificate continues to be valid.</p>"]
-    pub valid_till: Option<TStamp>,
+    pub valid_till: Option<String>,
 }
 
 struct CertificateDeserializer;
@@ -812,13 +805,12 @@ impl CertificateDeserializer {
 
     }
 }
-pub type CertificateList = Vec<Certificate>;
 struct CertificateListDeserializer;
 impl CertificateListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CertificateList, XmlParseError> {
+                                       -> Result<Vec<Certificate>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -858,7 +850,7 @@ impl CertificateListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CertificateMessage {
     #[doc="<p>The list of <a>Certificate</a> objects for the AWS account.</p>"]
-    pub certificates: Option<CertificateList>,
+    pub certificates: Option<Vec<Certificate>>,
     #[doc="<p> An optional pagination token provided by a previous <a>DescribeCertificates</a> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> . </p>"]
     pub marker: Option<String>,
 }
@@ -971,7 +963,7 @@ impl CharacterSetDeserializer {
 pub struct CopyDBClusterParameterGroupMessage {
     #[doc="<p>The identifier or Amazon Resource Name (ARN) for the source DB cluster parameter group. For information about creating an ARN, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing\"> Constructing an RDS Amazon Resource Name (ARN)</a>. </p> <p>Constraints:</p> <ul> <li> <p>Must specify a valid DB cluster parameter group.</p> </li> <li> <p>If the source DB cluster parameter group is in the same region as the copy, specify a valid DB parameter group identifier, for example <code>my-db-cluster-param-group</code>, or a valid ARN.</p> </li> <li> <p>If the source DB parameter group is in a different region than the copy, specify a valid DB cluster parameter group ARN, for example <code>arn:aws:rds:us-east-1:123456789012:cluster-pg:custom-cluster-group1</code>.</p> </li> </ul>"]
     pub source_db_cluster_parameter_group_identifier: String,
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>A description for the copied DB cluster parameter group.</p>"]
     pub target_db_cluster_parameter_group_description: String,
     #[doc="<p>The identifier for the copied DB cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Cannot be null, empty, or blank</p> </li> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul> <p>Example: <code>my-cluster-param-group1</code> </p>"]
@@ -1054,14 +1046,14 @@ impl CopyDBClusterParameterGroupResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CopyDBClusterSnapshotMessage {
     #[doc="<p>True to copy all tags from the source DB cluster snapshot to the target DB cluster snapshot; otherwise false. The default is false.</p>"]
-    pub copy_tags: Option<BooleanOptional>,
+    pub copy_tags: Option<bool>,
     #[doc="<p>The AWS KMS key ID for an encrypted DB cluster snapshot. The KMS key ID is the Amazon Resource Name (ARN), KMS key identifier, or the KMS key alias for the KMS encryption key. </p> <p>If you copy an unencrypted DB cluster snapshot and specify a value for the <code>KmsKeyId</code> parameter, Amazon RDS encrypts the target DB cluster snapshot using the specified KMS encryption key. </p> <p>If you copy an encrypted DB cluster snapshot from your AWS account, you can specify a value for <code>KmsKeyId</code> to encrypt the copy with a new KMS encryption key. If you don't specify a value for <code>KmsKeyId</code>, then the copy of the DB cluster snapshot is encrypted with the same KMS key as the source DB cluster snapshot. </p> <p>If you copy an encrypted DB cluster snapshot that is shared from another AWS account, then you must specify a value for <code>KmsKeyId</code>. </p> <p>To copy an encrypted DB cluster snapshot to another region, you must set <code>KmsKeyId</code> to the KMS key ID you want to use to encrypt the copy of the DB cluster snapshot in the destination region. KMS encryption keys are specific to the region that they are created in, and you cannot use encryption keys from one region in another region.</p>"]
     pub kms_key_id: Option<String>,
     #[doc="<p>The URL that contains a Signature Version 4 signed request for the <code>CopyDBClusterSnapshot</code> API action in the AWS region that contains the source DB cluster snapshot to copy. The <code>PreSignedUrl</code> parameter must be used when copying an encrypted DB cluster snapshot from another AWS region.</p> <p>The pre-signed URL must be a valid request for the <code>CopyDBSClusterSnapshot</code> API action that can be executed in the source region that contains the encrypted DB cluster snapshot to be copied. The pre-signed URL request must contain the following parameter values:</p> <ul> <li> <p> <code>KmsKeyId</code> - The KMS key identifier for the key to use to encrypt the copy of the DB cluster snapshot in the destination region. This is the same identifier for both the <code>CopyDBClusterSnapshot</code> action that is called in the destination region, and the action contained in the pre-signed URL.</p> </li> <li> <p> <code>DestinationRegion</code> - The name of the region that the DB cluster snapshot will be created in.</p> </li> <li> <p> <code>SourceDBClusterSnapshotIdentifier</code> - The DB cluster snapshot identifier for the encrypted DB cluster snapshot to be copied. This identifier must be in the Amazon Resource Name (ARN) format for the source region. For example, if you are copying an encrypted DB cluster snapshot from the us-west-2 region, then your <code>SourceDBClusterSnapshotIdentifier</code> looks like the following example: <code>arn:aws:rds:us-west-2:123456789012:cluster-snapshot:aurora-cluster1-snapshot-20161115</code>.</p> </li> </ul> <p>To learn how to generate a Signature Version 4 signed request, see <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html\"> Authenticating Requests: Using Query Parameters (AWS Signature Version 4)</a> and <a href=\"http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html\"> Signature Version 4 Signing Process</a>.</p>"]
     pub pre_signed_url: Option<String>,
     #[doc="<p>The identifier of the DB cluster snapshot to copy. This parameter is not case-sensitive.</p> <p>You cannot copy an encrypted, shared DB cluster snapshot from one AWS region to another.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must specify a valid system snapshot in the \"available\" state.</p> </li> <li> <p>If the source snapshot is in the same region as the copy, specify a valid DB snapshot identifier.</p> </li> <li> <p>If the source snapshot is in a different region than the copy, specify a valid DB cluster snapshot ARN. For more information, go to <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopySnapshot.html\"> Copying a DB Snapshot or DB Cluster Snapshot</a>.</p> </li> </ul> <p>Example: <code>my-cluster-snapshot1</code> </p>"]
     pub source_db_cluster_snapshot_identifier: String,
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>The identifier of the new DB cluster snapshot to create from the source DB cluster snapshot. This parameter is not case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <p>Example: <code>my-cluster-snapshot2</code> </p>"]
     pub target_db_cluster_snapshot_identifier: String,
 }
@@ -1150,7 +1142,7 @@ impl CopyDBClusterSnapshotResultDeserializer {
 pub struct CopyDBParameterGroupMessage {
     #[doc="<p> The identifier or ARN for the source DB parameter group. For information about creating an ARN, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing\"> Constructing an RDS Amazon Resource Name (ARN)</a>. </p> <p>Constraints:</p> <ul> <li> <p>Must specify a valid DB parameter group.</p> </li> <li> <p> Must specify a valid DB parameter group identifier, for example <code>my-db-param-group</code>, or a valid ARN.</p> </li> </ul>"]
     pub source_db_parameter_group_identifier: String,
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>A description for the copied DB parameter group.</p>"]
     pub target_db_parameter_group_description: String,
     #[doc="<p>The identifier for the copied DB parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Cannot be null, empty, or blank</p> </li> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul> <p>Example: <code>my-db-parameter-group</code> </p>"]
@@ -1232,7 +1224,7 @@ impl CopyDBParameterGroupResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CopyDBSnapshotMessage {
     #[doc="<p>True to copy all tags from the source DB snapshot to the target DB snapshot; otherwise false. The default is false.</p>"]
-    pub copy_tags: Option<BooleanOptional>,
+    pub copy_tags: Option<bool>,
     #[doc="<p>The AWS KMS key ID for an encrypted DB snapshot. The KMS key ID is the Amazon Resource Name (ARN), KMS key identifier, or the KMS key alias for the KMS encryption key. </p> <p>If you copy an encrypted DB snapshot from your AWS account, you can specify a value for this parameter to encrypt the copy with a new KMS encryption key. If you don't specify a value for this parameter, then the copy of the DB snapshot is encrypted with the same KMS key as the source DB snapshot. </p> <p>If you copy an encrypted DB snapshot that is shared from another AWS account, then you must specify a value for this parameter. </p> <p>If you specify this parameter when you copy an unencrypted snapshot, the copy is encrypted. </p> <p>If you copy an encrypted snapshot to a different AWS region, then you must specify a KMS key for the destination AWS region. KMS encryption keys are specific to the region that they are created in, and you cannot use encryption keys from one region in another region. </p>"]
     pub kms_key_id: Option<String>,
     #[doc="<p>The name of an option group to associate with the copy. </p> <p>Specify this option if you are copying a snapshot from one AWS region to another, and your DB instance uses a non-default option group. If your source DB instance uses Transparent Data Encryption for Oracle or Microsoft SQL Server, you must specify this option when copying across regions. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopySnapshot.html#USER_CopySnapshot.Options\">Option Group Considerations</a>. </p>"]
@@ -1241,7 +1233,7 @@ pub struct CopyDBSnapshotMessage {
     pub pre_signed_url: Option<String>,
     #[doc="<p>The identifier for the source DB snapshot.</p> <p>If the source snapshot is in the same region as the copy, specify a valid DB snapshot identifier. For example, <code>rds:mysql-instance1-snapshot-20130805</code>. </p> <p>If the source snapshot is in a different region than the copy, specify a valid DB snapshot ARN. For example, <code>arn:aws:rds:us-west-2:123456789012:snapshot:mysql-instance1-snapshot-20130805</code>. </p> <p>If you are copying from a shared manual DB snapshot, this parameter must be the Amazon Resource Name (ARN) of the shared DB snapshot. </p> <p>If you are copying an encrypted snapshot this parameter must be in the ARN format for the source region, and must match the <code>SourceDBSnapshotIdentifier</code> in the <code>PreSignedUrl</code> parameter. </p> <p>Constraints:</p> <ul> <li> <p>Must specify a valid system snapshot in the \"available\" state.</p> </li> </ul> <p>Example: <code>rds:mydb-2012-04-02-00-01</code> </p> <p>Example: <code>arn:aws:rds:us-west-2:123456789012:snapshot:mysql-instance1-snapshot-20130805</code> </p>"]
     pub source_db_snapshot_identifier: String,
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>The identifier for the copy of the snapshot. </p> <p>Constraints:</p> <ul> <li> <p>Cannot be null, empty, or blank</p> </li> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul> <p>Example: <code>my-db-snapshot</code> </p>"]
     pub target_db_snapshot_identifier: String,
 }
@@ -1333,7 +1325,7 @@ impl CopyDBSnapshotResultDeserializer {
 pub struct CopyOptionGroupMessage {
     #[doc="<p>The identifier or ARN for the source option group. For information about creating an ARN, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing\"> Constructing an RDS Amazon Resource Name (ARN)</a>. </p> <p>Constraints:</p> <ul> <li> <p>Must specify a valid option group.</p> </li> <li> <p>If the source option group is in the same region as the copy, specify a valid option group identifier, for example <code>my-option-group</code>, or a valid ARN.</p> </li> <li> <p>If the source option group is in a different region than the copy, specify a valid option group ARN, for example <code>arn:aws:rds:us-west-2:123456789012:og:special-options</code>.</p> </li> </ul>"]
     pub source_option_group_identifier: String,
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>The description for the copied option group.</p>"]
     pub target_option_group_description: String,
     #[doc="<p>The identifier for the copied option group.</p> <p>Constraints:</p> <ul> <li> <p>Cannot be null, empty, or blank</p> </li> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul> <p>Example: <code>my-option-group</code> </p>"]
@@ -1415,9 +1407,9 @@ impl CopyOptionGroupResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateDBClusterMessage {
     #[doc="<p>A list of EC2 Availability Zones that instances in the DB cluster can be created in. For information on regions and Availability Zones, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html\">Regions and Availability Zones</a>. </p>"]
-    pub availability_zones: Option<AvailabilityZones>,
+    pub availability_zones: Option<Vec<String>>,
     #[doc="<p>The number of days for which automated backups are retained. You must specify a minimum value of 1.</p> <p>Default: 1</p> <p>Constraints:</p> <ul> <li> <p>Must be a value from 1 to 35</p> </li> </ul>"]
-    pub backup_retention_period: Option<IntegerOptional>,
+    pub backup_retention_period: Option<i64>,
     #[doc="<p>A value that indicates that the DB cluster should be associated with the specified CharacterSet.</p>"]
     pub character_set_name: Option<String>,
     #[doc="<p>The DB cluster identifier. This parameter is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <p>Example: <code>my-cluster1</code> </p>"]
@@ -1429,7 +1421,7 @@ pub struct CreateDBClusterMessage {
     #[doc="<p>The name for your database of up to 64 alpha-numeric characters. If you do not provide a name, Amazon RDS will not create a database in the DB cluster you are creating.</p>"]
     pub database_name: Option<String>,
     #[doc="<p>A Boolean value that is true to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts, and otherwise false.</p> <p>Default: <code>false</code> </p>"]
-    pub enable_iam_database_authentication: Option<BooleanOptional>,
+    pub enable_iam_database_authentication: Option<bool>,
     #[doc="<p>The name of the database engine to be used for this DB cluster.</p> <p>Valid Values: <code>aurora</code> </p>"]
     pub engine: String,
     #[doc="<p>The version number of the database engine to use.</p> <p> <b>Aurora</b> </p> <p>Example: <code>5.6.10a</code> </p>"]
@@ -1443,7 +1435,7 @@ pub struct CreateDBClusterMessage {
     #[doc="<p>A value that indicates that the DB cluster should be associated with the specified option group.</p> <p>Permanent options cannot be removed from an option group. The option group cannot be removed from a DB cluster once it is associated with a DB cluster.</p>"]
     pub option_group_name: Option<String>,
     #[doc="<p>The port number on which the instances in the DB cluster accept connections.</p> <p> Default: <code>3306</code> </p>"]
-    pub port: Option<IntegerOptional>,
+    pub port: Option<i64>,
     #[doc="<p>A URL that contains a Signature Version 4 signed request for the <code>CreateDBCluster</code> action to be called in the source region where the DB cluster will be replicated from. You only need to specify <code>PreSignedUrl</code> when you are performing cross-region replication from an encrypted DB cluster.</p> <p>The pre-signed URL must be a valid request for the <code>CreateDBCluster</code> API action that can be executed in the source region that contains the encrypted DB cluster to be copied.</p> <p>The pre-signed URL request must contain the following parameter values:</p> <ul> <li> <p> <code>KmsKeyId</code> - The KMS key identifier for the key to use to encrypt the copy of the DB cluster in the destination region. This should refer to the same KMS key for both the <code>CreateDBCluster</code> action that is called in the destination region, and the action contained in the pre-signed URL.</p> </li> <li> <p> <code>DestinationRegion</code> - The name of the region that Aurora Read Replica will be created in.</p> </li> <li> <p> <code>ReplicationSourceIdentifier</code> - The DB cluster identifier for the encrypted DB cluster to be copied. This identifier must be in the Amazon Resource Name (ARN) format for the source region. For example, if you are copying an encrypted DB cluster from the us-west-2 region, then your <code>ReplicationSourceIdentifier</code> would look like Example: <code>arn:aws:rds:us-west-2:123456789012:cluster:aurora-cluster1</code>.</p> </li> </ul> <p>To learn how to generate a Signature Version 4 signed request, see <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html\"> Authenticating Requests: Using Query Parameters (AWS Signature Version 4)</a> and <a href=\"http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html\"> Signature Version 4 Signing Process</a>.</p>"]
     pub pre_signed_url: Option<String>,
     #[doc="<p>The daily time range during which automated backups are created if automated backups are enabled using the <code>BackupRetentionPeriod</code> parameter. </p> <p>Default: A 30-minute window selected at random from an 8-hour block of time per region. To see the time blocks available, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/AdjustingTheMaintenanceWindow.html\"> Adjusting the Preferred Maintenance Window</a> in the <i>Amazon RDS User Guide.</i> </p> <p>Constraints:</p> <ul> <li> <p>Must be in the format <code>hh24:mi-hh24:mi</code>.</p> </li> <li> <p>Times should be in Universal Coordinated Time (UTC).</p> </li> <li> <p>Must not conflict with the preferred maintenance window.</p> </li> <li> <p>Must be at least 30 minutes.</p> </li> </ul>"]
@@ -1453,10 +1445,10 @@ pub struct CreateDBClusterMessage {
     #[doc="<p>The Amazon Resource Name (ARN) of the source DB instance or DB cluster if this DB cluster is created as a Read Replica.</p>"]
     pub replication_source_identifier: Option<String>,
     #[doc="<p>Specifies whether the DB cluster is encrypted.</p>"]
-    pub storage_encrypted: Option<BooleanOptional>,
-    pub tags: Option<TagList>,
+    pub storage_encrypted: Option<bool>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>A list of EC2 VPC security groups to associate with this DB cluster.</p>"]
-    pub vpc_security_group_ids: Option<VpcSecurityGroupIdList>,
+    pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
 
@@ -1558,7 +1550,7 @@ pub struct CreateDBClusterParameterGroupMessage {
     pub db_parameter_group_family: String,
     #[doc="<p>The description for the DB cluster parameter group.</p>"]
     pub description: String,
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 
@@ -1687,7 +1679,7 @@ pub struct CreateDBClusterSnapshotMessage {
     #[doc="<p>The identifier of the DB cluster snapshot. This parameter is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <p>Example: <code>my-cluster1-snapshot1</code> </p>"]
     pub db_cluster_snapshot_identifier: String,
     #[doc="<p>The tags to be assigned to the DB cluster snapshot.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 
@@ -1763,17 +1755,17 @@ impl CreateDBClusterSnapshotResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateDBInstanceMessage {
     #[doc="<p>The amount of storage (in gigabytes) to be initially allocated for the database instance.</p> <p>Type: Integer</p> <p> <b>Amazon Aurora</b> </p> <p>Not applicable. Aurora cluster volumes automatically grow as the amount of data in your database increases, though you are only charged for the space that you use in an Aurora cluster volume.</p> <p> <b>MySQL</b> </p> <p>Constraints: Must be an integer from 5 to 6144.</p> <p> <b>MariaDB</b> </p> <p>Constraints: Must be an integer from 5 to 6144.</p> <p> <b>PostgreSQL</b> </p> <p>Constraints: Must be an integer from 5 to 6144.</p> <p> <b>Oracle</b> </p> <p>Constraints: Must be an integer from 10 to 6144.</p> <p> <b>SQL Server</b> </p> <p>Constraints: Must be an integer from 200 to 4096 (Standard Edition and Enterprise Edition) or from 20 to 4096 (Express Edition and Web Edition)</p>"]
-    pub allocated_storage: Option<IntegerOptional>,
+    pub allocated_storage: Option<i64>,
     #[doc="<p>Indicates that minor engine upgrades will be applied automatically to the DB instance during the maintenance window.</p> <p>Default: <code>true</code> </p>"]
-    pub auto_minor_version_upgrade: Option<BooleanOptional>,
+    pub auto_minor_version_upgrade: Option<bool>,
     #[doc="<p> The EC2 Availability Zone that the database instance will be created in. For information on regions and Availability Zones, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html\">Regions and Availability Zones</a>. </p> <p>Default: A random, system-chosen Availability Zone in the endpoint's region.</p> <p> Example: <code>us-east-1d</code> </p> <p> Constraint: The AvailabilityZone parameter cannot be specified if the MultiAZ parameter is set to <code>true</code>. The specified Availability Zone must be in the same region as the current endpoint. </p>"]
     pub availability_zone: Option<String>,
     #[doc="<p>The number of days for which automated backups are retained. Setting this parameter to a positive number enables backups. Setting this parameter to 0 disables automated backups.</p> <p>Default: 1</p> <p>Constraints:</p> <ul> <li> <p>Must be a value from 0 to 35</p> </li> <li> <p>Cannot be set to 0 if the DB instance is a source to Read Replicas</p> </li> </ul>"]
-    pub backup_retention_period: Option<IntegerOptional>,
+    pub backup_retention_period: Option<i64>,
     #[doc="<p>For supported engines, indicates that the DB instance should be associated with the specified CharacterSet.</p>"]
     pub character_set_name: Option<String>,
     #[doc="<p>True to copy all tags from the DB instance to snapshots of the DB instance; otherwise false. The default is false.</p>"]
-    pub copy_tags_to_snapshot: Option<BooleanOptional>,
+    pub copy_tags_to_snapshot: Option<bool>,
     #[doc="<p>The identifier of the DB cluster that the instance will belong to.</p> <p>For information on creating a DB cluster, see <a>CreateDBCluster</a>.</p> <p>Type: String</p>"]
     pub db_cluster_identifier: Option<String>,
     #[doc="<p>The compute and memory capacity of the DB instance. Note that not all instance classes are available in all regions for all DB engines.</p> <p> Valid Values: <code>db.t1.micro | db.m1.small | db.m1.medium | db.m1.large | db.m1.xlarge | db.m2.xlarge |db.m2.2xlarge | db.m2.4xlarge | db.m3.medium | db.m3.large | db.m3.xlarge | db.m3.2xlarge | db.m4.large | db.m4.xlarge | db.m4.2xlarge | db.m4.4xlarge | db.m4.10xlarge | db.r3.large | db.r3.xlarge | db.r3.2xlarge | db.r3.4xlarge | db.r3.8xlarge | db.t2.micro | db.t2.small | db.t2.medium | db.t2.large</code> </p>"]
@@ -1785,7 +1777,7 @@ pub struct CreateDBInstanceMessage {
     #[doc="<p>The name of the DB parameter group to associate with this DB instance. If this argument is omitted, the default DBParameterGroup for the specified engine will be used.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul>"]
     pub db_parameter_group_name: Option<String>,
     #[doc="<p>A list of DB security groups to associate with this DB instance.</p> <p>Default: The default DB security group for the database engine.</p>"]
-    pub db_security_groups: Option<DBSecurityGroupNameList>,
+    pub db_security_groups: Option<Vec<String>>,
     #[doc="<p>A DB subnet group to associate with this DB instance.</p> <p>If there is no DB subnet group, then it is a non-VPC DB instance.</p>"]
     pub db_subnet_group_name: Option<String>,
     #[doc="<p>Specify the Active Directory Domain to create the instance in.</p>"]
@@ -1793,13 +1785,13 @@ pub struct CreateDBInstanceMessage {
     #[doc="<p>Specify the name of the IAM role to be used when making API calls to the Directory Service.</p>"]
     pub domain_iam_role_name: Option<String>,
     #[doc="<p>True to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts; otherwise false. </p> <p> You can enable IAM database authentication for the following database engines:</p> <ul> <li> <p>For MySQL 5.6, minor version 5.6.34 or higher</p> </li> <li> <p>For MySQL 5.7, minor version 5.7.16 or higher</p> </li> </ul> <p>Default: <code>false</code> </p>"]
-    pub enable_iam_database_authentication: Option<BooleanOptional>,
+    pub enable_iam_database_authentication: Option<bool>,
     #[doc="<p>The name of the database engine to be used for this instance. </p> <p>Not every database engine is available for every AWS region. </p> <p>Valid Values: </p> <ul> <li> <p> <code>aurora</code> </p> </li> <li> <p> <code>mariadb</code> </p> </li> <li> <p> <code>mysql</code> </p> </li> <li> <p> <code>oracle-ee</code> </p> </li> <li> <p> <code>oracle-se2</code> </p> </li> <li> <p> <code>oracle-se1</code> </p> </li> <li> <p> <code>oracle-se</code> </p> </li> <li> <p> <code>postgres</code> </p> </li> <li> <p> <code>sqlserver-ee</code> </p> </li> <li> <p> <code>sqlserver-se</code> </p> </li> <li> <p> <code>sqlserver-ex</code> </p> </li> <li> <p> <code>sqlserver-web</code> </p> </li> </ul>"]
     pub engine: String,
     #[doc="<p>The version number of the database engine to use.</p> <p>The following are the database engines and major and minor versions that are available with Amazon RDS. Not every database engine is available for every AWS region.</p> <p> <b>Amazon Aurora</b> </p> <ul> <li> <p>Version 5.6 (available in these AWS regions: ap-northeast-1, ap-northeast-2, ap-south-1, ap-southeast-2, eu-west-1, us-east-1, us-east-2, us-west-2): <code> 5.6.10a</code> </p> </li> </ul> <p> <b>MariaDB</b> </p> <ul> <li> <p> <code>10.1.19</code> (supported in all AWS regions)</p> </li> <li> <p> <code>10.1.14</code> (supported in all regions except us-east-2)</p> </li> </ul> <p/> <ul> <li> <p> <code>10.0.28</code> (supported in all AWS regions)</p> </li> <li> <p> <code>10.0.24</code> (supported in all AWS regions)</p> </li> <li> <p> <code>10.0.17</code> (supported in all regions except us-east-2, ca-central-1, eu-west-2)</p> </li> </ul> <p> <b>Microsoft SQL Server 2016</b> </p> <ul> <li> <p> <code>13.00.4422.0.v1</code> (supported for all editions, and all AWS regions)</p> </li> <li> <p> <code>13.00.2164.0.v1</code> (supported for all editions, and all AWS regions)</p> </li> </ul> <p> <b>Microsoft SQL Server 2014</b> </p> <ul> <li> <p> <code>12.00.5546.0.v1</code> (supported for all editions, and all AWS regions)</p> </li> <li> <p> <code>12.00.5000.0.v1</code> (supported for all editions, and all AWS regions)</p> </li> <li> <p> <code>12.00.4422.0.v1</code> (supported for all editions except Enterprise Edition, and all AWS regions except ca-central-1 and eu-west-2)</p> </li> </ul> <p> <b>Microsoft SQL Server 2012</b> </p> <ul> <li> <p> <code>11.00.6594.0.v1</code> (supported for all editions, and all AWS regions)</p> </li> <li> <p> <code>11.00.6020.0.v1</code> (supported for all editions, and all AWS regions)</p> </li> <li> <p> <code>11.00.5058.0.v1</code> (supported for all editions, and all AWS regions except us-east-2, ca-central-1, and eu-west-2)</p> </li> <li> <p> <code>11.00.2100.60.v1</code> (supported for all editions, and all AWS regions except us-east-2, ca-central-1, and eu-west-2)</p> </li> </ul> <p> <b>Microsoft SQL Server 2008 R2</b> </p> <ul> <li> <p> <code>10.50.6529.0.v1</code> (supported for all editions, and all AWS regions except us-east-2, ca-central-1, and eu-west-2)</p> </li> <li> <p> <code>10.50.6000.34.v1</code> (supported for all editions, and all AWS regions except us-east-2, ca-central-1, and eu-west-2)</p> </li> <li> <p> <code>10.50.2789.0.v1</code> (supported for all editions, and all AWS regions except us-east-2, ca-central-1, and eu-west-2)</p> </li> </ul> <p> <b>MySQL</b> </p> <ul> <li> <p> <code>5.7.17</code> (supported in all AWS regions)</p> </li> <li> <p> <code>5.7.16</code> (supported in all AWS regions)</p> </li> <li> <p> <code>5.7.11</code> (supported in all AWS regions)</p> </li> <li> <p> <code>5.7.10</code> (supported in all regions except us-east-2, ca-central-1, eu-west-2)</p> </li> </ul> <p/> <ul> <li> <p> <code>5.6.35</code> (supported in all AWS regions)</p> </li> <li> <p> <code>5.6.34</code> (supported in all AWS regions)</p> </li> <li> <p> <code>5.6.29</code> (supported in all AWS regions)</p> </li> <li> <p> <code>5.6.27</code> (supported in all regions except us-east-2, ca-central-1, eu-west-2)</p> </li> <li> <p> <code>5.6.23</code> (supported in all regions except us-east-2, ap-south-1, ca-central-1, eu-west-2)</p> </li> <li> <p> <code>5.6.22</code> (supported in all regions except us-east-2, ap-south-1, ap-northeast-2, ca-central-1, eu-west-2)</p> </li> <li> <p> <code>5.6.21b</code> (supported in all regions except us-east-2, ap-south-1, ap-northeast-2, ca-central-1, eu-west-2)</p> </li> <li> <p> <code>5.6.21</code> (supported in all regions except us-east-2, ap-south-1, ap-northeast-2, ca-central-1, eu-west-2)</p> </li> <li> <p> <code>5.6.19b</code> (supported in all regions except us-east-2, ap-south-1, ap-northeast-2, ca-central-1, eu-west-2)</p> </li> <li> <p> <code>5.6.19a</code> (supported in all regions except us-east-2, ap-south-1, ap-northeast-2, ca-central-1, eu-west-2)</p> </li> </ul> <p/> <ul> <li> <p> <code>5.5.54</code> (supported in all AWS regions)</p> </li> <li> <p> <code>5.5.53</code> (supported in all AWS regions)</p> </li> <li> <p> <code>5.5.46</code> (supported in all AWS regions)</p> </li> </ul> <p> <b>Oracle 12c</b> </p> <ul> <li> <p> <code>12.1.0.2.v8</code> (supported for EE in all AWS regions, and SE2 in all AWS regions except us-gov-west-1)</p> </li> <li> <p> <code>12.1.0.2.v7</code> (supported for EE in all AWS regions, and SE2 in all AWS regions except us-gov-west-1)</p> </li> <li> <p> <code>12.1.0.2.v6</code> (supported for EE in all AWS regions, and SE2 in all AWS regions except us-gov-west-1)</p> </li> <li> <p> <code>12.1.0.2.v5</code> (supported for EE in all AWS regions, and SE2 in all AWS regions except us-gov-west-1)</p> </li> <li> <p> <code>12.1.0.2.v4</code> (supported for EE in all AWS regions, and SE2 in all AWS regions except us-gov-west-1)</p> </li> <li> <p> <code>12.1.0.2.v3</code> (supported for EE in all AWS regions, and SE2 in all AWS regions except us-gov-west-1)</p> </li> <li> <p> <code>12.1.0.2.v2</code> (supported for EE in all AWS regions, and SE2 in all AWS regions except us-gov-west-1)</p> </li> <li> <p> <code>12.1.0.2.v1</code> (supported for EE in all AWS regions, and SE2 in all AWS regions except us-gov-west-1)</p> </li> </ul> <p> <b>Oracle 11g</b> </p> <ul> <li> <p> <code>11.2.0.4.v12</code> (supported for EE, SE1, and SE, in all AWS regions)</p> </li> <li> <p> <code>11.2.0.4.v11</code> (supported for EE, SE1, and SE, in all AWS regions)</p> </li> <li> <p> <code>11.2.0.4.v10</code> (supported for EE, SE1, and SE, in all AWS regions)</p> </li> <li> <p> <code>11.2.0.4.v9</code> (supported for EE, SE1, and SE, in all AWS regions)</p> </li> <li> <p> <code>11.2.0.4.v8</code> (supported for EE, SE1, and SE, in all AWS regions)</p> </li> <li> <p> <code>11.2.0.4.v7</code> (supported for EE, SE1, and SE, in all AWS regions)</p> </li> <li> <p> <code>11.2.0.4.v6</code> (supported for EE, SE1, and SE, in all AWS regions)</p> </li> <li> <p> <code>11.2.0.4.v5</code> (supported for EE, SE1, and SE, in all AWS regions)</p> </li> <li> <p> <code>11.2.0.4.v4</code> (supported for EE, SE1, and SE, in all AWS regions)</p> </li> <li> <p> <code>11.2.0.4.v3</code> (supported for EE, SE1, and SE, in all AWS regions)</p> </li> <li> <p> <code>11.2.0.4.v1</code> (supported for EE, SE1, and SE, in all AWS regions)</p> </li> </ul> <p> <b>PostgreSQL</b> </p> <ul> <li> <p> <b>Version 9.6.x:</b> <code> 9.6.1 | 9.6.2</code> </p> </li> <li> <p> <b>Version 9.5.x:</b> <code>9.5.6 | 9.5.4 | 9.5.2</code> </p> </li> <li> <p> <b>Version 9.4.x:</b> <code>9.4.11 | 9.4.9 | 9.4.7</code> </p> </li> <li> <p> <b>Version 9.3.x:</b> <code>9.3.16 | 9.3.14 | 9.3.12</code> </p> </li> </ul>"]
     pub engine_version: Option<String>,
     #[doc="<p>The amount of Provisioned IOPS (input/output operations per second) to be initially allocated for the DB instance.</p> <p>Constraints: Must be a multiple between 3 and 10 of the storage amount for the DB instance. Must also be an integer multiple of 1000. For example, if the size of your DB instance is 500 GB, then your <code>Iops</code> value can be 2000, 3000, 4000, or 5000. </p>"]
-    pub iops: Option<IntegerOptional>,
+    pub iops: Option<i64>,
     #[doc="<p>The KMS key identifier for an encrypted DB instance.</p> <p>The KMS key identifier is the Amazon Resource Name (ARN) for the KMS encryption key. If you are creating a DB instance with the same AWS account that owns the KMS encryption key used to encrypt the new DB instance, then you can use the KMS key alias instead of the ARN for the KM encryption key.</p> <p>If the <code>StorageEncrypted</code> parameter is true, and you do not specify a value for the <code>KmsKeyId</code> parameter, then Amazon RDS will use your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS region.</p>"]
     pub kms_key_id: Option<String>,
     #[doc="<p>License model information for this DB instance.</p> <p> Valid values: <code>license-included</code> | <code>bring-your-own-license</code> | <code>general-public-license</code> </p>"]
@@ -1809,28 +1801,28 @@ pub struct CreateDBInstanceMessage {
     #[doc="<p>The name for the master database user.</p> <p> <b>Amazon Aurora</b> </p> <p>Not applicable. You specify the name for the master database user when you create your DB cluster. </p> <p> <b>MariaDB</b> </p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 16 alphanumeric characters.</p> </li> <li> <p>Cannot be a reserved word for the chosen database engine.</p> </li> </ul> <p> <b>Microsoft SQL Server</b> </p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 128 alphanumeric characters.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot be a reserved word for the chosen database engine.</p> </li> </ul> <p> <b>MySQL</b> </p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 16 alphanumeric characters.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot be a reserved word for the chosen database engine.</p> </li> </ul> <p> <b>Oracle</b> </p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 30 alphanumeric characters.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot be a reserved word for the chosen database engine.</p> </li> </ul> <p> <b>PostgreSQL</b> </p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 63 alphanumeric characters.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot be a reserved word for the chosen database engine.</p> </li> </ul>"]
     pub master_username: Option<String>,
     #[doc="<p>The interval, in seconds, between points when Enhanced Monitoring metrics are collected for the DB instance. To disable collecting Enhanced Monitoring metrics, specify 0. The default is 0.</p> <p>If <code>MonitoringRoleArn</code> is specified, then you must also set <code>MonitoringInterval</code> to a value other than 0.</p> <p>Valid Values: <code>0, 1, 5, 10, 15, 30, 60</code> </p>"]
-    pub monitoring_interval: Option<IntegerOptional>,
+    pub monitoring_interval: Option<i64>,
     #[doc="<p>The ARN for the IAM role that permits RDS to send enhanced monitoring metrics to CloudWatch Logs. For example, <code>arn:aws:iam:123456789012:role/emaccess</code>. For information on creating a monitoring role, go to <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Monitoring.OS.html#USER_Monitoring.OS.Enabling\">Setting Up and Enabling Enhanced Monitoring</a>.</p> <p>If <code>MonitoringInterval</code> is set to a value other than 0, then you must supply a <code>MonitoringRoleArn</code> value.</p>"]
     pub monitoring_role_arn: Option<String>,
     #[doc="<p>Specifies if the DB instance is a Multi-AZ deployment. You cannot set the AvailabilityZone parameter if the MultiAZ parameter is set to true.</p>"]
-    pub multi_az: Option<BooleanOptional>,
+    pub multi_az: Option<bool>,
     #[doc="<p>Indicates that the DB instance should be associated with the specified option group.</p> <p>Permanent options, such as the TDE option for Oracle Advanced Security TDE, cannot be removed from an option group, and that option group cannot be removed from a DB instance once it is associated with a DB instance</p>"]
     pub option_group_name: Option<String>,
     #[doc="<p>The port number on which the database accepts connections.</p> <p> <b>MySQL</b> </p> <p> Default: <code>3306</code> </p> <p> Valid Values: <code>1150-65535</code> </p> <p>Type: Integer</p> <p> <b>MariaDB</b> </p> <p> Default: <code>3306</code> </p> <p> Valid Values: <code>1150-65535</code> </p> <p>Type: Integer</p> <p> <b>PostgreSQL</b> </p> <p> Default: <code>5432</code> </p> <p> Valid Values: <code>1150-65535</code> </p> <p>Type: Integer</p> <p> <b>Oracle</b> </p> <p> Default: <code>1521</code> </p> <p> Valid Values: <code>1150-65535</code> </p> <p> <b>SQL Server</b> </p> <p> Default: <code>1433</code> </p> <p> Valid Values: <code>1150-65535</code> except for <code>1434</code>, <code>3389</code>, <code>47001</code>, <code>49152</code>, and <code>49152</code> through <code>49156</code>. </p> <p> <b>Amazon Aurora</b> </p> <p> Default: <code>3306</code> </p> <p> Valid Values: <code>1150-65535</code> </p> <p>Type: Integer</p>"]
-    pub port: Option<IntegerOptional>,
+    pub port: Option<i64>,
     #[doc="<p> The daily time range during which automated backups are created if automated backups are enabled, using the <code>BackupRetentionPeriod</code> parameter. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.BackingUpAndRestoringAmazonRDSInstances.html\">DB Instance Backups</a>. </p> <p> Default: A 30-minute window selected at random from an 8-hour block of time per region. To see the time blocks available, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.Maintenance.html#AdjustingTheMaintenanceWindow\"> Adjusting the Preferred DB Instance Maintenance Window</a>. </p> <p>Constraints:</p> <ul> <li> <p>Must be in the format <code>hh24:mi-hh24:mi</code>.</p> </li> <li> <p>Times should be in Universal Coordinated Time (UTC).</p> </li> <li> <p>Must not conflict with the preferred maintenance window.</p> </li> <li> <p>Must be at least 30 minutes.</p> </li> </ul>"]
     pub preferred_backup_window: Option<String>,
     #[doc="<p> The weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC). For more information, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBMaintenance.html\">DB Instance Maintenance</a>. </p> <p> Format: <code>ddd:hh24:mi-ddd:hh24:mi</code> </p> <p> Default: A 30-minute window selected at random from an 8-hour block of time per region, occurring on a random day of the week. To see the time blocks available, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/AdjustingTheMaintenanceWindow.html\"> Adjusting the Preferred Maintenance Window</a> in the <i>Amazon RDS User Guide.</i> </p> <p>Valid Days: Mon, Tue, Wed, Thu, Fri, Sat, Sun</p> <p>Constraints: Minimum 30-minute window.</p>"]
     pub preferred_maintenance_window: Option<String>,
     #[doc="<p>A value that specifies the order in which an Aurora Replica is promoted to the primary instance after a failure of the existing primary instance. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Aurora.Managing.html#Aurora.Managing.FaultTolerance\"> Fault Tolerance for an Aurora DB Cluster</a>. </p> <p>Default: 1</p> <p>Valid Values: 0 - 15</p>"]
-    pub promotion_tier: Option<IntegerOptional>,
+    pub promotion_tier: Option<i64>,
     #[doc="<p>Specifies the accessibility options for the DB instance. A value of true specifies an Internet-facing instance with a publicly resolvable DNS name, which resolves to a public IP address. A value of false specifies an internal instance with a DNS name that resolves to a private IP address.</p> <p>Default: The default behavior varies depending on whether a VPC has been requested or not. The following list shows the default behavior in each case.</p> <ul> <li> <p> <b>Default VPC:</b> true</p> </li> <li> <p> <b>VPC:</b> false</p> </li> </ul> <p>If no DB subnet group has been specified as part of the request and the PubliclyAccessible value has not been set, the DB instance will be publicly accessible. If a specific DB subnet group has been specified as part of the request and the PubliclyAccessible value has not been set, the DB instance will be private.</p>"]
-    pub publicly_accessible: Option<BooleanOptional>,
+    pub publicly_accessible: Option<bool>,
     #[doc="<p>Specifies whether the DB instance is encrypted.</p> <p>Default: false</p>"]
-    pub storage_encrypted: Option<BooleanOptional>,
+    pub storage_encrypted: Option<bool>,
     #[doc="<p>Specifies the storage type to be associated with the DB instance.</p> <p> Valid values: <code>standard | gp2 | io1</code> </p> <p> If you specify <code>io1</code>, you must also include a value for the <code>Iops</code> parameter. </p> <p> Default: <code>io1</code> if the <code>Iops</code> parameter is specified; otherwise <code>standard</code> </p>"]
     pub storage_type: Option<String>,
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>The ARN from the Key Store with which to associate the instance for TDE encryption.</p>"]
     pub tde_credential_arn: Option<String>,
     #[doc="<p>The password for the given ARN from the Key Store in order to access the device.</p>"]
@@ -1838,7 +1830,7 @@ pub struct CreateDBInstanceMessage {
     #[doc="<p>The time zone of the DB instance. The time zone parameter is currently supported only by <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_SQLServer.html#SQLServer.Concepts.General.TimeZone\">Microsoft SQL Server</a>. </p>"]
     pub timezone: Option<String>,
     #[doc="<p>A list of EC2 VPC security groups to associate with this DB instance.</p> <p>Default: The default EC2 VPC security group for the DB subnet group's VPC.</p>"]
-    pub vpc_security_group_ids: Option<VpcSecurityGroupIdList>,
+    pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
 
@@ -1994,11 +1986,11 @@ impl CreateDBInstanceMessageSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateDBInstanceReadReplicaMessage {
     #[doc="<p>Indicates that minor engine upgrades will be applied automatically to the Read Replica during the maintenance window.</p> <p>Default: Inherits from the source DB instance</p>"]
-    pub auto_minor_version_upgrade: Option<BooleanOptional>,
+    pub auto_minor_version_upgrade: Option<bool>,
     #[doc="<p>The Amazon EC2 Availability Zone that the Read Replica will be created in.</p> <p>Default: A random, system-chosen Availability Zone in the endpoint's region.</p> <p> Example: <code>us-east-1d</code> </p>"]
     pub availability_zone: Option<String>,
     #[doc="<p>True to copy all tags from the Read Replica to snapshots of the Read Replica; otherwise false. The default is false.</p>"]
-    pub copy_tags_to_snapshot: Option<BooleanOptional>,
+    pub copy_tags_to_snapshot: Option<bool>,
     #[doc="<p>The compute and memory capacity of the Read Replica. Note that not all instance classes are available in all regions for all DB engines.</p> <p> Valid Values: <code>db.m1.small | db.m1.medium | db.m1.large | db.m1.xlarge | db.m2.xlarge |db.m2.2xlarge | db.m2.4xlarge | db.m3.medium | db.m3.large | db.m3.xlarge | db.m3.2xlarge | db.m4.large | db.m4.xlarge | db.m4.2xlarge | db.m4.4xlarge | db.m4.10xlarge | db.r3.large | db.r3.xlarge | db.r3.2xlarge | db.r3.4xlarge | db.r3.8xlarge | db.t2.micro | db.t2.small | db.t2.medium | db.t2.large</code> </p> <p>Default: Inherits from the source DB instance.</p>"]
     pub db_instance_class: Option<String>,
     #[doc="<p>The DB instance identifier of the Read Replica. This identifier is the unique key that identifies a DB instance. This parameter is stored as a lowercase string.</p>"]
@@ -2006,28 +1998,28 @@ pub struct CreateDBInstanceReadReplicaMessage {
     #[doc="<p>Specifies a DB subnet group for the DB instance. The new DB instance will be created in the VPC associated with the DB subnet group. If no DB subnet group is specified, then the new DB instance is not created in a VPC.</p> <p>Constraints:</p> <ul> <li> <p>Can only be specified if the source DB instance identifier specifies a DB instance in another region.</p> </li> <li> <p>The specified DB subnet group must be in the same region in which the operation is running.</p> </li> <li> <p>All Read Replicas in one region that are created from the same source DB instance must either:&gt;</p> <ul> <li> <p>Specify DB subnet groups from the same VPC. All these Read Replicas will be created in the same VPC.</p> </li> <li> <p>Not specify a DB subnet group. All these Read Replicas will be created outside of any VPC.</p> </li> </ul> </li> </ul> <p>Constraints: Must contain no more than 255 alphanumeric characters, periods, underscores, spaces, or hyphens. Must not be default.</p> <p>Example: <code>mySubnetgroup</code> </p>"]
     pub db_subnet_group_name: Option<String>,
     #[doc="<p>True to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts; otherwise false.</p> <p>You can enable IAM database authentication for the following database engines</p> <ul> <li> <p>For MySQL 5.6, minor version 5.6.34 or higher</p> </li> <li> <p>For MySQL 5.7, minor version 5.7.16 or higher</p> </li> <li> <p>Aurora 5.6 or higher.</p> </li> </ul> <p>Default: <code>false</code> </p>"]
-    pub enable_iam_database_authentication: Option<BooleanOptional>,
+    pub enable_iam_database_authentication: Option<bool>,
     #[doc="<p>The amount of Provisioned IOPS (input/output operations per second) to be initially allocated for the DB instance.</p>"]
-    pub iops: Option<IntegerOptional>,
+    pub iops: Option<i64>,
     #[doc="<p>The AWS KMS key ID for an encrypted Read Replica. The KMS key ID is the Amazon Resource Name (ARN), KMS key identifier, or the KMS key alias for the KMS encryption key. </p> <p>If you create an unencrypted Read Replica and specify a value for the <code>KmsKeyId</code> parameter, Amazon RDS encrypts the target Read Replica using the specified KMS encryption key. </p> <p>If you create an encrypted Read Replica from your AWS account, you can specify a value for <code>KmsKeyId</code> to encrypt the Read Replica with a new KMS encryption key. If you don't specify a value for <code>KmsKeyId</code>, then the Read Replica is encrypted with the same KMS key as the source DB instance. </p> <p> If you create an encrypted Read Replica in a different AWS region, then you must specify a KMS key for the destination AWS region. KMS encryption keys are specific to the region that they are created in, and you cannot use encryption keys from one region in another region.</p>"]
     pub kms_key_id: Option<String>,
     #[doc="<p>The interval, in seconds, between points when Enhanced Monitoring metrics are collected for the Read Replica. To disable collecting Enhanced Monitoring metrics, specify 0. The default is 0.</p> <p>If <code>MonitoringRoleArn</code> is specified, then you must also set <code>MonitoringInterval</code> to a value other than 0.</p> <p>Valid Values: <code>0, 1, 5, 10, 15, 30, 60</code> </p>"]
-    pub monitoring_interval: Option<IntegerOptional>,
+    pub monitoring_interval: Option<i64>,
     #[doc="<p>The ARN for the IAM role that permits RDS to send enhanced monitoring metrics to CloudWatch Logs. For example, <code>arn:aws:iam:123456789012:role/emaccess</code>. For information on creating a monitoring role, go to <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Monitoring.html#USER_Monitoring.OS.IAMRole\">To create an IAM role for Amazon RDS Enhanced Monitoring</a>.</p> <p>If <code>MonitoringInterval</code> is set to a value other than 0, then you must supply a <code>MonitoringRoleArn</code> value.</p>"]
     pub monitoring_role_arn: Option<String>,
     #[doc="<p>The option group the DB instance will be associated with. If omitted, the default option group for the engine specified will be used.</p>"]
     pub option_group_name: Option<String>,
     #[doc="<p>The port number that the DB instance uses for connections.</p> <p>Default: Inherits from the source DB instance</p> <p>Valid Values: <code>1150-65535</code> </p>"]
-    pub port: Option<IntegerOptional>,
+    pub port: Option<i64>,
     #[doc="<p>The URL that contains a Signature Version 4 signed request for the <code> CreateDBInstanceReadReplica</code> API action in the AWS region that contains the source DB instance. The <code>PreSignedUrl</code> parameter must be used when encrypting a Read Replica from another AWS region.</p> <p>The presigned URL must be a valid request for the <code>CreateDBInstanceReadReplica</code> API action that can be executed in the source region that contains the encrypted DB instance. The presigned URL request must contain the following parameter values:</p> <ul> <li> <p> <code>DestinationRegion</code> - The AWS Region that the Read Replica is created in. This region is the same one where the <code>CreateDBInstanceReadReplica</code> action is called that contains this presigned URL. </p> <p> For example, if you create an encrypted Read Replica in the us-east-1 region, and the source DB instance is in the west-2 region, then you call the <code>CreateDBInstanceReadReplica</code> action in the us-east-1 region and provide a presigned URL that contains a call to the <code>CreateDBInstanceReadReplica</code> action in the us-west-2 region. For this example, the <code>DestinationRegion</code> in the presigned URL must be set to the us-east-1 region.</p> </li> <li> <p> <code>KmsKeyId</code> - The KMS key identifier for the key to use to encrypt the Read Replica in the destination region. This is the same identifier for both the <code>CreateDBInstanceReadReplica</code> action that is called in the destination region, and the action contained in the presigned URL.</p> </li> <li> <p> <code>SourceDBInstanceIdentifier</code> - The DB instance identifier for the encrypted Read Replica to be created. This identifier must be in the Amazon Resource Name (ARN) format for the source region. For example, if you create an encrypted Read Replica from a DB instance in the us-west-2 region, then your <code>SourceDBInstanceIdentifier</code> would look like this example: <code> arn:aws:rds:us-west-2:123456789012:instance:mysql-instance1-instance-20161115</code>.</p> </li> </ul> <p>To learn how to generate a Signature Version 4 signed request, see <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html\"> Authenticating Requests: Using Query Parameters (AWS Signature Version 4)</a> and <a href=\"http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html\"> Signature Version 4 Signing Process</a>.</p>"]
     pub pre_signed_url: Option<String>,
     #[doc="<p>Specifies the accessibility options for the DB instance. A value of true specifies an Internet-facing instance with a publicly resolvable DNS name, which resolves to a public IP address. A value of false specifies an internal instance with a DNS name that resolves to a private IP address.</p> <p>Default: The default behavior varies depending on whether a VPC has been requested or not. The following list shows the default behavior in each case.</p> <ul> <li> <p> <b>Default VPC:</b>true</p> </li> <li> <p> <b>VPC:</b>false</p> </li> </ul> <p>If no DB subnet group has been specified as part of the request and the PubliclyAccessible value has not been set, the DB instance will be publicly accessible. If a specific DB subnet group has been specified as part of the request and the PubliclyAccessible value has not been set, the DB instance will be private.</p>"]
-    pub publicly_accessible: Option<BooleanOptional>,
+    pub publicly_accessible: Option<bool>,
     #[doc="<p>The identifier of the DB instance that will act as the source for the Read Replica. Each DB instance can have up to five Read Replicas.</p> <p>Constraints:</p> <ul> <li> <p>Must be the identifier of an existing MySQL, MariaDB, or PostgreSQL DB instance.</p> </li> <li> <p>Can specify a DB instance that is a MySQL Read Replica only if the source is running MySQL 5.6.</p> </li> <li> <p>Can specify a DB instance that is a PostgreSQL DB instance only if the source is running PostgreSQL 9.3.5 or later.</p> </li> <li> <p>The specified DB instance must have automatic backups enabled, its backup retention period must be greater than 0.</p> </li> <li> <p>If the source DB instance is in the same region as the Read Replica, specify a valid DB instance identifier.</p> </li> <li> <p>If the source DB instance is in a different region than the Read Replica, specify a valid DB instance ARN. For more information, go to <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing\"> Constructing a Amazon RDS Amazon Resource Name (ARN)</a>.</p> </li> </ul>"]
     pub source_db_instance_identifier: String,
     #[doc="<p>Specifies the storage type to be associated with the Read Replica.</p> <p> Valid values: <code>standard | gp2 | io1</code> </p> <p> If you specify <code>io1</code>, you must also include a value for the <code>Iops</code> parameter. </p> <p> Default: <code>io1</code> if the <code>Iops</code> parameter is specified; otherwise <code>standard</code> </p>"]
     pub storage_type: Option<String>,
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 
@@ -2207,7 +2199,7 @@ pub struct CreateDBParameterGroupMessage {
     pub db_parameter_group_name: String,
     #[doc="<p>The description for the DB parameter group.</p>"]
     pub description: String,
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 
@@ -2287,7 +2279,7 @@ pub struct CreateDBSecurityGroupMessage {
     pub db_security_group_description: String,
     #[doc="<p>The name for the DB security group. This value is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> <li> <p>Must not be \"Default\"</p> </li> </ul> <p>Example: <code>mysecuritygroup</code> </p>"]
     pub db_security_group_name: String,
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 
@@ -2366,7 +2358,7 @@ pub struct CreateDBSnapshotMessage {
     pub db_instance_identifier: String,
     #[doc="<p>The identifier for the DB snapshot.</p> <p>Constraints:</p> <ul> <li> <p>Cannot be null, empty, or blank</p> </li> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul> <p>Example: <code>my-snapshot-id</code> </p>"]
     pub db_snapshot_identifier: String,
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 
@@ -2446,8 +2438,8 @@ pub struct CreateDBSubnetGroupMessage {
     #[doc="<p>The name for the DB subnet group. This value is stored as a lowercase string.</p> <p>Constraints: Must contain no more than 255 alphanumeric characters, periods, underscores, spaces, or hyphens. Must not be default.</p> <p>Example: <code>mySubnetgroup</code> </p>"]
     pub db_subnet_group_name: String,
     #[doc="<p>The EC2 Subnet IDs for the DB subnet group.</p>"]
-    pub subnet_ids: SubnetIdentifierList,
-    pub tags: Option<TagList>,
+    pub subnet_ids: Vec<String>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 
@@ -2526,18 +2518,18 @@ impl CreateDBSubnetGroupResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateEventSubscriptionMessage {
     #[doc="<p> A Boolean value; set to <b>true</b> to activate the subscription, set to <b>false</b> to create the subscription but not active it. </p>"]
-    pub enabled: Option<BooleanOptional>,
+    pub enabled: Option<bool>,
     #[doc="<p> A list of event categories for a SourceType that you want to subscribe to. You can see a list of the categories for a given SourceType in the <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html\">Events</a> topic in the Amazon RDS User Guide or by using the <b>DescribeEventCategories</b> action. </p>"]
-    pub event_categories: Option<EventCategoriesList>,
+    pub event_categories: Option<Vec<String>>,
     #[doc="<p>The Amazon Resource Name (ARN) of the SNS topic created for event notification. The ARN is created by Amazon SNS when you create a topic and subscribe to it.</p>"]
     pub sns_topic_arn: String,
     #[doc="<p>The list of identifiers of the event sources for which events will be returned. If not specified, then all sources are included in the response. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it cannot end with a hyphen or contain two consecutive hyphens.</p> <p>Constraints:</p> <ul> <li> <p>If SourceIds are supplied, SourceType must also be provided.</p> </li> <li> <p>If the source type is a DB instance, then a <code>DBInstanceIdentifier</code> must be supplied.</p> </li> <li> <p>If the source type is a DB security group, a <code>DBSecurityGroupName</code> must be supplied.</p> </li> <li> <p>If the source type is a DB parameter group, a <code>DBParameterGroupName</code> must be supplied.</p> </li> <li> <p>If the source type is a DB snapshot, a <code>DBSnapshotIdentifier</code> must be supplied.</p> </li> </ul>"]
-    pub source_ids: Option<SourceIdsList>,
+    pub source_ids: Option<Vec<String>>,
     #[doc="<p>The type of source that will be generating the events. For example, if you want to be notified of events generated by a DB instance, you would set this parameter to db-instance. if this value is not specified, all events are returned.</p> <p>Valid values: <code>db-instance</code> | <code>db-cluster</code> | <code>db-parameter-group</code> | <code>db-security-group</code> | <code>db-snapshot</code> | <code>db-cluster-snapshot</code> </p>"]
     pub source_type: Option<String>,
     #[doc="<p>The name of the subscription.</p> <p>Constraints: The name must be less than 255 characters.</p>"]
     pub subscription_name: String,
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 
@@ -2636,7 +2628,7 @@ pub struct CreateOptionGroupMessage {
     pub option_group_description: String,
     #[doc="<p>Specifies the name of the option group to be created.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters or hyphens</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul> <p>Example: <code>myoptiongroup</code> </p>"]
     pub option_group_name: String,
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 
@@ -2715,27 +2707,27 @@ impl CreateOptionGroupResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DBCluster {
     #[doc="<p>For all database engines except Amazon Aurora, <code>AllocatedStorage</code> specifies the allocated storage size in gigabytes (GB). For Aurora, <code>AllocatedStorage</code> always returns 1, because Aurora DB cluster storage size is not fixed, but instead automatically adjusts as needed.</p>"]
-    pub allocated_storage: Option<IntegerOptional>,
+    pub allocated_storage: Option<i64>,
     #[doc="<p>Provides a list of the AWS Identity and Access Management (IAM) roles that are associated with the DB cluster. IAM roles that are associated with a DB cluster grant permission for the DB cluster to access other AWS services on your behalf.</p>"]
-    pub associated_roles: Option<DBClusterRoles>,
+    pub associated_roles: Option<Vec<DBClusterRole>>,
     #[doc="<p>Provides the list of EC2 Availability Zones that instances in the DB cluster can be created in.</p>"]
-    pub availability_zones: Option<AvailabilityZones>,
+    pub availability_zones: Option<Vec<String>>,
     #[doc="<p>Specifies the number of days for which automatic DB snapshots are retained.</p>"]
-    pub backup_retention_period: Option<IntegerOptional>,
+    pub backup_retention_period: Option<i64>,
     #[doc="<p>If present, specifies the name of the character set that this cluster is associated with.</p>"]
     pub character_set_name: Option<String>,
     #[doc="<p>Identifies the clone group to which the DB cluster is associated.</p>"]
     pub clone_group_id: Option<String>,
     #[doc="<p>Specifies the time when the DB cluster was created, in Universal Coordinated Time (UTC).</p>"]
-    pub cluster_create_time: Option<TStamp>,
+    pub cluster_create_time: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) for the DB cluster.</p>"]
     pub db_cluster_arn: Option<String>,
     #[doc="<p>Contains a user-supplied DB cluster identifier. This identifier is the unique key that identifies a DB cluster.</p>"]
     pub db_cluster_identifier: Option<String>,
     #[doc="<p>Provides the list of instances that make up the DB cluster.</p>"]
-    pub db_cluster_members: Option<DBClusterMemberList>,
+    pub db_cluster_members: Option<Vec<DBClusterMember>>,
     #[doc="<p>Provides the list of option group memberships for this DB cluster.</p>"]
-    pub db_cluster_option_group_memberships: Option<DBClusterOptionGroupMemberships>,
+    pub db_cluster_option_group_memberships: Option<Vec<DBClusterOptionGroupStatus>>,
     #[doc="<p>Specifies the name of the DB cluster parameter group for the DB cluster.</p>"]
     pub db_cluster_parameter_group: Option<String>,
     #[doc="<p>Specifies information on the subnet group associated with the DB cluster, including the name, description, and subnets in the subnet group.</p>"]
@@ -2745,7 +2737,7 @@ pub struct DBCluster {
     #[doc="<p>The region-unique, immutable identifier for the DB cluster. This identifier is found in AWS CloudTrail log entries whenever the KMS key for the DB cluster is accessed.</p>"]
     pub db_cluster_resource_id: Option<String>,
     #[doc="<p>Specifies the earliest time to which a database can be restored with point-in-time restore.</p>"]
-    pub earliest_restorable_time: Option<TStamp>,
+    pub earliest_restorable_time: Option<String>,
     #[doc="<p>Specifies the connection endpoint for the primary instance of the DB cluster.</p>"]
     pub endpoint: Option<String>,
     #[doc="<p>Provides the name of the database engine to be used for this DB cluster.</p>"]
@@ -2755,25 +2747,25 @@ pub struct DBCluster {
     #[doc="<p>Specifies the ID that Amazon Route 53 assigns when you create a hosted zone.</p>"]
     pub hosted_zone_id: Option<String>,
     #[doc="<p>True if mapping of AWS Identity and Access Management (IAM) accounts to database accounts is enabled; otherwise false.</p>"]
-    pub iam_database_authentication_enabled: Option<Boolean>,
+    pub iam_database_authentication_enabled: Option<bool>,
     #[doc="<p>If <code>StorageEncrypted</code> is true, the KMS key identifier for the encrypted DB cluster.</p>"]
     pub kms_key_id: Option<String>,
     #[doc="<p>Specifies the latest time to which a database can be restored with point-in-time restore.</p>"]
-    pub latest_restorable_time: Option<TStamp>,
+    pub latest_restorable_time: Option<String>,
     #[doc="<p>Contains the master username for the DB cluster.</p>"]
     pub master_username: Option<String>,
     #[doc="<p>Specifies whether the DB cluster has instances in multiple Availability Zones.</p>"]
-    pub multi_az: Option<Boolean>,
+    pub multi_az: Option<bool>,
     #[doc="<p>Specifies the progress of the operation as a percentage.</p>"]
     pub percent_progress: Option<String>,
     #[doc="<p>Specifies the port that the database engine is listening on.</p>"]
-    pub port: Option<IntegerOptional>,
+    pub port: Option<i64>,
     #[doc="<p>Specifies the daily time range during which automated backups are created if automated backups are enabled, as determined by the <code>BackupRetentionPeriod</code>. </p>"]
     pub preferred_backup_window: Option<String>,
     #[doc="<p>Specifies the weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).</p>"]
     pub preferred_maintenance_window: Option<String>,
     #[doc="<p>Contains one or more identifiers of the Read Replicas associated with this DB cluster.</p>"]
-    pub read_replica_identifiers: Option<ReadReplicaIdentifierList>,
+    pub read_replica_identifiers: Option<Vec<String>>,
     #[doc="<p>The reader endpoint for the DB cluster. The reader endpoint for a DB cluster load-balances connections across the Aurora Replicas that are available in a DB cluster. As clients request new connections to the reader endpoint, Aurora distributes the connection requests among the Aurora Replicas in the DB cluster. This functionality can help balance your read workload across multiple Aurora Replicas in your DB cluster. </p> <p>If a failover occurs, and the Aurora Replica that you are connected to is promoted to be the primary instance, your connection will be dropped. To continue sending your read workload to other Aurora Replicas in the cluster, you can then reconnect to the reader endpoint.</p>"]
     pub reader_endpoint: Option<String>,
     #[doc="<p>Contains the identifier of the source DB cluster if this DB cluster is a Read Replica.</p>"]
@@ -2781,9 +2773,9 @@ pub struct DBCluster {
     #[doc="<p>Specifies the current state of this DB cluster.</p>"]
     pub status: Option<String>,
     #[doc="<p>Specifies whether the DB cluster is encrypted.</p>"]
-    pub storage_encrypted: Option<Boolean>,
+    pub storage_encrypted: Option<bool>,
     #[doc="<p>Provides a list of VPC security groups that the DB cluster belongs to.</p>"]
-    pub vpc_security_groups: Option<VpcSecurityGroupMembershipList>,
+    pub vpc_security_groups: Option<Vec<VpcSecurityGroupMembership>>,
 }
 
 struct DBClusterDeserializer;
@@ -2981,13 +2973,12 @@ impl DBClusterDeserializer {
 
     }
 }
-pub type DBClusterList = Vec<DBCluster>;
 struct DBClusterListDeserializer;
 impl DBClusterListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DBClusterList, XmlParseError> {
+                                       -> Result<Vec<DBCluster>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -3031,9 +3022,9 @@ pub struct DBClusterMember {
     #[doc="<p>Specifies the instance identifier for this member of the DB cluster.</p>"]
     pub db_instance_identifier: Option<String>,
     #[doc="<p>Value that is <code>true</code> if the cluster member is the primary instance for the DB cluster and <code>false</code> otherwise.</p>"]
-    pub is_cluster_writer: Option<Boolean>,
+    pub is_cluster_writer: Option<bool>,
     #[doc="<p>A value that specifies the order in which an Aurora Replica is promoted to the primary instance after a failure of the existing primary instance. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Aurora.Managing.html#Aurora.Managing.FaultTolerance\"> Fault Tolerance for an Aurora DB Cluster</a>. </p>"]
-    pub promotion_tier: Option<IntegerOptional>,
+    pub promotion_tier: Option<i64>,
 }
 
 struct DBClusterMemberDeserializer;
@@ -3094,13 +3085,12 @@ impl DBClusterMemberDeserializer {
 
     }
 }
-pub type DBClusterMemberList = Vec<DBClusterMember>;
 struct DBClusterMemberListDeserializer;
 impl DBClusterMemberListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DBClusterMemberList, XmlParseError> {
+                                       -> Result<Vec<DBClusterMember>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -3141,7 +3131,7 @@ impl DBClusterMemberListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DBClusterMessage {
     #[doc="<p>Contains a list of DB clusters for the user.</p>"]
-    pub db_clusters: Option<DBClusterList>,
+    pub db_clusters: Option<Vec<DBCluster>>,
     #[doc="<p>A pagination token that can be used in a subsequent DescribeDBClusters request.</p>"]
     pub marker: Option<String>,
 }
@@ -3193,14 +3183,13 @@ impl DBClusterMessageDeserializer {
 
     }
 }
-pub type DBClusterOptionGroupMemberships = Vec<DBClusterOptionGroupStatus>;
 struct DBClusterOptionGroupMembershipsDeserializer;
 impl DBClusterOptionGroupMembershipsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>
         (tag_name: &str,
          stack: &mut T)
-         -> Result<DBClusterOptionGroupMemberships, XmlParseError> {
+         -> Result<Vec<DBClusterOptionGroupStatus>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -3368,7 +3357,7 @@ pub struct DBClusterParameterGroupDetails {
     #[doc="<p> An optional pagination token provided by a previous DescribeDBClusterParameters request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> . </p>"]
     pub marker: Option<String>,
     #[doc="<p>Provides a list of parameters for the DB cluster parameter group.</p>"]
-    pub parameters: Option<ParametersList>,
+    pub parameters: Option<Vec<Parameter>>,
 }
 
 struct DBClusterParameterGroupDetailsDeserializer;
@@ -3418,13 +3407,12 @@ impl DBClusterParameterGroupDetailsDeserializer {
 
     }
 }
-pub type DBClusterParameterGroupList = Vec<DBClusterParameterGroup>;
 struct DBClusterParameterGroupListDeserializer;
 impl DBClusterParameterGroupListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DBClusterParameterGroupList, XmlParseError> {
+                                       -> Result<Vec<DBClusterParameterGroup>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -3515,7 +3503,7 @@ impl DBClusterParameterGroupNameMessageDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DBClusterParameterGroupsMessage {
     #[doc="<p>A list of DB cluster parameter groups.</p>"]
-    pub db_cluster_parameter_groups: Option<DBClusterParameterGroupList>,
+    pub db_cluster_parameter_groups: Option<Vec<DBClusterParameterGroup>>,
     #[doc="<p> An optional pagination token provided by a previous <code>DescribeDBClusterParameterGroups</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     pub marker: Option<String>,
 }
@@ -3621,13 +3609,12 @@ impl DBClusterRoleDeserializer {
 
     }
 }
-pub type DBClusterRoles = Vec<DBClusterRole>;
 struct DBClusterRolesDeserializer;
 impl DBClusterRolesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DBClusterRoles, XmlParseError> {
+                                       -> Result<Vec<DBClusterRole>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -3668,11 +3655,11 @@ impl DBClusterRolesDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DBClusterSnapshot {
     #[doc="<p>Specifies the allocated storage size in gigabytes (GB).</p>"]
-    pub allocated_storage: Option<Integer>,
+    pub allocated_storage: Option<i64>,
     #[doc="<p>Provides the list of EC2 Availability Zones that instances in the DB cluster snapshot can be restored in.</p>"]
-    pub availability_zones: Option<AvailabilityZones>,
+    pub availability_zones: Option<Vec<String>>,
     #[doc="<p>Specifies the time when the DB cluster was created, in Universal Coordinated Time (UTC).</p>"]
-    pub cluster_create_time: Option<TStamp>,
+    pub cluster_create_time: Option<String>,
     #[doc="<p>Specifies the DB cluster identifier of the DB cluster that this DB cluster snapshot was created from.</p>"]
     pub db_cluster_identifier: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) for the DB cluster snapshot.</p>"]
@@ -3684,7 +3671,7 @@ pub struct DBClusterSnapshot {
     #[doc="<p>Provides the version of the database engine for this DB cluster snapshot.</p>"]
     pub engine_version: Option<String>,
     #[doc="<p>True if mapping of AWS Identity and Access Management (IAM) accounts to database accounts is enabled; otherwise false.</p>"]
-    pub iam_database_authentication_enabled: Option<Boolean>,
+    pub iam_database_authentication_enabled: Option<bool>,
     #[doc="<p>If <code>StorageEncrypted</code> is true, the KMS key identifier for the encrypted DB cluster snapshot.</p>"]
     pub kms_key_id: Option<String>,
     #[doc="<p>Provides the license model information for this DB cluster snapshot.</p>"]
@@ -3692,11 +3679,11 @@ pub struct DBClusterSnapshot {
     #[doc="<p>Provides the master username for the DB cluster snapshot.</p>"]
     pub master_username: Option<String>,
     #[doc="<p>Specifies the percentage of the estimated data that has been transferred.</p>"]
-    pub percent_progress: Option<Integer>,
+    pub percent_progress: Option<i64>,
     #[doc="<p>Specifies the port that the DB cluster was listening on at the time of the snapshot.</p>"]
-    pub port: Option<Integer>,
+    pub port: Option<i64>,
     #[doc="<p>Provides the time when the snapshot was taken, in Universal Coordinated Time (UTC).</p>"]
-    pub snapshot_create_time: Option<TStamp>,
+    pub snapshot_create_time: Option<String>,
     #[doc="<p>Provides the type of the DB cluster snapshot.</p>"]
     pub snapshot_type: Option<String>,
     #[doc="<p>If the DB cluster snapshot was copied from a source DB cluster snapshot, the Amazon Resource Name (ARN) for the source DB cluster snapshot; otherwise, a null value.</p>"]
@@ -3704,7 +3691,7 @@ pub struct DBClusterSnapshot {
     #[doc="<p>Specifies the status of this DB cluster snapshot.</p>"]
     pub status: Option<String>,
     #[doc="<p>Specifies whether the DB cluster snapshot is encrypted.</p>"]
-    pub storage_encrypted: Option<Boolean>,
+    pub storage_encrypted: Option<bool>,
     #[doc="<p>Provides the VPC ID associated with the DB cluster snapshot.</p>"]
     pub vpc_id: Option<String>,
 }
@@ -3844,7 +3831,7 @@ pub struct DBClusterSnapshotAttribute {
     #[doc="<p>The name of the manual DB cluster snapshot attribute.</p> <p>The attribute named <code>restore</code> refers to the list of AWS accounts that have permission to copy or restore the manual DB cluster snapshot. For more information, see the <a>ModifyDBClusterSnapshotAttribute</a> API action.</p>"]
     pub attribute_name: Option<String>,
     #[doc="<p>The value(s) for the manual DB cluster snapshot attribute.</p> <p>If the <code>AttributeName</code> field is set to <code>restore</code>, then this element returns a list of IDs of the AWS accounts that are authorized to copy or restore the manual DB cluster snapshot. If a value of <code>all</code> is in the list, then the manual DB cluster snapshot is public and available for any AWS account to copy or restore.</p>"]
-    pub attribute_values: Option<AttributeValueList>,
+    pub attribute_values: Option<Vec<String>>,
 }
 
 struct DBClusterSnapshotAttributeDeserializer;
@@ -3894,13 +3881,13 @@ impl DBClusterSnapshotAttributeDeserializer {
 
     }
 }
-pub type DBClusterSnapshotAttributeList = Vec<DBClusterSnapshotAttribute>;
 struct DBClusterSnapshotAttributeListDeserializer;
 impl DBClusterSnapshotAttributeListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<DBClusterSnapshotAttributeList, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<Vec<DBClusterSnapshotAttribute>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -3940,7 +3927,7 @@ impl DBClusterSnapshotAttributeListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DBClusterSnapshotAttributesResult {
     #[doc="<p>The list of attributes and values for the manual DB cluster snapshot.</p>"]
-    pub db_cluster_snapshot_attributes: Option<DBClusterSnapshotAttributeList>,
+    pub db_cluster_snapshot_attributes: Option<Vec<DBClusterSnapshotAttribute>>,
     #[doc="<p>The identifier of the manual DB cluster snapshot that the attributes apply to.</p>"]
     pub db_cluster_snapshot_identifier: Option<String>,
 }
@@ -3992,13 +3979,12 @@ impl DBClusterSnapshotAttributesResultDeserializer {
 
     }
 }
-pub type DBClusterSnapshotList = Vec<DBClusterSnapshot>;
 struct DBClusterSnapshotListDeserializer;
 impl DBClusterSnapshotListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DBClusterSnapshotList, XmlParseError> {
+                                       -> Result<Vec<DBClusterSnapshot>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4038,7 +4024,7 @@ impl DBClusterSnapshotListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DBClusterSnapshotMessage {
     #[doc="<p>Provides a list of DB cluster snapshots for the user.</p>"]
-    pub db_cluster_snapshots: Option<DBClusterSnapshotList>,
+    pub db_cluster_snapshots: Option<Vec<DBClusterSnapshot>>,
     #[doc="<p> An optional pagination token provided by a previous <a>DescribeDBClusterSnapshots</a> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     pub marker: Option<String>,
 }
@@ -4106,11 +4092,11 @@ pub struct DBEngineVersion {
     #[doc="<p>The version number of the database engine.</p>"]
     pub engine_version: Option<String>,
     #[doc="<p> A list of the character sets supported by this engine for the <code>CharacterSetName</code> parameter of the <code>CreateDBInstance</code> action. </p>"]
-    pub supported_character_sets: Option<SupportedCharacterSetsList>,
+    pub supported_character_sets: Option<Vec<CharacterSet>>,
     #[doc="<p>A list of the time zones supported by this engine for the <code>Timezone</code> parameter of the <code>CreateDBInstance</code> action. </p>"]
-    pub supported_timezones: Option<SupportedTimezonesList>,
+    pub supported_timezones: Option<Vec<Timezone>>,
     #[doc="<p>A list of engine versions that this database engine version can be upgraded to.</p>"]
-    pub valid_upgrade_target: Option<ValidUpgradeTargetList>,
+    pub valid_upgrade_target: Option<Vec<UpgradeTarget>>,
 }
 
 struct DBEngineVersionDeserializer;
@@ -4192,13 +4178,12 @@ impl DBEngineVersionDeserializer {
 
     }
 }
-pub type DBEngineVersionList = Vec<DBEngineVersion>;
 struct DBEngineVersionListDeserializer;
 impl DBEngineVersionListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DBEngineVersionList, XmlParseError> {
+                                       -> Result<Vec<DBEngineVersion>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4239,7 +4224,7 @@ impl DBEngineVersionListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DBEngineVersionMessage {
     #[doc="<p> A list of <code>DBEngineVersion</code> elements. </p>"]
-    pub db_engine_versions: Option<DBEngineVersionList>,
+    pub db_engine_versions: Option<Vec<DBEngineVersion>>,
     #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     pub marker: Option<String>,
 }
@@ -4295,19 +4280,19 @@ impl DBEngineVersionMessageDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DBInstance {
     #[doc="<p>Specifies the allocated storage size specified in gigabytes.</p>"]
-    pub allocated_storage: Option<Integer>,
+    pub allocated_storage: Option<i64>,
     #[doc="<p>Indicates that minor version patches are applied automatically.</p>"]
-    pub auto_minor_version_upgrade: Option<Boolean>,
+    pub auto_minor_version_upgrade: Option<bool>,
     #[doc="<p>Specifies the name of the Availability Zone the DB instance is located in.</p>"]
     pub availability_zone: Option<String>,
     #[doc="<p>Specifies the number of days for which automatic DB snapshots are retained.</p>"]
-    pub backup_retention_period: Option<Integer>,
+    pub backup_retention_period: Option<i64>,
     #[doc="<p>The identifier of the CA certificate for this DB instance.</p>"]
     pub ca_certificate_identifier: Option<String>,
     #[doc="<p>If present, specifies the name of the character set that this instance is associated with.</p>"]
     pub character_set_name: Option<String>,
     #[doc="<p>Specifies whether tags are copied from the DB instance to snapshots of the DB instance.</p>"]
-    pub copy_tags_to_snapshot: Option<Boolean>,
+    pub copy_tags_to_snapshot: Option<bool>,
     #[doc="<p>If the DB instance is a member of a DB cluster, contains the name of the DB cluster that the DB instance is a member of.</p>"]
     pub db_cluster_identifier: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) for the DB instance.</p>"]
@@ -4321,17 +4306,17 @@ pub struct DBInstance {
     #[doc="<p>The meaning of this parameter differs according to the database engine you use. For example, this value returns MySQL, MariaDB, or PostgreSQL information when returning values from CreateDBInstanceReadReplica since Read Replicas are only supported for these engines.</p> <p> <b>MySQL, MariaDB, SQL Server, PostgreSQL</b> </p> <p>Contains the name of the initial database of this instance that was provided at create time, if one was specified when the DB instance was created. This same name is returned for the life of the DB instance.</p> <p>Type: String</p> <p> <b>Oracle</b> </p> <p>Contains the Oracle System ID (SID) of the created DB instance. Not shown when the returned parameters do not apply to an Oracle DB instance.</p>"]
     pub db_name: Option<String>,
     #[doc="<p>Provides the list of DB parameter groups applied to this DB instance.</p>"]
-    pub db_parameter_groups: Option<DBParameterGroupStatusList>,
+    pub db_parameter_groups: Option<Vec<DBParameterGroupStatus>>,
     #[doc="<p> Provides List of DB security group elements containing only <code>DBSecurityGroup.Name</code> and <code>DBSecurityGroup.Status</code> subelements. </p>"]
-    pub db_security_groups: Option<DBSecurityGroupMembershipList>,
+    pub db_security_groups: Option<Vec<DBSecurityGroupMembership>>,
     #[doc="<p>Specifies information on the subnet group associated with the DB instance, including the name, description, and subnets in the subnet group.</p>"]
     pub db_subnet_group: Option<DBSubnetGroup>,
     #[doc="<p>Specifies the port that the DB instance listens on. If the DB instance is part of a DB cluster, this can be a different port than the DB cluster port.</p>"]
-    pub db_instance_port: Option<Integer>,
+    pub db_instance_port: Option<i64>,
     #[doc="<p>The region-unique, immutable identifier for the DB instance. This identifier is found in AWS CloudTrail log entries whenever the KMS key for the DB instance is accessed.</p>"]
     pub dbi_resource_id: Option<String>,
     #[doc="<p>The Active Directory Domain membership records associated with the DB instance.</p>"]
-    pub domain_memberships: Option<DomainMembershipList>,
+    pub domain_memberships: Option<Vec<DomainMembership>>,
     #[doc="<p>Specifies the connection endpoint.</p>"]
     pub endpoint: Option<Endpoint>,
     #[doc="<p>Provides the name of the database engine to be used for this DB instance.</p>"]
@@ -4341,27 +4326,27 @@ pub struct DBInstance {
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon CloudWatch Logs log stream that receives the Enhanced Monitoring metrics data for the DB instance.</p>"]
     pub enhanced_monitoring_resource_arn: Option<String>,
     #[doc="<p>True if mapping of AWS Identity and Access Management (IAM) accounts to database accounts is enabled; otherwise false.</p> <p>IAM database authentication can be enabled for the following database engines</p> <ul> <li> <p>For MySQL 5.6, minor version 5.6.34 or higher</p> </li> <li> <p>For MySQL 5.7, minor version 5.7.16 or higher</p> </li> <li> <p>Aurora 5.6 or higher. To enable IAM database authentication for Aurora, see DBCluster Type.</p> </li> </ul>"]
-    pub iam_database_authentication_enabled: Option<Boolean>,
+    pub iam_database_authentication_enabled: Option<bool>,
     #[doc="<p>Provides the date and time the DB instance was created.</p>"]
-    pub instance_create_time: Option<TStamp>,
+    pub instance_create_time: Option<String>,
     #[doc="<p>Specifies the Provisioned IOPS (I/O operations per second) value.</p>"]
-    pub iops: Option<IntegerOptional>,
+    pub iops: Option<i64>,
     #[doc="<p> If <code>StorageEncrypted</code> is true, the KMS key identifier for the encrypted DB instance. </p>"]
     pub kms_key_id: Option<String>,
     #[doc="<p>Specifies the latest time to which a database can be restored with point-in-time restore.</p>"]
-    pub latest_restorable_time: Option<TStamp>,
+    pub latest_restorable_time: Option<String>,
     #[doc="<p>License model information for this DB instance.</p>"]
     pub license_model: Option<String>,
     #[doc="<p>Contains the master username for the DB instance.</p>"]
     pub master_username: Option<String>,
     #[doc="<p>The interval, in seconds, between points when Enhanced Monitoring metrics are collected for the DB instance.</p>"]
-    pub monitoring_interval: Option<IntegerOptional>,
+    pub monitoring_interval: Option<i64>,
     #[doc="<p>The ARN for the IAM role that permits RDS to send Enhanced Monitoring metrics to CloudWatch Logs.</p>"]
     pub monitoring_role_arn: Option<String>,
     #[doc="<p>Specifies if the DB instance is a Multi-AZ deployment.</p>"]
-    pub multi_az: Option<Boolean>,
+    pub multi_az: Option<bool>,
     #[doc="<p>Provides the list of option group memberships for this DB instance.</p>"]
-    pub option_group_memberships: Option<OptionGroupMembershipList>,
+    pub option_group_memberships: Option<Vec<OptionGroupMembership>>,
     #[doc="<p>Specifies that changes to the DB instance are pending. This element is only included when changes are pending. Specific changes are identified by subelements.</p>"]
     pub pending_modified_values: Option<PendingModifiedValues>,
     #[doc="<p> Specifies the daily time range during which automated backups are created if automated backups are enabled, as determined by the <code>BackupRetentionPeriod</code>. </p>"]
@@ -4369,21 +4354,21 @@ pub struct DBInstance {
     #[doc="<p>Specifies the weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).</p>"]
     pub preferred_maintenance_window: Option<String>,
     #[doc="<p>A value that specifies the order in which an Aurora Replica is promoted to the primary instance after a failure of the existing primary instance. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Aurora.Managing.html#Aurora.Managing.FaultTolerance\"> Fault Tolerance for an Aurora DB Cluster</a>. </p>"]
-    pub promotion_tier: Option<IntegerOptional>,
+    pub promotion_tier: Option<i64>,
     #[doc="<p>Specifies the accessibility options for the DB instance. A value of true specifies an Internet-facing instance with a publicly resolvable DNS name, which resolves to a public IP address. A value of false specifies an internal instance with a DNS name that resolves to a private IP address.</p> <p>Default: The default behavior varies depending on whether a VPC has been requested or not. The following list shows the default behavior in each case.</p> <ul> <li> <p> <b>Default VPC:</b>true</p> </li> <li> <p> <b>VPC:</b>false</p> </li> </ul> <p>If no DB subnet group has been specified as part of the request and the PubliclyAccessible value has not been set, the DB instance will be publicly accessible. If a specific DB subnet group has been specified as part of the request and the PubliclyAccessible value has not been set, the DB instance will be private.</p>"]
-    pub publicly_accessible: Option<Boolean>,
+    pub publicly_accessible: Option<bool>,
     #[doc="<p>Contains one or more identifiers of Aurora DB clusters that are Read Replicas of this DB instance.</p>"]
-    pub read_replica_db_cluster_identifiers: Option<ReadReplicaDBClusterIdentifierList>,
+    pub read_replica_db_cluster_identifiers: Option<Vec<String>>,
     #[doc="<p>Contains one or more identifiers of the Read Replicas associated with this DB instance.</p>"]
-    pub read_replica_db_instance_identifiers: Option<ReadReplicaDBInstanceIdentifierList>,
+    pub read_replica_db_instance_identifiers: Option<Vec<String>>,
     #[doc="<p>Contains the identifier of the source DB instance if this DB instance is a Read Replica.</p>"]
     pub read_replica_source_db_instance_identifier: Option<String>,
     #[doc="<p>If present, specifies the name of the secondary Availability Zone for a DB instance with multi-AZ support.</p>"]
     pub secondary_availability_zone: Option<String>,
     #[doc="<p>The status of a Read Replica. If the instance is not a Read Replica, this will be blank.</p>"]
-    pub status_infos: Option<DBInstanceStatusInfoList>,
+    pub status_infos: Option<Vec<DBInstanceStatusInfo>>,
     #[doc="<p>Specifies whether the DB instance is encrypted.</p>"]
-    pub storage_encrypted: Option<Boolean>,
+    pub storage_encrypted: Option<bool>,
     #[doc="<p>Specifies the storage type associated with DB instance.</p>"]
     pub storage_type: Option<String>,
     #[doc="<p>The ARN from the key store with which the instance is associated for TDE encryption.</p>"]
@@ -4391,7 +4376,7 @@ pub struct DBInstance {
     #[doc="<p>The time zone of the DB instance. In most cases, the <code>Timezone</code> element is empty. <code>Timezone</code> content appears only for Microsoft SQL Server DB instances that were created with a time zone specified. </p>"]
     pub timezone: Option<String>,
     #[doc="<p>Provides a list of VPC security group elements that the DB instance belongs to.</p>"]
-    pub vpc_security_groups: Option<VpcSecurityGroupMembershipList>,
+    pub vpc_security_groups: Option<Vec<VpcSecurityGroupMembership>>,
 }
 
 struct DBInstanceDeserializer;
@@ -4651,13 +4636,12 @@ impl DBInstanceDeserializer {
 
     }
 }
-pub type DBInstanceList = Vec<DBInstance>;
 struct DBInstanceListDeserializer;
 impl DBInstanceListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DBInstanceList, XmlParseError> {
+                                       -> Result<Vec<DBInstance>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4697,7 +4681,7 @@ impl DBInstanceListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DBInstanceMessage {
     #[doc="<p> A list of <a>DBInstance</a> instances. </p>"]
-    pub db_instances: Option<DBInstanceList>,
+    pub db_instances: Option<Vec<DBInstance>>,
     #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> . </p>"]
     pub marker: Option<String>,
 }
@@ -4755,7 +4739,7 @@ pub struct DBInstanceStatusInfo {
     #[doc="<p>Details of the error if there is an error for the instance. If the instance is not in an error state, this value is blank.</p>"]
     pub message: Option<String>,
     #[doc="<p>Boolean value that is true if the instance is operating normally, or false if the instance is in an error state.</p>"]
-    pub normal: Option<Boolean>,
+    pub normal: Option<bool>,
     #[doc="<p>Status of the DB instance. For a StatusType of read replica, the values can be replicating, error, stopped, or terminated.</p>"]
     pub status: Option<String>,
     #[doc="<p>This value is currently \"read replication.\"</p>"]
@@ -4816,13 +4800,12 @@ impl DBInstanceStatusInfoDeserializer {
 
     }
 }
-pub type DBInstanceStatusInfoList = Vec<DBInstanceStatusInfo>;
 struct DBInstanceStatusInfoListDeserializer;
 impl DBInstanceStatusInfoListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DBInstanceStatusInfoList, XmlParseError> {
+                                       -> Result<Vec<DBInstanceStatusInfo>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4934,7 +4917,7 @@ pub struct DBParameterGroupDetails {
     #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     pub marker: Option<String>,
     #[doc="<p> A list of <a>Parameter</a> values. </p>"]
-    pub parameters: Option<ParametersList>,
+    pub parameters: Option<Vec<Parameter>>,
 }
 
 struct DBParameterGroupDetailsDeserializer;
@@ -4984,13 +4967,12 @@ impl DBParameterGroupDetailsDeserializer {
 
     }
 }
-pub type DBParameterGroupList = Vec<DBParameterGroup>;
 struct DBParameterGroupListDeserializer;
 impl DBParameterGroupListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DBParameterGroupList, XmlParseError> {
+                                       -> Result<Vec<DBParameterGroup>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5134,13 +5116,12 @@ impl DBParameterGroupStatusDeserializer {
 
     }
 }
-pub type DBParameterGroupStatusList = Vec<DBParameterGroupStatus>;
 struct DBParameterGroupStatusListDeserializer;
 impl DBParameterGroupStatusListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DBParameterGroupStatusList, XmlParseError> {
+                                       -> Result<Vec<DBParameterGroupStatus>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5180,7 +5161,7 @@ impl DBParameterGroupStatusListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DBParameterGroupsMessage {
     #[doc="<p> A list of <a>DBParameterGroup</a> instances. </p>"]
-    pub db_parameter_groups: Option<DBParameterGroupList>,
+    pub db_parameter_groups: Option<Vec<DBParameterGroup>>,
     #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     pub marker: Option<String>,
 }
@@ -5242,9 +5223,9 @@ pub struct DBSecurityGroup {
     #[doc="<p>Specifies the name of the DB security group.</p>"]
     pub db_security_group_name: Option<String>,
     #[doc="<p> Contains a list of <a>EC2SecurityGroup</a> elements. </p>"]
-    pub ec2_security_groups: Option<EC2SecurityGroupList>,
+    pub ec2_security_groups: Option<Vec<EC2SecurityGroup>>,
     #[doc="<p> Contains a list of <a>IPRange</a> elements. </p>"]
-    pub ip_ranges: Option<IPRangeList>,
+    pub ip_ranges: Option<Vec<IPRange>>,
     #[doc="<p>Provides the AWS ID of the owner of a specific DB security group.</p>"]
     pub owner_id: Option<String>,
     #[doc="<p>Provides the VpcId of the DB security group.</p>"]
@@ -5377,13 +5358,12 @@ impl DBSecurityGroupMembershipDeserializer {
 
     }
 }
-pub type DBSecurityGroupMembershipList = Vec<DBSecurityGroupMembership>;
 struct DBSecurityGroupMembershipListDeserializer;
 impl DBSecurityGroupMembershipListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DBSecurityGroupMembershipList, XmlParseError> {
+                                       -> Result<Vec<DBSecurityGroupMembership>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5423,7 +5403,7 @@ impl DBSecurityGroupMembershipListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DBSecurityGroupMessage {
     #[doc="<p> A list of <a>DBSecurityGroup</a> instances. </p>"]
-    pub db_security_groups: Option<DBSecurityGroups>,
+    pub db_security_groups: Option<Vec<DBSecurityGroup>>,
     #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     pub marker: Option<String>,
 }
@@ -5475,12 +5455,11 @@ impl DBSecurityGroupMessageDeserializer {
 
     }
 }
-pub type DBSecurityGroupNameList = Vec<String>;
 
 /// Serialize `DBSecurityGroupNameList` contents to a `SignedRequest`.
 struct DBSecurityGroupNameListSerializer;
 impl DBSecurityGroupNameListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DBSecurityGroupNameList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -5488,13 +5467,12 @@ impl DBSecurityGroupNameListSerializer {
     }
 }
 
-pub type DBSecurityGroups = Vec<DBSecurityGroup>;
 struct DBSecurityGroupsDeserializer;
 impl DBSecurityGroupsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DBSecurityGroups, XmlParseError> {
+                                       -> Result<Vec<DBSecurityGroup>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5535,7 +5513,7 @@ impl DBSecurityGroupsDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DBSnapshot {
     #[doc="<p>Specifies the allocated storage size in gigabytes (GB).</p>"]
-    pub allocated_storage: Option<Integer>,
+    pub allocated_storage: Option<i64>,
     #[doc="<p>Specifies the name of the Availability Zone the DB instance was located in at the time of the DB snapshot.</p>"]
     pub availability_zone: Option<String>,
     #[doc="<p>Specifies the DB instance identifier of the DB instance this DB snapshot was created from.</p>"]
@@ -5545,17 +5523,17 @@ pub struct DBSnapshot {
     #[doc="<p>Specifies the identifier for the DB snapshot.</p>"]
     pub db_snapshot_identifier: Option<String>,
     #[doc="<p>Specifies whether the DB snapshot is encrypted.</p>"]
-    pub encrypted: Option<Boolean>,
+    pub encrypted: Option<bool>,
     #[doc="<p>Specifies the name of the database engine.</p>"]
     pub engine: Option<String>,
     #[doc="<p>Specifies the version of the database engine.</p>"]
     pub engine_version: Option<String>,
     #[doc="<p>True if mapping of AWS Identity and Access Management (IAM) accounts to database accounts is enabled; otherwise false.</p>"]
-    pub iam_database_authentication_enabled: Option<Boolean>,
+    pub iam_database_authentication_enabled: Option<bool>,
     #[doc="<p>Specifies the time when the snapshot was taken, in Universal Coordinated Time (UTC).</p>"]
-    pub instance_create_time: Option<TStamp>,
+    pub instance_create_time: Option<String>,
     #[doc="<p>Specifies the Provisioned IOPS (I/O operations per second) value of the DB instance at the time of the snapshot.</p>"]
-    pub iops: Option<IntegerOptional>,
+    pub iops: Option<i64>,
     #[doc="<p> If <code>Encrypted</code> is true, the KMS key identifier for the encrypted DB snapshot. </p>"]
     pub kms_key_id: Option<String>,
     #[doc="<p>License model information for the restored DB instance.</p>"]
@@ -5565,11 +5543,11 @@ pub struct DBSnapshot {
     #[doc="<p>Provides the option group name for the DB snapshot.</p>"]
     pub option_group_name: Option<String>,
     #[doc="<p>The percentage of the estimated data that has been transferred.</p>"]
-    pub percent_progress: Option<Integer>,
+    pub percent_progress: Option<i64>,
     #[doc="<p>Specifies the port that the database engine was listening on at the time of the snapshot.</p>"]
-    pub port: Option<Integer>,
+    pub port: Option<i64>,
     #[doc="<p>Provides the time when the snapshot was taken, in Universal Coordinated Time (UTC).</p>"]
-    pub snapshot_create_time: Option<TStamp>,
+    pub snapshot_create_time: Option<String>,
     #[doc="<p>Provides the type of the DB snapshot.</p>"]
     pub snapshot_type: Option<String>,
     #[doc="<p>The DB snapshot Arn that the DB snapshot was copied from. It only has value in case of cross customer or cross region copy.</p>"]
@@ -5747,7 +5725,7 @@ pub struct DBSnapshotAttribute {
     #[doc="<p>The name of the manual DB snapshot attribute.</p> <p>The attribute named <code>restore</code> refers to the list of AWS accounts that have permission to copy or restore the manual DB cluster snapshot. For more information, see the <a>ModifyDBSnapshotAttribute</a> API action.</p>"]
     pub attribute_name: Option<String>,
     #[doc="<p>The value or values for the manual DB snapshot attribute.</p> <p>If the <code>AttributeName</code> field is set to <code>restore</code>, then this element returns a list of IDs of the AWS accounts that are authorized to copy or restore the manual DB snapshot. If a value of <code>all</code> is in the list, then the manual DB snapshot is public and available for any AWS account to copy or restore.</p>"]
-    pub attribute_values: Option<AttributeValueList>,
+    pub attribute_values: Option<Vec<String>>,
 }
 
 struct DBSnapshotAttributeDeserializer;
@@ -5797,13 +5775,12 @@ impl DBSnapshotAttributeDeserializer {
 
     }
 }
-pub type DBSnapshotAttributeList = Vec<DBSnapshotAttribute>;
 struct DBSnapshotAttributeListDeserializer;
 impl DBSnapshotAttributeListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DBSnapshotAttributeList, XmlParseError> {
+                                       -> Result<Vec<DBSnapshotAttribute>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5843,7 +5820,7 @@ impl DBSnapshotAttributeListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DBSnapshotAttributesResult {
     #[doc="<p>The list of attributes and values for the manual DB snapshot.</p>"]
-    pub db_snapshot_attributes: Option<DBSnapshotAttributeList>,
+    pub db_snapshot_attributes: Option<Vec<DBSnapshotAttribute>>,
     #[doc="<p>The identifier of the manual DB snapshot that the attributes apply to.</p>"]
     pub db_snapshot_identifier: Option<String>,
 }
@@ -5896,13 +5873,12 @@ impl DBSnapshotAttributesResultDeserializer {
 
     }
 }
-pub type DBSnapshotList = Vec<DBSnapshot>;
 struct DBSnapshotListDeserializer;
 impl DBSnapshotListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DBSnapshotList, XmlParseError> {
+                                       -> Result<Vec<DBSnapshot>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5942,7 +5918,7 @@ impl DBSnapshotListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DBSnapshotMessage {
     #[doc="<p> A list of <a>DBSnapshot</a> instances. </p>"]
-    pub db_snapshots: Option<DBSnapshotList>,
+    pub db_snapshots: Option<Vec<DBSnapshot>>,
     #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     pub marker: Option<String>,
 }
@@ -6006,7 +5982,7 @@ pub struct DBSubnetGroup {
     #[doc="<p>Provides the status of the DB subnet group.</p>"]
     pub subnet_group_status: Option<String>,
     #[doc="<p> Contains a list of <a>Subnet</a> elements. </p>"]
-    pub subnets: Option<SubnetList>,
+    pub subnets: Option<Vec<Subnet>>,
     #[doc="<p>Provides the VpcId of the DB subnet group.</p>"]
     pub vpc_id: Option<String>,
 }
@@ -6081,7 +6057,7 @@ impl DBSubnetGroupDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DBSubnetGroupMessage {
     #[doc="<p> A list of <a>DBSubnetGroup</a> instances. </p>"]
-    pub db_subnet_groups: Option<DBSubnetGroups>,
+    pub db_subnet_groups: Option<Vec<DBSubnetGroup>>,
     #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     pub marker: Option<String>,
 }
@@ -6133,13 +6109,12 @@ impl DBSubnetGroupMessageDeserializer {
 
     }
 }
-pub type DBSubnetGroups = Vec<DBSubnetGroup>;
 struct DBSubnetGroupsDeserializer;
 impl DBSubnetGroupsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DBSubnetGroups, XmlParseError> {
+                                       -> Result<Vec<DBSubnetGroup>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -6184,7 +6159,7 @@ pub struct DeleteDBClusterMessage {
     #[doc="<p> The DB cluster snapshot identifier of the new DB cluster snapshot created when <code>SkipFinalSnapshot</code> is set to <code>false</code>. </p> <note> <p> Specifying this parameter and also setting the <code>SkipFinalShapshot</code> parameter to true results in an error. </p> </note> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul>"]
     pub final_db_snapshot_identifier: Option<String>,
     #[doc="<p> Determines whether a final DB cluster snapshot is created before the DB cluster is deleted. If <code>true</code> is specified, no DB cluster snapshot is created. If <code>false</code> is specified, a DB cluster snapshot is created before the DB cluster is deleted. </p> <note> <p>You must specify a <code>FinalDBSnapshotIdentifier</code> parameter if <code>SkipFinalSnapshot</code> is <code>false</code>.</p> </note> <p>Default: <code>false</code> </p>"]
-    pub skip_final_snapshot: Option<Boolean>,
+    pub skip_final_snapshot: Option<bool>,
 }
 
 
@@ -6360,7 +6335,7 @@ pub struct DeleteDBInstanceMessage {
     #[doc="<p> The DBSnapshotIdentifier of the new DBSnapshot created when SkipFinalSnapshot is set to <code>false</code>. </p> <note> <p>Specifying this parameter and also setting the SkipFinalShapshot parameter to true results in an error.</p> </note> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> <li> <p>Cannot be specified when deleting a Read Replica.</p> </li> </ul>"]
     pub final_db_snapshot_identifier: Option<String>,
     #[doc="<p> Determines whether a final DB snapshot is created before the DB instance is deleted. If <code>true</code> is specified, no DBSnapshot is created. If <code>false</code> is specified, a DB snapshot is created before the DB instance is deleted. </p> <p>Note that when a DB instance is in a failure state and has a status of 'failed', 'incompatible-restore', or 'incompatible-network', it can only be deleted when the SkipFinalSnapshot parameter is set to \"true\".</p> <p>Specify <code>true</code> when deleting a Read Replica.</p> <note> <p>The FinalDBSnapshotIdentifier parameter must be specified if SkipFinalSnapshot is <code>false</code>.</p> </note> <p>Default: <code>false</code> </p>"]
-    pub skip_final_snapshot: Option<Boolean>,
+    pub skip_final_snapshot: Option<bool>,
 }
 
 
@@ -6694,11 +6669,11 @@ pub struct DescribeCertificatesMessage {
     #[doc="<p>The user-supplied certificate identifier. If this parameter is specified, information for only the identified certificate is returned. This parameter isn't case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul>"]
     pub certificate_identifier: Option<String>,
     #[doc="<p>This parameter is not currently supported.</p>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p> An optional pagination token provided by a previous <a>DescribeCertificates</a> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     pub marker: Option<String>,
     #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
 }
 
 
@@ -6737,11 +6712,11 @@ pub struct DescribeDBClusterParameterGroupsMessage {
     #[doc="<p>The name of a specific DB cluster parameter group to return details for.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul>"]
     pub db_cluster_parameter_group_name: Option<String>,
     #[doc="<p>This parameter is not currently supported.</p>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p> An optional pagination token provided by a previous <code>DescribeDBClusterParameterGroups</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     pub marker: Option<String>,
     #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
 }
 
 
@@ -6780,11 +6755,11 @@ pub struct DescribeDBClusterParametersMessage {
     #[doc="<p>The name of a specific DB cluster parameter group to return parameter details for.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul>"]
     pub db_cluster_parameter_group_name: String,
     #[doc="<p>This parameter is not currently supported.</p>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p> An optional pagination token provided by a previous <code>DescribeDBClusterParameters</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     pub marker: Option<String>,
     #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p> A value that indicates to return only parameters for a specific source. Parameter sources can be <code>engine</code>, <code>service</code>, or <code>customer</code>. </p>"]
     pub source: Option<String>,
 }
@@ -6900,15 +6875,15 @@ pub struct DescribeDBClusterSnapshotsMessage {
     #[doc="<p>A specific DB cluster snapshot identifier to describe. This parameter cannot be used in conjunction with the <code>DBClusterIdentifier</code> parameter. This value is stored as a lowercase string. </p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> <li> <p>If this identifier is for an automated snapshot, the <code>SnapshotType</code> parameter must also be specified.</p> </li> </ul>"]
     pub db_cluster_snapshot_identifier: Option<String>,
     #[doc="<p>This parameter is not currently supported.</p>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>Set this value to <code>true</code> to include manual DB cluster snapshots that are public and can be copied or restored by any AWS account, otherwise set this value to <code>false</code>. The default is <code>false</code>. The default is false.</p> <p>You can share a manual DB cluster snapshot as public by using the <a>ModifyDBClusterSnapshotAttribute</a> API action.</p>"]
-    pub include_public: Option<Boolean>,
+    pub include_public: Option<bool>,
     #[doc="<p>Set this value to <code>true</code> to include shared manual DB cluster snapshots from other AWS accounts that this AWS account has been given permission to copy or restore, otherwise set this value to <code>false</code>. The default is <code>false</code>.</p> <p>You can give an AWS account permission to restore a manual DB cluster snapshot from another AWS account by the <a>ModifyDBClusterSnapshotAttribute</a> API action.</p>"]
-    pub include_shared: Option<Boolean>,
+    pub include_shared: Option<bool>,
     #[doc="<p>An optional pagination token provided by a previous <code>DescribeDBClusterSnapshots</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>The type of DB cluster snapshots to be returned. You can specify one of the following values:</p> <ul> <li> <p> <code>automated</code> - Return all DB cluster snapshots that have been automatically taken by Amazon RDS for my AWS account.</p> </li> <li> <p> <code>manual</code> - Return all DB cluster snapshots that have been taken by my AWS account.</p> </li> <li> <p> <code>shared</code> - Return all manual DB cluster snapshots that have been shared to my AWS account.</p> </li> <li> <p> <code>public</code> - Return all DB cluster snapshots that have been marked as public.</p> </li> </ul> <p>If you don't specify a <code>SnapshotType</code> value, then both automated and manual DB cluster snapshots are returned. You can include shared DB cluster snapshots with these results by setting the <code>IncludeShared</code> parameter to <code>true</code>. You can include public DB cluster snapshots with these results by setting the <code>IncludePublic</code> parameter to <code>true</code>.</p> <p>The <code>IncludeShared</code> and <code>IncludePublic</code> parameters don't apply for <code>SnapshotType</code> values of <code>manual</code> or <code>automated</code>. The <code>IncludePublic</code> parameter doesn't apply when <code>SnapshotType</code> is set to <code>shared</code>. The <code>IncludeShared</code> parameter doesn't apply when <code>SnapshotType</code> is set to <code>public</code>.</p>"]
     pub snapshot_type: Option<String>,
 }
@@ -6964,11 +6939,11 @@ pub struct DescribeDBClustersMessage {
     #[doc="<p>The user-supplied DB cluster identifier. If this parameter is specified, information from only the specific DB cluster is returned. This parameter isn't case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul>"]
     pub db_cluster_identifier: Option<String>,
     #[doc="<p>A filter that specifies one or more DB clusters to describe.</p> <p>Supported filters:</p> <ul> <li> <p> <code>db-cluster-id</code> - Accepts DB cluster identifiers and DB cluster Amazon Resource Names (ARNs). The results list will only include information about the DB clusters identified by these ARNs.</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p> An optional pagination token provided by a previous <a>DescribeDBClusters</a> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
 }
 
 
@@ -7006,21 +6981,21 @@ pub struct DescribeDBEngineVersionsMessage {
     #[doc="<p>The name of a specific DB parameter group family to return details for.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul>"]
     pub db_parameter_group_family: Option<String>,
     #[doc="<p>Indicates that only the default version of the specified engine or engine and major version combination is returned.</p>"]
-    pub default_only: Option<Boolean>,
+    pub default_only: Option<bool>,
     #[doc="<p>The database engine to return.</p>"]
     pub engine: Option<String>,
     #[doc="<p>The database engine version to return.</p> <p>Example: <code>5.1.49</code> </p>"]
     pub engine_version: Option<String>,
     #[doc="<p>Not currently supported.</p>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>If this parameter is specified and the requested engine supports the <code>CharacterSetName</code> parameter for <code>CreateDBInstance</code>, the response includes a list of supported character sets for each engine version. </p>"]
-    pub list_supported_character_sets: Option<BooleanOptional>,
+    pub list_supported_character_sets: Option<bool>,
     #[doc="<p>If this parameter is specified and the requested engine supports the <code>TimeZone</code> parameter for <code>CreateDBInstance</code>, the response includes a list of supported time zones for each engine version. </p>"]
-    pub list_supported_timezones: Option<BooleanOptional>,
+    pub list_supported_timezones: Option<bool>,
     #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     pub marker: Option<String>,
     #[doc="<p> The maximum number of records to include in the response. If more than the <code>MaxRecords</code> value is available, a pagination token called a marker is included in the response so that the following results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
 }
 
 
@@ -7077,11 +7052,11 @@ pub struct DescribeDBInstancesMessage {
     #[doc="<p>The user-supplied instance identifier. If this parameter is specified, information from only the specific DB instance is returned. This parameter isn't case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul>"]
     pub db_instance_identifier: Option<String>,
     #[doc="<p>A filter that specifies one or more DB instances to describe.</p> <p>Supported filters:</p> <ul> <li> <p> <code>db-cluster-id</code> - Accepts DB cluster identifiers and DB cluster Amazon Resource Names (ARNs). The results list will only include information about the DB instances associated with the DB Clusters identified by these ARNs.</p> </li> <li> <p> <code>db-instance-id</code> - Accepts DB instance identifiers and DB instance Amazon Resource Names (ARNs). The results list will only include information about the DB instances identified by these ARNs.</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p> An optional pagination token provided by a previous <code>DescribeDBInstances</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     pub marker: Option<String>,
     #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
 }
 
 
@@ -7118,11 +7093,11 @@ impl DescribeDBInstancesMessageSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeDBLogFilesDetails {
     #[doc="<p>A POSIX timestamp when the last log entry was written.</p>"]
-    pub last_written: Option<Long>,
+    pub last_written: Option<i64>,
     #[doc="<p>The name of the log file for the specified DB instance.</p>"]
     pub log_file_name: Option<String>,
     #[doc="<p>The size, in bytes, of the log file for the specified DB instance.</p>"]
-    pub size: Option<Long>,
+    pub size: Option<i64>,
 }
 
 struct DescribeDBLogFilesDetailsDeserializer;
@@ -7174,13 +7149,12 @@ impl DescribeDBLogFilesDetailsDeserializer {
 
     }
 }
-pub type DescribeDBLogFilesList = Vec<DescribeDBLogFilesDetails>;
 struct DescribeDBLogFilesListDeserializer;
 impl DescribeDBLogFilesListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DescribeDBLogFilesList, XmlParseError> {
+                                       -> Result<Vec<DescribeDBLogFilesDetails>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -7222,17 +7196,17 @@ pub struct DescribeDBLogFilesMessage {
     #[doc="<p>The customer-assigned name of the DB instance that contains the log files you want to list.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul>"]
     pub db_instance_identifier: String,
     #[doc="<p>Filters the available log files for files written since the specified date, in POSIX timestamp format with milliseconds.</p>"]
-    pub file_last_written: Option<Long>,
+    pub file_last_written: Option<i64>,
     #[doc="<p>Filters the available log files for files larger than the specified size.</p>"]
-    pub file_size: Option<Long>,
+    pub file_size: Option<i64>,
     #[doc="<p>Filters the available log files for log file names that contain the specified string.</p>"]
     pub filename_contains: Option<String>,
     #[doc="<p>This parameter is not currently supported.</p>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>The pagination token provided in the previous request. If this parameter is specified the response includes only records beyond the marker, up to MaxRecords.</p>"]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of records to include in the response. If more records exist than the specified MaxRecords value, a pagination token called a marker is included in the response so that the remaining results can be retrieved.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
 }
 
 
@@ -7278,7 +7252,7 @@ impl DescribeDBLogFilesMessageSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeDBLogFilesResponse {
     #[doc="<p>The DB log files returned.</p>"]
-    pub describe_db_log_files: Option<DescribeDBLogFilesList>,
+    pub describe_db_log_files: Option<Vec<DescribeDBLogFilesDetails>>,
     #[doc="<p>A pagination token that can be used in a subsequent DescribeDBLogFiles request.</p>"]
     pub marker: Option<String>,
 }
@@ -7336,11 +7310,11 @@ pub struct DescribeDBParameterGroupsMessage {
     #[doc="<p>The name of a specific DB parameter group to return details for.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul>"]
     pub db_parameter_group_name: Option<String>,
     #[doc="<p>This parameter is not currently supported.</p>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p> An optional pagination token provided by a previous <code>DescribeDBParameterGroups</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     pub marker: Option<String>,
     #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
 }
 
 
@@ -7378,11 +7352,11 @@ pub struct DescribeDBParametersMessage {
     #[doc="<p>The name of a specific DB parameter group to return details for.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul>"]
     pub db_parameter_group_name: String,
     #[doc="<p>This parameter is not currently supported.</p>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p> An optional pagination token provided by a previous <code>DescribeDBParameters</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     pub marker: Option<String>,
     #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>The parameter types to return.</p> <p>Default: All parameter types returned</p> <p>Valid Values: <code>user | system | engine-default</code> </p>"]
     pub source: Option<String>,
 }
@@ -7424,11 +7398,11 @@ pub struct DescribeDBSecurityGroupsMessage {
     #[doc="<p>The name of the DB security group to return details for.</p>"]
     pub db_security_group_name: Option<String>,
     #[doc="<p>This parameter is not currently supported.</p>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p> An optional pagination token provided by a previous <code>DescribeDBSecurityGroups</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     pub marker: Option<String>,
     #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
 }
 
 
@@ -7539,15 +7513,15 @@ pub struct DescribeDBSnapshotsMessage {
     #[doc="<p> A specific DB snapshot identifier to describe. This parameter cannot be used in conjunction with <code>DBInstanceIdentifier</code>. This value is stored as a lowercase string. </p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>If this identifier is for an automated snapshot, the <code>SnapshotType</code> parameter must also be specified.</p> </li> </ul>"]
     pub db_snapshot_identifier: Option<String>,
     #[doc="<p>This parameter is not currently supported.</p>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>Set this value to <code>true</code> to include manual DB snapshots that are public and can be copied or restored by any AWS account, otherwise set this value to <code>false</code>. The default is <code>false</code>.</p> <p>You can share a manual DB snapshot as public by using the <a>ModifyDBSnapshotAttribute</a> API.</p>"]
-    pub include_public: Option<Boolean>,
+    pub include_public: Option<bool>,
     #[doc="<p>Set this value to <code>true</code> to include shared manual DB snapshots from other AWS accounts that this AWS account has been given permission to copy or restore, otherwise set this value to <code>false</code>. The default is <code>false</code>.</p> <p>You can give an AWS account permission to restore a manual DB snapshot from another AWS account by using the <a>ModifyDBSnapshotAttribute</a> API action.</p>"]
-    pub include_shared: Option<Boolean>,
+    pub include_shared: Option<bool>,
     #[doc="<p> An optional pagination token provided by a previous <code>DescribeDBSnapshots</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     pub marker: Option<String>,
     #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>The type of snapshots to be returned. You can specify one of the following values:</p> <ul> <li> <p> <code>automated</code> - Return all DB snapshots that have been automatically taken by Amazon RDS for my AWS account.</p> </li> <li> <p> <code>manual</code> - Return all DB snapshots that have been taken by my AWS account.</p> </li> <li> <p> <code>shared</code> - Return all manual DB snapshots that have been shared to my AWS account.</p> </li> <li> <p> <code>public</code> - Return all DB snapshots that have been marked as public.</p> </li> </ul> <p>If you don't specify a <code>SnapshotType</code> value, then both automated and manual snapshots are returned. Shared and public DB snapshots are not included in the returned results by default. You can include shared snapshots with these results by setting the <code>IncludeShared</code> parameter to <code>true</code>. You can include public snapshots with these results by setting the <code>IncludePublic</code> parameter to <code>true</code>.</p> <p>The <code>IncludeShared</code> and <code>IncludePublic</code> parameters don't apply for <code>SnapshotType</code> values of <code>manual</code> or <code>automated</code>. The <code>IncludePublic</code> parameter doesn't apply when <code>SnapshotType</code> is set to <code>shared</code>. The <code>IncludeShared</code> parameter doesn't apply when <code>SnapshotType</code> is set to <code>public</code>.</p>"]
     pub snapshot_type: Option<String>,
 }
@@ -7603,11 +7577,11 @@ pub struct DescribeDBSubnetGroupsMessage {
     #[doc="<p>The name of the DB subnet group to return details for.</p>"]
     pub db_subnet_group_name: Option<String>,
     #[doc="<p>This parameter is not currently supported.</p>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p> An optional pagination token provided by a previous DescribeDBSubnetGroups request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     pub marker: Option<String>,
     #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
 }
 
 
@@ -7645,11 +7619,11 @@ pub struct DescribeEngineDefaultClusterParametersMessage {
     #[doc="<p>The name of the DB cluster parameter group family to return engine parameter information for.</p>"]
     pub db_parameter_group_family: String,
     #[doc="<p>This parameter is not currently supported.</p>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p> An optional pagination token provided by a previous <code>DescribeEngineDefaultClusterParameters</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     pub marker: Option<String>,
     #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
 }
 
 
@@ -7737,11 +7711,11 @@ pub struct DescribeEngineDefaultParametersMessage {
     #[doc="<p>The name of the DB parameter group family.</p>"]
     pub db_parameter_group_family: String,
     #[doc="<p>Not currently supported.</p>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p> An optional pagination token provided by a previous <code>DescribeEngineDefaultParameters</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     pub marker: Option<String>,
     #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
 }
 
 
@@ -7825,7 +7799,7 @@ impl DescribeEngineDefaultParametersResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeEventCategoriesMessage {
     #[doc="<p>This parameter is not currently supported.</p>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>The type of source that will be generating the events.</p> <p>Valid values: db-instance | db-parameter-group | db-security-group | db-snapshot</p>"]
     pub source_type: Option<String>,
 }
@@ -7856,11 +7830,11 @@ impl DescribeEventCategoriesMessageSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeEventSubscriptionsMessage {
     #[doc="<p>This parameter is not currently supported.</p>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p> An optional pagination token provided by a previous DescribeOrderableDBInstanceOptions request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> . </p>"]
     pub marker: Option<String>,
     #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>The name of the RDS event notification subscription you want to describe.</p>"]
     pub subscription_name: Option<String>,
 }
@@ -7898,23 +7872,23 @@ impl DescribeEventSubscriptionsMessageSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeEventsMessage {
     #[doc="<p>The number of minutes to retrieve events for.</p> <p>Default: 60</p>"]
-    pub duration: Option<IntegerOptional>,
+    pub duration: Option<i64>,
     #[doc="<p> The end of the time interval for which to retrieve events, specified in ISO 8601 format. For more information about ISO 8601, go to the <a href=\"http://en.wikipedia.org/wiki/ISO_8601\">ISO8601 Wikipedia page.</a> </p> <p>Example: 2009-07-08T18:00Z</p>"]
-    pub end_time: Option<TStamp>,
+    pub end_time: Option<String>,
     #[doc="<p>A list of event categories that trigger notifications for a event notification subscription.</p>"]
-    pub event_categories: Option<EventCategoriesList>,
+    pub event_categories: Option<Vec<String>>,
     #[doc="<p>This parameter is not currently supported.</p>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p> An optional pagination token provided by a previous DescribeEvents request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     pub marker: Option<String>,
     #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>The identifier of the event source for which events will be returned. If not specified, then all sources are included in the response.</p> <p>Constraints:</p> <ul> <li> <p>If SourceIdentifier is supplied, SourceType must also be provided.</p> </li> <li> <p>If the source type is <code>DBInstance</code>, then a <code>DBInstanceIdentifier</code> must be supplied.</p> </li> <li> <p>If the source type is <code>DBSecurityGroup</code>, a <code>DBSecurityGroupName</code> must be supplied.</p> </li> <li> <p>If the source type is <code>DBParameterGroup</code>, a <code>DBParameterGroupName</code> must be supplied.</p> </li> <li> <p>If the source type is <code>DBSnapshot</code>, a <code>DBSnapshotIdentifier</code> must be supplied.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>"]
     pub source_identifier: Option<String>,
     #[doc="<p>The event source to retrieve events for. If no value is specified, all events are returned.</p>"]
-    pub source_type: Option<SourceType>,
+    pub source_type: Option<String>,
     #[doc="<p> The beginning of the time interval to retrieve events for, specified in ISO 8601 format. For more information about ISO 8601, go to the <a href=\"http://en.wikipedia.org/wiki/ISO_8601\">ISO8601 Wikipedia page.</a> </p> <p>Example: 2009-07-08T18:00Z</p>"]
-    pub start_time: Option<TStamp>,
+    pub start_time: Option<String>,
 }
 
 
@@ -7970,13 +7944,13 @@ pub struct DescribeOptionGroupOptionsMessage {
     #[doc="<p>A required parameter. Options available for the given engine name will be described.</p>"]
     pub engine_name: String,
     #[doc="<p>This parameter is not currently supported.</p>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>If specified, filters the results to include only options for the specified major engine version.</p>"]
     pub major_engine_version: Option<String>,
     #[doc="<p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>"]
     pub marker: Option<String>,
     #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
 }
 
 
@@ -8015,13 +7989,13 @@ pub struct DescribeOptionGroupsMessage {
     #[doc="<p>Filters the list of option groups to only include groups associated with a specific database engine.</p>"]
     pub engine_name: Option<String>,
     #[doc="<p>This parameter is not currently supported.</p>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>Filters the list of option groups to only include groups associated with a specific database engine version. If specified, then EngineName must also be specified.</p>"]
     pub major_engine_version: Option<String>,
     #[doc="<p> An optional pagination token provided by a previous DescribeOptionGroups request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     pub marker: Option<String>,
     #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>The name of the option group to describe. Cannot be supplied together with EngineName or MajorEngineVersion.</p>"]
     pub option_group_name: Option<String>,
 }
@@ -8071,15 +8045,15 @@ pub struct DescribeOrderableDBInstanceOptionsMessage {
     #[doc="<p>The engine version filter value. Specify this parameter to show only the available offerings matching the specified engine version.</p>"]
     pub engine_version: Option<String>,
     #[doc="<p>This parameter is not currently supported.</p>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>The license model filter value. Specify this parameter to show only the available offerings matching the specified license model.</p>"]
     pub license_model: Option<String>,
     #[doc="<p> An optional pagination token provided by a previous DescribeOrderableDBInstanceOptions request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> . </p>"]
     pub marker: Option<String>,
     #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>The VPC filter value. Specify this parameter to show only the available VPC or non-VPC offerings.</p>"]
-    pub vpc: Option<BooleanOptional>,
+    pub vpc: Option<bool>,
 }
 
 
@@ -8127,11 +8101,11 @@ impl DescribeOrderableDBInstanceOptionsMessageSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribePendingMaintenanceActionsMessage {
     #[doc="<p>A filter that specifies one or more resources to return pending maintenance actions for.</p> <p>Supported filters:</p> <ul> <li> <p> <code>db-cluster-id</code> - Accepts DB cluster identifiers and DB cluster Amazon Resource Names (ARNs). The results list will only include pending maintenance actions for the DB clusters identified by these ARNs.</p> </li> <li> <p> <code>db-instance-id</code> - Accepts DB instance identifiers and DB instance ARNs. The results list will only include pending maintenance actions for the DB instances identified by these ARNs.</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p> An optional pagination token provided by a previous <code>DescribePendingMaintenanceActions</code> request. If this parameter is specified, the response includes only records beyond the marker, up to a number of records specified by <code>MaxRecords</code>. </p>"]
     pub marker: Option<String>,
     #[doc="<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>The ARN of a resource to return pending maintenance actions for.</p>"]
     pub resource_identifier: Option<String>,
 }
@@ -8173,13 +8147,13 @@ pub struct DescribeReservedDBInstancesMessage {
     #[doc="<p>The duration filter value, specified in years or seconds. Specify this parameter to show only reservations for this duration.</p> <p>Valid Values: <code>1 | 3 | 31536000 | 94608000</code> </p>"]
     pub duration: Option<String>,
     #[doc="<p>This parameter is not currently supported.</p>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     pub marker: Option<String>,
     #[doc="<p> The maximum number of records to include in the response. If more than the <code>MaxRecords</code> value is available, a pagination token called a marker is included in the response so that the following results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>The Multi-AZ filter value. Specify this parameter to show only those reservations matching the specified Multi-AZ parameter.</p>"]
-    pub multi_az: Option<BooleanOptional>,
+    pub multi_az: Option<bool>,
     #[doc="<p>The offering type filter value. Specify this parameter to show only the available offerings matching the specified offering type.</p> <p>Valid Values: <code>\"Partial Upfront\" | \"All Upfront\" | \"No Upfront\" </code> </p>"]
     pub offering_type: Option<String>,
     #[doc="<p>The product description filter value. Specify this parameter to show only those reservations matching the specified product description.</p>"]
@@ -8248,13 +8222,13 @@ pub struct DescribeReservedDBInstancesOfferingsMessage {
     #[doc="<p>Duration filter value, specified in years or seconds. Specify this parameter to show only reservations for this duration.</p> <p>Valid Values: <code>1 | 3 | 31536000 | 94608000</code> </p>"]
     pub duration: Option<String>,
     #[doc="<p>This parameter is not currently supported.</p>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     pub marker: Option<String>,
     #[doc="<p> The maximum number of records to include in the response. If more than the <code>MaxRecords</code> value is available, a pagination token called a marker is included in the response so that the following results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>The Multi-AZ filter value. Specify this parameter to show only the available offerings matching the specified Multi-AZ parameter.</p>"]
-    pub multi_az: Option<BooleanOptional>,
+    pub multi_az: Option<bool>,
     #[doc="<p>The offering type filter value. Specify this parameter to show only the available offerings matching the specified offering type.</p> <p>Valid Values: <code>\"Partial Upfront\" | \"All Upfront\" | \"No Upfront\" </code> </p>"]
     pub offering_type: Option<String>,
     #[doc="<p>Product description filter value. Specify this parameter to show only the available offerings matching the specified product description.</p>"]
@@ -8315,11 +8289,11 @@ impl DescribeReservedDBInstancesOfferingsMessageSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeSourceRegionsMessage {
     #[doc="<p>This parameter is not currently supported.</p>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p> An optional pagination token provided by a previous <a>DescribeSourceRegions</a> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>"]
     pub marker: Option<String>,
     #[doc="<p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>"]
-    pub max_records: Option<IntegerOptional>,
+    pub max_records: Option<i64>,
     #[doc="<p>The source region name. For example, <code>us-east-1</code>.</p> <p>Constraints:</p> <ul> <li> <p>Must specify a valid AWS Region name.</p> </li> </ul>"]
     pub region_name: Option<String>,
 }
@@ -8419,14 +8393,12 @@ impl DomainMembershipDeserializer {
 
     }
 }
-#[doc="<p>List of Active Directory Domain membership records associated with a DB instance.</p>"]
-pub type DomainMembershipList = Vec<DomainMembership>;
 struct DomainMembershipListDeserializer;
 impl DomainMembershipListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DomainMembershipList, XmlParseError> {
+                                       -> Result<Vec<DomainMembership>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -8463,13 +8435,12 @@ impl DomainMembershipListDeserializer {
 
     }
 }
-pub type Double = f64;
 struct DoubleDeserializer;
 impl DoubleDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Double, XmlParseError> {
+                                       -> Result<f64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = f64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -8482,7 +8453,7 @@ impl DoubleDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DownloadDBLogFilePortionDetails {
     #[doc="<p>Boolean value that if true, indicates there is more data to be downloaded.</p>"]
-    pub additional_data_pending: Option<Boolean>,
+    pub additional_data_pending: Option<bool>,
     #[doc="<p>Entries from the specified log file.</p>"]
     pub log_file_data: Option<String>,
     #[doc="<p>A pagination token that can be used in a subsequent DownloadDBLogFilePortion request.</p>"]
@@ -8551,7 +8522,7 @@ pub struct DownloadDBLogFilePortionMessage {
     #[doc="<p>The pagination token provided in the previous request or \"0\". If the Marker parameter is specified the response includes only records beyond the marker until the end of the file or up to NumberOfLines.</p>"]
     pub marker: Option<String>,
     #[doc="<p>The number of lines to download. If the number of lines specified results in a file over 1 MB in size, the file will be truncated at 1 MB in size.</p> <p>If the NumberOfLines parameter is specified, then the block of lines returned can be from the beginning or the end of the log file, depending on the value of the Marker parameter.</p> <ul> <li> <p>If neither Marker or NumberOfLines are specified, the entire log file is returned up to a maximum of 10000 lines, starting with the most recent log entries first.</p> </li> <li> <p>If NumberOfLines is specified and Marker is not specified, then the most recent lines from the end of the log file are returned.</p> </li> <li> <p>If Marker is specified as \"0\", then the specified number of lines from the beginning of the log file are returned.</p> </li> <li> <p>You can download the log file in blocks of lines by specifying the size of the block using the NumberOfLines parameter, and by specifying a value of \"0\" for the Marker parameter in your first request. Include the Marker value returned in the response as the Marker value for the next request, continuing until the AdditionalDataPending response element returns false.</p> </li> </ul>"]
-    pub number_of_lines: Option<Integer>,
+    pub number_of_lines: Option<i64>,
 }
 
 
@@ -8648,13 +8619,12 @@ impl EC2SecurityGroupDeserializer {
 
     }
 }
-pub type EC2SecurityGroupList = Vec<EC2SecurityGroup>;
 struct EC2SecurityGroupListDeserializer;
 impl EC2SecurityGroupListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EC2SecurityGroupList, XmlParseError> {
+                                       -> Result<Vec<EC2SecurityGroup>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -8699,7 +8669,7 @@ pub struct Endpoint {
     #[doc="<p>Specifies the ID that Amazon Route 53 assigns when you create a hosted zone.</p>"]
     pub hosted_zone_id: Option<String>,
     #[doc="<p>Specifies the port that the database engine is listening on.</p>"]
-    pub port: Option<Integer>,
+    pub port: Option<i64>,
 }
 
 struct EndpointDeserializer;
@@ -8759,7 +8729,7 @@ pub struct EngineDefaults {
     #[doc="<p> An optional pagination token provided by a previous EngineDefaults request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> . </p>"]
     pub marker: Option<String>,
     #[doc="<p>Contains a list of engine default parameters.</p>"]
-    pub parameters: Option<ParametersList>,
+    pub parameters: Option<Vec<Parameter>>,
 }
 
 struct EngineDefaultsDeserializer;
@@ -8818,9 +8788,9 @@ impl EngineDefaultsDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct Event {
     #[doc="<p>Specifies the date and time of the event.</p>"]
-    pub date: Option<TStamp>,
+    pub date: Option<String>,
     #[doc="<p>Specifies the category for the event.</p>"]
-    pub event_categories: Option<EventCategoriesList>,
+    pub event_categories: Option<Vec<String>>,
     #[doc="<p>Provides the text of this event.</p>"]
     pub message: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) for the event.</p>"]
@@ -8828,7 +8798,7 @@ pub struct Event {
     #[doc="<p>Provides the identifier for the source of the event.</p>"]
     pub source_identifier: Option<String>,
     #[doc="<p>Specifies the source type for this event.</p>"]
-    pub source_type: Option<SourceType>,
+    pub source_type: Option<String>,
 }
 
 struct EventDeserializer;
@@ -8895,13 +8865,12 @@ impl EventDeserializer {
 
     }
 }
-pub type EventCategoriesList = Vec<String>;
 struct EventCategoriesListDeserializer;
 impl EventCategoriesListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EventCategoriesList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -8941,7 +8910,7 @@ impl EventCategoriesListDeserializer {
 /// Serialize `EventCategoriesList` contents to a `SignedRequest`.
 struct EventCategoriesListSerializer;
 impl EventCategoriesListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &EventCategoriesList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -8953,7 +8922,7 @@ impl EventCategoriesListSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct EventCategoriesMap {
     #[doc="<p>The event categories for the specified source type</p>"]
-    pub event_categories: Option<EventCategoriesList>,
+    pub event_categories: Option<Vec<String>>,
     #[doc="<p>The source type that the returned categories belong to</p>"]
     pub source_type: Option<String>,
 }
@@ -9005,13 +8974,12 @@ impl EventCategoriesMapDeserializer {
 
     }
 }
-pub type EventCategoriesMapList = Vec<EventCategoriesMap>;
 struct EventCategoriesMapListDeserializer;
 impl EventCategoriesMapListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EventCategoriesMapList, XmlParseError> {
+                                       -> Result<Vec<EventCategoriesMap>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -9051,7 +9019,7 @@ impl EventCategoriesMapListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct EventCategoriesMessage {
     #[doc="<p>A list of EventCategoriesMap data types.</p>"]
-    pub event_categories_map_list: Option<EventCategoriesMapList>,
+    pub event_categories_map_list: Option<Vec<EventCategoriesMap>>,
 }
 
 struct EventCategoriesMessageDeserializer;
@@ -9097,13 +9065,12 @@ impl EventCategoriesMessageDeserializer {
 
     }
 }
-pub type EventList = Vec<Event>;
 struct EventListDeserializer;
 impl EventListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EventList, XmlParseError> {
+                                       -> Result<Vec<Event>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -9147,15 +9114,15 @@ pub struct EventSubscription {
     #[doc="<p>The AWS customer account associated with the RDS event notification subscription.</p>"]
     pub customer_aws_id: Option<String>,
     #[doc="<p>A Boolean value indicating if the subscription is enabled. True indicates the subscription is enabled.</p>"]
-    pub enabled: Option<Boolean>,
+    pub enabled: Option<bool>,
     #[doc="<p>A list of event categories for the RDS event notification subscription.</p>"]
-    pub event_categories_list: Option<EventCategoriesList>,
+    pub event_categories_list: Option<Vec<String>>,
     #[doc="<p>The Amazon Resource Name (ARN) for the event subscription.</p>"]
     pub event_subscription_arn: Option<String>,
     #[doc="<p>The topic ARN of the RDS event notification subscription.</p>"]
     pub sns_topic_arn: Option<String>,
     #[doc="<p>A list of source IDs for the RDS event notification subscription.</p>"]
-    pub source_ids_list: Option<SourceIdsList>,
+    pub source_ids_list: Option<Vec<String>>,
     #[doc="<p>The source type for the RDS event notification subscription.</p>"]
     pub source_type: Option<String>,
     #[doc="<p>The status of the RDS event notification subscription.</p> <p>Constraints:</p> <p>Can be one of the following: creating | modifying | deleting | active | no-permission | topic-not-exist</p> <p>The status \"no-permission\" indicates that RDS no longer has permission to post to the SNS topic. The status \"topic-not-exist\" indicates that the topic was deleted after the subscription was created.</p>"]
@@ -9247,13 +9214,12 @@ impl EventSubscriptionDeserializer {
 
     }
 }
-pub type EventSubscriptionsList = Vec<EventSubscription>;
 struct EventSubscriptionsListDeserializer;
 impl EventSubscriptionsListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EventSubscriptionsList, XmlParseError> {
+                                       -> Result<Vec<EventSubscription>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -9293,7 +9259,7 @@ impl EventSubscriptionsListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct EventSubscriptionsMessage {
     #[doc="<p>A list of EventSubscriptions data types.</p>"]
-    pub event_subscriptions_list: Option<EventSubscriptionsList>,
+    pub event_subscriptions_list: Option<Vec<EventSubscription>>,
     #[doc="<p> An optional pagination token provided by a previous DescribeOrderableDBInstanceOptions request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     pub marker: Option<String>,
 }
@@ -9349,7 +9315,7 @@ impl EventSubscriptionsMessageDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct EventsMessage {
     #[doc="<p> A list of <a>Event</a> instances. </p>"]
-    pub events: Option<EventList>,
+    pub events: Option<Vec<Event>>,
     #[doc="<p> An optional pagination token provided by a previous Events request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> . </p>"]
     pub marker: Option<String>,
 }
@@ -9484,7 +9450,7 @@ pub struct Filter {
     #[doc="<p>This parameter is not currently supported.</p>"]
     pub name: String,
     #[doc="<p>This parameter is not currently supported.</p>"]
-    pub values: FilterValueList,
+    pub values: Vec<String>,
 }
 
 
@@ -9505,12 +9471,11 @@ impl FilterSerializer {
     }
 }
 
-pub type FilterList = Vec<Filter>;
 
 /// Serialize `FilterList` contents to a `SignedRequest`.
 struct FilterListSerializer;
 impl FilterListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &FilterList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<Filter>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             FilterSerializer::serialize(params, &key, obj);
@@ -9518,12 +9483,11 @@ impl FilterListSerializer {
     }
 }
 
-pub type FilterValueList = Vec<String>;
 
 /// Serialize `FilterValueList` contents to a `SignedRequest`.
 struct FilterValueListSerializer;
 impl FilterValueListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &FilterValueList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -9586,13 +9550,12 @@ impl IPRangeDeserializer {
 
     }
 }
-pub type IPRangeList = Vec<IPRange>;
 struct IPRangeListDeserializer;
 impl IPRangeListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<IPRangeList, XmlParseError> {
+                                       -> Result<Vec<IPRange>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -9628,13 +9591,12 @@ impl IPRangeListDeserializer {
 
     }
 }
-pub type Integer = i64;
 struct IntegerDeserializer;
 impl IntegerDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Integer, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -9643,13 +9605,12 @@ impl IntegerDeserializer {
 
     }
 }
-pub type IntegerOptional = i64;
 struct IntegerOptionalDeserializer;
 impl IntegerOptionalDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<IntegerOptional, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -9658,12 +9619,11 @@ impl IntegerOptionalDeserializer {
 
     }
 }
-pub type KeyList = Vec<String>;
 
 /// Serialize `KeyList` contents to a `SignedRequest`.
 struct KeyListSerializer;
 impl KeyListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &KeyList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -9675,7 +9635,7 @@ impl KeyListSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListTagsForResourceMessage {
     #[doc="<p>This parameter is not currently supported.</p>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>The Amazon RDS resource with tags to be listed. This value is an Amazon Resource Name (ARN). For information about creating an ARN, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing\"> Constructing an RDS Amazon Resource Name (ARN)</a>.</p>"]
     pub resource_name: String,
 }
@@ -9700,13 +9660,12 @@ impl ListTagsForResourceMessageSerializer {
     }
 }
 
-pub type Long = i64;
 struct LongDeserializer;
 impl LongDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Long, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -9719,15 +9678,15 @@ impl LongDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ModifyDBClusterMessage {
     #[doc="<p>A value that specifies whether the modifications in this request and any pending modifications are asynchronously applied as soon as possible, regardless of the <code>PreferredMaintenanceWindow</code> setting for the DB cluster. If this parameter is set to <code>false</code>, changes to the DB cluster are applied during the next maintenance window.</p> <p>The <code>ApplyImmediately</code> parameter only affects the <code>NewDBClusterIdentifier</code> and <code>MasterUserPassword</code> values. If you set the <code>ApplyImmediately</code> parameter value to false, then changes to the <code>NewDBClusterIdentifier</code> and <code>MasterUserPassword</code> values are applied during the next maintenance window. All other changes are applied immediately, regardless of the value of the <code>ApplyImmediately</code> parameter.</p> <p>Default: <code>false</code> </p>"]
-    pub apply_immediately: Option<Boolean>,
+    pub apply_immediately: Option<bool>,
     #[doc="<p>The number of days for which automated backups are retained. You must specify a minimum value of 1.</p> <p>Default: 1</p> <p>Constraints:</p> <ul> <li> <p>Must be a value from 1 to 35</p> </li> </ul>"]
-    pub backup_retention_period: Option<IntegerOptional>,
+    pub backup_retention_period: Option<i64>,
     #[doc="<p>The DB cluster identifier for the cluster being modified. This parameter is not case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must be the identifier for an existing DB cluster.</p> </li> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>"]
     pub db_cluster_identifier: String,
     #[doc="<p>The name of the DB cluster parameter group to use for the DB cluster.</p>"]
     pub db_cluster_parameter_group_name: Option<String>,
     #[doc="<p>A Boolean value that is true to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts, and otherwise false.</p> <p>Default: <code>false</code> </p>"]
-    pub enable_iam_database_authentication: Option<BooleanOptional>,
+    pub enable_iam_database_authentication: Option<bool>,
     #[doc="<p>The new password for the master database user. This password can contain any printable ASCII character except \"/\", \"\"\", or \"@\".</p> <p>Constraints: Must contain from 8 to 41 characters.</p>"]
     pub master_user_password: Option<String>,
     #[doc="<p>The new DB cluster identifier for the DB cluster when renaming a DB cluster. This value is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul> <p>Example: <code>my-cluster2</code> </p>"]
@@ -9735,13 +9694,13 @@ pub struct ModifyDBClusterMessage {
     #[doc="<p>A value that indicates that the DB cluster should be associated with the specified option group. Changing this parameter does not result in an outage except in the following case, and the change is applied during the next maintenance window unless the <code>ApplyImmediately</code> parameter is set to <code>true</code> for this request. If the parameter change results in an option group that enables OEM, this change can cause a brief (sub-second) period during which new connections are rejected but existing connections are not interrupted. </p> <p>Permanent options cannot be removed from an option group. The option group cannot be removed from a DB cluster once it is associated with a DB cluster.</p>"]
     pub option_group_name: Option<String>,
     #[doc="<p>The port number on which the DB cluster accepts connections.</p> <p>Constraints: Value must be <code>1150-65535</code> </p> <p>Default: The same port as the original DB cluster.</p>"]
-    pub port: Option<IntegerOptional>,
+    pub port: Option<i64>,
     #[doc="<p>The daily time range during which automated backups are created if automated backups are enabled, using the <code>BackupRetentionPeriod</code> parameter. </p> <p>Default: A 30-minute window selected at random from an 8-hour block of time per region. To see the time blocks available, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/AdjustingTheMaintenanceWindow.html\"> Adjusting the Preferred Maintenance Window</a> in the <i>Amazon RDS User Guide.</i> </p> <p>Constraints:</p> <ul> <li> <p>Must be in the format <code>hh24:mi-hh24:mi</code>.</p> </li> <li> <p>Times should be in Universal Coordinated Time (UTC).</p> </li> <li> <p>Must not conflict with the preferred maintenance window.</p> </li> <li> <p>Must be at least 30 minutes.</p> </li> </ul>"]
     pub preferred_backup_window: Option<String>,
     #[doc="<p>The weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).</p> <p> Format: <code>ddd:hh24:mi-ddd:hh24:mi</code> </p> <p>Default: A 30-minute window selected at random from an 8-hour block of time per region, occurring on a random day of the week. To see the time blocks available, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/AdjustingTheMaintenanceWindow.html\"> Adjusting the Preferred Maintenance Window</a> in the <i>Amazon RDS User Guide.</i> </p> <p>Valid Days: Mon, Tue, Wed, Thu, Fri, Sat, Sun</p> <p>Constraints: Minimum 30-minute window.</p>"]
     pub preferred_maintenance_window: Option<String>,
     #[doc="<p>A list of VPC security groups that the DB cluster will belong to.</p>"]
-    pub vpc_security_group_ids: Option<VpcSecurityGroupIdList>,
+    pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
 
@@ -9810,7 +9769,7 @@ pub struct ModifyDBClusterParameterGroupMessage {
     #[doc="<p>The name of the DB cluster parameter group to modify.</p>"]
     pub db_cluster_parameter_group_name: String,
     #[doc="<p>A list of parameters in the DB cluster parameter group to modify.</p>"]
-    pub parameters: ParametersList,
+    pub parameters: Vec<Parameter>,
 }
 
 
@@ -9887,9 +9846,9 @@ pub struct ModifyDBClusterSnapshotAttributeMessage {
     #[doc="<p>The identifier for the DB cluster snapshot to modify the attributes for.</p>"]
     pub db_cluster_snapshot_identifier: String,
     #[doc="<p>A list of DB cluster snapshot attributes to add to the attribute specified by <code>AttributeName</code>.</p> <p>To authorize other AWS accounts to copy or restore a manual DB cluster snapshot, set this list to include one or more AWS account IDs, or <code>all</code> to make the manual DB cluster snapshot restorable by any AWS account. Do not add the <code>all</code> value for any manual DB cluster snapshots that contain private information that you don't want available to all AWS accounts.</p>"]
-    pub values_to_add: Option<AttributeValueList>,
+    pub values_to_add: Option<Vec<String>>,
     #[doc="<p>A list of DB cluster snapshot attributes to remove from the attribute specified by <code>AttributeName</code>.</p> <p>To remove authorization for other AWS accounts to copy or restore a manual DB cluster snapshot, set this list to include one or more AWS account identifiers, or <code>all</code> to remove authorization for any AWS account to copy or restore the DB cluster snapshot. If you specify <code>all</code>, an AWS account whose account ID is explicitly added to the <code>restore</code> attribute can still copy or restore a manual DB cluster snapshot.</p>"]
-    pub values_to_remove: Option<AttributeValueList>,
+    pub values_to_remove: Option<Vec<String>>,
 }
 
 
@@ -9971,19 +9930,19 @@ impl ModifyDBClusterSnapshotAttributeResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ModifyDBInstanceMessage {
     #[doc="<p> The new storage capacity of the RDS instance. Changing this setting does not result in an outage and the change is applied during the next maintenance window unless <code>ApplyImmediately</code> is set to <code>true</code> for this request. </p> <p> <b>MySQL</b> </p> <p>Default: Uses existing setting</p> <p>Valid Values: 5-6144</p> <p>Constraints: Value supplied must be at least 10% greater than the current value. Values that are not at least 10% greater than the existing value are rounded up so that they are 10% greater than the current value.</p> <p>Type: Integer</p> <p> <b>MariaDB</b> </p> <p>Default: Uses existing setting</p> <p>Valid Values: 5-6144</p> <p>Constraints: Value supplied must be at least 10% greater than the current value. Values that are not at least 10% greater than the existing value are rounded up so that they are 10% greater than the current value.</p> <p>Type: Integer</p> <p> <b>PostgreSQL</b> </p> <p>Default: Uses existing setting</p> <p>Valid Values: 5-6144</p> <p>Constraints: Value supplied must be at least 10% greater than the current value. Values that are not at least 10% greater than the existing value are rounded up so that they are 10% greater than the current value.</p> <p>Type: Integer</p> <p> <b>Oracle</b> </p> <p>Default: Uses existing setting</p> <p>Valid Values: 10-6144</p> <p>Constraints: Value supplied must be at least 10% greater than the current value. Values that are not at least 10% greater than the existing value are rounded up so that they are 10% greater than the current value.</p> <p> <b>SQL Server</b> </p> <p>Cannot be modified.</p> <p>If you choose to migrate your DB instance from using standard storage to using Provisioned IOPS, or from using Provisioned IOPS to using standard storage, the process can take time. The duration of the migration depends on several factors such as database load, storage size, storage type (standard or Provisioned IOPS), amount of IOPS provisioned (if any), and the number of prior scale storage operations. Typical migration times are under 24 hours, but the process can take up to several days in some cases. During the migration, the DB instance will be available for use, but might experience performance degradation. While the migration takes place, nightly backups for the instance will be suspended. No other Amazon RDS operations can take place for the instance, including modifying the instance, rebooting the instance, deleting the instance, creating a Read Replica for the instance, and creating a DB snapshot of the instance.</p>"]
-    pub allocated_storage: Option<IntegerOptional>,
+    pub allocated_storage: Option<i64>,
     #[doc="<p>Indicates that major version upgrades are allowed. Changing this parameter does not result in an outage and the change is asynchronously applied as soon as possible.</p> <p>Constraints: This parameter must be set to true when specifying a value for the EngineVersion parameter that is a different major version than the DB instance's current version.</p>"]
-    pub allow_major_version_upgrade: Option<Boolean>,
+    pub allow_major_version_upgrade: Option<bool>,
     #[doc="<p>Specifies whether the modifications in this request and any pending modifications are asynchronously applied as soon as possible, regardless of the <code>PreferredMaintenanceWindow</code> setting for the DB instance. </p> <p> If this parameter is set to <code>false</code>, changes to the DB instance are applied during the next maintenance window. Some parameter changes can cause an outage and will be applied on the next call to <a>RebootDBInstance</a>, or the next failure reboot. Review the table of parameters in <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.DBInstance.Modifying.html\">Modifying a DB Instance and Using the Apply Immediately Parameter</a> to see the impact that setting <code>ApplyImmediately</code> to <code>true</code> or <code>false</code> has for each modified parameter and to determine when the changes will be applied. </p> <p>Default: <code>false</code> </p>"]
-    pub apply_immediately: Option<Boolean>,
+    pub apply_immediately: Option<bool>,
     #[doc="<p> Indicates that minor version upgrades will be applied automatically to the DB instance during the maintenance window. Changing this parameter does not result in an outage except in the following case and the change is asynchronously applied as soon as possible. An outage will result if this parameter is set to <code>true</code> during the maintenance window, and a newer minor version is available, and RDS has enabled auto patching for that engine version. </p>"]
-    pub auto_minor_version_upgrade: Option<BooleanOptional>,
+    pub auto_minor_version_upgrade: Option<bool>,
     #[doc="<p>The number of days to retain automated backups. Setting this parameter to a positive number enables backups. Setting this parameter to 0 disables automated backups.</p> <p>Changing this parameter can result in an outage if you change from 0 to a non-zero value or from a non-zero value to 0. These changes are applied during the next maintenance window unless the <code>ApplyImmediately</code> parameter is set to <code>true</code> for this request. If you change the parameter from one non-zero value to another non-zero value, the change is asynchronously applied as soon as possible.</p> <p>Default: Uses existing setting</p> <p>Constraints:</p> <ul> <li> <p>Must be a value from 0 to 35</p> </li> <li> <p>Can be specified for a MySQL Read Replica only if the source is running MySQL 5.6</p> </li> <li> <p>Can be specified for a PostgreSQL Read Replica only if the source is running PostgreSQL 9.3.5</p> </li> <li> <p>Cannot be set to 0 if the DB instance is a source to Read Replicas</p> </li> </ul>"]
-    pub backup_retention_period: Option<IntegerOptional>,
+    pub backup_retention_period: Option<i64>,
     #[doc="<p>Indicates the certificate that needs to be associated with the instance.</p>"]
     pub ca_certificate_identifier: Option<String>,
     #[doc="<p>True to copy all tags from the DB instance to snapshots of the DB instance; otherwise false. The default is false.</p>"]
-    pub copy_tags_to_snapshot: Option<BooleanOptional>,
+    pub copy_tags_to_snapshot: Option<bool>,
     #[doc="<p> The new compute and memory capacity of the DB instance. To determine the instance classes that are available for a particular DB engine, use the <a>DescribeOrderableDBInstanceOptions</a> action. Note that not all instance classes are available in all regions for all DB engines. </p> <p> Passing a value for this setting causes an outage during the change and is applied during the next maintenance window, unless <code>ApplyImmediately</code> is specified as <code>true</code> for this request. </p> <p>Default: Uses existing setting</p> <p>Valid Values: <code>db.t1.micro | db.m1.small | db.m1.medium | db.m1.large | db.m1.xlarge | db.m2.xlarge | db.m2.2xlarge | db.m2.4xlarge | db.m3.medium | db.m3.large | db.m3.xlarge | db.m3.2xlarge | db.m4.large | db.m4.xlarge | db.m4.2xlarge | db.m4.4xlarge | db.m4.10xlarge | db.r3.large | db.r3.xlarge | db.r3.2xlarge | db.r3.4xlarge | db.r3.8xlarge | db.t2.micro | db.t2.small | db.t2.medium | db.t2.large</code> </p>"]
     pub db_instance_class: Option<String>,
     #[doc="<p>The DB instance identifier. This value is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must be the identifier for an existing DB instance</p> </li> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul>"]
@@ -9991,9 +9950,9 @@ pub struct ModifyDBInstanceMessage {
     #[doc="<p>The name of the DB parameter group to apply to the DB instance. Changing this setting does not result in an outage. The parameter group name itself is changed immediately, but the actual parameter changes are not applied until you reboot the instance without failover. The db instance will NOT be rebooted automatically and the parameter changes will NOT be applied during the next maintenance window.</p> <p>Default: Uses existing setting</p> <p>Constraints: The DB parameter group must be in the same DB parameter group family as this DB instance.</p>"]
     pub db_parameter_group_name: Option<String>,
     #[doc="<p>The port number on which the database accepts connections.</p> <p>The value of the <code>DBPortNumber</code> parameter must not match any of the port values specified for options in the option group for the DB instance.</p> <p>Your database will restart when you change the <code>DBPortNumber</code> value regardless of the value of the <code>ApplyImmediately</code> parameter.</p> <p> <b>MySQL</b> </p> <p> Default: <code>3306</code> </p> <p> Valid Values: <code>1150-65535</code> </p> <p> <b>MariaDB</b> </p> <p> Default: <code>3306</code> </p> <p> Valid Values: <code>1150-65535</code> </p> <p> <b>PostgreSQL</b> </p> <p> Default: <code>5432</code> </p> <p> Valid Values: <code>1150-65535</code> </p> <p>Type: Integer</p> <p> <b>Oracle</b> </p> <p> Default: <code>1521</code> </p> <p> Valid Values: <code>1150-65535</code> </p> <p> <b>SQL Server</b> </p> <p> Default: <code>1433</code> </p> <p> Valid Values: <code>1150-65535</code> except for <code>1434</code>, <code>3389</code>, <code>47001</code>, <code>49152</code>, and <code>49152</code> through <code>49156</code>. </p> <p> <b>Amazon Aurora</b> </p> <p> Default: <code>3306</code> </p> <p> Valid Values: <code>1150-65535</code> </p>"]
-    pub db_port_number: Option<IntegerOptional>,
+    pub db_port_number: Option<i64>,
     #[doc="<p>A list of DB security groups to authorize on this DB instance. Changing this setting does not result in an outage and the change is asynchronously applied as soon as possible.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul>"]
-    pub db_security_groups: Option<DBSecurityGroupNameList>,
+    pub db_security_groups: Option<Vec<String>>,
     #[doc="<p>The new DB subnet group for the DB instance. You can use this parameter to move your DB instance to a different VPC. If your DB instance is not in a VPC, you can also use this parameter to move your DB instance into a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_VPC.WorkingWithRDSInstanceinaVPC.html#USER_VPC.Non-VPC2VPC\">Updating the VPC for a DB Instance</a>. </p> <p>Changing the subnet group causes an outage during the change. The change is applied during the next maintenance window, unless you specify <code>true</code> for the <code>ApplyImmediately</code> parameter. </p> <p>Constraints: Must contain no more than 255 alphanumeric characters, periods, underscores, spaces, or hyphens.</p> <p>Example: <code>mySubnetGroup</code> </p>"]
     pub db_subnet_group_name: Option<String>,
     #[doc="<p>The Active Directory Domain to move the instance to. Specify <code>none</code> to remove the instance from its current domain. The domain must be created prior to this operation. Currently only a Microsoft SQL Server instance can be created in a Active Directory Domain. </p>"]
@@ -10001,21 +9960,21 @@ pub struct ModifyDBInstanceMessage {
     #[doc="<p>The name of the IAM role to use when making API calls to the Directory Service.</p>"]
     pub domain_iam_role_name: Option<String>,
     #[doc="<p>True to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts; otherwise false.</p> <p> You can enable IAM database authentication for the following database engines</p> <ul> <li> <p>For MySQL 5.6, minor version 5.6.34 or higher</p> </li> <li> <p>For MySQL 5.7, minor version 5.7.16 or higher</p> </li> </ul> <p>Default: <code>false</code> </p>"]
-    pub enable_iam_database_authentication: Option<BooleanOptional>,
+    pub enable_iam_database_authentication: Option<bool>,
     #[doc="<p> The version number of the database engine to upgrade to. Changing this parameter results in an outage and the change is applied during the next maintenance window unless the <code>ApplyImmediately</code> parameter is set to <code>true</code> for this request. </p> <p>For major version upgrades, if a non-default DB parameter group is currently in use, a new DB parameter group in the DB parameter group family for the new engine version must be specified. The new DB parameter group can be the default for that DB parameter group family.</p> <p>For a list of valid engine versions, see <a>CreateDBInstance</a>.</p>"]
     pub engine_version: Option<String>,
     #[doc="<p> The new Provisioned IOPS (I/O operations per second) value for the RDS instance. Changing this setting does not result in an outage and the change is applied during the next maintenance window unless the <code>ApplyImmediately</code> parameter is set to <code>true</code> for this request. </p> <p>Default: Uses existing setting</p> <p>Constraints: Value supplied must be at least 10% greater than the current value. Values that are not at least 10% greater than the existing value are rounded up so that they are 10% greater than the current value. If you are migrating from Provisioned IOPS to standard storage, set this value to 0. The DB instance will require a reboot for the change in storage type to take effect.</p> <p> <b>SQL Server</b> </p> <p>Setting the IOPS value for the SQL Server database engine is not supported.</p> <p>Type: Integer</p> <p>If you choose to migrate your DB instance from using standard storage to using Provisioned IOPS, or from using Provisioned IOPS to using standard storage, the process can take time. The duration of the migration depends on several factors such as database load, storage size, storage type (standard or Provisioned IOPS), amount of IOPS provisioned (if any), and the number of prior scale storage operations. Typical migration times are under 24 hours, but the process can take up to several days in some cases. During the migration, the DB instance will be available for use, but might experience performance degradation. While the migration takes place, nightly backups for the instance will be suspended. No other Amazon RDS operations can take place for the instance, including modifying the instance, rebooting the instance, deleting the instance, creating a Read Replica for the instance, and creating a DB snapshot of the instance.</p>"]
-    pub iops: Option<IntegerOptional>,
+    pub iops: Option<i64>,
     #[doc="<p>The license model for the DB instance.</p> <p>Valid values: <code>license-included</code> | <code>bring-your-own-license</code> | <code>general-public-license</code> </p>"]
     pub license_model: Option<String>,
     #[doc="<p>The new password for the DB instance master user. Can be any printable ASCII character except \"/\", \"\"\", or \"@\".</p> <p> Changing this parameter does not result in an outage and the change is asynchronously applied as soon as possible. Between the time of the request and the completion of the request, the <code>MasterUserPassword</code> element exists in the <code>PendingModifiedValues</code> element of the operation response. </p> <p>Default: Uses existing setting</p> <p>Constraints: Must be 8 to 41 alphanumeric characters (MySQL, MariaDB, and Amazon Aurora), 8 to 30 alphanumeric characters (Oracle), or 8 to 128 alphanumeric characters (SQL Server).</p> <note> <p>Amazon RDS API actions never return the password, so this action provides a way to regain access to a primary instance user if the password is lost. This includes restoring privileges that might have been accidentally revoked.</p> </note>"]
     pub master_user_password: Option<String>,
     #[doc="<p>The interval, in seconds, between points when Enhanced Monitoring metrics are collected for the DB instance. To disable collecting Enhanced Monitoring metrics, specify 0. The default is 0.</p> <p>If <code>MonitoringRoleArn</code> is specified, then you must also set <code>MonitoringInterval</code> to a value other than 0.</p> <p>Valid Values: <code>0, 1, 5, 10, 15, 30, 60</code> </p>"]
-    pub monitoring_interval: Option<IntegerOptional>,
+    pub monitoring_interval: Option<i64>,
     #[doc="<p>The ARN for the IAM role that permits RDS to send enhanced monitoring metrics to CloudWatch Logs. For example, <code>arn:aws:iam:123456789012:role/emaccess</code>. For information on creating a monitoring role, go to <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Monitoring.html#USER_Monitoring.OS.IAMRole\">To create an IAM role for Amazon RDS Enhanced Monitoring</a>.</p> <p>If <code>MonitoringInterval</code> is set to a value other than 0, then you must supply a <code>MonitoringRoleArn</code> value.</p>"]
     pub monitoring_role_arn: Option<String>,
     #[doc="<p> Specifies if the DB instance is a Multi-AZ deployment. Changing this parameter does not result in an outage and the change is applied during the next maintenance window unless the <code>ApplyImmediately</code> parameter is set to <code>true</code> for this request. </p> <p>Constraints: Cannot be specified if the DB instance is a Read Replica.</p>"]
-    pub multi_az: Option<BooleanOptional>,
+    pub multi_az: Option<bool>,
     #[doc="<p> The new DB instance identifier for the DB instance when renaming a DB instance. When you change the DB instance identifier, an instance reboot will occur immediately if you set <code>Apply Immediately</code> to true, or will occur during the next maintenance window if <code>Apply Immediately</code> to false. This value is stored as a lowercase string. </p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul>"]
     pub new_db_instance_identifier: Option<String>,
     #[doc="<p> Indicates that the DB instance should be associated with the specified option group. Changing this parameter does not result in an outage except in the following case and the change is applied during the next maintenance window unless the <code>ApplyImmediately</code> parameter is set to <code>true</code> for this request. If the parameter change results in an option group that enables OEM, this change can cause a brief (sub-second) period during which new connections are rejected but existing connections are not interrupted. </p> <p>Permanent options, such as the TDE option for Oracle Advanced Security TDE, cannot be removed from an option group, and that option group cannot be removed from a DB instance once it is associated with a DB instance</p>"]
@@ -10025,9 +9984,9 @@ pub struct ModifyDBInstanceMessage {
     #[doc="<p>The weekly time range (in UTC) during which system maintenance can occur, which might result in an outage. Changing this parameter does not result in an outage, except in the following situation, and the change is asynchronously applied as soon as possible. If there are pending actions that cause a reboot, and the maintenance window is changed to include the current time, then changing this parameter will cause a reboot of the DB instance. If moving this window to the current time, there must be at least 30 minutes between the current time and end of the window to ensure pending changes are applied.</p> <p>Default: Uses existing setting</p> <p>Format: ddd:hh24:mi-ddd:hh24:mi</p> <p>Valid Days: Mon | Tue | Wed | Thu | Fri | Sat | Sun</p> <p>Constraints: Must be at least 30 minutes</p>"]
     pub preferred_maintenance_window: Option<String>,
     #[doc="<p>A value that specifies the order in which an Aurora Replica is promoted to the primary instance after a failure of the existing primary instance. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Aurora.Managing.html#Aurora.Managing.FaultTolerance\"> Fault Tolerance for an Aurora DB Cluster</a>. </p> <p>Default: 1</p> <p>Valid Values: 0 - 15</p>"]
-    pub promotion_tier: Option<IntegerOptional>,
+    pub promotion_tier: Option<i64>,
     #[doc="<p>Boolean value that indicates if the DB instance has a publicly resolvable DNS name. Set to <code>True</code> to make the DB instance Internet-facing with a publicly resolvable DNS name, which resolves to a public IP address. Set to <code>False</code> to make the DB instance internal with a DNS name that resolves to a private IP address. </p> <p> <code>PubliclyAccessible</code> only applies to DB instances in a VPC. The DB instance must be part of a public subnet and <code>PubliclyAccessible</code> must be true in order for it to be publicly accessible. </p> <p>Changes to the <code>PubliclyAccessible</code> parameter are applied immediately regardless of the value of the <code>ApplyImmediately</code> parameter.</p> <p>Default: false</p>"]
-    pub publicly_accessible: Option<BooleanOptional>,
+    pub publicly_accessible: Option<bool>,
     #[doc="<p>Specifies the storage type to be associated with the DB instance.</p> <p> Valid values: <code>standard | gp2 | io1</code> </p> <p> If you specify <code>io1</code>, you must also include a value for the <code>Iops</code> parameter. </p> <p> Default: <code>io1</code> if the <code>Iops</code> parameter is specified; otherwise <code>standard</code> </p>"]
     pub storage_type: Option<String>,
     #[doc="<p>The ARN from the Key Store with which to associate the instance for TDE encryption.</p>"]
@@ -10035,7 +9994,7 @@ pub struct ModifyDBInstanceMessage {
     #[doc="<p>The password for the given ARN from the Key Store in order to access the device.</p>"]
     pub tde_credential_password: Option<String>,
     #[doc="<p>A list of EC2 VPC security groups to authorize on this DB instance. This change is asynchronously applied as soon as possible.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul>"]
-    pub vpc_security_group_ids: Option<VpcSecurityGroupIdList>,
+    pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
 
@@ -10230,7 +10189,7 @@ pub struct ModifyDBParameterGroupMessage {
     #[doc="<p>The name of the DB parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must be the name of an existing DB parameter group</p> </li> <li> <p>Must be 1 to 255 alphanumeric characters</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul>"]
     pub db_parameter_group_name: String,
     #[doc="<p>An array of parameter names, values, and the apply method for the parameter update. At least one parameter name, value, and apply method must be supplied; subsequent arguments are optional. A maximum of 20 parameters can be modified in a single request.</p> <p>Valid Values (for the application method): <code>immediate | pending-reboot</code> </p> <note> <p>You can use the immediate value with dynamic parameters only. You can use the pending-reboot value for both dynamic and static parameters, and changes are applied when you reboot the DB instance without failover.</p> </note>"]
-    pub parameters: ParametersList,
+    pub parameters: Vec<Parameter>,
 }
 
 
@@ -10260,9 +10219,9 @@ pub struct ModifyDBSnapshotAttributeMessage {
     #[doc="<p>The identifier for the DB snapshot to modify the attributes for.</p>"]
     pub db_snapshot_identifier: String,
     #[doc="<p>A list of DB snapshot attributes to add to the attribute specified by <code>AttributeName</code>.</p> <p>To authorize other AWS accounts to copy or restore a manual snapshot, set this list to include one or more AWS account IDs, or <code>all</code> to make the manual DB snapshot restorable by any AWS account. Do not add the <code>all</code> value for any manual DB snapshots that contain private information that you don't want available to all AWS accounts.</p>"]
-    pub values_to_add: Option<AttributeValueList>,
+    pub values_to_add: Option<Vec<String>>,
     #[doc="<p>A list of DB snapshot attributes to remove from the attribute specified by <code>AttributeName</code>.</p> <p>To remove authorization for other AWS accounts to copy or restore a manual snapshot, set this list to include one or more AWS account identifiers, or <code>all</code> to remove authorization for any AWS account to copy or restore the DB snapshot. If you specify <code>all</code>, an AWS account whose account ID is explicitly added to the <code>restore</code> attribute can still copy or restore the manual DB snapshot.</p>"]
-    pub values_to_remove: Option<AttributeValueList>,
+    pub values_to_remove: Option<Vec<String>>,
 }
 
 
@@ -10423,7 +10382,7 @@ pub struct ModifyDBSubnetGroupMessage {
     #[doc="<p>The name for the DB subnet group. This value is stored as a lowercase string.</p> <p>Constraints: Must contain no more than 255 alphanumeric characters, periods, underscores, spaces, or hyphens. Must not be default.</p> <p>Example: <code>mySubnetgroup</code> </p>"]
     pub db_subnet_group_name: String,
     #[doc="<p>The EC2 subnet IDs for the DB subnet group.</p>"]
-    pub subnet_ids: SubnetIdentifierList,
+    pub subnet_ids: Vec<String>,
 }
 
 
@@ -10501,9 +10460,9 @@ impl ModifyDBSubnetGroupResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ModifyEventSubscriptionMessage {
     #[doc="<p> A Boolean value; set to <b>true</b> to activate the subscription. </p>"]
-    pub enabled: Option<BooleanOptional>,
+    pub enabled: Option<bool>,
     #[doc="<p> A list of event categories for a SourceType that you want to subscribe to. You can see a list of the categories for a given SourceType in the <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html\">Events</a> topic in the Amazon RDS User Guide or by using the <b>DescribeEventCategories</b> action. </p>"]
-    pub event_categories: Option<EventCategoriesList>,
+    pub event_categories: Option<Vec<String>>,
     #[doc="<p>The Amazon Resource Name (ARN) of the SNS topic created for event notification. The ARN is created by Amazon SNS when you create a topic and subscribe to it.</p>"]
     pub sns_topic_arn: Option<String>,
     #[doc="<p>The type of source that will be generating the events. For example, if you want to be notified of events generated by a DB instance, you would set this parameter to db-instance. if this value is not specified, all events are returned.</p> <p>Valid values: db-instance | db-parameter-group | db-security-group | db-snapshot</p>"]
@@ -10595,13 +10554,13 @@ impl ModifyEventSubscriptionResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ModifyOptionGroupMessage {
     #[doc="<p>Indicates whether the changes should be applied immediately, or during the next maintenance window for each instance associated with the option group.</p>"]
-    pub apply_immediately: Option<Boolean>,
+    pub apply_immediately: Option<bool>,
     #[doc="<p>The name of the option group to be modified.</p> <p>Permanent options, such as the TDE option for Oracle Advanced Security TDE, cannot be removed from an option group, and that option group cannot be removed from a DB instance once it is associated with a DB instance</p>"]
     pub option_group_name: String,
     #[doc="<p>Options in this list are added to the option group or, if already present, the specified configuration is used to update the existing configuration.</p>"]
-    pub options_to_include: Option<OptionConfigurationList>,
+    pub options_to_include: Option<Vec<OptionConfiguration>>,
     #[doc="<p>Options in this list are removed from the option group.</p>"]
-    pub options_to_remove: Option<OptionNamesList>,
+    pub options_to_remove: Option<Vec<String>>,
 }
 
 
@@ -10688,23 +10647,23 @@ impl ModifyOptionGroupResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct RDSOption {
     #[doc="<p>If the option requires access to a port, then this DB security group allows access to the port.</p>"]
-    pub db_security_group_memberships: Option<DBSecurityGroupMembershipList>,
+    pub db_security_group_memberships: Option<Vec<DBSecurityGroupMembership>>,
     #[doc="<p>The description of the option.</p>"]
     pub option_description: Option<String>,
     #[doc="<p>The name of the option.</p>"]
     pub option_name: Option<String>,
     #[doc="<p>The option settings for this option.</p>"]
-    pub option_settings: Option<OptionSettingConfigurationList>,
+    pub option_settings: Option<Vec<OptionSetting>>,
     #[doc="<p>The version of the option.</p>"]
     pub option_version: Option<String>,
     #[doc="<p>Indicate if this option is permanent.</p>"]
-    pub permanent: Option<Boolean>,
+    pub permanent: Option<bool>,
     #[doc="<p>Indicate if this option is persistent.</p>"]
-    pub persistent: Option<Boolean>,
+    pub persistent: Option<bool>,
     #[doc="<p>If required, the port configured for this option to use.</p>"]
-    pub port: Option<IntegerOptional>,
+    pub port: Option<i64>,
     #[doc="<p>If the option requires access to a port, then this VPC security group allows access to the port.</p>"]
-    pub vpc_security_group_memberships: Option<VpcSecurityGroupMembershipList>,
+    pub vpc_security_group_memberships: Option<Vec<VpcSecurityGroupMembership>>,
 }
 
 struct RDSOptionDeserializer;
@@ -10783,17 +10742,17 @@ impl RDSOptionDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct OptionConfiguration {
     #[doc="<p>A list of DBSecurityGroupMemebrship name strings used for this option.</p>"]
-    pub db_security_group_memberships: Option<DBSecurityGroupNameList>,
+    pub db_security_group_memberships: Option<Vec<String>>,
     #[doc="<p>The configuration of options to include in a group.</p>"]
     pub option_name: String,
     #[doc="<p>The option settings to include in an option group.</p>"]
-    pub option_settings: Option<OptionSettingsList>,
+    pub option_settings: Option<Vec<OptionSetting>>,
     #[doc="<p>The version for the option.</p>"]
     pub option_version: Option<String>,
     #[doc="<p>The optional port for the option.</p>"]
-    pub port: Option<IntegerOptional>,
+    pub port: Option<i64>,
     #[doc="<p>A list of VpcSecurityGroupMemebrship name strings used for this option.</p>"]
-    pub vpc_security_group_memberships: Option<VpcSecurityGroupIdList>,
+    pub vpc_security_group_memberships: Option<Vec<String>>,
 }
 
 
@@ -10836,12 +10795,11 @@ impl OptionConfigurationSerializer {
     }
 }
 
-pub type OptionConfigurationList = Vec<OptionConfiguration>;
 
 /// Serialize `OptionConfigurationList` contents to a `SignedRequest`.
 struct OptionConfigurationListSerializer;
 impl OptionConfigurationListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &OptionConfigurationList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<OptionConfiguration>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             OptionConfigurationSerializer::serialize(params, &key, obj);
@@ -10853,7 +10811,7 @@ impl OptionConfigurationListSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct OptionGroup {
     #[doc="<p>Indicates whether this option group can be applied to both VPC and non-VPC instances. The value <code>true</code> indicates the option group can be applied to both VPC and non-VPC instances. </p>"]
-    pub allows_vpc_and_non_vpc_instance_memberships: Option<Boolean>,
+    pub allows_vpc_and_non_vpc_instance_memberships: Option<bool>,
     #[doc="<p>Indicates the name of the engine that this option group can be applied to.</p>"]
     pub engine_name: Option<String>,
     #[doc="<p>Indicates the major engine version associated with this option group.</p>"]
@@ -10865,7 +10823,7 @@ pub struct OptionGroup {
     #[doc="<p>Specifies the name of the option group.</p>"]
     pub option_group_name: Option<String>,
     #[doc="<p>Indicates what options are available in the option group.</p>"]
-    pub options: Option<OptionsList>,
+    pub options: Option<Vec<RDSOption>>,
     #[doc="<p>If <b>AllowsVpcAndNonVpcInstanceMemberships</b> is <code>false</code>, this field is blank. If <b>AllowsVpcAndNonVpcInstanceMemberships</b> is <code>true</code> and this field is blank, then this option group can be applied to both VPC and non-VPC instances. If this field contains a value, then this option group can only be applied to instances that are in the VPC indicated by this field. </p>"]
     pub vpc_id: Option<String>,
 }
@@ -11001,13 +10959,12 @@ impl OptionGroupMembershipDeserializer {
 
     }
 }
-pub type OptionGroupMembershipList = Vec<OptionGroupMembership>;
 struct OptionGroupMembershipListDeserializer;
 impl OptionGroupMembershipListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<OptionGroupMembershipList, XmlParseError> {
+                                       -> Result<Vec<OptionGroupMembership>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -11047,7 +11004,7 @@ impl OptionGroupMembershipListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct OptionGroupOption {
     #[doc="<p>If the option requires a port, specifies the default port for the option.</p>"]
-    pub default_port: Option<IntegerOptional>,
+    pub default_port: Option<i64>,
     #[doc="<p>The description of the option.</p>"]
     pub description: Option<String>,
     #[doc="<p>The name of the engine that this option can be applied to.</p>"]
@@ -11059,19 +11016,19 @@ pub struct OptionGroupOption {
     #[doc="<p>The name of the option.</p>"]
     pub name: Option<String>,
     #[doc="<p>The option settings that are available (and the default value) for each option in an option group.</p>"]
-    pub option_group_option_settings: Option<OptionGroupOptionSettingsList>,
+    pub option_group_option_settings: Option<Vec<OptionGroupOptionSetting>>,
     #[doc="<p>The versions that are available for the option.</p>"]
-    pub option_group_option_versions: Option<OptionGroupOptionVersionsList>,
+    pub option_group_option_versions: Option<Vec<OptionVersion>>,
     #[doc="<p>The options that conflict with this option.</p>"]
-    pub options_conflicts_with: Option<OptionsConflictsWith>,
+    pub options_conflicts_with: Option<Vec<String>>,
     #[doc="<p>The options that are prerequisites for this option.</p>"]
-    pub options_depended_on: Option<OptionsDependedOn>,
+    pub options_depended_on: Option<Vec<String>>,
     #[doc="<p>Permanent options can never be removed from an option group. An option group containing a permanent option can't be removed from a DB instance.</p>"]
-    pub permanent: Option<Boolean>,
+    pub permanent: Option<bool>,
     #[doc="<p>Persistent options can't be removed from an option group while DB instances are associated with the option group. If you disassociate all DB instances from the option group, your can remove the persistent option from the option group.</p>"]
-    pub persistent: Option<Boolean>,
+    pub persistent: Option<bool>,
     #[doc="<p>Specifies whether the option requires a port.</p>"]
-    pub port_required: Option<Boolean>,
+    pub port_required: Option<bool>,
 }
 
 struct OptionGroupOptionDeserializer;
@@ -11176,7 +11133,7 @@ pub struct OptionGroupOptionSetting {
     #[doc="<p>The default value for the option group option.</p>"]
     pub default_value: Option<String>,
     #[doc="<p>Boolean value where true indicates that this option group option can be changed from the default value.</p>"]
-    pub is_modifiable: Option<Boolean>,
+    pub is_modifiable: Option<bool>,
     #[doc="<p>The description of the option group option.</p>"]
     pub setting_description: Option<String>,
     #[doc="<p>The name of the option group option.</p>"]
@@ -11246,13 +11203,12 @@ impl OptionGroupOptionSettingDeserializer {
 
     }
 }
-pub type OptionGroupOptionSettingsList = Vec<OptionGroupOptionSetting>;
 struct OptionGroupOptionSettingsListDeserializer;
 impl OptionGroupOptionSettingsListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<OptionGroupOptionSettingsList, XmlParseError> {
+                                       -> Result<Vec<OptionGroupOptionSetting>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -11288,13 +11244,12 @@ impl OptionGroupOptionSettingsListDeserializer {
 
     }
 }
-pub type OptionGroupOptionVersionsList = Vec<OptionVersion>;
 struct OptionGroupOptionVersionsListDeserializer;
 impl OptionGroupOptionVersionsListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<OptionGroupOptionVersionsList, XmlParseError> {
+                                       -> Result<Vec<OptionVersion>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -11331,14 +11286,12 @@ impl OptionGroupOptionVersionsListDeserializer {
 
     }
 }
-#[doc="<p>List of available option group options.</p>"]
-pub type OptionGroupOptionsList = Vec<OptionGroupOption>;
 struct OptionGroupOptionsListDeserializer;
 impl OptionGroupOptionsListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<OptionGroupOptionsList, XmlParseError> {
+                                       -> Result<Vec<OptionGroupOption>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -11379,7 +11332,7 @@ impl OptionGroupOptionsListDeserializer {
 pub struct OptionGroupOptionsMessage {
     #[doc="<p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>"]
     pub marker: Option<String>,
-    pub option_group_options: Option<OptionGroupOptionsList>,
+    pub option_group_options: Option<Vec<OptionGroupOption>>,
 }
 
 struct OptionGroupOptionsMessageDeserializer;
@@ -11435,7 +11388,7 @@ pub struct OptionGroups {
     #[doc="<p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     pub marker: Option<String>,
     #[doc="<p>List of option groups.</p>"]
-    pub option_groups_list: Option<OptionGroupsList>,
+    pub option_groups_list: Option<Vec<OptionGroup>>,
 }
 
 struct OptionGroupsDeserializer;
@@ -11485,13 +11438,12 @@ impl OptionGroupsDeserializer {
 
     }
 }
-pub type OptionGroupsList = Vec<OptionGroup>;
 struct OptionGroupsListDeserializer;
 impl OptionGroupsListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<OptionGroupsList, XmlParseError> {
+                                       -> Result<Vec<OptionGroup>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -11527,12 +11479,11 @@ impl OptionGroupsListDeserializer {
 
     }
 }
-pub type OptionNamesList = Vec<String>;
 
 /// Serialize `OptionNamesList` contents to a `SignedRequest`.
 struct OptionNamesListSerializer;
 impl OptionNamesListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &OptionNamesList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -11554,9 +11505,9 @@ pub struct OptionSetting {
     #[doc="<p>The description of the option setting.</p>"]
     pub description: Option<String>,
     #[doc="<p>Indicates if the option setting is part of a collection.</p>"]
-    pub is_collection: Option<Boolean>,
+    pub is_collection: Option<bool>,
     #[doc="<p>A Boolean value that, when true, indicates the option setting can be modified from the default.</p>"]
-    pub is_modifiable: Option<Boolean>,
+    pub is_modifiable: Option<bool>,
     #[doc="<p>The name of the option that has settings that you can set.</p>"]
     pub name: Option<String>,
     #[doc="<p>The current value of the option setting.</p>"]
@@ -11678,13 +11629,12 @@ impl OptionSettingSerializer {
     }
 }
 
-pub type OptionSettingConfigurationList = Vec<OptionSetting>;
 struct OptionSettingConfigurationListDeserializer;
 impl OptionSettingConfigurationListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<OptionSettingConfigurationList, XmlParseError> {
+                                       -> Result<Vec<OptionSetting>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -11721,12 +11671,11 @@ impl OptionSettingConfigurationListDeserializer {
 
     }
 }
-pub type OptionSettingsList = Vec<OptionSetting>;
 
 /// Serialize `OptionSettingsList` contents to a `SignedRequest`.
 struct OptionSettingsListSerializer;
 impl OptionSettingsListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &OptionSettingsList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<OptionSetting>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             OptionSettingSerializer::serialize(params, &key, obj);
@@ -11738,7 +11687,7 @@ impl OptionSettingsListSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct OptionVersion {
     #[doc="<p>True if the version is the default version of the option; otherwise, false.</p>"]
-    pub is_default: Option<Boolean>,
+    pub is_default: Option<bool>,
     #[doc="<p>The version of the option.</p>"]
     pub version: Option<String>,
 }
@@ -11789,13 +11738,12 @@ impl OptionVersionDeserializer {
 
     }
 }
-pub type OptionsConflictsWith = Vec<String>;
 struct OptionsConflictsWithDeserializer;
 impl OptionsConflictsWithDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<OptionsConflictsWith, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -11832,13 +11780,12 @@ impl OptionsConflictsWithDeserializer {
 
     }
 }
-pub type OptionsDependedOn = Vec<String>;
 struct OptionsDependedOnDeserializer;
 impl OptionsDependedOnDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<OptionsDependedOn, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -11874,13 +11821,12 @@ impl OptionsDependedOnDeserializer {
 
     }
 }
-pub type OptionsList = Vec<RDSOption>;
 struct OptionsListDeserializer;
 impl OptionsListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<OptionsList, XmlParseError> {
+                                       -> Result<Vec<RDSOption>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -11920,7 +11866,7 @@ impl OptionsListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct OrderableDBInstanceOption {
     #[doc="<p>A list of Availability Zones for the orderable DB instance.</p>"]
-    pub availability_zones: Option<AvailabilityZoneList>,
+    pub availability_zones: Option<Vec<AvailabilityZone>>,
     #[doc="<p>The DB instance class for the orderable DB instance.</p>"]
     pub db_instance_class: Option<String>,
     #[doc="<p>The engine type of the orderable DB instance.</p>"]
@@ -11930,21 +11876,21 @@ pub struct OrderableDBInstanceOption {
     #[doc="<p>The license model for the orderable DB instance.</p>"]
     pub license_model: Option<String>,
     #[doc="<p>Indicates whether this orderable DB instance is multi-AZ capable.</p>"]
-    pub multi_az_capable: Option<Boolean>,
+    pub multi_az_capable: Option<bool>,
     #[doc="<p>Indicates whether this orderable DB instance can have a Read Replica.</p>"]
-    pub read_replica_capable: Option<Boolean>,
+    pub read_replica_capable: Option<bool>,
     #[doc="<p>Indicates the storage type for this orderable DB instance.</p>"]
     pub storage_type: Option<String>,
     #[doc="<p>Indicates whether the DB instance supports enhanced monitoring at intervals from 1 to 60 seconds.</p>"]
-    pub supports_enhanced_monitoring: Option<Boolean>,
+    pub supports_enhanced_monitoring: Option<bool>,
     #[doc="<p>Indicates whether this orderable DB instance supports IAM database authentication.</p>"]
-    pub supports_iam_database_authentication: Option<Boolean>,
+    pub supports_iam_database_authentication: Option<bool>,
     #[doc="<p>Indicates whether this orderable DB instance supports provisioned IOPS.</p>"]
-    pub supports_iops: Option<Boolean>,
+    pub supports_iops: Option<bool>,
     #[doc="<p>Indicates whether this orderable DB instance supports encrypted storage.</p>"]
-    pub supports_storage_encryption: Option<Boolean>,
+    pub supports_storage_encryption: Option<bool>,
     #[doc="<p>Indicates whether this is a VPC orderable DB instance.</p>"]
-    pub vpc: Option<Boolean>,
+    pub vpc: Option<bool>,
 }
 
 struct OrderableDBInstanceOptionDeserializer;
@@ -12043,13 +11989,12 @@ impl OrderableDBInstanceOptionDeserializer {
 
     }
 }
-pub type OrderableDBInstanceOptionsList = Vec<OrderableDBInstanceOption>;
 struct OrderableDBInstanceOptionsListDeserializer;
 impl OrderableDBInstanceOptionsListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<OrderableDBInstanceOptionsList, XmlParseError> {
+                                       -> Result<Vec<OrderableDBInstanceOption>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -12091,7 +12036,7 @@ pub struct OrderableDBInstanceOptionsMessage {
     #[doc="<p> An optional pagination token provided by a previous OrderableDBInstanceOptions request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> . </p>"]
     pub marker: Option<String>,
     #[doc="<p>An <a>OrderableDBInstanceOption</a> structure containing information about orderable options for the DB instance.</p>"]
-    pub orderable_db_instance_options: Option<OrderableDBInstanceOptionsList>,
+    pub orderable_db_instance_options: Option<Vec<OrderableDBInstanceOption>>,
 }
 
 struct OrderableDBInstanceOptionsMessageDeserializer;
@@ -12146,7 +12091,7 @@ pub struct Parameter {
     #[doc="<p>Specifies the valid range of values for the parameter.</p>"]
     pub allowed_values: Option<String>,
     #[doc="<p>Indicates when to apply parameter updates.</p>"]
-    pub apply_method: Option<ApplyMethod>,
+    pub apply_method: Option<String>,
     #[doc="<p>Specifies the engine specific parameters type.</p>"]
     pub apply_type: Option<String>,
     #[doc="<p>Specifies the valid data type for the parameter.</p>"]
@@ -12154,7 +12099,7 @@ pub struct Parameter {
     #[doc="<p>Provides a description of the parameter.</p>"]
     pub description: Option<String>,
     #[doc="<p> Indicates whether (<code>true</code>) or not (<code>false</code>) the parameter can be modified. Some parameters have security or operational implications that prevent them from being changed. </p>"]
-    pub is_modifiable: Option<Boolean>,
+    pub is_modifiable: Option<bool>,
     #[doc="<p>The earliest engine version to which the parameter can apply.</p>"]
     pub minimum_engine_version: Option<String>,
     #[doc="<p>Specifies the name of the parameter.</p>"]
@@ -12292,13 +12237,12 @@ impl ParameterSerializer {
     }
 }
 
-pub type ParametersList = Vec<Parameter>;
 struct ParametersListDeserializer;
 impl ParametersListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ParametersList, XmlParseError> {
+                                       -> Result<Vec<Parameter>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -12338,7 +12282,7 @@ impl ParametersListDeserializer {
 /// Serialize `ParametersList` contents to a `SignedRequest`.
 struct ParametersListSerializer;
 impl ParametersListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ParametersList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<Parameter>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             ParameterSerializer::serialize(params, &key, obj);
@@ -12352,13 +12296,13 @@ pub struct PendingMaintenanceAction {
     #[doc="<p>The type of pending maintenance action that is available for the resource.</p>"]
     pub action: Option<String>,
     #[doc="<p>The date of the maintenance window when the action will be applied. The maintenance action will be applied to the resource during its first maintenance window after this date. If this date is specified, any <code>next-maintenance</code> opt-in requests are ignored.</p>"]
-    pub auto_applied_after_date: Option<TStamp>,
+    pub auto_applied_after_date: Option<String>,
     #[doc="<p>The effective date when the pending maintenance action will be applied to the resource. This date takes into account opt-in requests received from the <a>ApplyPendingMaintenanceAction</a> API, the <code>AutoAppliedAfterDate</code>, and the <code>ForcedApplyDate</code>. This value is blank if an opt-in request has not been received and nothing has been specified as <code>AutoAppliedAfterDate</code> or <code>ForcedApplyDate</code>.</p>"]
-    pub current_apply_date: Option<TStamp>,
+    pub current_apply_date: Option<String>,
     #[doc="<p>A description providing more detail about the maintenance action.</p>"]
     pub description: Option<String>,
     #[doc="<p>The date when the maintenance action will be automatically applied. The maintenance action will be applied to the resource on this date regardless of the maintenance window for the resource. If this date is specified, any <code>immediate</code> opt-in requests are ignored.</p>"]
-    pub forced_apply_date: Option<TStamp>,
+    pub forced_apply_date: Option<String>,
     #[doc="<p>Indicates the type of opt-in request that has been received for the resource.</p>"]
     pub opt_in_status: Option<String>,
 }
@@ -12428,14 +12372,12 @@ impl PendingMaintenanceActionDeserializer {
 
     }
 }
-pub type PendingMaintenanceActionDetails = Vec<PendingMaintenanceAction>;
 struct PendingMaintenanceActionDetailsDeserializer;
 impl PendingMaintenanceActionDetailsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<PendingMaintenanceActionDetails, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<Vec<PendingMaintenanceAction>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -12471,13 +12413,13 @@ impl PendingMaintenanceActionDetailsDeserializer {
 
     }
 }
-pub type PendingMaintenanceActions = Vec<ResourcePendingMaintenanceActions>;
 struct PendingMaintenanceActionsDeserializer;
 impl PendingMaintenanceActionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<PendingMaintenanceActions, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<Vec<ResourcePendingMaintenanceActions>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -12519,7 +12461,7 @@ pub struct PendingMaintenanceActionsMessage {
     #[doc="<p> An optional pagination token provided by a previous <code>DescribePendingMaintenanceActions</code> request. If this parameter is specified, the response includes only records beyond the marker, up to a number of records specified by <code>MaxRecords</code>. </p>"]
     pub marker: Option<String>,
     #[doc="<p>A list of the pending maintenance actions for the resource.</p>"]
-    pub pending_maintenance_actions: Option<PendingMaintenanceActions>,
+    pub pending_maintenance_actions: Option<Vec<ResourcePendingMaintenanceActions>>,
 }
 
 struct PendingMaintenanceActionsMessageDeserializer;
@@ -12572,9 +12514,9 @@ impl PendingMaintenanceActionsMessageDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct PendingModifiedValues {
     #[doc="<p> Contains the new <code>AllocatedStorage</code> size for the DB instance that will be applied or is in progress. </p>"]
-    pub allocated_storage: Option<IntegerOptional>,
+    pub allocated_storage: Option<i64>,
     #[doc="<p>Specifies the pending number of days for which automated backups are retained.</p>"]
-    pub backup_retention_period: Option<IntegerOptional>,
+    pub backup_retention_period: Option<i64>,
     #[doc="<p>Specifies the identifier of the CA certificate for the DB instance.</p>"]
     pub ca_certificate_identifier: Option<String>,
     #[doc="<p> Contains the new <code>DBInstanceClass</code> for the DB instance that will be applied or is in progress. </p>"]
@@ -12586,15 +12528,15 @@ pub struct PendingModifiedValues {
     #[doc="<p>Indicates the database engine version.</p>"]
     pub engine_version: Option<String>,
     #[doc="<p>Specifies the new Provisioned IOPS value for the DB instance that will be applied or is being applied.</p>"]
-    pub iops: Option<IntegerOptional>,
+    pub iops: Option<i64>,
     #[doc="<p>The license model for the DB instance.</p> <p>Valid values: <code>license-included</code> | <code>bring-your-own-license</code> | <code>general-public-license</code> </p>"]
     pub license_model: Option<String>,
     #[doc="<p>Contains the pending or in-progress change of the master credentials for the DB instance.</p>"]
     pub master_user_password: Option<String>,
     #[doc="<p>Indicates that the Single-AZ DB instance is to change to a Multi-AZ deployment.</p>"]
-    pub multi_az: Option<BooleanOptional>,
+    pub multi_az: Option<bool>,
     #[doc="<p>Specifies the pending port for the DB instance.</p>"]
-    pub port: Option<IntegerOptional>,
+    pub port: Option<i64>,
     #[doc="<p>Specifies the storage type to be associated with the DB instance.</p>"]
     pub storage_type: Option<String>,
 }
@@ -12772,7 +12714,7 @@ impl PromoteReadReplicaDBClusterResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct PromoteReadReplicaMessage {
     #[doc="<p>The number of days to retain automated backups. Setting this parameter to a positive number enables backups. Setting this parameter to 0 disables automated backups.</p> <p>Default: 1</p> <p>Constraints:</p> <ul> <li> <p>Must be a value from 0 to 8</p> </li> </ul>"]
-    pub backup_retention_period: Option<IntegerOptional>,
+    pub backup_retention_period: Option<i64>,
     #[doc="<p>The DB instance identifier. This value is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must be the identifier for an existing Read Replica DB instance</p> </li> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul> <p>Example: <code>mydbinstance</code> </p>"]
     pub db_instance_identifier: String,
     #[doc="<p> The daily time range during which automated backups are created if automated backups are enabled, using the <code>BackupRetentionPeriod</code> parameter. </p> <p> Default: A 30-minute window selected at random from an 8-hour block of time per region. To see the time blocks available, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/AdjustingTheMaintenanceWindow.html\"> Adjusting the Preferred Maintenance Window</a> in the <i>Amazon RDS User Guide.</i> </p> <p>Constraints:</p> <ul> <li> <p>Must be in the format <code>hh24:mi-hh24:mi</code>.</p> </li> <li> <p>Times should be in Universal Coordinated Time (UTC).</p> </li> <li> <p>Must not conflict with the preferred maintenance window.</p> </li> <li> <p>Must be at least 30 minutes.</p> </li> </ul>"]
@@ -12855,12 +12797,12 @@ impl PromoteReadReplicaResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct PurchaseReservedDBInstancesOfferingMessage {
     #[doc="<p>The number of instances to reserve.</p> <p>Default: <code>1</code> </p>"]
-    pub db_instance_count: Option<IntegerOptional>,
+    pub db_instance_count: Option<i64>,
     #[doc="<p>Customer-specified identifier to track this reservation.</p> <p>Example: myreservationID</p>"]
     pub reserved_db_instance_id: Option<String>,
     #[doc="<p>The ID of the Reserved DB instance offering to purchase.</p> <p>Example: 438012d3-4052-4cc7-b2e3-8d3372e0e706</p>"]
     pub reserved_db_instances_offering_id: String,
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 
@@ -12941,14 +12883,12 @@ impl PurchaseReservedDBInstancesOfferingResultDeserializer {
 
     }
 }
-pub type ReadReplicaDBClusterIdentifierList = Vec<String>;
 struct ReadReplicaDBClusterIdentifierListDeserializer;
 impl ReadReplicaDBClusterIdentifierListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<ReadReplicaDBClusterIdentifierList, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -12984,14 +12924,12 @@ impl ReadReplicaDBClusterIdentifierListDeserializer {
 
     }
 }
-pub type ReadReplicaDBInstanceIdentifierList = Vec<String>;
 struct ReadReplicaDBInstanceIdentifierListDeserializer;
 impl ReadReplicaDBInstanceIdentifierListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<ReadReplicaDBInstanceIdentifierList, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -13027,13 +12965,12 @@ impl ReadReplicaDBInstanceIdentifierListDeserializer {
 
     }
 }
-pub type ReadReplicaIdentifierList = Vec<String>;
 struct ReadReplicaIdentifierListDeserializer;
 impl ReadReplicaIdentifierListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ReadReplicaIdentifierList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -13076,7 +13013,7 @@ pub struct RebootDBInstanceMessage {
     #[doc="<p>The DB instance identifier. This parameter is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul>"]
     pub db_instance_identifier: String,
     #[doc="<p> When <code>true</code>, the reboot will be conducted through a MultiAZ failover. </p> <p>Constraint: You cannot specify <code>true</code> if the instance is not configured for MultiAZ.</p>"]
-    pub force_failover: Option<BooleanOptional>,
+    pub force_failover: Option<bool>,
 }
 
 
@@ -13151,7 +13088,7 @@ impl RebootDBInstanceResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct RecurringCharge {
     #[doc="<p>The amount of the recurring charge.</p>"]
-    pub recurring_charge_amount: Option<Double>,
+    pub recurring_charge_amount: Option<f64>,
     #[doc="<p>The frequency of the recurring charge.</p>"]
     pub recurring_charge_frequency: Option<String>,
 }
@@ -13204,13 +13141,12 @@ impl RecurringChargeDeserializer {
 
     }
 }
-pub type RecurringChargeList = Vec<RecurringCharge>;
 struct RecurringChargeListDeserializer;
 impl RecurringChargeListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<RecurringChargeList, XmlParseError> {
+                                       -> Result<Vec<RecurringCharge>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -13356,7 +13292,7 @@ pub struct RemoveTagsFromResourceMessage {
     #[doc="<p>The Amazon RDS resource the tags will be removed from. This value is an Amazon Resource Name (ARN). For information about creating an ARN, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing\"> Constructing an RDS Amazon Resource Name (ARN)</a>.</p>"]
     pub resource_name: String,
     #[doc="<p>The tag key (name) of the tag to be removed.</p>"]
-    pub tag_keys: KeyList,
+    pub tag_keys: Vec<String>,
 }
 
 
@@ -13383,19 +13319,19 @@ pub struct ReservedDBInstance {
     #[doc="<p>The DB instance class for the reserved DB instance.</p>"]
     pub db_instance_class: Option<String>,
     #[doc="<p>The number of reserved DB instances.</p>"]
-    pub db_instance_count: Option<Integer>,
+    pub db_instance_count: Option<i64>,
     #[doc="<p>The duration of the reservation in seconds.</p>"]
-    pub duration: Option<Integer>,
+    pub duration: Option<i64>,
     #[doc="<p>The fixed price charged for this reserved DB instance.</p>"]
-    pub fixed_price: Option<Double>,
+    pub fixed_price: Option<f64>,
     #[doc="<p>Indicates if the reservation applies to Multi-AZ deployments.</p>"]
-    pub multi_az: Option<Boolean>,
+    pub multi_az: Option<bool>,
     #[doc="<p>The offering type of this reserved DB instance.</p>"]
     pub offering_type: Option<String>,
     #[doc="<p>The description of the reserved DB instance.</p>"]
     pub product_description: Option<String>,
     #[doc="<p>The recurring price charged to run this reserved DB instance.</p>"]
-    pub recurring_charges: Option<RecurringChargeList>,
+    pub recurring_charges: Option<Vec<RecurringCharge>>,
     #[doc="<p>The Amazon Resource Name (ARN) for the reserved DB instance.</p>"]
     pub reserved_db_instance_arn: Option<String>,
     #[doc="<p>The unique identifier for the reservation.</p>"]
@@ -13403,11 +13339,11 @@ pub struct ReservedDBInstance {
     #[doc="<p>The offering identifier.</p>"]
     pub reserved_db_instances_offering_id: Option<String>,
     #[doc="<p>The time the reservation started.</p>"]
-    pub start_time: Option<TStamp>,
+    pub start_time: Option<String>,
     #[doc="<p>The state of the reserved DB instance.</p>"]
     pub state: Option<String>,
     #[doc="<p>The hourly price charged for this reserved DB instance.</p>"]
-    pub usage_price: Option<Double>,
+    pub usage_price: Option<f64>,
 }
 
 struct ReservedDBInstanceDeserializer;
@@ -13514,13 +13450,12 @@ impl ReservedDBInstanceDeserializer {
 
     }
 }
-pub type ReservedDBInstanceList = Vec<ReservedDBInstance>;
 struct ReservedDBInstanceListDeserializer;
 impl ReservedDBInstanceListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ReservedDBInstanceList, XmlParseError> {
+                                       -> Result<Vec<ReservedDBInstance>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -13562,7 +13497,7 @@ pub struct ReservedDBInstanceMessage {
     #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     pub marker: Option<String>,
     #[doc="<p>A list of reserved DB instances.</p>"]
-    pub reserved_db_instances: Option<ReservedDBInstanceList>,
+    pub reserved_db_instances: Option<Vec<ReservedDBInstance>>,
 }
 
 struct ReservedDBInstanceMessageDeserializer;
@@ -13620,21 +13555,21 @@ pub struct ReservedDBInstancesOffering {
     #[doc="<p>The DB instance class for the reserved DB instance.</p>"]
     pub db_instance_class: Option<String>,
     #[doc="<p>The duration of the offering in seconds.</p>"]
-    pub duration: Option<Integer>,
+    pub duration: Option<i64>,
     #[doc="<p>The fixed price charged for this offering.</p>"]
-    pub fixed_price: Option<Double>,
+    pub fixed_price: Option<f64>,
     #[doc="<p>Indicates if the offering applies to Multi-AZ deployments.</p>"]
-    pub multi_az: Option<Boolean>,
+    pub multi_az: Option<bool>,
     #[doc="<p>The offering type.</p>"]
     pub offering_type: Option<String>,
     #[doc="<p>The database engine used by the offering.</p>"]
     pub product_description: Option<String>,
     #[doc="<p>The recurring price charged to run this reserved DB instance.</p>"]
-    pub recurring_charges: Option<RecurringChargeList>,
+    pub recurring_charges: Option<Vec<RecurringCharge>>,
     #[doc="<p>The offering identifier.</p>"]
     pub reserved_db_instances_offering_id: Option<String>,
     #[doc="<p>The hourly price charged for this offering.</p>"]
-    pub usage_price: Option<Double>,
+    pub usage_price: Option<f64>,
 }
 
 struct ReservedDBInstancesOfferingDeserializer;
@@ -13719,14 +13654,13 @@ impl ReservedDBInstancesOfferingDeserializer {
 
     }
 }
-pub type ReservedDBInstancesOfferingList = Vec<ReservedDBInstancesOffering>;
 struct ReservedDBInstancesOfferingListDeserializer;
 impl ReservedDBInstancesOfferingListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>
         (tag_name: &str,
          stack: &mut T)
-         -> Result<ReservedDBInstancesOfferingList, XmlParseError> {
+         -> Result<Vec<ReservedDBInstancesOffering>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -13768,7 +13702,7 @@ pub struct ReservedDBInstancesOfferingMessage {
     #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     pub marker: Option<String>,
     #[doc="<p>A list of reserved DB instance offerings.</p>"]
-    pub reserved_db_instances_offerings: Option<ReservedDBInstancesOfferingList>,
+    pub reserved_db_instances_offerings: Option<Vec<ReservedDBInstancesOffering>>,
 }
 
 struct ReservedDBInstancesOfferingMessageDeserializer;
@@ -13823,9 +13757,9 @@ pub struct ResetDBClusterParameterGroupMessage {
     #[doc="<p>The name of the DB cluster parameter group to reset.</p>"]
     pub db_cluster_parameter_group_name: String,
     #[doc="<p>A list of parameter names in the DB cluster parameter group to reset to the default values. You cannot use this parameter if the <code>ResetAllParameters</code> parameter is set to <code>true</code>.</p>"]
-    pub parameters: Option<ParametersList>,
+    pub parameters: Option<Vec<Parameter>>,
     #[doc="<p>A value that is set to <code>true</code> to reset all parameters in the DB cluster parameter group to their default values, and <code>false</code> otherwise. You cannot use this parameter if there is a list of parameter names specified for the <code>Parameters</code> parameter.</p>"]
-    pub reset_all_parameters: Option<Boolean>,
+    pub reset_all_parameters: Option<bool>,
 }
 
 
@@ -13859,9 +13793,9 @@ pub struct ResetDBParameterGroupMessage {
     #[doc="<p>The name of the DB parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul>"]
     pub db_parameter_group_name: String,
     #[doc="<p>To reset the entire DB parameter group, specify the <code>DBParameterGroup</code> name and <code>ResetAllParameters</code> parameters. To reset specific parameters, provide a list of the following: <code>ParameterName</code> and <code>ApplyMethod</code>. A maximum of 20 parameters can be modified in a single request.</p> <p> <b>MySQL</b> </p> <p>Valid Values (for Apply method): <code>immediate</code> | <code>pending-reboot</code> </p> <p>You can use the immediate value with dynamic parameters only. You can use the <code>pending-reboot</code> value for both dynamic and static parameters, and changes are applied when DB instance reboots.</p> <p> <b>MariaDB</b> </p> <p>Valid Values (for Apply method): <code>immediate</code> | <code>pending-reboot</code> </p> <p>You can use the immediate value with dynamic parameters only. You can use the <code>pending-reboot</code> value for both dynamic and static parameters, and changes are applied when DB instance reboots.</p> <p> <b>Oracle</b> </p> <p>Valid Values (for Apply method): <code>pending-reboot</code> </p>"]
-    pub parameters: Option<ParametersList>,
+    pub parameters: Option<Vec<Parameter>>,
     #[doc="<p> Specifies whether (<code>true</code>) or not (<code>false</code>) to reset all parameters in the DB parameter group to default values. </p> <p>Default: <code>true</code> </p>"]
-    pub reset_all_parameters: Option<Boolean>,
+    pub reset_all_parameters: Option<bool>,
 }
 
 
@@ -13893,7 +13827,7 @@ impl ResetDBParameterGroupMessageSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ResourcePendingMaintenanceActions {
     #[doc="<p>A list that provides details about the pending maintenance actions for the resource.</p>"]
-    pub pending_maintenance_action_details: Option<PendingMaintenanceActionDetails>,
+    pub pending_maintenance_action_details: Option<Vec<PendingMaintenanceAction>>,
     #[doc="<p>The ARN of the resource that has pending maintenance actions.</p>"]
     pub resource_identifier: Option<String>,
 }
@@ -13948,9 +13882,9 @@ impl ResourcePendingMaintenanceActionsDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct RestoreDBClusterFromS3Message {
     #[doc="<p>A list of EC2 Availability Zones that instances in the restored DB cluster can be created in.</p>"]
-    pub availability_zones: Option<AvailabilityZones>,
+    pub availability_zones: Option<Vec<String>>,
     #[doc="<p>The number of days for which automated backups of the restored DB cluster are retained. You must specify a minimum value of 1.</p> <p>Default: 1</p> <p>Constraints:</p> <ul> <li> <p>Must be a value from 1 to 35</p> </li> </ul>"]
-    pub backup_retention_period: Option<IntegerOptional>,
+    pub backup_retention_period: Option<i64>,
     #[doc="<p>A value that indicates that the restored DB cluster should be associated with the specified CharacterSet.</p>"]
     pub character_set_name: Option<String>,
     #[doc="<p>The name of the DB cluster to create from the source data in the S3 bucket. This parameter is isn't case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <p>Example: <code>my-cluster1</code> </p>"]
@@ -13962,7 +13896,7 @@ pub struct RestoreDBClusterFromS3Message {
     #[doc="<p>The database name for the restored DB cluster.</p>"]
     pub database_name: Option<String>,
     #[doc="<p>A Boolean value that is true to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts, and otherwise false.</p> <p>Default: <code>false</code> </p>"]
-    pub enable_iam_database_authentication: Option<BooleanOptional>,
+    pub enable_iam_database_authentication: Option<bool>,
     #[doc="<p>The name of the database engine to be used for the restored DB cluster.</p> <p>Valid Values: <code>aurora</code> </p>"]
     pub engine: String,
     #[doc="<p>The version number of the database engine to use.</p> <p> <b>Aurora</b> </p> <p>Example: <code>5.6.10a</code> </p>"]
@@ -13976,7 +13910,7 @@ pub struct RestoreDBClusterFromS3Message {
     #[doc="<p>A value that indicates that the restored DB cluster should be associated with the specified option group.</p> <p>Permanent options cannot be removed from an option group. An option group cannot be removed from a DB cluster once it is associated with a DB cluster.</p>"]
     pub option_group_name: Option<String>,
     #[doc="<p>The port number on which the instances in the restored DB cluster accept connections.</p> <p> Default: <code>3306</code> </p>"]
-    pub port: Option<IntegerOptional>,
+    pub port: Option<i64>,
     #[doc="<p>The daily time range during which automated backups are created if automated backups are enabled using the <code>BackupRetentionPeriod</code> parameter. </p> <p>Default: A 30-minute window selected at random from an 8-hour block of time per region. To see the time blocks available, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/AdjustingTheMaintenanceWindow.html\"> Adjusting the Preferred Maintenance Window</a> in the <i>Amazon RDS User Guide.</i> </p> <p>Constraints:</p> <ul> <li> <p>Must be in the format <code>hh24:mi-hh24:mi</code>.</p> </li> <li> <p>Times should be in Universal Coordinated Time (UTC).</p> </li> <li> <p>Must not conflict with the preferred maintenance window.</p> </li> <li> <p>Must be at least 30 minutes.</p> </li> </ul>"]
     pub preferred_backup_window: Option<String>,
     #[doc="<p>The weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).</p> <p> Format: <code>ddd:hh24:mi-ddd:hh24:mi</code> </p> <p>Default: A 30-minute window selected at random from an 8-hour block of time per region, occurring on a random day of the week. To see the time blocks available, see <a href=\"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/AdjustingTheMaintenanceWindow.html\"> Adjusting the Preferred Maintenance Window</a> in the <i>Amazon RDS User Guide.</i> </p> <p>Valid Days: Mon, Tue, Wed, Thu, Fri, Sat, Sun</p> <p>Constraints: Minimum 30-minute window.</p>"]
@@ -13992,10 +13926,10 @@ pub struct RestoreDBClusterFromS3Message {
     #[doc="<p>The version of the database that the backup files were created from.</p> <p>MySQL version 5.5 and 5.6 are supported. </p> <p>Example: <code>5.6.22</code> </p>"]
     pub source_engine_version: String,
     #[doc="<p>Specifies whether the restored DB cluster is encrypted.</p>"]
-    pub storage_encrypted: Option<BooleanOptional>,
-    pub tags: Option<TagList>,
+    pub storage_encrypted: Option<bool>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>A list of EC2 VPC security groups to associate with the restored DB cluster.</p>"]
-    pub vpc_security_group_ids: Option<VpcSecurityGroupIdList>,
+    pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
 
@@ -14140,7 +14074,7 @@ impl RestoreDBClusterFromS3ResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct RestoreDBClusterFromSnapshotMessage {
     #[doc="<p>Provides the list of EC2 Availability Zones that instances in the restored DB cluster can be created in.</p>"]
-    pub availability_zones: Option<AvailabilityZones>,
+    pub availability_zones: Option<Vec<String>>,
     #[doc="<p>The name of the DB cluster to create from the DB cluster snapshot. This parameter isn't case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul> <p>Example: <code>my-snapshot-id</code> </p>"]
     pub db_cluster_identifier: String,
     #[doc="<p>The name of the DB subnet group to use for the new DB cluster.</p> <p>Constraints: Must contain no more than 255 alphanumeric characters, periods, underscores, spaces, or hyphens. Must not be default.</p> <p>Example: <code>mySubnetgroup</code> </p>"]
@@ -14148,7 +14082,7 @@ pub struct RestoreDBClusterFromSnapshotMessage {
     #[doc="<p>The database name for the restored DB cluster.</p>"]
     pub database_name: Option<String>,
     #[doc="<p>A Boolean value that is true to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts, and otherwise false.</p> <p>Default: <code>false</code> </p>"]
-    pub enable_iam_database_authentication: Option<BooleanOptional>,
+    pub enable_iam_database_authentication: Option<bool>,
     #[doc="<p>The database engine to use for the new DB cluster.</p> <p>Default: The same as source</p> <p>Constraint: Must be compatible with the engine of the source</p>"]
     pub engine: String,
     #[doc="<p>The version of the database engine to use for the new DB cluster.</p>"]
@@ -14158,13 +14092,13 @@ pub struct RestoreDBClusterFromSnapshotMessage {
     #[doc="<p>The name of the option group to use for the restored DB cluster.</p>"]
     pub option_group_name: Option<String>,
     #[doc="<p>The port number on which the new DB cluster accepts connections.</p> <p>Constraints: Value must be <code>1150-65535</code> </p> <p>Default: The same port as the original DB cluster.</p>"]
-    pub port: Option<IntegerOptional>,
+    pub port: Option<i64>,
     #[doc="<p>The identifier for the DB cluster snapshot to restore from.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul>"]
     pub snapshot_identifier: String,
     #[doc="<p>The tags to be assigned to the restored DB cluster.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>A list of VPC security groups that the new DB cluster will belong to.</p>"]
-    pub vpc_security_group_ids: Option<VpcSecurityGroupIdList>,
+    pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
 
@@ -14279,24 +14213,24 @@ pub struct RestoreDBClusterToPointInTimeMessage {
     #[doc="<p>The DB subnet group name to use for the new DB cluster.</p> <p>Constraints: Must contain no more than 255 alphanumeric characters, periods, underscores, spaces, or hyphens. Must not be default.</p> <p>Example: <code>mySubnetgroup</code> </p>"]
     pub db_subnet_group_name: Option<String>,
     #[doc="<p>A Boolean value that is true to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts, and otherwise false.</p> <p>Default: <code>false</code> </p>"]
-    pub enable_iam_database_authentication: Option<BooleanOptional>,
+    pub enable_iam_database_authentication: Option<bool>,
     #[doc="<p>The KMS key identifier to use when restoring an encrypted DB cluster from an encrypted DB cluster.</p> <p>The KMS key identifier is the Amazon Resource Name (ARN) for the KMS encryption key. If you are restoring a DB cluster with the same AWS account that owns the KMS encryption key used to encrypt the new DB cluster, then you can use the KMS key alias instead of the ARN for the KMS encryption key.</p> <p>You can restore to a new DB cluster and encrypt the new DB cluster with a KMS key that is different than the KMS key used to encrypt the source DB cluster. The new DB cluster will be encrypted with the KMS key identified by the <code>KmsKeyId</code> parameter.</p> <p>If you do not specify a value for the <code>KmsKeyId</code> parameter, then the following will occur:</p> <ul> <li> <p>If the DB cluster is encrypted, then the restored DB cluster is encrypted using the KMS key that was used to encrypt the source DB cluster.</p> </li> <li> <p>If the DB cluster is not encrypted, then the restored DB cluster is not encrypted.</p> </li> </ul> <p>If <code>DBClusterIdentifier</code> refers to a DB cluster that is not encrypted, then the restore request is rejected.</p>"]
     pub kms_key_id: Option<String>,
     #[doc="<p>The name of the option group for the new DB cluster.</p>"]
     pub option_group_name: Option<String>,
     #[doc="<p>The port number on which the new DB cluster accepts connections.</p> <p>Constraints: Value must be <code>1150-65535</code> </p> <p>Default: The same port as the original DB cluster.</p>"]
-    pub port: Option<IntegerOptional>,
+    pub port: Option<i64>,
     #[doc="<p>The date and time to restore the DB cluster to.</p> <p>Valid Values: Value must be a time in Universal Coordinated Time (UTC) format</p> <p>Constraints:</p> <ul> <li> <p>Must be before the latest restorable time for the DB instance</p> </li> <li> <p>Must be specified if <code>UseLatestRestorableTime</code> parameter is not provided</p> </li> <li> <p>Cannot be specified if <code>UseLatestRestorableTime</code> parameter is true</p> </li> <li> <p>Cannot be specified if <code>RestoreType</code> parameter is <code>copy-on-write</code> </p> </li> </ul> <p>Example: <code>2015-03-07T23:45:00Z</code> </p>"]
-    pub restore_to_time: Option<TStamp>,
+    pub restore_to_time: Option<String>,
     #[doc="<p>The type of restore to be performed. You can specify one of the following values:</p> <ul> <li> <p> <code>full-copy</code> - The new DB cluster is restored as a full copy of the source DB cluster.</p> </li> <li> <p> <code>copy-on-write</code> - The new DB cluster is restored as a clone of the source DB cluster.</p> </li> </ul> <p>Constraints: You cannot specify <code>copy-on-write</code> if the engine version of the source DB cluster is earlier than 1.11.</p> <p>If you don't specify a <code>RestoreType</code> value, then the new DB cluster is restored as a full copy of the source DB cluster.</p>"]
     pub restore_type: Option<String>,
     #[doc="<p>The identifier of the source DB cluster from which to restore.</p> <p>Constraints:</p> <ul> <li> <p>Must be the identifier of an existing database instance</p> </li> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul>"]
     pub source_db_cluster_identifier: String,
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>A value that is set to <code>true</code> to restore the DB cluster to the latest restorable backup time, and <code>false</code> otherwise. </p> <p>Default: <code>false</code> </p> <p>Constraints: Cannot be specified if <code>RestoreToTime</code> parameter is provided.</p>"]
-    pub use_latest_restorable_time: Option<Boolean>,
+    pub use_latest_restorable_time: Option<bool>,
     #[doc="<p>A list of VPC security groups that the new DB cluster belongs to.</p>"]
-    pub vpc_security_group_ids: Option<VpcSecurityGroupIdList>,
+    pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
 
@@ -14405,11 +14339,11 @@ impl RestoreDBClusterToPointInTimeResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct RestoreDBInstanceFromDBSnapshotMessage {
     #[doc="<p>Indicates that minor version upgrades will be applied automatically to the DB instance during the maintenance window.</p>"]
-    pub auto_minor_version_upgrade: Option<BooleanOptional>,
+    pub auto_minor_version_upgrade: Option<bool>,
     #[doc="<p>The EC2 Availability Zone that the database instance will be created in.</p> <p>Default: A random, system-chosen Availability Zone.</p> <p>Constraint: You cannot specify the AvailabilityZone parameter if the MultiAZ parameter is set to <code>true</code>.</p> <p>Example: <code>us-east-1a</code> </p>"]
     pub availability_zone: Option<String>,
     #[doc="<p>True to copy all tags from the restored DB instance to snapshots of the DB instance; otherwise false. The default is false.</p>"]
-    pub copy_tags_to_snapshot: Option<BooleanOptional>,
+    pub copy_tags_to_snapshot: Option<bool>,
     #[doc="<p>The compute and memory capacity of the Amazon RDS DB instance.</p> <p>Valid Values: <code>db.t1.micro | db.m1.small | db.m1.medium | db.m1.large | db.m1.xlarge | db.m2.2xlarge | db.m2.4xlarge | db.m3.medium | db.m3.large | db.m3.xlarge | db.m3.2xlarge | db.m4.large | db.m4.xlarge | db.m4.2xlarge | db.m4.4xlarge | db.m4.10xlarge | db.r3.large | db.r3.xlarge | db.r3.2xlarge | db.r3.4xlarge | db.r3.8xlarge | db.t2.micro | db.t2.small | db.t2.medium | db.t2.large</code> </p>"]
     pub db_instance_class: Option<String>,
     #[doc="<p>Name of the DB instance to create from the DB snapshot. This parameter isn't case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens (1 to 15 for SQL Server)</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul> <p>Example: <code>my-snapshot-id</code> </p>"]
@@ -14425,24 +14359,24 @@ pub struct RestoreDBInstanceFromDBSnapshotMessage {
     #[doc="<p>Specify the name of the IAM role to be used when making API calls to the Directory Service.</p>"]
     pub domain_iam_role_name: Option<String>,
     #[doc="<p>True to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts; otherwise false.</p> <p>You can enable IAM database authentication for the following database engines</p> <ul> <li> <p>For MySQL 5.6, minor version 5.6.34 or higher</p> </li> <li> <p>For MySQL 5.7, minor version 5.7.16 or higher</p> </li> <li> <p>Aurora 5.6 or higher.</p> </li> </ul> <p>Default: <code>false</code> </p>"]
-    pub enable_iam_database_authentication: Option<BooleanOptional>,
+    pub enable_iam_database_authentication: Option<bool>,
     #[doc="<p>The database engine to use for the new instance.</p> <p>Default: The same as source</p> <p>Constraint: Must be compatible with the engine of the source. You can restore a MariaDB 10.1 DB instance from a MySQL 5.6 snapshot.</p> <p> Valid Values: <code>MySQL</code> | <code>mariadb</code> | <code>oracle-se1</code> | <code>oracle-se</code> | <code>oracle-ee</code> | <code>sqlserver-ee</code> | <code>sqlserver-se</code> | <code>sqlserver-ex</code> | <code>sqlserver-web</code> | <code>postgres</code> | <code>aurora</code> </p>"]
     pub engine: Option<String>,
     #[doc="<p>Specifies the amount of provisioned IOPS for the DB instance, expressed in I/O operations per second. If this parameter is not specified, the IOPS value will be taken from the backup. If this parameter is set to 0, the new instance will be converted to a non-PIOPS instance, which will take additional time, though your DB instance will be available for connections before the conversion starts.</p> <p>Constraints: Must be an integer greater than 1000.</p> <p> <b>SQL Server</b> </p> <p>Setting the IOPS value for the SQL Server database engine is not supported.</p>"]
-    pub iops: Option<IntegerOptional>,
+    pub iops: Option<i64>,
     #[doc="<p>License model information for the restored DB instance.</p> <p>Default: Same as source.</p> <p> Valid values: <code>license-included</code> | <code>bring-your-own-license</code> | <code>general-public-license</code> </p>"]
     pub license_model: Option<String>,
     #[doc="<p>Specifies if the DB instance is a Multi-AZ deployment.</p> <p>Constraint: You cannot specify the AvailabilityZone parameter if the MultiAZ parameter is set to <code>true</code>.</p>"]
-    pub multi_az: Option<BooleanOptional>,
+    pub multi_az: Option<bool>,
     #[doc="<p>The name of the option group to be used for the restored DB instance.</p> <p>Permanent options, such as the TDE option for Oracle Advanced Security TDE, cannot be removed from an option group, and that option group cannot be removed from a DB instance once it is associated with a DB instance</p>"]
     pub option_group_name: Option<String>,
     #[doc="<p>The port number on which the database accepts connections.</p> <p>Default: The same port as the original DB instance</p> <p>Constraints: Value must be <code>1150-65535</code> </p>"]
-    pub port: Option<IntegerOptional>,
+    pub port: Option<i64>,
     #[doc="<p>Specifies the accessibility options for the DB instance. A value of true specifies an Internet-facing instance with a publicly resolvable DNS name, which resolves to a public IP address. A value of false specifies an internal instance with a DNS name that resolves to a private IP address.</p> <p>Default: The default behavior varies depending on whether a VPC has been requested or not. The following list shows the default behavior in each case.</p> <ul> <li> <p> <b>Default VPC:</b> true</p> </li> <li> <p> <b>VPC:</b> false</p> </li> </ul> <p>If no DB subnet group has been specified as part of the request and the PubliclyAccessible value has not been set, the DB instance will be publicly accessible. If a specific DB subnet group has been specified as part of the request and the PubliclyAccessible value has not been set, the DB instance will be private.</p>"]
-    pub publicly_accessible: Option<BooleanOptional>,
+    pub publicly_accessible: Option<bool>,
     #[doc="<p>Specifies the storage type to be associated with the DB instance.</p> <p> Valid values: <code>standard | gp2 | io1</code> </p> <p> If you specify <code>io1</code>, you must also include a value for the <code>Iops</code> parameter. </p> <p> Default: <code>io1</code> if the <code>Iops</code> parameter is specified; otherwise <code>standard</code> </p>"]
     pub storage_type: Option<String>,
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>The ARN from the Key Store with which to associate the instance for TDE encryption.</p>"]
     pub tde_credential_arn: Option<String>,
     #[doc="<p>The password for the given ARN from the Key Store in order to access the device.</p>"]
@@ -14586,11 +14520,11 @@ impl RestoreDBInstanceFromDBSnapshotResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct RestoreDBInstanceToPointInTimeMessage {
     #[doc="<p>Indicates that minor version upgrades will be applied automatically to the DB instance during the maintenance window.</p>"]
-    pub auto_minor_version_upgrade: Option<BooleanOptional>,
+    pub auto_minor_version_upgrade: Option<bool>,
     #[doc="<p>The EC2 Availability Zone that the database instance will be created in.</p> <p>Default: A random, system-chosen Availability Zone.</p> <p>Constraint: You cannot specify the AvailabilityZone parameter if the MultiAZ parameter is set to true.</p> <p>Example: <code>us-east-1a</code> </p>"]
     pub availability_zone: Option<String>,
     #[doc="<p>True to copy all tags from the restored DB instance to snapshots of the DB instance; otherwise false. The default is false.</p>"]
-    pub copy_tags_to_snapshot: Option<BooleanOptional>,
+    pub copy_tags_to_snapshot: Option<bool>,
     #[doc="<p>The compute and memory capacity of the Amazon RDS DB instance.</p> <p>Valid Values: <code>db.t1.micro | db.m1.small | db.m1.medium | db.m1.large | db.m1.xlarge | db.m2.2xlarge | db.m2.4xlarge | db.m3.medium | db.m3.large | db.m3.xlarge | db.m3.2xlarge | db.m4.large | db.m4.xlarge | db.m4.2xlarge | db.m4.4xlarge | db.m4.10xlarge | db.r3.large | db.r3.xlarge | db.r3.2xlarge | db.r3.4xlarge | db.r3.8xlarge | db.t2.micro | db.t2.small | db.t2.medium | db.t2.large</code> </p> <p>Default: The same DBInstanceClass as the original DB instance.</p>"]
     pub db_instance_class: Option<String>,
     #[doc="<p>The database name for the restored DB instance.</p> <note> <p>This parameter is not used for the MySQL or MariaDB engines.</p> </note>"]
@@ -14602,28 +14536,28 @@ pub struct RestoreDBInstanceToPointInTimeMessage {
     #[doc="<p>Specify the name of the IAM role to be used when making API calls to the Directory Service.</p>"]
     pub domain_iam_role_name: Option<String>,
     #[doc="<p>True to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts; otherwise false.</p> <p> You can enable IAM database authentication for the following database engines</p> <ul> <li> <p>For MySQL 5.6, minor version 5.6.34 or higher</p> </li> <li> <p>For MySQL 5.7, minor version 5.7.16 or higher</p> </li> <li> <p>Aurora 5.6 or higher.</p> </li> </ul> <p>Default: <code>false</code> </p>"]
-    pub enable_iam_database_authentication: Option<BooleanOptional>,
+    pub enable_iam_database_authentication: Option<bool>,
     #[doc="<p>The database engine to use for the new instance.</p> <p>Default: The same as source</p> <p>Constraint: Must be compatible with the engine of the source</p> <p> Valid Values: <code>MySQL</code> | <code>mariadb</code> | <code>oracle-se1</code> | <code>oracle-se</code> | <code>oracle-ee</code> | <code>sqlserver-ee</code> | <code>sqlserver-se</code> | <code>sqlserver-ex</code> | <code>sqlserver-web</code> | <code>postgres</code> | <code>aurora</code> </p>"]
     pub engine: Option<String>,
     #[doc="<p>The amount of Provisioned IOPS (input/output operations per second) to be initially allocated for the DB instance.</p> <p>Constraints: Must be an integer greater than 1000.</p> <p> <b>SQL Server</b> </p> <p>Setting the IOPS value for the SQL Server database engine is not supported.</p>"]
-    pub iops: Option<IntegerOptional>,
+    pub iops: Option<i64>,
     #[doc="<p>License model information for the restored DB instance.</p> <p>Default: Same as source.</p> <p> Valid values: <code>license-included</code> | <code>bring-your-own-license</code> | <code>general-public-license</code> </p>"]
     pub license_model: Option<String>,
     #[doc="<p>Specifies if the DB instance is a Multi-AZ deployment.</p> <p>Constraint: You cannot specify the AvailabilityZone parameter if the MultiAZ parameter is set to <code>true</code>.</p>"]
-    pub multi_az: Option<BooleanOptional>,
+    pub multi_az: Option<bool>,
     #[doc="<p>The name of the option group to be used for the restored DB instance.</p> <p>Permanent options, such as the TDE option for Oracle Advanced Security TDE, cannot be removed from an option group, and that option group cannot be removed from a DB instance once it is associated with a DB instance</p>"]
     pub option_group_name: Option<String>,
     #[doc="<p>The port number on which the database accepts connections.</p> <p>Constraints: Value must be <code>1150-65535</code> </p> <p>Default: The same port as the original DB instance.</p>"]
-    pub port: Option<IntegerOptional>,
+    pub port: Option<i64>,
     #[doc="<p>Specifies the accessibility options for the DB instance. A value of true specifies an Internet-facing instance with a publicly resolvable DNS name, which resolves to a public IP address. A value of false specifies an internal instance with a DNS name that resolves to a private IP address.</p> <p>Default: The default behavior varies depending on whether a VPC has been requested or not. The following list shows the default behavior in each case.</p> <ul> <li> <p> <b>Default VPC:</b>true</p> </li> <li> <p> <b>VPC:</b>false</p> </li> </ul> <p>If no DB subnet group has been specified as part of the request and the PubliclyAccessible value has not been set, the DB instance will be publicly accessible. If a specific DB subnet group has been specified as part of the request and the PubliclyAccessible value has not been set, the DB instance will be private.</p>"]
-    pub publicly_accessible: Option<BooleanOptional>,
+    pub publicly_accessible: Option<bool>,
     #[doc="<p>The date and time to restore from.</p> <p>Valid Values: Value must be a time in Universal Coordinated Time (UTC) format</p> <p>Constraints:</p> <ul> <li> <p>Must be before the latest restorable time for the DB instance</p> </li> <li> <p>Cannot be specified if UseLatestRestorableTime parameter is true</p> </li> </ul> <p>Example: <code>2009-09-07T23:45:00Z</code> </p>"]
-    pub restore_time: Option<TStamp>,
+    pub restore_time: Option<String>,
     #[doc="<p>The identifier of the source DB instance from which to restore.</p> <p>Constraints:</p> <ul> <li> <p>Must be the identifier of an existing database instance</p> </li> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul>"]
     pub source_db_instance_identifier: String,
     #[doc="<p>Specifies the storage type to be associated with the DB instance.</p> <p> Valid values: <code>standard | gp2 | io1</code> </p> <p> If you specify <code>io1</code>, you must also include a value for the <code>Iops</code> parameter. </p> <p> Default: <code>io1</code> if the <code>Iops</code> parameter is specified; otherwise <code>standard</code> </p>"]
     pub storage_type: Option<String>,
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>The name of the new database instance to be created.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul>"]
     pub target_db_instance_identifier: String,
     #[doc="<p>The ARN from the Key Store with which to associate the instance for TDE encryption.</p>"]
@@ -14631,7 +14565,7 @@ pub struct RestoreDBInstanceToPointInTimeMessage {
     #[doc="<p>The password for the given ARN from the Key Store in order to access the device.</p>"]
     pub tde_credential_password: Option<String>,
     #[doc="<p> Specifies whether (<code>true</code>) or not (<code>false</code>) the DB instance is restored from the latest backup time. </p> <p>Default: <code>false</code> </p> <p>Constraints: Cannot be specified if RestoreTime parameter is provided.</p>"]
-    pub use_latest_restorable_time: Option<Boolean>,
+    pub use_latest_restorable_time: Option<bool>,
 }
 
 
@@ -14868,13 +14802,12 @@ impl RevokeDBSecurityGroupIngressResultDeserializer {
 
     }
 }
-pub type SourceIdsList = Vec<String>;
 struct SourceIdsListDeserializer;
 impl SourceIdsListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SourceIdsList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -14914,7 +14847,7 @@ impl SourceIdsListDeserializer {
 /// Serialize `SourceIdsList` contents to a `SignedRequest`.
 struct SourceIdsListSerializer;
 impl SourceIdsListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SourceIdsList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -14983,13 +14916,12 @@ impl SourceRegionDeserializer {
 
     }
 }
-pub type SourceRegionList = Vec<SourceRegion>;
 struct SourceRegionListDeserializer;
 impl SourceRegionListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SourceRegionList, XmlParseError> {
+                                       -> Result<Vec<SourceRegion>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -15032,7 +14964,7 @@ pub struct SourceRegionMessage {
     #[doc="<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>"]
     pub marker: Option<String>,
     #[doc="<p>A list of SourceRegion instances that contains each source AWS Region that the current region can get a Read Replica or a DB snapshot from.</p>"]
-    pub source_regions: Option<SourceRegionList>,
+    pub source_regions: Option<Vec<SourceRegion>>,
 }
 
 struct SourceRegionMessageDeserializer;
@@ -15082,13 +15014,12 @@ impl SourceRegionMessageDeserializer {
 
     }
 }
-pub type SourceType = String;
 struct SourceTypeDeserializer;
 impl SourceTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SourceType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -15319,12 +15250,11 @@ impl SubnetDeserializer {
 
     }
 }
-pub type SubnetIdentifierList = Vec<String>;
 
 /// Serialize `SubnetIdentifierList` contents to a `SignedRequest`.
 struct SubnetIdentifierListSerializer;
 impl SubnetIdentifierListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SubnetIdentifierList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -15332,13 +15262,12 @@ impl SubnetIdentifierListSerializer {
     }
 }
 
-pub type SubnetList = Vec<Subnet>;
 struct SubnetListDeserializer;
 impl SubnetListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SubnetList, XmlParseError> {
+                                       -> Result<Vec<Subnet>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -15374,13 +15303,12 @@ impl SubnetListDeserializer {
 
     }
 }
-pub type SupportedCharacterSetsList = Vec<CharacterSet>;
 struct SupportedCharacterSetsListDeserializer;
 impl SupportedCharacterSetsListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SupportedCharacterSetsList, XmlParseError> {
+                                       -> Result<Vec<CharacterSet>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -15417,13 +15345,12 @@ impl SupportedCharacterSetsListDeserializer {
 
     }
 }
-pub type SupportedTimezonesList = Vec<Timezone>;
 struct SupportedTimezonesListDeserializer;
 impl SupportedTimezonesListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SupportedTimezonesList, XmlParseError> {
+                                       -> Result<Vec<Timezone>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -15459,13 +15386,12 @@ impl SupportedTimezonesListDeserializer {
 
     }
 }
-pub type TStamp = String;
 struct TStampDeserializer;
 impl TStampDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TStamp, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -15547,14 +15473,12 @@ impl TagSerializer {
     }
 }
 
-#[doc="<p>A list of tags.</p>"]
-pub type TagList = Vec<Tag>;
 struct TagListDeserializer;
 impl TagListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TagList, XmlParseError> {
+                                       -> Result<Vec<Tag>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -15594,7 +15518,7 @@ impl TagListDeserializer {
 /// Serialize `TagList` contents to a `SignedRequest`.
 struct TagListSerializer;
 impl TagListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &TagList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<Tag>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             TagSerializer::serialize(params, &key, obj);
@@ -15606,7 +15530,7 @@ impl TagListSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct TagListMessage {
     #[doc="<p>List of tags returned by the ListTagsForResource operation.</p>"]
-    pub tag_list: Option<TagList>,
+    pub tag_list: Option<Vec<Tag>>,
 }
 
 struct TagListMessageDeserializer;
@@ -15704,7 +15628,7 @@ impl TimezoneDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct UpgradeTarget {
     #[doc="<p>A value that indicates whether the target version will be applied to any source DB instances that have AutoMinorVersionUpgrade set to true.</p>"]
-    pub auto_upgrade: Option<Boolean>,
+    pub auto_upgrade: Option<bool>,
     #[doc="<p>The version of the database engine that a DB instance can be upgraded to.</p>"]
     pub description: Option<String>,
     #[doc="<p>The name of the upgrade target database engine.</p>"]
@@ -15712,7 +15636,7 @@ pub struct UpgradeTarget {
     #[doc="<p>The version number of the upgrade target database engine.</p>"]
     pub engine_version: Option<String>,
     #[doc="<p>A value that indicates whether a database engine will be upgraded to a major version.</p>"]
-    pub is_major_version_upgrade: Option<Boolean>,
+    pub is_major_version_upgrade: Option<bool>,
 }
 
 struct UpgradeTargetDeserializer;
@@ -15774,13 +15698,12 @@ impl UpgradeTargetDeserializer {
 
     }
 }
-pub type ValidUpgradeTargetList = Vec<UpgradeTarget>;
 struct ValidUpgradeTargetListDeserializer;
 impl ValidUpgradeTargetListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ValidUpgradeTargetList, XmlParseError> {
+                                       -> Result<Vec<UpgradeTarget>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -15817,12 +15740,11 @@ impl ValidUpgradeTargetListDeserializer {
 
     }
 }
-pub type VpcSecurityGroupIdList = Vec<String>;
 
 /// Serialize `VpcSecurityGroupIdList` contents to a `SignedRequest`.
 struct VpcSecurityGroupIdListSerializer;
 impl VpcSecurityGroupIdListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &VpcSecurityGroupIdList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -15886,13 +15808,13 @@ impl VpcSecurityGroupMembershipDeserializer {
 
     }
 }
-pub type VpcSecurityGroupMembershipList = Vec<VpcSecurityGroupMembership>;
 struct VpcSecurityGroupMembershipListDeserializer;
 impl VpcSecurityGroupMembershipListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<VpcSecurityGroupMembershipList, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<Vec<VpcSecurityGroupMembership>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));

@@ -26,38 +26,35 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-pub type Arn = String;
 #[doc="<p>An object representing authorization data for an Amazon ECR registry.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct AuthorizationData {
     #[doc="<p>A base64-encoded string that contains authorization data for the specified Amazon ECR registry. When the string is decoded, it is presented in the format <code>user:password</code> for private registry authentication using <code>docker login</code>.</p>"]
     #[serde(rename="authorizationToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub authorization_token: Option<Base64>,
+    pub authorization_token: Option<String>,
     #[doc="<p>The Unix time in seconds and milliseconds when the authorization token expires. Authorization tokens are valid for 12 hours.</p>"]
     #[serde(rename="expiresAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub expires_at: Option<ExpirationTimestamp>,
+    pub expires_at: Option<f64>,
     #[doc="<p>The registry URL to use for this authorization token in a <code>docker login</code> command. The Amazon ECR registry URL format is <code>https://aws_account_id.dkr.ecr.region.amazonaws.com</code>. For example, <code>https://012345678910.dkr.ecr.us-east-1.amazonaws.com</code>.. </p>"]
     #[serde(rename="proxyEndpoint")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub proxy_endpoint: Option<ProxyEndpoint>,
+    pub proxy_endpoint: Option<String>,
 }
 
-pub type AuthorizationDataList = Vec<AuthorizationData>;
-pub type Base64 = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct BatchCheckLayerAvailabilityRequest {
     #[doc="<p>The digests of the image layers to check.</p>"]
     #[serde(rename="layerDigests")]
-    pub layer_digests: BatchedOperationLayerDigestList,
+    pub layer_digests: Vec<String>,
     #[doc="<p>The AWS account ID associated with the registry that contains the image layers to check. If you do not specify a registry, the default registry is assumed.</p>"]
     #[serde(rename="registryId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub registry_id: Option<RegistryId>,
+    pub registry_id: Option<String>,
     #[doc="<p>The name of the repository that is associated with the image layers to check.</p>"]
     #[serde(rename="repositoryName")]
-    pub repository_name: RepositoryName,
+    pub repository_name: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -65,11 +62,11 @@ pub struct BatchCheckLayerAvailabilityResponse {
     #[doc="<p>Any failures associated with the call.</p>"]
     #[serde(rename="failures")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub failures: Option<LayerFailureList>,
+    pub failures: Option<Vec<LayerFailure>>,
     #[doc="<p>A list of image layer objects corresponding to the image layer references in the request.</p>"]
     #[serde(rename="layers")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub layers: Option<LayerList>,
+    pub layers: Option<Vec<Layer>>,
 }
 
 #[doc="<p>Deletes specified images within a specified repository. Images are specified with either the <code>imageTag</code> or <code>imageDigest</code>.</p>"]
@@ -77,14 +74,14 @@ pub struct BatchCheckLayerAvailabilityResponse {
 pub struct BatchDeleteImageRequest {
     #[doc="<p>A list of image ID references that correspond to images to delete. The format of the <code>imageIds</code> reference is <code>imageTag=tag</code> or <code>imageDigest=digest</code>.</p>"]
     #[serde(rename="imageIds")]
-    pub image_ids: ImageIdentifierList,
+    pub image_ids: Vec<ImageIdentifier>,
     #[doc="<p>The AWS account ID associated with the registry that contains the image to delete. If you do not specify a registry, the default registry is assumed.</p>"]
     #[serde(rename="registryId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub registry_id: Option<RegistryId>,
+    pub registry_id: Option<String>,
     #[doc="<p>The repository that contains the image to delete.</p>"]
     #[serde(rename="repositoryName")]
-    pub repository_name: RepositoryName,
+    pub repository_name: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -92,11 +89,11 @@ pub struct BatchDeleteImageResponse {
     #[doc="<p>Any failures associated with the call.</p>"]
     #[serde(rename="failures")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub failures: Option<ImageFailureList>,
+    pub failures: Option<Vec<ImageFailure>>,
     #[doc="<p>The image IDs of the deleted images.</p>"]
     #[serde(rename="imageIds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub image_ids: Option<ImageIdentifierList>,
+    pub image_ids: Option<Vec<ImageIdentifier>>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -104,17 +101,17 @@ pub struct BatchGetImageRequest {
     #[doc="<p>The accepted media types for the request.</p> <p>Valid values: <code>application/vnd.docker.distribution.manifest.v1+json</code> | <code>application/vnd.docker.distribution.manifest.v2+json</code> | <code>application/vnd.oci.image.manifest.v1+json</code> </p>"]
     #[serde(rename="acceptedMediaTypes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub accepted_media_types: Option<MediaTypeList>,
+    pub accepted_media_types: Option<Vec<String>>,
     #[doc="<p>A list of image ID references that correspond to images to describe. The format of the <code>imageIds</code> reference is <code>imageTag=tag</code> or <code>imageDigest=digest</code>.</p>"]
     #[serde(rename="imageIds")]
-    pub image_ids: ImageIdentifierList,
+    pub image_ids: Vec<ImageIdentifier>,
     #[doc="<p>The AWS account ID associated with the registry that contains the images to describe. If you do not specify a registry, the default registry is assumed.</p>"]
     #[serde(rename="registryId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub registry_id: Option<RegistryId>,
+    pub registry_id: Option<String>,
     #[doc="<p>The repository that contains the images to describe.</p>"]
     #[serde(rename="repositoryName")]
-    pub repository_name: RepositoryName,
+    pub repository_name: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -122,30 +119,28 @@ pub struct BatchGetImageResponse {
     #[doc="<p>Any failures associated with the call.</p>"]
     #[serde(rename="failures")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub failures: Option<ImageFailureList>,
+    pub failures: Option<Vec<ImageFailure>>,
     #[doc="<p>A list of image objects corresponding to the image references in the request.</p>"]
     #[serde(rename="images")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub images: Option<ImageList>,
+    pub images: Option<Vec<Image>>,
 }
 
-pub type BatchedOperationLayerDigest = String;
-pub type BatchedOperationLayerDigestList = Vec<BatchedOperationLayerDigest>;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CompleteLayerUploadRequest {
     #[doc="<p>The <code>sha256</code> digest of the image layer.</p>"]
     #[serde(rename="layerDigests")]
-    pub layer_digests: LayerDigestList,
+    pub layer_digests: Vec<String>,
     #[doc="<p>The AWS account ID associated with the registry to which to upload layers. If you do not specify a registry, the default registry is assumed.</p>"]
     #[serde(rename="registryId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub registry_id: Option<RegistryId>,
+    pub registry_id: Option<String>,
     #[doc="<p>The name of the repository to associate with the image layer.</p>"]
     #[serde(rename="repositoryName")]
-    pub repository_name: RepositoryName,
+    pub repository_name: String,
     #[doc="<p>The upload ID from a previous <a>InitiateLayerUpload</a> operation to associate with the image layer.</p>"]
     #[serde(rename="uploadId")]
-    pub upload_id: UploadId,
+    pub upload_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -153,26 +148,26 @@ pub struct CompleteLayerUploadResponse {
     #[doc="<p>The <code>sha256</code> digest of the image layer.</p>"]
     #[serde(rename="layerDigest")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub layer_digest: Option<LayerDigest>,
+    pub layer_digest: Option<String>,
     #[doc="<p>The registry ID associated with the request.</p>"]
     #[serde(rename="registryId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub registry_id: Option<RegistryId>,
+    pub registry_id: Option<String>,
     #[doc="<p>The repository name associated with the request.</p>"]
     #[serde(rename="repositoryName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub repository_name: Option<RepositoryName>,
+    pub repository_name: Option<String>,
     #[doc="<p>The upload ID associated with the layer.</p>"]
     #[serde(rename="uploadId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub upload_id: Option<UploadId>,
+    pub upload_id: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateRepositoryRequest {
     #[doc="<p>The name to use for the repository. The repository name may be specified on its own (such as <code>nginx-web-app</code>) or it can be prepended with a namespace to group the repository into a category (such as <code>project-a/nginx-web-app</code>).</p>"]
     #[serde(rename="repositoryName")]
-    pub repository_name: RepositoryName,
+    pub repository_name: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -183,16 +178,15 @@ pub struct CreateRepositoryResponse {
     pub repository: Option<Repository>,
 }
 
-pub type CreationTimestamp = f64;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteRepositoryPolicyRequest {
     #[doc="<p>The AWS account ID associated with the registry that contains the repository policy to delete. If you do not specify a registry, the default registry is assumed.</p>"]
     #[serde(rename="registryId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub registry_id: Option<RegistryId>,
+    pub registry_id: Option<String>,
     #[doc="<p>The name of the repository that is associated with the repository policy to delete.</p>"]
     #[serde(rename="repositoryName")]
-    pub repository_name: RepositoryName,
+    pub repository_name: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -200,15 +194,15 @@ pub struct DeleteRepositoryPolicyResponse {
     #[doc="<p>The JSON repository policy that was deleted from the repository.</p>"]
     #[serde(rename="policyText")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub policy_text: Option<RepositoryPolicyText>,
+    pub policy_text: Option<String>,
     #[doc="<p>The registry ID associated with the request.</p>"]
     #[serde(rename="registryId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub registry_id: Option<RegistryId>,
+    pub registry_id: Option<String>,
     #[doc="<p>The repository name associated with the request.</p>"]
     #[serde(rename="repositoryName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub repository_name: Option<RepositoryName>,
+    pub repository_name: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -216,14 +210,14 @@ pub struct DeleteRepositoryRequest {
     #[doc="<p>Force the deletion of the repository if it contains images.</p>"]
     #[serde(rename="force")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub force: Option<ForceFlag>,
+    pub force: Option<bool>,
     #[doc="<p>The AWS account ID associated with the registry that contains the repository to delete. If you do not specify a registry, the default registry is assumed.</p>"]
     #[serde(rename="registryId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub registry_id: Option<RegistryId>,
+    pub registry_id: Option<String>,
     #[doc="<p>The name of the repository to delete.</p>"]
     #[serde(rename="repositoryName")]
-    pub repository_name: RepositoryName,
+    pub repository_name: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -240,7 +234,7 @@ pub struct DescribeImagesFilter {
     #[doc="<p>The tag status with which to filter your <a>DescribeImages</a> results. You can filter results based on whether they are <code>TAGGED</code> or <code>UNTAGGED</code>.</p>"]
     #[serde(rename="tagStatus")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub tag_status: Option<TagStatus>,
+    pub tag_status: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -252,22 +246,22 @@ pub struct DescribeImagesRequest {
     #[doc="<p>The list of image IDs for the requested repository.</p>"]
     #[serde(rename="imageIds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub image_ids: Option<ImageIdentifierList>,
+    pub image_ids: Option<Vec<ImageIdentifier>>,
     #[doc="<p>The maximum number of repository results returned by <code>DescribeImages</code> in paginated output. When this parameter is used, <code>DescribeImages</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeImages</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>DescribeImages</code> returns up to 100 results and a <code>nextToken</code> value, if applicable.</p>"]
     #[serde(rename="maxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<MaxResults>,
+    pub max_results: Option<i64>,
     #[doc="<p>The <code>nextToken</code> value returned from a previous paginated <code>DescribeImages</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. This value is <code>null</code> when there are no more results to return.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
     #[doc="<p>The AWS account ID associated with the registry that contains the repository in which to describe images. If you do not specify a registry, the default registry is assumed.</p>"]
     #[serde(rename="registryId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub registry_id: Option<RegistryId>,
+    pub registry_id: Option<String>,
     #[doc="<p>A list of repositories to describe. If this parameter is omitted, then all repositories in a registry are described.</p>"]
     #[serde(rename="repositoryName")]
-    pub repository_name: RepositoryName,
+    pub repository_name: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -275,11 +269,11 @@ pub struct DescribeImagesResponse {
     #[doc="<p>A list of <a>ImageDetail</a> objects that contain data about the image.</p>"]
     #[serde(rename="imageDetails")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub image_details: Option<ImageDetailList>,
+    pub image_details: Option<Vec<ImageDetail>>,
     #[doc="<p>The <code>nextToken</code> value to include in a future <code>DescribeImages</code> request. When the results of a <code>DescribeImages</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -287,19 +281,19 @@ pub struct DescribeRepositoriesRequest {
     #[doc="<p>The maximum number of repository results returned by <code>DescribeRepositories</code> in paginated output. When this parameter is used, <code>DescribeRepositories</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeRepositories</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>DescribeRepositories</code> returns up to 100 results and a <code>nextToken</code> value, if applicable.</p>"]
     #[serde(rename="maxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<MaxResults>,
+    pub max_results: Option<i64>,
     #[doc="<p>The <code>nextToken</code> value returned from a previous paginated <code>DescribeRepositories</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. This value is <code>null</code> when there are no more results to return.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
     #[doc="<p>The AWS account ID associated with the registry that contains the repositories to be described. If you do not specify a registry, the default registry is assumed.</p>"]
     #[serde(rename="registryId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub registry_id: Option<RegistryId>,
+    pub registry_id: Option<String>,
     #[doc="<p>A list of repositories to describe. If this parameter is omitted, then all repositories in a registry are described.</p>"]
     #[serde(rename="repositoryNames")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub repository_names: Option<RepositoryNameList>,
+    pub repository_names: Option<Vec<String>>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -307,23 +301,19 @@ pub struct DescribeRepositoriesResponse {
     #[doc="<p>The <code>nextToken</code> value to include in a future <code>DescribeRepositories</code> request. When the results of a <code>DescribeRepositories</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
     #[doc="<p>A list of repository objects corresponding to valid repositories.</p>"]
     #[serde(rename="repositories")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub repositories: Option<RepositoryList>,
+    pub repositories: Option<Vec<Repository>>,
 }
 
-pub type ExceptionMessage = String;
-pub type ExpirationTimestamp = f64;
-pub type ForceFlag = bool;
-pub type GetAuthorizationTokenRegistryIdList = Vec<RegistryId>;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetAuthorizationTokenRequest {
     #[doc="<p>A list of AWS account IDs that are associated with the registries for which to get authorization tokens. If you do not specify a registry, the default registry is assumed.</p>"]
     #[serde(rename="registryIds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub registry_ids: Option<GetAuthorizationTokenRegistryIdList>,
+    pub registry_ids: Option<Vec<String>>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -331,21 +321,21 @@ pub struct GetAuthorizationTokenResponse {
     #[doc="<p>A list of authorization token data objects that correspond to the <code>registryIds</code> values in the request.</p>"]
     #[serde(rename="authorizationData")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub authorization_data: Option<AuthorizationDataList>,
+    pub authorization_data: Option<Vec<AuthorizationData>>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetDownloadUrlForLayerRequest {
     #[doc="<p>The digest of the image layer to download.</p>"]
     #[serde(rename="layerDigest")]
-    pub layer_digest: LayerDigest,
+    pub layer_digest: String,
     #[doc="<p>The AWS account ID associated with the registry that contains the image layer to download. If you do not specify a registry, the default registry is assumed.</p>"]
     #[serde(rename="registryId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub registry_id: Option<RegistryId>,
+    pub registry_id: Option<String>,
     #[doc="<p>The name of the repository that is associated with the image layer to download.</p>"]
     #[serde(rename="repositoryName")]
-    pub repository_name: RepositoryName,
+    pub repository_name: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -353,11 +343,11 @@ pub struct GetDownloadUrlForLayerResponse {
     #[doc="<p>The pre-signed Amazon S3 download URL for the requested layer.</p>"]
     #[serde(rename="downloadUrl")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub download_url: Option<Url>,
+    pub download_url: Option<String>,
     #[doc="<p>The digest of the image layer to download.</p>"]
     #[serde(rename="layerDigest")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub layer_digest: Option<LayerDigest>,
+    pub layer_digest: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -365,10 +355,10 @@ pub struct GetRepositoryPolicyRequest {
     #[doc="<p>The AWS account ID associated with the registry that contains the repository. If you do not specify a registry, the default registry is assumed.</p>"]
     #[serde(rename="registryId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub registry_id: Option<RegistryId>,
+    pub registry_id: Option<String>,
     #[doc="<p>The name of the repository whose policy you want to retrieve.</p>"]
     #[serde(rename="repositoryName")]
-    pub repository_name: RepositoryName,
+    pub repository_name: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -376,15 +366,15 @@ pub struct GetRepositoryPolicyResponse {
     #[doc="<p>The JSON repository policy text associated with the repository.</p>"]
     #[serde(rename="policyText")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub policy_text: Option<RepositoryPolicyText>,
+    pub policy_text: Option<String>,
     #[doc="<p>The registry ID associated with the request.</p>"]
     #[serde(rename="registryId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub registry_id: Option<RegistryId>,
+    pub registry_id: Option<String>,
     #[doc="<p>The repository name associated with the request.</p>"]
     #[serde(rename="repositoryName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub repository_name: Option<RepositoryName>,
+    pub repository_name: Option<String>,
 }
 
 #[doc="<p>An object representing an Amazon ECR image.</p>"]
@@ -397,15 +387,15 @@ pub struct Image {
     #[doc="<p>The image manifest associated with the image.</p>"]
     #[serde(rename="imageManifest")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub image_manifest: Option<ImageManifest>,
+    pub image_manifest: Option<String>,
     #[doc="<p>The AWS account ID associated with the registry containing the image.</p>"]
     #[serde(rename="registryId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub registry_id: Option<RegistryId>,
+    pub registry_id: Option<String>,
     #[doc="<p>The name of the repository associated with the image.</p>"]
     #[serde(rename="repositoryName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub repository_name: Option<RepositoryName>,
+    pub repository_name: Option<String>,
 }
 
 #[doc="<p>An object that describes an image returned by a <a>DescribeImages</a> operation.</p>"]
@@ -414,79 +404,68 @@ pub struct ImageDetail {
     #[doc="<p>The <code>sha256</code> digest of the image manifest.</p>"]
     #[serde(rename="imageDigest")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub image_digest: Option<ImageDigest>,
+    pub image_digest: Option<String>,
     #[doc="<p>The date and time, expressed in standard JavaScript date format, at which the current image was pushed to the repository. </p>"]
     #[serde(rename="imagePushedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub image_pushed_at: Option<PushTimestamp>,
+    pub image_pushed_at: Option<f64>,
     #[doc="<p>The size, in bytes, of the image in the repository.</p> <note> <p>Beginning with Docker version 1.9, the Docker client compresses image layers before pushing them to a V2 Docker registry. The output of the <code>docker images</code> command shows the uncompressed image size, so it may return a larger image size than the image sizes returned by <a>DescribeImages</a>.</p> </note>"]
     #[serde(rename="imageSizeInBytes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub image_size_in_bytes: Option<ImageSizeInBytes>,
+    pub image_size_in_bytes: Option<i64>,
     #[doc="<p>The list of tags associated with this image.</p>"]
     #[serde(rename="imageTags")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub image_tags: Option<ImageTagList>,
+    pub image_tags: Option<Vec<String>>,
     #[doc="<p>The AWS account ID associated with the registry to which this image belongs.</p>"]
     #[serde(rename="registryId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub registry_id: Option<RegistryId>,
+    pub registry_id: Option<String>,
     #[doc="<p>The name of the repository to which this image belongs.</p>"]
     #[serde(rename="repositoryName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub repository_name: Option<RepositoryName>,
+    pub repository_name: Option<String>,
 }
 
-pub type ImageDetailList = Vec<ImageDetail>;
-pub type ImageDigest = String;
 #[doc="<p>An object representing an Amazon ECR image failure.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ImageFailure {
     #[doc="<p>The code associated with the failure.</p>"]
     #[serde(rename="failureCode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub failure_code: Option<ImageFailureCode>,
+    pub failure_code: Option<String>,
     #[doc="<p>The reason for the failure.</p>"]
     #[serde(rename="failureReason")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub failure_reason: Option<ImageFailureReason>,
+    pub failure_reason: Option<String>,
     #[doc="<p>The image ID associated with the failure.</p>"]
     #[serde(rename="imageId")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub image_id: Option<ImageIdentifier>,
 }
 
-pub type ImageFailureCode = String;
-pub type ImageFailureList = Vec<ImageFailure>;
-pub type ImageFailureReason = String;
 #[doc="<p>An object with identifying information for an Amazon ECR image.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ImageIdentifier {
     #[doc="<p>The <code>sha256</code> digest of the image manifest.</p>"]
     #[serde(rename="imageDigest")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub image_digest: Option<ImageDigest>,
+    pub image_digest: Option<String>,
     #[doc="<p>The tag used for the image.</p>"]
     #[serde(rename="imageTag")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub image_tag: Option<ImageTag>,
+    pub image_tag: Option<String>,
 }
 
-pub type ImageIdentifierList = Vec<ImageIdentifier>;
-pub type ImageList = Vec<Image>;
-pub type ImageManifest = String;
-pub type ImageSizeInBytes = i64;
-pub type ImageTag = String;
-pub type ImageTagList = Vec<ImageTag>;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct InitiateLayerUploadRequest {
     #[doc="<p>The AWS account ID associated with the registry that you intend to upload layers to. If you do not specify a registry, the default registry is assumed.</p>"]
     #[serde(rename="registryId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub registry_id: Option<RegistryId>,
+    pub registry_id: Option<String>,
     #[doc="<p>The name of the repository that you intend to upload layers to.</p>"]
     #[serde(rename="repositoryName")]
-    pub repository_name: RepositoryName,
+    pub repository_name: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -494,11 +473,11 @@ pub struct InitiateLayerUploadResponse {
     #[doc="<p>The size, in bytes, that Amazon ECR expects future layer part uploads to be.</p>"]
     #[serde(rename="partSize")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub part_size: Option<PartSize>,
+    pub part_size: Option<i64>,
     #[doc="<p>The upload ID for the layer upload. This parameter is passed to further <a>UploadLayerPart</a> and <a>CompleteLayerUpload</a> operations.</p>"]
     #[serde(rename="uploadId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub upload_id: Option<UploadId>,
+    pub upload_id: Option<String>,
 }
 
 #[doc="<p>An object representing an Amazon ECR image layer.</p>"]
@@ -507,54 +486,45 @@ pub struct Layer {
     #[doc="<p>The availability status of the image layer.</p>"]
     #[serde(rename="layerAvailability")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub layer_availability: Option<LayerAvailability>,
+    pub layer_availability: Option<String>,
     #[doc="<p>The <code>sha256</code> digest of the image layer.</p>"]
     #[serde(rename="layerDigest")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub layer_digest: Option<LayerDigest>,
+    pub layer_digest: Option<String>,
     #[doc="<p>The size, in bytes, of the image layer.</p>"]
     #[serde(rename="layerSize")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub layer_size: Option<LayerSizeInBytes>,
+    pub layer_size: Option<i64>,
     #[doc="<p>The media type of the layer, such as <code>application/vnd.docker.image.rootfs.diff.tar.gzip</code> or <code>application/vnd.oci.image.layer.v1.tar+gzip</code>.</p>"]
     #[serde(rename="mediaType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub media_type: Option<MediaType>,
+    pub media_type: Option<String>,
 }
 
-pub type LayerAvailability = String;
-pub type LayerDigest = String;
-pub type LayerDigestList = Vec<LayerDigest>;
 #[doc="<p>An object representing an Amazon ECR image layer failure.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct LayerFailure {
     #[doc="<p>The failure code associated with the failure.</p>"]
     #[serde(rename="failureCode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub failure_code: Option<LayerFailureCode>,
+    pub failure_code: Option<String>,
     #[doc="<p>The reason for the failure.</p>"]
     #[serde(rename="failureReason")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub failure_reason: Option<LayerFailureReason>,
+    pub failure_reason: Option<String>,
     #[doc="<p>The layer digest associated with the failure.</p>"]
     #[serde(rename="layerDigest")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub layer_digest: Option<BatchedOperationLayerDigest>,
+    pub layer_digest: Option<String>,
 }
 
-pub type LayerFailureCode = String;
-pub type LayerFailureList = Vec<LayerFailure>;
-pub type LayerFailureReason = String;
-pub type LayerList = Vec<Layer>;
-pub type LayerPartBlob = Vec<u8>;
-pub type LayerSizeInBytes = i64;
 #[doc="<p>An object representing a filter on a <a>ListImages</a> operation.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListImagesFilter {
     #[doc="<p>The tag status with which to filter your <a>ListImages</a> results. You can filter results based on whether they are <code>TAGGED</code> or <code>UNTAGGED</code>.</p>"]
     #[serde(rename="tagStatus")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub tag_status: Option<TagStatus>,
+    pub tag_status: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -566,18 +536,18 @@ pub struct ListImagesRequest {
     #[doc="<p>The maximum number of image results returned by <code>ListImages</code> in paginated output. When this parameter is used, <code>ListImages</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListImages</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>ListImages</code> returns up to 100 results and a <code>nextToken</code> value, if applicable.</p>"]
     #[serde(rename="maxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<MaxResults>,
+    pub max_results: Option<i64>,
     #[doc="<p>The <code>nextToken</code> value returned from a previous paginated <code>ListImages</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. This value is <code>null</code> when there are no more results to return.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
     #[doc="<p>The AWS account ID associated with the registry that contains the repository to list images in. If you do not specify a registry, the default registry is assumed.</p>"]
     #[serde(rename="registryId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub registry_id: Option<RegistryId>,
+    pub registry_id: Option<String>,
     #[doc="<p>The repository whose image IDs are to be listed.</p>"]
     #[serde(rename="repositoryName")]
-    pub repository_name: RepositoryName,
+    pub repository_name: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -585,36 +555,29 @@ pub struct ListImagesResponse {
     #[doc="<p>The list of image IDs for the requested repository.</p>"]
     #[serde(rename="imageIds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub image_ids: Option<ImageIdentifierList>,
+    pub image_ids: Option<Vec<ImageIdentifier>>,
     #[doc="<p>The <code>nextToken</code> value to include in a future <code>ListImages</code> request. When the results of a <code>ListImages</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
-pub type MaxResults = i64;
-pub type MediaType = String;
-pub type MediaTypeList = Vec<MediaType>;
-pub type NextToken = String;
-pub type PartSize = i64;
-pub type ProxyEndpoint = String;
-pub type PushTimestamp = f64;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct PutImageRequest {
     #[doc="<p>The image manifest corresponding to the image to be uploaded.</p>"]
     #[serde(rename="imageManifest")]
-    pub image_manifest: ImageManifest,
+    pub image_manifest: String,
     #[doc="<p>The tag to associate with the image. This parameter is required for images that use the Docker Image Manifest V2 Schema 2 or OCI formats.</p>"]
     #[serde(rename="imageTag")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub image_tag: Option<ImageTag>,
+    pub image_tag: Option<String>,
     #[doc="<p>The AWS account ID associated with the registry that contains the repository in which to put the image. If you do not specify a registry, the default registry is assumed.</p>"]
     #[serde(rename="registryId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub registry_id: Option<RegistryId>,
+    pub registry_id: Option<String>,
     #[doc="<p>The name of the repository in which to put the image.</p>"]
     #[serde(rename="repositoryName")]
-    pub repository_name: RepositoryName,
+    pub repository_name: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -625,52 +588,47 @@ pub struct PutImageResponse {
     pub image: Option<Image>,
 }
 
-pub type RegistryId = String;
 #[doc="<p>An object representing a repository.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Repository {
     #[doc="<p>The date and time, in JavaScript date/time format, when the repository was created.</p>"]
     #[serde(rename="createdAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_at: Option<CreationTimestamp>,
+    pub created_at: Option<f64>,
     #[doc="<p>The AWS account ID associated with the registry that contains the repository.</p>"]
     #[serde(rename="registryId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub registry_id: Option<RegistryId>,
+    pub registry_id: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) that identifies the repository. The ARN contains the <code>arn:aws:ecr</code> namespace, followed by the region of the repository, the AWS account ID of the repository owner, the repository namespace, and then the repository name. For example, <code>arn:aws:ecr:region:012345678910:repository/test</code>.</p>"]
     #[serde(rename="repositoryArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub repository_arn: Option<Arn>,
+    pub repository_arn: Option<String>,
     #[doc="<p>The name of the repository.</p>"]
     #[serde(rename="repositoryName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub repository_name: Option<RepositoryName>,
+    pub repository_name: Option<String>,
     #[doc="<p>The URI for the repository. You can use this URI for Docker <code>push</code> and <code>pull</code> operations.</p>"]
     #[serde(rename="repositoryUri")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub repository_uri: Option<Url>,
+    pub repository_uri: Option<String>,
 }
 
-pub type RepositoryList = Vec<Repository>;
-pub type RepositoryName = String;
-pub type RepositoryNameList = Vec<RepositoryName>;
-pub type RepositoryPolicyText = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct SetRepositoryPolicyRequest {
     #[doc="<p>If the policy you are attempting to set on a repository policy would prevent you from setting another policy in the future, you must force the <a>SetRepositoryPolicy</a> operation. This is intended to prevent accidental repository lock outs.</p>"]
     #[serde(rename="force")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub force: Option<ForceFlag>,
+    pub force: Option<bool>,
     #[doc="<p>The JSON repository policy text to apply to the repository.</p>"]
     #[serde(rename="policyText")]
-    pub policy_text: RepositoryPolicyText,
+    pub policy_text: String,
     #[doc="<p>The AWS account ID associated with the registry that contains the repository. If you do not specify a registry, the default registry is assumed.</p>"]
     #[serde(rename="registryId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub registry_id: Option<RegistryId>,
+    pub registry_id: Option<String>,
     #[doc="<p>The name of the repository to receive the policy.</p>"]
     #[serde(rename="repositoryName")]
-    pub repository_name: RepositoryName,
+    pub repository_name: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -678,19 +636,17 @@ pub struct SetRepositoryPolicyResponse {
     #[doc="<p>The JSON repository policy text applied to the repository.</p>"]
     #[serde(rename="policyText")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub policy_text: Option<RepositoryPolicyText>,
+    pub policy_text: Option<String>,
     #[doc="<p>The registry ID associated with the request.</p>"]
     #[serde(rename="registryId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub registry_id: Option<RegistryId>,
+    pub registry_id: Option<String>,
     #[doc="<p>The repository name associated with the request.</p>"]
     #[serde(rename="repositoryName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub repository_name: Option<RepositoryName>,
+    pub repository_name: Option<String>,
 }
 
-pub type TagStatus = String;
-pub type UploadId = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UploadLayerPartRequest {
     #[doc="<p>The base64-encoded layer part payload.</p>"]
@@ -700,23 +656,23 @@ pub struct UploadLayerPartRequest {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub layer_part_blob: LayerPartBlob,
+    pub layer_part_blob: Vec<u8>,
     #[doc="<p>The integer value of the first byte of the layer part.</p>"]
     #[serde(rename="partFirstByte")]
-    pub part_first_byte: PartSize,
+    pub part_first_byte: i64,
     #[doc="<p>The integer value of the last byte of the layer part.</p>"]
     #[serde(rename="partLastByte")]
-    pub part_last_byte: PartSize,
+    pub part_last_byte: i64,
     #[doc="<p>The AWS account ID associated with the registry that you are uploading layer parts to. If you do not specify a registry, the default registry is assumed.</p>"]
     #[serde(rename="registryId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub registry_id: Option<RegistryId>,
+    pub registry_id: Option<String>,
     #[doc="<p>The name of the repository that you are uploading layer parts to.</p>"]
     #[serde(rename="repositoryName")]
-    pub repository_name: RepositoryName,
+    pub repository_name: String,
     #[doc="<p>The upload ID from a previous <a>InitiateLayerUpload</a> operation to associate with the layer part upload.</p>"]
     #[serde(rename="uploadId")]
-    pub upload_id: UploadId,
+    pub upload_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -724,22 +680,21 @@ pub struct UploadLayerPartResponse {
     #[doc="<p>The integer value of the last byte received in the request.</p>"]
     #[serde(rename="lastByteReceived")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub last_byte_received: Option<PartSize>,
+    pub last_byte_received: Option<i64>,
     #[doc="<p>The registry ID associated with the request.</p>"]
     #[serde(rename="registryId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub registry_id: Option<RegistryId>,
+    pub registry_id: Option<String>,
     #[doc="<p>The repository name associated with the request.</p>"]
     #[serde(rename="repositoryName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub repository_name: Option<RepositoryName>,
+    pub repository_name: Option<String>,
     #[doc="<p>The upload ID associated with the request.</p>"]
     #[serde(rename="uploadId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub upload_id: Option<UploadId>,
+    pub upload_id: Option<String>,
 }
 
-pub type Url = String;
 /// Errors returned by BatchCheckLayerAvailability
 #[derive(Debug, PartialEq)]
 pub enum BatchCheckLayerAvailabilityError {

@@ -26,118 +26,105 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-pub type AccessDeniedErrorCode = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct AddAttributesToFindingsRequest {
     #[doc="<p>The array of attributes that you want to assign to specified findings.</p>"]
     #[serde(rename="attributes")]
-    pub attributes: UserAttributeList,
+    pub attributes: Vec<Attribute>,
     #[doc="<p>The ARNs that specify the findings that you want to assign attributes to.</p>"]
     #[serde(rename="findingArns")]
-    pub finding_arns: AddRemoveAttributesFindingArnList,
+    pub finding_arns: Vec<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct AddAttributesToFindingsResponse {
     #[doc="<p>Attribute details that cannot be described. An error code is provided for each failed item.</p>"]
     #[serde(rename="failedItems")]
-    pub failed_items: FailedItems,
+    pub failed_items: ::std::collections::HashMap<String, FailedItemDetails>,
 }
 
-pub type AddRemoveAttributesFindingArnList = Vec<Arn>;
 #[doc="<p>Used in the exception error that is thrown if you start an assessment run for an assessment target that includes an EC2 instance that is already participating in another started assessment run.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct AgentAlreadyRunningAssessment {
     #[doc="<p>ID of the agent that is running on an EC2 instance that is already participating in another started assessment run.</p>"]
-    pub agent_id: AgentId,
+    pub agent_id: String,
     #[doc="<p>The ARN of the assessment run that has already been started.</p>"]
-    pub assessment_run_arn: Arn,
+    pub assessment_run_arn: String,
 }
 
-pub type AgentAlreadyRunningAssessmentList = Vec<AgentAlreadyRunningAssessment>;
 #[doc="<p>Contains information about an Amazon Inspector agent. This data type is used as a request parameter in the <a>ListAssessmentRunAgents</a> action.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct AgentFilter {
     #[doc="<p>The detailed health state of the agent. Values can be set to <b>IDLE</b>, <b>RUNNING</b>, <b>SHUTDOWN</b>, <b>UNHEALTHY</b>, <b>THROTTLED</b>, and <b>UNKNOWN</b>. </p>"]
     #[serde(rename="agentHealthCodes")]
-    pub agent_health_codes: AgentHealthCodeList,
+    pub agent_health_codes: Vec<String>,
     #[doc="<p>The current health state of the agent. Values can be set to <b>HEALTHY</b> or <b>UNHEALTHY</b>.</p>"]
     #[serde(rename="agentHealths")]
-    pub agent_healths: AgentHealthList,
+    pub agent_healths: Vec<String>,
 }
 
-pub type AgentHealth = String;
-pub type AgentHealthCode = String;
-pub type AgentHealthCodeList = Vec<AgentHealthCode>;
-pub type AgentHealthList = Vec<AgentHealth>;
-pub type AgentId = String;
-pub type AgentIdList = Vec<AgentId>;
 #[doc="<p>Used as a response element in the <a>PreviewAgents</a> action.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct AgentPreview {
     #[doc="<p>The ID of the EC2 instance where the agent is installed.</p>"]
     #[serde(rename="agentId")]
-    pub agent_id: AgentId,
+    pub agent_id: String,
     #[doc="<p>The Auto Scaling group for the EC2 instance where the agent is installed.</p>"]
     #[serde(rename="autoScalingGroup")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub auto_scaling_group: Option<AutoScalingGroup>,
+    pub auto_scaling_group: Option<String>,
 }
 
-pub type AgentPreviewList = Vec<AgentPreview>;
-pub type AmiId = String;
-pub type Arn = String;
-pub type AssessmentRulesPackageArnList = Vec<Arn>;
 #[doc="<p>A snapshot of an Amazon Inspector assessment run that contains the findings of the assessment run .</p> <p>Used as the response element in the <a>DescribeAssessmentRuns</a> action.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct AssessmentRun {
     #[doc="<p>The ARN of the assessment run.</p>"]
     #[serde(rename="arn")]
-    pub arn: Arn,
+    pub arn: String,
     #[doc="<p>The ARN of the assessment template that is associated with the assessment run.</p>"]
     #[serde(rename="assessmentTemplateArn")]
-    pub assessment_template_arn: Arn,
+    pub assessment_template_arn: String,
     #[doc="<p>The assessment run completion time that corresponds to the rules packages evaluation completion time or failure.</p>"]
     #[serde(rename="completedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub completed_at: Option<Timestamp>,
+    pub completed_at: Option<f64>,
     #[doc="<p>The time when <a>StartAssessmentRun</a> was called.</p>"]
     #[serde(rename="createdAt")]
-    pub created_at: Timestamp,
+    pub created_at: f64,
     #[doc="<p>A Boolean value (true or false) that specifies whether the process of collecting data from the agents is completed.</p>"]
     #[serde(rename="dataCollected")]
-    pub data_collected: Bool,
+    pub data_collected: bool,
     #[doc="<p>The duration of the assessment run.</p>"]
     #[serde(rename="durationInSeconds")]
-    pub duration_in_seconds: AssessmentRunDuration,
+    pub duration_in_seconds: i64,
     #[doc="<p>Provides a total count of generated findings per severity.</p>"]
     #[serde(rename="findingCounts")]
-    pub finding_counts: AssessmentRunFindingCounts,
+    pub finding_counts: ::std::collections::HashMap<String, i64>,
     #[doc="<p>The auto-generated name for the assessment run.</p>"]
     #[serde(rename="name")]
-    pub name: AssessmentRunName,
+    pub name: String,
     #[doc="<p>A list of notifications for the event subscriptions. A notification about a particular generated finding is added to this list only once.</p>"]
     #[serde(rename="notifications")]
-    pub notifications: AssessmentRunNotificationList,
+    pub notifications: Vec<AssessmentRunNotification>,
     #[doc="<p>The rules packages selected for the assessment run.</p>"]
     #[serde(rename="rulesPackageArns")]
-    pub rules_package_arns: AssessmentRulesPackageArnList,
+    pub rules_package_arns: Vec<String>,
     #[doc="<p>The time when <a>StartAssessmentRun</a> was called.</p>"]
     #[serde(rename="startedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub started_at: Option<Timestamp>,
+    pub started_at: Option<f64>,
     #[doc="<p>The state of the assessment run.</p>"]
     #[serde(rename="state")]
-    pub state: AssessmentRunState,
+    pub state: String,
     #[doc="<p>The last time when the assessment run's state changed.</p>"]
     #[serde(rename="stateChangedAt")]
-    pub state_changed_at: Timestamp,
+    pub state_changed_at: f64,
     #[doc="<p>A list of the assessment run state changes.</p>"]
     #[serde(rename="stateChanges")]
-    pub state_changes: AssessmentRunStateChangeList,
+    pub state_changes: Vec<AssessmentRunStateChange>,
     #[doc="<p>The user-defined attributes that are assigned to every generated finding.</p>"]
     #[serde(rename="userAttributesForFindings")]
-    pub user_attributes_for_findings: UserAttributeList,
+    pub user_attributes_for_findings: Vec<Attribute>,
 }
 
 #[doc="<p>Contains information about an Amazon Inspector agent. This data type is used as a response element in the <a>ListAssessmentRunAgents</a> action.</p>"]
@@ -145,31 +132,29 @@ pub struct AssessmentRun {
 pub struct AssessmentRunAgent {
     #[doc="<p>The current health state of the agent.</p>"]
     #[serde(rename="agentHealth")]
-    pub agent_health: AgentHealth,
+    pub agent_health: String,
     #[doc="<p>The detailed health state of the agent.</p>"]
     #[serde(rename="agentHealthCode")]
-    pub agent_health_code: AgentHealthCode,
+    pub agent_health_code: String,
     #[doc="<p>The description for the agent health code.</p>"]
     #[serde(rename="agentHealthDetails")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub agent_health_details: Option<Message>,
+    pub agent_health_details: Option<String>,
     #[doc="<p>The AWS account of the EC2 instance where the agent is installed.</p>"]
     #[serde(rename="agentId")]
-    pub agent_id: AgentId,
+    pub agent_id: String,
     #[doc="<p>The ARN of the assessment run that is associated with the agent.</p>"]
     #[serde(rename="assessmentRunArn")]
-    pub assessment_run_arn: Arn,
+    pub assessment_run_arn: String,
     #[doc="<p>The Auto Scaling group of the EC2 instance that is specified by the agent ID.</p>"]
     #[serde(rename="autoScalingGroup")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub auto_scaling_group: Option<AutoScalingGroup>,
+    pub auto_scaling_group: Option<String>,
     #[doc="<p>The Amazon Inspector application data metrics that are collected by the agent.</p>"]
     #[serde(rename="telemetryMetadata")]
-    pub telemetry_metadata: TelemetryMetadataList,
+    pub telemetry_metadata: Vec<TelemetryMetadata>,
 }
 
-pub type AssessmentRunAgentList = Vec<AssessmentRunAgent>;
-pub type AssessmentRunDuration = i64;
 #[doc="<p>Used as the request parameter in the <a>ListAssessmentRuns</a> action.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct AssessmentRunFilter {
@@ -184,11 +169,11 @@ pub struct AssessmentRunFilter {
     #[doc="<p>For a record to match a filter, an explicit value or a string containing a wildcard that is specified for this data type property must match the value of the <b>assessmentRunName</b> property of the <a>AssessmentRun</a> data type.</p>"]
     #[serde(rename="namePattern")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name_pattern: Option<NamePattern>,
+    pub name_pattern: Option<String>,
     #[doc="<p>For a record to match a filter, the value that is specified for this data type property must be contained in the list of values of the <b>rulesPackages</b> property of the <a>AssessmentRun</a> data type.</p>"]
     #[serde(rename="rulesPackageArns")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub rules_package_arns: Option<FilterRulesPackageArnList>,
+    pub rules_package_arns: Option<Vec<String>>,
     #[doc="<p>For a record to match a filter, the value that is specified for this data type property must inclusively match any value between the specified minimum and maximum values of the <b>startTime</b> property of the <a>AssessmentRun</a> data type.</p>"]
     #[serde(rename="startTimeRange")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -200,73 +185,64 @@ pub struct AssessmentRunFilter {
     #[doc="<p>For a record to match a filter, one of the values specified for this data type property must be the exact match of the value of the <b>assessmentRunState</b> property of the <a>AssessmentRun</a> data type.</p>"]
     #[serde(rename="states")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub states: Option<AssessmentRunStateList>,
+    pub states: Option<Vec<String>>,
 }
 
-pub type AssessmentRunFindingCounts = ::std::collections::HashMap<Severity, FindingCount>;
-pub type AssessmentRunInProgressArnList = Vec<Arn>;
-pub type AssessmentRunList = Vec<AssessmentRun>;
-pub type AssessmentRunName = String;
 #[doc="<p>Used as one of the elements of the <a>AssessmentRun</a> data type.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct AssessmentRunNotification {
     #[doc="<p>The date of the notification.</p>"]
     #[serde(rename="date")]
-    pub date: Timestamp,
+    pub date: f64,
     #[doc="<p>The Boolean value that specifies whether the notification represents an error.</p>"]
     #[serde(rename="error")]
-    pub error: Bool,
+    pub error: bool,
     #[doc="<p>The event for which a notification is sent.</p>"]
     #[serde(rename="event")]
-    pub event: InspectorEvent,
+    pub event: String,
     #[doc="<p>The message included in the notification.</p>"]
     #[serde(rename="message")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub message: Option<Message>,
+    pub message: Option<String>,
     #[doc="<p>The status code of the SNS notification.</p>"]
     #[serde(rename="snsPublishStatusCode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub sns_publish_status_code: Option<AssessmentRunNotificationSnsStatusCode>,
+    pub sns_publish_status_code: Option<String>,
     #[doc="<p>The SNS topic to which the SNS notification is sent.</p>"]
     #[serde(rename="snsTopicArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub sns_topic_arn: Option<Arn>,
+    pub sns_topic_arn: Option<String>,
 }
 
-pub type AssessmentRunNotificationList = Vec<AssessmentRunNotification>;
-pub type AssessmentRunNotificationSnsStatusCode = String;
-pub type AssessmentRunState = String;
 #[doc="<p>Used as one of the elements of the <a>AssessmentRun</a> data type.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct AssessmentRunStateChange {
     #[doc="<p>The assessment run state.</p>"]
     #[serde(rename="state")]
-    pub state: AssessmentRunState,
+    pub state: String,
     #[doc="<p>The last time the assessment run state changed.</p>"]
     #[serde(rename="stateChangedAt")]
-    pub state_changed_at: Timestamp,
+    pub state_changed_at: f64,
 }
 
-pub type AssessmentRunStateChangeList = Vec<AssessmentRunStateChange>;
-pub type AssessmentRunStateList = Vec<AssessmentRunState>;
 #[doc="<p>Contains information about an Amazon Inspector application. This data type is used as the response element in the <a>DescribeAssessmentTargets</a> action.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct AssessmentTarget {
     #[doc="<p>The ARN that specifies the Amazon Inspector assessment target.</p>"]
     #[serde(rename="arn")]
-    pub arn: Arn,
+    pub arn: String,
     #[doc="<p>The time at which the assessment target is created.</p>"]
     #[serde(rename="createdAt")]
-    pub created_at: Timestamp,
+    pub created_at: f64,
     #[doc="<p>The name of the Amazon Inspector assessment target.</p>"]
     #[serde(rename="name")]
-    pub name: AssessmentTargetName,
+    pub name: String,
     #[doc="<p>The ARN that specifies the resource group that is associated with the assessment target.</p>"]
     #[serde(rename="resourceGroupArn")]
-    pub resource_group_arn: Arn,
+    pub resource_group_arn: String,
     #[doc="<p>The time at which <a>UpdateAssessmentTarget</a> is called.</p>"]
     #[serde(rename="updatedAt")]
-    pub updated_at: Timestamp,
+    pub updated_at: f64,
 }
 
 #[doc="<p>Used as the request parameter in the <a>ListAssessmentTargets</a> action.</p>"]
@@ -275,35 +251,33 @@ pub struct AssessmentTargetFilter {
     #[doc="<p>For a record to match a filter, an explicit value or a string that contains a wildcard that is specified for this data type property must match the value of the <b>assessmentTargetName</b> property of the <a>AssessmentTarget</a> data type.</p>"]
     #[serde(rename="assessmentTargetNamePattern")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub assessment_target_name_pattern: Option<NamePattern>,
+    pub assessment_target_name_pattern: Option<String>,
 }
 
-pub type AssessmentTargetList = Vec<AssessmentTarget>;
-pub type AssessmentTargetName = String;
 #[doc="<p>Contains information about an Amazon Inspector assessment template. This data type is used as the response element in the <a>DescribeAssessmentTemplates</a> action.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct AssessmentTemplate {
     #[doc="<p>The ARN of the assessment template.</p>"]
     #[serde(rename="arn")]
-    pub arn: Arn,
+    pub arn: String,
     #[doc="<p>The ARN of the assessment target that corresponds to this assessment template.</p>"]
     #[serde(rename="assessmentTargetArn")]
-    pub assessment_target_arn: Arn,
+    pub assessment_target_arn: String,
     #[doc="<p>The time at which the assessment template is created.</p>"]
     #[serde(rename="createdAt")]
-    pub created_at: Timestamp,
+    pub created_at: f64,
     #[doc="<p>The duration in seconds specified for this assessment tempate. The default value is 3600 seconds (one hour). The maximum value is 86400 seconds (one day).</p>"]
     #[serde(rename="durationInSeconds")]
-    pub duration_in_seconds: AssessmentRunDuration,
+    pub duration_in_seconds: i64,
     #[doc="<p>The name of the assessment template.</p>"]
     #[serde(rename="name")]
-    pub name: AssessmentTemplateName,
+    pub name: String,
     #[doc="<p>The rules packages that are specified for this assessment template.</p>"]
     #[serde(rename="rulesPackageArns")]
-    pub rules_package_arns: AssessmentTemplateRulesPackageArnList,
+    pub rules_package_arns: Vec<String>,
     #[doc="<p>The user-defined attributes that are assigned to every generated finding from the assessment run that uses this assessment template.</p>"]
     #[serde(rename="userAttributesForFindings")]
-    pub user_attributes_for_findings: UserAttributeList,
+    pub user_attributes_for_findings: Vec<Attribute>,
 }
 
 #[doc="<p>Used as the request parameter in the <a>ListAssessmentTemplates</a> action.</p>"]
@@ -316,242 +290,231 @@ pub struct AssessmentTemplateFilter {
     #[doc="<p>For a record to match a filter, an explicit value or a string that contains a wildcard that is specified for this data type property must match the value of the <b>assessmentTemplateName</b> property of the <a>AssessmentTemplate</a> data type.</p>"]
     #[serde(rename="namePattern")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name_pattern: Option<NamePattern>,
+    pub name_pattern: Option<String>,
     #[doc="<p>For a record to match a filter, the values that are specified for this data type property must be contained in the list of values of the <b>rulesPackageArns</b> property of the <a>AssessmentTemplate</a> data type.</p>"]
     #[serde(rename="rulesPackageArns")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub rules_package_arns: Option<FilterRulesPackageArnList>,
+    pub rules_package_arns: Option<Vec<String>>,
 }
 
-pub type AssessmentTemplateList = Vec<AssessmentTemplate>;
-pub type AssessmentTemplateName = String;
-pub type AssessmentTemplateRulesPackageArnList = Vec<Arn>;
 #[doc="<p>A collection of attributes of the host from which the finding is generated.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct AssetAttributes {
     #[doc="<p>The ID of the agent that is installed on the EC2 instance where the finding is generated.</p>"]
     #[serde(rename="agentId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub agent_id: Option<AgentId>,
+    pub agent_id: Option<String>,
     #[doc="<p>The ID of the Amazon Machine Image (AMI) that is installed on the EC2 instance where the finding is generated.</p>"]
     #[serde(rename="amiId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ami_id: Option<AmiId>,
+    pub ami_id: Option<String>,
     #[doc="<p>The Auto Scaling group of the EC2 instance where the finding is generated.</p>"]
     #[serde(rename="autoScalingGroup")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub auto_scaling_group: Option<AutoScalingGroup>,
+    pub auto_scaling_group: Option<String>,
     #[doc="<p>The hostname of the EC2 instance where the finding is generated.</p>"]
     #[serde(rename="hostname")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub hostname: Option<Hostname>,
+    pub hostname: Option<String>,
     #[doc="<p>The list of IP v4 addresses of the EC2 instance where the finding is generated.</p>"]
     #[serde(rename="ipv4Addresses")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ipv_4_addresses: Option<Ipv4AddressList>,
+    pub ipv_4_addresses: Option<Vec<String>>,
     #[doc="<p>The schema version of this data type.</p>"]
     #[serde(rename="schemaVersion")]
-    pub schema_version: NumericVersion,
+    pub schema_version: i64,
 }
 
-pub type AssetType = String;
 #[doc="<p>This data type is used as a request parameter in the <a>AddAttributesToFindings</a> and <a>CreateAssessmentTemplate</a> actions.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Attribute {
     #[doc="<p>The attribute key.</p>"]
     #[serde(rename="key")]
-    pub key: AttributeKey,
+    pub key: String,
     #[doc="<p>The value assigned to the attribute key.</p>"]
     #[serde(rename="value")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub value: Option<AttributeValue>,
+    pub value: Option<String>,
 }
 
-pub type AttributeKey = String;
-pub type AttributeList = Vec<Attribute>;
-pub type AttributeValue = String;
-pub type AutoScalingGroup = String;
-pub type AutoScalingGroupList = Vec<AutoScalingGroup>;
-pub type BatchDescribeArnList = Vec<Arn>;
-pub type Bool = bool;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateAssessmentTargetRequest {
     #[doc="<p>The user-defined name that identifies the assessment target that you want to create. The name must be unique within the AWS account.</p>"]
     #[serde(rename="assessmentTargetName")]
-    pub assessment_target_name: AssessmentTargetName,
+    pub assessment_target_name: String,
     #[doc="<p>The ARN that specifies the resource group that is used to create the assessment target.</p>"]
     #[serde(rename="resourceGroupArn")]
-    pub resource_group_arn: Arn,
+    pub resource_group_arn: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct CreateAssessmentTargetResponse {
     #[doc="<p>The ARN that specifies the assessment target that is created.</p>"]
     #[serde(rename="assessmentTargetArn")]
-    pub assessment_target_arn: Arn,
+    pub assessment_target_arn: String,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateAssessmentTemplateRequest {
     #[doc="<p>The ARN that specifies the assessment target for which you want to create the assessment template.</p>"]
     #[serde(rename="assessmentTargetArn")]
-    pub assessment_target_arn: Arn,
+    pub assessment_target_arn: String,
     #[doc="<p>The user-defined name that identifies the assessment template that you want to create. You can create several assessment templates for an assessment target. The names of the assessment templates that correspond to a particular assessment target must be unique.</p>"]
     #[serde(rename="assessmentTemplateName")]
-    pub assessment_template_name: AssessmentTemplateName,
+    pub assessment_template_name: String,
     #[doc="<p>The duration of the assessment run in seconds. The default value is 3600 seconds (one hour).</p>"]
     #[serde(rename="durationInSeconds")]
-    pub duration_in_seconds: AssessmentRunDuration,
+    pub duration_in_seconds: i64,
     #[doc="<p>The ARNs that specify the rules packages that you want to attach to the assessment template.</p>"]
     #[serde(rename="rulesPackageArns")]
-    pub rules_package_arns: AssessmentTemplateRulesPackageArnList,
+    pub rules_package_arns: Vec<String>,
     #[doc="<p>The user-defined attributes that are assigned to every finding that is generated by the assessment run that uses this assessment template.</p>"]
     #[serde(rename="userAttributesForFindings")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub user_attributes_for_findings: Option<UserAttributeList>,
+    pub user_attributes_for_findings: Option<Vec<Attribute>>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct CreateAssessmentTemplateResponse {
     #[doc="<p>The ARN that specifies the assessment template that is created.</p>"]
     #[serde(rename="assessmentTemplateArn")]
-    pub assessment_template_arn: Arn,
+    pub assessment_template_arn: String,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateResourceGroupRequest {
     #[doc="<p>A collection of keys and an array of possible values, '[{\"key\":\"key1\",\"values\":[\"Value1\",\"Value2\"]},{\"key\":\"Key2\",\"values\":[\"Value3\"]}]'.</p> <p>For example,'[{\"key\":\"Name\",\"values\":[\"TestEC2Instance\"]}]'.</p>"]
     #[serde(rename="resourceGroupTags")]
-    pub resource_group_tags: ResourceGroupTags,
+    pub resource_group_tags: Vec<ResourceGroupTag>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct CreateResourceGroupResponse {
     #[doc="<p>The ARN that specifies the resource group that is created.</p>"]
     #[serde(rename="resourceGroupArn")]
-    pub resource_group_arn: Arn,
+    pub resource_group_arn: String,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteAssessmentRunRequest {
     #[doc="<p>The ARN that specifies the assessment run that you want to delete.</p>"]
     #[serde(rename="assessmentRunArn")]
-    pub assessment_run_arn: Arn,
+    pub assessment_run_arn: String,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteAssessmentTargetRequest {
     #[doc="<p>The ARN that specifies the assessment target that you want to delete.</p>"]
     #[serde(rename="assessmentTargetArn")]
-    pub assessment_target_arn: Arn,
+    pub assessment_target_arn: String,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteAssessmentTemplateRequest {
     #[doc="<p>The ARN that specifies the assessment template that you want to delete.</p>"]
     #[serde(rename="assessmentTemplateArn")]
-    pub assessment_template_arn: Arn,
+    pub assessment_template_arn: String,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DescribeAssessmentRunsRequest {
     #[doc="<p>The ARN that specifies the assessment run that you want to describe.</p>"]
     #[serde(rename="assessmentRunArns")]
-    pub assessment_run_arns: BatchDescribeArnList,
+    pub assessment_run_arns: Vec<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DescribeAssessmentRunsResponse {
     #[doc="<p>Information about the assessment run.</p>"]
     #[serde(rename="assessmentRuns")]
-    pub assessment_runs: AssessmentRunList,
+    pub assessment_runs: Vec<AssessmentRun>,
     #[doc="<p>Assessment run details that cannot be described. An error code is provided for each failed item.</p>"]
     #[serde(rename="failedItems")]
-    pub failed_items: FailedItems,
+    pub failed_items: ::std::collections::HashMap<String, FailedItemDetails>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DescribeAssessmentTargetsRequest {
     #[doc="<p>The ARNs that specifies the assessment targets that you want to describe.</p>"]
     #[serde(rename="assessmentTargetArns")]
-    pub assessment_target_arns: BatchDescribeArnList,
+    pub assessment_target_arns: Vec<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DescribeAssessmentTargetsResponse {
     #[doc="<p>Information about the assessment targets.</p>"]
     #[serde(rename="assessmentTargets")]
-    pub assessment_targets: AssessmentTargetList,
+    pub assessment_targets: Vec<AssessmentTarget>,
     #[doc="<p>Assessment target details that cannot be described. An error code is provided for each failed item.</p>"]
     #[serde(rename="failedItems")]
-    pub failed_items: FailedItems,
+    pub failed_items: ::std::collections::HashMap<String, FailedItemDetails>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DescribeAssessmentTemplatesRequest {
     #[serde(rename="assessmentTemplateArns")]
-    pub assessment_template_arns: BatchDescribeArnList,
+    pub assessment_template_arns: Vec<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DescribeAssessmentTemplatesResponse {
     #[doc="<p>Information about the assessment templates.</p>"]
     #[serde(rename="assessmentTemplates")]
-    pub assessment_templates: AssessmentTemplateList,
+    pub assessment_templates: Vec<AssessmentTemplate>,
     #[doc="<p>Assessment template details that cannot be described. An error code is provided for each failed item.</p>"]
     #[serde(rename="failedItems")]
-    pub failed_items: FailedItems,
+    pub failed_items: ::std::collections::HashMap<String, FailedItemDetails>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DescribeCrossAccountAccessRoleResponse {
     #[doc="<p>The date when the cross-account access role was registered.</p>"]
     #[serde(rename="registeredAt")]
-    pub registered_at: Timestamp,
+    pub registered_at: f64,
     #[doc="<p>The ARN that specifies the IAM role that Amazon Inspector uses to access your AWS account.</p>"]
     #[serde(rename="roleArn")]
-    pub role_arn: Arn,
+    pub role_arn: String,
     #[doc="<p>A Boolean value that specifies whether the IAM role has the necessary policies attached to enable Amazon Inspector to access your AWS account.</p>"]
     #[serde(rename="valid")]
-    pub valid: Bool,
+    pub valid: bool,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DescribeFindingsRequest {
     #[doc="<p>The ARN that specifies the finding that you want to describe.</p>"]
     #[serde(rename="findingArns")]
-    pub finding_arns: BatchDescribeArnList,
+    pub finding_arns: Vec<String>,
     #[doc="<p>The locale into which you want to translate a finding description, recommendation, and the short description that identifies the finding.</p>"]
     #[serde(rename="locale")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub locale: Option<Locale>,
+    pub locale: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DescribeFindingsResponse {
     #[doc="<p>Finding details that cannot be described. An error code is provided for each failed item.</p>"]
     #[serde(rename="failedItems")]
-    pub failed_items: FailedItems,
+    pub failed_items: ::std::collections::HashMap<String, FailedItemDetails>,
     #[doc="<p>Information about the finding.</p>"]
     #[serde(rename="findings")]
-    pub findings: FindingList,
+    pub findings: Vec<Finding>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DescribeResourceGroupsRequest {
     #[doc="<p>The ARN that specifies the resource group that you want to describe.</p>"]
     #[serde(rename="resourceGroupArns")]
-    pub resource_group_arns: BatchDescribeArnList,
+    pub resource_group_arns: Vec<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DescribeResourceGroupsResponse {
     #[doc="<p>Resource group details that cannot be described. An error code is provided for each failed item.</p>"]
     #[serde(rename="failedItems")]
-    pub failed_items: FailedItems,
+    pub failed_items: ::std::collections::HashMap<String, FailedItemDetails>,
     #[doc="<p>Information about a resource group.</p>"]
     #[serde(rename="resourceGroups")]
-    pub resource_groups: ResourceGroupList,
+    pub resource_groups: Vec<ResourceGroup>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -559,20 +522,20 @@ pub struct DescribeRulesPackagesRequest {
     #[doc="<p>The locale that you want to translate a rules package description into.</p>"]
     #[serde(rename="locale")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub locale: Option<Locale>,
+    pub locale: Option<String>,
     #[doc="<p>The ARN that specifies the rules package that you want to describe.</p>"]
     #[serde(rename="rulesPackageArns")]
-    pub rules_package_arns: BatchDescribeArnList,
+    pub rules_package_arns: Vec<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DescribeRulesPackagesResponse {
     #[doc="<p>Rules package details that cannot be described. An error code is provided for each failed item.</p>"]
     #[serde(rename="failedItems")]
-    pub failed_items: FailedItems,
+    pub failed_items: ::std::collections::HashMap<String, FailedItemDetails>,
     #[doc="<p>Information about the rules package.</p>"]
     #[serde(rename="rulesPackages")]
-    pub rules_packages: RulesPackageList,
+    pub rules_packages: Vec<RulesPackage>,
 }
 
 #[doc="<p>This data type is used in the <a>AssessmentTemplateFilter</a> data type.</p>"]
@@ -581,46 +544,41 @@ pub struct DurationRange {
     #[doc="<p>The maximum value of the duration range. Must be less than or equal to 604800 seconds (1 week).</p>"]
     #[serde(rename="maxSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_seconds: Option<AssessmentRunDuration>,
+    pub max_seconds: Option<i64>,
     #[doc="<p>The minimum value of the duration range. Must be greater than zero.</p>"]
     #[serde(rename="minSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub min_seconds: Option<AssessmentRunDuration>,
+    pub min_seconds: Option<i64>,
 }
 
-pub type ErrorMessage = String;
 #[doc="<p>This data type is used in the <a>Subscription</a> data type.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct EventSubscription {
     #[doc="<p>The event for which Amazon Simple Notification Service (SNS) notifications are sent.</p>"]
     #[serde(rename="event")]
-    pub event: InspectorEvent,
+    pub event: String,
     #[doc="<p>The time at which <a>SubscribeToEvent</a> is called.</p>"]
     #[serde(rename="subscribedAt")]
-    pub subscribed_at: Timestamp,
+    pub subscribed_at: f64,
 }
 
-pub type EventSubscriptionList = Vec<EventSubscription>;
 #[doc="<p>Includes details about the failed items.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct FailedItemDetails {
     #[doc="<p>The status code of a failed item.</p>"]
     #[serde(rename="failureCode")]
-    pub failure_code: FailedItemErrorCode,
+    pub failure_code: String,
     #[doc="<p>Indicates whether you can immediately retry a request for this item for a specified resource.</p>"]
     #[serde(rename="retryable")]
-    pub retryable: Bool,
+    pub retryable: bool,
 }
 
-pub type FailedItemErrorCode = String;
-pub type FailedItems = ::std::collections::HashMap<Arn, FailedItemDetails>;
-pub type FilterRulesPackageArnList = Vec<Arn>;
 #[doc="<p>Contains information about an Amazon Inspector finding. This data type is used as the response element in the <a>DescribeFindings</a> action.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Finding {
     #[doc="<p>The ARN that specifies the finding.</p>"]
     #[serde(rename="arn")]
-    pub arn: Arn,
+    pub arn: String,
     #[doc="<p>A collection of attributes of the host from which the finding is generated.</p>"]
     #[serde(rename="assetAttributes")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -628,45 +586,45 @@ pub struct Finding {
     #[doc="<p>The type of the host from which the finding is generated.</p>"]
     #[serde(rename="assetType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub asset_type: Option<AssetType>,
+    pub asset_type: Option<String>,
     #[doc="<p>The system-defined attributes for the finding.</p>"]
     #[serde(rename="attributes")]
-    pub attributes: AttributeList,
+    pub attributes: Vec<Attribute>,
     #[doc="<p>This data element is currently not used.</p>"]
     #[serde(rename="confidence")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub confidence: Option<IocConfidence>,
+    pub confidence: Option<i64>,
     #[doc="<p>The time when the finding was generated.</p>"]
     #[serde(rename="createdAt")]
-    pub created_at: Timestamp,
+    pub created_at: f64,
     #[doc="<p>The description of the finding.</p>"]
     #[serde(rename="description")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub description: Option<Text>,
+    pub description: Option<String>,
     #[doc="<p>The ID of the finding.</p>"]
     #[serde(rename="id")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub id: Option<FindingId>,
+    pub id: Option<String>,
     #[doc="<p>This data element is currently not used.</p>"]
     #[serde(rename="indicatorOfCompromise")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub indicator_of_compromise: Option<Bool>,
+    pub indicator_of_compromise: Option<bool>,
     #[doc="<p>The numeric value of the finding severity.</p>"]
     #[serde(rename="numericSeverity")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub numeric_severity: Option<NumericSeverity>,
+    pub numeric_severity: Option<f64>,
     #[doc="<p>The recommendation for the finding.</p>"]
     #[serde(rename="recommendation")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub recommendation: Option<Text>,
+    pub recommendation: Option<String>,
     #[doc="<p>The schema version of this data type.</p>"]
     #[serde(rename="schemaVersion")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub schema_version: Option<NumericVersion>,
+    pub schema_version: Option<i64>,
     #[doc="<p>The data element is set to \"Inspector\".</p>"]
     #[serde(rename="service")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub service: Option<ServiceName>,
+    pub service: Option<String>,
     #[doc="<p>This data type is used in the <a>Finding</a> data type.</p>"]
     #[serde(rename="serviceAttributes")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -674,35 +632,34 @@ pub struct Finding {
     #[doc="<p>The finding severity. Values can be set to High, Medium, Low, and Informational.</p>"]
     #[serde(rename="severity")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub severity: Option<Severity>,
+    pub severity: Option<String>,
     #[doc="<p>The name of the finding.</p>"]
     #[serde(rename="title")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub title: Option<Text>,
+    pub title: Option<String>,
     #[doc="<p>The time when <a>AddAttributesToFindings</a> is called.</p>"]
     #[serde(rename="updatedAt")]
-    pub updated_at: Timestamp,
+    pub updated_at: f64,
     #[doc="<p>The user-defined attributes that are assigned to the finding.</p>"]
     #[serde(rename="userAttributes")]
-    pub user_attributes: UserAttributeList,
+    pub user_attributes: Vec<Attribute>,
 }
 
-pub type FindingCount = i64;
 #[doc="<p>This data type is used as a request parameter in the <a>ListFindings</a> action.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct FindingFilter {
     #[doc="<p>For a record to match a filter, one of the values that is specified for this data type property must be the exact match of the value of the <b>agentId</b> property of the <a>Finding</a> data type.</p>"]
     #[serde(rename="agentIds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub agent_ids: Option<AgentIdList>,
+    pub agent_ids: Option<Vec<String>>,
     #[doc="<p>For a record to match a filter, the list of values that are specified for this data type property must be contained in the list of values of the <b>attributes</b> property of the <a>Finding</a> data type.</p>"]
     #[serde(rename="attributes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub attributes: Option<AttributeList>,
+    pub attributes: Option<Vec<Attribute>>,
     #[doc="<p>For a record to match a filter, one of the values that is specified for this data type property must be the exact match of the value of the <b>autoScalingGroup</b> property of the <a>Finding</a> data type.</p>"]
     #[serde(rename="autoScalingGroups")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub auto_scaling_groups: Option<AutoScalingGroupList>,
+    pub auto_scaling_groups: Option<Vec<String>>,
     #[doc="<p>The time range during which the finding is generated.</p>"]
     #[serde(rename="creationTimeRange")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -710,90 +667,80 @@ pub struct FindingFilter {
     #[doc="<p>For a record to match a filter, one of the values that is specified for this data type property must be the exact match of the value of the <b>ruleName</b> property of the <a>Finding</a> data type.</p>"]
     #[serde(rename="ruleNames")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub rule_names: Option<RuleNameList>,
+    pub rule_names: Option<Vec<String>>,
     #[doc="<p>For a record to match a filter, one of the values that is specified for this data type property must be the exact match of the value of the <b>rulesPackageArn</b> property of the <a>Finding</a> data type.</p>"]
     #[serde(rename="rulesPackageArns")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub rules_package_arns: Option<FilterRulesPackageArnList>,
+    pub rules_package_arns: Option<Vec<String>>,
     #[doc="<p>For a record to match a filter, one of the values that is specified for this data type property must be the exact match of the value of the <b>severity</b> property of the <a>Finding</a> data type.</p>"]
     #[serde(rename="severities")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub severities: Option<SeverityList>,
+    pub severities: Option<Vec<String>>,
     #[doc="<p>For a record to match a filter, the value that is specified for this data type property must be contained in the list of values of the <b>userAttributes</b> property of the <a>Finding</a> data type.</p>"]
     #[serde(rename="userAttributes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub user_attributes: Option<AttributeList>,
+    pub user_attributes: Option<Vec<Attribute>>,
 }
 
-pub type FindingId = String;
-pub type FindingList = Vec<Finding>;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetAssessmentReportRequest {
     #[doc="<p>The ARN that specifies the assessment run for which you want to generate a report.</p>"]
     #[serde(rename="assessmentRunArn")]
-    pub assessment_run_arn: Arn,
+    pub assessment_run_arn: String,
     #[doc="<p>Specifies the file format (html or pdf) of the assessment report that you want to generate.</p>"]
     #[serde(rename="reportFileFormat")]
-    pub report_file_format: ReportFileFormat,
+    pub report_file_format: String,
     #[doc="<p>Specifies the type of the assessment report that you want to generate. There are two types of assessment reports: a finding report and a full report. For more information, see <a href=\"http://docs.aws.amazon.com/inspector/latest/userguide/inspector_reports.html\">Assessment Reports</a>. </p>"]
     #[serde(rename="reportType")]
-    pub report_type: ReportType,
+    pub report_type: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GetAssessmentReportResponse {
     #[doc="<p>Specifies the status of the request to generate an assessment report. </p>"]
     #[serde(rename="status")]
-    pub status: ReportStatus,
+    pub status: String,
     #[doc="<p>Specifies the URL where you can find the generated assessment report. This parameter is only returned if the report is successfully generated.</p>"]
     #[serde(rename="url")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub url: Option<Url>,
+    pub url: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetTelemetryMetadataRequest {
     #[doc="<p>The ARN that specifies the assessment run that has the telemetry data that you want to obtain.</p>"]
     #[serde(rename="assessmentRunArn")]
-    pub assessment_run_arn: Arn,
+    pub assessment_run_arn: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GetTelemetryMetadataResponse {
     #[doc="<p>Telemetry details.</p>"]
     #[serde(rename="telemetryMetadata")]
-    pub telemetry_metadata: TelemetryMetadataList,
+    pub telemetry_metadata: Vec<TelemetryMetadata>,
 }
 
-pub type Hostname = String;
-pub type InspectorEvent = String;
 #[doc="<p>This data type is used in the <a>Finding</a> data type.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct InspectorServiceAttributes {
     #[doc="<p>The ARN of the assessment run during which the finding is generated.</p>"]
     #[serde(rename="assessmentRunArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub assessment_run_arn: Option<Arn>,
+    pub assessment_run_arn: Option<String>,
     #[doc="<p>The ARN of the rules package that is used to generate the finding.</p>"]
     #[serde(rename="rulesPackageArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub rules_package_arn: Option<Arn>,
+    pub rules_package_arn: Option<String>,
     #[doc="<p>The schema version of this data type.</p>"]
     #[serde(rename="schemaVersion")]
-    pub schema_version: NumericVersion,
+    pub schema_version: i64,
 }
 
-pub type InvalidCrossAccountRoleErrorCode = String;
-pub type InvalidInputErrorCode = String;
-pub type IocConfidence = i64;
-pub type Ipv4Address = String;
-pub type Ipv4AddressList = Vec<Ipv4Address>;
-pub type LimitExceededErrorCode = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListAssessmentRunAgentsRequest {
     #[doc="<p>The ARN that specifies the assessment run whose agents you want to list.</p>"]
     #[serde(rename="assessmentRunArn")]
-    pub assessment_run_arn: Arn,
+    pub assessment_run_arn: String,
     #[doc="<p>You can use this parameter to specify a subset of data to be included in the action's response.</p> <p>For a record to match a filter, all specified filter attributes must match. When multiple values are specified for a filter attribute, any of the values can match.</p>"]
     #[serde(rename="filter")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -801,22 +748,22 @@ pub struct ListAssessmentRunAgentsRequest {
     #[doc="<p>You can use this parameter to indicate the maximum number of items that you want in the response. The default value is 10. The maximum value is 500.</p>"]
     #[serde(rename="maxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<ListMaxResults>,
+    pub max_results: Option<i64>,
     #[doc="<p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the <b>ListAssessmentRunAgents</b> action. Subsequent calls to the action fill <b>nextToken</b> in the request with the value of <b>NextToken</b> from the previous response to continue listing data.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ListAssessmentRunAgentsResponse {
     #[doc="<p>A list of ARNs that specifies the agents returned by the action.</p>"]
     #[serde(rename="assessmentRunAgents")]
-    pub assessment_run_agents: AssessmentRunAgentList,
+    pub assessment_run_agents: Vec<AssessmentRunAgent>,
     #[doc="<p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -824,7 +771,7 @@ pub struct ListAssessmentRunsRequest {
     #[doc="<p>The ARNs that specify the assessment templates whose assessment runs you want to list.</p>"]
     #[serde(rename="assessmentTemplateArns")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub assessment_template_arns: Option<ListParentArnList>,
+    pub assessment_template_arns: Option<Vec<String>>,
     #[doc="<p>You can use this parameter to specify a subset of data to be included in the action's response.</p> <p>For a record to match a filter, all specified filter attributes must match. When multiple values are specified for a filter attribute, any of the values can match.</p>"]
     #[serde(rename="filter")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -832,22 +779,22 @@ pub struct ListAssessmentRunsRequest {
     #[doc="<p>You can use this parameter to indicate the maximum number of items that you want in the response. The default value is 10. The maximum value is 500.</p>"]
     #[serde(rename="maxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<ListMaxResults>,
+    pub max_results: Option<i64>,
     #[doc="<p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the <b>ListAssessmentRuns</b> action. Subsequent calls to the action fill <b>nextToken</b> in the request with the value of <b>NextToken</b> from the previous response to continue listing data.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ListAssessmentRunsResponse {
     #[doc="<p>A list of ARNs that specifies the assessment runs that are returned by the action.</p>"]
     #[serde(rename="assessmentRunArns")]
-    pub assessment_run_arns: ListReturnedArnList,
+    pub assessment_run_arns: Vec<String>,
     #[doc="<p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -859,22 +806,22 @@ pub struct ListAssessmentTargetsRequest {
     #[doc="<p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>"]
     #[serde(rename="maxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<ListMaxResults>,
+    pub max_results: Option<i64>,
     #[doc="<p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the <b>ListAssessmentTargets</b> action. Subsequent calls to the action fill <b>nextToken</b> in the request with the value of <b>NextToken</b> from the previous response to continue listing data.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ListAssessmentTargetsResponse {
     #[doc="<p>A list of ARNs that specifies the assessment targets that are returned by the action.</p>"]
     #[serde(rename="assessmentTargetArns")]
-    pub assessment_target_arns: ListReturnedArnList,
+    pub assessment_target_arns: Vec<String>,
     #[doc="<p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -882,7 +829,7 @@ pub struct ListAssessmentTemplatesRequest {
     #[doc="<p>A list of ARNs that specifies the assessment targets whose assessment templates you want to list.</p>"]
     #[serde(rename="assessmentTargetArns")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub assessment_target_arns: Option<ListParentArnList>,
+    pub assessment_target_arns: Option<Vec<String>>,
     #[doc="<p>You can use this parameter to specify a subset of data to be included in the action's response.</p> <p>For a record to match a filter, all specified filter attributes must match. When multiple values are specified for a filter attribute, any of the values can match.</p>"]
     #[serde(rename="filter")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -890,39 +837,38 @@ pub struct ListAssessmentTemplatesRequest {
     #[doc="<p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>"]
     #[serde(rename="maxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<ListMaxResults>,
+    pub max_results: Option<i64>,
     #[doc="<p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the <b>ListAssessmentTemplates</b> action. Subsequent calls to the action fill <b>nextToken</b> in the request with the value of <b>NextToken</b> from the previous response to continue listing data.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ListAssessmentTemplatesResponse {
     #[doc="<p>A list of ARNs that specifies the assessment templates returned by the action.</p>"]
     #[serde(rename="assessmentTemplateArns")]
-    pub assessment_template_arns: ListReturnedArnList,
+    pub assessment_template_arns: Vec<String>,
     #[doc="<p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
 }
 
-pub type ListEventSubscriptionsMaxResults = i64;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListEventSubscriptionsRequest {
     #[doc="<p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>"]
     #[serde(rename="maxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<ListEventSubscriptionsMaxResults>,
+    pub max_results: Option<i64>,
     #[doc="<p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the <b>ListEventSubscriptions</b> action. Subsequent calls to the action fill <b>nextToken</b> in the request with the value of <b>NextToken</b> from the previous response to continue listing data.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
     #[doc="<p>The ARN of the assessment template for which you want to list the existing event subscriptions.</p>"]
     #[serde(rename="resourceArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub resource_arn: Option<Arn>,
+    pub resource_arn: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -930,10 +876,10 @@ pub struct ListEventSubscriptionsResponse {
     #[doc="<p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
     #[doc="<p>Details of the returned event subscriptions.</p>"]
     #[serde(rename="subscriptions")]
-    pub subscriptions: SubscriptionList,
+    pub subscriptions: Vec<Subscription>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -941,7 +887,7 @@ pub struct ListFindingsRequest {
     #[doc="<p>The ARNs of the assessment runs that generate the findings that you want to list.</p>"]
     #[serde(rename="assessmentRunArns")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub assessment_run_arns: Option<ListParentArnList>,
+    pub assessment_run_arns: Option<Vec<String>>,
     #[doc="<p>You can use this parameter to specify a subset of data to be included in the action's response.</p> <p>For a record to match a filter, all specified filter attributes must match. When multiple values are specified for a filter attribute, any of the values can match.</p>"]
     #[serde(rename="filter")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -949,37 +895,34 @@ pub struct ListFindingsRequest {
     #[doc="<p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>"]
     #[serde(rename="maxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<ListMaxResults>,
+    pub max_results: Option<i64>,
     #[doc="<p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the <b>ListFindings</b> action. Subsequent calls to the action fill <b>nextToken</b> in the request with the value of <b>NextToken</b> from the previous response to continue listing data.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ListFindingsResponse {
     #[doc="<p>A list of ARNs that specifies the findings returned by the action.</p>"]
     #[serde(rename="findingArns")]
-    pub finding_arns: ListReturnedArnList,
+    pub finding_arns: Vec<String>,
     #[doc="<p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
 }
 
-pub type ListMaxResults = i64;
-pub type ListParentArnList = Vec<Arn>;
-pub type ListReturnedArnList = Vec<Arn>;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListRulesPackagesRequest {
     #[doc="<p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>"]
     #[serde(rename="maxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<ListMaxResults>,
+    pub max_results: Option<i64>,
     #[doc="<p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the <b>ListRulesPackages</b> action. Subsequent calls to the action fill <b>nextToken</b> in the request with the value of <b>NextToken</b> from the previous response to continue listing data.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -987,193 +930,170 @@ pub struct ListRulesPackagesResponse {
     #[doc="<p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
     #[doc="<p>The list of ARNs that specifies the rules packages returned by the action.</p>"]
     #[serde(rename="rulesPackageArns")]
-    pub rules_package_arns: ListReturnedArnList,
+    pub rules_package_arns: Vec<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListTagsForResourceRequest {
     #[doc="<p>The ARN that specifies the assessment template whose tags you want to list.</p>"]
     #[serde(rename="resourceArn")]
-    pub resource_arn: Arn,
+    pub resource_arn: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ListTagsForResourceResponse {
     #[doc="<p>A collection of key and value pairs.</p>"]
     #[serde(rename="tags")]
-    pub tags: TagList,
+    pub tags: Vec<Tag>,
 }
 
-pub type Locale = String;
-pub type Long = i64;
-pub type Message = String;
-pub type MessageType = String;
-pub type NamePattern = String;
-pub type NoSuchEntityErrorCode = String;
-pub type NumericSeverity = f64;
-pub type NumericVersion = i64;
-pub type PaginationToken = String;
-pub type PreviewAgentsMaxResults = i64;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct PreviewAgentsRequest {
     #[doc="<p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>"]
     #[serde(rename="maxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<PreviewAgentsMaxResults>,
+    pub max_results: Option<i64>,
     #[doc="<p>You can use this parameter when paginating results. Set the value of this parameter to null on your first call to the <b>PreviewAgents</b> action. Subsequent calls to the action fill <b>nextToken</b> in the request with the value of <b>NextToken</b> from the previous response to continue listing data.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
     #[doc="<p>The ARN of the assessment target whose agents you want to preview.</p>"]
     #[serde(rename="previewAgentsArn")]
-    pub preview_agents_arn: Arn,
+    pub preview_agents_arn: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct PreviewAgentsResponse {
     #[doc="<p>The resulting list of agents.</p>"]
     #[serde(rename="agentPreviews")]
-    pub agent_previews: AgentPreviewList,
+    pub agent_previews: Vec<AgentPreview>,
     #[doc="<p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
 }
 
-pub type ProviderName = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct RegisterCrossAccountAccessRoleRequest {
     #[doc="<p>The ARN of the IAM role that Amazon Inspector uses to list your EC2 instances during the assessment run or when you call the <a>PreviewAgents</a> action. </p>"]
     #[serde(rename="roleArn")]
-    pub role_arn: Arn,
+    pub role_arn: String,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct RemoveAttributesFromFindingsRequest {
     #[doc="<p>The array of attribute keys that you want to remove from specified findings.</p>"]
     #[serde(rename="attributeKeys")]
-    pub attribute_keys: UserAttributeKeyList,
+    pub attribute_keys: Vec<String>,
     #[doc="<p>The ARNs that specify the findings that you want to remove attributes from.</p>"]
     #[serde(rename="findingArns")]
-    pub finding_arns: AddRemoveAttributesFindingArnList,
+    pub finding_arns: Vec<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct RemoveAttributesFromFindingsResponse {
     #[doc="<p>Attributes details that cannot be described. An error code is provided for each failed item.</p>"]
     #[serde(rename="failedItems")]
-    pub failed_items: FailedItems,
+    pub failed_items: ::std::collections::HashMap<String, FailedItemDetails>,
 }
 
-pub type ReportFileFormat = String;
-pub type ReportStatus = String;
-pub type ReportType = String;
 #[doc="<p>Contains information about a resource group. The resource group defines a set of tags that, when queried, identify the AWS resources that make up the assessment target. This data type is used as the response element in the <a>DescribeResourceGroups</a> action.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ResourceGroup {
     #[doc="<p>The ARN of the resource group.</p>"]
     #[serde(rename="arn")]
-    pub arn: Arn,
+    pub arn: String,
     #[doc="<p>The time at which resource group is created.</p>"]
     #[serde(rename="createdAt")]
-    pub created_at: Timestamp,
+    pub created_at: f64,
     #[doc="<p>The tags (key and value pairs) of the resource group. This data type property is used in the <a>CreateResourceGroup</a> action.</p>"]
     #[serde(rename="tags")]
-    pub tags: ResourceGroupTags,
+    pub tags: Vec<ResourceGroupTag>,
 }
 
-pub type ResourceGroupList = Vec<ResourceGroup>;
 #[doc="<p>This data type is used as one of the elements of the <a>ResourceGroup</a> data type.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ResourceGroupTag {
     #[doc="<p>A tag key.</p>"]
     #[serde(rename="key")]
-    pub key: TagKey,
+    pub key: String,
     #[doc="<p>The value assigned to a tag key.</p>"]
     #[serde(rename="value")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub value: Option<TagValue>,
+    pub value: Option<String>,
 }
 
-pub type ResourceGroupTags = Vec<ResourceGroupTag>;
-pub type RuleName = String;
-pub type RuleNameList = Vec<RuleName>;
 #[doc="<p>Contains information about an Amazon Inspector rules package. This data type is used as the response element in the <a>DescribeRulesPackages</a> action.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct RulesPackage {
     #[doc="<p>The ARN of the rules package.</p>"]
     #[serde(rename="arn")]
-    pub arn: Arn,
+    pub arn: String,
     #[doc="<p>The description of the rules package.</p>"]
     #[serde(rename="description")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub description: Option<Text>,
+    pub description: Option<String>,
     #[doc="<p>The name of the rules package.</p>"]
     #[serde(rename="name")]
-    pub name: RulesPackageName,
+    pub name: String,
     #[doc="<p>The provider of the rules package.</p>"]
     #[serde(rename="provider")]
-    pub provider: ProviderName,
+    pub provider: String,
     #[doc="<p>The version ID of the rules package.</p>"]
     #[serde(rename="version")]
-    pub version: Version,
+    pub version: String,
 }
 
-pub type RulesPackageList = Vec<RulesPackage>;
-pub type RulesPackageName = String;
-pub type ServiceName = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct SetTagsForResourceRequest {
     #[doc="<p>The ARN of the assessment template that you want to set tags to.</p>"]
     #[serde(rename="resourceArn")]
-    pub resource_arn: Arn,
+    pub resource_arn: String,
     #[doc="<p>A collection of key and value pairs that you want to set to the assessment template.</p>"]
     #[serde(rename="tags")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
-pub type Severity = String;
-pub type SeverityList = Vec<Severity>;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct StartAssessmentRunRequest {
     #[doc="<p>You can specify the name for the assessment run. The name must be unique for the assessment template whose ARN is used to start the assessment run.</p>"]
     #[serde(rename="assessmentRunName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub assessment_run_name: Option<AssessmentRunName>,
+    pub assessment_run_name: Option<String>,
     #[doc="<p>The ARN of the assessment template of the assessment run that you want to start.</p>"]
     #[serde(rename="assessmentTemplateArn")]
-    pub assessment_template_arn: Arn,
+    pub assessment_template_arn: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct StartAssessmentRunResponse {
     #[doc="<p>The ARN of the assessment run that has been started.</p>"]
     #[serde(rename="assessmentRunArn")]
-    pub assessment_run_arn: Arn,
+    pub assessment_run_arn: String,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct StopAssessmentRunRequest {
     #[doc="<p>The ARN of the assessment run that you want to stop.</p>"]
     #[serde(rename="assessmentRunArn")]
-    pub assessment_run_arn: Arn,
+    pub assessment_run_arn: String,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct SubscribeToEventRequest {
     #[doc="<p>The event for which you want to receive SNS notifications.</p>"]
     #[serde(rename="event")]
-    pub event: InspectorEvent,
+    pub event: String,
     #[doc="<p>The ARN of the assessment template that is used during the event for which you want to receive SNS notifications.</p>"]
     #[serde(rename="resourceArn")]
-    pub resource_arn: Arn,
+    pub resource_arn: String,
     #[doc="<p>The ARN of the SNS topic to which the SNS notifications are sent.</p>"]
     #[serde(rename="topicArn")]
-    pub topic_arn: Arn,
+    pub topic_arn: String,
 }
 
 #[doc="<p>This data type is used as a response element in the <a>ListEventSubscriptions</a> action.</p>"]
@@ -1181,92 +1101,81 @@ pub struct SubscribeToEventRequest {
 pub struct Subscription {
     #[doc="<p>The list of existing event subscriptions.</p>"]
     #[serde(rename="eventSubscriptions")]
-    pub event_subscriptions: EventSubscriptionList,
+    pub event_subscriptions: Vec<EventSubscription>,
     #[doc="<p>The ARN of the assessment template that is used during the event for which the SNS notification is sent.</p>"]
     #[serde(rename="resourceArn")]
-    pub resource_arn: Arn,
+    pub resource_arn: String,
     #[doc="<p>The ARN of the Amazon Simple Notification Service (SNS) topic to which the SNS notifications are sent.</p>"]
     #[serde(rename="topicArn")]
-    pub topic_arn: Arn,
+    pub topic_arn: String,
 }
 
-pub type SubscriptionList = Vec<Subscription>;
 #[doc="<p>A key and value pair. This data type is used as a request parameter in the <a>SetTagsForResource</a> action and a response element in the <a>ListTagsForResource</a> action.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Tag {
     #[doc="<p>A tag key.</p>"]
     #[serde(rename="key")]
-    pub key: TagKey,
+    pub key: String,
     #[doc="<p>A value assigned to a tag key.</p>"]
     #[serde(rename="value")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub value: Option<TagValue>,
+    pub value: Option<String>,
 }
 
-pub type TagKey = String;
-pub type TagList = Vec<Tag>;
-pub type TagValue = String;
 #[doc="<p>The metadata about the Amazon Inspector application data metrics collected by the agent. This data type is used as the response element in the <a>GetTelemetryMetadata</a> action.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct TelemetryMetadata {
     #[doc="<p>The count of messages that the agent sends to the Amazon Inspector service.</p>"]
     #[serde(rename="count")]
-    pub count: Long,
+    pub count: i64,
     #[doc="<p>The data size of messages that the agent sends to the Amazon Inspector service.</p>"]
     #[serde(rename="dataSize")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub data_size: Option<Long>,
+    pub data_size: Option<i64>,
     #[doc="<p>A specific type of behavioral data that is collected by the agent.</p>"]
     #[serde(rename="messageType")]
-    pub message_type: MessageType,
+    pub message_type: String,
 }
 
-pub type TelemetryMetadataList = Vec<TelemetryMetadata>;
-pub type Text = String;
-pub type Timestamp = f64;
 #[doc="<p>This data type is used in the <a>AssessmentRunFilter</a> data type.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct TimestampRange {
     #[doc="<p>The minimum value of the timestamp range.</p>"]
     #[serde(rename="beginDate")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub begin_date: Option<Timestamp>,
+    pub begin_date: Option<f64>,
     #[doc="<p>The maximum value of the timestamp range.</p>"]
     #[serde(rename="endDate")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub end_date: Option<Timestamp>,
+    pub end_date: Option<f64>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UnsubscribeFromEventRequest {
     #[doc="<p>The event for which you want to stop receiving SNS notifications.</p>"]
     #[serde(rename="event")]
-    pub event: InspectorEvent,
+    pub event: String,
     #[doc="<p>The ARN of the assessment template that is used during the event for which you want to stop receiving SNS notifications.</p>"]
     #[serde(rename="resourceArn")]
-    pub resource_arn: Arn,
+    pub resource_arn: String,
     #[doc="<p>The ARN of the SNS topic to which SNS notifications are sent.</p>"]
     #[serde(rename="topicArn")]
-    pub topic_arn: Arn,
+    pub topic_arn: String,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateAssessmentTargetRequest {
     #[doc="<p>The ARN of the assessment target that you want to update.</p>"]
     #[serde(rename="assessmentTargetArn")]
-    pub assessment_target_arn: Arn,
+    pub assessment_target_arn: String,
     #[doc="<p>The name of the assessment target that you want to update.</p>"]
     #[serde(rename="assessmentTargetName")]
-    pub assessment_target_name: AssessmentTargetName,
+    pub assessment_target_name: String,
     #[doc="<p>The ARN of the resource group that is used to specify the new resource group to associate with the assessment target.</p>"]
     #[serde(rename="resourceGroupArn")]
-    pub resource_group_arn: Arn,
+    pub resource_group_arn: String,
 }
 
-pub type Url = String;
-pub type UserAttributeKeyList = Vec<AttributeKey>;
-pub type UserAttributeList = Vec<Attribute>;
-pub type Version = String;
 /// Errors returned by AddAttributesToFindings
 #[derive(Debug, PartialEq)]
 pub enum AddAttributesToFindingsError {

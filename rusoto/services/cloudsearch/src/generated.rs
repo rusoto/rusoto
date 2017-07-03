@@ -37,14 +37,12 @@ enum DeserializerNext {
     Skip,
     Element(String),
 }
-#[doc="<p>The Amazon CloudSearch API version for a domain: 2011-02-01 or 2013-01-01.</p>"]
-pub type APIVersion = String;
 struct APIVersionDeserializer;
 impl APIVersionDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<APIVersion, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -53,14 +51,12 @@ impl APIVersionDeserializer {
 
     }
 }
-#[doc="<p>The Amazon Resource Name (ARN) of the search domain. See <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/index.html?Using_Identifiers.html\" target=\"_blank\">Identifiers for IAM Entities</a> in <i>Using AWS Identity and Access Management</i> for more information.</p>"]
-pub type ARN = String;
 struct ARNDeserializer;
 impl ARNDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ARN, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -72,7 +68,7 @@ impl ARNDeserializer {
 #[doc="<p>The configured access rules for the domain's document and search endpoints, and the current status of those rules.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct AccessPoliciesStatus {
-    pub options: PolicyDocument,
+    pub options: String,
     pub status: OptionStatus,
 }
 
@@ -122,13 +118,12 @@ impl AccessPoliciesStatusDeserializer {
 
     }
 }
-pub type AlgorithmicStemming = String;
 struct AlgorithmicStemmingDeserializer;
 impl AlgorithmicStemmingDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AlgorithmicStemming, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -141,7 +136,7 @@ impl AlgorithmicStemmingDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct AnalysisOptions {
     #[doc="<p>The level of algorithmic stemming to perform: <code>none</code>, <code>minimal</code>, <code>light</code>, or <code>full</code>. The available levels vary depending on the language. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/text-processing.html#text-processing-settings\" target=\"_blank\">Language Specific Text Processing Settings</a> in the <i>Amazon CloudSearch Developer Guide</i> </p>"]
-    pub algorithmic_stemming: Option<AlgorithmicStemming>,
+    pub algorithmic_stemming: Option<String>,
     #[doc="<p>A JSON array that contains a collection of terms, tokens, readings and part of speech for Japanese Tokenizaiton. The Japanese tokenization dictionary enables you to override the default tokenization for selected terms. This is only valid for Japanese language fields.</p>"]
     pub japanese_tokenization_dictionary: Option<String>,
     #[doc="<p>A JSON object that contains a collection of string:value pairs that each map a term to its stem. For example, <code>{\"term1\": \"stem1\", \"term2\": \"stem2\", \"term3\": \"stem3\"}</code>. The stemming dictionary is applied in addition to any algorithmic stemming. This enables you to override the results of the algorithmic stemming to correct specific cases of overstemming or understemming. The maximum size of a stemming dictionary is 500 KB.</p>"]
@@ -248,8 +243,8 @@ impl AnalysisOptionsSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct AnalysisScheme {
     pub analysis_options: Option<AnalysisOptions>,
-    pub analysis_scheme_language: AnalysisSchemeLanguage,
-    pub analysis_scheme_name: StandardName,
+    pub analysis_scheme_language: String,
+    pub analysis_scheme_name: String,
 }
 
 struct AnalysisSchemeDeserializer;
@@ -328,14 +323,12 @@ impl AnalysisSchemeSerializer {
     }
 }
 
-#[doc="<p>An <a href=\"http://tools.ietf.org/html/rfc4646\" target=\"_blank\">IETF RFC 4646</a> language code or <code>mul</code> for multiple languages.</p>"]
-pub type AnalysisSchemeLanguage = String;
 struct AnalysisSchemeLanguageDeserializer;
 impl AnalysisSchemeLanguageDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AnalysisSchemeLanguage, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -397,14 +390,12 @@ impl AnalysisSchemeStatusDeserializer {
 
     }
 }
-#[doc="<p>A list of the analysis schemes configured for a domain.</p>"]
-pub type AnalysisSchemeStatusList = Vec<AnalysisSchemeStatus>;
 struct AnalysisSchemeStatusListDeserializer;
 impl AnalysisSchemeStatusListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AnalysisSchemeStatusList, XmlParseError> {
+                                       -> Result<Vec<AnalysisSchemeStatus>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -445,7 +436,7 @@ impl AnalysisSchemeStatusListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct AvailabilityOptionsStatus {
     #[doc="<p>The availability options configured for the domain.</p>"]
-    pub options: MultiAZ,
+    pub options: bool,
     pub status: OptionStatus,
 }
 
@@ -494,13 +485,12 @@ impl AvailabilityOptionsStatusDeserializer {
 
     }
 }
-pub type Boolean = bool;
 struct BooleanDeserializer;
 impl BooleanDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Boolean, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -512,7 +502,7 @@ impl BooleanDeserializer {
 #[doc="<p>Container for the parameters to the <code><a>BuildSuggester</a></code> operation. Specifies the name of the domain you want to update.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct BuildSuggestersRequest {
-    pub domain_name: DomainName,
+    pub domain_name: String,
 }
 
 
@@ -533,7 +523,7 @@ impl BuildSuggestersRequestSerializer {
 #[doc="<p>The result of a <code>BuildSuggester</code> request. Contains a list of the fields used for suggestions.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct BuildSuggestersResponse {
-    pub field_names: Option<FieldNameList>,
+    pub field_names: Option<Vec<String>>,
 }
 
 struct BuildSuggestersResponseDeserializer;
@@ -583,7 +573,7 @@ impl BuildSuggestersResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateDomainRequest {
     #[doc="<p>A name for the domain you are creating. Allowed characters are a-z (lower-case letters), 0-9, and hyphen (-). Domain names must start with a letter or number and be at least 3 and no more than 28 characters long.</p>"]
-    pub domain_name: DomainName,
+    pub domain_name: String,
 }
 
 
@@ -654,15 +644,15 @@ impl CreateDomainResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DateArrayOptions {
     #[doc="A value to use for the field if the field isn't specified for a document."]
-    pub default_value: Option<FieldValue>,
+    pub default_value: Option<String>,
     #[doc="<p>Whether facet information can be returned for the field.</p>"]
-    pub facet_enabled: Option<Boolean>,
+    pub facet_enabled: Option<bool>,
     #[doc="<p>Whether the contents of the field can be returned in the search results.</p>"]
-    pub return_enabled: Option<Boolean>,
+    pub return_enabled: Option<bool>,
     #[doc="<p>Whether the contents of the field are searchable.</p>"]
-    pub search_enabled: Option<Boolean>,
+    pub search_enabled: Option<bool>,
     #[doc="<p>A list of source fields to map to the field. </p>"]
-    pub source_fields: Option<FieldNameCommaList>,
+    pub source_fields: Option<String>,
 }
 
 struct DateArrayOptionsDeserializer;
@@ -763,16 +753,16 @@ impl DateArrayOptionsSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DateOptions {
     #[doc="A value to use for the field if the field isn't specified for a document."]
-    pub default_value: Option<FieldValue>,
+    pub default_value: Option<String>,
     #[doc="<p>Whether facet information can be returned for the field.</p>"]
-    pub facet_enabled: Option<Boolean>,
+    pub facet_enabled: Option<bool>,
     #[doc="<p>Whether the contents of the field can be returned in the search results.</p>"]
-    pub return_enabled: Option<Boolean>,
+    pub return_enabled: Option<bool>,
     #[doc="<p>Whether the contents of the field are searchable.</p>"]
-    pub search_enabled: Option<Boolean>,
+    pub search_enabled: Option<bool>,
     #[doc="<p>Whether the field can be used to sort the search results.</p>"]
-    pub sort_enabled: Option<Boolean>,
-    pub source_field: Option<FieldName>,
+    pub sort_enabled: Option<bool>,
+    pub source_field: Option<String>,
 }
 
 struct DateOptionsDeserializer;
@@ -881,7 +871,7 @@ impl DateOptionsSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DefineAnalysisSchemeRequest {
     pub analysis_scheme: AnalysisScheme,
-    pub domain_name: DomainName,
+    pub domain_name: String,
 }
 
 
@@ -954,7 +944,7 @@ impl DefineAnalysisSchemeResponseDeserializer {
 #[doc="<p>Container for the parameters to the <code><a>DefineExpression</a></code> operation. Specifies the name of the domain you want to update and the expression you want to configure.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct DefineExpressionRequest {
-    pub domain_name: DomainName,
+    pub domain_name: String,
     pub expression: Expression,
 }
 
@@ -1027,7 +1017,7 @@ impl DefineExpressionResponseDeserializer {
 #[doc="<p>Container for the parameters to the <code><a>DefineIndexField</a></code> operation. Specifies the name of the domain you want to update and the index field configuration.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct DefineIndexFieldRequest {
-    pub domain_name: DomainName,
+    pub domain_name: String,
     #[doc="<p>The index field and field options you want to configure. </p>"]
     pub index_field: IndexField,
 }
@@ -1102,7 +1092,7 @@ impl DefineIndexFieldResponseDeserializer {
 #[doc="<p>Container for the parameters to the <code><a>DefineSuggester</a></code> operation. Specifies the name of the domain you want to update and the suggester configuration.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct DefineSuggesterRequest {
-    pub domain_name: DomainName,
+    pub domain_name: String,
     pub suggester: Suggester,
 }
 
@@ -1176,8 +1166,8 @@ impl DefineSuggesterResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteAnalysisSchemeRequest {
     #[doc="<p>The name of the analysis scheme you want to delete.</p>"]
-    pub analysis_scheme_name: StandardName,
-    pub domain_name: DomainName,
+    pub analysis_scheme_name: String,
+    pub domain_name: String,
 }
 
 
@@ -1251,7 +1241,7 @@ impl DeleteAnalysisSchemeResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteDomainRequest {
     #[doc="<p>The name of the domain you want to permanently delete.</p>"]
-    pub domain_name: DomainName,
+    pub domain_name: String,
 }
 
 
@@ -1321,9 +1311,9 @@ impl DeleteDomainResponseDeserializer {
 #[doc="<p>Container for the parameters to the <code><a>DeleteExpression</a></code> operation. Specifies the name of the domain you want to update and the name of the expression you want to delete.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct DeleteExpressionRequest {
-    pub domain_name: DomainName,
+    pub domain_name: String,
     #[doc="<p>The name of the <code><a>Expression</a></code> to delete.</p>"]
-    pub expression_name: StandardName,
+    pub expression_name: String,
 }
 
 
@@ -1395,9 +1385,9 @@ impl DeleteExpressionResponseDeserializer {
 #[doc="<p>Container for the parameters to the <code><a>DeleteIndexField</a></code> operation. Specifies the name of the domain you want to update and the name of the index field you want to delete.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct DeleteIndexFieldRequest {
-    pub domain_name: DomainName,
+    pub domain_name: String,
     #[doc="<p>The name of the index field your want to remove from the domain's indexing options.</p>"]
-    pub index_field_name: DynamicFieldName,
+    pub index_field_name: String,
 }
 
 
@@ -1470,9 +1460,9 @@ impl DeleteIndexFieldResponseDeserializer {
 #[doc="<p>Container for the parameters to the <code><a>DeleteSuggester</a></code> operation. Specifies the name of the domain you want to update and name of the suggester you want to delete.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct DeleteSuggesterRequest {
-    pub domain_name: DomainName,
+    pub domain_name: String,
     #[doc="<p>Specifies the name of the suggester you want to delete.</p>"]
-    pub suggester_name: StandardName,
+    pub suggester_name: String,
 }
 
 
@@ -1545,11 +1535,11 @@ impl DeleteSuggesterResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeAnalysisSchemesRequest {
     #[doc="<p>The analysis schemes you want to describe.</p>"]
-    pub analysis_scheme_names: Option<StandardNameList>,
+    pub analysis_scheme_names: Option<Vec<String>>,
     #[doc="<p>Whether to display the deployed configuration (<code>true</code>) or include any pending changes (<code>false</code>). Defaults to <code>false</code>.</p>"]
-    pub deployed: Option<Boolean>,
+    pub deployed: Option<bool>,
     #[doc="<p>The name of the domain you want to describe.</p>"]
-    pub domain_name: DomainName,
+    pub domain_name: String,
 }
 
 
@@ -1580,7 +1570,7 @@ impl DescribeAnalysisSchemesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeAnalysisSchemesResponse {
     #[doc="<p>The analysis scheme descriptions.</p>"]
-    pub analysis_schemes: AnalysisSchemeStatusList,
+    pub analysis_schemes: Vec<AnalysisSchemeStatus>,
 }
 
 struct DescribeAnalysisSchemesResponseDeserializer;
@@ -1631,9 +1621,9 @@ impl DescribeAnalysisSchemesResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeAvailabilityOptionsRequest {
     #[doc="<p>Whether to display the deployed configuration (<code>true</code>) or include any pending changes (<code>false</code>). Defaults to <code>false</code>.</p>"]
-    pub deployed: Option<Boolean>,
+    pub deployed: Option<bool>,
     #[doc="<p>The name of the domain you want to describe.</p>"]
-    pub domain_name: DomainName,
+    pub domain_name: String,
 }
 
 
@@ -1708,7 +1698,7 @@ impl DescribeAvailabilityOptionsResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeDomainsRequest {
     #[doc="<p>The names of the domains you want to include in the response.</p>"]
-    pub domain_names: Option<DomainNameList>,
+    pub domain_names: Option<Vec<String>>,
 }
 
 
@@ -1733,7 +1723,7 @@ impl DescribeDomainsRequestSerializer {
 #[doc="<p>The result of a <code>DescribeDomains</code> request. Contains the status of the domains specified in the request or all domains owned by the account.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct DescribeDomainsResponse {
-    pub domain_status_list: DomainStatusList,
+    pub domain_status_list: Vec<DomainStatus>,
 }
 
 struct DescribeDomainsResponseDeserializer;
@@ -1783,11 +1773,11 @@ impl DescribeDomainsResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeExpressionsRequest {
     #[doc="<p>Whether to display the deployed configuration (<code>true</code>) or include any pending changes (<code>false</code>). Defaults to <code>false</code>.</p>"]
-    pub deployed: Option<Boolean>,
+    pub deployed: Option<bool>,
     #[doc="<p>The name of the domain you want to describe.</p>"]
-    pub domain_name: DomainName,
+    pub domain_name: String,
     #[doc="<p>Limits the <code><a>DescribeExpressions</a></code> response to the specified expressions. If not specified, all expressions are shown.</p>"]
-    pub expression_names: Option<StandardNameList>,
+    pub expression_names: Option<Vec<String>>,
 }
 
 
@@ -1818,7 +1808,7 @@ impl DescribeExpressionsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeExpressionsResponse {
     #[doc="<p>The expressions configured for the domain.</p>"]
-    pub expressions: ExpressionStatusList,
+    pub expressions: Vec<ExpressionStatus>,
 }
 
 struct DescribeExpressionsResponseDeserializer;
@@ -1868,11 +1858,11 @@ impl DescribeExpressionsResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeIndexFieldsRequest {
     #[doc="<p>Whether to display the deployed configuration (<code>true</code>) or include any pending changes (<code>false</code>). Defaults to <code>false</code>.</p>"]
-    pub deployed: Option<Boolean>,
+    pub deployed: Option<bool>,
     #[doc="<p>The name of the domain you want to describe.</p>"]
-    pub domain_name: DomainName,
+    pub domain_name: String,
     #[doc="<p>A list of the index fields you want to describe. If not specified, information is returned for all configured index fields.</p>"]
-    pub field_names: Option<DynamicFieldNameList>,
+    pub field_names: Option<Vec<String>>,
 }
 
 
@@ -1903,7 +1893,7 @@ impl DescribeIndexFieldsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeIndexFieldsResponse {
     #[doc="<p>The index fields configured for the domain.</p>"]
-    pub index_fields: IndexFieldStatusList,
+    pub index_fields: Vec<IndexFieldStatus>,
 }
 
 struct DescribeIndexFieldsResponseDeserializer;
@@ -1952,7 +1942,7 @@ impl DescribeIndexFieldsResponseDeserializer {
 #[doc="<p>Container for the parameters to the <code><a>DescribeScalingParameters</a></code> operation. Specifies the name of the domain you want to describe. </p>"]
 #[derive(Default,Debug,Clone)]
 pub struct DescribeScalingParametersRequest {
-    pub domain_name: DomainName,
+    pub domain_name: String,
 }
 
 
@@ -2024,9 +2014,9 @@ impl DescribeScalingParametersResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeServiceAccessPoliciesRequest {
     #[doc="<p>Whether to display the deployed configuration (<code>true</code>) or include any pending changes (<code>false</code>). Defaults to <code>false</code>.</p>"]
-    pub deployed: Option<Boolean>,
+    pub deployed: Option<bool>,
     #[doc="<p>The name of the domain you want to describe.</p>"]
-    pub domain_name: DomainName,
+    pub domain_name: String,
 }
 
 
@@ -2103,11 +2093,11 @@ impl DescribeServiceAccessPoliciesResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeSuggestersRequest {
     #[doc="<p>Whether to display the deployed configuration (<code>true</code>) or include any pending changes (<code>false</code>). Defaults to <code>false</code>.</p>"]
-    pub deployed: Option<Boolean>,
+    pub deployed: Option<bool>,
     #[doc="<p>The name of the domain you want to describe.</p>"]
-    pub domain_name: DomainName,
+    pub domain_name: String,
     #[doc="<p>The suggesters you want to describe.</p>"]
-    pub suggester_names: Option<StandardNameList>,
+    pub suggester_names: Option<Vec<String>>,
 }
 
 
@@ -2138,7 +2128,7 @@ impl DescribeSuggestersRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeSuggestersResponse {
     #[doc="<p>The suggesters configured for the domain specified in the request.</p>"]
-    pub suggesters: SuggesterStatusList,
+    pub suggesters: Vec<SuggesterStatus>,
 }
 
 struct DescribeSuggestersResponseDeserializer;
@@ -2188,11 +2178,11 @@ impl DescribeSuggestersResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DocumentSuggesterOptions {
     #[doc="<p>The level of fuzziness allowed when suggesting matches for a string: <code>none</code>, <code>low</code>, or <code>high</code>. With none, the specified string is treated as an exact prefix. With low, suggestions must differ from the specified string by no more than one character. With high, suggestions can differ by up to two characters. The default is none. </p>"]
-    pub fuzzy_matching: Option<SuggesterFuzzyMatching>,
+    pub fuzzy_matching: Option<String>,
     #[doc="<p>An expression that computes a score for each suggestion to control how they are sorted. The scores are rounded to the nearest integer, with a floor of 0 and a ceiling of 2^31-1. A document's relevance score is not computed for suggestions, so sort expressions cannot reference the <code>_score</code> value. To sort suggestions using a numeric field or existing expression, simply specify the name of the field or expression. If no expression is configured for the suggester, the suggestions are sorted with the closest matches listed first.</p>"]
     pub sort_expression: Option<String>,
     #[doc="<p>The name of the index field you want to use for suggestions. </p>"]
-    pub source_field: FieldName,
+    pub source_field: String,
 }
 
 struct DocumentSuggesterOptionsDeserializer;
@@ -2268,14 +2258,12 @@ impl DocumentSuggesterOptionsSerializer {
     }
 }
 
-#[doc="<p>An internally generated unique identifier for a domain.</p>"]
-pub type DomainId = String;
 struct DomainIdDeserializer;
 impl DomainIdDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DomainId, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2284,14 +2272,12 @@ impl DomainIdDeserializer {
 
     }
 }
-#[doc="<p>A string that represents the name of a domain. Domain names are unique across the domains owned by an account within an AWS region. Domain names start with a letter or number and can contain the following characters: a-z (lowercase), 0-9, and - (hyphen).</p>"]
-pub type DomainName = String;
 struct DomainNameDeserializer;
 impl DomainNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DomainName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2300,13 +2286,11 @@ impl DomainNameDeserializer {
 
     }
 }
-#[doc="<p>A list of domain names.</p>"]
-pub type DomainNameList = Vec<DomainName>;
 
 /// Serialize `DomainNameList` contents to a `SignedRequest`.
 struct DomainNameListSerializer;
 impl DomainNameListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DomainNameList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -2314,14 +2298,13 @@ impl DomainNameListSerializer {
     }
 }
 
-#[doc="<p>A collection of domain names.</p>"]
-pub type DomainNameMap = ::std::collections::HashMap<DomainName, APIVersion>;
 struct DomainNameMapDeserializer;
 impl DomainNameMapDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<DomainNameMap, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<::std::collections::HashMap<String, String>, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = ::std::collections::HashMap::new();
@@ -2342,26 +2325,26 @@ impl DomainNameMapDeserializer {
 #[doc="<p>The current status of the search domain.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct DomainStatus {
-    pub arn: Option<ARN>,
+    pub arn: Option<String>,
     #[doc="<p>True if the search domain is created. It can take several minutes to initialize a domain when <a>CreateDomain</a> is called. Newly created search domains are returned from <a>DescribeDomains</a> with a false value for Created until domain creation is complete.</p>"]
-    pub created: Option<Boolean>,
+    pub created: Option<bool>,
     #[doc="<p>True if the search domain has been deleted. The system must clean up resources dedicated to the search domain when <a>DeleteDomain</a> is called. Newly deleted search domains are returned from <a>DescribeDomains</a> with a true value for IsDeleted for several minutes until resource cleanup is complete.</p>"]
-    pub deleted: Option<Boolean>,
+    pub deleted: Option<bool>,
     #[doc="<p>The service endpoint for updating documents in a search domain.</p>"]
     pub doc_service: Option<ServiceEndpoint>,
-    pub domain_id: DomainId,
-    pub domain_name: DomainName,
+    pub domain_id: String,
+    pub domain_name: String,
     pub limits: Option<Limits>,
     #[doc="<p>True if processing is being done to activate the current domain configuration.</p>"]
-    pub processing: Option<Boolean>,
+    pub processing: Option<bool>,
     #[doc="<p>True if <a>IndexDocuments</a> needs to be called to activate the current domain configuration.</p>"]
-    pub requires_index_documents: Boolean,
+    pub requires_index_documents: bool,
     #[doc="<p>The number of search instances that are available to process search requests.</p>"]
-    pub search_instance_count: Option<InstanceCount>,
+    pub search_instance_count: Option<i64>,
     #[doc="<p>The instance type that is being used to process search requests.</p>"]
-    pub search_instance_type: Option<SearchInstanceType>,
+    pub search_instance_type: Option<String>,
     #[doc="<p>The number of partitions across which the search index is spread.</p>"]
-    pub search_partition_count: Option<PartitionCount>,
+    pub search_partition_count: Option<i64>,
     #[doc="<p>The service endpoint for requesting search results from a search domain.</p>"]
     pub search_service: Option<ServiceEndpoint>,
 }
@@ -2461,14 +2444,12 @@ impl DomainStatusDeserializer {
 
     }
 }
-#[doc="<p>A list that contains the status of each requested domain.</p>"]
-pub type DomainStatusList = Vec<DomainStatus>;
 struct DomainStatusListDeserializer;
 impl DomainStatusListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DomainStatusList, XmlParseError> {
+                                       -> Result<Vec<DomainStatus>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -2504,13 +2485,12 @@ impl DomainStatusListDeserializer {
 
     }
 }
-pub type Double = f64;
 struct DoubleDeserializer;
 impl DoubleDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Double, XmlParseError> {
+                                       -> Result<f64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = f64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -2523,15 +2503,15 @@ impl DoubleDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DoubleArrayOptions {
     #[doc="A value to use for the field if the field isn't specified for a document."]
-    pub default_value: Option<Double>,
+    pub default_value: Option<f64>,
     #[doc="<p>Whether facet information can be returned for the field.</p>"]
-    pub facet_enabled: Option<Boolean>,
+    pub facet_enabled: Option<bool>,
     #[doc="<p>Whether the contents of the field can be returned in the search results.</p>"]
-    pub return_enabled: Option<Boolean>,
+    pub return_enabled: Option<bool>,
     #[doc="<p>Whether the contents of the field are searchable.</p>"]
-    pub search_enabled: Option<Boolean>,
+    pub search_enabled: Option<bool>,
     #[doc="<p>A list of source fields to map to the field. </p>"]
-    pub source_fields: Option<FieldNameCommaList>,
+    pub source_fields: Option<String>,
 }
 
 struct DoubleArrayOptionsDeserializer;
@@ -2632,17 +2612,17 @@ impl DoubleArrayOptionsSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DoubleOptions {
     #[doc="<p>A value to use for the field if the field isn't specified for a document. This can be important if you are using the field in an expression and that field is not present in every document.</p>"]
-    pub default_value: Option<Double>,
+    pub default_value: Option<f64>,
     #[doc="<p>Whether facet information can be returned for the field.</p>"]
-    pub facet_enabled: Option<Boolean>,
+    pub facet_enabled: Option<bool>,
     #[doc="<p>Whether the contents of the field can be returned in the search results.</p>"]
-    pub return_enabled: Option<Boolean>,
+    pub return_enabled: Option<bool>,
     #[doc="<p>Whether the contents of the field are searchable.</p>"]
-    pub search_enabled: Option<Boolean>,
+    pub search_enabled: Option<bool>,
     #[doc="<p>Whether the field can be used to sort the search results.</p>"]
-    pub sort_enabled: Option<Boolean>,
+    pub sort_enabled: Option<bool>,
     #[doc="<p>The name of the source field to map to the field. </p>"]
-    pub source_field: Option<FieldName>,
+    pub source_field: Option<String>,
 }
 
 struct DoubleOptionsDeserializer;
@@ -2747,13 +2727,12 @@ impl DoubleOptionsSerializer {
     }
 }
 
-pub type DynamicFieldName = String;
 struct DynamicFieldNameDeserializer;
 impl DynamicFieldNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DynamicFieldName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2762,12 +2741,11 @@ impl DynamicFieldNameDeserializer {
 
     }
 }
-pub type DynamicFieldNameList = Vec<DynamicFieldName>;
 
 /// Serialize `DynamicFieldNameList` contents to a `SignedRequest`.
 struct DynamicFieldNameListSerializer;
 impl DynamicFieldNameListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DynamicFieldNameList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -2775,15 +2753,11 @@ impl DynamicFieldNameListSerializer {
     }
 }
 
-#[doc="<p>A machine-parsable string error or warning code.</p>"]
-pub type ErrorCode = String;
-#[doc="<p>A human-readable string error or warning message.</p>"]
-pub type ErrorMessage = String;
 #[doc="<p>A named expression that can be evaluated at search time. Can be used to sort the search results, define other expressions, or return computed information in the search results. </p>"]
 #[derive(Default,Debug,Clone)]
 pub struct Expression {
-    pub expression_name: StandardName,
-    pub expression_value: ExpressionValue,
+    pub expression_name: String,
+    pub expression_value: String,
 }
 
 struct ExpressionDeserializer;
@@ -2906,14 +2880,12 @@ impl ExpressionStatusDeserializer {
 
     }
 }
-#[doc="<p>Contains the status of multiple expressions.</p>"]
-pub type ExpressionStatusList = Vec<ExpressionStatus>;
 struct ExpressionStatusListDeserializer;
 impl ExpressionStatusListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ExpressionStatusList, XmlParseError> {
+                                       -> Result<Vec<ExpressionStatus>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -2949,14 +2921,12 @@ impl ExpressionStatusListDeserializer {
 
     }
 }
-#[doc="<p>The expression to evaluate for sorting while processing a search request. The <code>Expression</code> syntax is based on JavaScript expressions. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html\" target=\"_blank\">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-pub type ExpressionValue = String;
 struct ExpressionValueDeserializer;
 impl ExpressionValueDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ExpressionValue, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2965,14 +2935,12 @@ impl ExpressionValueDeserializer {
 
     }
 }
-#[doc="<p>A string that represents the name of an index field. CloudSearch supports regular index fields as well as dynamic fields. A dynamic field's name defines a pattern that begins or ends with a wildcard. Any document fields that don't map to a regular index field but do match a dynamic field's pattern are configured with the dynamic field's indexing options. </p> <p>Regular field names begin with a letter and can contain the following characters: a-z (lowercase), 0-9, and _ (underscore). Dynamic field names must begin or end with a wildcard (*). The wildcard can also be the only character in a dynamic field name. Multiple wildcards, and wildcards embedded within a string are not supported. </p> <p>The name <code>score</code> is reserved and cannot be used as a field name. To reference a document's ID, you can use the name <code>_id</code>. </p>"]
-pub type FieldName = String;
 struct FieldNameDeserializer;
 impl FieldNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<FieldName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2981,13 +2949,12 @@ impl FieldNameDeserializer {
 
     }
 }
-pub type FieldNameCommaList = String;
 struct FieldNameCommaListDeserializer;
 impl FieldNameCommaListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<FieldNameCommaList, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2996,14 +2963,12 @@ impl FieldNameCommaListDeserializer {
 
     }
 }
-#[doc="<p>A list of field names.</p>"]
-pub type FieldNameList = Vec<FieldName>;
 struct FieldNameListDeserializer;
 impl FieldNameListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<FieldNameList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -3039,14 +3004,12 @@ impl FieldNameListDeserializer {
 
     }
 }
-#[doc="<p>The value of a field attribute.</p>"]
-pub type FieldValue = String;
 struct FieldValueDeserializer;
 impl FieldValueDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<FieldValue, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3058,7 +3021,7 @@ impl FieldValueDeserializer {
 #[doc="<p>Container for the parameters to the <code><a>IndexDocuments</a></code> operation. Specifies the name of the domain you want to re-index.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct IndexDocumentsRequest {
-    pub domain_name: DomainName,
+    pub domain_name: String,
 }
 
 
@@ -3080,7 +3043,7 @@ impl IndexDocumentsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct IndexDocumentsResponse {
     #[doc="<p>The names of the fields that are currently being indexed.</p>"]
-    pub field_names: Option<FieldNameList>,
+    pub field_names: Option<Vec<String>>,
 }
 
 struct IndexDocumentsResponseDeserializer;
@@ -3134,8 +3097,8 @@ pub struct IndexField {
     pub double_array_options: Option<DoubleArrayOptions>,
     pub double_options: Option<DoubleOptions>,
     #[doc="<p>A string that represents the name of an index field. CloudSearch supports regular index fields as well as dynamic fields. A dynamic field's name defines a pattern that begins or ends with a wildcard. Any document fields that don't map to a regular index field but do match a dynamic field's pattern are configured with the dynamic field's indexing options. </p> <p>Regular field names begin with a letter and can contain the following characters: a-z (lowercase), 0-9, and _ (underscore). Dynamic field names must begin or end with a wildcard (*). The wildcard can also be the only character in a dynamic field name. Multiple wildcards, and wildcards embedded within a string are not supported. </p> <p>The name <code>score</code> is reserved and cannot be used as a field name. To reference a document's ID, you can use the name <code>_id</code>. </p>"]
-    pub index_field_name: DynamicFieldName,
-    pub index_field_type: IndexFieldType,
+    pub index_field_name: String,
+    pub index_field_type: String,
     pub int_array_options: Option<IntArrayOptions>,
     pub int_options: Option<IntOptions>,
     pub lat_lon_options: Option<LatLonOptions>,
@@ -3376,14 +3339,12 @@ impl IndexFieldStatusDeserializer {
 
     }
 }
-#[doc="<p>Contains the status of multiple index fields.</p>"]
-pub type IndexFieldStatusList = Vec<IndexFieldStatus>;
 struct IndexFieldStatusListDeserializer;
 impl IndexFieldStatusListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<IndexFieldStatusList, XmlParseError> {
+                                       -> Result<Vec<IndexFieldStatus>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -3419,14 +3380,12 @@ impl IndexFieldStatusListDeserializer {
 
     }
 }
-#[doc="<p>The type of field. The valid options for a field depend on the field type. For more information about the supported field types, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-index-fields.html\" target=\"_blank\">Configuring Index Fields</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>"]
-pub type IndexFieldType = String;
 struct IndexFieldTypeDeserializer;
 impl IndexFieldTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<IndexFieldType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3435,13 +3394,12 @@ impl IndexFieldTypeDeserializer {
 
     }
 }
-pub type InstanceCount = i64;
 struct InstanceCountDeserializer;
 impl InstanceCountDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<InstanceCount, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -3454,15 +3412,15 @@ impl InstanceCountDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct IntArrayOptions {
     #[doc="A value to use for the field if the field isn't specified for a document."]
-    pub default_value: Option<Long>,
+    pub default_value: Option<i64>,
     #[doc="<p>Whether facet information can be returned for the field.</p>"]
-    pub facet_enabled: Option<Boolean>,
+    pub facet_enabled: Option<bool>,
     #[doc="<p>Whether the contents of the field can be returned in the search results.</p>"]
-    pub return_enabled: Option<Boolean>,
+    pub return_enabled: Option<bool>,
     #[doc="<p>Whether the contents of the field are searchable.</p>"]
-    pub search_enabled: Option<Boolean>,
+    pub search_enabled: Option<bool>,
     #[doc="<p>A list of source fields to map to the field. </p>"]
-    pub source_fields: Option<FieldNameCommaList>,
+    pub source_fields: Option<String>,
 }
 
 struct IntArrayOptionsDeserializer;
@@ -3563,17 +3521,17 @@ impl IntArrayOptionsSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct IntOptions {
     #[doc="A value to use for the field if the field isn't specified for a document. This can be important if you are using the field in an expression and that field is not present in every document."]
-    pub default_value: Option<Long>,
+    pub default_value: Option<i64>,
     #[doc="<p>Whether facet information can be returned for the field.</p>"]
-    pub facet_enabled: Option<Boolean>,
+    pub facet_enabled: Option<bool>,
     #[doc="<p>Whether the contents of the field can be returned in the search results.</p>"]
-    pub return_enabled: Option<Boolean>,
+    pub return_enabled: Option<bool>,
     #[doc="<p>Whether the contents of the field are searchable.</p>"]
-    pub search_enabled: Option<Boolean>,
+    pub search_enabled: Option<bool>,
     #[doc="<p>Whether the field can be used to sort the search results.</p>"]
-    pub sort_enabled: Option<Boolean>,
+    pub sort_enabled: Option<bool>,
     #[doc="<p>The name of the source field to map to the field. </p>"]
-    pub source_field: Option<FieldName>,
+    pub source_field: Option<String>,
 }
 
 struct IntOptionsDeserializer;
@@ -3682,16 +3640,16 @@ impl IntOptionsSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct LatLonOptions {
     #[doc="A value to use for the field if the field isn't specified for a document."]
-    pub default_value: Option<FieldValue>,
+    pub default_value: Option<String>,
     #[doc="<p>Whether facet information can be returned for the field.</p>"]
-    pub facet_enabled: Option<Boolean>,
+    pub facet_enabled: Option<bool>,
     #[doc="<p>Whether the contents of the field can be returned in the search results.</p>"]
-    pub return_enabled: Option<Boolean>,
+    pub return_enabled: Option<bool>,
     #[doc="<p>Whether the contents of the field are searchable.</p>"]
-    pub search_enabled: Option<Boolean>,
+    pub search_enabled: Option<bool>,
     #[doc="<p>Whether the field can be used to sort the search results.</p>"]
-    pub sort_enabled: Option<Boolean>,
-    pub source_field: Option<FieldName>,
+    pub sort_enabled: Option<bool>,
+    pub source_field: Option<String>,
 }
 
 struct LatLonOptionsDeserializer;
@@ -3798,8 +3756,8 @@ impl LatLonOptionsSerializer {
 
 #[derive(Default,Debug,Clone)]
 pub struct Limits {
-    pub maximum_partition_count: MaximumPartitionCount,
-    pub maximum_replication_count: MaximumReplicationCount,
+    pub maximum_partition_count: i64,
+    pub maximum_replication_count: i64,
 }
 
 struct LimitsDeserializer;
@@ -3854,7 +3812,7 @@ impl LimitsDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListDomainNamesResponse {
     #[doc="<p>The names of the search domains owned by an account.</p>"]
-    pub domain_names: Option<DomainNameMap>,
+    pub domain_names: Option<::std::collections::HashMap<String, String>>,
 }
 
 struct ListDomainNamesResponseDeserializer;
@@ -3904,15 +3862,15 @@ impl ListDomainNamesResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct LiteralArrayOptions {
     #[doc="A value to use for the field if the field isn't specified for a document."]
-    pub default_value: Option<FieldValue>,
+    pub default_value: Option<String>,
     #[doc="<p>Whether facet information can be returned for the field.</p>"]
-    pub facet_enabled: Option<Boolean>,
+    pub facet_enabled: Option<bool>,
     #[doc="<p>Whether the contents of the field can be returned in the search results.</p>"]
-    pub return_enabled: Option<Boolean>,
+    pub return_enabled: Option<bool>,
     #[doc="<p>Whether the contents of the field are searchable.</p>"]
-    pub search_enabled: Option<Boolean>,
+    pub search_enabled: Option<bool>,
     #[doc="<p>A list of source fields to map to the field. </p>"]
-    pub source_fields: Option<FieldNameCommaList>,
+    pub source_fields: Option<String>,
 }
 
 struct LiteralArrayOptionsDeserializer;
@@ -4013,16 +3971,16 @@ impl LiteralArrayOptionsSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct LiteralOptions {
     #[doc="A value to use for the field if the field isn't specified for a document."]
-    pub default_value: Option<FieldValue>,
+    pub default_value: Option<String>,
     #[doc="<p>Whether facet information can be returned for the field.</p>"]
-    pub facet_enabled: Option<Boolean>,
+    pub facet_enabled: Option<bool>,
     #[doc="<p>Whether the contents of the field can be returned in the search results.</p>"]
-    pub return_enabled: Option<Boolean>,
+    pub return_enabled: Option<bool>,
     #[doc="<p>Whether the contents of the field are searchable.</p>"]
-    pub search_enabled: Option<Boolean>,
+    pub search_enabled: Option<bool>,
     #[doc="<p>Whether the field can be used to sort the search results.</p>"]
-    pub sort_enabled: Option<Boolean>,
-    pub source_field: Option<FieldName>,
+    pub sort_enabled: Option<bool>,
+    pub source_field: Option<String>,
 }
 
 struct LiteralOptionsDeserializer;
@@ -4127,13 +4085,12 @@ impl LiteralOptionsSerializer {
     }
 }
 
-pub type Long = i64;
 struct LongDeserializer;
 impl LongDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Long, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -4142,13 +4099,12 @@ impl LongDeserializer {
 
     }
 }
-pub type MaximumPartitionCount = i64;
 struct MaximumPartitionCountDeserializer;
 impl MaximumPartitionCountDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<MaximumPartitionCount, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -4157,13 +4113,12 @@ impl MaximumPartitionCountDeserializer {
 
     }
 }
-pub type MaximumReplicationCount = i64;
 struct MaximumReplicationCountDeserializer;
 impl MaximumReplicationCountDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<MaximumReplicationCount, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -4172,13 +4127,12 @@ impl MaximumReplicationCountDeserializer {
 
     }
 }
-pub type MultiAZ = bool;
 struct MultiAZDeserializer;
 impl MultiAZDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<MultiAZ, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -4187,14 +4141,12 @@ impl MultiAZDeserializer {
 
     }
 }
-#[doc="<p>The state of processing a change to an option. One of:</p> <ul> <li>RequiresIndexDocuments: The option's latest value will not be deployed until <a>IndexDocuments</a> has been called and indexing is complete.</li> <li>Processing: The option's latest value is in the process of being activated.</li> <li>Active: The option's latest value is fully deployed. </li> <li>FailedToValidate: The option value is not compatible with the domain's data and cannot be used to index the data. You must either modify the option value or update or remove the incompatible documents.</li> </ul>"]
-pub type OptionState = String;
 struct OptionStateDeserializer;
 impl OptionStateDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<OptionState, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4207,15 +4159,15 @@ impl OptionStateDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct OptionStatus {
     #[doc="<p>A timestamp for when this option was created.</p>"]
-    pub creation_date: UpdateTimestamp,
+    pub creation_date: String,
     #[doc="<p>Indicates that the option will be deleted once processing is complete.</p>"]
-    pub pending_deletion: Option<Boolean>,
+    pub pending_deletion: Option<bool>,
     #[doc="<p>The state of processing a change to an option. Possible values:</p> <ul> <li> <code>RequiresIndexDocuments</code>: the option's latest value will not be deployed until <a>IndexDocuments</a> has been called and indexing is complete.</li> <li> <code>Processing</code>: the option's latest value is in the process of being activated. </li> <li> <code>Active</code>: the option's latest value is completely deployed.</li> <li> <code>FailedToValidate</code>: the option value is not compatible with the domain's data and cannot be used to index the data. You must either modify the option value or update or remove the incompatible documents.</li> </ul>"]
-    pub state: OptionState,
+    pub state: String,
     #[doc="<p>A timestamp for when this option was last updated.</p>"]
-    pub update_date: UpdateTimestamp,
+    pub update_date: String,
     #[doc="<p>A unique integer that indicates when this option was last updated.</p>"]
-    pub update_version: Option<UIntValue>,
+    pub update_version: Option<i64>,
 }
 
 struct OptionStatusDeserializer;
@@ -4278,14 +4230,12 @@ impl OptionStatusDeserializer {
 
     }
 }
-#[doc="<p>The number of partitions used to hold the domain's index.</p>"]
-pub type PartitionCount = i64;
 struct PartitionCountDeserializer;
 impl PartitionCountDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PartitionCount, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -4294,14 +4244,12 @@ impl PartitionCountDeserializer {
 
     }
 }
-#[doc="<p>The instance type (such as <code>search.m1.small</code>) on which an index partition is hosted.</p>"]
-pub type PartitionInstanceType = String;
 struct PartitionInstanceTypeDeserializer;
 impl PartitionInstanceTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PartitionInstanceType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4310,14 +4258,12 @@ impl PartitionInstanceTypeDeserializer {
 
     }
 }
-#[doc="<p>Access rules for a domain's document or search service endpoints. For more information, see <a href=\"http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-access.html\" target=\"_blank\">Configuring Access for a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>. The maximum size of a policy document is 100 KB.</p>"]
-pub type PolicyDocument = String;
 struct PolicyDocumentDeserializer;
 impl PolicyDocumentDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PolicyDocument, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4330,11 +4276,11 @@ impl PolicyDocumentDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ScalingParameters {
     #[doc="<p>The instance type that you want to preconfigure for your domain. For example, <code>search.m1.small</code>.</p>"]
-    pub desired_instance_type: Option<PartitionInstanceType>,
+    pub desired_instance_type: Option<String>,
     #[doc="<p>The number of partitions you want to preconfigure for your domain. Only valid when you select <code>m2.2xlarge</code> as the desired instance type.</p>"]
-    pub desired_partition_count: Option<UIntValue>,
+    pub desired_partition_count: Option<i64>,
     #[doc="<p>The number of replicas you want to preconfigure for each index partition.</p>"]
-    pub desired_replication_count: Option<UIntValue>,
+    pub desired_replication_count: Option<i64>,
 }
 
 struct ScalingParametersDeserializer;
@@ -4469,14 +4415,12 @@ impl ScalingParametersStatusDeserializer {
 
     }
 }
-#[doc="<p>The instance type (such as <code>search.m1.small</code>) that is being used to process search requests.</p>"]
-pub type SearchInstanceType = String;
 struct SearchInstanceTypeDeserializer;
 impl SearchInstanceTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SearchInstanceType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4488,7 +4432,7 @@ impl SearchInstanceTypeDeserializer {
 #[doc="<p>The endpoint to which service requests can be submitted.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct ServiceEndpoint {
-    pub endpoint: Option<ServiceUrl>,
+    pub endpoint: Option<String>,
 }
 
 struct ServiceEndpointDeserializer;
@@ -4533,14 +4477,12 @@ impl ServiceEndpointDeserializer {
 
     }
 }
-#[doc="<p>The endpoint to which service requests can be submitted. For example, <code>search-imdb-movies-oopcnjfn6ugofer3zx5iadxxca.eu-west-1.cloudsearch.amazonaws.com</code> or <code>doc-imdb-movies-oopcnjfn6ugofer3zx5iadxxca.eu-west-1.cloudsearch.amazonaws.com</code>.</p>"]
-pub type ServiceUrl = String;
 struct ServiceUrlDeserializer;
 impl ServiceUrlDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ServiceUrl, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4549,14 +4491,12 @@ impl ServiceUrlDeserializer {
 
     }
 }
-#[doc="<p>Names must begin with a letter and can contain the following characters: a-z (lowercase), 0-9, and _ (underscore).</p>"]
-pub type StandardName = String;
 struct StandardNameDeserializer;
 impl StandardNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<StandardName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4565,12 +4505,11 @@ impl StandardNameDeserializer {
 
     }
 }
-pub type StandardNameList = Vec<StandardName>;
 
 /// Serialize `StandardNameList` contents to a `SignedRequest`.
 struct StandardNameListSerializer;
 impl StandardNameListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &StandardNameList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -4596,7 +4535,7 @@ impl StringDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct Suggester {
     pub document_suggester_options: DocumentSuggesterOptions,
-    pub suggester_name: StandardName,
+    pub suggester_name: String,
 }
 
 struct SuggesterDeserializer;
@@ -4667,13 +4606,12 @@ impl SuggesterSerializer {
     }
 }
 
-pub type SuggesterFuzzyMatching = String;
 struct SuggesterFuzzyMatchingDeserializer;
 impl SuggesterFuzzyMatchingDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SuggesterFuzzyMatching, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4735,14 +4673,12 @@ impl SuggesterStatusDeserializer {
 
     }
 }
-#[doc="<p>Contains the status of multiple suggesters.</p>"]
-pub type SuggesterStatusList = Vec<SuggesterStatus>;
 struct SuggesterStatusListDeserializer;
 impl SuggesterStatusListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SuggesterStatusList, XmlParseError> {
+                                       -> Result<Vec<SuggesterStatus>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4782,15 +4718,15 @@ impl SuggesterStatusListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct TextArrayOptions {
     #[doc="<p>The name of an analysis scheme for a <code>text-array</code> field.</p>"]
-    pub analysis_scheme: Option<Word>,
+    pub analysis_scheme: Option<String>,
     #[doc="A value to use for the field if the field isn't specified for a document."]
-    pub default_value: Option<FieldValue>,
+    pub default_value: Option<String>,
     #[doc="<p>Whether highlights can be returned for the field.</p>"]
-    pub highlight_enabled: Option<Boolean>,
+    pub highlight_enabled: Option<bool>,
     #[doc="<p>Whether the contents of the field can be returned in the search results.</p>"]
-    pub return_enabled: Option<Boolean>,
+    pub return_enabled: Option<bool>,
     #[doc="<p>A list of source fields to map to the field. </p>"]
-    pub source_fields: Option<FieldNameCommaList>,
+    pub source_fields: Option<String>,
 }
 
 struct TextArrayOptionsDeserializer;
@@ -4890,16 +4826,16 @@ impl TextArrayOptionsSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct TextOptions {
     #[doc="<p>The name of an analysis scheme for a <code>text</code> field.</p>"]
-    pub analysis_scheme: Option<Word>,
+    pub analysis_scheme: Option<String>,
     #[doc="A value to use for the field if the field isn't specified for a document."]
-    pub default_value: Option<FieldValue>,
+    pub default_value: Option<String>,
     #[doc="<p>Whether highlights can be returned for the field.</p>"]
-    pub highlight_enabled: Option<Boolean>,
+    pub highlight_enabled: Option<bool>,
     #[doc="<p>Whether the contents of the field can be returned in the search results.</p>"]
-    pub return_enabled: Option<Boolean>,
+    pub return_enabled: Option<bool>,
     #[doc="<p>Whether the field can be used to sort the search results.</p>"]
-    pub sort_enabled: Option<Boolean>,
-    pub source_field: Option<FieldName>,
+    pub sort_enabled: Option<bool>,
+    pub source_field: Option<String>,
 }
 
 struct TextOptionsDeserializer;
@@ -5003,13 +4939,12 @@ impl TextOptionsSerializer {
     }
 }
 
-pub type UIntValue = i64;
 struct UIntValueDeserializer;
 impl UIntValueDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<UIntValue, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -5021,9 +4956,9 @@ impl UIntValueDeserializer {
 #[doc="<p>Container for the parameters to the <code><a>UpdateAvailabilityOptions</a></code> operation. Specifies the name of the domain you want to update and the Multi-AZ availability option.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct UpdateAvailabilityOptionsRequest {
-    pub domain_name: DomainName,
+    pub domain_name: String,
     #[doc="<p>You expand an existing search domain to a second Availability Zone by setting the Multi-AZ option to true. Similarly, you can turn off the Multi-AZ option to downgrade the domain to a single Availability Zone by setting the Multi-AZ option to <code>false</code>. </p>"]
-    pub multi_az: Boolean,
+    pub multi_az: bool,
 }
 
 
@@ -5095,7 +5030,7 @@ impl UpdateAvailabilityOptionsResponseDeserializer {
 #[doc="<p>Container for the parameters to the <code><a>UpdateScalingParameters</a></code> operation. Specifies the name of the domain you want to update and the scaling parameters you want to configure.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct UpdateScalingParametersRequest {
-    pub domain_name: DomainName,
+    pub domain_name: String,
     pub scaling_parameters: ScalingParameters,
 }
 
@@ -5171,8 +5106,8 @@ impl UpdateScalingParametersResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct UpdateServiceAccessPoliciesRequest {
     #[doc="<p>The access rules you want to configure. These rules replace any existing rules. </p>"]
-    pub access_policies: PolicyDocument,
-    pub domain_name: DomainName,
+    pub access_policies: String,
+    pub domain_name: String,
 }
 
 
@@ -5243,13 +5178,12 @@ impl UpdateServiceAccessPoliciesResponseDeserializer {
 
     }
 }
-pub type UpdateTimestamp = String;
 struct UpdateTimestampDeserializer;
 impl UpdateTimestampDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<UpdateTimestamp, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5258,13 +5192,12 @@ impl UpdateTimestampDeserializer {
 
     }
 }
-pub type Word = String;
 struct WordDeserializer;
 impl WordDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Word, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));

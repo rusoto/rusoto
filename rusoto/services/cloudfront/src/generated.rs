@@ -41,11 +41,11 @@ enum DeserializerNext {
 #[derive(Default,Clone,Debug)]
 pub struct ActiveTrustedSigners {
     #[doc="<p>Enabled is <code>true</code> if any of the AWS accounts listed in the <code>TrustedSigners</code> complex type for this RTMP distribution have active CloudFront key pairs. If not, <code>Enabled</code> is <code>false</code>.</p> <p>For more information, see <a>ActiveTrustedSigners</a>.</p>"]
-    pub enabled: Boolean,
+    pub enabled: bool,
     #[doc="<p>A complex type that contains one <code>Signer</code> complex type for each trusted signer that is specified in the <code>TrustedSigners</code> complex type.</p> <p>For more information, see <a>ActiveTrustedSigners</a>. </p>"]
-    pub items: Option<SignerList>,
+    pub items: Option<Vec<Signer>>,
     #[doc="<p>A complex type that contains one <code>Signer</code> complex type for each trusted signer specified in the <code>TrustedSigners</code> complex type.</p> <p>For more information, see <a>ActiveTrustedSigners</a>.</p>"]
-    pub quantity: Integer,
+    pub quantity: i64,
 }
 
 struct ActiveTrustedSignersDeserializer;
@@ -97,13 +97,12 @@ impl ActiveTrustedSignersDeserializer {
 
     }
 }
-pub type AliasList = Vec<String>;
 struct AliasListDeserializer;
 impl AliasListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AliasList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -143,7 +142,7 @@ impl AliasListDeserializer {
 pub struct AliasListSerializer;
 impl AliasListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &AliasList) -> String {
+    pub fn serialize(name: &str, obj: &Vec<String>) -> String {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
@@ -158,9 +157,9 @@ impl AliasListSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct Aliases {
     #[doc="<p>A complex type that contains the CNAME aliases, if any, that you want to associate with this distribution.</p>"]
-    pub items: Option<AliasList>,
+    pub items: Option<Vec<String>>,
     #[doc="<p>The number of CNAME aliases, if any, that you want to associate with this distribution.</p>"]
-    pub quantity: Integer,
+    pub quantity: i64,
 }
 
 struct AliasesDeserializer;
@@ -229,9 +228,9 @@ impl AliasesSerializer {
 pub struct AllowedMethods {
     pub cached_methods: Option<CachedMethods>,
     #[doc="<p>A complex type that contains the HTTP methods that you want CloudFront to process and forward to your origin.</p>"]
-    pub items: MethodsList,
+    pub items: Vec<String>,
     #[doc="<p>The number of HTTP methods that you want CloudFront to forward to your origin. Valid values are 2 (for <code>GET</code> and <code>HEAD</code> requests), 3 (for <code>GET</code>, <code>HEAD</code>, and <code>OPTIONS</code> requests) and 7 (for <code>GET, HEAD, OPTIONS, PUT, PATCH, POST</code>, and <code>DELETE</code> requests).</p>"]
-    pub quantity: Integer,
+    pub quantity: i64,
 }
 
 struct AllowedMethodsDeserializer;
@@ -300,13 +299,12 @@ impl AllowedMethodsSerializer {
     }
 }
 
-pub type AwsAccountNumberList = Vec<String>;
 struct AwsAccountNumberListDeserializer;
 impl AwsAccountNumberListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AwsAccountNumberList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -346,7 +344,7 @@ impl AwsAccountNumberListDeserializer {
 pub struct AwsAccountNumberListSerializer;
 impl AwsAccountNumberListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &AwsAccountNumberList) -> String {
+    pub fn serialize(name: &str, obj: &Vec<String>) -> String {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
@@ -357,13 +355,12 @@ impl AwsAccountNumberListSerializer {
     }
 }
 
-pub type Boolean = bool;
 struct BooleanDeserializer;
 impl BooleanDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Boolean, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -376,7 +373,7 @@ impl BooleanDeserializer {
 pub struct BooleanSerializer;
 impl BooleanSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Boolean) -> String {
+    pub fn serialize(name: &str, obj: &bool) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
@@ -388,27 +385,27 @@ impl BooleanSerializer {
 pub struct CacheBehavior {
     pub allowed_methods: Option<AllowedMethods>,
     #[doc="<p>Whether you want CloudFront to automatically compress certain files for this cache behavior. If so, specify true; if not, specify false. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html\">Serving Compressed Files</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
-    pub compress: Option<Boolean>,
+    pub compress: Option<bool>,
     #[doc="<p>The default amount of time that you want objects to stay in CloudFront caches before CloudFront forwards another request to your origin to determine whether the object has been updated. The value that you specify applies only when your origin does not add HTTP headers such as <code>Cache-Control max-age</code>, <code>Cache-Control s-maxage</code>, and <code>Expires</code> to objects. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html\">Specifying How Long Objects and Errors Stay in a CloudFront Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
-    pub default_ttl: Option<Long>,
+    pub default_ttl: Option<i64>,
     #[doc="<p>A complex type that specifies how CloudFront handles query strings and cookies.</p>"]
     pub forwarded_values: ForwardedValues,
     #[doc="<p>A complex type that contains zero or more Lambda function associations for a cache behavior.</p>"]
     pub lambda_function_associations: Option<LambdaFunctionAssociations>,
     #[doc="<p>The maximum amount of time that you want objects to stay in CloudFront caches before CloudFront forwards another request to your origin to determine whether the object has been updated. The value that you specify applies only when your origin adds HTTP headers such as <code>Cache-Control max-age</code>, <code>Cache-Control s-maxage</code>, and <code>Expires</code> to objects. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html\">Specifying How Long Objects and Errors Stay in a CloudFront Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
-    pub max_ttl: Option<Long>,
+    pub max_ttl: Option<i64>,
     #[doc="<p>The minimum amount of time that you want objects to stay in CloudFront caches before CloudFront forwards another request to your origin to determine whether the object has been updated. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html\">Specifying How Long Objects and Errors Stay in a CloudFront Edge Cache (Expiration)</a> in the <i>Amazon Amazon CloudFront Developer Guide</i>.</p> <p>You must specify <code>0</code> for <code>MinTTL</code> if you configure CloudFront to forward all headers to your origin (under <code>Headers</code>, if you specify <code>1</code> for <code>Quantity</code> and <code>*</code> for <code>Name</code>).</p>"]
-    pub min_ttl: Long,
+    pub min_ttl: i64,
     #[doc="<p>The pattern (for example, <code>images/*.jpg</code>) that specifies which requests to apply the behavior to. When CloudFront receives a viewer request, the requested path is compared with path patterns in the order in which cache behaviors are listed in the distribution.</p> <note> <p>You can optionally include a slash (<code>/</code>) at the beginning of the path pattern. For example, <code>/images/*.jpg</code>. CloudFront behavior is the same with or without the leading <code>/</code>.</p> </note> <p>The path pattern for the default cache behavior is <code>*</code> and cannot be changed. If the request for an object does not match the path pattern for any cache behaviors, CloudFront applies the behavior in the default cache behavior.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesPathPattern\">Path Pattern</a> in the <i> Amazon CloudFront Developer Guide</i>.</p>"]
     pub path_pattern: String,
     #[doc="<p>Indicates whether you want to distribute media files in the Microsoft Smooth Streaming format using the origin that is associated with this cache behavior. If so, specify <code>true</code>; if not, specify <code>false</code>. If you specify <code>true</code> for <code>SmoothStreaming</code>, you can still distribute other content using this cache behavior if the content matches the value of <code>PathPattern</code>. </p>"]
-    pub smooth_streaming: Option<Boolean>,
+    pub smooth_streaming: Option<bool>,
     #[doc="<p>The value of <code>ID</code> for the origin that you want CloudFront to route requests to when a request matches the path pattern either for a cache behavior or for the default cache behavior.</p>"]
     pub target_origin_id: String,
     #[doc="<p>A complex type that specifies the AWS accounts, if any, that you want to allow to create signed URLs for private content.</p> <p>If you want to require signed URLs in requests for objects in the target origin that match the <code>PathPattern</code> for this cache behavior, specify <code>true</code> for <code>Enabled</code>, and specify the applicable values for <code>Quantity</code> and <code>Items</code>. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html\">Serving Private Content through CloudFront</a> in the <i>Amazon Amazon CloudFront Developer Guide</i>.</p> <p>If you don't want to require signed URLs in requests for objects that match <code>PathPattern</code>, specify <code>false</code> for <code>Enabled</code> and <code>0</code> for <code>Quantity</code>. Omit <code>Items</code>.</p> <p>To add, change, or remove one or more trusted signers, change <code>Enabled</code> to <code>true</code> (if it's currently <code>false</code>), change <code>Quantity</code> as applicable, and specify all of the trusted signers that you want to include in the updated distribution.</p>"]
     pub trusted_signers: TrustedSigners,
     #[doc="<p>The protocol that viewers can use to access the files in the origin specified by <code>TargetOriginId</code> when a request matches the path pattern in <code>PathPattern</code>. You can specify the following options:</p> <ul> <li> <p> <code>allow-all</code>: Viewers can use HTTP or HTTPS.</p> </li> <li> <p> <code>redirect-to-https</code>: If a viewer submits an HTTP request, CloudFront returns an HTTP status code of 301 (Moved Permanently) to the viewer along with the HTTPS URL. The viewer then resubmits the request using the new URL. </p> </li> <li> <p> <code>https-only</code>: If a viewer sends an HTTP request, CloudFront returns an HTTP status code of 403 (Forbidden). </p> </li> </ul> <p>For more information about requiring the HTTPS protocol, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html\">Using an HTTPS Connection to Access Your Objects</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <note> <p>The only way to guarantee that viewers retrieve an object that was fetched from the origin using HTTPS is never to use any other protocol to fetch the object. If you have recently changed from HTTP to HTTPS, we recommend that you clear your objects' cache because cached objects are protocol agnostic. That means that an edge location will return an object from the cache regardless of whether the current request protocol matches the protocol used previously. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html\">Specifying How Long Objects and Errors Stay in a CloudFront Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </note>"]
-    pub viewer_protocol_policy: ViewerProtocolPolicy,
+    pub viewer_protocol_policy: String,
 }
 
 struct CacheBehaviorDeserializer;
@@ -540,13 +537,12 @@ impl CacheBehaviorSerializer {
     }
 }
 
-pub type CacheBehaviorList = Vec<CacheBehavior>;
 struct CacheBehaviorListDeserializer;
 impl CacheBehaviorListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CacheBehaviorList, XmlParseError> {
+                                       -> Result<Vec<CacheBehavior>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -587,7 +583,7 @@ impl CacheBehaviorListDeserializer {
 pub struct CacheBehaviorListSerializer;
 impl CacheBehaviorListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &CacheBehaviorList) -> String {
+    pub fn serialize(name: &str, obj: &Vec<CacheBehavior>) -> String {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
@@ -602,9 +598,9 @@ impl CacheBehaviorListSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct CacheBehaviors {
     #[doc="<p>Optional: A complex type that contains cache behaviors for this distribution. If <code>Quantity</code> is <code>0</code>, you can omit <code>Items</code>.</p>"]
-    pub items: Option<CacheBehaviorList>,
+    pub items: Option<Vec<CacheBehavior>>,
     #[doc="<p>The number of cache behaviors for this distribution. </p>"]
-    pub quantity: Integer,
+    pub quantity: i64,
 }
 
 struct CacheBehaviorsDeserializer;
@@ -673,9 +669,9 @@ impl CacheBehaviorsSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct CachedMethods {
     #[doc="<p>A complex type that contains the HTTP methods that you want CloudFront to cache responses to.</p>"]
-    pub items: MethodsList,
+    pub items: Vec<String>,
     #[doc="<p>The number of HTTP methods for which you want CloudFront to cache responses. Valid values are <code>2</code> (for caching responses to <code>GET</code> and <code>HEAD</code> requests) and <code>3</code> (for caching responses to <code>GET</code>, <code>HEAD</code>, and <code>OPTIONS</code> requests).</p>"]
-    pub quantity: Integer,
+    pub quantity: i64,
 }
 
 struct CachedMethodsDeserializer;
@@ -736,7 +732,6 @@ impl CachedMethodsSerializer {
     }
 }
 
-pub type CertificateSource = String;
 #[doc="<p>CloudFront origin access identity.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct CloudFrontOriginAccessIdentity {
@@ -869,17 +864,17 @@ impl CloudFrontOriginAccessIdentityConfigSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct CloudFrontOriginAccessIdentityList {
     #[doc="<p>A flag that indicates whether more origin access identities remain to be listed. If your results were truncated, you can make a follow-up pagination request using the <code>Marker</code> request parameter to retrieve more items in the list.</p>"]
-    pub is_truncated: Boolean,
+    pub is_truncated: bool,
     #[doc="<p>A complex type that contains one <code>CloudFrontOriginAccessIdentitySummary</code> element for each origin access identity that was created by the current AWS account.</p>"]
-    pub items: Option<CloudFrontOriginAccessIdentitySummaryList>,
+    pub items: Option<Vec<CloudFrontOriginAccessIdentitySummary>>,
     #[doc="<p>Use this when paginating results to indicate where to begin in your list of origin access identities. The results include identities in the list that occur after the marker. To get the next page of results, set the <code>Marker</code> to the value of the <code>NextMarker</code> from the current page's response (which is also the ID of the last identity on that page). </p>"]
     pub marker: String,
     #[doc="<p>The maximum number of origin access identities you want in the response body. </p>"]
-    pub max_items: Integer,
+    pub max_items: i64,
     #[doc="<p>If <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value you can use for the <code>Marker</code> request parameter to continue listing your origin access identities where they left off. </p>"]
     pub next_marker: Option<String>,
     #[doc="<p>The number of CloudFront origin access identities that were created by the current AWS account. </p>"]
-    pub quantity: Integer,
+    pub quantity: i64,
 }
 
 struct CloudFrontOriginAccessIdentityListDeserializer;
@@ -1003,14 +998,13 @@ impl CloudFrontOriginAccessIdentitySummaryDeserializer {
 
     }
 }
-pub type CloudFrontOriginAccessIdentitySummaryList = Vec<CloudFrontOriginAccessIdentitySummary>;
 struct CloudFrontOriginAccessIdentitySummaryListDeserializer;
 impl CloudFrontOriginAccessIdentitySummaryListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>
         (tag_name: &str,
          stack: &mut T)
-         -> Result<CloudFrontOriginAccessIdentitySummaryList, XmlParseError> {
+         -> Result<Vec<CloudFrontOriginAccessIdentitySummary>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -1046,13 +1040,12 @@ impl CloudFrontOriginAccessIdentitySummaryListDeserializer {
 
     }
 }
-pub type CookieNameList = Vec<String>;
 struct CookieNameListDeserializer;
 impl CookieNameListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CookieNameList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -1092,7 +1085,7 @@ impl CookieNameListDeserializer {
 pub struct CookieNameListSerializer;
 impl CookieNameListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &CookieNameList) -> String {
+    pub fn serialize(name: &str, obj: &Vec<String>) -> String {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
@@ -1107,9 +1100,9 @@ impl CookieNameListSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct CookieNames {
     #[doc="<p>A complex type that contains one <code>Name</code> element for each cookie that you want CloudFront to forward to the origin for this cache behavior.</p>"]
-    pub items: Option<CookieNameList>,
+    pub items: Option<Vec<String>>,
     #[doc="<p>The number of different cookies that you want CloudFront to forward to the origin for this cache behavior.</p>"]
-    pub quantity: Integer,
+    pub quantity: i64,
 }
 
 struct CookieNamesDeserializer;
@@ -1177,7 +1170,7 @@ impl CookieNamesSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct CookiePreference {
     #[doc="<p>Specifies which cookies to forward to the origin for this cache behavior: all, none, or the list of cookies specified in the <code>WhitelistedNames</code> complex type.</p> <p>Amazon S3 doesn't process cookies. When the cache behavior is forwarding requests to an Amazon S3 origin, specify none for the <code>Forward</code> element. </p>"]
-    pub forward: ItemSelection,
+    pub forward: String,
     #[doc="<p>Required if you specify <code>whitelist</code> for the value of <code>Forward:</code>. A complex type that specifies how many different cookies you want CloudFront to forward to the origin for this cache behavior and, if you want to forward selected cookies, the names of those cookies.</p> <p>If you specify <code>all</code> or none for the value of <code>Forward</code>, omit <code>WhitelistedNames</code>. If you change the value of <code>Forward</code> from <code>whitelist</code> to all or none and you don't delete the <code>WhitelistedNames</code> element and its child elements, CloudFront deletes them automatically.</p> <p>For the current limit on the number of cookie names that you can whitelist for each cache behavior, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_cloudfront\">Amazon CloudFront Limits</a> in the <i>AWS General Reference</i>.</p>"]
     pub whitelisted_names: Option<CookieNames>,
 }
@@ -1615,9 +1608,9 @@ impl CreateStreamingDistributionWithTagsResultDeserializer {
 #[derive(Default,Clone,Debug)]
 pub struct CustomErrorResponse {
     #[doc="<p>The minimum amount of time, in seconds, that you want CloudFront to cache the HTTP status code specified in <code>ErrorCode</code>. When this time period has elapsed, CloudFront queries your origin to see whether the problem that caused the error has been resolved and the requested object is now available.</p> <p>If you don't want to specify a value, include an empty element, <code>&lt;ErrorCachingMinTTL&gt;</code>, in the XML document.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages.html\">Customizing Error Responses</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
-    pub error_caching_min_ttl: Option<Long>,
+    pub error_caching_min_ttl: Option<i64>,
     #[doc="<p>The HTTP status code for which you want to specify a custom error page and/or a caching duration.</p>"]
-    pub error_code: Integer,
+    pub error_code: i64,
     #[doc="<p>The HTTP status code that you want CloudFront to return to the viewer along with the custom error page. There are a variety of reasons that you might want CloudFront to return a status code different from the status code that your origin returned to CloudFront, for example:</p> <ul> <li> <p>Some Internet devices (some firewalls and corporate proxies, for example) intercept HTTP 4xx and 5xx and prevent the response from being returned to the viewer. If you substitute <code>200</code>, the response typically won't be intercepted.</p> </li> <li> <p>If you don't care about distinguishing among different client errors or server errors, you can specify <code>400</code> or <code>500</code> as the <code>ResponseCode</code> for all 4xx or 5xx errors.</p> </li> <li> <p>You might want to return a <code>200</code> status code (OK) and static website so your customers don't know that your website is down.</p> </li> </ul> <p>If you specify a value for <code>ResponseCode</code>, you must also specify a value for <code>ResponsePagePath</code>. If you don't want to specify a value, include an empty element, <code>&lt;ResponseCode&gt;</code>, in the XML document.</p>"]
     pub response_code: Option<String>,
     #[doc="<p>The path to the custom error page that you want CloudFront to return to a viewer when your origin returns the HTTP status code specified by <code>ErrorCode</code>, for example, <code>/4xx-errors/403-forbidden.html</code>. If you want to store your objects and your custom error pages in different locations, your distribution must include a cache behavior for which the following is true:</p> <ul> <li> <p>The value of <code>PathPattern</code> matches the path to your custom error messages. For example, suppose you saved custom error pages for 4xx errors in an Amazon S3 bucket in a directory named <code>/4xx-errors</code>. Your distribution must include a cache behavior for which the path pattern routes requests for your custom error pages to that location, for example, <code>/4xx-errors/*</code>. </p> </li> <li> <p>The value of <code>TargetOriginId</code> specifies the value of the <code>ID</code> element for the origin that contains your custom error pages.</p> </li> </ul> <p>If you specify a value for <code>ResponsePagePath</code>, you must also specify a value for <code>ResponseCode</code>. If you don't want to specify a value, include an empty element, <code>&lt;ResponsePagePath&gt;</code>, in the XML document.</p> <p>We recommend that you store custom error pages in an Amazon S3 bucket. If you store custom error pages on an HTTP server and the server starts to return 5xx errors, CloudFront can't get the files that you want to return to viewers because the origin server is unavailable.</p>"]
@@ -1703,13 +1696,12 @@ impl CustomErrorResponseSerializer {
     }
 }
 
-pub type CustomErrorResponseList = Vec<CustomErrorResponse>;
 struct CustomErrorResponseListDeserializer;
 impl CustomErrorResponseListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CustomErrorResponseList, XmlParseError> {
+                                       -> Result<Vec<CustomErrorResponse>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -1749,7 +1741,7 @@ impl CustomErrorResponseListDeserializer {
 pub struct CustomErrorResponseListSerializer;
 impl CustomErrorResponseListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &CustomErrorResponseList) -> String {
+    pub fn serialize(name: &str, obj: &Vec<CustomErrorResponse>) -> String {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
@@ -1764,9 +1756,9 @@ impl CustomErrorResponseListSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct CustomErrorResponses {
     #[doc="<p>A complex type that contains a <code>CustomErrorResponse</code> element for each HTTP status code for which you want to specify a custom error page and/or a caching duration. </p>"]
-    pub items: Option<CustomErrorResponseList>,
+    pub items: Option<Vec<CustomErrorResponse>>,
     #[doc="<p>The number of HTTP status codes for which you want to specify a custom error page and/or a caching duration. If <code>Quantity</code> is <code>0</code>, you can omit <code>Items</code>.</p>"]
-    pub quantity: Integer,
+    pub quantity: i64,
 }
 
 struct CustomErrorResponsesDeserializer;
@@ -1835,9 +1827,9 @@ impl CustomErrorResponsesSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct CustomHeaders {
     #[doc="<p> <b>Optional</b>: A list that contains one <code>OriginCustomHeader</code> element for each custom header that you want CloudFront to forward to the origin. If Quantity is <code>0</code>, omit <code>Items</code>.</p>"]
-    pub items: Option<OriginCustomHeadersList>,
+    pub items: Option<Vec<OriginCustomHeader>>,
     #[doc="<p>The number of custom headers, if any, for this distribution.</p>"]
-    pub quantity: Integer,
+    pub quantity: i64,
 }
 
 struct CustomHeadersDeserializer;
@@ -1906,15 +1898,15 @@ impl CustomHeadersSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct CustomOriginConfig {
     #[doc="<p>The HTTP port the custom origin listens on.</p>"]
-    pub http_port: Integer,
+    pub http_port: i64,
     #[doc="<p>The HTTPS port the custom origin listens on.</p>"]
-    pub https_port: Integer,
+    pub https_port: i64,
     #[doc="<p>You can create a custom keep-alive timeout. All timeout units are in seconds. The default keep-alive timeout is 5 seconds, but you can configure custom timeout lengths using the CloudFront API. The minimum timeout length is 1 second; the maximum is 60 seconds.</p> <p>If you need to increase the maximum time limit, contact the <a href=\"https://console.aws.amazon.com/support/home#/\">AWS Support Center</a>.</p>"]
-    pub origin_keepalive_timeout: Option<Integer>,
+    pub origin_keepalive_timeout: Option<i64>,
     #[doc="<p>The origin protocol policy to apply to your origin.</p>"]
-    pub origin_protocol_policy: OriginProtocolPolicy,
+    pub origin_protocol_policy: String,
     #[doc="<p>You can create a custom origin read timeout. All timeout units are in seconds. The default origin read timeout is 30 seconds, but you can configure custom timeout lengths using the CloudFront API. The minimum timeout length is 4 seconds; the maximum is 60 seconds.</p> <p>If you need to increase the maximum time limit, contact the <a href=\"https://console.aws.amazon.com/support/home#/\">AWS Support Center</a>.</p>"]
-    pub origin_read_timeout: Option<Integer>,
+    pub origin_read_timeout: Option<i64>,
     #[doc="<p>The SSL/TLS protocols that you want CloudFront to use when communicating with your origin over HTTPS.</p>"]
     pub origin_ssl_protocols: Option<OriginSslProtocols>,
 }
@@ -2016,24 +2008,24 @@ impl CustomOriginConfigSerializer {
 pub struct DefaultCacheBehavior {
     pub allowed_methods: Option<AllowedMethods>,
     #[doc="<p>Whether you want CloudFront to automatically compress certain files for this cache behavior. If so, specify <code>true</code>; if not, specify <code>false</code>. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html\">Serving Compressed Files</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
-    pub compress: Option<Boolean>,
+    pub compress: Option<bool>,
     #[doc="<p>The default amount of time that you want objects to stay in CloudFront caches before CloudFront forwards another request to your origin to determine whether the object has been updated. The value that you specify applies only when your origin does not add HTTP headers such as <code>Cache-Control max-age</code>, <code>Cache-Control s-maxage</code>, and <code>Expires</code> to objects. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html\">Specifying How Long Objects and Errors Stay in a CloudFront Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
-    pub default_ttl: Option<Long>,
+    pub default_ttl: Option<i64>,
     #[doc="<p>A complex type that specifies how CloudFront handles query strings and cookies.</p>"]
     pub forwarded_values: ForwardedValues,
     #[doc="<p>A complex type that contains zero or more Lambda function associations for a cache behavior.</p>"]
     pub lambda_function_associations: Option<LambdaFunctionAssociations>,
-    pub max_ttl: Option<Long>,
+    pub max_ttl: Option<i64>,
     #[doc="<p>The minimum amount of time that you want objects to stay in CloudFront caches before CloudFront forwards another request to your origin to determine whether the object has been updated. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html\">Specifying How Long Objects and Errors Stay in a CloudFront Edge Cache (Expiration)</a> in the <i>Amazon Amazon CloudFront Developer Guide</i>.</p> <p>You must specify <code>0</code> for <code>MinTTL</code> if you configure CloudFront to forward all headers to your origin (under <code>Headers</code>, if you specify <code>1</code> for <code>Quantity</code> and <code>*</code> for <code>Name</code>).</p>"]
-    pub min_ttl: Long,
+    pub min_ttl: i64,
     #[doc="<p>Indicates whether you want to distribute media files in the Microsoft Smooth Streaming format using the origin that is associated with this cache behavior. If so, specify <code>true</code>; if not, specify <code>false</code>. If you specify <code>true</code> for <code>SmoothStreaming</code>, you can still distribute other content using this cache behavior if the content matches the value of <code>PathPattern</code>. </p>"]
-    pub smooth_streaming: Option<Boolean>,
+    pub smooth_streaming: Option<bool>,
     #[doc="<p>The value of <code>ID</code> for the origin that you want CloudFront to route requests to when a request matches the path pattern either for a cache behavior or for the default cache behavior.</p>"]
     pub target_origin_id: String,
     #[doc="<p>A complex type that specifies the AWS accounts, if any, that you want to allow to create signed URLs for private content.</p> <p>If you want to require signed URLs in requests for objects in the target origin that match the <code>PathPattern</code> for this cache behavior, specify <code>true</code> for <code>Enabled</code>, and specify the applicable values for <code>Quantity</code> and <code>Items</code>. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html\">Serving Private Content through CloudFront</a> in the <i>Amazon Amazon CloudFront Developer Guide</i>.</p> <p>If you don't want to require signed URLs in requests for objects that match <code>PathPattern</code>, specify <code>false</code> for <code>Enabled</code> and <code>0</code> for <code>Quantity</code>. Omit <code>Items</code>.</p> <p>To add, change, or remove one or more trusted signers, change <code>Enabled</code> to <code>true</code> (if it's currently <code>false</code>), change <code>Quantity</code> as applicable, and specify all of the trusted signers that you want to include in the updated distribution.</p>"]
     pub trusted_signers: TrustedSigners,
     #[doc="<p>The protocol that viewers can use to access the files in the origin specified by <code>TargetOriginId</code> when a request matches the path pattern in <code>PathPattern</code>. You can specify the following options:</p> <ul> <li> <p> <code>allow-all</code>: Viewers can use HTTP or HTTPS.</p> </li> <li> <p> <code>redirect-to-https</code>: If a viewer submits an HTTP request, CloudFront returns an HTTP status code of 301 (Moved Permanently) to the viewer along with the HTTPS URL. The viewer then resubmits the request using the new URL.</p> </li> <li> <p> <code>https-only</code>: If a viewer sends an HTTP request, CloudFront returns an HTTP status code of 403 (Forbidden).</p> </li> </ul> <p>For more information about requiring the HTTPS protocol, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html\">Using an HTTPS Connection to Access Your Objects</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <note> <p>The only way to guarantee that viewers retrieve an object that was fetched from the origin using HTTPS is never to use any other protocol to fetch the object. If you have recently changed from HTTP to HTTPS, we recommend that you clear your objects' cache because cached objects are protocol agnostic. That means that an edge location will return an object from the cache regardless of whether the current request protocol matches the protocol used previously. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html\">Specifying How Long Objects and Errors Stay in a CloudFront Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </note>"]
-    pub viewer_protocol_policy: ViewerProtocolPolicy,
+    pub viewer_protocol_policy: String,
 }
 
 struct DefaultCacheBehaviorDeserializer;
@@ -2200,9 +2192,9 @@ pub struct Distribution {
     #[doc="<p>The identifier for the distribution. For example: <code>EDFDVBD632BHDS5</code>. </p>"]
     pub id: String,
     #[doc="<p>The number of invalidation batches currently in progress. </p>"]
-    pub in_progress_invalidation_batches: Integer,
+    pub in_progress_invalidation_batches: i64,
     #[doc="<p>The date and time the distribution was last modified. </p>"]
-    pub last_modified_time: Timestamp,
+    pub last_modified_time: String,
     #[doc="<p>This response element indicates the current status of the distribution. When the status is <code>Deployed</code>, the distribution's information is fully propagated to all CloudFront edge locations. </p>"]
     pub status: String,
 }
@@ -2295,17 +2287,17 @@ pub struct DistributionConfig {
     #[doc="<p>The object that you want CloudFront to request from your origin (for example, <code>index.html</code>) when a viewer requests the root URL for your distribution (<code>http://www.example.com</code>) instead of an object in your distribution (<code>http://www.example.com/product-description.html</code>). Specifying a default root object avoids exposing the contents of your distribution.</p> <p>Specify only the object name, for example, <code>index.html</code>. Do not add a <code>/</code> before the object name.</p> <p>If you don't want to specify a default root object when you create a distribution, include an empty <code>DefaultRootObject</code> element.</p> <p>To delete the default root object from an existing distribution, update the distribution configuration and include an empty <code>DefaultRootObject</code> element.</p> <p>To replace the default root object, update the distribution configuration and specify the new object.</p> <p>For more information about the default root object, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DefaultRootObject.html\">Creating a Default Root Object</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
     pub default_root_object: Option<String>,
     #[doc="<p>From this field, you can enable or disable the selected distribution.</p> <p>If you specify <code>false</code> for <code>Enabled</code> but you specify values for <code>Bucket</code> and <code>Prefix</code>, the values are automatically deleted.</p>"]
-    pub enabled: Boolean,
+    pub enabled: bool,
     #[doc="<p>(Optional) Specify the maximum HTTP version that you want viewers to use to communicate with CloudFront. The default value for new web distributions is http2. Viewers that don't support HTTP/2 automatically use an earlier HTTP version.</p> <p>For viewers and CloudFront to use HTTP/2, viewers must support TLS 1.2 or later, and must support Server Name Identification (SNI).</p> <p>In general, configuring CloudFront to communicate with viewers using HTTP/2 reduces latency. You can improve performance by optimizing for HTTP/2. For more information, do an Internet search for \"http/2 optimization.\" </p>"]
-    pub http_version: Option<HttpVersion>,
+    pub http_version: Option<String>,
     #[doc="<p>If you want CloudFront to respond to IPv6 DNS requests with an IPv6 address for your distribution, specify <code>true</code>. If you specify <code>false</code>, CloudFront responds to IPv6 DNS requests with the DNS response code <code>NOERROR</code> and with no IP addresses. This allows viewers to submit a second request, for an IPv4 address for your distribution. </p> <p>In general, you should enable IPv6 if you have users on IPv6 networks who want to access your content. However, if you're using signed URLs or signed cookies to restrict access to your content, and if you're using a custom policy that includes the <code>IpAddress</code> parameter to restrict the IP addresses that can access your content, do not enable IPv6. If you want to restrict access to some content by IP address and not restrict access to other content (or restrict access but not by IP address), you can create two distributions. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-creating-signed-url-custom-policy.html\">Creating a Signed URL Using a Custom Policy</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>If you're using an Amazon Route 53 alias resource record set to route traffic to your CloudFront distribution, you need to create a second alias resource record set when both of the following are true:</p> <ul> <li> <p>You enable IPv6 for the distribution</p> </li> <li> <p>You're using alternate domain names in the URLs for your objects</p> </li> </ul> <p>For more information, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-to-cloudfront-distribution.html\">Routing Traffic to an Amazon CloudFront Web Distribution by Using Your Domain Name</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>If you created a CNAME resource record set, either with Amazon Route 53 or with another DNS service, you don't need to make any changes. A CNAME record will route traffic to your distribution regardless of the IP address format of the viewer request.</p>"]
-    pub is_ipv6_enabled: Option<Boolean>,
+    pub is_ipv6_enabled: Option<bool>,
     #[doc="<p>A complex type that controls whether access logs are written for the distribution.</p> <p>For more information about logging, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/AccessLogs.html\">Access Logs</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
     pub logging: Option<LoggingConfig>,
     #[doc="<p>A complex type that contains information about origins for this distribution. </p>"]
     pub origins: Origins,
     #[doc="<p>The price class that corresponds with the maximum price that you want to pay for CloudFront service. If you specify <code>PriceClass_All</code>, CloudFront responds to requests for your objects from all CloudFront edge locations.</p> <p>If you specify a price class other than <code>PriceClass_All</code>, CloudFront serves your objects from the CloudFront edge location that has the lowest latency among the edge locations in your price class. Viewers who are in or near regions that are excluded from your specified price class may encounter slower performance.</p> <p>For more information about price classes, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PriceClass.html\">Choosing the Price Class for a CloudFront Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>. For information about CloudFront pricing, including how price classes map to CloudFront regions, see <a href=\"https://aws.amazon.com/cloudfront/pricing/\">Amazon CloudFront Pricing</a>.</p>"]
-    pub price_class: Option<PriceClass>,
+    pub price_class: Option<String>,
     pub restrictions: Option<Restrictions>,
     pub viewer_certificate: Option<ViewerCertificate>,
     #[doc="<p>A unique identifier that specifies the AWS WAF web ACL, if any, to associate with this distribution.</p> <p>AWS WAF is a web application firewall that lets you monitor the HTTP and HTTPS requests that are forwarded to CloudFront, and lets you control access to your content. Based on conditions that you specify, such as the IP addresses that requests originate from or the values of query strings, CloudFront responds to requests either with the requested content or with an HTTP 403 status code (Forbidden). You can also configure CloudFront to return a custom error page when a request is blocked. For more information about AWS WAF, see the <a href=\"http://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html\">AWS WAF Developer Guide</a>. </p>"]
@@ -2499,17 +2491,17 @@ impl DistributionConfigWithTagsSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct DistributionList {
     #[doc="<p>A flag that indicates whether more distributions remain to be listed. If your results were truncated, you can make a follow-up pagination request using the <code>Marker</code> request parameter to retrieve more distributions in the list.</p>"]
-    pub is_truncated: Boolean,
+    pub is_truncated: bool,
     #[doc="<p>A complex type that contains one <code>DistributionSummary</code> element for each distribution that was created by the current AWS account.</p>"]
-    pub items: Option<DistributionSummaryList>,
+    pub items: Option<Vec<DistributionSummary>>,
     #[doc="<p>The value you provided for the <code>Marker</code> request parameter.</p>"]
     pub marker: String,
     #[doc="<p>The value you provided for the <code>MaxItems</code> request parameter.</p>"]
-    pub max_items: Integer,
+    pub max_items: i64,
     #[doc="<p>If <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value you can use for the <code>Marker</code> request parameter to continue listing your distributions where they left off. </p>"]
     pub next_marker: Option<String>,
     #[doc="<p>The number of distributions that were created by the current AWS account. </p>"]
-    pub quantity: Integer,
+    pub quantity: i64,
 }
 
 struct DistributionListDeserializer;
@@ -2592,18 +2584,18 @@ pub struct DistributionSummary {
     #[doc="<p>The domain name that corresponds to the distribution. For example: <code>d604721fxaaqy9.cloudfront.net</code>.</p>"]
     pub domain_name: String,
     #[doc="<p>Whether the distribution is enabled to accept user requests for content.</p>"]
-    pub enabled: Boolean,
+    pub enabled: bool,
     #[doc="<p> Specify the maximum HTTP version that you want viewers to use to communicate with CloudFront. The default value for new web distributions is <code>http2</code>. Viewers that don't support <code>HTTP/2</code> will automatically use an earlier version.</p>"]
-    pub http_version: HttpVersion,
+    pub http_version: String,
     #[doc="<p>The identifier for the distribution. For example: <code>EDFDVBD632BHDS5</code>.</p>"]
     pub id: String,
     #[doc="<p>Whether CloudFront responds to IPv6 DNS requests with an IPv6 address for your distribution.</p>"]
-    pub is_ipv6_enabled: Boolean,
+    pub is_ipv6_enabled: bool,
     #[doc="<p>The date and time the distribution was last modified.</p>"]
-    pub last_modified_time: Timestamp,
+    pub last_modified_time: String,
     #[doc="<p>A complex type that contains information about origins for this distribution.</p>"]
     pub origins: Origins,
-    pub price_class: PriceClass,
+    pub price_class: String,
     pub restrictions: Restrictions,
     #[doc="<p>The current status of the distribution. When the status is <code>Deployed</code>, the distribution's information is propagated to all CloudFront edge locations.</p>"]
     pub status: String,
@@ -2719,13 +2711,12 @@ impl DistributionSummaryDeserializer {
 
     }
 }
-pub type DistributionSummaryList = Vec<DistributionSummary>;
 struct DistributionSummaryListDeserializer;
 impl DistributionSummaryListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DistributionSummaryList, XmlParseError> {
+                                       -> Result<Vec<DistributionSummary>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -2761,13 +2752,12 @@ impl DistributionSummaryListDeserializer {
 
     }
 }
-pub type EventType = String;
 struct EventTypeDeserializer;
 impl EventTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EventType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2780,7 +2770,7 @@ impl EventTypeDeserializer {
 pub struct EventTypeSerializer;
 impl EventTypeSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &EventType) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
@@ -2795,7 +2785,7 @@ pub struct ForwardedValues {
     #[doc="<p>A complex type that specifies the <code>Headers</code>, if any, that you want CloudFront to vary upon for this cache behavior. </p>"]
     pub headers: Option<Headers>,
     #[doc="<p>Indicates whether you want CloudFront to forward query strings to the origin that is associated with this cache behavior and cache based on the query string parameters. CloudFront behavior depends on the value of <code>QueryString</code> and on the values that you specify for <code>QueryStringCacheKeys</code>, if any:</p> <p>If you specify true for <code>QueryString</code> and you don't specify any values for <code>QueryStringCacheKeys</code>, CloudFront forwards all query string parameters to the origin and caches based on all query string parameters. Depending on how many query string parameters and values you have, this can adversely affect performance because CloudFront must forward more requests to the origin.</p> <p>If you specify true for <code>QueryString</code> and you specify one or more values for <code>QueryStringCacheKeys</code>, CloudFront forwards all query string parameters to the origin, but it only caches based on the query string parameters that you specify.</p> <p>If you specify false for <code>QueryString</code>, CloudFront doesn't forward any query string parameters to the origin, and doesn't cache based on query string parameters.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/QueryStringParameters.html\">Configuring CloudFront to Cache Based on Query String Parameters</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
-    pub query_string: Boolean,
+    pub query_string: bool,
     #[doc="<p>A complex type that contains information about the query string parameters that you want CloudFront to use for caching for this cache behavior.</p>"]
     pub query_string_cache_keys: Option<QueryStringCacheKeys>,
 }
@@ -2879,11 +2869,11 @@ impl ForwardedValuesSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct GeoRestriction {
     #[doc="<p> A complex type that contains a <code>Location</code> element for each country in which you want CloudFront either to distribute your content (<code>whitelist</code>) or not distribute your content (<code>blacklist</code>).</p> <p>The <code>Location</code> element is a two-letter, uppercase country code for a country that you want to include in your <code>blacklist</code> or <code>whitelist</code>. Include one <code>Location</code> element for each country.</p> <p>CloudFront and <code>MaxMind</code> both use <code>ISO 3166</code> country codes. For the current list of countries and the corresponding codes, see <code>ISO 3166-1-alpha-2</code> code on the <i>International Organization for Standardization</i> website. You can also refer to the country list in the CloudFront console, which includes both country names and codes.</p>"]
-    pub items: Option<LocationList>,
+    pub items: Option<Vec<String>>,
     #[doc="<p>When geo restriction is <code>enabled</code>, this is the number of countries in your <code>whitelist</code> or <code>blacklist</code>. Otherwise, when it is not enabled, <code>Quantity</code> is <code>0</code>, and you can omit <code>Items</code>.</p>"]
-    pub quantity: Integer,
+    pub quantity: i64,
     #[doc="<p>The method that you want to use to restrict distribution of your content by country:</p> <ul> <li> <p> <code>none</code>: No geo restriction is enabled, meaning access to content is not restricted by client geo location.</p> </li> <li> <p> <code>blacklist</code>: The <code>Location</code> elements specify the countries in which you do not want CloudFront to distribute your content.</p> </li> <li> <p> <code>whitelist</code>: The <code>Location</code> elements specify the countries in which you want CloudFront to distribute your content.</p> </li> </ul>"]
-    pub restriction_type: GeoRestrictionType,
+    pub restriction_type: String,
 }
 
 struct GeoRestrictionDeserializer;
@@ -2954,13 +2944,12 @@ impl GeoRestrictionSerializer {
     }
 }
 
-pub type GeoRestrictionType = String;
 struct GeoRestrictionTypeDeserializer;
 impl GeoRestrictionTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<GeoRestrictionType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2973,7 +2962,7 @@ impl GeoRestrictionTypeDeserializer {
 pub struct GeoRestrictionTypeSerializer;
 impl GeoRestrictionTypeSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &GeoRestrictionType) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
@@ -3390,13 +3379,12 @@ impl GetStreamingDistributionResultDeserializer {
 
     }
 }
-pub type HeaderList = Vec<String>;
 struct HeaderListDeserializer;
 impl HeaderListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<HeaderList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -3436,7 +3424,7 @@ impl HeaderListDeserializer {
 pub struct HeaderListSerializer;
 impl HeaderListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &HeaderList) -> String {
+    pub fn serialize(name: &str, obj: &Vec<String>) -> String {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
@@ -3451,9 +3439,9 @@ impl HeaderListSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct Headers {
     #[doc="<p>A complex type that contains one <code>Name</code> element for each header that you want CloudFront to forward to the origin and to vary on for this cache behavior. If <code>Quantity</code> is <code>0</code>, omit <code>Items</code>.</p>"]
-    pub items: Option<HeaderList>,
+    pub items: Option<Vec<String>>,
     #[doc="<p>The number of different headers that you want CloudFront to forward to the origin for this cache behavior. You can configure each cache behavior in a web distribution to do one of the following:</p> <ul> <li> <p> <b>Forward all headers to your origin</b>: Specify <code>1</code> for <code>Quantity</code> and <code>*</code> for <code>Name</code>.</p> <important> <p>If you configure CloudFront to forward all headers to your origin, CloudFront doesn't cache the objects associated with this cache behavior. Instead, it sends every request to the origin.</p> </important> </li> <li> <p> <i>Forward a whitelist of headers you specify</i>: Specify the number of headers that you want to forward, and specify the header names in <code>Name</code> elements. CloudFront caches your objects based on the values in all of the specified headers. CloudFront also forwards the headers that it forwards by default, but it caches your objects based only on the headers that you specify. </p> </li> <li> <p> <b>Forward only the default headers</b>: Specify <code>0</code> for <code>Quantity</code> and omit <code>Items</code>. In this configuration, CloudFront doesn't cache based on the values in the request headers.</p> </li> </ul>"]
-    pub quantity: Integer,
+    pub quantity: i64,
 }
 
 struct HeadersDeserializer;
@@ -3517,13 +3505,12 @@ impl HeadersSerializer {
     }
 }
 
-pub type HttpVersion = String;
 struct HttpVersionDeserializer;
 impl HttpVersionDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<HttpVersion, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3536,20 +3523,19 @@ impl HttpVersionDeserializer {
 pub struct HttpVersionSerializer;
 impl HttpVersionSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &HttpVersion) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type Integer = i64;
 struct IntegerDeserializer;
 impl IntegerDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Integer, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -3562,7 +3548,7 @@ impl IntegerDeserializer {
 pub struct IntegerSerializer;
 impl IntegerSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Integer) -> String {
+    pub fn serialize(name: &str, obj: &i64) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
@@ -3573,7 +3559,7 @@ impl IntegerSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct Invalidation {
     #[doc="<p>The date and time the invalidation request was first made. </p>"]
-    pub create_time: Timestamp,
+    pub create_time: String,
     #[doc="<p>The identifier for the invalidation request. For example: <code>IDFDVBD632BHDS5</code>.</p>"]
     pub id: String,
     #[doc="<p>The current invalidation information for the batch request. </p>"]
@@ -3707,17 +3693,17 @@ impl InvalidationBatchSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct InvalidationList {
     #[doc="<p>A flag that indicates whether more invalidation batch requests remain to be listed. If your results were truncated, you can make a follow-up pagination request using the <code>Marker</code> request parameter to retrieve more invalidation batches in the list.</p>"]
-    pub is_truncated: Boolean,
+    pub is_truncated: bool,
     #[doc="<p>A complex type that contains one <code>InvalidationSummary</code> element for each invalidation batch created by the current AWS account.</p>"]
-    pub items: Option<InvalidationSummaryList>,
+    pub items: Option<Vec<InvalidationSummary>>,
     #[doc="<p>The value that you provided for the <code>Marker</code> request parameter.</p>"]
     pub marker: String,
     #[doc="<p>The value that you provided for the <code>MaxItems</code> request parameter.</p>"]
-    pub max_items: Integer,
+    pub max_items: i64,
     #[doc="<p>If <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value that you can use for the <code>Marker</code> request parameter to continue listing your invalidation batches where they left off.</p>"]
     pub next_marker: Option<String>,
     #[doc="<p>The number of invalidation batches that were created by the current AWS account. </p>"]
-    pub quantity: Integer,
+    pub quantity: i64,
 }
 
 struct InvalidationListDeserializer;
@@ -3785,7 +3771,7 @@ impl InvalidationListDeserializer {
 #[doc="<p>A summary of an invalidation request.</p>"]
 #[derive(Default,Clone,Debug)]
 pub struct InvalidationSummary {
-    pub create_time: Timestamp,
+    pub create_time: String,
     #[doc="<p>The unique ID for an invalidation request.</p>"]
     pub id: String,
     #[doc="<p>The status of an invalidation request.</p>"]
@@ -3840,13 +3826,12 @@ impl InvalidationSummaryDeserializer {
 
     }
 }
-pub type InvalidationSummaryList = Vec<InvalidationSummary>;
 struct InvalidationSummaryListDeserializer;
 impl InvalidationSummaryListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<InvalidationSummaryList, XmlParseError> {
+                                       -> Result<Vec<InvalidationSummary>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -3882,13 +3867,12 @@ impl InvalidationSummaryListDeserializer {
 
     }
 }
-pub type ItemSelection = String;
 struct ItemSelectionDeserializer;
 impl ItemSelectionDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ItemSelection, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3901,20 +3885,19 @@ impl ItemSelectionDeserializer {
 pub struct ItemSelectionSerializer;
 impl ItemSelectionSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &ItemSelection) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type KeyPairIdList = Vec<String>;
 struct KeyPairIdListDeserializer;
 impl KeyPairIdListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<KeyPairIdList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -3954,9 +3937,9 @@ impl KeyPairIdListDeserializer {
 #[derive(Default,Clone,Debug)]
 pub struct KeyPairIds {
     #[doc="<p>A complex type that lists the active CloudFront key pairs, if any, that are associated with <code>AwsAccountNumber</code>.</p> <p>For more information, see <a>ActiveTrustedSigners</a>.</p>"]
-    pub items: Option<KeyPairIdList>,
+    pub items: Option<Vec<String>>,
     #[doc="<p>The number of active CloudFront key pairs for <code>AwsAccountNumber</code>.</p> <p>For more information, see <a>ActiveTrustedSigners</a>.</p>"]
-    pub quantity: Integer,
+    pub quantity: i64,
 }
 
 struct KeyPairIdsDeserializer;
@@ -4009,7 +3992,7 @@ impl KeyPairIdsDeserializer {
 #[derive(Default,Clone,Debug)]
 pub struct LambdaFunctionAssociation {
     #[doc="<p>Specifies the event type that triggers a Lambda function invocation. Valid values are:</p> <ul> <li> <p> <code>viewer-request</code> </p> </li> <li> <p> <code>origin-request</code> </p> </li> <li> <p> <code>viewer-response</code> </p> </li> <li> <p> <code>origin-response</code> </p> </li> </ul>"]
-    pub event_type: Option<EventType>,
+    pub event_type: Option<String>,
     #[doc="<p>The ARN of the Lambda function.</p>"]
     pub lambda_function_arn: Option<String>,
 }
@@ -4079,13 +4062,12 @@ impl LambdaFunctionAssociationSerializer {
     }
 }
 
-pub type LambdaFunctionAssociationList = Vec<LambdaFunctionAssociation>;
 struct LambdaFunctionAssociationListDeserializer;
 impl LambdaFunctionAssociationListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LambdaFunctionAssociationList, XmlParseError> {
+                                       -> Result<Vec<LambdaFunctionAssociation>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4125,7 +4107,7 @@ impl LambdaFunctionAssociationListDeserializer {
 pub struct LambdaFunctionAssociationListSerializer;
 impl LambdaFunctionAssociationListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &LambdaFunctionAssociationList) -> String {
+    pub fn serialize(name: &str, obj: &Vec<LambdaFunctionAssociation>) -> String {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
@@ -4140,9 +4122,9 @@ impl LambdaFunctionAssociationListSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct LambdaFunctionAssociations {
     #[doc="<p> <b>Optional</b>: A complex type that contains <code>LambdaFunctionAssociation</code> items for this cache behavior. If <code>Quantity</code> is <code>0</code>, you can omit <code>Items</code>.</p>"]
-    pub items: Option<LambdaFunctionAssociationList>,
+    pub items: Option<Vec<LambdaFunctionAssociation>>,
     #[doc="<p>The number of Lambda function associations for this cache behavior.</p>"]
-    pub quantity: Integer,
+    pub quantity: i64,
 }
 
 struct LambdaFunctionAssociationsDeserializer;
@@ -4507,7 +4489,7 @@ impl ListStreamingDistributionsResultDeserializer {
 #[derive(Default,Clone,Debug)]
 pub struct ListTagsForResourceRequest {
     #[doc="<p> An ARN of a CloudFront resource.</p>"]
-    pub resource: ResourceARN,
+    pub resource: String,
 }
 
 #[doc="<p> The returned result of the corresponding request.</p>"]
@@ -4558,13 +4540,12 @@ impl ListTagsForResourceResultDeserializer {
 
     }
 }
-pub type LocationList = Vec<String>;
 struct LocationListDeserializer;
 impl LocationListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LocationList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4604,7 +4585,7 @@ impl LocationListDeserializer {
 pub struct LocationListSerializer;
 impl LocationListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &LocationList) -> String {
+    pub fn serialize(name: &str, obj: &Vec<String>) -> String {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
@@ -4621,9 +4602,9 @@ pub struct LoggingConfig {
     #[doc="<p>The Amazon S3 bucket to store the access logs in, for example, <code>myawslogbucket.s3.amazonaws.com</code>.</p>"]
     pub bucket: String,
     #[doc="<p>Specifies whether you want CloudFront to save access logs to an Amazon S3 bucket. If you do not want to enable logging when you create a distribution or if you want to disable logging for an existing distribution, specify <code>false</code> for <code>Enabled</code>, and specify empty <code>Bucket</code> and <code>Prefix</code> elements. If you specify <code>false</code> for <code>Enabled</code> but you specify values for <code>Bucket</code>, <code>prefix</code>, and <code>IncludeCookies</code>, the values are automatically deleted.</p>"]
-    pub enabled: Boolean,
+    pub enabled: bool,
     #[doc="<p>Specifies whether you want CloudFront to include cookies in access logs, specify <code>true</code> for <code>IncludeCookies</code>. If you choose to include cookies in logs, CloudFront logs all cookies regardless of how you configure the cache behaviors for this distribution. If you do not want to include cookies when you create a distribution or if you want to disable include cookies for an existing distribution, specify <code>false</code> for <code>IncludeCookies</code>.</p>"]
-    pub include_cookies: Boolean,
+    pub include_cookies: bool,
     #[doc="<p>An optional string that you want CloudFront to prefix to the access log <code>filenames</code> for this distribution, for example, <code>myprefix/</code>. If you want to enable logging, but you do not want to specify a prefix, you still must include an empty <code>Prefix</code> element in the <code>Logging</code> element.</p>"]
     pub prefix: String,
 }
@@ -4695,13 +4676,12 @@ impl LoggingConfigSerializer {
     }
 }
 
-pub type Long = i64;
 struct LongDeserializer;
 impl LongDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Long, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -4714,20 +4694,19 @@ impl LongDeserializer {
 pub struct LongSerializer;
 impl LongSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Long) -> String {
+    pub fn serialize(name: &str, obj: &i64) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type Method = String;
 struct MethodDeserializer;
 impl MethodDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Method, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4740,20 +4719,19 @@ impl MethodDeserializer {
 pub struct MethodSerializer;
 impl MethodSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Method) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type MethodsList = Vec<Method>;
 struct MethodsListDeserializer;
 impl MethodsListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<MethodsList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4793,7 +4771,7 @@ impl MethodsListDeserializer {
 pub struct MethodsListSerializer;
 impl MethodsListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &MethodsList) -> String {
+    pub fn serialize(name: &str, obj: &Vec<String>) -> String {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
@@ -4804,13 +4782,12 @@ impl MethodsListSerializer {
     }
 }
 
-pub type MinimumProtocolVersion = String;
 struct MinimumProtocolVersionDeserializer;
 impl MinimumProtocolVersionDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<MinimumProtocolVersion, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4823,7 +4800,7 @@ impl MinimumProtocolVersionDeserializer {
 pub struct MinimumProtocolVersionSerializer;
 impl MinimumProtocolVersionSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &MinimumProtocolVersion) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
@@ -5005,13 +4982,12 @@ impl OriginCustomHeaderSerializer {
     }
 }
 
-pub type OriginCustomHeadersList = Vec<OriginCustomHeader>;
 struct OriginCustomHeadersListDeserializer;
 impl OriginCustomHeadersListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<OriginCustomHeadersList, XmlParseError> {
+                                       -> Result<Vec<OriginCustomHeader>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5051,7 +5027,7 @@ impl OriginCustomHeadersListDeserializer {
 pub struct OriginCustomHeadersListSerializer;
 impl OriginCustomHeadersListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &OriginCustomHeadersList) -> String {
+    pub fn serialize(name: &str, obj: &Vec<OriginCustomHeader>) -> String {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
@@ -5062,13 +5038,12 @@ impl OriginCustomHeadersListSerializer {
     }
 }
 
-pub type OriginList = Vec<Origin>;
 struct OriginListDeserializer;
 impl OriginListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<OriginList, XmlParseError> {
+                                       -> Result<Vec<Origin>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5108,7 +5083,7 @@ impl OriginListDeserializer {
 pub struct OriginListSerializer;
 impl OriginListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &OriginList) -> String {
+    pub fn serialize(name: &str, obj: &Vec<Origin>) -> String {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
@@ -5119,13 +5094,12 @@ impl OriginListSerializer {
     }
 }
 
-pub type OriginProtocolPolicy = String;
 struct OriginProtocolPolicyDeserializer;
 impl OriginProtocolPolicyDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<OriginProtocolPolicy, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5138,7 +5112,7 @@ impl OriginProtocolPolicyDeserializer {
 pub struct OriginProtocolPolicySerializer;
 impl OriginProtocolPolicySerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &OriginProtocolPolicy) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
@@ -5149,9 +5123,9 @@ impl OriginProtocolPolicySerializer {
 #[derive(Default,Clone,Debug)]
 pub struct OriginSslProtocols {
     #[doc="<p>A list that contains allowed SSL/TLS protocols for this distribution.</p>"]
-    pub items: SslProtocolsList,
+    pub items: Vec<String>,
     #[doc="<p>The number of SSL/TLS protocols that you want to allow CloudFront to use when establishing an HTTPS connection with this origin. </p>"]
-    pub quantity: Integer,
+    pub quantity: i64,
 }
 
 struct OriginSslProtocolsDeserializer;
@@ -5217,9 +5191,9 @@ impl OriginSslProtocolsSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct Origins {
     #[doc="<p>A complex type that contains origins for this distribution.</p>"]
-    pub items: Option<OriginList>,
+    pub items: Option<Vec<Origin>>,
     #[doc="<p>The number of origins for this distribution.</p>"]
-    pub quantity: Integer,
+    pub quantity: i64,
 }
 
 struct OriginsDeserializer;
@@ -5283,13 +5257,12 @@ impl OriginsSerializer {
     }
 }
 
-pub type PathList = Vec<String>;
 struct PathListDeserializer;
 impl PathListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PathList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5329,7 +5302,7 @@ impl PathListDeserializer {
 pub struct PathListSerializer;
 impl PathListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &PathList) -> String {
+    pub fn serialize(name: &str, obj: &Vec<String>) -> String {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
@@ -5344,9 +5317,9 @@ impl PathListSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct Paths {
     #[doc="<p>A complex type that contains a list of the paths that you want to invalidate.</p>"]
-    pub items: Option<PathList>,
+    pub items: Option<Vec<String>>,
     #[doc="<p>The number of objects that you want to invalidate.</p>"]
-    pub quantity: Integer,
+    pub quantity: i64,
 }
 
 struct PathsDeserializer;
@@ -5410,13 +5383,12 @@ impl PathsSerializer {
     }
 }
 
-pub type PriceClass = String;
 struct PriceClassDeserializer;
 impl PriceClassDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PriceClass, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5429,7 +5401,7 @@ impl PriceClassDeserializer {
 pub struct PriceClassSerializer;
 impl PriceClassSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &PriceClass) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
@@ -5439,9 +5411,9 @@ impl PriceClassSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct QueryStringCacheKeys {
     #[doc="<p>(Optional) A list that contains the query string parameters that you want CloudFront to use as a basis for caching for this cache behavior. If <code>Quantity</code> is 0, you can omit <code>Items</code>. </p>"]
-    pub items: Option<QueryStringCacheKeysList>,
+    pub items: Option<Vec<String>>,
     #[doc="<p>The number of <code>whitelisted</code> query string parameters for this cache behavior.</p>"]
-    pub quantity: Integer,
+    pub quantity: i64,
 }
 
 struct QueryStringCacheKeysDeserializer;
@@ -5504,13 +5476,12 @@ impl QueryStringCacheKeysSerializer {
     }
 }
 
-pub type QueryStringCacheKeysList = Vec<String>;
 struct QueryStringCacheKeysListDeserializer;
 impl QueryStringCacheKeysListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<QueryStringCacheKeysList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5550,7 +5521,7 @@ impl QueryStringCacheKeysListDeserializer {
 pub struct QueryStringCacheKeysListSerializer;
 impl QueryStringCacheKeysListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &QueryStringCacheKeysList) -> String {
+    pub fn serialize(name: &str, obj: &Vec<String>) -> String {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
@@ -5561,12 +5532,11 @@ impl QueryStringCacheKeysListSerializer {
     }
 }
 
-pub type ResourceARN = String;
 
 pub struct ResourceARNSerializer;
 impl ResourceARNSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &ResourceARN) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
@@ -5767,13 +5737,12 @@ impl S3OriginConfigSerializer {
     }
 }
 
-pub type SSLSupportMethod = String;
 struct SSLSupportMethodDeserializer;
 impl SSLSupportMethodDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SSLSupportMethod, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5786,7 +5755,7 @@ impl SSLSupportMethodDeserializer {
 pub struct SSLSupportMethodSerializer;
 impl SSLSupportMethodSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &SSLSupportMethod) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
@@ -5850,13 +5819,12 @@ impl SignerDeserializer {
 
     }
 }
-pub type SignerList = Vec<Signer>;
 struct SignerListDeserializer;
 impl SignerListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SignerList, XmlParseError> {
+                                       -> Result<Vec<Signer>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5892,13 +5860,12 @@ impl SignerListDeserializer {
 
     }
 }
-pub type SslProtocol = String;
 struct SslProtocolDeserializer;
 impl SslProtocolDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SslProtocol, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5911,20 +5878,19 @@ impl SslProtocolDeserializer {
 pub struct SslProtocolSerializer;
 impl SslProtocolSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &SslProtocol) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type SslProtocolsList = Vec<SslProtocol>;
 struct SslProtocolsListDeserializer;
 impl SslProtocolsListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SslProtocolsList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5964,7 +5930,7 @@ impl SslProtocolsListDeserializer {
 pub struct SslProtocolsListSerializer;
 impl SslProtocolsListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &SslProtocolsList) -> String {
+    pub fn serialize(name: &str, obj: &Vec<String>) -> String {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
@@ -5986,7 +5952,7 @@ pub struct StreamingDistribution {
     #[doc="<p>The identifier for the RTMP distribution. For example: <code>EGTXBD79EXAMPLE</code>.</p>"]
     pub id: String,
     #[doc="<p>The date and time that the distribution was last modified. </p>"]
-    pub last_modified_time: Option<Timestamp>,
+    pub last_modified_time: Option<String>,
     #[doc="<p>The current status of the RTMP distribution. When the status is <code>Deployed</code>, the distribution's information is propagated to all CloudFront edge locations.</p>"]
     pub status: String,
     #[doc="<p>The current configuration information for the RTMP distribution.</p>"]
@@ -6069,11 +6035,11 @@ pub struct StreamingDistributionConfig {
     #[doc="<p>Any comments you want to include about the streaming distribution. </p>"]
     pub comment: String,
     #[doc="<p>Whether the streaming distribution is enabled to accept user requests for content.</p>"]
-    pub enabled: Boolean,
+    pub enabled: bool,
     #[doc="<p>A complex type that controls whether access logs are written for the streaming distribution. </p>"]
     pub logging: Option<StreamingLoggingConfig>,
     #[doc="<p>A complex type that contains information about price class for this streaming distribution. </p>"]
-    pub price_class: Option<PriceClass>,
+    pub price_class: Option<String>,
     #[doc="<p>A complex type that contains information about the Amazon S3 bucket from which you want CloudFront to get your media files for distribution. </p>"]
     pub s3_origin: S3Origin,
     #[doc="<p>A complex type that specifies any AWS accounts that you want to permit to create signed URLs for private content. If you want the distribution to use signed URLs, include this element; if you want the distribution to use public URLs, remove this element. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html\">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>. </p>"]
@@ -6205,17 +6171,17 @@ impl StreamingDistributionConfigWithTagsSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct StreamingDistributionList {
     #[doc="<p>A flag that indicates whether more streaming distributions remain to be listed. If your results were truncated, you can make a follow-up pagination request using the <code>Marker</code> request parameter to retrieve more distributions in the list. </p>"]
-    pub is_truncated: Boolean,
+    pub is_truncated: bool,
     #[doc="<p>A complex type that contains one <code>StreamingDistributionSummary</code> element for each distribution that was created by the current AWS account.</p>"]
-    pub items: Option<StreamingDistributionSummaryList>,
+    pub items: Option<Vec<StreamingDistributionSummary>>,
     #[doc="<p>The value you provided for the <code>Marker</code> request parameter. </p>"]
     pub marker: String,
     #[doc="<p>The value you provided for the <code>MaxItems</code> request parameter. </p>"]
-    pub max_items: Integer,
+    pub max_items: i64,
     #[doc="<p>If <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value you can use for the <code>Marker</code> request parameter to continue listing your RTMP distributions where they left off. </p>"]
     pub next_marker: Option<String>,
     #[doc="<p>The number of streaming distributions that were created by the current AWS account. </p>"]
-    pub quantity: Integer,
+    pub quantity: i64,
 }
 
 struct StreamingDistributionListDeserializer;
@@ -6290,12 +6256,12 @@ pub struct StreamingDistributionSummary {
     #[doc="<p>The domain name corresponding to the distribution. For example: <code>d604721fxaaqy9.cloudfront.net</code>.</p>"]
     pub domain_name: String,
     #[doc="<p>Whether the distribution is enabled to accept end user requests for content.</p>"]
-    pub enabled: Boolean,
+    pub enabled: bool,
     #[doc="<p>The identifier for the distribution. For example: <code>EDFDVBD632BHDS5</code>.</p>"]
     pub id: String,
     #[doc="<p>The date and time the distribution was last modified.</p>"]
-    pub last_modified_time: Timestamp,
-    pub price_class: PriceClass,
+    pub last_modified_time: String,
+    pub price_class: String,
     #[doc="<p>A complex type that contains information about the Amazon S3 bucket from which you want CloudFront to get your media files for distribution.</p>"]
     pub s3_origin: S3Origin,
     #[doc="<p> Indicates the current status of the distribution. When the status is <code>Deployed</code>, the distribution's information is fully propagated throughout the Amazon CloudFront system.</p>"]
@@ -6381,14 +6347,13 @@ impl StreamingDistributionSummaryDeserializer {
 
     }
 }
-pub type StreamingDistributionSummaryList = Vec<StreamingDistributionSummary>;
 struct StreamingDistributionSummaryListDeserializer;
 impl StreamingDistributionSummaryListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>
         (tag_name: &str,
          stack: &mut T)
-         -> Result<StreamingDistributionSummaryList, XmlParseError> {
+         -> Result<Vec<StreamingDistributionSummary>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -6430,7 +6395,7 @@ pub struct StreamingLoggingConfig {
     #[doc="<p>The Amazon S3 bucket to store the access logs in, for example, <code>myawslogbucket.s3.amazonaws.com</code>.</p>"]
     pub bucket: String,
     #[doc="<p>Specifies whether you want CloudFront to save access logs to an Amazon S3 bucket. If you do not want to enable logging when you create a streaming distribution or if you want to disable logging for an existing streaming distribution, specify <code>false</code> for <code>Enabled</code>, and specify <code>empty Bucket</code> and <code>Prefix</code> elements. If you specify <code>false</code> for <code>Enabled</code> but you specify values for <code>Bucket</code> and <code>Prefix</code>, the values are automatically deleted. </p>"]
-    pub enabled: Boolean,
+    pub enabled: bool,
     #[doc="<p>An optional string that you want CloudFront to prefix to the access log <code>filenames</code> for this streaming distribution, for example, <code>myprefix/</code>. If you want to enable logging, but you do not want to specify a prefix, you still must include an empty <code>Prefix</code> element in the <code>Logging</code> element.</p>"]
     pub prefix: String,
 }
@@ -6525,9 +6490,9 @@ impl StringSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct Tag {
     #[doc="<p> A string that contains <code>Tag</code> key.</p> <p>The string length should be between 1 and 128 characters. Valid characters include <code>a-z</code>, <code>A-Z</code>, <code>0-9</code>, space, and the special characters <code>_ - . : / = + @</code>.</p>"]
-    pub key: TagKey,
+    pub key: String,
     #[doc="<p> A string that contains an optional <code>Tag</code> value.</p> <p>The string length should be between 0 and 256 characters. Valid characters include <code>a-z</code>, <code>A-Z</code>, <code>0-9</code>, space, and the special characters <code>_ - . : / = + @</code>.</p>"]
-    pub value: Option<TagValue>,
+    pub value: Option<String>,
 }
 
 struct TagDeserializer;
@@ -6590,14 +6555,12 @@ impl TagSerializer {
     }
 }
 
-#[doc="<p> A string that contains <code>Tag</code> key.</p> <p>The string length should be between 1 and 128 characters. Valid characters include <code>a-z</code>, <code>A-Z</code>, <code>0-9</code>, space, and the special characters <code>_ - . : / = + @</code>.</p>"]
-pub type TagKey = String;
 struct TagKeyDeserializer;
 impl TagKeyDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TagKey, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -6610,19 +6573,18 @@ impl TagKeyDeserializer {
 pub struct TagKeySerializer;
 impl TagKeySerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &TagKey) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type TagKeyList = Vec<TagKey>;
 
 pub struct TagKeyListSerializer;
 impl TagKeyListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &TagKeyList) -> String {
+    pub fn serialize(name: &str, obj: &Vec<String>) -> String {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
@@ -6637,7 +6599,7 @@ impl TagKeyListSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct TagKeys {
     #[doc="<p> A complex type that contains <code>Tag</code> key elements.</p>"]
-    pub items: Option<TagKeyList>,
+    pub items: Option<Vec<String>>,
 }
 
 
@@ -6654,13 +6616,12 @@ impl TagKeysSerializer {
     }
 }
 
-pub type TagList = Vec<Tag>;
 struct TagListDeserializer;
 impl TagListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TagList, XmlParseError> {
+                                       -> Result<Vec<Tag>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -6700,7 +6661,7 @@ impl TagListDeserializer {
 pub struct TagListSerializer;
 impl TagListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &TagList) -> String {
+    pub fn serialize(name: &str, obj: &Vec<Tag>) -> String {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
@@ -6715,18 +6676,17 @@ impl TagListSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct TagResourceRequest {
     #[doc="<p> An ARN of a CloudFront resource.</p>"]
-    pub resource: ResourceARN,
+    pub resource: String,
     #[doc="<p> A complex type that contains zero or more <code>Tag</code> elements.</p>"]
     pub tags: Tags,
 }
 
-pub type TagValue = String;
 struct TagValueDeserializer;
 impl TagValueDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TagValue, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -6739,7 +6699,7 @@ impl TagValueDeserializer {
 pub struct TagValueSerializer;
 impl TagValueSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &TagValue) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
@@ -6750,7 +6710,7 @@ impl TagValueSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct Tags {
     #[doc="<p> A complex type that contains <code>Tag</code> elements.</p>"]
-    pub items: Option<TagList>,
+    pub items: Option<Vec<Tag>>,
 }
 
 struct TagsDeserializer;
@@ -6809,13 +6769,12 @@ impl TagsSerializer {
     }
 }
 
-pub type Timestamp = String;
 struct TimestampDeserializer;
 impl TimestampDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Timestamp, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -6828,11 +6787,11 @@ impl TimestampDeserializer {
 #[derive(Default,Clone,Debug)]
 pub struct TrustedSigners {
     #[doc="<p>Specifies whether you want to require viewers to use signed URLs to access the files specified by <code>PathPattern</code> and <code>TargetOriginId</code>.</p>"]
-    pub enabled: Boolean,
+    pub enabled: bool,
     #[doc="<p> <b>Optional</b>: A complex type that contains trusted signers for this cache behavior. If <code>Quantity</code> is <code>0</code>, you can omit <code>Items</code>.</p>"]
-    pub items: Option<AwsAccountNumberList>,
+    pub items: Option<Vec<String>>,
     #[doc="<p>The number of trusted signers for this cache behavior.</p>"]
-    pub quantity: Integer,
+    pub quantity: i64,
 }
 
 struct TrustedSignersDeserializer;
@@ -6905,7 +6864,7 @@ impl TrustedSignersSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct UntagResourceRequest {
     #[doc="<p> An ARN of a CloudFront resource.</p>"]
-    pub resource: ResourceARN,
+    pub resource: String,
     #[doc="<p> A complex type that contains zero or more <code>Tag</code> key elements.</p>"]
     pub tag_keys: TagKeys,
 }
@@ -7103,12 +7062,12 @@ impl UpdateStreamingDistributionResultDeserializer {
 #[derive(Default,Clone,Debug)]
 pub struct ViewerCertificate {
     pub acm_certificate_arn: Option<String>,
-    pub cloud_front_default_certificate: Option<Boolean>,
+    pub cloud_front_default_certificate: Option<bool>,
     pub iam_certificate_id: Option<String>,
     #[doc="<p>Specify the minimum version of the SSL/TLS protocol that you want CloudFront to use for HTTPS connections between viewers and CloudFront: <code>SSLv3</code> or <code>TLSv1</code>. CloudFront serves your objects only to viewers that support SSL/TLS version that you specify and later versions. The <code>TLSv1</code> protocol is more secure, so we recommend that you specify <code>SSLv3</code> only if your users are using browsers or devices that don't support <code>TLSv1</code>. Note the following:</p> <ul> <li> <p>If you specify &lt;CloudFrontDefaultCertificate&gt;true&lt;CloudFrontDefaultCertificate&gt;, the minimum SSL protocol version is <code>TLSv1</code> and can't be changed.</p> </li> <li> <p>If you're using a custom certificate (if you specify a value for <code>ACMCertificateArn</code> or for <code>IAMCertificateId</code>) and if you're using SNI (if you specify <code>sni-only</code> for <code>SSLSupportMethod</code>), you must specify <code>TLSv1</code> for <code>MinimumProtocolVersion</code>.</p> </li> </ul>"]
-    pub minimum_protocol_version: Option<MinimumProtocolVersion>,
+    pub minimum_protocol_version: Option<String>,
     #[doc="<p>If you specify a value for <code>ACMCertificateArn</code> or for <code>IAMCertificateId</code>, you must also specify how you want CloudFront to serve HTTPS requests: using a method that works for all clients or one that works for most clients:</p> <ul> <li> <p> <code>vip</code>: CloudFront uses dedicated IP addresses for your content and can respond to HTTPS requests from any viewer. However, you will incur additional monthly charges.</p> </li> <li> <p> <code>sni-only</code>: CloudFront can respond to HTTPS requests from viewers that support Server Name Indication (SNI). All modern browsers support SNI, but some browsers still in use don't support SNI. If some of your users' browsers don't support SNI, we recommend that you do one of the following:</p> <ul> <li> <p>Use the <code>vip</code> option (dedicated IP addresses) instead of <code>sni-only</code>.</p> </li> <li> <p>Use the CloudFront SSL/TLS certificate instead of a custom certificate. This requires that you use the CloudFront domain name of your distribution in the URLs for your objects, for example, <code>https://d111111abcdef8.cloudfront.net/logo.png</code>.</p> </li> <li> <p>If you can control which browser your users use, upgrade the browser to one that supports SNI.</p> </li> <li> <p>Use HTTP instead of HTTPS.</p> </li> </ul> </li> </ul> <p>Do not specify a value for <code>SSLSupportMethod</code> if you specified <code>&lt;CloudFrontDefaultCertificate&gt;true&lt;CloudFrontDefaultCertificate&gt;</code>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html#CNAMEsAndHTTPS.html\">Using Alternate Domain Names and HTTPS</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
-    pub ssl_support_method: Option<SSLSupportMethod>,
+    pub ssl_support_method: Option<String>,
 }
 
 struct ViewerCertificateDeserializer;
@@ -7205,13 +7164,12 @@ impl ViewerCertificateSerializer {
     }
 }
 
-pub type ViewerProtocolPolicy = String;
 struct ViewerProtocolPolicyDeserializer;
 impl ViewerProtocolPolicyDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ViewerProtocolPolicy, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7224,7 +7182,7 @@ impl ViewerProtocolPolicyDeserializer {
 pub struct ViewerProtocolPolicySerializer;
 impl ViewerProtocolPolicySerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &ViewerProtocolPolicy) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())

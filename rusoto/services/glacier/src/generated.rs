@@ -52,14 +52,13 @@ pub struct AbortVaultLockInput {
     pub vault_name: String,
 }
 
-pub type ActionCode = String;
 #[doc="<p>The input values for <code>AddTagsToVault</code>.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct AddTagsToVaultInput {
     #[doc="<p>The tags to add to the vault. Each tag is composed of a key and a value. The value can be an empty string.</p>"]
     #[serde(rename="Tags")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub tags: Option<TagMap>,
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID.</p>"]
     #[serde(rename="accountId")]
     pub account_id: String,
@@ -85,7 +84,6 @@ pub struct ArchiveCreationOutput {
     pub location: Option<String>,
 }
 
-pub type Boolean = bool;
 #[doc="<p>Provides options to complete a multipart upload operation. This informs Amazon Glacier that all the archive parts have been uploaded and Amazon Glacier can now assemble the archive from the uploaded parts. After assembling and saving the archive to the vault, Amazon Glacier returns the URI path of the newly created archive resource.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CompleteMultipartUploadInput {
@@ -148,7 +146,7 @@ pub struct DataRetrievalPolicy {
     #[doc="<p>The policy rule. Although this is a list type, currently there must be only one rule, which contains a Strategy field and optionally a BytesPerHour field.</p>"]
     #[serde(rename="Rules")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub rules: Option<DataRetrievalRulesList>,
+    pub rules: Option<Vec<DataRetrievalRule>>,
 }
 
 #[doc="<p>Data retrieval policy rule.</p>"]
@@ -157,15 +155,13 @@ pub struct DataRetrievalRule {
     #[doc="<p>The maximum number of bytes that can be retrieved in an hour.</p> <p>This field is required only if the value of the Strategy field is <code>BytesPerHour</code>. Your PUT operation will be rejected if the Strategy field is not set to <code>BytesPerHour</code> and you set this field.</p>"]
     #[serde(rename="BytesPerHour")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub bytes_per_hour: Option<NullableLong>,
+    pub bytes_per_hour: Option<i64>,
     #[doc="<p>The type of data retrieval policy to set.</p> <p>Valid values: BytesPerHour|FreeTier|None</p>"]
     #[serde(rename="Strategy")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub strategy: Option<String>,
 }
 
-pub type DataRetrievalRulesList = Vec<DataRetrievalRule>;
-pub type DateTime = String;
 #[doc="<p>Provides options for deleting an archive from an Amazon Glacier vault.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteArchiveInput {
@@ -252,11 +248,11 @@ pub struct DescribeVaultOutput {
     #[doc="<p>The number of archives in the vault as of the last inventory date. This field will return <code>null</code> if an inventory has not yet run on the vault, for example if you just created the vault.</p>"]
     #[serde(rename="NumberOfArchives")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub number_of_archives: Option<Long>,
+    pub number_of_archives: Option<i64>,
     #[doc="<p>Total size, in bytes, of the archives in the vault as of the last inventory date. This field will return null if an inventory has not yet run on the vault, for example if you just created the vault.</p>"]
     #[serde(rename="SizeInBytes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub size_in_bytes: Option<Long>,
+    pub size_in_bytes: Option<i64>,
     #[doc="<p>The Amazon Resource Name (ARN) of the vault.</p>"]
     #[serde(rename="VaultARN")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -310,7 +306,7 @@ pub struct GetJobOutputOutput {
     #[doc="<p>The description of an archive.</p>"]
     pub archive_description: Option<String>,
     #[doc="<p>The job data, either archive data or inventory data.</p>"]
-    pub body: Option<Stream>,
+    pub body: Option<Vec<u8>>,
     #[doc="<p>The checksum of the data in the response. This header is returned only when retrieving the output for an archive retrieval job. Furthermore, this header appears only under the following conditions:</p> <ul> <li> <p>You get the entire range of the archive.</p> </li> <li> <p>You request a range to return of the archive that starts and ends on a multiple of 1 MB. For example, if you have an 3.1 MB archive and you specify a range to return that starts at 1 MB and ends at 2 MB, then the x-amz-sha256-tree-hash is returned as a response header.</p> </li> <li> <p>You request a range of the archive to return that starts on a multiple of 1 MB and goes to the end of the archive. For example, if you have a 3.1 MB archive and you specify a range that starts at 2 MB and ends at 3.1 MB (the end of the archive), then the x-amz-sha256-tree-hash is returned as a response header.</p> </li> </ul>"]
     pub checksum: Option<String>,
     #[doc="<p>The range of bytes returned by Amazon Glacier. If only partial output is downloaded, the response provides the range of bytes Amazon Glacier returned. For example, bytes 0-1048575/8388608 returns the first 1 MB from 8 MB.</p>"]
@@ -318,7 +314,7 @@ pub struct GetJobOutputOutput {
     #[doc="<p>The Content-Type depends on whether the job output is an archive or a vault inventory. For archive data, the Content-Type is application/octet-stream. For vault inventory, if you requested CSV format when you initiated the job, the Content-Type is text/csv. Otherwise, by default, vault inventory is returned as JSON, and the Content-Type is application/json.</p>"]
     pub content_type: Option<String>,
     #[doc="<p>The HTTP response code for a job output request. The value depends on whether a range was specified in the request.</p>"]
-    pub status: Option<Httpstatus>,
+    pub status: Option<i64>,
 }
 
 #[doc="<p>Input for GetVaultAccessPolicy.</p>"]
@@ -399,7 +395,7 @@ pub struct GlacierJobDescription {
     #[doc="<p>The job type. It is either ArchiveRetrieval or InventoryRetrieval.</p>"]
     #[serde(rename="Action")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub action: Option<ActionCode>,
+    pub action: Option<String>,
     #[doc="<p>For an ArchiveRetrieval job, this is the archive ID requested for download. Otherwise, this field is null.</p>"]
     #[serde(rename="ArchiveId")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -411,11 +407,11 @@ pub struct GlacierJobDescription {
     #[doc="<p>For an ArchiveRetrieval job, this is the size in bytes of the archive being requested for download. For the InventoryRetrieval job, the value is null.</p>"]
     #[serde(rename="ArchiveSizeInBytes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub archive_size_in_bytes: Option<Size>,
+    pub archive_size_in_bytes: Option<i64>,
     #[doc="<p>The job status. When a job is completed, you get the job's output.</p>"]
     #[serde(rename="Completed")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub completed: Option<Boolean>,
+    pub completed: Option<bool>,
     #[doc="<p>The UTC time that the archive retrieval request completed. While the job is in progress, the value will be null.</p>"]
     #[serde(rename="CompletionDate")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -431,7 +427,7 @@ pub struct GlacierJobDescription {
     #[doc="<p>For an InventoryRetrieval job, this is the size in bytes of the inventory requested for download. For the ArchiveRetrieval job, the value is null.</p>"]
     #[serde(rename="InventorySizeInBytes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub inventory_size_in_bytes: Option<Size>,
+    pub inventory_size_in_bytes: Option<i64>,
     #[doc="<p>The job description you provided when you initiated the job.</p>"]
     #[serde(rename="JobDescription")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -455,7 +451,7 @@ pub struct GlacierJobDescription {
     #[doc="<p>The status code can be InProgress, Succeeded, or Failed, and indicates the status of the job.</p>"]
     #[serde(rename="StatusCode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status_code: Option<ApiGatewayStatusCode>,
+    pub status_code: Option<String>,
     #[doc="<p>A friendly message that describes the job status.</p>"]
     #[serde(rename="StatusMessage")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -470,7 +466,6 @@ pub struct GlacierJobDescription {
     pub vault_arn: Option<String>,
 }
 
-pub type Httpstatus = i64;
 #[doc="<p>Provides options for initiating an Amazon Glacier job.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct InitiateJobInput {
@@ -561,7 +556,7 @@ pub struct InventoryRetrievalJobDescription {
     #[doc="<p>The end of the date range in UTC for vault inventory retrieval that includes archives created before this date. This value should be a string in the ISO 8601 date format, for example <code>2013-03-20T17:03:43Z</code>.</p>"]
     #[serde(rename="EndDate")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub end_date: Option<DateTime>,
+    pub end_date: Option<String>,
     #[doc="<p>The output format for the vault inventory list, which is set by the <b>InitiateJob</b> request when initiating a job to retrieve a vault inventory. Valid values are <code>CSV</code> and <code>JSON</code>.</p>"]
     #[serde(rename="Format")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -577,7 +572,7 @@ pub struct InventoryRetrievalJobDescription {
     #[doc="<p>The start of the date range in Universal Coordinated Time (UTC) for vault inventory retrieval that includes archives created on or after this date. This value should be a string in the ISO 8601 date format, for example <code>2013-03-20T17:03:43Z</code>.</p>"]
     #[serde(rename="StartDate")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub start_date: Option<DateTime>,
+    pub start_date: Option<String>,
 }
 
 #[doc="<p>Provides options for specifying a range inventory retrieval job.</p>"]
@@ -601,7 +596,6 @@ pub struct InventoryRetrievalJobInput {
     pub start_date: Option<String>,
 }
 
-pub type JobList = Vec<GlacierJobDescription>;
 #[doc="<p>Provides options for defining a job.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct JobParameters {
@@ -672,7 +666,7 @@ pub struct ListJobsOutput {
     #[doc="<p>A list of job objects. Each job object contains metadata describing the job.</p>"]
     #[serde(rename="JobList")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub job_list: Option<JobList>,
+    pub job_list: Option<Vec<GlacierJobDescription>>,
     #[doc="<p> An opaque string used for pagination that specifies the job at which the listing of jobs should begin. You get the <code>marker</code> value from a previous List Jobs response. You only need to include the marker if you are continuing the pagination of the results started in a previous List Jobs request. </p>"]
     #[serde(rename="Marker")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -708,7 +702,7 @@ pub struct ListMultipartUploadsOutput {
     #[doc="<p>A list of in-progress multipart uploads.</p>"]
     #[serde(rename="UploadsList")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub uploads_list: Option<UploadsList>,
+    pub uploads_list: Option<Vec<UploadListElement>>,
 }
 
 #[doc="<p>Provides options for retrieving a list of parts of an archive that have been uploaded in a specific multipart upload.</p>"]
@@ -755,11 +749,11 @@ pub struct ListPartsOutput {
     #[doc="<p>The part size in bytes. This is the same value that you specified in the Initiate Multipart Upload request.</p>"]
     #[serde(rename="PartSizeInBytes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub part_size_in_bytes: Option<Long>,
+    pub part_size_in_bytes: Option<i64>,
     #[doc="<p>A list of the part sizes of the multipart upload. Each object in the array contains a <code>RangeBytes</code> and <code>sha256-tree-hash</code> name/value pair.</p>"]
     #[serde(rename="Parts")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub parts: Option<PartList>,
+    pub parts: Option<Vec<PartListElement>>,
     #[doc="<p>The Amazon Resource Name (ARN) of the vault to which the multipart upload was initiated.</p>"]
     #[serde(rename="VaultARN")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -778,7 +772,7 @@ pub struct ListProvisionedCapacityOutput {
     #[doc="<p>The response body contains the following JSON fields.</p>"]
     #[serde(rename="ProvisionedCapacityList")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub provisioned_capacity_list: Option<ProvisionedCapacityList>,
+    pub provisioned_capacity_list: Option<Vec<ProvisionedCapacityDescription>>,
 }
 
 #[doc="<p>The input value for <code>ListTagsForVaultInput</code>.</p>"]
@@ -798,7 +792,7 @@ pub struct ListTagsForVaultOutput {
     #[doc="<p>The tags attached to the vault. Each tag is composed of a key and a value.</p>"]
     #[serde(rename="Tags")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub tags: Option<TagMap>,
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[doc="<p>Provides options to retrieve the vault list owned by the calling user's account. The list provides metadata information for each vault.</p>"]
@@ -827,13 +821,9 @@ pub struct ListVaultsOutput {
     #[doc="<p>List of vaults.</p>"]
     #[serde(rename="VaultList")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub vault_list: Option<VaultList>,
+    pub vault_list: Option<Vec<DescribeVaultOutput>>,
 }
 
-pub type Long = i64;
-pub type NotificationEventList = Vec<String>;
-pub type NullableLong = i64;
-pub type PartList = Vec<PartListElement>;
 #[doc="<p>A list of the part sizes of the multipart upload.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct PartListElement {
@@ -864,7 +854,6 @@ pub struct ProvisionedCapacityDescription {
     pub start_date: Option<String>,
 }
 
-pub type ProvisionedCapacityList = Vec<ProvisionedCapacityDescription>;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct PurchaseProvisionedCapacityInput {
     #[doc="<p>The AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '-' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, don't include any hyphens ('-') in the ID. </p>"]
@@ -886,7 +875,7 @@ pub struct RemoveTagsFromVaultInput {
     #[doc="<p>A list of tag keys. Each corresponding tag is removed from the vault.</p>"]
     #[serde(rename="TagKeys")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub tag_keys: Option<TagKeyList>,
+    pub tag_keys: Option<Vec<String>>,
     #[doc="<p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '<code>-</code>' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, do not include any hyphens ('-') in the ID.</p>"]
     #[serde(rename="accountId")]
     pub account_id: String,
@@ -937,13 +926,6 @@ pub struct SetVaultNotificationsInput {
     pub vault_notification_config: Option<VaultNotificationConfig>,
 }
 
-pub type Size = i64;
-pub type ApiGatewayStatusCode = String;
-pub type Stream = Vec<u8>;
-pub type TagKey = String;
-pub type TagKeyList = Vec<String>;
-pub type TagMap = ::std::collections::HashMap<TagKey, TagValue>;
-pub type TagValue = String;
 #[doc="<p>Provides options to add an archive to a vault.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UploadArchiveInput {
@@ -961,7 +943,7 @@ pub struct UploadArchiveInput {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub body: Option<Stream>,
+    pub body: Option<Vec<u8>>,
     #[doc="<p>The SHA256 tree hash of the data being uploaded.</p>"]
     #[serde(rename="checksum")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -989,7 +971,7 @@ pub struct UploadListElement {
     #[doc="<p>The part size, in bytes, specified in the Initiate Multipart Upload request. This is the size of all the parts in the upload except the last part, which may be smaller than this size.</p>"]
     #[serde(rename="PartSizeInBytes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub part_size_in_bytes: Option<Long>,
+    pub part_size_in_bytes: Option<i64>,
     #[doc="<p>The Amazon Resource Name (ARN) of the vault that contains the archive.</p>"]
     #[serde(rename="VaultARN")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1009,7 +991,7 @@ pub struct UploadMultipartPartInput {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub body: Option<Stream>,
+    pub body: Option<Vec<u8>>,
     #[doc="<p>The SHA256 tree hash of the data being uploaded.</p>"]
     #[serde(rename="checksum")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1035,7 +1017,6 @@ pub struct UploadMultipartPartOutput {
     pub checksum: Option<String>,
 }
 
-pub type UploadsList = Vec<UploadListElement>;
 #[doc="<p>Contains the vault access policy.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VaultAccessPolicy {
@@ -1045,7 +1026,6 @@ pub struct VaultAccessPolicy {
     pub policy: Option<String>,
 }
 
-pub type VaultList = Vec<DescribeVaultOutput>;
 #[doc="<p>Contains the vault lock policy.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct VaultLockPolicy {
@@ -1061,7 +1041,7 @@ pub struct VaultNotificationConfig {
     #[doc="<p>A list of one or more events for which Amazon Glacier will send a notification to the specified Amazon SNS topic.</p>"]
     #[serde(rename="Events")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub events: Option<NotificationEventList>,
+    pub events: Option<Vec<String>>,
     #[doc="<p>The Amazon Simple Notification Service (Amazon SNS) topic Amazon Resource Name (ARN).</p>"]
     #[serde(rename="SNSTopic")]
     #[serde(skip_serializing_if="Option::is_none")]

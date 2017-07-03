@@ -16,7 +16,7 @@ use rusoto_s3::{S3, S3Client, HeadObjectRequest, CopyObjectRequest, GetObjectReq
                  PutObjectRequest, DeleteObjectRequest, PutBucketCorsRequest, CORSConfiguration,
                  CORSRule, CreateBucketRequest, DeleteBucketRequest, CreateMultipartUploadRequest,
                  UploadPartRequest, CompleteMultipartUploadRequest, CompletedMultipartUpload,
-                 CompletedPart, CompletedPartList, ListObjectsV2Request};
+                 CompletedPart, ListObjectsV2Request};
 use rusoto_core::default_tls_client;
 
 type TestClient = S3Client<DefaultCredentialsProvider, Client>;
@@ -135,7 +135,7 @@ fn test_multipart_upload(client: &TestClient, bucket: &str, filename: &str) {
     let part_req2 = create_upload_part("foo".as_bytes().to_vec(), 2);
 
     // upload 2 parts and note the etags generated for them
-    let mut completed_parts = CompletedPartList::new();
+    let mut completed_parts = Vec::new();
     for req in [part_req1, part_req2].into_iter() {
         let response = client.upload_part(&req).unwrap();
         println!("{:#?}", response);

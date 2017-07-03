@@ -41,9 +41,9 @@ enum DeserializerNext {
 #[derive(Default,Debug,Clone)]
 pub struct AddHeaderAction {
     #[doc="<p>The name of the header to add. Must be between 1 and 50 characters, inclusive, and consist of alphanumeric (a-z, A-Z, 0-9) characters and dashes only.</p>"]
-    pub header_name: HeaderName,
+    pub header_name: String,
     #[doc="<p>Must be less than 2048 characters, and must not contain newline characters (\"\\r\" or \"\\n\").</p>"]
-    pub header_value: HeaderValue,
+    pub header_value: String,
 }
 
 struct AddHeaderActionDeserializer;
@@ -108,13 +108,12 @@ impl AddHeaderActionSerializer {
     }
 }
 
-pub type Address = String;
 struct AddressDeserializer;
 impl AddressDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Address, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -123,13 +122,12 @@ impl AddressDeserializer {
 
     }
 }
-pub type AddressList = Vec<Address>;
 struct AddressListDeserializer;
 impl AddressListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AddressList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -169,7 +167,7 @@ impl AddressListDeserializer {
 /// Serialize `AddressList` contents to a `SignedRequest`.
 struct AddressListSerializer;
 impl AddressListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AddressList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -177,13 +175,12 @@ impl AddressListSerializer {
     }
 }
 
-pub type AmazonResourceName = String;
 struct AmazonResourceNameDeserializer;
 impl AmazonResourceNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AmazonResourceName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -192,14 +189,12 @@ impl AmazonResourceNameDeserializer {
 
     }
 }
-pub type ArrivalDate = String;
-pub type BehaviorOnMXFailure = String;
 struct BehaviorOnMXFailureDeserializer;
 impl BehaviorOnMXFailureDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<BehaviorOnMXFailure, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -241,15 +236,15 @@ impl BodySerializer {
 #[derive(Default,Debug,Clone)]
 pub struct BounceAction {
     #[doc="<p>Human-readable text to include in the bounce message.</p>"]
-    pub message: BounceMessage,
+    pub message: String,
     #[doc="<p>The email address of the sender of the bounced email. This is the address from which the bounce message will be sent.</p>"]
-    pub sender: Address,
+    pub sender: String,
     #[doc="<p>The SMTP reply code, as defined by <a href=\"https://tools.ietf.org/html/rfc5321\">RFC 5321</a>.</p>"]
-    pub smtp_reply_code: BounceSmtpReplyCode,
+    pub smtp_reply_code: String,
     #[doc="<p>The SMTP enhanced status code, as defined by <a href=\"https://tools.ietf.org/html/rfc3463\">RFC 3463</a>.</p>"]
-    pub status_code: Option<BounceStatusCode>,
+    pub status_code: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon SNS topic to notify when the bounce action is taken. An example of an Amazon SNS topic ARN is <code>arn:aws:sns:us-west-2:123456789012:MyTopic</code>. For more information about Amazon SNS topics, see the <a href=\"http://docs.aws.amazon.com/sns/latest/dg/CreateTopic.html\">Amazon SNS Developer Guide</a>.</p>"]
-    pub topic_arn: Option<AmazonResourceName>,
+    pub topic_arn: Option<String>,
 }
 
 struct BounceActionDeserializer;
@@ -336,13 +331,12 @@ impl BounceActionSerializer {
     }
 }
 
-pub type BounceMessage = String;
 struct BounceMessageDeserializer;
 impl BounceMessageDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<BounceMessage, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -351,13 +345,12 @@ impl BounceMessageDeserializer {
 
     }
 }
-pub type BounceSmtpReplyCode = String;
 struct BounceSmtpReplyCodeDeserializer;
 impl BounceSmtpReplyCodeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<BounceSmtpReplyCode, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -366,13 +359,12 @@ impl BounceSmtpReplyCodeDeserializer {
 
     }
 }
-pub type BounceStatusCode = String;
 struct BounceStatusCodeDeserializer;
 impl BounceStatusCodeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<BounceStatusCode, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -381,16 +373,15 @@ impl BounceStatusCodeDeserializer {
 
     }
 }
-pub type BounceType = String;
 #[doc="<p>Recipient-related information to include in the Delivery Status Notification (DSN) when an email that Amazon SES receives on your behalf bounces.</p> <p>For information about receiving email through Amazon SES, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email.html\">Amazon SES Developer Guide</a>.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct BouncedRecipientInfo {
     #[doc="<p>The reason for the bounce. You must provide either this parameter or <code>RecipientDsnFields</code>.</p>"]
-    pub bounce_type: Option<BounceType>,
+    pub bounce_type: Option<String>,
     #[doc="<p>The email address of the recipient of the bounced email.</p>"]
-    pub recipient: Address,
+    pub recipient: String,
     #[doc="<p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to receive email for the recipient of the bounced email. For more information about sending authorization, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>.</p>"]
-    pub recipient_arn: Option<AmazonResourceName>,
+    pub recipient_arn: Option<String>,
     #[doc="<p>Recipient-related DSN fields, most of which would normally be filled in automatically when provided with a <code>BounceType</code>. You must provide either this parameter or <code>BounceType</code>.</p>"]
     pub recipient_dsn_fields: Option<RecipientDsnFields>,
 }
@@ -421,12 +412,11 @@ impl BouncedRecipientInfoSerializer {
     }
 }
 
-pub type BouncedRecipientInfoList = Vec<BouncedRecipientInfo>;
 
 /// Serialize `BouncedRecipientInfoList` contents to a `SignedRequest`.
 struct BouncedRecipientInfoListSerializer;
 impl BouncedRecipientInfoListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &BouncedRecipientInfoList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<BouncedRecipientInfo>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             BouncedRecipientInfoSerializer::serialize(params, &key, obj);
@@ -434,14 +424,12 @@ impl BouncedRecipientInfoListSerializer {
     }
 }
 
-pub type Charset = String;
-pub type Cidr = String;
 struct CidrDeserializer;
 impl CidrDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Cidr, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -454,9 +442,9 @@ impl CidrDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CloneReceiptRuleSetRequest {
     #[doc="<p>The name of the rule set to clone.</p>"]
-    pub original_rule_set_name: ReceiptRuleSetName,
+    pub original_rule_set_name: String,
     #[doc="<p>The name of the rule set to create. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-).</p> </li> <li> <p>Start and end with a letter or number.</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul>"]
-    pub rule_set_name: ReceiptRuleSetName,
+    pub rule_set_name: String,
 }
 
 
@@ -500,7 +488,7 @@ impl CloneReceiptRuleSetResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CloudWatchDestination {
     #[doc="<p>A list of dimensions upon which to categorize your emails when you publish email sending events to Amazon CloudWatch.</p>"]
-    pub dimension_configurations: CloudWatchDimensionConfigurations,
+    pub dimension_configurations: Vec<CloudWatchDimensionConfiguration>,
 }
 
 struct CloudWatchDestinationDeserializer;
@@ -567,11 +555,11 @@ impl CloudWatchDestinationSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct CloudWatchDimensionConfiguration {
     #[doc="<p>The default value of the dimension that is published to Amazon CloudWatch if you do not provide the value of the dimension when you send an email. The default value must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 256 characters.</p> </li> </ul>"]
-    pub default_dimension_value: DefaultDimensionValue,
+    pub default_dimension_value: String,
     #[doc="<p>The name of an Amazon CloudWatch dimension associated with an email sending metric. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 256 characters.</p> </li> </ul>"]
-    pub dimension_name: DimensionName,
+    pub dimension_name: String,
     #[doc="<p>The place where Amazon SES finds the value of a dimension to publish to Amazon CloudWatch. If you want Amazon SES to use the message tags that you specify using an <code>X-SES-MESSAGE-TAGS</code> header or a parameter to the <code>SendEmail</code>/<code>SendRawEmail</code> API, choose <code>messageTag</code>. If you want Amazon SES to use your own email headers, choose <code>emailHeader</code>.</p>"]
-    pub dimension_value_source: DimensionValueSource,
+    pub dimension_value_source: String,
 }
 
 struct CloudWatchDimensionConfigurationDeserializer;
@@ -648,14 +636,13 @@ impl CloudWatchDimensionConfigurationSerializer {
     }
 }
 
-pub type CloudWatchDimensionConfigurations = Vec<CloudWatchDimensionConfiguration>;
 struct CloudWatchDimensionConfigurationsDeserializer;
 impl CloudWatchDimensionConfigurationsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>
         (tag_name: &str,
          stack: &mut T)
-         -> Result<CloudWatchDimensionConfigurations, XmlParseError> {
+         -> Result<Vec<CloudWatchDimensionConfiguration>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -695,7 +682,7 @@ impl CloudWatchDimensionConfigurationsDeserializer {
 /// Serialize `CloudWatchDimensionConfigurations` contents to a `SignedRequest`.
 struct CloudWatchDimensionConfigurationsSerializer;
 impl CloudWatchDimensionConfigurationsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CloudWatchDimensionConfigurations) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<CloudWatchDimensionConfiguration>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             CloudWatchDimensionConfigurationSerializer::serialize(params, &key, obj);
@@ -707,7 +694,7 @@ impl CloudWatchDimensionConfigurationsSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ConfigurationSet {
     #[doc="<p>The name of the configuration set. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul>"]
-    pub name: ConfigurationSetName,
+    pub name: String,
 }
 
 struct ConfigurationSetDeserializer;
@@ -767,13 +754,11 @@ impl ConfigurationSetSerializer {
     }
 }
 
-pub type ConfigurationSetAttribute = String;
-pub type ConfigurationSetAttributeList = Vec<ConfigurationSetAttribute>;
 
 /// Serialize `ConfigurationSetAttributeList` contents to a `SignedRequest`.
 struct ConfigurationSetAttributeListSerializer;
 impl ConfigurationSetAttributeListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ConfigurationSetAttributeList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -781,13 +766,12 @@ impl ConfigurationSetAttributeListSerializer {
     }
 }
 
-pub type ConfigurationSetName = String;
 struct ConfigurationSetNameDeserializer;
 impl ConfigurationSetNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ConfigurationSetName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -796,13 +780,12 @@ impl ConfigurationSetNameDeserializer {
 
     }
 }
-pub type ConfigurationSets = Vec<ConfigurationSet>;
 struct ConfigurationSetsDeserializer;
 impl ConfigurationSetsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ConfigurationSets, XmlParseError> {
+                                       -> Result<Vec<ConfigurationSet>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -842,9 +825,9 @@ impl ConfigurationSetsDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct Content {
     #[doc="<p>The character set of the content.</p>"]
-    pub charset: Option<Charset>,
+    pub charset: Option<String>,
     #[doc="<p>The textual data of the content.</p>"]
-    pub data: MessageData,
+    pub data: String,
 }
 
 
@@ -865,13 +848,12 @@ impl ContentSerializer {
     }
 }
 
-pub type Counter = i64;
 struct CounterDeserializer;
 impl CounterDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Counter, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -884,7 +866,7 @@ impl CounterDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateConfigurationSetEventDestinationRequest {
     #[doc="<p>The name of the configuration set to which to apply the event destination.</p>"]
-    pub configuration_set_name: ConfigurationSetName,
+    pub configuration_set_name: String,
     #[doc="<p>An object that describes the AWS service to which Amazon SES will publish the email sending events associated with the specified configuration set.</p>"]
     pub event_destination: EventDestination,
 }
@@ -1021,11 +1003,11 @@ impl CreateReceiptFilterResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateReceiptRuleRequest {
     #[doc="<p>The name of an existing rule after which the new rule will be placed. If this parameter is null, the new rule will be inserted at the beginning of the rule list.</p>"]
-    pub after: Option<ReceiptRuleName>,
+    pub after: Option<String>,
     #[doc="<p>A data structure that contains the specified rule's name, actions, recipients, domains, enabled status, scan status, and TLS policy.</p>"]
     pub rule: ReceiptRule,
     #[doc="<p>The name of the rule set to which to add the rule.</p>"]
-    pub rule_set_name: ReceiptRuleSetName,
+    pub rule_set_name: String,
 }
 
 
@@ -1071,7 +1053,7 @@ impl CreateReceiptRuleResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateReceiptRuleSetRequest {
     #[doc="<p>The name of the rule set to create. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-).</p> </li> <li> <p>Start and end with a letter or number.</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul>"]
-    pub rule_set_name: ReceiptRuleSetName,
+    pub rule_set_name: String,
 }
 
 
@@ -1109,13 +1091,12 @@ impl CreateReceiptRuleSetResponseDeserializer {
 
     }
 }
-pub type CustomMailFromStatus = String;
 struct CustomMailFromStatusDeserializer;
 impl CustomMailFromStatusDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CustomMailFromStatus, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1124,13 +1105,12 @@ impl CustomMailFromStatusDeserializer {
 
     }
 }
-pub type DefaultDimensionValue = String;
 struct DefaultDimensionValueDeserializer;
 impl DefaultDimensionValueDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DefaultDimensionValue, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1143,9 +1123,9 @@ impl DefaultDimensionValueDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteConfigurationSetEventDestinationRequest {
     #[doc="<p>The name of the configuration set from which to delete the event destination.</p>"]
-    pub configuration_set_name: ConfigurationSetName,
+    pub configuration_set_name: String,
     #[doc="<p>The name of the event destination to delete.</p>"]
-    pub event_destination_name: EventDestinationName,
+    pub event_destination_name: String,
 }
 
 
@@ -1193,7 +1173,7 @@ impl DeleteConfigurationSetEventDestinationResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteConfigurationSetRequest {
     #[doc="<p>The name of the configuration set to delete.</p>"]
-    pub configuration_set_name: ConfigurationSetName,
+    pub configuration_set_name: String,
 }
 
 
@@ -1236,9 +1216,9 @@ impl DeleteConfigurationSetResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteIdentityPolicyRequest {
     #[doc="<p>The identity that is associated with the policy that you want to delete. You can specify the identity by using its name or by using its Amazon Resource Name (ARN). Examples: <code>user@example.com</code>, <code>example.com</code>, <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>.</p> <p>To successfully call this API, you must own the identity.</p>"]
-    pub identity: Identity,
+    pub identity: String,
     #[doc="<p>The name of the policy to be deleted.</p>"]
-    pub policy_name: PolicyName,
+    pub policy_name: String,
 }
 
 
@@ -1281,7 +1261,7 @@ impl DeleteIdentityPolicyResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteIdentityRequest {
     #[doc="<p>The identity to be removed from the list of identities for the AWS Account.</p>"]
-    pub identity: Identity,
+    pub identity: String,
 }
 
 
@@ -1323,7 +1303,7 @@ impl DeleteIdentityResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteReceiptFilterRequest {
     #[doc="<p>The name of the IP address filter to delete.</p>"]
-    pub filter_name: ReceiptFilterName,
+    pub filter_name: String,
 }
 
 
@@ -1365,9 +1345,9 @@ impl DeleteReceiptFilterResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteReceiptRuleRequest {
     #[doc="<p>The name of the receipt rule to delete.</p>"]
-    pub rule_name: ReceiptRuleName,
+    pub rule_name: String,
     #[doc="<p>The name of the receipt rule set that contains the receipt rule to delete.</p>"]
-    pub rule_set_name: ReceiptRuleSetName,
+    pub rule_set_name: String,
 }
 
 
@@ -1410,7 +1390,7 @@ impl DeleteReceiptRuleResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteReceiptRuleSetRequest {
     #[doc="<p>The name of the receipt rule set to delete.</p>"]
-    pub rule_set_name: ReceiptRuleSetName,
+    pub rule_set_name: String,
 }
 
 
@@ -1452,7 +1432,7 @@ impl DeleteReceiptRuleSetResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteVerifiedEmailAddressRequest {
     #[doc="<p>An email address to be removed from the list of verified addresses.</p>"]
-    pub email_address: Address,
+    pub email_address: String,
 }
 
 
@@ -1495,7 +1475,7 @@ pub struct DescribeActiveReceiptRuleSetResponse {
     #[doc="<p>The metadata for the currently active receipt rule set. The metadata consists of the rule set name and a timestamp of when the rule set was created.</p>"]
     pub metadata: Option<ReceiptRuleSetMetadata>,
     #[doc="<p>The receipt rules that belong to the active rule set.</p>"]
-    pub rules: Option<ReceiptRulesList>,
+    pub rules: Option<Vec<ReceiptRule>>,
 }
 
 struct DescribeActiveReceiptRuleSetResponseDeserializer;
@@ -1551,9 +1531,9 @@ impl DescribeActiveReceiptRuleSetResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeConfigurationSetRequest {
     #[doc="<p>A list of configuration set attributes to return.</p>"]
-    pub configuration_set_attribute_names: Option<ConfigurationSetAttributeList>,
+    pub configuration_set_attribute_names: Option<Vec<String>>,
     #[doc="<p>The name of the configuration set to describe.</p>"]
-    pub configuration_set_name: ConfigurationSetName,
+    pub configuration_set_name: String,
 }
 
 
@@ -1585,7 +1565,7 @@ pub struct DescribeConfigurationSetResponse {
     #[doc="<p>The configuration set object associated with the specified configuration set.</p>"]
     pub configuration_set: Option<ConfigurationSet>,
     #[doc="<p>A list of event destinations associated with the configuration set. </p>"]
-    pub event_destinations: Option<EventDestinations>,
+    pub event_destinations: Option<Vec<EventDestination>>,
 }
 
 struct DescribeConfigurationSetResponseDeserializer;
@@ -1641,9 +1621,9 @@ impl DescribeConfigurationSetResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeReceiptRuleRequest {
     #[doc="<p>The name of the receipt rule.</p>"]
-    pub rule_name: ReceiptRuleName,
+    pub rule_name: String,
     #[doc="<p>The name of the receipt rule set to which the receipt rule belongs.</p>"]
-    pub rule_set_name: ReceiptRuleSetName,
+    pub rule_set_name: String,
 }
 
 
@@ -1715,7 +1695,7 @@ impl DescribeReceiptRuleResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeReceiptRuleSetRequest {
     #[doc="<p>The name of the receipt rule set to describe.</p>"]
-    pub rule_set_name: ReceiptRuleSetName,
+    pub rule_set_name: String,
 }
 
 
@@ -1739,7 +1719,7 @@ pub struct DescribeReceiptRuleSetResponse {
     #[doc="<p>The metadata for the receipt rule set, which consists of the rule set name and the timestamp of when the rule set was created.</p>"]
     pub metadata: Option<ReceiptRuleSetMetadata>,
     #[doc="<p>A list of the receipt rules that belong to the specified receipt rule set.</p>"]
-    pub rules: Option<ReceiptRulesList>,
+    pub rules: Option<Vec<ReceiptRule>>,
 }
 
 struct DescribeReceiptRuleSetResponseDeserializer;
@@ -1794,11 +1774,11 @@ impl DescribeReceiptRuleSetResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct Destination {
     #[doc="<p>The BCC: field(s) of the message.</p>"]
-    pub bcc_addresses: Option<AddressList>,
+    pub bcc_addresses: Option<Vec<String>>,
     #[doc="<p>The CC: field(s) of the message.</p>"]
-    pub cc_addresses: Option<AddressList>,
+    pub cc_addresses: Option<Vec<String>>,
     #[doc="<p>The To: field(s) of the message.</p>"]
-    pub to_addresses: Option<AddressList>,
+    pub to_addresses: Option<Vec<String>>,
 }
 
 
@@ -1830,14 +1810,12 @@ impl DestinationSerializer {
     }
 }
 
-pub type DiagnosticCode = String;
-pub type DimensionName = String;
 struct DimensionNameDeserializer;
 impl DimensionNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DimensionName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1846,13 +1824,12 @@ impl DimensionNameDeserializer {
 
     }
 }
-pub type DimensionValueSource = String;
 struct DimensionValueSourceDeserializer;
 impl DimensionValueSourceDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DimensionValueSource, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1861,13 +1838,13 @@ impl DimensionValueSourceDeserializer {
 
     }
 }
-pub type DkimAttributes = ::std::collections::HashMap<Identity, IdentityDkimAttributes>;
 struct DkimAttributesDeserializer;
 impl DkimAttributesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<DkimAttributes, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<::std::collections::HashMap<String, IdentityDkimAttributes>, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = ::std::collections::HashMap::new();
@@ -1885,16 +1862,12 @@ impl DkimAttributesDeserializer {
 
     }
 }
-pub type Domain = String;
-pub type DsnAction = String;
-pub type DsnStatus = String;
-pub type Enabled = bool;
 struct EnabledDeserializer;
 impl EnabledDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Enabled, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -1909,13 +1882,13 @@ pub struct EventDestination {
     #[doc="<p>An object that contains the names, default values, and sources of the dimensions associated with an Amazon CloudWatch event destination.</p>"]
     pub cloud_watch_destination: Option<CloudWatchDestination>,
     #[doc="<p>Sets whether Amazon SES publishes events to this destination when you send an email with the associated configuration set. Set to <code>true</code> to enable publishing to this destination; set to <code>false</code> to prevent publishing to this destination. The default value is <code>false</code>.</p>"]
-    pub enabled: Option<Enabled>,
+    pub enabled: Option<bool>,
     #[doc="<p>An object that contains the delivery stream ARN and the IAM role ARN associated with an Amazon Kinesis Firehose event destination.</p>"]
     pub kinesis_firehose_destination: Option<KinesisFirehoseDestination>,
     #[doc="<p>The type of email sending events to publish to the event destination.</p>"]
-    pub matching_event_types: EventTypes,
+    pub matching_event_types: Vec<String>,
     #[doc="<p>The name of the event destination. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul>"]
-    pub name: EventDestinationName,
+    pub name: String,
 }
 
 struct EventDestinationDeserializer;
@@ -2013,13 +1986,12 @@ impl EventDestinationSerializer {
     }
 }
 
-pub type EventDestinationName = String;
 struct EventDestinationNameDeserializer;
 impl EventDestinationNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EventDestinationName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2028,13 +2000,12 @@ impl EventDestinationNameDeserializer {
 
     }
 }
-pub type EventDestinations = Vec<EventDestination>;
 struct EventDestinationsDeserializer;
 impl EventDestinationsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EventDestinations, XmlParseError> {
+                                       -> Result<Vec<EventDestination>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -2070,13 +2041,12 @@ impl EventDestinationsDeserializer {
 
     }
 }
-pub type EventType = String;
 struct EventTypeDeserializer;
 impl EventTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EventType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2085,13 +2055,12 @@ impl EventTypeDeserializer {
 
     }
 }
-pub type EventTypes = Vec<EventType>;
 struct EventTypesDeserializer;
 impl EventTypesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EventTypes, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -2131,7 +2100,7 @@ impl EventTypesDeserializer {
 /// Serialize `EventTypes` contents to a `SignedRequest`.
 struct EventTypesSerializer;
 impl EventTypesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &EventTypes) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -2139,14 +2108,13 @@ impl EventTypesSerializer {
     }
 }
 
-pub type Explanation = String;
 #[doc="<p>Additional X-headers to include in the Delivery Status Notification (DSN) when an email that Amazon SES receives on your behalf bounces.</p> <p>For information about receiving email through Amazon SES, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email.html\">Amazon SES Developer Guide</a>.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct ExtensionField {
     #[doc="<p>The name of the header to add. Must be between 1 and 50 characters, inclusive, and consist of alphanumeric (a-z, A-Z, 0-9) characters and dashes only.</p>"]
-    pub name: ExtensionFieldName,
+    pub name: String,
     #[doc="<p>The value of the header to add. Must be less than 2048 characters, and must not contain newline characters (\"\\r\" or \"\\n\").</p>"]
-    pub value: ExtensionFieldValue,
+    pub value: String,
 }
 
 
@@ -2165,12 +2133,11 @@ impl ExtensionFieldSerializer {
     }
 }
 
-pub type ExtensionFieldList = Vec<ExtensionField>;
 
 /// Serialize `ExtensionFieldList` contents to a `SignedRequest`.
 struct ExtensionFieldListSerializer;
 impl ExtensionFieldListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ExtensionFieldList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<ExtensionField>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             ExtensionFieldSerializer::serialize(params, &key, obj);
@@ -2178,13 +2145,11 @@ impl ExtensionFieldListSerializer {
     }
 }
 
-pub type ExtensionFieldName = String;
-pub type ExtensionFieldValue = String;
 #[doc="<p>Represents a request for the status of Amazon SES Easy DKIM signing for an identity. For domain identities, this request also returns the DKIM tokens that are required for Easy DKIM signing, and whether Amazon SES successfully verified that these tokens were published. For more information about Easy DKIM, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html\">Amazon SES Developer Guide</a>.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct GetIdentityDkimAttributesRequest {
     #[doc="<p>A list of one or more verified identities - email addresses, domains, or both.</p>"]
-    pub identities: IdentityList,
+    pub identities: Vec<String>,
 }
 
 
@@ -2208,7 +2173,7 @@ impl GetIdentityDkimAttributesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetIdentityDkimAttributesResponse {
     #[doc="<p>The DKIM attributes for an email address or a domain.</p>"]
-    pub dkim_attributes: DkimAttributes,
+    pub dkim_attributes: ::std::collections::HashMap<String, IdentityDkimAttributes>,
 }
 
 struct GetIdentityDkimAttributesResponseDeserializer;
@@ -2259,7 +2224,7 @@ impl GetIdentityDkimAttributesResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetIdentityMailFromDomainAttributesRequest {
     #[doc="<p>A list of one or more identities.</p>"]
-    pub identities: IdentityList,
+    pub identities: Vec<String>,
 }
 
 
@@ -2285,7 +2250,8 @@ impl GetIdentityMailFromDomainAttributesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetIdentityMailFromDomainAttributesResponse {
     #[doc="<p>A map of identities to custom MAIL FROM attributes.</p>"]
-    pub mail_from_domain_attributes: MailFromDomainAttributes,
+    pub mail_from_domain_attributes:
+        ::std::collections::HashMap<String, IdentityMailFromDomainAttributes>,
 }
 
 struct GetIdentityMailFromDomainAttributesResponseDeserializer;
@@ -2336,7 +2302,7 @@ impl GetIdentityMailFromDomainAttributesResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetIdentityNotificationAttributesRequest {
     #[doc="<p>A list of one or more identities. You can specify an identity by using its name or by using its Amazon Resource Name (ARN). Examples: <code>user@example.com</code>, <code>example.com</code>, <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>.</p>"]
-    pub identities: IdentityList,
+    pub identities: Vec<String>,
 }
 
 
@@ -2360,7 +2326,8 @@ impl GetIdentityNotificationAttributesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetIdentityNotificationAttributesResponse {
     #[doc="<p>A map of Identity to IdentityNotificationAttributes.</p>"]
-    pub notification_attributes: NotificationAttributes,
+    pub notification_attributes:
+        ::std::collections::HashMap<String, IdentityNotificationAttributes>,
 }
 
 struct GetIdentityNotificationAttributesResponseDeserializer;
@@ -2411,9 +2378,9 @@ impl GetIdentityNotificationAttributesResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetIdentityPoliciesRequest {
     #[doc="<p>The identity for which the policies will be retrieved. You can specify an identity by using its name or by using its Amazon Resource Name (ARN). Examples: <code>user@example.com</code>, <code>example.com</code>, <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>.</p> <p>To successfully call this API, you must own the identity.</p>"]
-    pub identity: Identity,
+    pub identity: String,
     #[doc="<p>A list of the names of policies to be retrieved. You can retrieve a maximum of 20 policies at a time. If you do not know the names of the policies that are attached to the identity, you can use <code>ListIdentityPolicies</code>.</p>"]
-    pub policy_names: PolicyNameList,
+    pub policy_names: Vec<String>,
 }
 
 
@@ -2438,7 +2405,7 @@ impl GetIdentityPoliciesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetIdentityPoliciesResponse {
     #[doc="<p>A map of policy names to policies.</p>"]
-    pub policies: PolicyMap,
+    pub policies: ::std::collections::HashMap<String, String>,
 }
 
 struct GetIdentityPoliciesResponseDeserializer;
@@ -2487,7 +2454,7 @@ impl GetIdentityPoliciesResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetIdentityVerificationAttributesRequest {
     #[doc="<p>A list of identities.</p>"]
-    pub identities: IdentityList,
+    pub identities: Vec<String>,
 }
 
 
@@ -2511,7 +2478,8 @@ impl GetIdentityVerificationAttributesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetIdentityVerificationAttributesResponse {
     #[doc="<p>A map of Identities to IdentityVerificationAttributes objects.</p>"]
-    pub verification_attributes: VerificationAttributes,
+    pub verification_attributes:
+        ::std::collections::HashMap<String, IdentityVerificationAttributes>,
 }
 
 struct GetIdentityVerificationAttributesResponseDeserializer;
@@ -2562,11 +2530,11 @@ impl GetIdentityVerificationAttributesResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetSendQuotaResponse {
     #[doc="<p>The maximum number of emails the user is allowed to send in a 24-hour interval. A value of -1 signifies an unlimited quota.</p>"]
-    pub max_24_hour_send: Option<Max24HourSend>,
+    pub max_24_hour_send: Option<f64>,
     #[doc="<p>The maximum number of emails that Amazon SES can accept from the user's account per second.</p> <note> <p>The rate at which Amazon SES accepts the user's messages might be less than the maximum send rate.</p> </note>"]
-    pub max_send_rate: Option<MaxSendRate>,
+    pub max_send_rate: Option<f64>,
     #[doc="<p>The number of emails sent during the previous 24 hours.</p>"]
-    pub sent_last_24_hours: Option<SentLast24Hours>,
+    pub sent_last_24_hours: Option<f64>,
 }
 
 struct GetSendQuotaResponseDeserializer;
@@ -2626,7 +2594,7 @@ impl GetSendQuotaResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetSendStatisticsResponse {
     #[doc="<p>A list of data points, each of which represents 15 minutes of activity.</p>"]
-    pub send_data_points: Option<SendDataPointList>,
+    pub send_data_points: Option<Vec<SendDataPoint>>,
 }
 
 struct GetSendStatisticsResponseDeserializer;
@@ -2672,13 +2640,12 @@ impl GetSendStatisticsResponseDeserializer {
 
     }
 }
-pub type HeaderName = String;
 struct HeaderNameDeserializer;
 impl HeaderNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<HeaderName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2687,13 +2654,12 @@ impl HeaderNameDeserializer {
 
     }
 }
-pub type HeaderValue = String;
 struct HeaderValueDeserializer;
 impl HeaderValueDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<HeaderValue, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2702,13 +2668,12 @@ impl HeaderValueDeserializer {
 
     }
 }
-pub type Identity = String;
 struct IdentityDeserializer;
 impl IdentityDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Identity, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2721,11 +2686,11 @@ impl IdentityDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct IdentityDkimAttributes {
     #[doc="<p>True if DKIM signing is enabled for email sent from the identity; false otherwise. The default value is true.</p>"]
-    pub dkim_enabled: Enabled,
+    pub dkim_enabled: bool,
     #[doc="<p>A set of character strings that represent the domain's identity. Using these tokens, you will need to create DNS CNAME records that point to DKIM public keys hosted by Amazon SES. Amazon Web Services will eventually detect that you have updated your DNS records; this detection process may take up to 72 hours. Upon successful detection, Amazon SES will be able to DKIM-sign email originating from that domain. (This only applies to domain identities, not email address identities.)</p> <p>For more information about creating DNS records using DKIM tokens, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim-dns-records.html\">Amazon SES Developer Guide</a>.</p>"]
-    pub dkim_tokens: Option<VerificationTokenList>,
+    pub dkim_tokens: Option<Vec<String>>,
     #[doc="<p>Describes whether Amazon SES has successfully verified the DKIM DNS records (tokens) published in the domain name's DNS. (This only applies to domain identities, not email address identities.)</p>"]
-    pub dkim_verification_status: VerificationStatus,
+    pub dkim_verification_status: String,
 }
 
 struct IdentityDkimAttributesDeserializer;
@@ -2780,13 +2745,12 @@ impl IdentityDkimAttributesDeserializer {
 
     }
 }
-pub type IdentityList = Vec<Identity>;
 struct IdentityListDeserializer;
 impl IdentityListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<IdentityList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -2826,7 +2790,7 @@ impl IdentityListDeserializer {
 /// Serialize `IdentityList` contents to a `SignedRequest`.
 struct IdentityListSerializer;
 impl IdentityListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &IdentityList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -2838,11 +2802,11 @@ impl IdentityListSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct IdentityMailFromDomainAttributes {
     #[doc="<p>The action that Amazon SES takes if it cannot successfully read the required MX record when you send an email. A value of <code>UseDefaultValue</code> indicates that if Amazon SES cannot read the required MX record, it uses amazonses.com (or a subdomain of that) as the MAIL FROM domain. A value of <code>RejectMessage</code> indicates that if Amazon SES cannot read the required MX record, Amazon SES returns a <code>MailFromDomainNotVerified</code> error and does not send the email.</p> <p>The custom MAIL FROM setup states that result in this behavior are <code>Pending</code>, <code>Failed</code>, and <code>TemporaryFailure</code>.</p>"]
-    pub behavior_on_mx_failure: BehaviorOnMXFailure,
+    pub behavior_on_mx_failure: String,
     #[doc="<p>The custom MAIL FROM domain that the identity is configured to use.</p>"]
-    pub mail_from_domain: MailFromDomainName,
+    pub mail_from_domain: String,
     #[doc="<p>The state that indicates whether Amazon SES has successfully read the MX record required for custom MAIL FROM domain setup. If the state is <code>Success</code>, Amazon SES uses the specified custom MAIL FROM domain when the verified identity sends an email. All other states indicate that Amazon SES takes the action described by <code>BehaviorOnMXFailure</code>.</p>"]
-    pub mail_from_domain_status: CustomMailFromStatus,
+    pub mail_from_domain_status: String,
 }
 
 struct IdentityMailFromDomainAttributesDeserializer;
@@ -2903,19 +2867,19 @@ impl IdentityMailFromDomainAttributesDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct IdentityNotificationAttributes {
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon SNS topic where Amazon SES will publish bounce notifications.</p>"]
-    pub bounce_topic: NotificationTopic,
+    pub bounce_topic: String,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon SNS topic where Amazon SES will publish complaint notifications.</p>"]
-    pub complaint_topic: NotificationTopic,
+    pub complaint_topic: String,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon SNS topic where Amazon SES will publish delivery notifications.</p>"]
-    pub delivery_topic: NotificationTopic,
+    pub delivery_topic: String,
     #[doc="<p>Describes whether Amazon SES will forward bounce and complaint notifications as email. <code>true</code> indicates that Amazon SES will forward bounce and complaint notifications as email, while <code>false</code> indicates that bounce and complaint notifications will be published only to the specified bounce and complaint Amazon SNS topics.</p>"]
-    pub forwarding_enabled: Enabled,
+    pub forwarding_enabled: bool,
     #[doc="<p>Describes whether Amazon SES includes the original email headers in Amazon SNS notifications of type <code>Bounce</code>. A value of <code>true</code> specifies that Amazon SES will include headers in bounce notifications, and a value of <code>false</code> specifies that Amazon SES will not include headers in bounce notifications.</p>"]
-    pub headers_in_bounce_notifications_enabled: Option<Enabled>,
+    pub headers_in_bounce_notifications_enabled: Option<bool>,
     #[doc="<p>Describes whether Amazon SES includes the original email headers in Amazon SNS notifications of type <code>Complaint</code>. A value of <code>true</code> specifies that Amazon SES will include headers in complaint notifications, and a value of <code>false</code> specifies that Amazon SES will not include headers in complaint notifications.</p>"]
-    pub headers_in_complaint_notifications_enabled: Option<Enabled>,
+    pub headers_in_complaint_notifications_enabled: Option<bool>,
     #[doc="<p>Describes whether Amazon SES includes the original email headers in Amazon SNS notifications of type <code>Delivery</code>. A value of <code>true</code> specifies that Amazon SES will include headers in delivery notifications, and a value of <code>false</code> specifies that Amazon SES will not include headers in delivery notifications.</p>"]
-    pub headers_in_delivery_notifications_enabled: Option<Enabled>,
+    pub headers_in_delivery_notifications_enabled: Option<bool>,
 }
 
 struct IdentityNotificationAttributesDeserializer;
@@ -2990,14 +2954,13 @@ impl IdentityNotificationAttributesDeserializer {
 
     }
 }
-pub type IdentityType = String;
 #[doc="<p>Represents the verification attributes of a single identity.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct IdentityVerificationAttributes {
     #[doc="<p>The verification status of the identity: \"Pending\", \"Success\", \"Failed\", or \"TemporaryFailure\".</p>"]
-    pub verification_status: VerificationStatus,
+    pub verification_status: String,
     #[doc="<p>The verification token for a domain identity. Null for email address identities.</p>"]
-    pub verification_token: Option<VerificationToken>,
+    pub verification_token: Option<String>,
 }
 
 struct IdentityVerificationAttributesDeserializer;
@@ -3048,13 +3011,12 @@ impl IdentityVerificationAttributesDeserializer {
 
     }
 }
-pub type InvocationType = String;
 struct InvocationTypeDeserializer;
 impl InvocationTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<InvocationType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3067,9 +3029,9 @@ impl InvocationTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct KinesisFirehoseDestination {
     #[doc="<p>The ARN of the Amazon Kinesis Firehose stream to which to publish email sending events.</p>"]
-    pub delivery_stream_arn: AmazonResourceName,
+    pub delivery_stream_arn: String,
     #[doc="<p>The ARN of the IAM role under which Amazon SES publishes email sending events to the Amazon Kinesis Firehose stream.</p>"]
-    pub iam_role_arn: AmazonResourceName,
+    pub iam_role_arn: String,
 }
 
 struct KinesisFirehoseDestinationDeserializer;
@@ -3141,11 +3103,11 @@ impl KinesisFirehoseDestinationSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct LambdaAction {
     #[doc="<p>The Amazon Resource Name (ARN) of the AWS Lambda function. An example of an AWS Lambda function ARN is <code>arn:aws:lambda:us-west-2:account-id:function:MyFunction</code>. For more information about AWS Lambda, see the <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/welcome.html\">AWS Lambda Developer Guide</a>.</p>"]
-    pub function_arn: AmazonResourceName,
+    pub function_arn: String,
     #[doc="<p>The invocation type of the AWS Lambda function. An invocation type of <code>RequestResponse</code> means that the execution of the function will immediately result in a response, and a value of <code>Event</code> means that the function will be invoked asynchronously. The default value is <code>Event</code>. For information about AWS Lambda invocation types, see the <a href=\"http://docs.aws.amazon.com/lambda/latest/dg/API_Invoke.html\">AWS Lambda Developer Guide</a>.</p> <important> <p>There is a 30-second timeout on <code>RequestResponse</code> invocations. You should use <code>Event</code> invocation in most cases. Use <code>RequestResponse</code> only when you want to make a mail flow decision, such as whether to stop the receipt rule or the receipt rule set.</p> </important>"]
-    pub invocation_type: Option<InvocationType>,
+    pub invocation_type: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon SNS topic to notify when the Lambda action is taken. An example of an Amazon SNS topic ARN is <code>arn:aws:sns:us-west-2:123456789012:MyTopic</code>. For more information about Amazon SNS topics, see the <a href=\"http://docs.aws.amazon.com/sns/latest/dg/CreateTopic.html\">Amazon SNS Developer Guide</a>.</p>"]
-    pub topic_arn: Option<AmazonResourceName>,
+    pub topic_arn: Option<String>,
 }
 
 struct LambdaActionDeserializer;
@@ -3222,14 +3184,13 @@ impl LambdaActionSerializer {
     }
 }
 
-pub type LastAttemptDate = String;
 #[doc="<p>Represents a request to list the configuration sets associated with your AWS account. Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct ListConfigurationSetsRequest {
     #[doc="<p>The number of configuration sets to return.</p>"]
-    pub max_items: Option<MaxItems>,
+    pub max_items: Option<i64>,
     #[doc="<p>A token returned from a previous call to <code>ListConfigurationSets</code> to indicate the position of the configuration set in the configuration set list.</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
 
@@ -3257,9 +3218,9 @@ impl ListConfigurationSetsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListConfigurationSetsResponse {
     #[doc="<p>A list of configuration sets.</p>"]
-    pub configuration_sets: Option<ConfigurationSets>,
+    pub configuration_sets: Option<Vec<ConfigurationSet>>,
     #[doc="<p>A token indicating that there are additional configuration sets available to be listed. Pass this token to successive calls of <code>ListConfigurationSets</code>. </p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
 struct ListConfigurationSetsResponseDeserializer;
@@ -3313,11 +3274,11 @@ impl ListConfigurationSetsResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListIdentitiesRequest {
     #[doc="<p>The type of the identities to list. Possible values are \"EmailAddress\" and \"Domain\". If this parameter is omitted, then all identities will be listed.</p>"]
-    pub identity_type: Option<IdentityType>,
+    pub identity_type: Option<String>,
     #[doc="<p>The maximum number of identities per page. Possible values are 1-1000 inclusive.</p>"]
-    pub max_items: Option<MaxItems>,
+    pub max_items: Option<i64>,
     #[doc="<p>The token to use for pagination.</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
 
@@ -3348,9 +3309,9 @@ impl ListIdentitiesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListIdentitiesResponse {
     #[doc="<p>A list of identities.</p>"]
-    pub identities: IdentityList,
+    pub identities: Vec<String>,
     #[doc="<p>The token used for pagination.</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
 struct ListIdentitiesResponseDeserializer;
@@ -3403,7 +3364,7 @@ impl ListIdentitiesResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListIdentityPoliciesRequest {
     #[doc="<p>The identity that is associated with the policy for which the policies will be listed. You can specify an identity by using its name or by using its Amazon Resource Name (ARN). Examples: <code>user@example.com</code>, <code>example.com</code>, <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>.</p> <p>To successfully call this API, you must own the identity.</p>"]
-    pub identity: Identity,
+    pub identity: String,
 }
 
 
@@ -3425,7 +3386,7 @@ impl ListIdentityPoliciesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListIdentityPoliciesResponse {
     #[doc="<p>A list of names of policies that apply to the specified identity.</p>"]
-    pub policy_names: PolicyNameList,
+    pub policy_names: Vec<String>,
 }
 
 struct ListIdentityPoliciesResponseDeserializer;
@@ -3493,7 +3454,7 @@ impl ListReceiptFiltersRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListReceiptFiltersResponse {
     #[doc="<p>A list of IP address filter data structures, which each consist of a name, an IP address range, and whether to allow or block mail from it.</p>"]
-    pub filters: Option<ReceiptFilterList>,
+    pub filters: Option<Vec<ReceiptFilter>>,
 }
 
 struct ListReceiptFiltersResponseDeserializer;
@@ -3543,7 +3504,7 @@ impl ListReceiptFiltersResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListReceiptRuleSetsRequest {
     #[doc="<p>A token returned from a previous call to <code>ListReceiptRuleSets</code> to indicate the position in the receipt rule set list.</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
 
@@ -3567,9 +3528,9 @@ impl ListReceiptRuleSetsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListReceiptRuleSetsResponse {
     #[doc="<p>A token indicating that there are additional receipt rule sets available to be listed. Pass this token to successive calls of <code>ListReceiptRuleSets</code> to retrieve up to 100 receipt rule sets at a time.</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
     #[doc="<p>The metadata for the currently active receipt rule set. The metadata consists of the rule set name and the timestamp of when the rule set was created.</p>"]
-    pub rule_sets: Option<ReceiptRuleSetsLists>,
+    pub rule_sets: Option<Vec<ReceiptRuleSetMetadata>>,
 }
 
 struct ListReceiptRuleSetsResponseDeserializer;
@@ -3623,7 +3584,7 @@ impl ListReceiptRuleSetsResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListVerifiedEmailAddressesResponse {
     #[doc="<p>A list of email addresses that have been verified.</p>"]
-    pub verified_email_addresses: Option<AddressList>,
+    pub verified_email_addresses: Option<Vec<String>>,
 }
 
 struct ListVerifiedEmailAddressesResponseDeserializer;
@@ -3670,14 +3631,14 @@ impl ListVerifiedEmailAddressesResponseDeserializer {
 
     }
 }
-pub type MailFromDomainAttributes = ::std::collections::HashMap<Identity,
-                                                                IdentityMailFromDomainAttributes>;
 struct MailFromDomainAttributesDeserializer;
 impl MailFromDomainAttributesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<MailFromDomainAttributes, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<::std::collections::HashMap<String, IdentityMailFromDomainAttributes>,
+                   XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = ::std::collections::HashMap::new();
@@ -3696,13 +3657,12 @@ impl MailFromDomainAttributesDeserializer {
 
     }
 }
-pub type MailFromDomainName = String;
 struct MailFromDomainNameDeserializer;
 impl MailFromDomainNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<MailFromDomainName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3711,13 +3671,12 @@ impl MailFromDomainNameDeserializer {
 
     }
 }
-pub type Max24HourSend = f64;
 struct Max24HourSendDeserializer;
 impl Max24HourSendDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Max24HourSend, XmlParseError> {
+                                       -> Result<f64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = f64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -3726,14 +3685,12 @@ impl Max24HourSendDeserializer {
 
     }
 }
-pub type MaxItems = i64;
-pub type MaxSendRate = f64;
 struct MaxSendRateDeserializer;
 impl MaxSendRateDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<MaxSendRate, XmlParseError> {
+                                       -> Result<f64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = f64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -3767,16 +3724,15 @@ impl MessageSerializer {
     }
 }
 
-pub type MessageData = String;
 #[doc="<p>Message-related information to include in the Delivery Status Notification (DSN) when an email that Amazon SES receives on your behalf bounces.</p> <p>For information about receiving email through Amazon SES, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email.html\">Amazon SES Developer Guide</a>.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct MessageDsn {
     #[doc="<p>When the message was received by the reporting mail transfer agent (MTA), in <a href=\"https://www.ietf.org/rfc/rfc0822.txt\">RFC 822</a> date-time format.</p>"]
-    pub arrival_date: Option<ArrivalDate>,
+    pub arrival_date: Option<String>,
     #[doc="<p>Additional X-headers to include in the DSN.</p>"]
-    pub extension_fields: Option<ExtensionFieldList>,
+    pub extension_fields: Option<Vec<ExtensionField>>,
     #[doc="<p>The reporting MTA that attempted to deliver the message, formatted as specified in <a href=\"https://tools.ietf.org/html/rfc3464\">RFC 3464</a> (<code>mta-name-type; mta-name</code>). The default value is <code>dns; inbound-smtp.[region].amazonaws.com</code>.</p>"]
-    pub reporting_mta: ReportingMta,
+    pub reporting_mta: String,
 }
 
 
@@ -3802,13 +3758,12 @@ impl MessageDsnSerializer {
     }
 }
 
-pub type MessageId = String;
 struct MessageIdDeserializer;
 impl MessageIdDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<MessageId, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3821,9 +3776,9 @@ impl MessageIdDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct MessageTag {
     #[doc="<p>The name of the tag. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 256 characters.</p> </li> </ul>"]
-    pub name: MessageTagName,
+    pub name: String,
     #[doc="<p>The value of the tag. The value must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 256 characters.</p> </li> </ul>"]
-    pub value: MessageTagValue,
+    pub value: String,
 }
 
 
@@ -3842,12 +3797,11 @@ impl MessageTagSerializer {
     }
 }
 
-pub type MessageTagList = Vec<MessageTag>;
 
 /// Serialize `MessageTagList` contents to a `SignedRequest`.
 struct MessageTagListSerializer;
 impl MessageTagListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &MessageTagList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<MessageTag>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             MessageTagSerializer::serialize(params, &key, obj);
@@ -3855,15 +3809,12 @@ impl MessageTagListSerializer {
     }
 }
 
-pub type MessageTagName = String;
-pub type MessageTagValue = String;
-pub type NextToken = String;
 struct NextTokenDeserializer;
 impl NextTokenDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NextToken, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3872,14 +3823,14 @@ impl NextTokenDeserializer {
 
     }
 }
-pub type NotificationAttributes = ::std::collections::HashMap<Identity,
-                                                              IdentityNotificationAttributes>;
 struct NotificationAttributesDeserializer;
 impl NotificationAttributesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<NotificationAttributes, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<::std::collections::HashMap<String, IdentityNotificationAttributes>,
+                   XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = ::std::collections::HashMap::new();
@@ -3898,13 +3849,12 @@ impl NotificationAttributesDeserializer {
 
     }
 }
-pub type NotificationTopic = String;
 struct NotificationTopicDeserializer;
 impl NotificationTopicDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NotificationTopic, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3913,14 +3863,12 @@ impl NotificationTopicDeserializer {
 
     }
 }
-pub type NotificationType = String;
-pub type Policy = String;
 struct PolicyDeserializer;
 impl PolicyDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Policy, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3929,13 +3877,13 @@ impl PolicyDeserializer {
 
     }
 }
-pub type PolicyMap = ::std::collections::HashMap<PolicyName, Policy>;
 struct PolicyMapDeserializer;
 impl PolicyMapDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<PolicyMap, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<::std::collections::HashMap<String, String>, XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = ::std::collections::HashMap::new();
@@ -3953,13 +3901,12 @@ impl PolicyMapDeserializer {
 
     }
 }
-pub type PolicyName = String;
 struct PolicyNameDeserializer;
 impl PolicyNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PolicyName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3968,13 +3915,12 @@ impl PolicyNameDeserializer {
 
     }
 }
-pub type PolicyNameList = Vec<PolicyName>;
 struct PolicyNameListDeserializer;
 impl PolicyNameListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PolicyNameList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4014,7 +3960,7 @@ impl PolicyNameListDeserializer {
 /// Serialize `PolicyNameList` contents to a `SignedRequest`.
 struct PolicyNameListSerializer;
 impl PolicyNameListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &PolicyNameList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -4026,11 +3972,11 @@ impl PolicyNameListSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct PutIdentityPolicyRequest {
     #[doc="<p>The identity to which the policy will apply. You can specify an identity by using its name or by using its Amazon Resource Name (ARN). Examples: <code>user@example.com</code>, <code>example.com</code>, <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>.</p> <p>To successfully call this API, you must own the identity.</p>"]
-    pub identity: Identity,
+    pub identity: String,
     #[doc="<p>The text of the policy in JSON format. The policy cannot exceed 4 KB.</p> <p>For information about the syntax of sending authorization policies, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization-policies.html\">Amazon SES Developer Guide</a>. </p>"]
-    pub policy: Policy,
+    pub policy: String,
     #[doc="<p>The name of the policy.</p> <p>The policy name cannot exceed 64 characters and can only include alphanumeric characters, dashes, and underscores.</p>"]
-    pub policy_name: PolicyName,
+    pub policy_name: String,
 }
 
 
@@ -4074,7 +4020,7 @@ impl PutIdentityPolicyResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct RawMessage {
     #[doc="<p>The raw data of the message. The client must ensure that the message format complies with Internet email standards regarding email header fields, MIME types, MIME encoding, and base64 encoding.</p> <p>The To:, CC:, and BCC: headers in the raw message can contain a group list.</p> <p>If you are using <code>SendRawEmail</code> with sending authorization, you can include X-headers in the raw message to specify the \"Source,\" \"From,\" and \"Return-Path\" addresses. For more information, see the documentation for <code>SendRawEmail</code>. </p> <important> <p>Do not include these X-headers in the DKIM signature, because they are removed by Amazon SES before sending the email.</p> </important> <p>For more information, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-raw.html\">Amazon SES Developer Guide</a>. </p>"]
-    pub data: RawMessageData,
+    pub data: Vec<u8>,
 }
 
 
@@ -4093,7 +4039,6 @@ impl RawMessageSerializer {
     }
 }
 
-pub type RawMessageData = Vec<u8>;
 #[doc="<p>An action that Amazon SES can take when it receives an email on behalf of one or more email addresses or domains that you own. An instance of this data type can represent only one action.</p> <p>For information about setting up receipt rules, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rules.html\">Amazon SES Developer Guide</a>.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct ReceiptAction {
@@ -4233,13 +4178,12 @@ impl ReceiptActionSerializer {
     }
 }
 
-pub type ReceiptActionsList = Vec<ReceiptAction>;
 struct ReceiptActionsListDeserializer;
 impl ReceiptActionsListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ReceiptActionsList, XmlParseError> {
+                                       -> Result<Vec<ReceiptAction>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4279,7 +4223,7 @@ impl ReceiptActionsListDeserializer {
 /// Serialize `ReceiptActionsList` contents to a `SignedRequest`.
 struct ReceiptActionsListSerializer;
 impl ReceiptActionsListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ReceiptActionsList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<ReceiptAction>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             ReceiptActionSerializer::serialize(params, &key, obj);
@@ -4293,7 +4237,7 @@ pub struct ReceiptFilter {
     #[doc="<p>A structure that provides the IP addresses to block or allow, and whether to block or allow incoming mail from them.</p>"]
     pub ip_filter: ReceiptIpFilter,
     #[doc="<p>The name of the IP address filter. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-).</p> </li> <li> <p>Start and end with a letter or number.</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul>"]
-    pub name: ReceiptFilterName,
+    pub name: String,
 }
 
 struct ReceiptFilterDeserializer;
@@ -4360,13 +4304,12 @@ impl ReceiptFilterSerializer {
     }
 }
 
-pub type ReceiptFilterList = Vec<ReceiptFilter>;
 struct ReceiptFilterListDeserializer;
 impl ReceiptFilterListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ReceiptFilterList, XmlParseError> {
+                                       -> Result<Vec<ReceiptFilter>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4402,13 +4345,12 @@ impl ReceiptFilterListDeserializer {
 
     }
 }
-pub type ReceiptFilterName = String;
 struct ReceiptFilterNameDeserializer;
 impl ReceiptFilterNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ReceiptFilterName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4417,13 +4359,12 @@ impl ReceiptFilterNameDeserializer {
 
     }
 }
-pub type ReceiptFilterPolicy = String;
 struct ReceiptFilterPolicyDeserializer;
 impl ReceiptFilterPolicyDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ReceiptFilterPolicy, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4436,9 +4377,9 @@ impl ReceiptFilterPolicyDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ReceiptIpFilter {
     #[doc="<p>A single IP address or a range of IP addresses that you want to block or allow, specified in Classless Inter-Domain Routing (CIDR) notation. An example of a single email address is 10.0.0.1. An example of a range of IP addresses is 10.0.0.1/24. For more information about CIDR notation, see <a href=\"https://tools.ietf.org/html/rfc2317\">RFC 2317</a>.</p>"]
-    pub cidr: Cidr,
+    pub cidr: String,
     #[doc="<p>Indicates whether to block or allow incoming mail from the specified IP addresses.</p>"]
-    pub policy: ReceiptFilterPolicy,
+    pub policy: String,
 }
 
 struct ReceiptIpFilterDeserializer;
@@ -4506,17 +4447,17 @@ impl ReceiptIpFilterSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ReceiptRule {
     #[doc="<p>An ordered list of actions to perform on messages that match at least one of the recipient email addresses or domains specified in the receipt rule.</p>"]
-    pub actions: Option<ReceiptActionsList>,
+    pub actions: Option<Vec<ReceiptAction>>,
     #[doc="<p>If <code>true</code>, the receipt rule is active. The default value is <code>false</code>.</p>"]
-    pub enabled: Option<Enabled>,
+    pub enabled: Option<bool>,
     #[doc="<p>The name of the receipt rule. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-).</p> </li> <li> <p>Start and end with a letter or number.</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul>"]
-    pub name: ReceiptRuleName,
+    pub name: String,
     #[doc="<p>The recipient domains and email addresses to which the receipt rule applies. If this field is not specified, this rule will match all recipients under all verified domains.</p>"]
-    pub recipients: Option<RecipientsList>,
+    pub recipients: Option<Vec<String>>,
     #[doc="<p>If <code>true</code>, then messages to which this receipt rule applies are scanned for spam and viruses. The default value is <code>false</code>.</p>"]
-    pub scan_enabled: Option<Enabled>,
+    pub scan_enabled: Option<bool>,
     #[doc="<p>Specifies whether Amazon SES should require that incoming email is delivered over a connection encrypted with Transport Layer Security (TLS). If this parameter is set to <code>Require</code>, Amazon SES will bounce emails that are not received over TLS. The default is <code>Optional</code>.</p>"]
-    pub tls_policy: Option<TlsPolicy>,
+    pub tls_policy: Option<String>,
 }
 
 struct ReceiptRuleDeserializer;
@@ -4619,13 +4560,12 @@ impl ReceiptRuleSerializer {
     }
 }
 
-pub type ReceiptRuleName = String;
 struct ReceiptRuleNameDeserializer;
 impl ReceiptRuleNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ReceiptRuleName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4634,12 +4574,11 @@ impl ReceiptRuleNameDeserializer {
 
     }
 }
-pub type ReceiptRuleNamesList = Vec<ReceiptRuleName>;
 
 /// Serialize `ReceiptRuleNamesList` contents to a `SignedRequest`.
 struct ReceiptRuleNamesListSerializer;
 impl ReceiptRuleNamesListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ReceiptRuleNamesList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -4651,9 +4590,9 @@ impl ReceiptRuleNamesListSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ReceiptRuleSetMetadata {
     #[doc="<p>The date and time the receipt rule set was created.</p>"]
-    pub created_timestamp: Option<Timestamp>,
+    pub created_timestamp: Option<String>,
     #[doc="<p>The name of the receipt rule set. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-).</p> </li> <li> <p>Start and end with a letter or number.</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul>"]
-    pub name: Option<ReceiptRuleSetName>,
+    pub name: Option<String>,
 }
 
 struct ReceiptRuleSetMetadataDeserializer;
@@ -4704,13 +4643,12 @@ impl ReceiptRuleSetMetadataDeserializer {
 
     }
 }
-pub type ReceiptRuleSetName = String;
 struct ReceiptRuleSetNameDeserializer;
 impl ReceiptRuleSetNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ReceiptRuleSetName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4719,13 +4657,12 @@ impl ReceiptRuleSetNameDeserializer {
 
     }
 }
-pub type ReceiptRuleSetsLists = Vec<ReceiptRuleSetMetadata>;
 struct ReceiptRuleSetsListsDeserializer;
 impl ReceiptRuleSetsListsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ReceiptRuleSetsLists, XmlParseError> {
+                                       -> Result<Vec<ReceiptRuleSetMetadata>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4762,13 +4699,12 @@ impl ReceiptRuleSetsListsDeserializer {
 
     }
 }
-pub type ReceiptRulesList = Vec<ReceiptRule>;
 struct ReceiptRulesListDeserializer;
 impl ReceiptRulesListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ReceiptRulesList, XmlParseError> {
+                                       -> Result<Vec<ReceiptRule>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4804,13 +4740,12 @@ impl ReceiptRulesListDeserializer {
 
     }
 }
-pub type Recipient = String;
 struct RecipientDeserializer;
 impl RecipientDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Recipient, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4823,19 +4758,19 @@ impl RecipientDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct RecipientDsnFields {
     #[doc="<p>The action performed by the reporting mail transfer agent (MTA) as a result of its attempt to deliver the message to the recipient address. This is required by <a href=\"https://tools.ietf.org/html/rfc3464\">RFC 3464</a>.</p>"]
-    pub action: DsnAction,
+    pub action: String,
     #[doc="<p>An extended explanation of what went wrong; this is usually an SMTP response. See <a href=\"https://tools.ietf.org/html/rfc3463\">RFC 3463</a> for the correct formatting of this parameter.</p>"]
-    pub diagnostic_code: Option<DiagnosticCode>,
+    pub diagnostic_code: Option<String>,
     #[doc="<p>Additional X-headers to include in the DSN.</p>"]
-    pub extension_fields: Option<ExtensionFieldList>,
+    pub extension_fields: Option<Vec<ExtensionField>>,
     #[doc="<p>The email address to which the message was ultimately delivered. This corresponds to the <code>Final-Recipient</code> in the DSN. If not specified, <code>FinalRecipient</code> will be set to the <code>Recipient</code> specified in the <code>BouncedRecipientInfo</code> structure. Either <code>FinalRecipient</code> or the recipient in <code>BouncedRecipientInfo</code> must be a recipient of the original bounced message.</p> <note> <p>Do not prepend the <code>FinalRecipient</code> email address with <code>rfc 822;</code>, as described in <a href=\"https://tools.ietf.org/html/rfc3798\">RFC 3798</a>.</p> </note>"]
-    pub final_recipient: Option<Address>,
+    pub final_recipient: Option<String>,
     #[doc="<p>The time the final delivery attempt was made, in <a href=\"https://www.ietf.org/rfc/rfc0822.txt\">RFC 822</a> date-time format.</p>"]
-    pub last_attempt_date: Option<LastAttemptDate>,
+    pub last_attempt_date: Option<String>,
     #[doc="<p>The MTA to which the remote MTA attempted to deliver the message, formatted as specified in <a href=\"https://tools.ietf.org/html/rfc3464\">RFC 3464</a> (<code>mta-name-type; mta-name</code>). This parameter typically applies only to propagating synchronous bounces.</p>"]
-    pub remote_mta: Option<RemoteMta>,
+    pub remote_mta: Option<String>,
     #[doc="<p>The status code that indicates what went wrong. This is required by <a href=\"https://tools.ietf.org/html/rfc3464\">RFC 3464</a>.</p>"]
-    pub status: DsnStatus,
+    pub status: String,
 }
 
 
@@ -4871,13 +4806,12 @@ impl RecipientDsnFieldsSerializer {
     }
 }
 
-pub type RecipientsList = Vec<Recipient>;
 struct RecipientsListDeserializer;
 impl RecipientsListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<RecipientsList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4917,7 +4851,7 @@ impl RecipientsListDeserializer {
 /// Serialize `RecipientsList` contents to a `SignedRequest`.
 struct RecipientsListSerializer;
 impl RecipientsListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RecipientsList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -4925,14 +4859,13 @@ impl RecipientsListSerializer {
     }
 }
 
-pub type RemoteMta = String;
 #[doc="<p>Represents a request to reorder the receipt rules within a receipt rule set. You use receipt rule sets to receive email with Amazon SES. For more information, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html\">Amazon SES Developer Guide</a>.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct ReorderReceiptRuleSetRequest {
     #[doc="<p>A list of the specified receipt rule set's receipt rules in the order that you want to put them.</p>"]
-    pub rule_names: ReceiptRuleNamesList,
+    pub rule_names: Vec<String>,
     #[doc="<p>The name of the receipt rule set to reorder.</p>"]
-    pub rule_set_name: ReceiptRuleSetName,
+    pub rule_set_name: String,
 }
 
 
@@ -4973,19 +4906,17 @@ impl ReorderReceiptRuleSetResponseDeserializer {
 
     }
 }
-pub type ReportingMta = String;
-pub type RuleOrRuleSetName = String;
 #[doc="<p>When included in a receipt rule, this action saves the received message to an Amazon Simple Storage Service (Amazon S3) bucket and, optionally, publishes a notification to Amazon Simple Notification Service (Amazon SNS).</p> <p>To enable Amazon SES to write emails to your Amazon S3 bucket, use an AWS KMS key to encrypt your emails, or publish to an Amazon SNS topic of another account, Amazon SES must have permission to access those resources. For information about giving permissions, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html\">Amazon SES Developer Guide</a>.</p> <note> <p>When you save your emails to an Amazon S3 bucket, the maximum email size (including headers) is 30 MB. Emails larger than that will bounce.</p> </note> <p>For information about specifying Amazon S3 actions in receipt rules, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-action-s3.html\">Amazon SES Developer Guide</a>.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct S3Action {
     #[doc="<p>The name of the Amazon S3 bucket to which to save the received email.</p>"]
-    pub bucket_name: S3BucketName,
+    pub bucket_name: String,
     #[doc="<p>The customer master key that Amazon SES should use to encrypt your emails before saving them to the Amazon S3 bucket. You can use the default master key or a custom master key you created in AWS KMS as follows:</p> <ul> <li> <p>To use the default master key, provide an ARN in the form of <code>arn:aws:kms:REGION:ACCOUNT-ID-WITHOUT-HYPHENS:alias/aws/ses</code>. For example, if your AWS account ID is 123456789012 and you want to use the default master key in the US West (Oregon) region, the ARN of the default master key would be <code>arn:aws:kms:us-west-2:123456789012:alias/aws/ses</code>. If you use the default master key, you don't need to perform any extra steps to give Amazon SES permission to use the key.</p> </li> <li> <p>To use a custom master key you created in AWS KMS, provide the ARN of the master key and ensure that you add a statement to your key's policy to give Amazon SES permission to use it. For more information about giving permissions, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html\">Amazon SES Developer Guide</a>.</p> </li> </ul> <p>For more information about key policies, see the <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html\">AWS KMS Developer Guide</a>. If you do not specify a master key, Amazon SES will not encrypt your emails.</p> <important> <p>Your mail is encrypted by Amazon SES using the Amazon S3 encryption client before the mail is submitted to Amazon S3 for storage. It is not encrypted using Amazon S3 server-side encryption. This means that you must use the Amazon S3 encryption client to decrypt the email after retrieving it from Amazon S3, as the service has no access to use your AWS KMS keys for decryption. This encryption client is currently available with the <a href=\"http://aws.amazon.com/sdk-for-java/\">AWS Java SDK</a> and <a href=\"http://aws.amazon.com/sdk-for-ruby/\">AWS Ruby SDK</a> only. For more information about client-side encryption using AWS KMS master keys, see the <a href=\"http://alpha-docs-aws.amazon.com/AmazonS3/latest/dev/UsingClientSideEncryption.html\">Amazon S3 Developer Guide</a>.</p> </important>"]
-    pub kms_key_arn: Option<AmazonResourceName>,
+    pub kms_key_arn: Option<String>,
     #[doc="<p>The key prefix of the Amazon S3 bucket. The key prefix is similar to a directory name that enables you to store similar data under the same directory in a bucket.</p>"]
-    pub object_key_prefix: Option<S3KeyPrefix>,
+    pub object_key_prefix: Option<String>,
     #[doc="<p>The ARN of the Amazon SNS topic to notify when the message is saved to the Amazon S3 bucket. An example of an Amazon SNS topic ARN is <code>arn:aws:sns:us-west-2:123456789012:MyTopic</code>. For more information about Amazon SNS topics, see the <a href=\"http://docs.aws.amazon.com/sns/latest/dg/CreateTopic.html\">Amazon SNS Developer Guide</a>.</p>"]
-    pub topic_arn: Option<AmazonResourceName>,
+    pub topic_arn: Option<String>,
 }
 
 struct S3ActionDeserializer;
@@ -5069,13 +5000,12 @@ impl S3ActionSerializer {
     }
 }
 
-pub type S3BucketName = String;
 struct S3BucketNameDeserializer;
 impl S3BucketNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<S3BucketName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5084,13 +5014,12 @@ impl S3BucketNameDeserializer {
 
     }
 }
-pub type S3KeyPrefix = String;
 struct S3KeyPrefixDeserializer;
 impl S3KeyPrefixDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<S3KeyPrefix, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5103,9 +5032,9 @@ impl S3KeyPrefixDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct SNSAction {
     #[doc="<p>The encoding to use for the email within the Amazon SNS notification. UTF-8 is easier to use, but may not preserve all special characters when a message was encoded with a different encoding format. Base64 preserves all special characters. The default value is UTF-8.</p>"]
-    pub encoding: Option<SNSActionEncoding>,
+    pub encoding: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon SNS topic to notify. An example of an Amazon SNS topic ARN is <code>arn:aws:sns:us-west-2:123456789012:MyTopic</code>. For more information about Amazon SNS topics, see the <a href=\"http://docs.aws.amazon.com/sns/latest/dg/CreateTopic.html\">Amazon SNS Developer Guide</a>.</p>"]
-    pub topic_arn: AmazonResourceName,
+    pub topic_arn: String,
 }
 
 struct SNSActionDeserializer;
@@ -5174,13 +5103,12 @@ impl SNSActionSerializer {
     }
 }
 
-pub type SNSActionEncoding = String;
 struct SNSActionEncodingDeserializer;
 impl SNSActionEncodingDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SNSActionEncoding, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5193,17 +5121,17 @@ impl SNSActionEncodingDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct SendBounceRequest {
     #[doc="<p>The address to use in the \"From\" header of the bounce message. This must be an identity that you have verified with Amazon SES.</p>"]
-    pub bounce_sender: Address,
+    pub bounce_sender: String,
     #[doc="<p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to use the address in the \"From\" header of the bounce. For more information about sending authorization, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>.</p>"]
-    pub bounce_sender_arn: Option<AmazonResourceName>,
+    pub bounce_sender_arn: Option<String>,
     #[doc="<p>A list of recipients of the bounced message, including the information required to create the Delivery Status Notifications (DSNs) for the recipients. You must specify at least one <code>BouncedRecipientInfo</code> in the list.</p>"]
-    pub bounced_recipient_info_list: BouncedRecipientInfoList,
+    pub bounced_recipient_info_list: Vec<BouncedRecipientInfo>,
     #[doc="<p>Human-readable text for the bounce message to explain the failure. If not specified, the text will be auto-generated based on the bounced recipient information.</p>"]
-    pub explanation: Option<Explanation>,
+    pub explanation: Option<String>,
     #[doc="<p>Message-related DSN fields. If not specified, Amazon SES will choose the values.</p>"]
     pub message_dsn: Option<MessageDsn>,
     #[doc="<p>The message ID of the message to be bounced.</p>"]
-    pub original_message_id: MessageId,
+    pub original_message_id: String,
 }
 
 
@@ -5243,7 +5171,7 @@ impl SendBounceRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct SendBounceResponse {
     #[doc="<p>The message ID of the bounce message.</p>"]
-    pub message_id: Option<MessageId>,
+    pub message_id: Option<String>,
 }
 
 struct SendBounceResponseDeserializer;
@@ -5292,15 +5220,15 @@ impl SendBounceResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct SendDataPoint {
     #[doc="<p>Number of emails that have bounced.</p>"]
-    pub bounces: Option<Counter>,
+    pub bounces: Option<i64>,
     #[doc="<p>Number of unwanted emails that were rejected by recipients.</p>"]
-    pub complaints: Option<Counter>,
+    pub complaints: Option<i64>,
     #[doc="<p>Number of emails that have been sent.</p>"]
-    pub delivery_attempts: Option<Counter>,
+    pub delivery_attempts: Option<i64>,
     #[doc="<p>Number of emails rejected by Amazon SES.</p>"]
-    pub rejects: Option<Counter>,
+    pub rejects: Option<i64>,
     #[doc="<p>Time of the data point.</p>"]
-    pub timestamp: Option<Timestamp>,
+    pub timestamp: Option<String>,
 }
 
 struct SendDataPointDeserializer;
@@ -5362,13 +5290,12 @@ impl SendDataPointDeserializer {
 
     }
 }
-pub type SendDataPointList = Vec<SendDataPoint>;
 struct SendDataPointListDeserializer;
 impl SendDataPointListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SendDataPointList, XmlParseError> {
+                                       -> Result<Vec<SendDataPoint>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5408,23 +5335,23 @@ impl SendDataPointListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct SendEmailRequest {
     #[doc="<p>The name of the configuration set to use when you send an email using <code>SendEmail</code>.</p>"]
-    pub configuration_set_name: Option<ConfigurationSetName>,
+    pub configuration_set_name: Option<String>,
     #[doc="<p>The destination for this email, composed of To:, CC:, and BCC: fields.</p>"]
     pub destination: Destination,
     #[doc="<p>The message to be sent.</p>"]
     pub message: Message,
     #[doc="<p>The reply-to email address(es) for the message. If the recipient replies to the message, each reply-to address will receive the reply.</p>"]
-    pub reply_to_addresses: Option<AddressList>,
+    pub reply_to_addresses: Option<Vec<String>>,
     #[doc="<p>The email address to which bounces and complaints are to be forwarded when feedback forwarding is enabled. If the message cannot be delivered to the recipient, then an error message will be returned from the recipient's ISP; this message will then be forwarded to the email address specified by the <code>ReturnPath</code> parameter. The <code>ReturnPath</code> parameter is never overwritten. This email address must be either individually verified with Amazon SES, or from a domain that has been verified with Amazon SES. </p>"]
-    pub return_path: Option<Address>,
+    pub return_path: Option<String>,
     #[doc="<p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to use the email address specified in the <code>ReturnPath</code> parameter.</p> <p>For example, if the owner of <code>example.com</code> (which has ARN <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>) attaches a policy to it that authorizes you to use <code>feedback@example.com</code>, then you would specify the <code>ReturnPathArn</code> to be <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>, and the <code>ReturnPath</code> to be <code>feedback@example.com</code>.</p> <p>For more information about sending authorization, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>. </p>"]
-    pub return_path_arn: Option<AmazonResourceName>,
+    pub return_path_arn: Option<String>,
     #[doc="<p>The email address that is sending the email. This email address must be either individually verified with Amazon SES, or from a domain that has been verified with Amazon SES. For information about verifying identities, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html\">Amazon SES Developer Guide</a>.</p> <p>If you are sending on behalf of another user and have been permitted to do so by a sending authorization policy, then you must also specify the <code>SourceArn</code> parameter. For more information about sending authorization, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>.</p> <p> In all cases, the email address must be 7-bit ASCII. If the text must contain any other characters, then you must use MIME encoded-word syntax (RFC 2047) instead of a literal string. MIME encoded-word syntax uses the following form: <code>=?charset?encoding?encoded-text?=</code>. For more information, see <a href=\"http://tools.ietf.org/html/rfc2047\">RFC 2047</a>. </p>"]
-    pub source: Address,
+    pub source: String,
     #[doc="<p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to send for the email address specified in the <code>Source</code> parameter.</p> <p>For example, if the owner of <code>example.com</code> (which has ARN <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>) attaches a policy to it that authorizes you to send from <code>user@example.com</code>, then you would specify the <code>SourceArn</code> to be <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>, and the <code>Source</code> to be <code>user@example.com</code>.</p> <p>For more information about sending authorization, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>. </p>"]
-    pub source_arn: Option<AmazonResourceName>,
+    pub source_arn: Option<String>,
     #[doc="<p>A list of tags, in the form of name/value pairs, to apply to an email that you send using <code>SendEmail</code>. Tags correspond to characteristics of the email that you define, so that you can publish email sending events.</p>"]
-    pub tags: Option<MessageTagList>,
+    pub tags: Option<Vec<MessageTag>>,
 }
 
 
@@ -5473,7 +5400,7 @@ impl SendEmailRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct SendEmailResponse {
     #[doc="<p>The unique message identifier returned from the <code>SendEmail</code> action. </p>"]
-    pub message_id: MessageId,
+    pub message_id: String,
 }
 
 struct SendEmailResponseDeserializer;
@@ -5522,21 +5449,21 @@ impl SendEmailResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct SendRawEmailRequest {
     #[doc="<p>The name of the configuration set to use when you send an email using <code>SendRawEmail</code>.</p>"]
-    pub configuration_set_name: Option<ConfigurationSetName>,
+    pub configuration_set_name: Option<String>,
     #[doc="<p>A list of destinations for the message, consisting of To:, CC:, and BCC: addresses.</p>"]
-    pub destinations: Option<AddressList>,
+    pub destinations: Option<Vec<String>>,
     #[doc="<p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to specify a particular \"From\" address in the header of the raw email.</p> <p>Instead of using this parameter, you can use the X-header <code>X-SES-FROM-ARN</code> in the raw message of the email. If you use both the <code>FromArn</code> parameter and the corresponding X-header, Amazon SES uses the value of the <code>FromArn</code> parameter.</p> <note> <p>For information about when to use this parameter, see the description of <code>SendRawEmail</code> in this guide, or see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization-delegate-sender-tasks-email.html\">Amazon SES Developer Guide</a>.</p> </note>"]
-    pub from_arn: Option<AmazonResourceName>,
+    pub from_arn: Option<String>,
     #[doc="<p>The raw text of the message. The client is responsible for ensuring the following:</p> <ul> <li> <p>Message must contain a header and a body, separated by a blank line.</p> </li> <li> <p>All required header fields must be present.</p> </li> <li> <p>Each part of a multipart MIME message must be formatted properly.</p> </li> <li> <p>MIME content types must be among those supported by Amazon SES. For more information, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mime-types.html\">Amazon SES Developer Guide</a>.</p> </li> <li> <p>Must be base64-encoded.</p> </li> </ul>"]
     pub raw_message: RawMessage,
     #[doc="<p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to use the email address specified in the <code>ReturnPath</code> parameter.</p> <p>For example, if the owner of <code>example.com</code> (which has ARN <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>) attaches a policy to it that authorizes you to use <code>feedback@example.com</code>, then you would specify the <code>ReturnPathArn</code> to be <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>, and the <code>ReturnPath</code> to be <code>feedback@example.com</code>.</p> <p>Instead of using this parameter, you can use the X-header <code>X-SES-RETURN-PATH-ARN</code> in the raw message of the email. If you use both the <code>ReturnPathArn</code> parameter and the corresponding X-header, Amazon SES uses the value of the <code>ReturnPathArn</code> parameter.</p> <note> <p>For information about when to use this parameter, see the description of <code>SendRawEmail</code> in this guide, or see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization-delegate-sender-tasks-email.html\">Amazon SES Developer Guide</a>.</p> </note>"]
-    pub return_path_arn: Option<AmazonResourceName>,
+    pub return_path_arn: Option<String>,
     #[doc="<p>The identity's email address. If you do not provide a value for this parameter, you must specify a \"From\" address in the raw text of the message. (You can also specify both.)</p> <p> By default, the string must be 7-bit ASCII. If the text must contain any other characters, then you must use MIME encoded-word syntax (RFC 2047) instead of a literal string. MIME encoded-word syntax uses the following form: <code>=?charset?encoding?encoded-text?=</code>. For more information, see <a href=\"http://tools.ietf.org/html/rfc2047\">RFC 2047</a>. </p> <note> <p>If you specify the <code>Source</code> parameter and have feedback forwarding enabled, then bounces and complaints will be sent to this email address. This takes precedence over any <i>Return-Path</i> header that you might include in the raw text of the message.</p> </note>"]
-    pub source: Option<Address>,
+    pub source: Option<String>,
     #[doc="<p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to send for the email address specified in the <code>Source</code> parameter.</p> <p>For example, if the owner of <code>example.com</code> (which has ARN <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>) attaches a policy to it that authorizes you to send from <code>user@example.com</code>, then you would specify the <code>SourceArn</code> to be <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>, and the <code>Source</code> to be <code>user@example.com</code>.</p> <p>Instead of using this parameter, you can use the X-header <code>X-SES-SOURCE-ARN</code> in the raw message of the email. If you use both the <code>SourceArn</code> parameter and the corresponding X-header, Amazon SES uses the value of the <code>SourceArn</code> parameter.</p> <note> <p>For information about when to use this parameter, see the description of <code>SendRawEmail</code> in this guide, or see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization-delegate-sender-tasks-email.html\">Amazon SES Developer Guide</a>.</p> </note>"]
-    pub source_arn: Option<AmazonResourceName>,
+    pub source_arn: Option<String>,
     #[doc="<p>A list of tags, in the form of name/value pairs, to apply to an email that you send using <code>SendRawEmail</code>. Tags correspond to characteristics of the email that you define, so that you can publish email sending events.</p>"]
-    pub tags: Option<MessageTagList>,
+    pub tags: Option<Vec<MessageTag>>,
 }
 
 
@@ -5586,7 +5513,7 @@ impl SendRawEmailRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct SendRawEmailResponse {
     #[doc="<p>The unique message identifier returned from the <code>SendRawEmail</code> action. </p>"]
-    pub message_id: MessageId,
+    pub message_id: String,
 }
 
 struct SendRawEmailResponseDeserializer;
@@ -5631,13 +5558,12 @@ impl SendRawEmailResponseDeserializer {
 
     }
 }
-pub type SentLast24Hours = f64;
 struct SentLast24HoursDeserializer;
 impl SentLast24HoursDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SentLast24Hours, XmlParseError> {
+                                       -> Result<f64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = f64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -5650,7 +5576,7 @@ impl SentLast24HoursDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct SetActiveReceiptRuleSetRequest {
     #[doc="<p>The name of the receipt rule set to make active. Setting this value to null disables all email receiving.</p>"]
-    pub rule_set_name: Option<ReceiptRuleSetName>,
+    pub rule_set_name: Option<String>,
 }
 
 
@@ -5695,9 +5621,9 @@ impl SetActiveReceiptRuleSetResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct SetIdentityDkimEnabledRequest {
     #[doc="<p>Sets whether DKIM signing is enabled for an identity. Set to <code>true</code> to enable DKIM signing for this identity; <code>false</code> to disable it. </p>"]
-    pub dkim_enabled: Enabled,
+    pub dkim_enabled: bool,
     #[doc="<p>The identity for which DKIM signing should be enabled or disabled.</p>"]
-    pub identity: Identity,
+    pub identity: String,
 }
 
 
@@ -5741,9 +5667,9 @@ impl SetIdentityDkimEnabledResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct SetIdentityFeedbackForwardingEnabledRequest {
     #[doc="<p>Sets whether Amazon SES will forward bounce and complaint notifications as email. <code>true</code> specifies that Amazon SES will forward bounce and complaint notifications as email, in addition to any Amazon SNS topic publishing otherwise specified. <code>false</code> specifies that Amazon SES will publish bounce and complaint notifications only through Amazon SNS. This value can only be set to <code>false</code> when Amazon SNS topics are set for both <code>Bounce</code> and <code>Complaint</code> notification types.</p>"]
-    pub forwarding_enabled: Enabled,
+    pub forwarding_enabled: bool,
     #[doc="<p>The identity for which to set bounce and complaint notification forwarding. Examples: <code>user@example.com</code>, <code>example.com</code>.</p>"]
-    pub identity: Identity,
+    pub identity: String,
 }
 
 
@@ -5790,11 +5716,11 @@ impl SetIdentityFeedbackForwardingEnabledResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct SetIdentityHeadersInNotificationsEnabledRequest {
     #[doc="<p>Sets whether Amazon SES includes the original email headers in Amazon SNS notifications of the specified notification type. A value of <code>true</code> specifies that Amazon SES will include headers in notifications, and a value of <code>false</code> specifies that Amazon SES will not include headers in notifications.</p> <p>This value can only be set when <code>NotificationType</code> is already set to use a particular Amazon SNS topic.</p>"]
-    pub enabled: Enabled,
+    pub enabled: bool,
     #[doc="<p>The identity for which to enable or disable headers in notifications. Examples: <code>user@example.com</code>, <code>example.com</code>.</p>"]
-    pub identity: Identity,
+    pub identity: String,
     #[doc="<p>The notification type for which to enable or disable headers in notifications. </p>"]
-    pub notification_type: NotificationType,
+    pub notification_type: String,
 }
 
 
@@ -5843,11 +5769,11 @@ impl SetIdentityHeadersInNotificationsEnabledResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct SetIdentityMailFromDomainRequest {
     #[doc="<p>The action that you want Amazon SES to take if it cannot successfully read the required MX record when you send an email. If you choose <code>UseDefaultValue</code>, Amazon SES will use amazonses.com (or a subdomain of that) as the MAIL FROM domain. If you choose <code>RejectMessage</code>, Amazon SES will return a <code>MailFromDomainNotVerified</code> error and not send the email.</p> <p>The action specified in <code>BehaviorOnMXFailure</code> is taken when the custom MAIL FROM domain setup is in the <code>Pending</code>, <code>Failed</code>, and <code>TemporaryFailure</code> states.</p>"]
-    pub behavior_on_mx_failure: Option<BehaviorOnMXFailure>,
+    pub behavior_on_mx_failure: Option<String>,
     #[doc="<p>The verified identity for which you want to enable or disable the specified custom MAIL FROM domain.</p>"]
-    pub identity: Identity,
+    pub identity: String,
     #[doc="<p>The custom MAIL FROM domain that you want the verified identity to use. The MAIL FROM domain must 1) be a subdomain of the verified identity, 2) not be used in a \"From\" address if the MAIL FROM domain is the destination of email feedback forwarding (for more information, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from.html\">Amazon SES Developer Guide</a>), and 3) not be used to receive emails. A value of <code>null</code> disables the custom MAIL FROM setting for the identity.</p>"]
-    pub mail_from_domain: Option<MailFromDomainName>,
+    pub mail_from_domain: Option<String>,
 }
 
 
@@ -5897,11 +5823,11 @@ impl SetIdentityMailFromDomainResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct SetIdentityNotificationTopicRequest {
     #[doc="<p>The identity for which the Amazon SNS topic will be set. You can specify an identity by using its name or by using its Amazon Resource Name (ARN). Examples: <code>user@example.com</code>, <code>example.com</code>, <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>.</p>"]
-    pub identity: Identity,
+    pub identity: String,
     #[doc="<p>The type of notifications that will be published to the specified Amazon SNS topic.</p>"]
-    pub notification_type: NotificationType,
+    pub notification_type: String,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon SNS topic. If the parameter is omitted from the request or a null value is passed, <code>SnsTopic</code> is cleared and publishing is disabled.</p>"]
-    pub sns_topic: Option<NotificationTopic>,
+    pub sns_topic: Option<String>,
 }
 
 
@@ -5949,11 +5875,11 @@ impl SetIdentityNotificationTopicResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct SetReceiptRulePositionRequest {
     #[doc="<p>The name of the receipt rule after which to place the specified receipt rule.</p>"]
-    pub after: Option<ReceiptRuleName>,
+    pub after: Option<String>,
     #[doc="<p>The name of the receipt rule to reposition.</p>"]
-    pub rule_name: ReceiptRuleName,
+    pub rule_name: String,
     #[doc="<p>The name of the receipt rule set that contains the receipt rule to reposition.</p>"]
-    pub rule_set_name: ReceiptRuleSetName,
+    pub rule_set_name: String,
 }
 
 
@@ -5999,9 +5925,9 @@ impl SetReceiptRulePositionResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct StopAction {
     #[doc="<p>The scope to which the Stop action applies. That is, what is being stopped.</p>"]
-    pub scope: StopScope,
+    pub scope: String,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon SNS topic to notify when the stop action is taken. An example of an Amazon SNS topic ARN is <code>arn:aws:sns:us-west-2:123456789012:MyTopic</code>. For more information about Amazon SNS topics, see the <a href=\"http://docs.aws.amazon.com/sns/latest/dg/CreateTopic.html\">Amazon SNS Developer Guide</a>.</p>"]
-    pub topic_arn: Option<AmazonResourceName>,
+    pub topic_arn: Option<String>,
 }
 
 struct StopActionDeserializer;
@@ -6068,13 +5994,12 @@ impl StopActionSerializer {
     }
 }
 
-pub type StopScope = String;
 struct StopScopeDeserializer;
 impl StopScopeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<StopScope, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -6083,13 +6008,12 @@ impl StopScopeDeserializer {
 
     }
 }
-pub type Timestamp = String;
 struct TimestampDeserializer;
 impl TimestampDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Timestamp, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -6098,13 +6022,12 @@ impl TimestampDeserializer {
 
     }
 }
-pub type TlsPolicy = String;
 struct TlsPolicyDeserializer;
 impl TlsPolicyDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TlsPolicy, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -6117,7 +6040,7 @@ impl TlsPolicyDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct UpdateConfigurationSetEventDestinationRequest {
     #[doc="<p>The name of the configuration set that you want to update.</p>"]
-    pub configuration_set_name: ConfigurationSetName,
+    pub configuration_set_name: String,
     #[doc="<p>The event destination object that you want to apply to the specified configuration set.</p>"]
     pub event_destination: EventDestination,
 }
@@ -6170,7 +6093,7 @@ pub struct UpdateReceiptRuleRequest {
     #[doc="<p>A data structure that contains the updated receipt rule information.</p>"]
     pub rule: ReceiptRule,
     #[doc="<p>The name of the receipt rule set to which the receipt rule belongs.</p>"]
-    pub rule_set_name: ReceiptRuleSetName,
+    pub rule_set_name: String,
 }
 
 
@@ -6209,14 +6132,14 @@ impl UpdateReceiptRuleResponseDeserializer {
 
     }
 }
-pub type VerificationAttributes = ::std::collections::HashMap<Identity,
-                                                              IdentityVerificationAttributes>;
 struct VerificationAttributesDeserializer;
 impl VerificationAttributesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<VerificationAttributes, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<::std::collections::HashMap<String, IdentityVerificationAttributes>,
+                   XmlParseError> {
         try!(start_element(tag_name, stack));
 
         let mut obj = ::std::collections::HashMap::new();
@@ -6235,13 +6158,12 @@ impl VerificationAttributesDeserializer {
 
     }
 }
-pub type VerificationStatus = String;
 struct VerificationStatusDeserializer;
 impl VerificationStatusDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VerificationStatus, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -6250,13 +6172,12 @@ impl VerificationStatusDeserializer {
 
     }
 }
-pub type VerificationToken = String;
 struct VerificationTokenDeserializer;
 impl VerificationTokenDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VerificationToken, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -6265,13 +6186,12 @@ impl VerificationTokenDeserializer {
 
     }
 }
-pub type VerificationTokenList = Vec<VerificationToken>;
 struct VerificationTokenListDeserializer;
 impl VerificationTokenListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VerificationTokenList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -6311,7 +6231,7 @@ impl VerificationTokenListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct VerifyDomainDkimRequest {
     #[doc="<p>The name of the domain to be verified for Easy DKIM signing.</p>"]
-    pub domain: Domain,
+    pub domain: String,
 }
 
 
@@ -6333,7 +6253,7 @@ impl VerifyDomainDkimRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct VerifyDomainDkimResponse {
     #[doc="<p>A set of character strings that represent the domain's identity. If the identity is an email address, the tokens represent the domain of that address.</p> <p>Using these tokens, you will need to create DNS CNAME records that point to DKIM public keys hosted by Amazon SES. Amazon Web Services will eventually detect that you have updated your DNS records; this detection process may take up to 72 hours. Upon successful detection, Amazon SES will be able to DKIM-sign emails originating from that domain.</p> <p>For more information about creating DNS records using DKIM tokens, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim-dns-records.html\">Amazon SES Developer Guide</a>.</p>"]
-    pub dkim_tokens: VerificationTokenList,
+    pub dkim_tokens: Vec<String>,
 }
 
 struct VerifyDomainDkimResponseDeserializer;
@@ -6383,7 +6303,7 @@ impl VerifyDomainDkimResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct VerifyDomainIdentityRequest {
     #[doc="<p>The domain to be verified.</p>"]
-    pub domain: Domain,
+    pub domain: String,
 }
 
 
@@ -6405,7 +6325,7 @@ impl VerifyDomainIdentityRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct VerifyDomainIdentityResponse {
     #[doc="<p>A TXT record that must be placed in the DNS settings for the domain, in order to complete domain verification.</p>"]
-    pub verification_token: VerificationToken,
+    pub verification_token: String,
 }
 
 struct VerifyDomainIdentityResponseDeserializer;
@@ -6455,7 +6375,7 @@ impl VerifyDomainIdentityResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct VerifyEmailAddressRequest {
     #[doc="<p>The email address to be verified.</p>"]
-    pub email_address: Address,
+    pub email_address: String,
 }
 
 
@@ -6477,7 +6397,7 @@ impl VerifyEmailAddressRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct VerifyEmailIdentityRequest {
     #[doc="<p>The email address to be verified.</p>"]
-    pub email_address: Address,
+    pub email_address: String,
 }
 
 
@@ -6519,9 +6439,9 @@ impl VerifyEmailIdentityResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct WorkmailAction {
     #[doc="<p>The ARN of the Amazon WorkMail organization. An example of an Amazon WorkMail organization ARN is <code>arn:aws:workmail:us-west-2:123456789012:organization/m-68755160c4cb4e29a2b2f8fb58f359d7</code>. For information about Amazon WorkMail organizations, see the <a href=\"http://docs.aws.amazon.com/workmail/latest/adminguide/organizations_overview.html\">Amazon WorkMail Administrator Guide</a>.</p>"]
-    pub organization_arn: AmazonResourceName,
+    pub organization_arn: String,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon SNS topic to notify when the WorkMail action is called. An example of an Amazon SNS topic ARN is <code>arn:aws:sns:us-west-2:123456789012:MyTopic</code>. For more information about Amazon SNS topics, see the <a href=\"http://docs.aws.amazon.com/sns/latest/dg/CreateTopic.html\">Amazon SNS Developer Guide</a>.</p>"]
-    pub topic_arn: Option<AmazonResourceName>,
+    pub topic_arn: Option<String>,
 }
 
 struct WorkmailActionDeserializer;

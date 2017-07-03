@@ -37,13 +37,12 @@ enum DeserializerNext {
     Skip,
     Element(String),
 }
-pub type ARN = String;
 struct ARNDeserializer;
 impl ARNDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ARN, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -56,9 +55,9 @@ impl ARNDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct AbortEnvironmentUpdateMessage {
     #[doc="<p>This specifies the ID of the environment with the in-progress update that you want to cancel.</p>"]
-    pub environment_id: Option<EnvironmentId>,
+    pub environment_id: Option<String>,
     #[doc="<p>This specifies the name of the environment with the in-progress update that you want to cancel.</p>"]
-    pub environment_name: Option<EnvironmentName>,
+    pub environment_name: Option<String>,
 }
 
 
@@ -81,13 +80,12 @@ impl AbortEnvironmentUpdateMessageSerializer {
     }
 }
 
-pub type AbortableOperationInProgress = bool;
 struct AbortableOperationInProgressDeserializer;
 impl AbortableOperationInProgressDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AbortableOperationInProgress, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -96,13 +94,12 @@ impl AbortableOperationInProgressDeserializer {
 
     }
 }
-pub type ActionHistoryStatus = String;
 struct ActionHistoryStatusDeserializer;
 impl ActionHistoryStatusDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ActionHistoryStatus, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -111,13 +108,12 @@ impl ActionHistoryStatusDeserializer {
 
     }
 }
-pub type ActionStatus = String;
 struct ActionStatusDeserializer;
 impl ActionStatusDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ActionStatus, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -126,13 +122,12 @@ impl ActionStatusDeserializer {
 
     }
 }
-pub type ActionType = String;
 struct ActionTypeDeserializer;
 impl ActionTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ActionType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -145,19 +140,19 @@ impl ActionTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ApplicationDescription {
     #[doc="<p>The name of the application.</p>"]
-    pub application_name: Option<ApplicationName>,
+    pub application_name: Option<String>,
     #[doc="<p>The names of the configuration templates associated with this application.</p>"]
-    pub configuration_templates: Option<ConfigurationTemplateNamesList>,
+    pub configuration_templates: Option<Vec<String>>,
     #[doc="<p>The date when the application was created.</p>"]
-    pub date_created: Option<CreationDate>,
+    pub date_created: Option<String>,
     #[doc="<p>The date when the application was last modified.</p>"]
-    pub date_updated: Option<UpdateDate>,
+    pub date_updated: Option<String>,
     #[doc="<p>User-defined description of the application.</p>"]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[doc="<p>The lifecycle settings for the application.</p>"]
     pub resource_lifecycle_config: Option<ApplicationResourceLifecycleConfig>,
     #[doc="<p>The names of the versions for this application.</p>"]
-    pub versions: Option<VersionLabelsList>,
+    pub versions: Option<Vec<String>>,
 }
 
 struct ApplicationDescriptionDeserializer;
@@ -229,13 +224,12 @@ impl ApplicationDescriptionDeserializer {
 
     }
 }
-pub type ApplicationDescriptionList = Vec<ApplicationDescription>;
 struct ApplicationDescriptionListDeserializer;
 impl ApplicationDescriptionListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ApplicationDescriptionList, XmlParseError> {
+                                       -> Result<Vec<ApplicationDescription>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -326,7 +320,7 @@ impl ApplicationDescriptionMessageDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ApplicationDescriptionsMessage {
     #[doc="<p>This parameter contains a list of <a>ApplicationDescription</a>.</p>"]
-    pub applications: Option<ApplicationDescriptionList>,
+    pub applications: Option<Vec<ApplicationDescription>>,
 }
 
 struct ApplicationDescriptionsMessageDeserializer;
@@ -374,11 +368,11 @@ impl ApplicationDescriptionsMessageDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ApplicationMetrics {
     #[doc="<p>The amount of time that the metrics cover (usually 10 seconds). For example, you might have 5 requests (<code>request_count</code>) within the most recent time slice of 10 seconds (<code>duration</code>).</p>"]
-    pub duration: Option<NullableInteger>,
+    pub duration: Option<i64>,
     #[doc="<p>Represents the average latency for the slowest X percent of requests over the last 10 seconds. Latencies are in seconds with one millisecond resolution.</p>"]
     pub latency: Option<Latency>,
     #[doc="<p>Average number of requests handled by the web server per second over the last 10 seconds.</p>"]
-    pub request_count: Option<RequestCount>,
+    pub request_count: Option<i64>,
     #[doc="<p>Represents the percentage of requests over the last 10 seconds that resulted in each type of status code response.</p>"]
     pub status_codes: Option<StatusCodes>,
 }
@@ -440,13 +434,12 @@ impl ApplicationMetricsDeserializer {
 
     }
 }
-pub type ApplicationName = String;
 struct ApplicationNameDeserializer;
 impl ApplicationNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ApplicationName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -455,12 +448,11 @@ impl ApplicationNameDeserializer {
 
     }
 }
-pub type ApplicationNamesList = Vec<ApplicationName>;
 
 /// Serialize `ApplicationNamesList` contents to a `SignedRequest`.
 struct ApplicationNamesListSerializer;
 impl ApplicationNamesListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ApplicationNamesList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -550,7 +542,7 @@ impl ApplicationResourceLifecycleConfigSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ApplicationResourceLifecycleDescriptionMessage {
     #[doc="<p>The name of the application.</p>"]
-    pub application_name: Option<ApplicationName>,
+    pub application_name: Option<String>,
     #[doc="<p>The lifecycle configuration.</p>"]
     pub resource_lifecycle_config: Option<ApplicationResourceLifecycleConfig>,
 }
@@ -606,23 +598,23 @@ impl ApplicationResourceLifecycleDescriptionMessageDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ApplicationVersionDescription {
     #[doc="<p>The name of the application to which the application version belongs.</p>"]
-    pub application_name: Option<ApplicationName>,
+    pub application_name: Option<String>,
     #[doc="<p>Reference to the artifact from the AWS CodeBuild build.</p>"]
     pub build_arn: Option<String>,
     #[doc="<p>The creation date of the application version.</p>"]
-    pub date_created: Option<CreationDate>,
+    pub date_created: Option<String>,
     #[doc="<p>The last modified date of the application version.</p>"]
-    pub date_updated: Option<UpdateDate>,
+    pub date_updated: Option<String>,
     #[doc="<p>The description of the application version.</p>"]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[doc="<p>If the version's source code was retrieved from AWS CodeCommit, the location of the source code for the application version.</p>"]
     pub source_build_information: Option<SourceBuildInformation>,
     #[doc="<p>The storage location of the application version's source bundle in Amazon S3.</p>"]
     pub source_bundle: Option<S3Location>,
     #[doc="<p>The processing status of the application version.</p>"]
-    pub status: Option<ApplicationVersionStatus>,
+    pub status: Option<String>,
     #[doc="<p>A unique identifier for the application version.</p>"]
-    pub version_label: Option<VersionLabel>,
+    pub version_label: Option<String>,
 }
 
 struct ApplicationVersionDescriptionDeserializer;
@@ -705,14 +697,13 @@ impl ApplicationVersionDescriptionDeserializer {
 
     }
 }
-pub type ApplicationVersionDescriptionList = Vec<ApplicationVersionDescription>;
 struct ApplicationVersionDescriptionListDeserializer;
 impl ApplicationVersionDescriptionListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>
         (tag_name: &str,
          stack: &mut T)
-         -> Result<ApplicationVersionDescriptionList, XmlParseError> {
+         -> Result<Vec<ApplicationVersionDescription>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -801,9 +792,9 @@ impl ApplicationVersionDescriptionMessageDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ApplicationVersionDescriptionsMessage {
     #[doc="<p>List of <code>ApplicationVersionDescription</code> objects sorted in order of creation.</p>"]
-    pub application_versions: Option<ApplicationVersionDescriptionList>,
+    pub application_versions: Option<Vec<ApplicationVersionDescription>>,
     #[doc="<p>For a paginated request, the token that you can pass in a subsequent request to get the next page.</p>"]
-    pub next_token: Option<Token>,
+    pub next_token: Option<String>,
 }
 
 struct ApplicationVersionDescriptionsMessageDeserializer;
@@ -934,14 +925,12 @@ impl ApplicationVersionLifecycleConfigSerializer {
     }
 }
 
-pub type ApplicationVersionProccess = bool;
-pub type ApplicationVersionStatus = String;
 struct ApplicationVersionStatusDeserializer;
 impl ApplicationVersionStatusDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ApplicationVersionStatus, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -990,7 +979,7 @@ pub struct ApplyEnvironmentManagedActionResult {
     #[doc="<p>The action ID of the managed action.</p>"]
     pub action_id: Option<String>,
     #[doc="<p>The type of managed action.</p>"]
-    pub action_type: Option<ActionType>,
+    pub action_type: Option<String>,
     #[doc="<p>The status of the managed action.</p>"]
     pub status: Option<String>,
 }
@@ -1052,12 +1041,11 @@ impl ApplyEnvironmentManagedActionResultDeserializer {
 
     }
 }
-pub type AutoCreateApplication = bool;
 #[doc="<p>Describes an Auto Scaling launch configuration.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct AutoScalingGroup {
     #[doc="<p>The name of the <code>AutoScalingGroup</code> . </p>"]
-    pub name: Option<ResourceId>,
+    pub name: Option<String>,
 }
 
 struct AutoScalingGroupDeserializer;
@@ -1102,13 +1090,12 @@ impl AutoScalingGroupDeserializer {
 
     }
 }
-pub type AutoScalingGroupList = Vec<AutoScalingGroup>;
 struct AutoScalingGroupListDeserializer;
 impl AutoScalingGroupListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AutoScalingGroupList, XmlParseError> {
+                                       -> Result<Vec<AutoScalingGroup>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -1144,14 +1131,12 @@ impl AutoScalingGroupListDeserializer {
 
     }
 }
-pub type AvailableSolutionStackDetailsList = Vec<SolutionStackDescription>;
 struct AvailableSolutionStackDetailsListDeserializer;
 impl AvailableSolutionStackDetailsListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<AvailableSolutionStackDetailsList, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<Vec<SolutionStackDescription>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -1188,14 +1173,12 @@ impl AvailableSolutionStackDetailsListDeserializer {
 
     }
 }
-pub type AvailableSolutionStackNamesList = Vec<SolutionStackName>;
 struct AvailableSolutionStackNamesListDeserializer;
 impl AvailableSolutionStackNamesListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<AvailableSolutionStackNamesList, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -1231,13 +1214,12 @@ impl AvailableSolutionStackNamesListDeserializer {
 
     }
 }
-pub type BoxedBoolean = bool;
 struct BoxedBooleanDeserializer;
 impl BoxedBooleanDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<BoxedBoolean, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -1246,13 +1228,12 @@ impl BoxedBooleanDeserializer {
 
     }
 }
-pub type BoxedInt = i64;
 struct BoxedIntDeserializer;
 impl BoxedIntDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<BoxedInt, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -1267,13 +1248,13 @@ pub struct BuildConfiguration {
     #[doc="<p>The name of the artifact of the CodeBuild build. If provided, Elastic Beanstalk stores the build artifact in the S3 location <i>S3-bucket</i>/resources/<i>application-name</i>/codebuild/codebuild-<i>version-label</i>-<i>artifact-name</i>.zip. If not provided, Elastic Beanstalk stores the build artifact in the S3 location <i>S3-bucket</i>/resources/<i>application-name</i>/codebuild/codebuild-<i>version-label</i>.zip. </p>"]
     pub artifact_name: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that enables AWS CodeBuild to interact with dependent AWS services on behalf of the AWS account.</p>"]
-    pub code_build_service_role: NonEmptyString,
+    pub code_build_service_role: String,
     #[doc="<p>Information about the compute resources the build project will use.</p> <ul> <li> <p> <code>BUILD_GENERAL1_SMALL: Use up to 3 GB memory and 2 vCPUs for builds</code> </p> </li> <li> <p> <code>BUILD_GENERAL1_MEDIUM: Use up to 7 GB memory and 4 vCPUs for builds</code> </p> </li> <li> <p> <code>BUILD_GENERAL1_LARGE: Use up to 15 GB memory and 8 vCPUs for builds</code> </p> </li> </ul>"]
-    pub compute_type: Option<ComputeType>,
+    pub compute_type: Option<String>,
     #[doc="<p>The ID of the Docker image to use for this build project.</p>"]
-    pub image: NonEmptyString,
+    pub image: String,
     #[doc="<p>How long in minutes, from 5 to 480 (8 hours), for AWS CodeBuild to wait until timing out any related build that does not get marked as completed. The default is 60 minutes.</p>"]
-    pub timeout_in_minutes: Option<BoxedInt>,
+    pub timeout_in_minutes: Option<i64>,
 }
 
 
@@ -1307,7 +1288,7 @@ impl BuildConfigurationSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct Builder {
     #[doc="<p>The ARN of the builder.</p>"]
-    pub arn: Option<ARN>,
+    pub arn: Option<String>,
 }
 
 struct BuilderDeserializer;
@@ -1355,19 +1336,19 @@ impl BuilderDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CPUUtilization {
     #[doc="<p>Percentage of time that the CPU has spent in the <code>I/O Wait</code> state over the last 10 seconds.</p>"]
-    pub io_wait: Option<NullableDouble>,
+    pub io_wait: Option<f64>,
     #[doc="<p>Percentage of time that the CPU has spent in the <code>IRQ</code> state over the last 10 seconds.</p>"]
-    pub irq: Option<NullableDouble>,
+    pub irq: Option<f64>,
     #[doc="<p>Percentage of time that the CPU has spent in the <code>Idle</code> state over the last 10 seconds.</p>"]
-    pub idle: Option<NullableDouble>,
+    pub idle: Option<f64>,
     #[doc="<p>Percentage of time that the CPU has spent in the <code>Nice</code> state over the last 10 seconds.</p>"]
-    pub nice: Option<NullableDouble>,
+    pub nice: Option<f64>,
     #[doc="<p>Percentage of time that the CPU has spent in the <code>SoftIRQ</code> state over the last 10 seconds.</p>"]
-    pub soft_irq: Option<NullableDouble>,
+    pub soft_irq: Option<f64>,
     #[doc="<p>Percentage of time that the CPU has spent in the <code>System</code> state over the last 10 seconds.</p>"]
-    pub system: Option<NullableDouble>,
+    pub system: Option<f64>,
     #[doc="<p>Percentage of time that the CPU has spent in the <code>User</code> state over the last 10 seconds.</p>"]
-    pub user: Option<NullableDouble>,
+    pub user: Option<f64>,
 }
 
 struct CPUUtilizationDeserializer;
@@ -1438,13 +1419,12 @@ impl CPUUtilizationDeserializer {
 
     }
 }
-pub type Cause = String;
 struct CauseDeserializer;
 impl CauseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Cause, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1453,13 +1433,12 @@ impl CauseDeserializer {
 
     }
 }
-pub type Causes = Vec<Cause>;
 struct CausesDeserializer;
 impl CausesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Causes, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -1499,7 +1478,7 @@ impl CausesDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CheckDNSAvailabilityMessage {
     #[doc="<p>The prefix used when this CNAME is reserved.</p>"]
-    pub cname_prefix: DNSCnamePrefix,
+    pub cname_prefix: String,
 }
 
 
@@ -1521,9 +1500,9 @@ impl CheckDNSAvailabilityMessageSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct CheckDNSAvailabilityResultMessage {
     #[doc="<p>Indicates if the specified CNAME is available:</p> <ul> <li> <p> <code>true</code> : The CNAME is available.</p> </li> <li> <p> <code>false</code> : The CNAME is not available.</p> </li> </ul>"]
-    pub available: Option<CnameAvailability>,
+    pub available: Option<bool>,
     #[doc="<p>The fully qualified CNAME to reserve when <a>CreateEnvironment</a> is called with the provided prefix.</p>"]
-    pub fully_qualified_cname: Option<DNSCname>,
+    pub fully_qualified_cname: Option<String>,
 }
 
 struct CheckDNSAvailabilityResultMessageDeserializer;
@@ -1575,13 +1554,12 @@ impl CheckDNSAvailabilityResultMessageDeserializer {
 
     }
 }
-pub type CnameAvailability = bool;
 struct CnameAvailabilityDeserializer;
 impl CnameAvailabilityDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CnameAvailability, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -1594,11 +1572,11 @@ impl CnameAvailabilityDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ComposeEnvironmentsMessage {
     #[doc="<p>The name of the application to which the specified source bundles belong.</p>"]
-    pub application_name: Option<ApplicationName>,
+    pub application_name: Option<String>,
     #[doc="<p>The name of the group to which the target environments belong. Specify a group name only if the environment name defined in each target environment's manifest ends with a + (plus) character. See <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/environment-cfg-manifest.html\">Environment Manifest (env.yaml)</a> for details.</p>"]
-    pub group_name: Option<GroupName>,
+    pub group_name: Option<String>,
     #[doc="<p>A list of version labels, specifying one or more application source bundles that belong to the target application. Each source bundle must include an environment manifest that specifies the name of the environment and the name of the solution stack to use, and optionally can specify environment links to create.</p>"]
-    pub version_labels: Option<VersionLabels>,
+    pub version_labels: Option<Vec<String>>,
 }
 
 
@@ -1626,14 +1604,12 @@ impl ComposeEnvironmentsMessageSerializer {
     }
 }
 
-pub type ComputeType = String;
-pub type ConfigurationDeploymentStatus = String;
 struct ConfigurationDeploymentStatusDeserializer;
 impl ConfigurationDeploymentStatusDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ConfigurationDeploymentStatus, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1642,14 +1618,12 @@ impl ConfigurationDeploymentStatusDeserializer {
 
     }
 }
-pub type ConfigurationOptionDefaultValue = String;
 struct ConfigurationOptionDefaultValueDeserializer;
 impl ConfigurationOptionDefaultValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<ConfigurationOptionDefaultValue, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1662,27 +1636,27 @@ impl ConfigurationOptionDefaultValueDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ConfigurationOptionDescription {
     #[doc="<p>An indication of which action is required if the value for this configuration option changes:</p> <ul> <li> <p> <code>NoInterruption</code> : There is no interruption to the environment or application availability.</p> </li> <li> <p> <code>RestartEnvironment</code> : The environment is entirely restarted, all AWS resources are deleted and recreated, and the environment is unavailable during the process.</p> </li> <li> <p> <code>RestartApplicationServer</code> : The environment is available the entire time. However, a short application outage occurs when the application servers on the running Amazon EC2 instances are restarted.</p> </li> </ul>"]
-    pub change_severity: Option<ConfigurationOptionSeverity>,
+    pub change_severity: Option<String>,
     #[doc="<p>The default value for this configuration option.</p>"]
-    pub default_value: Option<ConfigurationOptionDefaultValue>,
+    pub default_value: Option<String>,
     #[doc="<p>If specified, the configuration option must be a string value no longer than this value.</p>"]
-    pub max_length: Option<OptionRestrictionMaxLength>,
+    pub max_length: Option<i64>,
     #[doc="<p>If specified, the configuration option must be a numeric value less than this value.</p>"]
-    pub max_value: Option<OptionRestrictionMaxValue>,
+    pub max_value: Option<i64>,
     #[doc="<p>If specified, the configuration option must be a numeric value greater than this value.</p>"]
-    pub min_value: Option<OptionRestrictionMinValue>,
+    pub min_value: Option<i64>,
     #[doc="<p>The name of the configuration option.</p>"]
-    pub name: Option<ConfigurationOptionName>,
+    pub name: Option<String>,
     #[doc="<p>A unique namespace identifying the option's associated AWS resource.</p>"]
-    pub namespace: Option<OptionNamespace>,
+    pub namespace: Option<String>,
     #[doc="<p>If specified, the configuration option must be a string value that satisfies this regular expression.</p>"]
     pub regex: Option<OptionRestrictionRegex>,
     #[doc="<p>An indication of whether the user defined this configuration option:</p> <ul> <li> <p> <code>true</code> : This configuration option was defined by the user. It is a valid choice for specifying if this as an <code>Option to Remove</code> when updating configuration settings. </p> </li> <li> <p> <code>false</code> : This configuration was not defined by the user.</p> </li> </ul> <p> Constraint: You can remove only <code>UserDefined</code> options from a configuration. </p> <p> Valid Values: <code>true</code> | <code>false</code> </p>"]
-    pub user_defined: Option<UserDefinedOption>,
+    pub user_defined: Option<bool>,
     #[doc="<p>If specified, values for the configuration option are selected from this list.</p>"]
-    pub value_options: Option<ConfigurationOptionPossibleValues>,
+    pub value_options: Option<Vec<String>>,
     #[doc="<p>An indication of which type of values this option has and whether it is allowable to select one or more than one of the possible values:</p> <ul> <li> <p> <code>Scalar</code> : Values for this option are a single selection from the possible values, or an unformatted string, or numeric value governed by the <code>MIN/MAX/Regex</code> constraints.</p> </li> <li> <p> <code>List</code> : Values for this option are multiple selections from the possible values.</p> </li> <li> <p> <code>Boolean</code> : Values for this option are either <code>true</code> or <code>false</code> .</p> </li> <li> <p> <code>Json</code> : Values for this option are a JSON representation of a <code>ConfigDocument</code>.</p> </li> </ul>"]
-    pub value_type: Option<ConfigurationOptionValueType>,
+    pub value_type: Option<String>,
 }
 
 struct ConfigurationOptionDescriptionDeserializer;
@@ -1764,14 +1738,13 @@ impl ConfigurationOptionDescriptionDeserializer {
 
     }
 }
-pub type ConfigurationOptionDescriptionsList = Vec<ConfigurationOptionDescription>;
 struct ConfigurationOptionDescriptionsListDeserializer;
 impl ConfigurationOptionDescriptionsListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>
         (tag_name: &str,
          stack: &mut T)
-         -> Result<ConfigurationOptionDescriptionsList, XmlParseError> {
+         -> Result<Vec<ConfigurationOptionDescription>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -1807,13 +1780,12 @@ impl ConfigurationOptionDescriptionsListDeserializer {
 
     }
 }
-pub type ConfigurationOptionName = String;
 struct ConfigurationOptionNameDeserializer;
 impl ConfigurationOptionNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ConfigurationOptionName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1822,14 +1794,12 @@ impl ConfigurationOptionNameDeserializer {
 
     }
 }
-pub type ConfigurationOptionPossibleValue = String;
 struct ConfigurationOptionPossibleValueDeserializer;
 impl ConfigurationOptionPossibleValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<ConfigurationOptionPossibleValue, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1838,14 +1808,12 @@ impl ConfigurationOptionPossibleValueDeserializer {
 
     }
 }
-pub type ConfigurationOptionPossibleValues = Vec<ConfigurationOptionPossibleValue>;
 struct ConfigurationOptionPossibleValuesDeserializer;
 impl ConfigurationOptionPossibleValuesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<ConfigurationOptionPossibleValues, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -1885,13 +1853,13 @@ impl ConfigurationOptionPossibleValuesDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ConfigurationOptionSetting {
     #[doc="<p>A unique namespace identifying the option's associated AWS resource.</p>"]
-    pub namespace: Option<OptionNamespace>,
+    pub namespace: Option<String>,
     #[doc="<p>The name of the configuration option.</p>"]
-    pub option_name: Option<ConfigurationOptionName>,
+    pub option_name: Option<String>,
     #[doc="<p>A unique resource name for a time-based scaling configuration option.</p>"]
-    pub resource_name: Option<ResourceName>,
+    pub resource_name: Option<String>,
     #[doc="<p>The current value for the configuration option.</p>"]
-    pub value: Option<ConfigurationOptionValue>,
+    pub value: Option<String>,
 }
 
 struct ConfigurationOptionSettingDeserializer;
@@ -1976,14 +1944,13 @@ impl ConfigurationOptionSettingSerializer {
     }
 }
 
-pub type ConfigurationOptionSettingsList = Vec<ConfigurationOptionSetting>;
 struct ConfigurationOptionSettingsListDeserializer;
 impl ConfigurationOptionSettingsListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>
         (tag_name: &str,
          stack: &mut T)
-         -> Result<ConfigurationOptionSettingsList, XmlParseError> {
+         -> Result<Vec<ConfigurationOptionSetting>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -2024,7 +1991,7 @@ impl ConfigurationOptionSettingsListDeserializer {
 /// Serialize `ConfigurationOptionSettingsList` contents to a `SignedRequest`.
 struct ConfigurationOptionSettingsListSerializer;
 impl ConfigurationOptionSettingsListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ConfigurationOptionSettingsList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<ConfigurationOptionSetting>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             ConfigurationOptionSettingSerializer::serialize(params, &key, obj);
@@ -2032,13 +1999,12 @@ impl ConfigurationOptionSettingsListSerializer {
     }
 }
 
-pub type ConfigurationOptionSeverity = String;
 struct ConfigurationOptionSeverityDeserializer;
 impl ConfigurationOptionSeverityDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ConfigurationOptionSeverity, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2047,13 +2013,12 @@ impl ConfigurationOptionSeverityDeserializer {
 
     }
 }
-pub type ConfigurationOptionValue = String;
 struct ConfigurationOptionValueDeserializer;
 impl ConfigurationOptionValueDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ConfigurationOptionValue, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2062,13 +2027,12 @@ impl ConfigurationOptionValueDeserializer {
 
     }
 }
-pub type ConfigurationOptionValueType = String;
 struct ConfigurationOptionValueTypeDeserializer;
 impl ConfigurationOptionValueTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ConfigurationOptionValueType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2081,11 +2045,11 @@ impl ConfigurationOptionValueTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ConfigurationOptionsDescription {
     #[doc="<p> A list of <a>ConfigurationOptionDescription</a>. </p>"]
-    pub options: Option<ConfigurationOptionDescriptionsList>,
+    pub options: Option<Vec<ConfigurationOptionDescription>>,
     #[doc="<p>The ARN of the custom platform.</p>"]
-    pub platform_arn: Option<PlatformArn>,
+    pub platform_arn: Option<String>,
     #[doc="<p>The name of the solution stack these configuration options belong to.</p>"]
-    pub solution_stack_name: Option<SolutionStackName>,
+    pub solution_stack_name: Option<String>,
 }
 
 struct ConfigurationOptionsDescriptionDeserializer;
@@ -2144,25 +2108,25 @@ impl ConfigurationOptionsDescriptionDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ConfigurationSettingsDescription {
     #[doc="<p>The name of the application associated with this configuration set.</p>"]
-    pub application_name: Option<ApplicationName>,
+    pub application_name: Option<String>,
     #[doc="<p>The date (in UTC time) when this configuration set was created.</p>"]
-    pub date_created: Option<CreationDate>,
+    pub date_created: Option<String>,
     #[doc="<p>The date (in UTC time) when this configuration set was last modified.</p>"]
-    pub date_updated: Option<UpdateDate>,
+    pub date_updated: Option<String>,
     #[doc="<p> If this configuration set is associated with an environment, the <code>DeploymentStatus</code> parameter indicates the deployment status of this configuration set: </p> <ul> <li> <p> <code>null</code>: This configuration is not associated with a running environment.</p> </li> <li> <p> <code>pending</code>: This is a draft configuration that is not deployed to the associated environment but is in the process of deploying.</p> </li> <li> <p> <code>deployed</code>: This is the configuration that is currently deployed to the associated running environment.</p> </li> <li> <p> <code>failed</code>: This is a draft configuration that failed to successfully deploy.</p> </li> </ul>"]
-    pub deployment_status: Option<ConfigurationDeploymentStatus>,
+    pub deployment_status: Option<String>,
     #[doc="<p>Describes this configuration set.</p>"]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[doc="<p> If not <code>null</code>, the name of the environment for this configuration set. </p>"]
-    pub environment_name: Option<EnvironmentName>,
+    pub environment_name: Option<String>,
     #[doc="<p>A list of the configuration options and their values in this configuration set.</p>"]
-    pub option_settings: Option<ConfigurationOptionSettingsList>,
+    pub option_settings: Option<Vec<ConfigurationOptionSetting>>,
     #[doc="<p>The ARN of the custom platform.</p>"]
-    pub platform_arn: Option<PlatformArn>,
+    pub platform_arn: Option<String>,
     #[doc="<p>The name of the solution stack this configuration set uses.</p>"]
-    pub solution_stack_name: Option<SolutionStackName>,
+    pub solution_stack_name: Option<String>,
     #[doc="<p> If not <code>null</code>, the name of the configuration template for this configuration set. </p>"]
-    pub template_name: Option<ConfigurationTemplateName>,
+    pub template_name: Option<String>,
 }
 
 struct ConfigurationSettingsDescriptionDeserializer;
@@ -2248,14 +2212,13 @@ impl ConfigurationSettingsDescriptionDeserializer {
 
     }
 }
-pub type ConfigurationSettingsDescriptionList = Vec<ConfigurationSettingsDescription>;
 struct ConfigurationSettingsDescriptionListDeserializer;
 impl ConfigurationSettingsDescriptionListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>
         (tag_name: &str,
          stack: &mut T)
-         -> Result<ConfigurationSettingsDescriptionList, XmlParseError> {
+         -> Result<Vec<ConfigurationSettingsDescription>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -2295,7 +2258,7 @@ impl ConfigurationSettingsDescriptionListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ConfigurationSettingsDescriptions {
     #[doc="<p> A list of <a>ConfigurationSettingsDescription</a>. </p>"]
-    pub configuration_settings: Option<ConfigurationSettingsDescriptionList>,
+    pub configuration_settings: Option<Vec<ConfigurationSettingsDescription>>,
 }
 
 struct ConfigurationSettingsDescriptionsDeserializer;
@@ -2344,7 +2307,7 @@ impl ConfigurationSettingsDescriptionsDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ConfigurationSettingsValidationMessages {
     #[doc="<p> A list of <a>ValidationMessage</a>. </p>"]
-    pub messages: Option<ValidationMessagesList>,
+    pub messages: Option<Vec<ValidationMessage>>,
 }
 
 struct ConfigurationSettingsValidationMessagesDeserializer;
@@ -2391,13 +2354,12 @@ impl ConfigurationSettingsValidationMessagesDeserializer {
 
     }
 }
-pub type ConfigurationTemplateName = String;
 struct ConfigurationTemplateNameDeserializer;
 impl ConfigurationTemplateNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ConfigurationTemplateName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2406,13 +2368,12 @@ impl ConfigurationTemplateNameDeserializer {
 
     }
 }
-pub type ConfigurationTemplateNamesList = Vec<ConfigurationTemplateName>;
 struct ConfigurationTemplateNamesListDeserializer;
 impl ConfigurationTemplateNamesListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ConfigurationTemplateNamesList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -2453,9 +2414,9 @@ impl ConfigurationTemplateNamesListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateApplicationMessage {
     #[doc="<p>The name of the application.</p> <p>Constraint: This name must be unique within your account. If the specified name already exists, the action returns an <code>InvalidParameterValue</code> error.</p>"]
-    pub application_name: ApplicationName,
+    pub application_name: String,
     #[doc="<p>Describes the application.</p>"]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[doc="<p>Specify an application resource lifecycle configuration to prevent your application from accumulating too many versions.</p>"]
     pub resource_lifecycle_config: Option<ApplicationResourceLifecycleConfig>,
 }
@@ -2490,21 +2451,21 @@ impl CreateApplicationMessageSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateApplicationVersionMessage {
     #[doc="<p> The name of the application. If no application is found with this name, and <code>AutoCreateApplication</code> is <code>false</code>, returns an <code>InvalidParameterValue</code> error. </p>"]
-    pub application_name: ApplicationName,
+    pub application_name: String,
     #[doc="<p>Set to <code>true</code> to create an application with the specified name if it doesn't already exist.</p>"]
-    pub auto_create_application: Option<AutoCreateApplication>,
+    pub auto_create_application: Option<bool>,
     #[doc="<p>Settings for an AWS CodeBuild build.</p>"]
     pub build_configuration: Option<BuildConfiguration>,
     #[doc="<p>Describes this version.</p>"]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[doc="<p>Preprocesses and validates the environment manifest and configuration files in the source bundle. Validating configuration files can identify issues prior to deploying the application version to an environment.</p>"]
-    pub process: Option<ApplicationVersionProccess>,
+    pub process: Option<bool>,
     #[doc="<p>Specify a commit in an AWS CodeCommit Git repository to use as the source code for the application version.</p>"]
     pub source_build_information: Option<SourceBuildInformation>,
     #[doc="<p>The Amazon S3 bucket and key that identify the location of the source bundle for this version.</p> <note> <p>The Amazon S3 bucket must be in the same region as the environment.</p> </note> <p>Specify a source bundle in S3 or a commit in an AWS CodeCommit repository (with <code>SourceBuildInformation</code>), but not both. If neither <code>SourceBundle</code> nor <code>SourceBuildInformation</code> are provided, Elastic Beanstalk uses a sample application.</p>"]
     pub source_bundle: Option<S3Location>,
     #[doc="<p>A label identifying this version.</p> <p>Constraint: Must be unique per application. If an application version already exists with this label for the specified application, AWS Elastic Beanstalk returns an <code>InvalidParameterValue</code> error. </p>"]
-    pub version_label: VersionLabel,
+    pub version_label: String,
 }
 
 
@@ -2556,21 +2517,21 @@ impl CreateApplicationVersionMessageSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateConfigurationTemplateMessage {
     #[doc="<p>The name of the application to associate with this configuration template. If no application is found with this name, AWS Elastic Beanstalk returns an <code>InvalidParameterValue</code> error. </p>"]
-    pub application_name: ApplicationName,
+    pub application_name: String,
     #[doc="<p>Describes this configuration.</p>"]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[doc="<p>The ID of the environment used with this configuration template.</p>"]
-    pub environment_id: Option<EnvironmentId>,
+    pub environment_id: Option<String>,
     #[doc="<p>If specified, AWS Elastic Beanstalk sets the specified configuration option to the requested value. The new value overrides the value obtained from the solution stack or the source configuration template.</p>"]
-    pub option_settings: Option<ConfigurationOptionSettingsList>,
+    pub option_settings: Option<Vec<ConfigurationOptionSetting>>,
     #[doc="<p>The ARN of the custome platform.</p>"]
-    pub platform_arn: Option<PlatformArn>,
+    pub platform_arn: Option<String>,
     #[doc="<p>The name of the solution stack used by this configuration. The solution stack specifies the operating system, architecture, and application server for a configuration template. It determines the set of configuration options as well as the possible and default values.</p> <p> Use <a>ListAvailableSolutionStacks</a> to obtain a list of available solution stacks. </p> <p> A solution stack name or a source configuration parameter must be specified, otherwise AWS Elastic Beanstalk returns an <code>InvalidParameterValue</code> error. </p> <p>If a solution stack name is not specified and the source configuration parameter is specified, AWS Elastic Beanstalk uses the same solution stack as the source configuration template.</p>"]
-    pub solution_stack_name: Option<SolutionStackName>,
+    pub solution_stack_name: Option<String>,
     #[doc="<p>If specified, AWS Elastic Beanstalk uses the configuration values from the specified configuration template to create a new configuration.</p> <p> Values specified in the <code>OptionSettings</code> parameter of this call overrides any values obtained from the <code>SourceConfiguration</code>. </p> <p> If no configuration template is found, returns an <code>InvalidParameterValue</code> error. </p> <p> Constraint: If both the solution stack name parameter and the source configuration parameters are specified, the solution stack of the source configuration template must match the specified solution stack name or else AWS Elastic Beanstalk returns an <code>InvalidParameterCombination</code> error. </p>"]
     pub source_configuration: Option<SourceConfiguration>,
     #[doc="<p>The name of the configuration template.</p> <p>Constraint: This name must be unique per application.</p> <p>Default: If a configuration template already exists with this name, AWS Elastic Beanstalk returns an <code>InvalidParameterValue</code> error. </p>"]
-    pub template_name: ConfigurationTemplateName,
+    pub template_name: String,
 }
 
 
@@ -2620,31 +2581,31 @@ impl CreateConfigurationTemplateMessageSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateEnvironmentMessage {
     #[doc="<p>The name of the application that contains the version to be deployed.</p> <p> If no application is found with this name, <code>CreateEnvironment</code> returns an <code>InvalidParameterValue</code> error. </p>"]
-    pub application_name: ApplicationName,
+    pub application_name: String,
     #[doc="<p>If specified, the environment attempts to use this value as the prefix for the CNAME. If not specified, the CNAME is generated automatically by appending a random alphanumeric string to the environment name.</p>"]
-    pub cname_prefix: Option<DNSCnamePrefix>,
+    pub cname_prefix: Option<String>,
     #[doc="<p>Describes this environment.</p>"]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[doc="<p>A unique name for the deployment environment. Used in the application URL.</p> <p>Constraint: Must be from 4 to 40 characters in length. The name can contain only letters, numbers, and hyphens. It cannot start or end with a hyphen. This name must be unique in your account. If the specified name already exists, AWS Elastic Beanstalk returns an <code>InvalidParameterValue</code> error. </p> <p>Default: If the CNAME parameter is not specified, the environment name becomes part of the CNAME, and therefore part of the visible URL for your application.</p>"]
-    pub environment_name: Option<EnvironmentName>,
+    pub environment_name: Option<String>,
     #[doc="<p>The name of the group to which the target environment belongs. Specify a group name only if the environment's name is specified in an environment manifest and not with the environment name parameter. See <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/environment-cfg-manifest.html\">Environment Manifest (env.yaml)</a> for details.</p>"]
-    pub group_name: Option<GroupName>,
+    pub group_name: Option<String>,
     #[doc="<p>If specified, AWS Elastic Beanstalk sets the specified configuration options to the requested value in the configuration set for the new environment. These override the values obtained from the solution stack or the configuration template.</p>"]
-    pub option_settings: Option<ConfigurationOptionSettingsList>,
+    pub option_settings: Option<Vec<ConfigurationOptionSetting>>,
     #[doc="<p>A list of custom user-defined configuration options to remove from the configuration set for this new environment.</p>"]
-    pub options_to_remove: Option<OptionsSpecifierList>,
+    pub options_to_remove: Option<Vec<OptionSpecification>>,
     #[doc="<p>The ARN of the custom platform.</p>"]
-    pub platform_arn: Option<PlatformArn>,
+    pub platform_arn: Option<String>,
     #[doc="<p>This is an alternative to specifying a template name. If specified, AWS Elastic Beanstalk sets the configuration values to the default values associated with the specified solution stack.</p>"]
-    pub solution_stack_name: Option<SolutionStackName>,
+    pub solution_stack_name: Option<String>,
     #[doc="<p>This specifies the tags applied to resources in the environment.</p>"]
-    pub tags: Option<Tags>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p> The name of the configuration template to use in deployment. If no configuration template is found with this name, AWS Elastic Beanstalk returns an <code>InvalidParameterValue</code> error. </p>"]
-    pub template_name: Option<ConfigurationTemplateName>,
+    pub template_name: Option<String>,
     #[doc="<p>This specifies the tier to use for creating this environment.</p>"]
     pub tier: Option<EnvironmentTier>,
     #[doc="<p>The name of the application version to deploy.</p> <p> If the specified application has no associated application versions, AWS Elastic Beanstalk <code>UpdateEnvironment</code> returns an <code>InvalidParameterValue</code> error. </p> <p>Default: If not specified, AWS Elastic Beanstalk attempts to launch the sample application in the container.</p>"]
-    pub version_label: Option<VersionLabel>,
+    pub version_label: Option<String>,
 }
 
 
@@ -2711,15 +2672,15 @@ impl CreateEnvironmentMessageSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreatePlatformVersionRequest {
     #[doc="<p>The name of the builder environment.</p>"]
-    pub environment_name: Option<EnvironmentName>,
+    pub environment_name: Option<String>,
     #[doc="<p>The configuration option settings to apply to the builder environment.</p>"]
-    pub option_settings: Option<ConfigurationOptionSettingsList>,
+    pub option_settings: Option<Vec<ConfigurationOptionSetting>>,
     #[doc="<p>The location of the platform definition archive in Amazon S3.</p>"]
     pub platform_definition_bundle: S3Location,
     #[doc="<p>The name of your custom platform.</p>"]
-    pub platform_name: PlatformName,
+    pub platform_name: String,
     #[doc="<p>The number, such as 1.0.2, for the new platform version.</p>"]
-    pub platform_version: PlatformVersion,
+    pub platform_version: String,
 }
 
 
@@ -2811,7 +2772,7 @@ impl CreatePlatformVersionResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateStorageLocationResultMessage {
     #[doc="<p>The name of the Amazon S3 bucket created.</p>"]
-    pub s3_bucket: Option<S3Bucket>,
+    pub s3_bucket: Option<String>,
 }
 
 struct CreateStorageLocationResultMessageDeserializer;
@@ -2857,13 +2818,12 @@ impl CreateStorageLocationResultMessageDeserializer {
 
     }
 }
-pub type CreationDate = String;
 struct CreationDateDeserializer;
 impl CreationDateDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CreationDate, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2876,9 +2836,9 @@ impl CreationDateDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CustomAmi {
     #[doc="<p>THe ID of the image used to create the custom AMI.</p>"]
-    pub image_id: Option<ImageId>,
+    pub image_id: Option<String>,
     #[doc="<p>The type of virtualization used to create the custom AMI.</p>"]
-    pub virtualization_type: Option<VirtualizationType>,
+    pub virtualization_type: Option<String>,
 }
 
 struct CustomAmiDeserializer;
@@ -2928,13 +2888,12 @@ impl CustomAmiDeserializer {
 
     }
 }
-pub type CustomAmiList = Vec<CustomAmi>;
 struct CustomAmiListDeserializer;
 impl CustomAmiListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CustomAmiList, XmlParseError> {
+                                       -> Result<Vec<CustomAmi>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -2970,13 +2929,12 @@ impl CustomAmiListDeserializer {
 
     }
 }
-pub type DNSCname = String;
 struct DNSCnameDeserializer;
 impl DNSCnameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DNSCname, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2985,14 +2943,13 @@ impl DNSCnameDeserializer {
 
     }
 }
-pub type DNSCnamePrefix = String;
 #[doc="<p>Request to delete an application.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct DeleteApplicationMessage {
     #[doc="<p>The name of the application to delete.</p>"]
-    pub application_name: ApplicationName,
+    pub application_name: String,
     #[doc="<p>When set to true, running environments will be terminated before deleting the application.</p>"]
-    pub terminate_env_by_force: Option<TerminateEnvForce>,
+    pub terminate_env_by_force: Option<bool>,
 }
 
 
@@ -3019,11 +2976,11 @@ impl DeleteApplicationMessageSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteApplicationVersionMessage {
     #[doc="<p>The name of the application to which the version belongs.</p>"]
-    pub application_name: ApplicationName,
+    pub application_name: String,
     #[doc="<p>Set to <code>true</code> to delete the source bundle from your storage bucket. Otherwise, the application version is deleted only from Elastic Beanstalk and the source bundle remains in Amazon S3.</p>"]
-    pub delete_source_bundle: Option<DeleteSourceBundle>,
+    pub delete_source_bundle: Option<bool>,
     #[doc="<p>The label of the version to delete.</p>"]
-    pub version_label: VersionLabel,
+    pub version_label: String,
 }
 
 
@@ -3051,9 +3008,9 @@ impl DeleteApplicationVersionMessageSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteConfigurationTemplateMessage {
     #[doc="<p>The name of the application to delete the configuration template from.</p>"]
-    pub application_name: ApplicationName,
+    pub application_name: String,
     #[doc="<p>The name of the configuration template to delete.</p>"]
-    pub template_name: ConfigurationTemplateName,
+    pub template_name: String,
 }
 
 
@@ -3077,9 +3034,9 @@ impl DeleteConfigurationTemplateMessageSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteEnvironmentConfigurationMessage {
     #[doc="<p>The name of the application the environment is associated with.</p>"]
-    pub application_name: ApplicationName,
+    pub application_name: String,
     #[doc="<p>The name of the environment to delete the draft configuration from.</p>"]
-    pub environment_name: EnvironmentName,
+    pub environment_name: String,
 }
 
 
@@ -3103,7 +3060,7 @@ impl DeleteEnvironmentConfigurationMessageSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeletePlatformVersionRequest {
     #[doc="<p>The ARN of the version of the custom platform.</p>"]
-    pub platform_arn: Option<PlatformArn>,
+    pub platform_arn: Option<String>,
 }
 
 
@@ -3172,14 +3129,13 @@ impl DeletePlatformVersionResultDeserializer {
 
     }
 }
-pub type DeleteSourceBundle = bool;
 #[doc="<p>Information about an application version deployment.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct Deployment {
     #[doc="<p>The ID of the deployment. This number increases by one each time that you deploy source code or change instance configuration settings.</p>"]
-    pub deployment_id: Option<NullableLong>,
+    pub deployment_id: Option<i64>,
     #[doc="<p>For in-progress deployments, the time that the deloyment started.</p> <p>For completed deployments, the time that the deployment ended.</p>"]
-    pub deployment_time: Option<DeploymentTimestamp>,
+    pub deployment_time: Option<String>,
     #[doc="<p>The status of the deployment:</p> <ul> <li> <p> <code>In Progress</code> : The deployment is in progress.</p> </li> <li> <p> <code>Deployed</code> : The deployment succeeded.</p> </li> <li> <p> <code>Failed</code> : The deployment failed.</p> </li> </ul>"]
     pub status: Option<String>,
     #[doc="<p>The version label of the application version in the deployment.</p>"]
@@ -3242,13 +3198,12 @@ impl DeploymentDeserializer {
 
     }
 }
-pub type DeploymentTimestamp = String;
 struct DeploymentTimestampDeserializer;
 impl DeploymentTimestampDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DeploymentTimestamp, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3261,13 +3216,13 @@ impl DeploymentTimestampDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeApplicationVersionsMessage {
     #[doc="<p>Specify an application name to show only application versions for that application.</p>"]
-    pub application_name: Option<ApplicationName>,
+    pub application_name: Option<String>,
     #[doc="<p>Specify a maximum number of application versions to paginate in the request.</p>"]
-    pub max_records: Option<MaxRecords>,
+    pub max_records: Option<i64>,
     #[doc="<p>Specify a next token to retrieve the next page in a paginated request.</p>"]
-    pub next_token: Option<Token>,
+    pub next_token: Option<String>,
     #[doc="<p>Specify a version label to show a specific application version.</p>"]
-    pub version_labels: Option<VersionLabelsList>,
+    pub version_labels: Option<Vec<String>>,
 }
 
 
@@ -3303,7 +3258,7 @@ impl DescribeApplicationVersionsMessageSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeApplicationsMessage {
     #[doc="<p>If specified, AWS Elastic Beanstalk restricts the returned descriptions to only include those with the specified names.</p>"]
-    pub application_names: Option<ApplicationNamesList>,
+    pub application_names: Option<Vec<String>>,
 }
 
 
@@ -3329,17 +3284,17 @@ impl DescribeApplicationsMessageSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeConfigurationOptionsMessage {
     #[doc="<p>The name of the application associated with the configuration template or environment. Only needed if you want to describe the configuration options associated with either the configuration template or environment.</p>"]
-    pub application_name: Option<ApplicationName>,
+    pub application_name: Option<String>,
     #[doc="<p>The name of the environment whose configuration options you want to describe.</p>"]
-    pub environment_name: Option<EnvironmentName>,
+    pub environment_name: Option<String>,
     #[doc="<p>If specified, restricts the descriptions to only the specified options.</p>"]
-    pub options: Option<OptionsSpecifierList>,
+    pub options: Option<Vec<OptionSpecification>>,
     #[doc="<p>The ARN of the custom platform.</p>"]
-    pub platform_arn: Option<PlatformArn>,
+    pub platform_arn: Option<String>,
     #[doc="<p>The name of the solution stack whose configuration options you want to describe.</p>"]
-    pub solution_stack_name: Option<SolutionStackName>,
+    pub solution_stack_name: Option<String>,
     #[doc="<p>The name of the configuration template whose configuration options you want to describe.</p>"]
-    pub template_name: Option<ConfigurationTemplateName>,
+    pub template_name: Option<String>,
 }
 
 
@@ -3380,11 +3335,11 @@ impl DescribeConfigurationOptionsMessageSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeConfigurationSettingsMessage {
     #[doc="<p>The application for the environment or configuration template.</p>"]
-    pub application_name: ApplicationName,
+    pub application_name: String,
     #[doc="<p>The name of the environment to describe.</p> <p> Condition: You must specify either this or a TemplateName, but not both. If you specify both, AWS Elastic Beanstalk returns an <code>InvalidParameterCombination</code> error. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>"]
-    pub environment_name: Option<EnvironmentName>,
+    pub environment_name: Option<String>,
     #[doc="<p>The name of the configuration template to describe.</p> <p> Conditional: You must specify either this parameter or an EnvironmentName, but not both. If you specify both, AWS Elastic Beanstalk returns an <code>InvalidParameterCombination</code> error. If you do not specify either, AWS Elastic Beanstalk returns a <code>MissingRequiredParameter</code> error. </p>"]
-    pub template_name: Option<ConfigurationTemplateName>,
+    pub template_name: Option<String>,
 }
 
 
@@ -3413,11 +3368,11 @@ impl DescribeConfigurationSettingsMessageSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeEnvironmentHealthRequest {
     #[doc="<p>Specify the response elements to return. To retrieve all attributes, set to <code>All</code>. If no attribute names are specified, returns the name of the environment.</p>"]
-    pub attribute_names: Option<EnvironmentHealthAttributes>,
+    pub attribute_names: Option<Vec<String>>,
     #[doc="<p>Specify the environment by ID.</p> <p>You must specify either this or an EnvironmentName, or both.</p>"]
-    pub environment_id: Option<EnvironmentId>,
+    pub environment_id: Option<String>,
     #[doc="<p>Specify the environment by name.</p> <p>You must specify either this or an EnvironmentName, or both.</p>"]
-    pub environment_name: Option<EnvironmentName>,
+    pub environment_name: Option<String>,
 }
 
 
@@ -3453,19 +3408,19 @@ pub struct DescribeEnvironmentHealthResult {
     #[doc="<p>Application request metrics for the environment.</p>"]
     pub application_metrics: Option<ApplicationMetrics>,
     #[doc="<p>Descriptions of the data that contributed to the environment's current health status.</p>"]
-    pub causes: Option<Causes>,
+    pub causes: Option<Vec<String>>,
     #[doc="<p>The <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced-status.html\">health color</a> of the environment.</p>"]
     pub color: Option<String>,
     #[doc="<p>The environment's name.</p>"]
-    pub environment_name: Option<EnvironmentName>,
+    pub environment_name: Option<String>,
     #[doc="<p>The <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced-status.html\">health status</a> of the environment. For example, <code>Ok</code>.</p>"]
     pub health_status: Option<String>,
     #[doc="<p>Summary health information for the instances in the environment.</p>"]
     pub instances_health: Option<InstanceHealthSummary>,
     #[doc="<p>The date and time that the health information was retrieved.</p>"]
-    pub refreshed_at: Option<RefreshedAt>,
+    pub refreshed_at: Option<String>,
     #[doc="<p>The environment's operational status. <code>Ready</code>, <code>Launching</code>, <code>Updating</code>, <code>Terminating</code>, or <code>Terminated</code>.</p>"]
-    pub status: Option<EnvironmentHealth>,
+    pub status: Option<String>,
 }
 
 struct DescribeEnvironmentHealthResultDeserializer;
@@ -3547,11 +3502,11 @@ impl DescribeEnvironmentHealthResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeEnvironmentManagedActionHistoryRequest {
     #[doc="<p>The environment ID of the target environment.</p>"]
-    pub environment_id: Option<EnvironmentId>,
+    pub environment_id: Option<String>,
     #[doc="<p>The name of the target environment.</p>"]
-    pub environment_name: Option<EnvironmentName>,
+    pub environment_name: Option<String>,
     #[doc="<p>The maximum number of items to return for a single request.</p>"]
-    pub max_items: Option<Integer>,
+    pub max_items: Option<i64>,
     #[doc="<p>The pagination token returned by a previous request.</p>"]
     pub next_token: Option<String>,
 }
@@ -3589,7 +3544,7 @@ impl DescribeEnvironmentManagedActionHistoryRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeEnvironmentManagedActionHistoryResult {
     #[doc="<p>A list of completed and failed managed actions.</p>"]
-    pub managed_action_history_items: Option<ManagedActionHistoryItems>,
+    pub managed_action_history_items: Option<Vec<ManagedActionHistoryItem>>,
     #[doc="<p>A pagination token that you pass to <a>DescribeEnvironmentManagedActionHistory</a> to get the next page of results.</p>"]
     pub next_token: Option<String>,
 }
@@ -3648,7 +3603,7 @@ pub struct DescribeEnvironmentManagedActionsRequest {
     #[doc="<p>The name of the target environment.</p>"]
     pub environment_name: Option<String>,
     #[doc="<p>To show only actions with a particular status, specify a status.</p>"]
-    pub status: Option<ActionStatus>,
+    pub status: Option<String>,
 }
 
 
@@ -3678,7 +3633,7 @@ impl DescribeEnvironmentManagedActionsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeEnvironmentManagedActionsResult {
     #[doc="<p>A list of upcoming and in-progress managed actions.</p>"]
-    pub managed_actions: Option<ManagedActions>,
+    pub managed_actions: Option<Vec<ManagedAction>>,
 }
 
 struct DescribeEnvironmentManagedActionsResultDeserializer;
@@ -3729,9 +3684,9 @@ impl DescribeEnvironmentManagedActionsResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeEnvironmentResourcesMessage {
     #[doc="<p>The ID of the environment to retrieve AWS resource usage data.</p> <p> Condition: You must specify either this or an EnvironmentName, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>"]
-    pub environment_id: Option<EnvironmentId>,
+    pub environment_id: Option<String>,
     #[doc="<p>The name of the environment to retrieve AWS resource usage data.</p> <p> Condition: You must specify either this or an EnvironmentId, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>"]
-    pub environment_name: Option<EnvironmentName>,
+    pub environment_name: Option<String>,
 }
 
 
@@ -3758,17 +3713,17 @@ impl DescribeEnvironmentResourcesMessageSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeEnvironmentsMessage {
     #[doc="<p>If specified, AWS Elastic Beanstalk restricts the returned descriptions to include only those that are associated with this application.</p>"]
-    pub application_name: Option<ApplicationName>,
+    pub application_name: Option<String>,
     #[doc="<p>If specified, AWS Elastic Beanstalk restricts the returned descriptions to include only those that have the specified IDs.</p>"]
-    pub environment_ids: Option<EnvironmentIdList>,
+    pub environment_ids: Option<Vec<String>>,
     #[doc="<p>If specified, AWS Elastic Beanstalk restricts the returned descriptions to include only those that have the specified names.</p>"]
-    pub environment_names: Option<EnvironmentNamesList>,
+    pub environment_names: Option<Vec<String>>,
     #[doc="<p>Indicates whether to include deleted environments:</p> <p> <code>true</code>: Environments that have been deleted after <code>IncludedDeletedBackTo</code> are displayed.</p> <p> <code>false</code>: Do not include deleted environments.</p>"]
-    pub include_deleted: Option<IncludeDeleted>,
+    pub include_deleted: Option<bool>,
     #[doc="<p> If specified when <code>IncludeDeleted</code> is set to <code>true</code>, then environments deleted after this date are displayed. </p>"]
-    pub included_deleted_back_to: Option<IncludeDeletedBackTo>,
+    pub included_deleted_back_to: Option<String>,
     #[doc="<p>If specified, AWS Elastic Beanstalk restricts the returned descriptions to include only those that are associated with this application version.</p>"]
-    pub version_label: Option<VersionLabel>,
+    pub version_label: Option<String>,
 }
 
 
@@ -3813,29 +3768,29 @@ impl DescribeEnvironmentsMessageSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeEventsMessage {
     #[doc="<p>If specified, AWS Elastic Beanstalk restricts the returned descriptions to include only those associated with this application.</p>"]
-    pub application_name: Option<ApplicationName>,
+    pub application_name: Option<String>,
     #[doc="<p> If specified, AWS Elastic Beanstalk restricts the returned descriptions to those that occur up to, but not including, the <code>EndTime</code>. </p>"]
-    pub end_time: Option<TimeFilterEnd>,
+    pub end_time: Option<String>,
     #[doc="<p>If specified, AWS Elastic Beanstalk restricts the returned descriptions to those associated with this environment.</p>"]
-    pub environment_id: Option<EnvironmentId>,
+    pub environment_id: Option<String>,
     #[doc="<p>If specified, AWS Elastic Beanstalk restricts the returned descriptions to those associated with this environment.</p>"]
-    pub environment_name: Option<EnvironmentName>,
+    pub environment_name: Option<String>,
     #[doc="<p>Specifies the maximum number of events that can be returned, beginning with the most recent event.</p>"]
-    pub max_records: Option<MaxRecords>,
+    pub max_records: Option<i64>,
     #[doc="<p>Pagination token. If specified, the events return the next batch of results.</p>"]
-    pub next_token: Option<Token>,
+    pub next_token: Option<String>,
     #[doc="<p>The ARN of the version of the custom platform.</p>"]
-    pub platform_arn: Option<PlatformArn>,
+    pub platform_arn: Option<String>,
     #[doc="<p>If specified, AWS Elastic Beanstalk restricts the described events to include only those associated with this request ID.</p>"]
-    pub request_id: Option<RequestId>,
+    pub request_id: Option<String>,
     #[doc="<p>If specified, limits the events returned from this call to include only those with the specified severity or higher.</p>"]
-    pub severity: Option<EventSeverity>,
+    pub severity: Option<String>,
     #[doc="<p>If specified, AWS Elastic Beanstalk restricts the returned descriptions to those that occur on or after this time.</p>"]
-    pub start_time: Option<TimeFilterStart>,
+    pub start_time: Option<String>,
     #[doc="<p>If specified, AWS Elastic Beanstalk restricts the returned descriptions to those that are associated with this environment configuration.</p>"]
-    pub template_name: Option<ConfigurationTemplateName>,
+    pub template_name: Option<String>,
     #[doc="<p>If specified, AWS Elastic Beanstalk restricts the returned descriptions to those associated with this application version.</p>"]
-    pub version_label: Option<VersionLabel>,
+    pub version_label: Option<String>,
 }
 
 
@@ -3893,13 +3848,13 @@ impl DescribeEventsMessageSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeInstancesHealthRequest {
     #[doc="<p>Specifies the response elements you wish to receive. To retrieve all attributes, set to <code>All</code>. If no attribute names are specified, returns a list of instances.</p>"]
-    pub attribute_names: Option<InstancesHealthAttributes>,
+    pub attribute_names: Option<Vec<String>>,
     #[doc="<p>Specify the AWS Elastic Beanstalk environment by ID.</p>"]
-    pub environment_id: Option<EnvironmentId>,
+    pub environment_id: Option<String>,
     #[doc="<p>Specify the AWS Elastic Beanstalk environment by name.</p>"]
-    pub environment_name: Option<EnvironmentName>,
+    pub environment_name: Option<String>,
     #[doc="<p>Specify the pagination token returned by a previous call.</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
 
@@ -3936,11 +3891,11 @@ impl DescribeInstancesHealthRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeInstancesHealthResult {
     #[doc="<p>Detailed health information about each instance.</p>"]
-    pub instance_health_list: Option<InstanceHealthList>,
+    pub instance_health_list: Option<Vec<SingleInstanceHealth>>,
     #[doc="<p>Pagination token for the next page of results, if available.</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
     #[doc="<p>The date and time that the health information was retrieved.</p>"]
-    pub refreshed_at: Option<RefreshedAt>,
+    pub refreshed_at: Option<String>,
 }
 
 struct DescribeInstancesHealthResultDeserializer;
@@ -3998,7 +3953,7 @@ impl DescribeInstancesHealthResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribePlatformVersionRequest {
     #[doc="<p>The ARN of the version of the platform.</p>"]
-    pub platform_arn: Option<PlatformArn>,
+    pub platform_arn: Option<String>,
 }
 
 
@@ -4067,13 +4022,12 @@ impl DescribePlatformVersionResultDeserializer {
 
     }
 }
-pub type Description = String;
 struct DescriptionDeserializer;
 impl DescriptionDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Description, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4082,13 +4036,12 @@ impl DescriptionDeserializer {
 
     }
 }
-pub type Ec2InstanceId = String;
 struct Ec2InstanceIdDeserializer;
 impl Ec2InstanceIdDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Ec2InstanceId, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4097,13 +4050,12 @@ impl Ec2InstanceIdDeserializer {
 
     }
 }
-pub type EndpointURL = String;
 struct EndpointURLDeserializer;
 impl EndpointURLDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EndpointURL, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4116,43 +4068,43 @@ impl EndpointURLDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct EnvironmentDescription {
     #[doc="<p>Indicates if there is an in-progress environment configuration update or application version deployment that you can cancel.</p> <p> <code>true:</code> There is an update in progress. </p> <p> <code>false:</code> There are no updates currently in progress. </p>"]
-    pub abortable_operation_in_progress: Option<AbortableOperationInProgress>,
+    pub abortable_operation_in_progress: Option<bool>,
     #[doc="<p>The name of the application associated with this environment.</p>"]
-    pub application_name: Option<ApplicationName>,
+    pub application_name: Option<String>,
     #[doc="<p>The URL to the CNAME for this environment.</p>"]
-    pub cname: Option<DNSCname>,
+    pub cname: Option<String>,
     #[doc="<p>The creation date for this environment.</p>"]
-    pub date_created: Option<CreationDate>,
+    pub date_created: Option<String>,
     #[doc="<p>The last modified date for this environment.</p>"]
-    pub date_updated: Option<UpdateDate>,
+    pub date_updated: Option<String>,
     #[doc="<p>Describes this environment.</p>"]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[doc="<p>For load-balanced, autoscaling environments, the URL to the LoadBalancer. For single-instance environments, the IP address of the instance.</p>"]
-    pub endpoint_url: Option<EndpointURL>,
+    pub endpoint_url: Option<String>,
     #[doc="<p>The ID of this environment.</p>"]
-    pub environment_id: Option<EnvironmentId>,
+    pub environment_id: Option<String>,
     #[doc="<p>A list of links to other environments in the same group.</p>"]
-    pub environment_links: Option<EnvironmentLinks>,
+    pub environment_links: Option<Vec<EnvironmentLink>>,
     #[doc="<p>The name of this environment.</p>"]
-    pub environment_name: Option<EnvironmentName>,
+    pub environment_name: Option<String>,
     #[doc="<p>Describes the health status of the environment. AWS Elastic Beanstalk indicates the failure levels for a running environment:</p> <ul> <li> <p> <code>Red</code>: Indicates the environment is not responsive. Occurs when three or more consecutive failures occur for an environment.</p> </li> <li> <p> <code>Yellow</code>: Indicates that something is wrong. Occurs when two consecutive failures occur for an environment.</p> </li> <li> <p> <code>Green</code>: Indicates the environment is healthy and fully functional.</p> </li> <li> <p> <code>Grey</code>: Default health for a new environment. The environment is not fully launched and health checks have not started or health checks are suspended during an <code>UpdateEnvironment</code> or <code>RestartEnvironement</code> request.</p> </li> </ul> <p> Default: <code>Grey</code> </p>"]
-    pub health: Option<EnvironmentHealth>,
+    pub health: Option<String>,
     #[doc="<p>Returns the health status of the application running in your environment. For more information, see <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced-status.html\">Health Colors and Statuses</a>.</p>"]
-    pub health_status: Option<EnvironmentHealthStatus>,
+    pub health_status: Option<String>,
     #[doc="<p>The ARN of the custom platform.</p>"]
-    pub platform_arn: Option<PlatformArn>,
+    pub platform_arn: Option<String>,
     #[doc="<p>The description of the AWS resources used by this environment.</p>"]
     pub resources: Option<EnvironmentResourcesDescription>,
     #[doc="<p> The name of the <code>SolutionStack</code> deployed with this environment. </p>"]
-    pub solution_stack_name: Option<SolutionStackName>,
+    pub solution_stack_name: Option<String>,
     #[doc="<p>The current operational status of the environment:</p> <ul> <li> <p> <code>Launching</code>: Environment is in the process of initial deployment.</p> </li> <li> <p> <code>Updating</code>: Environment is in the process of updating its configuration settings or application version.</p> </li> <li> <p> <code>Ready</code>: Environment is available to have an action performed on it, such as update or terminate.</p> </li> <li> <p> <code>Terminating</code>: Environment is in the shut-down process.</p> </li> <li> <p> <code>Terminated</code>: Environment is not running.</p> </li> </ul>"]
-    pub status: Option<EnvironmentStatus>,
+    pub status: Option<String>,
     #[doc="<p>The name of the configuration template used to originally launch this environment.</p>"]
-    pub template_name: Option<ConfigurationTemplateName>,
+    pub template_name: Option<String>,
     #[doc="<p>Describes the current tier of this environment.</p>"]
     pub tier: Option<EnvironmentTier>,
     #[doc="<p>The application version deployed in this environment.</p>"]
-    pub version_label: Option<VersionLabel>,
+    pub version_label: Option<String>,
 }
 
 struct EnvironmentDescriptionDeserializer;
@@ -4280,13 +4232,12 @@ impl EnvironmentDescriptionDeserializer {
 
     }
 }
-pub type EnvironmentDescriptionsList = Vec<EnvironmentDescription>;
 struct EnvironmentDescriptionsListDeserializer;
 impl EnvironmentDescriptionsListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EnvironmentDescriptionsList, XmlParseError> {
+                                       -> Result<Vec<EnvironmentDescription>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4327,7 +4278,7 @@ impl EnvironmentDescriptionsListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct EnvironmentDescriptionsMessage {
     #[doc="<p> Returns an <a>EnvironmentDescription</a> list. </p>"]
-    pub environments: Option<EnvironmentDescriptionsList>,
+    pub environments: Option<Vec<EnvironmentDescription>>,
 }
 
 struct EnvironmentDescriptionsMessageDeserializer;
@@ -4371,13 +4322,12 @@ impl EnvironmentDescriptionsMessageDeserializer {
 
     }
 }
-pub type EnvironmentHealth = String;
 struct EnvironmentHealthDeserializer;
 impl EnvironmentHealthDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EnvironmentHealth, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4386,13 +4336,11 @@ impl EnvironmentHealthDeserializer {
 
     }
 }
-pub type EnvironmentHealthAttribute = String;
-pub type EnvironmentHealthAttributes = Vec<EnvironmentHealthAttribute>;
 
 /// Serialize `EnvironmentHealthAttributes` contents to a `SignedRequest`.
 struct EnvironmentHealthAttributesSerializer;
 impl EnvironmentHealthAttributesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &EnvironmentHealthAttributes) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -4400,13 +4348,12 @@ impl EnvironmentHealthAttributesSerializer {
     }
 }
 
-pub type EnvironmentHealthStatus = String;
 struct EnvironmentHealthStatusDeserializer;
 impl EnvironmentHealthStatusDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EnvironmentHealthStatus, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4415,13 +4362,12 @@ impl EnvironmentHealthStatusDeserializer {
 
     }
 }
-pub type EnvironmentId = String;
 struct EnvironmentIdDeserializer;
 impl EnvironmentIdDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EnvironmentId, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4430,12 +4376,11 @@ impl EnvironmentIdDeserializer {
 
     }
 }
-pub type EnvironmentIdList = Vec<EnvironmentId>;
 
 /// Serialize `EnvironmentIdList` contents to a `SignedRequest`.
 struct EnvironmentIdListSerializer;
 impl EnvironmentIdListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &EnvironmentIdList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -4447,13 +4392,13 @@ impl EnvironmentIdListSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct EnvironmentInfoDescription {
     #[doc="<p>The Amazon EC2 Instance ID for this information.</p>"]
-    pub ec_2_instance_id: Option<Ec2InstanceId>,
+    pub ec_2_instance_id: Option<String>,
     #[doc="<p>The type of information retrieved.</p>"]
-    pub info_type: Option<EnvironmentInfoType>,
+    pub info_type: Option<String>,
     #[doc="<p>The retrieved information.</p>"]
-    pub message: Option<Message>,
+    pub message: Option<String>,
     #[doc="<p>The time stamp when this information was retrieved.</p>"]
-    pub sample_timestamp: Option<SampleTimestamp>,
+    pub sample_timestamp: Option<String>,
 }
 
 struct EnvironmentInfoDescriptionDeserializer;
@@ -4513,13 +4458,13 @@ impl EnvironmentInfoDescriptionDeserializer {
 
     }
 }
-pub type EnvironmentInfoDescriptionList = Vec<EnvironmentInfoDescription>;
 struct EnvironmentInfoDescriptionListDeserializer;
 impl EnvironmentInfoDescriptionListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<EnvironmentInfoDescriptionList, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<Vec<EnvironmentInfoDescription>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4556,13 +4501,12 @@ impl EnvironmentInfoDescriptionListDeserializer {
 
     }
 }
-pub type EnvironmentInfoType = String;
 struct EnvironmentInfoTypeDeserializer;
 impl EnvironmentInfoTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EnvironmentInfoType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4627,13 +4571,12 @@ impl EnvironmentLinkDeserializer {
 
     }
 }
-pub type EnvironmentLinks = Vec<EnvironmentLink>;
 struct EnvironmentLinksDeserializer;
 impl EnvironmentLinksDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EnvironmentLinks, XmlParseError> {
+                                       -> Result<Vec<EnvironmentLink>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4669,13 +4612,12 @@ impl EnvironmentLinksDeserializer {
 
     }
 }
-pub type EnvironmentName = String;
 struct EnvironmentNameDeserializer;
 impl EnvironmentNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EnvironmentName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4684,12 +4626,11 @@ impl EnvironmentNameDeserializer {
 
     }
 }
-pub type EnvironmentNamesList = Vec<EnvironmentName>;
 
 /// Serialize `EnvironmentNamesList` contents to a `SignedRequest`.
 struct EnvironmentNamesListSerializer;
 impl EnvironmentNamesListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &EnvironmentNamesList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -4701,19 +4642,19 @@ impl EnvironmentNamesListSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct EnvironmentResourceDescription {
     #[doc="<p> The <code>AutoScalingGroups</code> used by this environment. </p>"]
-    pub auto_scaling_groups: Option<AutoScalingGroupList>,
+    pub auto_scaling_groups: Option<Vec<AutoScalingGroup>>,
     #[doc="<p>The name of the environment.</p>"]
-    pub environment_name: Option<EnvironmentName>,
+    pub environment_name: Option<String>,
     #[doc="<p>The Amazon EC2 instances used by this environment.</p>"]
-    pub instances: Option<InstanceList>,
+    pub instances: Option<Vec<Instance>>,
     #[doc="<p>The Auto Scaling launch configurations in use by this environment.</p>"]
-    pub launch_configurations: Option<LaunchConfigurationList>,
+    pub launch_configurations: Option<Vec<LaunchConfiguration>>,
     #[doc="<p>The LoadBalancers in use by this environment.</p>"]
-    pub load_balancers: Option<LoadBalancerList>,
+    pub load_balancers: Option<Vec<LoadBalancer>>,
     #[doc="<p>The queues used by this environment.</p>"]
-    pub queues: Option<QueueList>,
+    pub queues: Option<Vec<Queue>>,
     #[doc="<p>The <code>AutoScaling</code> triggers in use by this environment. </p>"]
-    pub triggers: Option<TriggerList>,
+    pub triggers: Option<Vec<Trigger>>,
 }
 
 struct EnvironmentResourceDescriptionDeserializer;
@@ -4887,13 +4828,12 @@ impl EnvironmentResourcesDescriptionDeserializer {
 
     }
 }
-pub type EnvironmentStatus = String;
 struct EnvironmentStatusDeserializer;
 impl EnvironmentStatusDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EnvironmentStatus, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4984,13 +4924,12 @@ impl EnvironmentTierSerializer {
     }
 }
 
-pub type EventDate = String;
 struct EventDateDeserializer;
 impl EventDateDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EventDate, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5003,23 +4942,23 @@ impl EventDateDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct EventDescription {
     #[doc="<p>The application associated with the event.</p>"]
-    pub application_name: Option<ApplicationName>,
+    pub application_name: Option<String>,
     #[doc="<p>The name of the environment associated with this event.</p>"]
-    pub environment_name: Option<EnvironmentName>,
+    pub environment_name: Option<String>,
     #[doc="<p>The date when the event occurred.</p>"]
-    pub event_date: Option<EventDate>,
+    pub event_date: Option<String>,
     #[doc="<p>The event message.</p>"]
-    pub message: Option<EventMessage>,
+    pub message: Option<String>,
     #[doc="<p>The ARN of the custom platform.</p>"]
-    pub platform_arn: Option<PlatformArn>,
+    pub platform_arn: Option<String>,
     #[doc="<p>The web service request ID for the activity of this event.</p>"]
-    pub request_id: Option<RequestId>,
+    pub request_id: Option<String>,
     #[doc="<p>The severity level of this event.</p>"]
-    pub severity: Option<EventSeverity>,
+    pub severity: Option<String>,
     #[doc="<p>The name of the configuration associated with this event.</p>"]
-    pub template_name: Option<ConfigurationTemplateName>,
+    pub template_name: Option<String>,
     #[doc="<p>The release label for the application version associated with this event.</p>"]
-    pub version_label: Option<VersionLabel>,
+    pub version_label: Option<String>,
 }
 
 struct EventDescriptionDeserializer;
@@ -5100,13 +5039,12 @@ impl EventDescriptionDeserializer {
 
     }
 }
-pub type EventDescriptionList = Vec<EventDescription>;
 struct EventDescriptionListDeserializer;
 impl EventDescriptionListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EventDescriptionList, XmlParseError> {
+                                       -> Result<Vec<EventDescription>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5146,9 +5084,9 @@ impl EventDescriptionListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct EventDescriptionsMessage {
     #[doc="<p> A list of <a>EventDescription</a>. </p>"]
-    pub events: Option<EventDescriptionList>,
+    pub events: Option<Vec<EventDescription>>,
     #[doc="<p> If returned, this indicates that there are more results to obtain. Use this token in the next <a>DescribeEvents</a> call to get the next batch of events. </p>"]
-    pub next_token: Option<Token>,
+    pub next_token: Option<String>,
 }
 
 struct EventDescriptionsMessageDeserializer;
@@ -5198,13 +5136,12 @@ impl EventDescriptionsMessageDeserializer {
 
     }
 }
-pub type EventMessage = String;
 struct EventMessageDeserializer;
 impl EventMessageDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EventMessage, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5213,13 +5150,12 @@ impl EventMessageDeserializer {
 
     }
 }
-pub type EventSeverity = String;
 struct EventSeverityDeserializer;
 impl EventSeverityDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EventSeverity, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5228,14 +5164,12 @@ impl EventSeverityDeserializer {
 
     }
 }
-pub type ExceptionMessage = String;
-pub type FailureType = String;
 struct FailureTypeDeserializer;
 impl FailureTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<FailureType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5244,13 +5178,12 @@ impl FailureTypeDeserializer {
 
     }
 }
-pub type FileTypeExtension = String;
 struct FileTypeExtensionDeserializer;
 impl FileTypeExtensionDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<FileTypeExtension, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5259,15 +5192,12 @@ impl FileTypeExtensionDeserializer {
 
     }
 }
-pub type ForceTerminate = bool;
-pub type GroupName = String;
-pub type ImageId = String;
 struct ImageIdDeserializer;
 impl ImageIdDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ImageId, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5276,13 +5206,11 @@ impl ImageIdDeserializer {
 
     }
 }
-pub type IncludeDeleted = bool;
-pub type IncludeDeletedBackTo = String;
 #[doc="<p>The description of an Amazon EC2 instance.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct Instance {
     #[doc="<p>The ID of the Amazon EC2 instance.</p>"]
-    pub id: Option<ResourceId>,
+    pub id: Option<String>,
 }
 
 struct InstanceDeserializer;
@@ -5326,13 +5254,12 @@ impl InstanceDeserializer {
 
     }
 }
-pub type InstanceHealthList = Vec<SingleInstanceHealth>;
 struct InstanceHealthListDeserializer;
 impl InstanceHealthListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<InstanceHealthList, XmlParseError> {
+                                       -> Result<Vec<SingleInstanceHealth>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5373,21 +5300,21 @@ impl InstanceHealthListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct InstanceHealthSummary {
     #[doc="<p> <b>Red.</b> The health agent is reporting a high number of request failures or other issues for an instance or environment.</p>"]
-    pub degraded: Option<NullableInteger>,
+    pub degraded: Option<i64>,
     #[doc="<p> <b>Green.</b> An operation is in progress on an instance.</p>"]
-    pub info: Option<NullableInteger>,
+    pub info: Option<i64>,
     #[doc="<p> <b>Grey.</b> AWS Elastic Beanstalk and the health agent are reporting no data on an instance.</p>"]
-    pub no_data: Option<NullableInteger>,
+    pub no_data: Option<i64>,
     #[doc="<p> <b>Green.</b> An instance is passing health checks and the health agent is not reporting any problems.</p>"]
-    pub ok: Option<NullableInteger>,
+    pub ok: Option<i64>,
     #[doc="<p> <b>Grey.</b> An operation is in progress on an instance within the command timeout.</p>"]
-    pub pending: Option<NullableInteger>,
+    pub pending: Option<i64>,
     #[doc="<p> <b>Red.</b> The health agent is reporting a very high number of request failures or other issues for an instance or environment.</p>"]
-    pub severe: Option<NullableInteger>,
+    pub severe: Option<i64>,
     #[doc="<p> <b>Grey.</b> AWS Elastic Beanstalk and the health agent are reporting an insufficient amount of data on an instance.</p>"]
-    pub unknown: Option<NullableInteger>,
+    pub unknown: Option<i64>,
     #[doc="<p> <b>Yellow.</b> The health agent is reporting a moderate number of request failures or other issues for an instance or environment.</p>"]
-    pub warning: Option<NullableInteger>,
+    pub warning: Option<i64>,
 }
 
 struct InstanceHealthSummaryDeserializer;
@@ -5466,13 +5393,12 @@ impl InstanceHealthSummaryDeserializer {
 
     }
 }
-pub type InstanceId = String;
 struct InstanceIdDeserializer;
 impl InstanceIdDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<InstanceId, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5481,13 +5407,12 @@ impl InstanceIdDeserializer {
 
     }
 }
-pub type InstanceList = Vec<Instance>;
 struct InstanceListDeserializer;
 impl InstanceListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<InstanceList, XmlParseError> {
+                                       -> Result<Vec<Instance>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5523,13 +5448,11 @@ impl InstanceListDeserializer {
 
     }
 }
-pub type InstancesHealthAttribute = String;
-pub type InstancesHealthAttributes = Vec<InstancesHealthAttribute>;
 
 /// Serialize `InstancesHealthAttributes` contents to a `SignedRequest`.
 struct InstancesHealthAttributesSerializer;
 impl InstancesHealthAttributesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &InstancesHealthAttributes) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -5537,13 +5460,12 @@ impl InstancesHealthAttributesSerializer {
     }
 }
 
-pub type Integer = i64;
 struct IntegerDeserializer;
 impl IntegerDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Integer, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -5556,21 +5478,21 @@ impl IntegerDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct Latency {
     #[doc="<p>The average latency for the slowest 90 percent of requests over the last 10 seconds.</p>"]
-    pub p10: Option<NullableDouble>,
+    pub p10: Option<f64>,
     #[doc="<p>The average latency for the slowest 50 percent of requests over the last 10 seconds.</p>"]
-    pub p50: Option<NullableDouble>,
+    pub p50: Option<f64>,
     #[doc="<p>The average latency for the slowest 25 percent of requests over the last 10 seconds.</p>"]
-    pub p75: Option<NullableDouble>,
+    pub p75: Option<f64>,
     #[doc="<p>The average latency for the slowest 15 percent of requests over the last 10 seconds.</p>"]
-    pub p85: Option<NullableDouble>,
+    pub p85: Option<f64>,
     #[doc="<p>The average latency for the slowest 10 percent of requests over the last 10 seconds.</p>"]
-    pub p90: Option<NullableDouble>,
+    pub p90: Option<f64>,
     #[doc="<p>The average latency for the slowest 5 percent of requests over the last 10 seconds.</p>"]
-    pub p95: Option<NullableDouble>,
+    pub p95: Option<f64>,
     #[doc="<p>The average latency for the slowest 1 percent of requests over the last 10 seconds.</p>"]
-    pub p99: Option<NullableDouble>,
+    pub p99: Option<f64>,
     #[doc="<p>The average latency for the slowest 0.1 percent of requests over the last 10 seconds.</p>"]
-    pub p999: Option<NullableDouble>,
+    pub p999: Option<f64>,
 }
 
 struct LatencyDeserializer;
@@ -5647,7 +5569,7 @@ impl LatencyDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct LaunchConfiguration {
     #[doc="<p>The name of the launch configuration.</p>"]
-    pub name: Option<ResourceId>,
+    pub name: Option<String>,
 }
 
 struct LaunchConfigurationDeserializer;
@@ -5692,13 +5614,12 @@ impl LaunchConfigurationDeserializer {
 
     }
 }
-pub type LaunchConfigurationList = Vec<LaunchConfiguration>;
 struct LaunchConfigurationListDeserializer;
 impl LaunchConfigurationListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LaunchConfigurationList, XmlParseError> {
+                                       -> Result<Vec<LaunchConfiguration>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5735,13 +5656,12 @@ impl LaunchConfigurationListDeserializer {
 
     }
 }
-pub type LaunchedAt = String;
 struct LaunchedAtDeserializer;
 impl LaunchedAtDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LaunchedAt, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5754,9 +5674,9 @@ impl LaunchedAtDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListAvailableSolutionStacksResultMessage {
     #[doc="<p> A list of available solution stacks and their <a>SolutionStackDescription</a>. </p>"]
-    pub solution_stack_details: Option<AvailableSolutionStackDetailsList>,
+    pub solution_stack_details: Option<Vec<SolutionStackDescription>>,
     #[doc="<p>A list of available solution stacks.</p>"]
-    pub solution_stacks: Option<AvailableSolutionStackNamesList>,
+    pub solution_stacks: Option<Vec<String>>,
 }
 
 struct ListAvailableSolutionStacksResultMessageDeserializer;
@@ -5807,11 +5727,11 @@ impl ListAvailableSolutionStacksResultMessageDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListPlatformVersionsRequest {
     #[doc="<p>List only the platforms where the platform member value relates to one of the supplied values.</p>"]
-    pub filters: Option<PlatformFilters>,
+    pub filters: Option<Vec<PlatformFilter>>,
     #[doc="<p>The maximum number of platform values returned in one call.</p>"]
-    pub max_records: Option<PlatformMaxRecords>,
+    pub max_records: Option<i64>,
     #[doc="<p>The starting index into the remaining list of platforms. Use the <code>NextToken</code> value from a previous <code>ListPlatformVersion</code> call.</p>"]
-    pub next_token: Option<Token>,
+    pub next_token: Option<String>,
 }
 
 
@@ -5843,9 +5763,9 @@ impl ListPlatformVersionsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListPlatformVersionsResult {
     #[doc="<p>The starting index into the remaining list of platforms. if this value is not <code>null</code>, you can use it in a subsequent <code>ListPlatformVersion</code> call. </p>"]
-    pub next_token: Option<Token>,
+    pub next_token: Option<String>,
     #[doc="<p>Detailed information about the platforms.</p>"]
-    pub platform_summary_list: Option<PlatformSummaryList>,
+    pub platform_summary_list: Option<Vec<PlatformSummary>>,
 }
 
 struct ListPlatformVersionsResultDeserializer;
@@ -5899,7 +5819,7 @@ impl ListPlatformVersionsResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct Listener {
     #[doc="<p>The port that is used by the Listener.</p>"]
-    pub port: Option<Integer>,
+    pub port: Option<i64>,
     #[doc="<p>The protocol that is used by the Listener.</p>"]
     pub protocol: Option<String>,
 }
@@ -5949,13 +5869,12 @@ impl ListenerDeserializer {
 
     }
 }
-pub type LoadAverage = Vec<LoadAverageValue>;
 struct LoadAverageDeserializer;
 impl LoadAverageDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LoadAverage, XmlParseError> {
+                                       -> Result<Vec<f64>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5991,13 +5910,12 @@ impl LoadAverageDeserializer {
 
     }
 }
-pub type LoadAverageValue = f64;
 struct LoadAverageValueDeserializer;
 impl LoadAverageValueDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LoadAverageValue, XmlParseError> {
+                                       -> Result<f64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = f64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -6010,7 +5928,7 @@ impl LoadAverageValueDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct LoadBalancer {
     #[doc="<p>The name of the LoadBalancer.</p>"]
-    pub name: Option<ResourceId>,
+    pub name: Option<String>,
 }
 
 struct LoadBalancerDeserializer;
@@ -6061,7 +5979,7 @@ pub struct LoadBalancerDescription {
     #[doc="<p>The domain name of the LoadBalancer.</p>"]
     pub domain: Option<String>,
     #[doc="<p>A list of Listeners used by the LoadBalancer.</p>"]
-    pub listeners: Option<LoadBalancerListenersDescription>,
+    pub listeners: Option<Vec<Listener>>,
     #[doc="<p>The name of the LoadBalancer.</p>"]
     pub load_balancer_name: Option<String>,
 }
@@ -6116,13 +6034,12 @@ impl LoadBalancerDescriptionDeserializer {
 
     }
 }
-pub type LoadBalancerList = Vec<LoadBalancer>;
 struct LoadBalancerListDeserializer;
 impl LoadBalancerListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LoadBalancerList, XmlParseError> {
+                                       -> Result<Vec<LoadBalancer>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -6158,14 +6075,12 @@ impl LoadBalancerListDeserializer {
 
     }
 }
-pub type LoadBalancerListenersDescription = Vec<Listener>;
 struct LoadBalancerListenersDescriptionDeserializer;
 impl LoadBalancerListenersDescriptionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<LoadBalancerListenersDescription, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<Vec<Listener>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -6201,13 +6116,12 @@ impl LoadBalancerListenersDescriptionDeserializer {
 
     }
 }
-pub type Maintainer = String;
 struct MaintainerDeserializer;
 impl MaintainerDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Maintainer, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -6224,11 +6138,11 @@ pub struct ManagedAction {
     #[doc="<p>A unique identifier for the managed action.</p>"]
     pub action_id: Option<String>,
     #[doc="<p>The type of managed action.</p>"]
-    pub action_type: Option<ActionType>,
+    pub action_type: Option<String>,
     #[doc="<p>The status of the managed action. If the action is <code>Scheduled</code>, you can apply it immediately with <a>ApplyEnvironmentManagedAction</a>.</p>"]
-    pub status: Option<ActionStatus>,
+    pub status: Option<String>,
     #[doc="<p>The start time of the maintenance window in which the managed action will execute.</p>"]
-    pub window_start_time: Option<Timestamp>,
+    pub window_start_time: Option<String>,
 }
 
 struct ManagedActionDeserializer;
@@ -6300,17 +6214,17 @@ pub struct ManagedActionHistoryItem {
     #[doc="<p>A unique identifier for the managed action.</p>"]
     pub action_id: Option<String>,
     #[doc="<p>The type of the managed action.</p>"]
-    pub action_type: Option<ActionType>,
+    pub action_type: Option<String>,
     #[doc="<p>The date and time that the action started executing.</p>"]
-    pub executed_time: Option<Timestamp>,
+    pub executed_time: Option<String>,
     #[doc="<p>If the action failed, a description of the failure.</p>"]
     pub failure_description: Option<String>,
     #[doc="<p>If the action failed, the type of failure.</p>"]
-    pub failure_type: Option<FailureType>,
+    pub failure_type: Option<String>,
     #[doc="<p>The date and time that the action finished executing.</p>"]
-    pub finished_time: Option<Timestamp>,
+    pub finished_time: Option<String>,
     #[doc="<p>The status of the action.</p>"]
-    pub status: Option<ActionHistoryStatus>,
+    pub status: Option<String>,
 }
 
 struct ManagedActionHistoryItemDeserializer;
@@ -6390,13 +6304,12 @@ impl ManagedActionHistoryItemDeserializer {
 
     }
 }
-pub type ManagedActionHistoryItems = Vec<ManagedActionHistoryItem>;
 struct ManagedActionHistoryItemsDeserializer;
 impl ManagedActionHistoryItemsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ManagedActionHistoryItems, XmlParseError> {
+                                       -> Result<Vec<ManagedActionHistoryItem>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -6433,13 +6346,12 @@ impl ManagedActionHistoryItemsDeserializer {
 
     }
 }
-pub type ManagedActions = Vec<ManagedAction>;
 struct ManagedActionsDeserializer;
 impl ManagedActionsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ManagedActions, XmlParseError> {
+                                       -> Result<Vec<ManagedAction>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -6479,11 +6391,11 @@ impl ManagedActionsDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct MaxAgeRule {
     #[doc="<p>Set to <code>true</code> to delete a version's source bundle from Amazon S3 when Elastic Beanstalk deletes the application version.</p>"]
-    pub delete_source_from_s3: Option<BoxedBoolean>,
+    pub delete_source_from_s3: Option<bool>,
     #[doc="<p>Specify <code>true</code> to apply the rule, or <code>false</code> to disable it.</p>"]
-    pub enabled: BoxedBoolean,
+    pub enabled: bool,
     #[doc="<p>Specify the number of days to retain an application versions.</p>"]
-    pub max_age_in_days: Option<BoxedInt>,
+    pub max_age_in_days: Option<i64>,
 }
 
 struct MaxAgeRuleDeserializer;
@@ -6566,11 +6478,11 @@ impl MaxAgeRuleSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct MaxCountRule {
     #[doc="<p>Set to <code>true</code> to delete a version's source bundle from Amazon S3 when Elastic Beanstalk deletes the application version.</p>"]
-    pub delete_source_from_s3: Option<BoxedBoolean>,
+    pub delete_source_from_s3: Option<bool>,
     #[doc="<p>Specify <code>true</code> to apply the rule, or <code>false</code> to disable it.</p>"]
-    pub enabled: BoxedBoolean,
+    pub enabled: bool,
     #[doc="<p>Specify the maximum number of application versions to retain.</p>"]
-    pub max_count: Option<BoxedInt>,
+    pub max_count: Option<i64>,
 }
 
 struct MaxCountRuleDeserializer;
@@ -6648,14 +6560,12 @@ impl MaxCountRuleSerializer {
     }
 }
 
-pub type MaxRecords = i64;
-pub type Message = String;
 struct MessageDeserializer;
 impl MessageDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Message, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -6664,13 +6574,12 @@ impl MessageDeserializer {
 
     }
 }
-pub type NextToken = String;
 struct NextTokenDeserializer;
 impl NextTokenDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NextToken, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -6679,14 +6588,12 @@ impl NextTokenDeserializer {
 
     }
 }
-pub type NonEmptyString = String;
-pub type NullableDouble = f64;
 struct NullableDoubleDeserializer;
 impl NullableDoubleDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NullableDouble, XmlParseError> {
+                                       -> Result<f64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = f64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -6695,13 +6602,12 @@ impl NullableDoubleDeserializer {
 
     }
 }
-pub type NullableInteger = i64;
 struct NullableIntegerDeserializer;
 impl NullableIntegerDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NullableInteger, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -6710,13 +6616,12 @@ impl NullableIntegerDeserializer {
 
     }
 }
-pub type NullableLong = i64;
 struct NullableLongDeserializer;
 impl NullableLongDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NullableLong, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -6725,13 +6630,12 @@ impl NullableLongDeserializer {
 
     }
 }
-pub type OperatingSystemName = String;
 struct OperatingSystemNameDeserializer;
 impl OperatingSystemNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<OperatingSystemName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -6740,13 +6644,12 @@ impl OperatingSystemNameDeserializer {
 
     }
 }
-pub type OperatingSystemVersion = String;
 struct OperatingSystemVersionDeserializer;
 impl OperatingSystemVersionDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<OperatingSystemVersion, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -6755,13 +6658,12 @@ impl OperatingSystemVersionDeserializer {
 
     }
 }
-pub type OptionNamespace = String;
 struct OptionNamespaceDeserializer;
 impl OptionNamespaceDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<OptionNamespace, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -6770,13 +6672,12 @@ impl OptionNamespaceDeserializer {
 
     }
 }
-pub type OptionRestrictionMaxLength = i64;
 struct OptionRestrictionMaxLengthDeserializer;
 impl OptionRestrictionMaxLengthDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<OptionRestrictionMaxLength, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -6785,13 +6686,12 @@ impl OptionRestrictionMaxLengthDeserializer {
 
     }
 }
-pub type OptionRestrictionMaxValue = i64;
 struct OptionRestrictionMaxValueDeserializer;
 impl OptionRestrictionMaxValueDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<OptionRestrictionMaxValue, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -6800,13 +6700,12 @@ impl OptionRestrictionMaxValueDeserializer {
 
     }
 }
-pub type OptionRestrictionMinValue = i64;
 struct OptionRestrictionMinValueDeserializer;
 impl OptionRestrictionMinValueDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<OptionRestrictionMinValue, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -6819,9 +6718,9 @@ impl OptionRestrictionMinValueDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct OptionRestrictionRegex {
     #[doc="<p>A unique name representing this regular expression.</p>"]
-    pub label: Option<RegexLabel>,
+    pub label: Option<String>,
     #[doc="<p>The regular expression pattern that a string configuration option value with this restriction must match.</p>"]
-    pub pattern: Option<RegexPattern>,
+    pub pattern: Option<String>,
 }
 
 struct OptionRestrictionRegexDeserializer;
@@ -6874,11 +6773,11 @@ impl OptionRestrictionRegexDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct OptionSpecification {
     #[doc="<p>A unique namespace identifying the option's associated AWS resource.</p>"]
-    pub namespace: Option<OptionNamespace>,
+    pub namespace: Option<String>,
     #[doc="<p>The name of the configuration option.</p>"]
-    pub option_name: Option<ConfigurationOptionName>,
+    pub option_name: Option<String>,
     #[doc="<p>A unique resource name for a time-based scaling configuration option.</p>"]
-    pub resource_name: Option<ResourceName>,
+    pub resource_name: Option<String>,
 }
 
 
@@ -6904,12 +6803,11 @@ impl OptionSpecificationSerializer {
     }
 }
 
-pub type OptionsSpecifierList = Vec<OptionSpecification>;
 
 /// Serialize `OptionsSpecifierList` contents to a `SignedRequest`.
 struct OptionsSpecifierListSerializer;
 impl OptionsSpecifierListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &OptionsSpecifierList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<OptionSpecification>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             OptionSpecificationSerializer::serialize(params, &key, obj);
@@ -6917,13 +6815,12 @@ impl OptionsSpecifierListSerializer {
     }
 }
 
-pub type PlatformArn = String;
 struct PlatformArnDeserializer;
 impl PlatformArnDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PlatformArn, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -6932,13 +6829,12 @@ impl PlatformArnDeserializer {
 
     }
 }
-pub type PlatformCategory = String;
 struct PlatformCategoryDeserializer;
 impl PlatformCategoryDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PlatformCategory, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -6951,41 +6847,41 @@ impl PlatformCategoryDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct PlatformDescription {
     #[doc="<p>The custom AMIs supported by the platform.</p>"]
-    pub custom_ami_list: Option<CustomAmiList>,
+    pub custom_ami_list: Option<Vec<CustomAmi>>,
     #[doc="<p>The date when the platform was created.</p>"]
-    pub date_created: Option<CreationDate>,
+    pub date_created: Option<String>,
     #[doc="<p>The date when the platform was last updated.</p>"]
-    pub date_updated: Option<UpdateDate>,
+    pub date_updated: Option<String>,
     #[doc="<p>The description of the platform.</p>"]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[doc="<p>The frameworks supported by the platform.</p>"]
-    pub frameworks: Option<PlatformFrameworks>,
+    pub frameworks: Option<Vec<PlatformFramework>>,
     #[doc="<p>Information about the maintainer of the platform.</p>"]
-    pub maintainer: Option<Maintainer>,
+    pub maintainer: Option<String>,
     #[doc="<p>The operating system used by the platform.</p>"]
-    pub operating_system_name: Option<OperatingSystemName>,
+    pub operating_system_name: Option<String>,
     #[doc="<p>The version of the operating system used by the platform.</p>"]
-    pub operating_system_version: Option<OperatingSystemVersion>,
+    pub operating_system_version: Option<String>,
     #[doc="<p>The ARN of the platform.</p>"]
-    pub platform_arn: Option<PlatformArn>,
+    pub platform_arn: Option<String>,
     #[doc="<p>The category of the platform.</p>"]
-    pub platform_category: Option<PlatformCategory>,
+    pub platform_category: Option<String>,
     #[doc="<p>The name of the platform.</p>"]
-    pub platform_name: Option<PlatformName>,
+    pub platform_name: Option<String>,
     #[doc="<p>The AWS account ID of the person who created the platform.</p>"]
-    pub platform_owner: Option<PlatformOwner>,
+    pub platform_owner: Option<String>,
     #[doc="<p>The status of the platform.</p>"]
-    pub platform_status: Option<PlatformStatus>,
+    pub platform_status: Option<String>,
     #[doc="<p>The version of the platform.</p>"]
-    pub platform_version: Option<PlatformVersion>,
+    pub platform_version: Option<String>,
     #[doc="<p>The programming languages supported by the platform.</p>"]
-    pub programming_languages: Option<PlatformProgrammingLanguages>,
+    pub programming_languages: Option<Vec<PlatformProgrammingLanguage>>,
     #[doc="<p>The name of the solution stack used by the platform.</p>"]
-    pub solution_stack_name: Option<SolutionStackName>,
+    pub solution_stack_name: Option<String>,
     #[doc="<p>The additions supported by the platform.</p>"]
-    pub supported_addon_list: Option<SupportedAddonList>,
+    pub supported_addon_list: Option<Vec<String>>,
     #[doc="<p>The tiers supported by the platform.</p>"]
-    pub supported_tier_list: Option<SupportedTierList>,
+    pub supported_tier_list: Option<Vec<String>>,
 }
 
 struct PlatformDescriptionDeserializer;
@@ -7117,11 +7013,11 @@ impl PlatformDescriptionDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct PlatformFilter {
     #[doc="<p>The operator to apply to the <code>Type</code> with each of the <code>Values</code>.</p> <p> Valid Values: <code>=</code> (equal to) | <code>!=</code> (not equal to) | <code>&lt;</code> (less than) | <code>&lt;=</code> (less than or equal to) | <code>&gt;</code> (greater than) | <code>&gt;=</code> (greater than or equal to) | <code>contains</code> | <code>begins_with</code> | <code>ends_with</code> </p>"]
-    pub operator: Option<PlatformFilterOperator>,
+    pub operator: Option<String>,
     #[doc="<p>The custom platform attribute to which the filter values are applied.</p> <p>Valid Values: <code>PlatformName</code> | <code>PlatformVersion</code> | <code>PlatformStatus</code> | <code>PlatformOwner</code> </p>"]
-    pub type_: Option<PlatformFilterType>,
+    pub type_: Option<String>,
     #[doc="<p>The list of values applied to the custom platform attribute.</p>"]
-    pub values: Option<PlatformFilterValueList>,
+    pub values: Option<Vec<String>>,
 }
 
 
@@ -7149,15 +7045,11 @@ impl PlatformFilterSerializer {
     }
 }
 
-pub type PlatformFilterOperator = String;
-pub type PlatformFilterType = String;
-pub type PlatformFilterValue = String;
-pub type PlatformFilterValueList = Vec<PlatformFilterValue>;
 
 /// Serialize `PlatformFilterValueList` contents to a `SignedRequest`.
 struct PlatformFilterValueListSerializer;
 impl PlatformFilterValueListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &PlatformFilterValueList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -7165,12 +7057,11 @@ impl PlatformFilterValueListSerializer {
     }
 }
 
-pub type PlatformFilters = Vec<PlatformFilter>;
 
 /// Serialize `PlatformFilters` contents to a `SignedRequest`.
 struct PlatformFiltersSerializer;
 impl PlatformFiltersSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &PlatformFilters) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<PlatformFilter>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             PlatformFilterSerializer::serialize(params, &key, obj);
@@ -7232,13 +7123,12 @@ impl PlatformFrameworkDeserializer {
 
     }
 }
-pub type PlatformFrameworks = Vec<PlatformFramework>;
 struct PlatformFrameworksDeserializer;
 impl PlatformFrameworksDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PlatformFrameworks, XmlParseError> {
+                                       -> Result<Vec<PlatformFramework>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -7274,14 +7164,12 @@ impl PlatformFrameworksDeserializer {
 
     }
 }
-pub type PlatformMaxRecords = i64;
-pub type PlatformName = String;
 struct PlatformNameDeserializer;
 impl PlatformNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PlatformName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7290,13 +7178,12 @@ impl PlatformNameDeserializer {
 
     }
 }
-pub type PlatformOwner = String;
 struct PlatformOwnerDeserializer;
 impl PlatformOwnerDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PlatformOwner, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7359,13 +7246,13 @@ impl PlatformProgrammingLanguageDeserializer {
 
     }
 }
-pub type PlatformProgrammingLanguages = Vec<PlatformProgrammingLanguage>;
 struct PlatformProgrammingLanguagesDeserializer;
 impl PlatformProgrammingLanguagesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<PlatformProgrammingLanguages, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<Vec<PlatformProgrammingLanguage>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -7401,13 +7288,12 @@ impl PlatformProgrammingLanguagesDeserializer {
 
     }
 }
-pub type PlatformStatus = String;
 struct PlatformStatusDeserializer;
 impl PlatformStatusDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PlatformStatus, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7420,21 +7306,21 @@ impl PlatformStatusDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct PlatformSummary {
     #[doc="<p>The operating system used by the platform.</p>"]
-    pub operating_system_name: Option<OperatingSystemName>,
+    pub operating_system_name: Option<String>,
     #[doc="<p>The version of the operating system used by the platform.</p>"]
-    pub operating_system_version: Option<OperatingSystemVersion>,
+    pub operating_system_version: Option<String>,
     #[doc="<p>The ARN of the platform.</p>"]
-    pub platform_arn: Option<PlatformArn>,
+    pub platform_arn: Option<String>,
     #[doc="<p>The category of platform.</p>"]
-    pub platform_category: Option<PlatformCategory>,
+    pub platform_category: Option<String>,
     #[doc="<p>The AWS account ID of the person who created the platform.</p>"]
-    pub platform_owner: Option<PlatformOwner>,
+    pub platform_owner: Option<String>,
     #[doc="<p>The status of the platform. You can create an environment from the platform once it is ready.</p>"]
-    pub platform_status: Option<PlatformStatus>,
+    pub platform_status: Option<String>,
     #[doc="<p>The additions associated with the platform.</p>"]
-    pub supported_addon_list: Option<SupportedAddonList>,
+    pub supported_addon_list: Option<Vec<String>>,
     #[doc="<p>The tiers in which the platform runs.</p>"]
-    pub supported_tier_list: Option<SupportedTierList>,
+    pub supported_tier_list: Option<Vec<String>>,
 }
 
 struct PlatformSummaryDeserializer;
@@ -7515,13 +7401,12 @@ impl PlatformSummaryDeserializer {
 
     }
 }
-pub type PlatformSummaryList = Vec<PlatformSummary>;
 struct PlatformSummaryListDeserializer;
 impl PlatformSummaryListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PlatformSummaryList, XmlParseError> {
+                                       -> Result<Vec<PlatformSummary>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -7557,13 +7442,12 @@ impl PlatformSummaryListDeserializer {
 
     }
 }
-pub type PlatformVersion = String;
 struct PlatformVersionDeserializer;
 impl PlatformVersionDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PlatformVersion, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7625,13 +7509,12 @@ impl QueueDeserializer {
 
     }
 }
-pub type QueueList = Vec<Queue>;
 struct QueueListDeserializer;
 impl QueueListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<QueueList, XmlParseError> {
+                                       -> Result<Vec<Queue>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -7671,9 +7554,9 @@ impl QueueListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct RebuildEnvironmentMessage {
     #[doc="<p>The ID of the environment to rebuild.</p> <p> Condition: You must specify either this or an EnvironmentName, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>"]
-    pub environment_id: Option<EnvironmentId>,
+    pub environment_id: Option<String>,
     #[doc="<p>The name of the environment to rebuild.</p> <p> Condition: You must specify either this or an EnvironmentId, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>"]
-    pub environment_name: Option<EnvironmentName>,
+    pub environment_name: Option<String>,
 }
 
 
@@ -7696,13 +7579,12 @@ impl RebuildEnvironmentMessageSerializer {
     }
 }
 
-pub type RefreshedAt = String;
 struct RefreshedAtDeserializer;
 impl RefreshedAtDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<RefreshedAt, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7711,13 +7593,12 @@ impl RefreshedAtDeserializer {
 
     }
 }
-pub type RegexLabel = String;
 struct RegexLabelDeserializer;
 impl RegexLabelDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<RegexLabel, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7726,13 +7607,12 @@ impl RegexLabelDeserializer {
 
     }
 }
-pub type RegexPattern = String;
 struct RegexPatternDeserializer;
 impl RegexPatternDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<RegexPattern, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7741,13 +7621,12 @@ impl RegexPatternDeserializer {
 
     }
 }
-pub type RequestCount = i64;
 struct RequestCountDeserializer;
 impl RequestCountDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<RequestCount, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -7760,11 +7639,11 @@ impl RequestCountDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct RequestEnvironmentInfoMessage {
     #[doc="<p>The ID of the environment of the requested data.</p> <p>If no such environment is found, <code>RequestEnvironmentInfo</code> returns an <code>InvalidParameterValue</code> error. </p> <p>Condition: You must specify either this or an EnvironmentName, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>"]
-    pub environment_id: Option<EnvironmentId>,
+    pub environment_id: Option<String>,
     #[doc="<p>The name of the environment of the requested data.</p> <p>If no such environment is found, <code>RequestEnvironmentInfo</code> returns an <code>InvalidParameterValue</code> error. </p> <p>Condition: You must specify either this or an EnvironmentId, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>"]
-    pub environment_name: Option<EnvironmentName>,
+    pub environment_name: Option<String>,
     #[doc="<p>The type of information to request.</p>"]
-    pub info_type: EnvironmentInfoType,
+    pub info_type: String,
 }
 
 
@@ -7788,13 +7667,12 @@ impl RequestEnvironmentInfoMessageSerializer {
     }
 }
 
-pub type RequestId = String;
 struct RequestIdDeserializer;
 impl RequestIdDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<RequestId, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7803,13 +7681,12 @@ impl RequestIdDeserializer {
 
     }
 }
-pub type ResourceId = String;
 struct ResourceIdDeserializer;
 impl ResourceIdDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ResourceId, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7818,13 +7695,12 @@ impl ResourceIdDeserializer {
 
     }
 }
-pub type ResourceName = String;
 struct ResourceNameDeserializer;
 impl ResourceNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ResourceName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7837,9 +7713,9 @@ impl ResourceNameDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct RestartAppServerMessage {
     #[doc="<p>The ID of the environment to restart the server for.</p> <p> Condition: You must specify either this or an EnvironmentName, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>"]
-    pub environment_id: Option<EnvironmentId>,
+    pub environment_id: Option<String>,
     #[doc="<p>The name of the environment to restart the server for.</p> <p> Condition: You must specify either this or an EnvironmentId, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>"]
-    pub environment_name: Option<EnvironmentName>,
+    pub environment_name: Option<String>,
 }
 
 
@@ -7866,11 +7742,11 @@ impl RestartAppServerMessageSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct RetrieveEnvironmentInfoMessage {
     #[doc="<p>The ID of the data's environment.</p> <p>If no such environment is found, returns an <code>InvalidParameterValue</code> error.</p> <p>Condition: You must specify either this or an EnvironmentName, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error.</p>"]
-    pub environment_id: Option<EnvironmentId>,
+    pub environment_id: Option<String>,
     #[doc="<p>The name of the data's environment.</p> <p> If no such environment is found, returns an <code>InvalidParameterValue</code> error. </p> <p> Condition: You must specify either this or an EnvironmentId, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>"]
-    pub environment_name: Option<EnvironmentName>,
+    pub environment_name: Option<String>,
     #[doc="<p>The type of information to retrieve.</p>"]
-    pub info_type: EnvironmentInfoType,
+    pub info_type: String,
 }
 
 
@@ -7898,7 +7774,7 @@ impl RetrieveEnvironmentInfoMessageSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct RetrieveEnvironmentInfoResultMessage {
     #[doc="<p> The <a>EnvironmentInfoDescription</a> of the environment. </p>"]
-    pub environment_info: Option<EnvironmentInfoDescriptionList>,
+    pub environment_info: Option<Vec<EnvironmentInfoDescription>>,
 }
 
 struct RetrieveEnvironmentInfoResultMessageDeserializer;
@@ -7943,13 +7819,12 @@ impl RetrieveEnvironmentInfoResultMessageDeserializer {
 
     }
 }
-pub type S3Bucket = String;
 struct S3BucketDeserializer;
 impl S3BucketDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<S3Bucket, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7958,13 +7833,12 @@ impl S3BucketDeserializer {
 
     }
 }
-pub type S3Key = String;
 struct S3KeyDeserializer;
 impl S3KeyDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<S3Key, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7977,9 +7851,9 @@ impl S3KeyDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct S3Location {
     #[doc="<p>The Amazon S3 bucket where the data is located.</p>"]
-    pub s3_bucket: Option<S3Bucket>,
+    pub s3_bucket: Option<String>,
     #[doc="<p>The Amazon S3 key where the data is located.</p>"]
-    pub s3_key: Option<S3Key>,
+    pub s3_key: Option<String>,
 }
 
 struct S3LocationDeserializer;
@@ -8047,13 +7921,12 @@ impl S3LocationSerializer {
     }
 }
 
-pub type SampleTimestamp = String;
 struct SampleTimestampDeserializer;
 impl SampleTimestampDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SampleTimestamp, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -8070,7 +7943,7 @@ pub struct SingleInstanceHealth {
     #[doc="<p>The availability zone in which the instance runs.</p>"]
     pub availability_zone: Option<String>,
     #[doc="<p>Represents the causes, which provide more information about the current health status.</p>"]
-    pub causes: Option<Causes>,
+    pub causes: Option<Vec<String>>,
     #[doc="<p>Represents the color indicator that gives you information about the health of the EC2 instance. For more information, see <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced-status.html\">Health Colors and Statuses</a>.</p>"]
     pub color: Option<String>,
     #[doc="<p>Information about the most recent deployment to an instance.</p>"]
@@ -8078,11 +7951,11 @@ pub struct SingleInstanceHealth {
     #[doc="<p>Returns the health status of the specified instance. For more information, see <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced-status.html\">Health Colors and Statuses</a>.</p>"]
     pub health_status: Option<String>,
     #[doc="<p>The ID of the Amazon EC2 instance.</p>"]
-    pub instance_id: Option<InstanceId>,
+    pub instance_id: Option<String>,
     #[doc="<p>The instance's type.</p>"]
     pub instance_type: Option<String>,
     #[doc="<p>The time at which the EC2 instance was launched.</p>"]
-    pub launched_at: Option<LaunchedAt>,
+    pub launched_at: Option<String>,
     #[doc="<p>Operating system metrics from the instance.</p>"]
     pub system: Option<SystemStatus>,
 }
@@ -8172,9 +8045,9 @@ impl SingleInstanceHealthDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct SolutionStackDescription {
     #[doc="<p>The permitted file types allowed for a solution stack.</p>"]
-    pub permitted_file_types: Option<SolutionStackFileTypeList>,
+    pub permitted_file_types: Option<Vec<String>>,
     #[doc="<p>The name of the solution stack.</p>"]
-    pub solution_stack_name: Option<SolutionStackName>,
+    pub solution_stack_name: Option<String>,
 }
 
 struct SolutionStackDescriptionDeserializer;
@@ -8223,13 +8096,12 @@ impl SolutionStackDescriptionDeserializer {
 
     }
 }
-pub type SolutionStackFileTypeList = Vec<FileTypeExtension>;
 struct SolutionStackFileTypeListDeserializer;
 impl SolutionStackFileTypeListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SolutionStackFileTypeList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -8265,13 +8137,12 @@ impl SolutionStackFileTypeListDeserializer {
 
     }
 }
-pub type SolutionStackName = String;
 struct SolutionStackNameDeserializer;
 impl SolutionStackNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SolutionStackName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -8284,11 +8155,11 @@ impl SolutionStackNameDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct SourceBuildInformation {
     #[doc="<p>The location of the source code, as a formatted string, depending on the value of <code>SourceRepository</code> </p> <ul> <li> <p>For <code>CodeCommit</code>, the format is the repository name and commit ID, separated by a forward slash. For example, <code>my-git-repo/265cfa0cf6af46153527f55d6503ec030551f57a</code>.</p> </li> <li> <p>For <code>S3</code>, the format is the S3 bucket name and object key, separated by a forward slash. For example, <code>my-s3-bucket/Folders/my-source-file</code>.</p> </li> </ul>"]
-    pub source_location: SourceLocation,
+    pub source_location: String,
     #[doc="<p>Location where the repository is stored.</p> <ul> <li> <p> <code>CodeCommit</code> </p> </li> <li> <p> <code>S3</code> </p> </li> </ul>"]
-    pub source_repository: SourceRepository,
+    pub source_repository: String,
     #[doc="<p>The type of repository.</p> <ul> <li> <p> <code>Git</code> </p> </li> <li> <p> <code>Zip</code> </p> </li> </ul>"]
-    pub source_type: SourceType,
+    pub source_type: String,
 }
 
 struct SourceBuildInformationDeserializer;
@@ -8366,9 +8237,9 @@ impl SourceBuildInformationSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct SourceConfiguration {
     #[doc="<p>The name of the application associated with the configuration.</p>"]
-    pub application_name: Option<ApplicationName>,
+    pub application_name: Option<String>,
     #[doc="<p>The name of the configuration template.</p>"]
-    pub template_name: Option<ConfigurationTemplateName>,
+    pub template_name: Option<String>,
 }
 
 
@@ -8391,13 +8262,12 @@ impl SourceConfigurationSerializer {
     }
 }
 
-pub type SourceLocation = String;
 struct SourceLocationDeserializer;
 impl SourceLocationDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SourceLocation, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -8406,13 +8276,12 @@ impl SourceLocationDeserializer {
 
     }
 }
-pub type SourceRepository = String;
 struct SourceRepositoryDeserializer;
 impl SourceRepositoryDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SourceRepository, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -8421,13 +8290,12 @@ impl SourceRepositoryDeserializer {
 
     }
 }
-pub type SourceType = String;
 struct SourceTypeDeserializer;
 impl SourceTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SourceType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -8440,13 +8308,13 @@ impl SourceTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct StatusCodes {
     #[doc="<p>The percentage of requests over the last 10 seconds that resulted in a 2xx (200, 201, etc.) status code.</p>"]
-    pub status_2xx: Option<NullableInteger>,
+    pub status_2xx: Option<i64>,
     #[doc="<p>The percentage of requests over the last 10 seconds that resulted in a 3xx (300, 301, etc.) status code.</p>"]
-    pub status_3xx: Option<NullableInteger>,
+    pub status_3xx: Option<i64>,
     #[doc="<p>The percentage of requests over the last 10 seconds that resulted in a 4xx (400, 401, etc.) status code.</p>"]
-    pub status_4xx: Option<NullableInteger>,
+    pub status_4xx: Option<i64>,
     #[doc="<p>The percentage of requests over the last 10 seconds that resulted in a 5xx (500, 501, etc.) status code.</p>"]
-    pub status_5xx: Option<NullableInteger>,
+    pub status_5xx: Option<i64>,
 }
 
 struct StatusCodesDeserializer;
@@ -8521,13 +8389,12 @@ impl StringDeserializer {
 
     }
 }
-pub type SupportedAddon = String;
 struct SupportedAddonDeserializer;
 impl SupportedAddonDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SupportedAddon, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -8536,13 +8403,12 @@ impl SupportedAddonDeserializer {
 
     }
 }
-pub type SupportedAddonList = Vec<SupportedAddon>;
 struct SupportedAddonListDeserializer;
 impl SupportedAddonListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SupportedAddonList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -8578,13 +8444,12 @@ impl SupportedAddonListDeserializer {
 
     }
 }
-pub type SupportedTier = String;
 struct SupportedTierDeserializer;
 impl SupportedTierDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SupportedTier, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -8593,13 +8458,12 @@ impl SupportedTierDeserializer {
 
     }
 }
-pub type SupportedTierList = Vec<SupportedTier>;
 struct SupportedTierListDeserializer;
 impl SupportedTierListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SupportedTierList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -8639,13 +8503,13 @@ impl SupportedTierListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct SwapEnvironmentCNAMEsMessage {
     #[doc="<p>The ID of the destination environment.</p> <p> Condition: You must specify at least the <code>DestinationEnvironmentID</code> or the <code>DestinationEnvironmentName</code>. You may also specify both. You must specify the <code>SourceEnvironmentId</code> with the <code>DestinationEnvironmentId</code>. </p>"]
-    pub destination_environment_id: Option<EnvironmentId>,
+    pub destination_environment_id: Option<String>,
     #[doc="<p>The name of the destination environment.</p> <p> Condition: You must specify at least the <code>DestinationEnvironmentID</code> or the <code>DestinationEnvironmentName</code>. You may also specify both. You must specify the <code>SourceEnvironmentName</code> with the <code>DestinationEnvironmentName</code>. </p>"]
-    pub destination_environment_name: Option<EnvironmentName>,
+    pub destination_environment_name: Option<String>,
     #[doc="<p>The ID of the source environment.</p> <p> Condition: You must specify at least the <code>SourceEnvironmentID</code> or the <code>SourceEnvironmentName</code>. You may also specify both. If you specify the <code>SourceEnvironmentId</code>, you must specify the <code>DestinationEnvironmentId</code>. </p>"]
-    pub source_environment_id: Option<EnvironmentId>,
+    pub source_environment_id: Option<String>,
     #[doc="<p>The name of the source environment.</p> <p> Condition: You must specify at least the <code>SourceEnvironmentID</code> or the <code>SourceEnvironmentName</code>. You may also specify both. If you specify the <code>SourceEnvironmentName</code>, you must specify the <code>DestinationEnvironmentName</code>. </p>"]
-    pub source_environment_name: Option<EnvironmentName>,
+    pub source_environment_name: Option<String>,
 }
 
 
@@ -8684,7 +8548,7 @@ pub struct SystemStatus {
     #[doc="<p>CPU utilization metrics for the instance.</p>"]
     pub cpu_utilization: Option<CPUUtilization>,
     #[doc="<p>Load average in the last 1-minute, 5-minute, and 15-minute periods. For more information, see <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced-metrics.html#health-enhanced-metrics-os\">Operating System Metrics</a>.</p>"]
-    pub load_average: Option<LoadAverage>,
+    pub load_average: Option<Vec<f64>>,
 }
 
 struct SystemStatusDeserializer;
@@ -8739,9 +8603,9 @@ impl SystemStatusDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct Tag {
     #[doc="<p>The key of the tag.</p>"]
-    pub key: Option<TagKey>,
+    pub key: Option<String>,
     #[doc="<p>The value of the tag.</p>"]
-    pub value: Option<TagValue>,
+    pub value: Option<String>,
 }
 
 
@@ -8764,14 +8628,11 @@ impl TagSerializer {
     }
 }
 
-pub type TagKey = String;
-pub type TagValue = String;
-pub type Tags = Vec<Tag>;
 
 /// Serialize `Tags` contents to a `SignedRequest`.
 struct TagsSerializer;
 impl TagsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Tags) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<Tag>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             TagSerializer::serialize(params, &key, obj);
@@ -8779,18 +8640,17 @@ impl TagsSerializer {
     }
 }
 
-pub type TerminateEnvForce = bool;
 #[doc="<p>Request to terminate an environment.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct TerminateEnvironmentMessage {
     #[doc="<p>The ID of the environment to terminate.</p> <p> Condition: You must specify either this or an EnvironmentName, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>"]
-    pub environment_id: Option<EnvironmentId>,
+    pub environment_id: Option<String>,
     #[doc="<p>The name of the environment to terminate.</p> <p> Condition: You must specify either this or an EnvironmentId, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>"]
-    pub environment_name: Option<EnvironmentName>,
+    pub environment_name: Option<String>,
     #[doc="<p>Terminates the target environment even if another environment in the same group is dependent on it.</p>"]
-    pub force_terminate: Option<ForceTerminate>,
+    pub force_terminate: Option<bool>,
     #[doc="<p>Indicates whether the associated AWS resources should shut down when the environment is terminated:</p> <ul> <li> <p> <code>true</code>: The specified environment as well as the associated AWS resources, such as Auto Scaling group and LoadBalancer, are terminated.</p> </li> <li> <p> <code>false</code>: AWS Elastic Beanstalk resource management is removed from the environment, but the AWS resources continue to operate.</p> </li> </ul> <p> For more information, see the <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/ug/\"> AWS Elastic Beanstalk User Guide. </a> </p> <p> Default: <code>true</code> </p> <p> Valid Values: <code>true</code> | <code>false</code> </p>"]
-    pub terminate_resources: Option<TerminateEnvironmentResources>,
+    pub terminate_resources: Option<bool>,
 }
 
 
@@ -8821,16 +8681,12 @@ impl TerminateEnvironmentMessageSerializer {
     }
 }
 
-pub type TerminateEnvironmentResources = bool;
-pub type TimeFilterEnd = String;
-pub type TimeFilterStart = String;
-pub type Timestamp = String;
 struct TimestampDeserializer;
 impl TimestampDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Timestamp, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -8839,13 +8695,12 @@ impl TimestampDeserializer {
 
     }
 }
-pub type Token = String;
 struct TokenDeserializer;
 impl TokenDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Token, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -8858,7 +8713,7 @@ impl TokenDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct Trigger {
     #[doc="<p>The name of the trigger.</p>"]
-    pub name: Option<ResourceId>,
+    pub name: Option<String>,
 }
 
 struct TriggerDeserializer;
@@ -8903,13 +8758,12 @@ impl TriggerDeserializer {
 
     }
 }
-pub type TriggerList = Vec<Trigger>;
 struct TriggerListDeserializer;
 impl TriggerListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TriggerList, XmlParseError> {
+                                       -> Result<Vec<Trigger>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -8949,9 +8803,9 @@ impl TriggerListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct UpdateApplicationMessage {
     #[doc="<p>The name of the application to update. If no such application is found, <code>UpdateApplication</code> returns an <code>InvalidParameterValue</code> error. </p>"]
-    pub application_name: ApplicationName,
+    pub application_name: String,
     #[doc="<p>A new description for the application.</p> <p>Default: If not specified, AWS Elastic Beanstalk does not update the description.</p>"]
-    pub description: Option<Description>,
+    pub description: Option<String>,
 }
 
 
@@ -8976,7 +8830,7 @@ impl UpdateApplicationMessageSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct UpdateApplicationResourceLifecycleMessage {
     #[doc="<p>The name of the application.</p>"]
-    pub application_name: ApplicationName,
+    pub application_name: String,
     #[doc="<p>The lifecycle configuration.</p>"]
     pub resource_lifecycle_config: ApplicationResourceLifecycleConfig,
 }
@@ -9008,11 +8862,11 @@ impl UpdateApplicationResourceLifecycleMessageSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct UpdateApplicationVersionMessage {
     #[doc="<p>The name of the application associated with this version.</p> <p> If no application is found with this name, <code>UpdateApplication</code> returns an <code>InvalidParameterValue</code> error.</p>"]
-    pub application_name: ApplicationName,
+    pub application_name: String,
     #[doc="<p>A new description for this version.</p>"]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[doc="<p>The name of the version to update.</p> <p>If no application version is found with this label, <code>UpdateApplication</code> returns an <code>InvalidParameterValue</code> error. </p>"]
-    pub version_label: VersionLabel,
+    pub version_label: String,
 }
 
 
@@ -9039,15 +8893,15 @@ impl UpdateApplicationVersionMessageSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct UpdateConfigurationTemplateMessage {
     #[doc="<p>The name of the application associated with the configuration template to update.</p> <p> If no application is found with this name, <code>UpdateConfigurationTemplate</code> returns an <code>InvalidParameterValue</code> error. </p>"]
-    pub application_name: ApplicationName,
+    pub application_name: String,
     #[doc="<p>A new description for the configuration.</p>"]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[doc="<p>A list of configuration option settings to update with the new specified option value.</p>"]
-    pub option_settings: Option<ConfigurationOptionSettingsList>,
+    pub option_settings: Option<Vec<ConfigurationOptionSetting>>,
     #[doc="<p>A list of configuration options to remove from the configuration set.</p> <p> Constraint: You can remove only <code>UserDefined</code> configuration options. </p>"]
-    pub options_to_remove: Option<OptionsSpecifierList>,
+    pub options_to_remove: Option<Vec<OptionSpecification>>,
     #[doc="<p>The name of the configuration template to update.</p> <p> If no configuration template is found with this name, <code>UpdateConfigurationTemplate</code> returns an <code>InvalidParameterValue</code> error. </p>"]
-    pub template_name: ConfigurationTemplateName,
+    pub template_name: String,
 }
 
 
@@ -9082,13 +8936,12 @@ impl UpdateConfigurationTemplateMessageSerializer {
     }
 }
 
-pub type UpdateDate = String;
 struct UpdateDateDeserializer;
 impl UpdateDateDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<UpdateDate, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -9101,29 +8954,29 @@ impl UpdateDateDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct UpdateEnvironmentMessage {
     #[doc="<p>The name of the application with which the environment is associated.</p>"]
-    pub application_name: Option<ApplicationName>,
+    pub application_name: Option<String>,
     #[doc="<p>If this parameter is specified, AWS Elastic Beanstalk updates the description of this environment.</p>"]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[doc="<p>The ID of the environment to update.</p> <p>If no environment with this ID exists, AWS Elastic Beanstalk returns an <code>InvalidParameterValue</code> error.</p> <p>Condition: You must specify either this or an EnvironmentName, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>"]
-    pub environment_id: Option<EnvironmentId>,
+    pub environment_id: Option<String>,
     #[doc="<p>The name of the environment to update. If no environment with this name exists, AWS Elastic Beanstalk returns an <code>InvalidParameterValue</code> error. </p> <p>Condition: You must specify either this or an EnvironmentId, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>"]
-    pub environment_name: Option<EnvironmentName>,
+    pub environment_name: Option<String>,
     #[doc="<p>The name of the group to which the target environment belongs. Specify a group name only if the environment's name is specified in an environment manifest and not with the environment name or environment ID parameters. See <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/environment-cfg-manifest.html\">Environment Manifest (env.yaml)</a> for details.</p>"]
-    pub group_name: Option<GroupName>,
+    pub group_name: Option<String>,
     #[doc="<p>If specified, AWS Elastic Beanstalk updates the configuration set associated with the running environment and sets the specified configuration options to the requested value.</p>"]
-    pub option_settings: Option<ConfigurationOptionSettingsList>,
+    pub option_settings: Option<Vec<ConfigurationOptionSetting>>,
     #[doc="<p>A list of custom user-defined configuration options to remove from the configuration set for this environment.</p>"]
-    pub options_to_remove: Option<OptionsSpecifierList>,
+    pub options_to_remove: Option<Vec<OptionSpecification>>,
     #[doc="<p>The ARN of the platform, if used.</p>"]
-    pub platform_arn: Option<PlatformArn>,
+    pub platform_arn: Option<String>,
     #[doc="<p>This specifies the platform version that the environment will run after the environment is updated.</p>"]
-    pub solution_stack_name: Option<SolutionStackName>,
+    pub solution_stack_name: Option<String>,
     #[doc="<p>If this parameter is specified, AWS Elastic Beanstalk deploys this configuration template to the environment. If no such configuration template is found, AWS Elastic Beanstalk returns an <code>InvalidParameterValue</code> error. </p>"]
-    pub template_name: Option<ConfigurationTemplateName>,
+    pub template_name: Option<String>,
     #[doc="<p>This specifies the tier to use to update the environment.</p> <p>Condition: At this time, if you change the tier version, name, or type, AWS Elastic Beanstalk returns <code>InvalidParameterValue</code> error. </p>"]
     pub tier: Option<EnvironmentTier>,
     #[doc="<p>If this parameter is specified, AWS Elastic Beanstalk deploys the named application version to the environment. If no such application version is found, returns an <code>InvalidParameterValue</code> error. </p>"]
-    pub version_label: Option<VersionLabel>,
+    pub version_label: Option<String>,
 }
 
 
@@ -9184,13 +9037,12 @@ impl UpdateEnvironmentMessageSerializer {
     }
 }
 
-pub type UserDefinedOption = bool;
 struct UserDefinedOptionDeserializer;
 impl UserDefinedOptionDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<UserDefinedOption, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -9203,13 +9055,13 @@ impl UserDefinedOptionDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ValidateConfigurationSettingsMessage {
     #[doc="<p>The name of the application that the configuration template or environment belongs to.</p>"]
-    pub application_name: ApplicationName,
+    pub application_name: String,
     #[doc="<p>The name of the environment to validate the settings against.</p> <p>Condition: You cannot specify both this and a configuration template name.</p>"]
-    pub environment_name: Option<EnvironmentName>,
+    pub environment_name: Option<String>,
     #[doc="<p>A list of the options and desired values to evaluate.</p>"]
-    pub option_settings: ConfigurationOptionSettingsList,
+    pub option_settings: Vec<ConfigurationOptionSetting>,
     #[doc="<p>The name of the configuration template to validate the settings against.</p> <p>Condition: You cannot specify both this and an environment name.</p>"]
-    pub template_name: Option<ConfigurationTemplateName>,
+    pub template_name: Option<String>,
 }
 
 
@@ -9243,13 +9095,13 @@ impl ValidateConfigurationSettingsMessageSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ValidationMessage {
     #[doc="<p>A message describing the error or warning.</p>"]
-    pub message: Option<ValidationMessageString>,
+    pub message: Option<String>,
     #[doc="<p>The namespace to which the option belongs.</p>"]
-    pub namespace: Option<OptionNamespace>,
+    pub namespace: Option<String>,
     #[doc="<p>The name of the option.</p>"]
-    pub option_name: Option<ConfigurationOptionName>,
+    pub option_name: Option<String>,
     #[doc="<p>An indication of the severity of this message:</p> <ul> <li> <p> <code>error</code>: This message indicates that this is not a valid setting for an option.</p> </li> <li> <p> <code>warning</code>: This message is providing information you should take into account.</p> </li> </ul>"]
-    pub severity: Option<ValidationSeverity>,
+    pub severity: Option<String>,
 }
 
 struct ValidationMessageDeserializer;
@@ -9310,13 +9162,12 @@ impl ValidationMessageDeserializer {
 
     }
 }
-pub type ValidationMessageString = String;
 struct ValidationMessageStringDeserializer;
 impl ValidationMessageStringDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ValidationMessageString, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -9325,13 +9176,12 @@ impl ValidationMessageStringDeserializer {
 
     }
 }
-pub type ValidationMessagesList = Vec<ValidationMessage>;
 struct ValidationMessagesListDeserializer;
 impl ValidationMessagesListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ValidationMessagesList, XmlParseError> {
+                                       -> Result<Vec<ValidationMessage>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -9367,13 +9217,12 @@ impl ValidationMessagesListDeserializer {
 
     }
 }
-pub type ValidationSeverity = String;
 struct ValidationSeverityDeserializer;
 impl ValidationSeverityDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ValidationSeverity, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -9382,13 +9231,12 @@ impl ValidationSeverityDeserializer {
 
     }
 }
-pub type VersionLabel = String;
 struct VersionLabelDeserializer;
 impl VersionLabelDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VersionLabel, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -9397,12 +9245,11 @@ impl VersionLabelDeserializer {
 
     }
 }
-pub type VersionLabels = Vec<VersionLabel>;
 
 /// Serialize `VersionLabels` contents to a `SignedRequest`.
 struct VersionLabelsSerializer;
 impl VersionLabelsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &VersionLabels) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -9410,13 +9257,12 @@ impl VersionLabelsSerializer {
     }
 }
 
-pub type VersionLabelsList = Vec<VersionLabel>;
 struct VersionLabelsListDeserializer;
 impl VersionLabelsListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VersionLabelsList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -9456,7 +9302,7 @@ impl VersionLabelsListDeserializer {
 /// Serialize `VersionLabelsList` contents to a `SignedRequest`.
 struct VersionLabelsListSerializer;
 impl VersionLabelsListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &VersionLabelsList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -9464,13 +9310,12 @@ impl VersionLabelsListSerializer {
     }
 }
 
-pub type VirtualizationType = String;
 struct VirtualizationTypeDeserializer;
 impl VirtualizationTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VirtualizationType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));

@@ -37,13 +37,11 @@ enum DeserializerNext {
     Skip,
     Element(String),
 }
-#[doc="Specifies the version of the client tool."]
-pub type APIVersion = String;
 #[doc="A discrete item that contains the description and URL of an artifact (such as a PDF)."]
 #[derive(Default,Debug,Clone)]
 pub struct Artifact {
-    pub description: Option<Description>,
-    pub url: Option<URL>,
+    pub description: Option<String>,
+    pub url: Option<String>,
 }
 
 struct ArtifactDeserializer;
@@ -92,14 +90,12 @@ impl ArtifactDeserializer {
 
     }
 }
-#[doc="A collection of artifacts."]
-pub type ArtifactList = Vec<Artifact>;
 struct ArtifactListDeserializer;
 impl ArtifactListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ArtifactList, XmlParseError> {
+                                       -> Result<Vec<Artifact>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -138,8 +134,8 @@ impl ArtifactListDeserializer {
 #[doc="Input structure for the CancelJob operation."]
 #[derive(Default,Debug,Clone)]
 pub struct CancelJobInput {
-    pub api_version: Option<APIVersion>,
-    pub job_id: JobId,
+    pub api_version: Option<String>,
+    pub job_id: String,
 }
 
 
@@ -163,7 +159,7 @@ impl CancelJobInputSerializer {
 #[doc="Output structure for the CancelJob operation."]
 #[derive(Default,Debug,Clone)]
 pub struct CancelJobOutput {
-    pub success: Option<Success>,
+    pub success: Option<bool>,
 }
 
 struct CancelJobOutputDeserializer;
@@ -208,14 +204,12 @@ impl CancelJobOutputDeserializer {
 
     }
 }
-#[doc="Name of the shipping company. This value is included when the LocationCode is \"Returned\"."]
-pub type Carrier = String;
 struct CarrierDeserializer;
 impl CarrierDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Carrier, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -224,20 +218,14 @@ impl CarrierDeserializer {
 
     }
 }
-#[doc="Specifies the name of your city for the return address."]
-pub type City = String;
-#[doc="Specifies the name of the company that will ship this package."]
-pub type Company = String;
-#[doc="Specifies the name of your country for the return address."]
-pub type Country = String;
 #[doc="Input structure for the CreateJob operation."]
 #[derive(Default,Debug,Clone)]
 pub struct CreateJobInput {
-    pub api_version: Option<APIVersion>,
-    pub job_type: JobType,
-    pub manifest: Manifest,
-    pub manifest_addendum: Option<ManifestAddendum>,
-    pub validate_only: ValidateOnly,
+    pub api_version: Option<String>,
+    pub job_type: String,
+    pub manifest: String,
+    pub manifest_addendum: Option<String>,
+    pub validate_only: bool,
 }
 
 
@@ -267,12 +255,12 @@ impl CreateJobInputSerializer {
 #[doc="Output structure for the CreateJob operation."]
 #[derive(Default,Debug,Clone)]
 pub struct CreateJobOutput {
-    pub artifact_list: Option<ArtifactList>,
-    pub job_id: Option<JobId>,
-    pub job_type: Option<JobType>,
-    pub signature: Option<Signature>,
-    pub signature_file_contents: Option<SignatureFileContents>,
-    pub warning_message: Option<WarningMessage>,
+    pub artifact_list: Option<Vec<Artifact>>,
+    pub job_id: Option<String>,
+    pub job_type: Option<String>,
+    pub signature: Option<String>,
+    pub signature_file_contents: Option<String>,
+    pub warning_message: Option<String>,
 }
 
 struct CreateJobOutputDeserializer;
@@ -339,14 +327,12 @@ impl CreateJobOutputDeserializer {
 
     }
 }
-#[doc="Timestamp of the CreateJob request in ISO8601 date format. For example \"2010-03-28T20:27:35Z\"."]
-pub type CreationDate = String;
 struct CreationDateDeserializer;
 impl CreationDateDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CreationDate, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -355,14 +341,12 @@ impl CreationDateDeserializer {
 
     }
 }
-#[doc="The last manifest submitted, which will be used to process the job."]
-pub type CurrentManifest = String;
 struct CurrentManifestDeserializer;
 impl CurrentManifestDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CurrentManifest, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -371,14 +355,12 @@ impl CurrentManifestDeserializer {
 
     }
 }
-#[doc="The associated description for this object."]
-pub type Description = String;
 struct DescriptionDeserializer;
 impl DescriptionDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Description, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -387,14 +369,12 @@ impl DescriptionDeserializer {
 
     }
 }
-#[doc="Number of errors. We return this value when the ProgressCode is Success or SuccessWithErrors."]
-pub type ErrorCount = i64;
 struct ErrorCountDeserializer;
 impl ErrorCountDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ErrorCount, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -403,15 +383,12 @@ impl ErrorCountDeserializer {
 
     }
 }
-#[doc="The human-readable description of a particular error."]
-pub type ErrorMessage = String;
-pub type GenericString = String;
 struct GenericStringDeserializer;
 impl GenericStringDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<GenericString, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -422,18 +399,18 @@ impl GenericStringDeserializer {
 }
 #[derive(Default,Debug,Clone)]
 pub struct GetShippingLabelInput {
-    pub api_version: Option<APIVersion>,
-    pub city: Option<City>,
-    pub company: Option<Company>,
-    pub country: Option<Country>,
-    pub job_ids: JobIdList,
-    pub name: Option<Name>,
-    pub phone_number: Option<PhoneNumber>,
-    pub postal_code: Option<PostalCode>,
-    pub state_or_province: Option<StateOrProvince>,
-    pub street_1: Option<Street1>,
-    pub street_2: Option<Street2>,
-    pub street_3: Option<Street3>,
+    pub api_version: Option<String>,
+    pub city: Option<String>,
+    pub company: Option<String>,
+    pub country: Option<String>,
+    pub job_ids: Vec<String>,
+    pub name: Option<String>,
+    pub phone_number: Option<String>,
+    pub postal_code: Option<String>,
+    pub state_or_province: Option<String>,
+    pub street_1: Option<String>,
+    pub street_2: Option<String>,
+    pub street_3: Option<String>,
 }
 
 
@@ -486,8 +463,8 @@ impl GetShippingLabelInputSerializer {
 
 #[derive(Default,Debug,Clone)]
 pub struct GetShippingLabelOutput {
-    pub shipping_label_url: Option<GenericString>,
-    pub warning: Option<GenericString>,
+    pub shipping_label_url: Option<String>,
+    pub warning: Option<String>,
 }
 
 struct GetShippingLabelOutputDeserializer;
@@ -540,8 +517,8 @@ impl GetShippingLabelOutputDeserializer {
 #[doc="Input structure for the GetStatus operation."]
 #[derive(Default,Debug,Clone)]
 pub struct GetStatusInput {
-    pub api_version: Option<APIVersion>,
-    pub job_id: JobId,
+    pub api_version: Option<String>,
+    pub job_id: String,
 }
 
 
@@ -565,22 +542,22 @@ impl GetStatusInputSerializer {
 #[doc="Output structure for the GetStatus operation."]
 #[derive(Default,Debug,Clone)]
 pub struct GetStatusOutput {
-    pub artifact_list: Option<ArtifactList>,
-    pub carrier: Option<Carrier>,
-    pub creation_date: Option<CreationDate>,
-    pub current_manifest: Option<CurrentManifest>,
-    pub error_count: Option<ErrorCount>,
-    pub job_id: Option<JobId>,
-    pub job_type: Option<JobType>,
-    pub location_code: Option<LocationCode>,
-    pub location_message: Option<LocationMessage>,
-    pub log_bucket: Option<LogBucket>,
-    pub log_key: Option<LogKey>,
-    pub progress_code: Option<ProgressCode>,
-    pub progress_message: Option<ProgressMessage>,
-    pub signature: Option<Signature>,
-    pub signature_file_contents: Option<Signature>,
-    pub tracking_number: Option<TrackingNumber>,
+    pub artifact_list: Option<Vec<Artifact>>,
+    pub carrier: Option<String>,
+    pub creation_date: Option<String>,
+    pub current_manifest: Option<String>,
+    pub error_count: Option<i64>,
+    pub job_id: Option<String>,
+    pub job_type: Option<String>,
+    pub location_code: Option<String>,
+    pub location_message: Option<String>,
+    pub log_bucket: Option<String>,
+    pub log_key: Option<String>,
+    pub progress_code: Option<String>,
+    pub progress_message: Option<String>,
+    pub signature: Option<String>,
+    pub signature_file_contents: Option<String>,
+    pub tracking_number: Option<String>,
 }
 
 struct GetStatusOutputDeserializer;
@@ -694,14 +671,12 @@ impl GetStatusOutputDeserializer {
 
     }
 }
-#[doc="Indicates whether the job was canceled."]
-pub type IsCanceled = bool;
 struct IsCanceledDeserializer;
 impl IsCanceledDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<IsCanceled, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -710,14 +685,12 @@ impl IsCanceledDeserializer {
 
     }
 }
-#[doc="Indicates whether the list of jobs was truncated. If true, then call ListJobs again using the last JobId element as the marker."]
-pub type IsTruncated = bool;
 struct IsTruncatedDeserializer;
 impl IsTruncatedDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<IsTruncated, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -729,10 +702,10 @@ impl IsTruncatedDeserializer {
 #[doc="Representation of a job returned by the ListJobs operation."]
 #[derive(Default,Debug,Clone)]
 pub struct Job {
-    pub creation_date: Option<CreationDate>,
-    pub is_canceled: Option<IsCanceled>,
-    pub job_id: Option<JobId>,
-    pub job_type: Option<JobType>,
+    pub creation_date: Option<String>,
+    pub is_canceled: Option<bool>,
+    pub job_id: Option<String>,
+    pub job_type: Option<String>,
 }
 
 struct JobDeserializer;
@@ -790,14 +763,12 @@ impl JobDeserializer {
 
     }
 }
-#[doc="A unique identifier which refers to a particular job."]
-pub type JobId = String;
 struct JobIdDeserializer;
 impl JobIdDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<JobId, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -806,12 +777,11 @@ impl JobIdDeserializer {
 
     }
 }
-pub type JobIdList = Vec<GenericString>;
 
 /// Serialize `JobIdList` contents to a `SignedRequest`.
 struct JobIdListSerializer;
 impl JobIdListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &JobIdList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -819,14 +789,12 @@ impl JobIdListSerializer {
     }
 }
 
-#[doc="Specifies whether the job to initiate is an import or export job."]
-pub type JobType = String;
 struct JobTypeDeserializer;
 impl JobTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<JobType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -835,14 +803,12 @@ impl JobTypeDeserializer {
 
     }
 }
-#[doc="A list container for Jobs returned by the ListJobs operation."]
-pub type JobsList = Vec<Job>;
 struct JobsListDeserializer;
 impl JobsListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<JobsList, XmlParseError> {
+                                       -> Result<Vec<Job>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -881,9 +847,9 @@ impl JobsListDeserializer {
 #[doc="Input structure for the ListJobs operation."]
 #[derive(Default,Debug,Clone)]
 pub struct ListJobsInput {
-    pub api_version: Option<APIVersion>,
-    pub marker: Option<Marker>,
-    pub max_jobs: Option<MaxJobs>,
+    pub api_version: Option<String>,
+    pub marker: Option<String>,
+    pub max_jobs: Option<i64>,
 }
 
 
@@ -913,8 +879,8 @@ impl ListJobsInputSerializer {
 #[doc="Output structure for the ListJobs operation."]
 #[derive(Default,Debug,Clone)]
 pub struct ListJobsOutput {
-    pub is_truncated: Option<IsTruncated>,
-    pub jobs: Option<JobsList>,
+    pub is_truncated: Option<bool>,
+    pub jobs: Option<Vec<Job>>,
 }
 
 struct ListJobsOutputDeserializer;
@@ -963,14 +929,12 @@ impl ListJobsOutputDeserializer {
 
     }
 }
-#[doc="A token representing the location of the storage device, such as \"AtAWS\"."]
-pub type LocationCode = String;
 struct LocationCodeDeserializer;
 impl LocationCodeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LocationCode, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -979,14 +943,12 @@ impl LocationCodeDeserializer {
 
     }
 }
-#[doc="A more human readable form of the physical location of the storage device."]
-pub type LocationMessage = String;
 struct LocationMessageDeserializer;
 impl LocationMessageDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LocationMessage, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -995,14 +957,12 @@ impl LocationMessageDeserializer {
 
     }
 }
-#[doc="Amazon S3 bucket for user logs."]
-pub type LogBucket = String;
 struct LogBucketDeserializer;
 impl LogBucketDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LogBucket, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1011,14 +971,12 @@ impl LogBucketDeserializer {
 
     }
 }
-#[doc="The key where the user logs were stored."]
-pub type LogKey = String;
 struct LogKeyDeserializer;
 impl LogKeyDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LogKey, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1027,28 +985,12 @@ impl LogKeyDeserializer {
 
     }
 }
-#[doc="The UTF-8 encoded text of the manifest file."]
-pub type Manifest = String;
-#[doc="For internal use only."]
-pub type ManifestAddendum = String;
-#[doc="Specifies the JOBID to start after when listing the jobs created with your account. AWS Import/Export lists your jobs in reverse chronological order. See MaxJobs."]
-pub type Marker = String;
-#[doc="Sets the maximum number of jobs returned in the response. If there are additional jobs that were not returned because MaxJobs was exceeded, the response contains &lt;IsTruncated&gt;true&lt;/IsTruncated&gt;. To return the additional jobs, see Marker."]
-pub type MaxJobs = i64;
-#[doc="Specifies the name of the person responsible for shipping this package."]
-pub type Name = String;
-#[doc="Specifies the phone number of the person responsible for shipping this package."]
-pub type PhoneNumber = String;
-#[doc="Specifies the postal code for the return address."]
-pub type PostalCode = String;
-#[doc="A token representing the state of the job, such as \"Started\"."]
-pub type ProgressCode = String;
 struct ProgressCodeDeserializer;
 impl ProgressCodeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ProgressCode, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1057,14 +999,12 @@ impl ProgressCodeDeserializer {
 
     }
 }
-#[doc="A more human readable form of the job status."]
-pub type ProgressMessage = String;
 struct ProgressMessageDeserializer;
 impl ProgressMessageDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ProgressMessage, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1073,14 +1013,12 @@ impl ProgressMessageDeserializer {
 
     }
 }
-#[doc="An encrypted code used to authenticate the request and response, for example, \"DV+TpDfx1/TdSE9ktyK9k/bDTVI=\". Only use this value is you want to create the signature file yourself. Generally you should use the SignatureFileContents value."]
-pub type Signature = String;
 struct SignatureDeserializer;
 impl SignatureDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Signature, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1089,14 +1027,12 @@ impl SignatureDeserializer {
 
     }
 }
-#[doc="The actual text of the SIGNATURE file to be written to disk."]
-pub type SignatureFileContents = String;
 struct SignatureFileContentsDeserializer;
 impl SignatureFileContentsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SignatureFileContents, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1105,22 +1041,12 @@ impl SignatureFileContentsDeserializer {
 
     }
 }
-#[doc="Specifies the name of your state or your province for the return address."]
-pub type StateOrProvince = String;
-#[doc="Specifies the first part of the street address for the return address, for example 1234 Main Street."]
-pub type Street1 = String;
-#[doc="Specifies the optional second part of the street address for the return address, for example Suite 100."]
-pub type Street2 = String;
-#[doc="Specifies the optional third part of the street address for the return address, for example c/o Jane Doe."]
-pub type Street3 = String;
-#[doc="Specifies whether (true) or not (false) AWS Import/Export updated your job."]
-pub type Success = bool;
 struct SuccessDeserializer;
 impl SuccessDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Success, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -1129,14 +1055,12 @@ impl SuccessDeserializer {
 
     }
 }
-#[doc="The shipping tracking number assigned by AWS Import/Export to the storage device when it's returned to you. We return this value when the LocationCode is \"Returned\"."]
-pub type TrackingNumber = String;
 struct TrackingNumberDeserializer;
 impl TrackingNumberDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TrackingNumber, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1145,14 +1069,12 @@ impl TrackingNumberDeserializer {
 
     }
 }
-#[doc="The URL for a given Artifact."]
-pub type URL = String;
 struct URLDeserializer;
 impl URLDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<URL, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1164,11 +1086,11 @@ impl URLDeserializer {
 #[doc="Input structure for the UpateJob operation."]
 #[derive(Default,Debug,Clone)]
 pub struct UpdateJobInput {
-    pub api_version: Option<APIVersion>,
-    pub job_id: JobId,
-    pub job_type: JobType,
-    pub manifest: Manifest,
-    pub validate_only: ValidateOnly,
+    pub api_version: Option<String>,
+    pub job_id: String,
+    pub job_type: String,
+    pub manifest: String,
+    pub validate_only: bool,
 }
 
 
@@ -1196,9 +1118,9 @@ impl UpdateJobInputSerializer {
 #[doc="Output structure for the UpateJob operation."]
 #[derive(Default,Debug,Clone)]
 pub struct UpdateJobOutput {
-    pub artifact_list: Option<ArtifactList>,
-    pub success: Option<Success>,
-    pub warning_message: Option<WarningMessage>,
+    pub artifact_list: Option<Vec<Artifact>>,
+    pub success: Option<bool>,
+    pub warning_message: Option<String>,
 }
 
 struct UpdateJobOutputDeserializer;
@@ -1253,16 +1175,12 @@ impl UpdateJobOutputDeserializer {
 
     }
 }
-#[doc="Validate the manifest and parameter values in the request but do not actually create a job."]
-pub type ValidateOnly = bool;
-#[doc="An optional message notifying you of non-fatal issues with the job, such as use of an incompatible Amazon S3 bucket name."]
-pub type WarningMessage = String;
 struct WarningMessageDeserializer;
 impl WarningMessageDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<WarningMessage, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));

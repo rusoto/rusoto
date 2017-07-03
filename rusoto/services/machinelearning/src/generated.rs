@@ -30,13 +30,13 @@ use serde_json::from_str;
 pub struct AddTagsInput {
     #[doc="<p>The ID of the ML object to tag. For example, <code>exampleModelId</code>.</p>"]
     #[serde(rename="ResourceId")]
-    pub resource_id: EntityId,
+    pub resource_id: String,
     #[doc="<p>The type of the ML object to tag. </p>"]
     #[serde(rename="ResourceType")]
-    pub resource_type: TaggableResourceType,
+    pub resource_type: String,
     #[doc="<p>The key-value pairs to use to create tags. If you specify a key without specifying a value, Amazon ML creates a tag with the specified key and a value of null.</p>"]
     #[serde(rename="Tags")]
-    pub tags: TagList,
+    pub tags: Vec<Tag>,
 }
 
 #[doc="<p>Amazon ML returns the following elements. </p>"]
@@ -45,105 +45,95 @@ pub struct AddTagsOutput {
     #[doc="<p>The ID of the ML object that was tagged.</p>"]
     #[serde(rename="ResourceId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub resource_id: Option<EntityId>,
+    pub resource_id: Option<String>,
     #[doc="<p>The type of the ML object that was tagged.</p>"]
     #[serde(rename="ResourceType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub resource_type: Option<TaggableResourceType>,
+    pub resource_type: Option<String>,
 }
 
-#[doc="<p>The function used to train an <code>MLModel</code>. Training choices supported by Amazon ML include the following:</p> <ul> <li> <code>SGD</code> - Stochastic Gradient Descent.</li> <li> <code>RandomForest</code> - Random forest of decision trees.</li> </ul>"]
-pub type Algorithm = String;
-#[doc="<p>An Amazon Web Service (AWS) user account identifier. The account identifier can be an AWS root account or an AWS Identity and Access Management (IAM) user.</p>"]
-pub type AwsUserArn = String;
 #[doc="<p> Represents the output of a <code>GetBatchPrediction</code> operation.</p> <p> The content consists of the detailed metadata, the status, and the data file information of a <code>Batch Prediction</code>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct BatchPrediction {
     #[doc="<p>The ID of the <code>DataSource</code> that points to the group of observations to predict.</p>"]
     #[serde(rename="BatchPredictionDataSourceId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub batch_prediction_data_source_id: Option<EntityId>,
+    pub batch_prediction_data_source_id: Option<String>,
     #[doc="<p>The ID assigned to the <code>BatchPrediction</code> at creation. This value should be identical to the value of the <code>BatchPredictionID</code> in the request. </p>"]
     #[serde(rename="BatchPredictionId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub batch_prediction_id: Option<EntityId>,
+    pub batch_prediction_id: Option<String>,
     #[serde(rename="ComputeTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub compute_time: Option<LongType>,
+    pub compute_time: Option<i64>,
     #[doc="<p>The time that the <code>BatchPrediction</code> was created. The time is expressed in epoch time.</p>"]
     #[serde(rename="CreatedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_at: Option<EpochTime>,
+    pub created_at: Option<f64>,
     #[doc="<p>The AWS user account that invoked the <code>BatchPrediction</code>. The account type can be either an AWS root account or an AWS Identity and Access Management (IAM) user account.</p>"]
     #[serde(rename="CreatedByIamUser")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_by_iam_user: Option<AwsUserArn>,
+    pub created_by_iam_user: Option<String>,
     #[serde(rename="FinishedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub finished_at: Option<EpochTime>,
+    pub finished_at: Option<f64>,
     #[doc="<p>The location of the data file or directory in Amazon Simple Storage Service (Amazon S3).</p>"]
     #[serde(rename="InputDataLocationS3")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub input_data_location_s3: Option<S3Url>,
+    pub input_data_location_s3: Option<String>,
     #[serde(rename="InvalidRecordCount")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub invalid_record_count: Option<LongType>,
+    pub invalid_record_count: Option<i64>,
     #[doc="<p>The time of the most recent edit to the <code>BatchPrediction</code>. The time is expressed in epoch time.</p>"]
     #[serde(rename="LastUpdatedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub last_updated_at: Option<EpochTime>,
+    pub last_updated_at: Option<f64>,
     #[doc="<p>The ID of the <code>MLModel</code> that generated predictions for the <code>BatchPrediction</code> request.</p>"]
     #[serde(rename="MLModelId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ml_model_id: Option<EntityId>,
+    pub ml_model_id: Option<String>,
     #[doc="<p>A description of the most recent details about processing the batch prediction request.</p>"]
     #[serde(rename="Message")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub message: Option<Message>,
+    pub message: Option<String>,
     #[doc="<p>A user-supplied name or description of the <code>BatchPrediction</code>.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<EntityName>,
+    pub name: Option<String>,
     #[doc="<p>The location of an Amazon S3 bucket or directory to receive the operation results. The following substrings are not allowed in the <code>s3 key</code> portion of the <code>outputURI</code> field: ':', '//', '/./', '/../'.</p>"]
     #[serde(rename="OutputUri")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub output_uri: Option<S3Url>,
+    pub output_uri: Option<String>,
     #[serde(rename="StartedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub started_at: Option<EpochTime>,
+    pub started_at: Option<f64>,
     #[doc="<p>The status of the <code>BatchPrediction</code>. This element can have one of the following values:</p> <ul> <li> <code>PENDING</code> - Amazon Machine Learning (Amazon ML) submitted a request to generate predictions for a batch of observations.</li> <li> <code>INPROGRESS</code> - The process is underway.</li> <li> <code>FAILED</code> - The request to perform a batch prediction did not run to completion. It is not usable.</li> <li> <code>COMPLETED</code> - The batch prediction process completed successfully.</li> <li> <code>DELETED</code> - The <code>BatchPrediction</code> is marked as deleted. It is not usable.</li> </ul>"]
     #[serde(rename="Status")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status: Option<EntityStatus>,
+    pub status: Option<String>,
     #[serde(rename="TotalRecordCount")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub total_record_count: Option<LongType>,
+    pub total_record_count: Option<i64>,
 }
 
-#[doc="<p>A list of the variables to use in searching or filtering <code>BatchPrediction</code>.</p> <ul> <li> <code>CreatedAt</code> - Sets the search criteria to <code>BatchPrediction</code> creation date.</li> <li> <code>Status</code> - Sets the search criteria to <code>BatchPrediction</code> status.</li> <li> <code>Name</code> - Sets the search criteria to the contents of <code>BatchPrediction</code><b> </b> <code>Name</code>.</li> <li> <code>IAMUser</code> - Sets the search criteria to the user account that invoked the <code>BatchPrediction</code> creation.</li> <li> <code>MLModelId</code> - Sets the search criteria to the <code>MLModel</code> used in the <code>BatchPrediction</code>.</li> <li> <code>DataSourceId</code> - Sets the search criteria to the <code>DataSource</code> used in the <code>BatchPrediction</code>.</li> <li> <code>DataURI</code> - Sets the search criteria to the data file(s) used in the <code>BatchPrediction</code>. The URL can identify either a file or an Amazon Simple Storage Service (Amazon S3) bucket or directory.</li> </ul>"]
-pub type BatchPredictionFilterVariable = String;
-pub type BatchPredictions = Vec<BatchPrediction>;
-#[doc="<p>The value specified in a filtering condition. The <code>ComparatorValue</code> becomes the reference value when matching or evaluating data values in filtering and searching functions.</p>"]
-pub type ComparatorValue = String;
-pub type ComputeStatistics = bool;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateBatchPredictionInput {
     #[doc="<p>The ID of the <code>DataSource</code> that points to the group of observations to predict.</p>"]
     #[serde(rename="BatchPredictionDataSourceId")]
-    pub batch_prediction_data_source_id: EntityId,
+    pub batch_prediction_data_source_id: String,
     #[doc="<p>A user-supplied ID that uniquely identifies the <code>BatchPrediction</code>.</p>"]
     #[serde(rename="BatchPredictionId")]
-    pub batch_prediction_id: EntityId,
+    pub batch_prediction_id: String,
     #[doc="<p>A user-supplied name or description of the <code>BatchPrediction</code>. <code>BatchPredictionName</code> can only use the UTF-8 character set.</p>"]
     #[serde(rename="BatchPredictionName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub batch_prediction_name: Option<EntityName>,
+    pub batch_prediction_name: Option<String>,
     #[doc="<p>The ID of the <code>MLModel</code> that will generate predictions for the group of observations. </p>"]
     #[serde(rename="MLModelId")]
-    pub ml_model_id: EntityId,
+    pub ml_model_id: String,
     #[doc="<p>The location of an Amazon Simple Storage Service (Amazon S3) bucket or directory to store the batch prediction results. The following substrings are not allowed in the <code>s3 key</code> portion of the <code>outputURI</code> field: ':', '//', '/./', '/../'.</p> <p>Amazon ML needs permissions to store and retrieve the logs on your behalf. For information about how to set permissions, see the <a href=\"http://docs.aws.amazon.com/machine-learning/latest/dg\">Amazon Machine Learning Developer Guide</a>.</p>"]
     #[serde(rename="OutputUri")]
-    pub output_uri: S3Url,
+    pub output_uri: String,
 }
 
 #[doc="<p> Represents the output of a <code>CreateBatchPrediction</code> operation, and is an acknowledgement that Amazon ML received the request.</p> <p>The <code>CreateBatchPrediction</code> operation is asynchronous. You can poll for status updates by using the <code>&gt;GetBatchPrediction</code> operation and checking the <code>Status</code> parameter of the result. </p>"]
@@ -152,7 +142,7 @@ pub struct CreateBatchPredictionOutput {
     #[doc="<p>A user-supplied ID that uniquely identifies the <code>BatchPrediction</code>. This value is identical to the value of the <code>BatchPredictionId</code> in the request.</p>"]
     #[serde(rename="BatchPredictionId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub batch_prediction_id: Option<EntityId>,
+    pub batch_prediction_id: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -160,20 +150,20 @@ pub struct CreateDataSourceFromRDSInput {
     #[doc="<p>The compute statistics for a <code>DataSource</code>. The statistics are generated from the observation data referenced by a <code>DataSource</code>. Amazon ML uses the statistics internally during <code>MLModel</code> training. This parameter must be set to <code>true</code> if the <code></code>DataSource<code></code> needs to be used for <code>MLModel</code> training. </p>"]
     #[serde(rename="ComputeStatistics")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub compute_statistics: Option<ComputeStatistics>,
+    pub compute_statistics: Option<bool>,
     #[doc="<p>A user-supplied ID that uniquely identifies the <code>DataSource</code>. Typically, an Amazon Resource Number (ARN) becomes the ID for a <code>DataSource</code>.</p>"]
     #[serde(rename="DataSourceId")]
-    pub data_source_id: EntityId,
+    pub data_source_id: String,
     #[doc="<p>A user-supplied name or description of the <code>DataSource</code>.</p>"]
     #[serde(rename="DataSourceName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub data_source_name: Option<EntityName>,
+    pub data_source_name: Option<String>,
     #[doc="<p>The data specification of an Amazon RDS <code>DataSource</code>:</p> <ul> <li><p>DatabaseInformation - <ul> <li> <code>DatabaseName</code> - The name of the Amazon RDS database.</li> <li> <code>InstanceIdentifier </code> - A unique identifier for the Amazon RDS database instance.</li> </ul> </p></li> <li><p>DatabaseCredentials - AWS Identity and Access Management (IAM) credentials that are used to connect to the Amazon RDS database.</p></li> <li><p>ResourceRole - A role (DataPipelineDefaultResourceRole) assumed by an EC2 instance to carry out the copy task from Amazon RDS to Amazon Simple Storage Service (Amazon S3). For more information, see <a href=\"http://docs.aws.amazon.com/datapipeline/latest/DeveloperGuide/dp-iam-roles.html\">Role templates</a> for data pipelines.</p></li> <li><p>ServiceRole - A role (DataPipelineDefaultRole) assumed by the AWS Data Pipeline service to monitor the progress of the copy task from Amazon RDS to Amazon S3. For more information, see <a href=\"http://docs.aws.amazon.com/datapipeline/latest/DeveloperGuide/dp-iam-roles.html\">Role templates</a> for data pipelines.</p></li> <li><p>SecurityInfo - The security information to use to access an RDS DB instance. You need to set up appropriate ingress rules for the security entity IDs provided to allow access to the Amazon RDS instance. Specify a [<code>SubnetId</code>, <code>SecurityGroupIds</code>] pair for a VPC-based RDS DB instance.</p></li> <li><p>SelectSqlQuery - A query that is used to retrieve the observation data for the <code>Datasource</code>.</p></li> <li><p>S3StagingLocation - The Amazon S3 location for staging Amazon RDS data. The data retrieved from Amazon RDS using <code>SelectSqlQuery</code> is stored in this location.</p></li> <li><p>DataSchemaUri - The Amazon S3 location of the <code>DataSchema</code>.</p></li> <li><p>DataSchema - A JSON string representing the schema. This is not required if <code>DataSchemaUri</code> is specified. </p></li> <li> <p>DataRearrangement - A JSON string that represents the splitting and rearrangement requirements for the <code>Datasource</code>. </p> <br> <p> Sample - <code> \"{\\\"splitting\\\":{\\\"percentBegin\\\":10,\\\"percentEnd\\\":60}}\"</code> </p> </li> </ul>"]
     #[serde(rename="RDSData")]
     pub rds_data: RDSDataSpec,
     #[doc="<p>The role that Amazon ML assumes on behalf of the user to create and activate a data pipeline in the user's account and copy data using the <code>SelectSqlQuery</code> query from Amazon RDS to Amazon S3.</p> <p> </p>"]
     #[serde(rename="RoleARN")]
-    pub role_arn: RoleARN,
+    pub role_arn: String,
 }
 
 #[doc="<p> Represents the output of a <code>CreateDataSourceFromRDS</code> operation, and is an acknowledgement that Amazon ML received the request.</p> <p>The <code>CreateDataSourceFromRDS</code>&gt; operation is asynchronous. You can poll for updates by using the <code>GetBatchPrediction</code> operation and checking the <code>Status</code> parameter. You can inspect the <code>Message</code> when <code>Status</code> shows up as <code>FAILED</code>. You can also check the progress of the copy operation by going to the <code>DataPipeline</code> console and looking up the pipeline using the <code>pipelineId </code> from the describe call.</p>"]
@@ -182,7 +172,7 @@ pub struct CreateDataSourceFromRDSOutput {
     #[doc="<p>A user-supplied ID that uniquely identifies the datasource. This value should be identical to the value of the <code>DataSourceID</code> in the request. </p>"]
     #[serde(rename="DataSourceId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub data_source_id: Option<EntityId>,
+    pub data_source_id: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -190,20 +180,20 @@ pub struct CreateDataSourceFromRedshiftInput {
     #[doc="<p>The compute statistics for a <code>DataSource</code>. The statistics are generated from the observation data referenced by a <code>DataSource</code>. Amazon ML uses the statistics internally during <code>MLModel</code> training. This parameter must be set to <code>true</code> if the <code>DataSource</code> needs to be used for <code>MLModel</code> training.</p>"]
     #[serde(rename="ComputeStatistics")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub compute_statistics: Option<ComputeStatistics>,
+    pub compute_statistics: Option<bool>,
     #[doc="<p>A user-supplied ID that uniquely identifies the <code>DataSource</code>.</p>"]
     #[serde(rename="DataSourceId")]
-    pub data_source_id: EntityId,
+    pub data_source_id: String,
     #[doc="<p>A user-supplied name or description of the <code>DataSource</code>. </p>"]
     #[serde(rename="DataSourceName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub data_source_name: Option<EntityName>,
+    pub data_source_name: Option<String>,
     #[doc="<p>The data specification of an Amazon Redshift <code>DataSource</code>:</p> <ul> <li><p>DatabaseInformation - <ul> <li> <code>DatabaseName</code> - The name of the Amazon Redshift database. </li> <li> <code> ClusterIdentifier</code> - The unique ID for the Amazon Redshift cluster.</li> </ul></p></li> <li><p>DatabaseCredentials - The AWS Identity and Access Management (IAM) credentials that are used to connect to the Amazon Redshift database.</p></li> <li><p>SelectSqlQuery - The query that is used to retrieve the observation data for the <code>Datasource</code>.</p></li> <li><p>S3StagingLocation - The Amazon Simple Storage Service (Amazon S3) location for staging Amazon Redshift data. The data retrieved from Amazon Redshift using the <code>SelectSqlQuery</code> query is stored in this location.</p></li> <li><p>DataSchemaUri - The Amazon S3 location of the <code>DataSchema</code>.</p></li> <li><p>DataSchema - A JSON string representing the schema. This is not required if <code>DataSchemaUri</code> is specified. </p></li> <li> <p>DataRearrangement - A JSON string that represents the splitting and rearrangement requirements for the <code>DataSource</code>.</p> <p> Sample - <code> \"{\\\"splitting\\\":{\\\"percentBegin\\\":10,\\\"percentEnd\\\":60}}\"</code> </p> </li> </ul>"]
     #[serde(rename="DataSpec")]
     pub data_spec: RedshiftDataSpec,
     #[doc="<p>A fully specified role Amazon Resource Name (ARN). Amazon ML assumes the role on behalf of the user to create the following: </p> <p> <ul> <li><p>A security group to allow Amazon ML to execute the <code>SelectSqlQuery</code> query on an Amazon Redshift cluster</p></li> <li><p>An Amazon S3 bucket policy to grant Amazon ML read/write permissions on the <code>S3StagingLocation</code></p></li> </ul> </p>"]
     #[serde(rename="RoleARN")]
-    pub role_arn: RoleARN,
+    pub role_arn: String,
 }
 
 #[doc="<p> Represents the output of a <code>CreateDataSourceFromRedshift</code> operation, and is an acknowledgement that Amazon ML received the request.</p> <p>The <code>CreateDataSourceFromRedshift</code> operation is asynchronous. You can poll for updates by using the <code>GetBatchPrediction</code> operation and checking the <code>Status</code> parameter. </p>"]
@@ -212,7 +202,7 @@ pub struct CreateDataSourceFromRedshiftOutput {
     #[doc="<p>A user-supplied ID that uniquely identifies the datasource. This value should be identical to the value of the <code>DataSourceID</code> in the request. </p>"]
     #[serde(rename="DataSourceId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub data_source_id: Option<EntityId>,
+    pub data_source_id: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -220,14 +210,14 @@ pub struct CreateDataSourceFromS3Input {
     #[doc="<p>The compute statistics for a <code>DataSource</code>. The statistics are generated from the observation data referenced by a <code>DataSource</code>. Amazon ML uses the statistics internally during <code>MLModel</code> training. This parameter must be set to <code>true</code> if the <code></code>DataSource<code></code> needs to be used for <code>MLModel</code> training.</p>"]
     #[serde(rename="ComputeStatistics")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub compute_statistics: Option<ComputeStatistics>,
+    pub compute_statistics: Option<bool>,
     #[doc="<p>A user-supplied identifier that uniquely identifies the <code>DataSource</code>. </p>"]
     #[serde(rename="DataSourceId")]
-    pub data_source_id: EntityId,
+    pub data_source_id: String,
     #[doc="<p>A user-supplied name or description of the <code>DataSource</code>. </p>"]
     #[serde(rename="DataSourceName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub data_source_name: Option<EntityName>,
+    pub data_source_name: Option<String>,
     #[doc="<p>The data specification of a <code>DataSource</code>:</p> <ul> <li><p>DataLocationS3 - The Amazon S3 location of the observation data.</p></li> <li><p>DataSchemaLocationS3 - The Amazon S3 location of the <code>DataSchema</code>.</p></li> <li><p>DataSchema - A JSON string representing the schema. This is not required if <code>DataSchemaUri</code> is specified. </p></li> <li> <p>DataRearrangement - A JSON string that represents the splitting and rearrangement requirements for the <code>Datasource</code>. </p> <p> Sample - <code> \"{\\\"splitting\\\":{\\\"percentBegin\\\":10,\\\"percentEnd\\\":60}}\"</code> </p> </li> </ul>"]
     #[serde(rename="DataSpec")]
     pub data_spec: S3DataSpec,
@@ -239,24 +229,24 @@ pub struct CreateDataSourceFromS3Output {
     #[doc="<p>A user-supplied ID that uniquely identifies the <code>DataSource</code>. This value should be identical to the value of the <code>DataSourceID</code> in the request. </p>"]
     #[serde(rename="DataSourceId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub data_source_id: Option<EntityId>,
+    pub data_source_id: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateEvaluationInput {
     #[doc="<p>The ID of the <code>DataSource</code> for the evaluation. The schema of the <code>DataSource</code> must match the schema used to create the <code>MLModel</code>.</p>"]
     #[serde(rename="EvaluationDataSourceId")]
-    pub evaluation_data_source_id: EntityId,
+    pub evaluation_data_source_id: String,
     #[doc="<p>A user-supplied ID that uniquely identifies the <code>Evaluation</code>.</p>"]
     #[serde(rename="EvaluationId")]
-    pub evaluation_id: EntityId,
+    pub evaluation_id: String,
     #[doc="<p>A user-supplied name or description of the <code>Evaluation</code>.</p>"]
     #[serde(rename="EvaluationName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub evaluation_name: Option<EntityName>,
+    pub evaluation_name: Option<String>,
     #[doc="<p>The ID of the <code>MLModel</code> to evaluate.</p> <p>The schema used in creating the <code>MLModel</code> must match the schema of the <code>DataSource</code> used in the <code>Evaluation</code>.</p>"]
     #[serde(rename="MLModelId")]
-    pub ml_model_id: EntityId,
+    pub ml_model_id: String,
 }
 
 #[doc="<p> Represents the output of a <code>CreateEvaluation</code> operation, and is an acknowledgement that Amazon ML received the request.</p> <p><code>CreateEvaluation</code> operation is asynchronous. You can poll for status updates by using the <code>GetEvcaluation</code> operation and checking the <code>Status</code> parameter. </p>"]
@@ -265,36 +255,36 @@ pub struct CreateEvaluationOutput {
     #[doc="<p>The user-supplied ID that uniquely identifies the <code>Evaluation</code>. This value should be identical to the value of the <code>EvaluationId</code> in the request.</p>"]
     #[serde(rename="EvaluationId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub evaluation_id: Option<EntityId>,
+    pub evaluation_id: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateMLModelInput {
     #[doc="<p>A user-supplied ID that uniquely identifies the <code>MLModel</code>.</p>"]
     #[serde(rename="MLModelId")]
-    pub ml_model_id: EntityId,
+    pub ml_model_id: String,
     #[doc="<p>A user-supplied name or description of the <code>MLModel</code>.</p>"]
     #[serde(rename="MLModelName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ml_model_name: Option<EntityName>,
+    pub ml_model_name: Option<String>,
     #[doc="<p>The category of supervised learning that this <code>MLModel</code> will address. Choose from the following types:</p> <ul> <li>Choose <code>REGRESSION</code> if the <code>MLModel</code> will be used to predict a numeric value.</li> <li>Choose <code>BINARY</code> if the <code>MLModel</code> result has two possible values.</li> <li>Choose <code>MULTICLASS</code> if the <code>MLModel</code> result has a limited number of values. </li> </ul> <p> For more information, see the <a href=\"http://docs.aws.amazon.com/machine-learning/latest/dg\">Amazon Machine Learning Developer Guide</a>.</p>"]
     #[serde(rename="MLModelType")]
-    pub ml_model_type: MLModelType,
+    pub ml_model_type: String,
     #[doc="<p>A list of the training parameters in the <code>MLModel</code>. The list is implemented as a map of key-value pairs.</p> <p>The following is the current set of training parameters: </p> <ul> <li> <p><code>sgd.maxMLModelSizeInBytes</code> - The maximum allowed size of the model. Depending on the input data, the size of the model might affect its performance.</p> <p> The value is an integer that ranges from <code>100000</code> to <code>2147483648</code>. The default value is <code>33554432</code>.</p> </li> <li><p><code>sgd.maxPasses</code> - The number of times that the training process traverses the observations to build the <code>MLModel</code>. The value is an integer that ranges from <code>1</code> to <code>10000</code>. The default value is <code>10</code>.</p></li> <li> <p><code>sgd.shuffleType</code> - Whether Amazon ML shuffles the training data. Shuffling the data improves a model's ability to find the optimal solution for a variety of data types. The valid values are <code>auto</code> and <code>none</code>. The default value is <code>none</code>. We <?oxy_insert_start author=\"laurama\" timestamp=\"20160329T131121-0700\">strongly recommend that you shuffle your data.<?oxy_insert_end></p> </li> <li> <p><code>sgd.l1RegularizationAmount</code> - The coefficient regularization L1 norm. It controls overfitting the data by penalizing large coefficients. This tends to drive coefficients to zero, resulting in a sparse feature set. If you use this parameter, start by specifying a small value, such as <code>1.0E-08</code>.</p> <p>The value is a double that ranges from <code>0</code> to <code>MAX_DOUBLE</code>. The default is to not use L1 normalization. This parameter can't be used when <code>L2</code> is specified. Use this parameter sparingly.</p> </li> <li> <p><code>sgd.l2RegularizationAmount</code> - The coefficient regularization L2 norm. It controls overfitting the data by penalizing large coefficients. This tends to drive coefficients to small, nonzero values. If you use this parameter, start by specifying a small value, such as <code>1.0E-08</code>.</p> <p>The value is a double that ranges from <code>0</code> to <code>MAX_DOUBLE</code>. The default is to not use L2 normalization. This parameter can't be used when <code>L1</code> is specified. Use this parameter sparingly.</p> </li> </ul>"]
     #[serde(rename="Parameters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub parameters: Option<TrainingParameters>,
+    pub parameters: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>The data recipe for creating the <code>MLModel</code>. You must specify either the recipe or its URI. If you don't specify a recipe or its URI, Amazon ML creates a default.</p>"]
     #[serde(rename="Recipe")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub recipe: Option<Recipe>,
+    pub recipe: Option<String>,
     #[doc="<p>The Amazon Simple Storage Service (Amazon S3) location and file name that contains the <code>MLModel</code> recipe. You must specify either the recipe or its URI. If you don't specify a recipe or its URI, Amazon ML creates a default.</p>"]
     #[serde(rename="RecipeUri")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub recipe_uri: Option<S3Url>,
+    pub recipe_uri: Option<String>,
     #[doc="<p>The <code>DataSource</code> that points to the training data.</p>"]
     #[serde(rename="TrainingDataSourceId")]
-    pub training_data_source_id: EntityId,
+    pub training_data_source_id: String,
 }
 
 #[doc="<p> Represents the output of a <code>CreateMLModel</code> operation, and is an acknowledgement that Amazon ML received the request.</p> <p>The <code>CreateMLModel</code> operation is asynchronous. You can poll for status updates by using the <code>GetMLModel</code> operation and checking the <code>Status</code> parameter. </p>"]
@@ -303,14 +293,14 @@ pub struct CreateMLModelOutput {
     #[doc="<p>A user-supplied ID that uniquely identifies the <code>MLModel</code>. This value should be identical to the value of the <code>MLModelId</code> in the request. </p>"]
     #[serde(rename="MLModelId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ml_model_id: Option<EntityId>,
+    pub ml_model_id: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateRealtimeEndpointInput {
     #[doc="<p>The ID assigned to the <code>MLModel</code> during creation.</p>"]
     #[serde(rename="MLModelId")]
-    pub ml_model_id: EntityId,
+    pub ml_model_id: String,
 }
 
 #[doc="<p>Represents the output of an <code>CreateRealtimeEndpoint</code> operation.</p> <p>The result contains the <code>MLModelId</code> and the endpoint information for the <code>MLModel</code>.</p> <note> <p>The endpoint information includes the URI of the <code>MLModel</code>; that is, the location to send online prediction requests for the specified <code>MLModel</code>.</p> </note>"]
@@ -319,69 +309,66 @@ pub struct CreateRealtimeEndpointOutput {
     #[doc="<p>A user-supplied ID that uniquely identifies the <code>MLModel</code>. This value should be identical to the value of the <code>MLModelId</code> in the request.</p>"]
     #[serde(rename="MLModelId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ml_model_id: Option<EntityId>,
+    pub ml_model_id: Option<String>,
     #[doc="<p>The endpoint information of the <code>MLModel</code> </p>"]
     #[serde(rename="RealtimeEndpointInfo")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub realtime_endpoint_info: Option<RealtimeEndpointInfo>,
 }
 
-pub type DataRearrangement = String;
-#[doc="<p>The schema of a <code>DataSource</code>. The <code>DataSchema</code> defines the structure of the observation data in the data file(s) referenced in the <code>DataSource</code>. The DataSource schema is expressed in JSON format.</p> <p><code>DataSchema</code> is not required if you specify a <code>DataSchemaUri</code></p> <p>{ \"version\": \"1.0\", \"recordAnnotationFieldName\": \"F1\", \"recordWeightFieldName\": \"F2\", \"targetFieldName\": \"F3\", \"dataFormat\": \"CSV\", \"dataFileContainsHeader\": true, \"variables\": [ { \"fieldName\": \"F1\", \"fieldType\": \"TEXT\" }, { \"fieldName\": \"F2\", \"fieldType\": \"NUMERIC\" }, { \"fieldName\": \"F3\", \"fieldType\": \"CATEGORICAL\" }, { \"fieldName\": \"F4\", \"fieldType\": \"NUMERIC\" }, { \"fieldName\": \"F5\", \"fieldType\": \"CATEGORICAL\" }, { \"fieldName\": \"F6\", \"fieldType\": \"TEXT\" }, { \"fieldName\": \"F7\", \"fieldType\": \"WEIGHTED_INT_SEQUENCE\" }, { \"fieldName\": \"F8\", \"fieldType\": \"WEIGHTED_STRING_SEQUENCE\" } ], \"excludedVariableNames\": [ \"F6\" ] } </p>"]
-pub type DataSchema = String;
 #[doc="<p> Represents the output of the <code>GetDataSource</code> operation. </p> <p> The content consists of the detailed metadata and data file information and the current status of the <code>DataSource</code>. </p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DataSource {
     #[doc="<p> The parameter is <code>true</code> if statistics need to be generated from the observation data. </p>"]
     #[serde(rename="ComputeStatistics")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub compute_statistics: Option<ComputeStatistics>,
+    pub compute_statistics: Option<bool>,
     #[serde(rename="ComputeTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub compute_time: Option<LongType>,
+    pub compute_time: Option<i64>,
     #[doc="<p>The time that the <code>DataSource</code> was created. The time is expressed in epoch time.</p>"]
     #[serde(rename="CreatedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_at: Option<EpochTime>,
+    pub created_at: Option<f64>,
     #[doc="<p>The AWS user account from which the <code>DataSource</code> was created. The account type can be either an AWS root account or an AWS Identity and Access Management (IAM) user account.</p>"]
     #[serde(rename="CreatedByIamUser")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_by_iam_user: Option<AwsUserArn>,
+    pub created_by_iam_user: Option<String>,
     #[doc="<p>The location and name of the data in Amazon Simple Storage Service (Amazon S3) that is used by a <code>DataSource</code>.</p>"]
     #[serde(rename="DataLocationS3")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub data_location_s3: Option<S3Url>,
+    pub data_location_s3: Option<String>,
     #[doc="<p>A JSON string that represents the splitting and rearrangement requirement used when this <code>DataSource</code> was created.</p>"]
     #[serde(rename="DataRearrangement")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub data_rearrangement: Option<DataRearrangement>,
+    pub data_rearrangement: Option<String>,
     #[doc="<p>The total number of observations contained in the data files that the <code>DataSource</code> references.</p>"]
     #[serde(rename="DataSizeInBytes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub data_size_in_bytes: Option<LongType>,
+    pub data_size_in_bytes: Option<i64>,
     #[doc="<p>The ID that is assigned to the <code>DataSource</code> during creation.</p>"]
     #[serde(rename="DataSourceId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub data_source_id: Option<EntityId>,
+    pub data_source_id: Option<String>,
     #[serde(rename="FinishedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub finished_at: Option<EpochTime>,
+    pub finished_at: Option<f64>,
     #[doc="<p>The time of the most recent edit to the <code>BatchPrediction</code>. The time is expressed in epoch time.</p>"]
     #[serde(rename="LastUpdatedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub last_updated_at: Option<EpochTime>,
+    pub last_updated_at: Option<f64>,
     #[doc="<p>A description of the most recent details about creating the <code>DataSource</code>.</p>"]
     #[serde(rename="Message")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub message: Option<Message>,
+    pub message: Option<String>,
     #[doc="<p>A user-supplied name or description of the <code>DataSource</code>.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<EntityName>,
+    pub name: Option<String>,
     #[doc="<p>The number of data files referenced by the <code>DataSource</code>.</p>"]
     #[serde(rename="NumberOfFiles")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub number_of_files: Option<LongType>,
+    pub number_of_files: Option<i64>,
     #[serde(rename="RDSMetadata")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub rds_metadata: Option<RDSMetadata>,
@@ -390,24 +377,21 @@ pub struct DataSource {
     pub redshift_metadata: Option<RedshiftMetadata>,
     #[serde(rename="RoleARN")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub role_arn: Option<RoleARN>,
+    pub role_arn: Option<String>,
     #[serde(rename="StartedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub started_at: Option<EpochTime>,
+    pub started_at: Option<f64>,
     #[doc="<p>The current status of the <code>DataSource</code>. This element can have one of the following values: </p> <ul> <li>PENDING - Amazon Machine Learning (Amazon ML) submitted a request to create a <code>DataSource</code>.</li> <li>INPROGRESS - The creation process is underway.</li> <li>FAILED - The request to create a <code>DataSource</code> did not run to completion. It is not usable.</li> <li>COMPLETED - The creation process completed successfully.</li> <li>DELETED - The <code>DataSource</code> is marked as deleted. It is not usable.</li> </ul>"]
     #[serde(rename="Status")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status: Option<EntityStatus>,
+    pub status: Option<String>,
 }
 
-#[doc="<p>A list of the variables to use in searching or filtering <code>DataSource</code>.</p> <ul> <li> <code>CreatedAt</code> - Sets the search criteria to <code>DataSource</code> creation date.</li> <li> <code>Status</code> - Sets the search criteria to <code>DataSource</code> status.</li> <li> <code>Name</code> - Sets the search criteria to the contents of <code>DataSource</code> <b> </b> <code>Name</code>.</li> <li> <code>DataUri</code> - Sets the search criteria to the URI of data files used to create the <code>DataSource</code>. The URI can identify either a file or an Amazon Simple Storage Service (Amazon S3) bucket or directory.</li> <li> <code>IAMUser</code> - Sets the search criteria to the user account that invoked the <code>DataSource</code> creation.</li> </ul> <note><title>Note</title> <p>The variable names should match the variable names in the <code>DataSource</code>.</p> </note>"]
-pub type DataSourceFilterVariable = String;
-pub type DataSources = Vec<DataSource>;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteBatchPredictionInput {
     #[doc="<p>A user-supplied ID that uniquely identifies the <code>BatchPrediction</code>.</p>"]
     #[serde(rename="BatchPredictionId")]
-    pub batch_prediction_id: EntityId,
+    pub batch_prediction_id: String,
 }
 
 #[doc="<p> Represents the output of a <code>DeleteBatchPrediction</code> operation.</p> <p>You can use the <code>GetBatchPrediction</code> operation and check the value of the <code>Status</code> parameter to see whether a <code>BatchPrediction</code> is marked as <code>DELETED</code>.</p>"]
@@ -416,14 +400,14 @@ pub struct DeleteBatchPredictionOutput {
     #[doc="<p>A user-supplied ID that uniquely identifies the <code>BatchPrediction</code>. This value should be identical to the value of the <code>BatchPredictionID</code> in the request.</p>"]
     #[serde(rename="BatchPredictionId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub batch_prediction_id: Option<EntityId>,
+    pub batch_prediction_id: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteDataSourceInput {
     #[doc="<p>A user-supplied ID that uniquely identifies the <code>DataSource</code>.</p>"]
     #[serde(rename="DataSourceId")]
-    pub data_source_id: EntityId,
+    pub data_source_id: String,
 }
 
 #[doc="<p> Represents the output of a <code>DeleteDataSource</code> operation.</p>"]
@@ -432,14 +416,14 @@ pub struct DeleteDataSourceOutput {
     #[doc="<p>A user-supplied ID that uniquely identifies the <code>DataSource</code>. This value should be identical to the value of the <code>DataSourceID</code> in the request.</p>"]
     #[serde(rename="DataSourceId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub data_source_id: Option<EntityId>,
+    pub data_source_id: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteEvaluationInput {
     #[doc="<p>A user-supplied ID that uniquely identifies the <code>Evaluation</code> to delete.</p>"]
     #[serde(rename="EvaluationId")]
-    pub evaluation_id: EntityId,
+    pub evaluation_id: String,
 }
 
 #[doc="<p> Represents the output of a <code>DeleteEvaluation</code> operation. The output indicates that Amazon Machine Learning (Amazon ML) received the request.</p> <p>You can use the <code>GetEvaluation</code> operation and check the value of the <code>Status</code> parameter to see whether an <code>Evaluation</code> is marked as <code>DELETED</code>.</p>"]
@@ -448,14 +432,14 @@ pub struct DeleteEvaluationOutput {
     #[doc="<p>A user-supplied ID that uniquely identifies the <code>Evaluation</code>. This value should be identical to the value of the <code>EvaluationId</code> in the request.</p>"]
     #[serde(rename="EvaluationId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub evaluation_id: Option<EntityId>,
+    pub evaluation_id: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteMLModelInput {
     #[doc="<p>A user-supplied ID that uniquely identifies the <code>MLModel</code>.</p>"]
     #[serde(rename="MLModelId")]
-    pub ml_model_id: EntityId,
+    pub ml_model_id: String,
 }
 
 #[doc="<p>Represents the output of a <code>DeleteMLModel</code> operation.</p> <p>You can use the <code>GetMLModel</code> operation and check the value of the <code>Status</code> parameter to see whether an <code>MLModel</code> is marked as <code>DELETED</code>.</p>"]
@@ -464,14 +448,14 @@ pub struct DeleteMLModelOutput {
     #[doc="<p>A user-supplied ID that uniquely identifies the <code>MLModel</code>. This value should be identical to the value of the <code>MLModelID</code> in the request.</p>"]
     #[serde(rename="MLModelId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ml_model_id: Option<EntityId>,
+    pub ml_model_id: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteRealtimeEndpointInput {
     #[doc="<p>The ID assigned to the <code>MLModel</code> during creation.</p>"]
     #[serde(rename="MLModelId")]
-    pub ml_model_id: EntityId,
+    pub ml_model_id: String,
 }
 
 #[doc="<p>Represents the output of an <code>DeleteRealtimeEndpoint</code> operation.</p> <p>The result contains the <code>MLModelId</code> and the endpoint information for the <code>MLModel</code>. </p>"]
@@ -480,7 +464,7 @@ pub struct DeleteRealtimeEndpointOutput {
     #[doc="<p>A user-supplied ID that uniquely identifies the <code>MLModel</code>. This value should be identical to the value of the <code>MLModelId</code> in the request.</p>"]
     #[serde(rename="MLModelId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ml_model_id: Option<EntityId>,
+    pub ml_model_id: Option<String>,
     #[doc="<p>The endpoint information of the <code>MLModel</code> </p>"]
     #[serde(rename="RealtimeEndpointInfo")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -491,13 +475,13 @@ pub struct DeleteRealtimeEndpointOutput {
 pub struct DeleteTagsInput {
     #[doc="<p>The ID of the tagged ML object. For example, <code>exampleModelId</code>.</p>"]
     #[serde(rename="ResourceId")]
-    pub resource_id: EntityId,
+    pub resource_id: String,
     #[doc="<p>The type of the tagged ML object.</p>"]
     #[serde(rename="ResourceType")]
-    pub resource_type: TaggableResourceType,
+    pub resource_type: String,
     #[doc="<p>One or more tags to delete.</p>"]
     #[serde(rename="TagKeys")]
-    pub tag_keys: TagKeyList,
+    pub tag_keys: Vec<String>,
 }
 
 #[doc="<p>Amazon ML returns the following elements. </p>"]
@@ -506,11 +490,11 @@ pub struct DeleteTagsOutput {
     #[doc="<p>The ID of the ML object from which tags were deleted.</p>"]
     #[serde(rename="ResourceId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub resource_id: Option<EntityId>,
+    pub resource_id: Option<String>,
     #[doc="<p>The type of the ML object from which tags were deleted.</p>"]
     #[serde(rename="ResourceType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub resource_type: Option<TaggableResourceType>,
+    pub resource_type: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -518,47 +502,47 @@ pub struct DescribeBatchPredictionsInput {
     #[doc="<p>The equal to operator. The <code>BatchPrediction</code> results will have <code>FilterVariable</code> values that exactly match the value specified with <code>EQ</code>.</p>"]
     #[serde(rename="EQ")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub eq: Option<ComparatorValue>,
+    pub eq: Option<String>,
     #[doc="<p>Use one of the following variables to filter a list of <code>BatchPrediction</code>:</p> <ul> <li> <code>CreatedAt</code> - Sets the search criteria to the <code>BatchPrediction</code> creation date.</li> <li> <code>Status</code> - Sets the search criteria to the <code>BatchPrediction</code> status.</li> <li> <code>Name</code> - Sets the search criteria to the contents of the <code>BatchPrediction</code><b> </b> <code>Name</code>.</li> <li> <code>IAMUser</code> - Sets the search criteria to the user account that invoked the <code>BatchPrediction</code> creation.</li> <li> <code>MLModelId</code> - Sets the search criteria to the <code>MLModel</code> used in the <code>BatchPrediction</code>.</li> <li> <code>DataSourceId</code> - Sets the search criteria to the <code>DataSource</code> used in the <code>BatchPrediction</code>.</li> <li> <code>DataURI</code> - Sets the search criteria to the data file(s) used in the <code>BatchPrediction</code>. The URL can identify either a file or an Amazon Simple Storage Solution (Amazon S3) bucket or directory.</li> </ul>"]
     #[serde(rename="FilterVariable")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub filter_variable: Option<BatchPredictionFilterVariable>,
+    pub filter_variable: Option<String>,
     #[doc="<p>The greater than or equal to operator. The <code>BatchPrediction</code> results will have <code>FilterVariable</code> values that are greater than or equal to the value specified with <code>GE</code>. </p>"]
     #[serde(rename="GE")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ge: Option<ComparatorValue>,
+    pub ge: Option<String>,
     #[doc="<p>The greater than operator. The <code>BatchPrediction</code> results will have <code>FilterVariable</code> values that are greater than the value specified with <code>GT</code>.</p>"]
     #[serde(rename="GT")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub gt: Option<ComparatorValue>,
+    pub gt: Option<String>,
     #[doc="<p>The less than or equal to operator. The <code>BatchPrediction</code> results will have <code>FilterVariable</code> values that are less than or equal to the value specified with <code>LE</code>.</p>"]
     #[serde(rename="LE")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub le: Option<ComparatorValue>,
+    pub le: Option<String>,
     #[doc="<p>The less than operator. The <code>BatchPrediction</code> results will have <code>FilterVariable</code> values that are less than the value specified with <code>LT</code>.</p>"]
     #[serde(rename="LT")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub lt: Option<ComparatorValue>,
+    pub lt: Option<String>,
     #[doc="<p>The number of pages of information to include in the result. The range of acceptable values is <code>1</code> through <code>100</code>. The default value is <code>100</code>.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<PageLimit>,
+    pub limit: Option<i64>,
     #[doc="<p>The not equal to operator. The <code>BatchPrediction</code> results will have <code>FilterVariable</code> values not equal to the value specified with <code>NE</code>.</p>"]
     #[serde(rename="NE")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ne: Option<ComparatorValue>,
+    pub ne: Option<String>,
     #[doc="<p>An ID of the page in the paginated results.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<StringType>,
+    pub next_token: Option<String>,
     #[doc="<p>A string that is found at the beginning of a variable, such as <code>Name</code> or <code>Id</code>.</p> <p>For example, a <code>Batch Prediction</code> operation could have the <code>Name</code> <code>2014-09-09-HolidayGiftMailer</code>. To search for this <code>BatchPrediction</code>, select <code>Name</code> for the <code>FilterVariable</code> and any of the following strings for the <code>Prefix</code>: </p> <ul> <li><p>2014-09</p></li> <li><p>2014-09-09</p></li> <li><p>2014-09-09-Holiday</p></li> </ul>"]
     #[serde(rename="Prefix")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub prefix: Option<ComparatorValue>,
+    pub prefix: Option<String>,
     #[doc="<p>A two-value parameter that determines the sequence of the resulting list of <code>MLModel</code>s.</p> <ul> <li> <code>asc</code> - Arranges the list in ascending order (A-Z, 0-9).</li> <li> <code>dsc</code> - Arranges the list in descending order (Z-A, 9-0).</li> </ul> <p>Results are sorted by <code>FilterVariable</code>.</p>"]
     #[serde(rename="SortOrder")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub sort_order: Option<SortOrder>,
+    pub sort_order: Option<String>,
 }
 
 #[doc="<p>Represents the output of a <code>DescribeBatchPredictions</code> operation. The content is essentially a list of <code>BatchPrediction</code>s.</p>"]
@@ -567,11 +551,11 @@ pub struct DescribeBatchPredictionsOutput {
     #[doc="<p>The ID of the next page in the paginated results that indicates at least one more page follows.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<StringType>,
+    pub next_token: Option<String>,
     #[doc="<p>A list of <code>BatchPrediction</code> objects that meet the search criteria. </p>"]
     #[serde(rename="Results")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub results: Option<BatchPredictions>,
+    pub results: Option<Vec<BatchPrediction>>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -579,47 +563,47 @@ pub struct DescribeDataSourcesInput {
     #[doc="<p>The equal to operator. The <code>DataSource</code> results will have <code>FilterVariable</code> values that exactly match the value specified with <code>EQ</code>.</p>"]
     #[serde(rename="EQ")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub eq: Option<ComparatorValue>,
+    pub eq: Option<String>,
     #[doc="<p>Use one of the following variables to filter a list of <code>DataSource</code>:</p> <ul> <li> <code>CreatedAt</code> - Sets the search criteria to <code>DataSource</code> creation dates.</li> <li> <code>Status</code> - Sets the search criteria to <code>DataSource</code> statuses.</li> <li> <code>Name</code> - Sets the search criteria to the contents of <code>DataSource</code> <b> </b> <code>Name</code>.</li> <li> <code>DataUri</code> - Sets the search criteria to the URI of data files used to create the <code>DataSource</code>. The URI can identify either a file or an Amazon Simple Storage Service (Amazon S3) bucket or directory.</li> <li> <code>IAMUser</code> - Sets the search criteria to the user account that invoked the <code>DataSource</code> creation.</li> </ul>"]
     #[serde(rename="FilterVariable")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub filter_variable: Option<DataSourceFilterVariable>,
+    pub filter_variable: Option<String>,
     #[doc="<p>The greater than or equal to operator. The <code>DataSource</code> results will have <code>FilterVariable</code> values that are greater than or equal to the value specified with <code>GE</code>. </p>"]
     #[serde(rename="GE")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ge: Option<ComparatorValue>,
+    pub ge: Option<String>,
     #[doc="<p>The greater than operator. The <code>DataSource</code> results will have <code>FilterVariable</code> values that are greater than the value specified with <code>GT</code>.</p>"]
     #[serde(rename="GT")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub gt: Option<ComparatorValue>,
+    pub gt: Option<String>,
     #[doc="<p>The less than or equal to operator. The <code>DataSource</code> results will have <code>FilterVariable</code> values that are less than or equal to the value specified with <code>LE</code>.</p>"]
     #[serde(rename="LE")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub le: Option<ComparatorValue>,
+    pub le: Option<String>,
     #[doc="<p>The less than operator. The <code>DataSource</code> results will have <code>FilterVariable</code> values that are less than the value specified with <code>LT</code>.</p>"]
     #[serde(rename="LT")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub lt: Option<ComparatorValue>,
+    pub lt: Option<String>,
     #[doc="<p> The maximum number of <code>DataSource</code> to include in the result.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<PageLimit>,
+    pub limit: Option<i64>,
     #[doc="<p>The not equal to operator. The <code>DataSource</code> results will have <code>FilterVariable</code> values not equal to the value specified with <code>NE</code>.</p>"]
     #[serde(rename="NE")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ne: Option<ComparatorValue>,
+    pub ne: Option<String>,
     #[doc="<p>The ID of the page in the paginated results.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<StringType>,
+    pub next_token: Option<String>,
     #[doc="<p>A string that is found at the beginning of a variable, such as <code>Name</code> or <code>Id</code>.</p> <p>For example, a <code>DataSource</code> could have the <code>Name</code> <code>2014-09-09-HolidayGiftMailer</code>. To search for this <code>DataSource</code>, select <code>Name</code> for the <code>FilterVariable</code> and any of the following strings for the <code>Prefix</code>: </p> <ul> <li><p>2014-09</p></li> <li><p>2014-09-09</p></li> <li><p>2014-09-09-Holiday</p></li> </ul>"]
     #[serde(rename="Prefix")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub prefix: Option<ComparatorValue>,
+    pub prefix: Option<String>,
     #[doc="<p>A two-value parameter that determines the sequence of the resulting list of <code>DataSource</code>.</p> <ul> <li> <code>asc</code> - Arranges the list in ascending order (A-Z, 0-9).</li> <li> <code>dsc</code> - Arranges the list in descending order (Z-A, 9-0).</li> </ul> <p>Results are sorted by <code>FilterVariable</code>.</p>"]
     #[serde(rename="SortOrder")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub sort_order: Option<SortOrder>,
+    pub sort_order: Option<String>,
 }
 
 #[doc="<p>Represents the query results from a <a>DescribeDataSources</a> operation. The content is essentially a list of <code>DataSource</code>.</p>"]
@@ -628,11 +612,11 @@ pub struct DescribeDataSourcesOutput {
     #[doc="<p>An ID of the next page in the paginated results that indicates at least one more page follows.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<StringType>,
+    pub next_token: Option<String>,
     #[doc="<p>A list of <code>DataSource</code> that meet the search criteria. </p>"]
     #[serde(rename="Results")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub results: Option<DataSources>,
+    pub results: Option<Vec<DataSource>>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -640,47 +624,47 @@ pub struct DescribeEvaluationsInput {
     #[doc="<p>The equal to operator. The <code>Evaluation</code> results will have <code>FilterVariable</code> values that exactly match the value specified with <code>EQ</code>.</p>"]
     #[serde(rename="EQ")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub eq: Option<ComparatorValue>,
+    pub eq: Option<String>,
     #[doc="<p>Use one of the following variable to filter a list of <code>Evaluation</code> objects:</p> <ul> <li> <code>CreatedAt</code> - Sets the search criteria to the <code>Evaluation</code> creation date.</li> <li> <code>Status</code> - Sets the search criteria to the <code>Evaluation</code> status.</li> <li> <code>Name</code> - Sets the search criteria to the contents of <code>Evaluation</code> <b> </b> <code>Name</code>.</li> <li> <code>IAMUser</code> - Sets the search criteria to the user account that invoked an <code>Evaluation</code>.</li> <li> <code>MLModelId</code> - Sets the search criteria to the <code>MLModel</code> that was evaluated.</li> <li> <code>DataSourceId</code> - Sets the search criteria to the <code>DataSource</code> used in <code>Evaluation</code>.</li> <li> <code>DataUri</code> - Sets the search criteria to the data file(s) used in <code>Evaluation</code>. The URL can identify either a file or an Amazon Simple Storage Solution (Amazon S3) bucket or directory.</li> </ul>"]
     #[serde(rename="FilterVariable")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub filter_variable: Option<EvaluationFilterVariable>,
+    pub filter_variable: Option<String>,
     #[doc="<p>The greater than or equal to operator. The <code>Evaluation</code> results will have <code>FilterVariable</code> values that are greater than or equal to the value specified with <code>GE</code>. </p>"]
     #[serde(rename="GE")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ge: Option<ComparatorValue>,
+    pub ge: Option<String>,
     #[doc="<p>The greater than operator. The <code>Evaluation</code> results will have <code>FilterVariable</code> values that are greater than the value specified with <code>GT</code>.</p>"]
     #[serde(rename="GT")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub gt: Option<ComparatorValue>,
+    pub gt: Option<String>,
     #[doc="<p>The less than or equal to operator. The <code>Evaluation</code> results will have <code>FilterVariable</code> values that are less than or equal to the value specified with <code>LE</code>.</p>"]
     #[serde(rename="LE")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub le: Option<ComparatorValue>,
+    pub le: Option<String>,
     #[doc="<p>The less than operator. The <code>Evaluation</code> results will have <code>FilterVariable</code> values that are less than the value specified with <code>LT</code>.</p>"]
     #[serde(rename="LT")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub lt: Option<ComparatorValue>,
+    pub lt: Option<String>,
     #[doc="<p> The maximum number of <code>Evaluation</code> to include in the result.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<PageLimit>,
+    pub limit: Option<i64>,
     #[doc="<p>The not equal to operator. The <code>Evaluation</code> results will have <code>FilterVariable</code> values not equal to the value specified with <code>NE</code>.</p>"]
     #[serde(rename="NE")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ne: Option<ComparatorValue>,
+    pub ne: Option<String>,
     #[doc="<p>The ID of the page in the paginated results.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<StringType>,
+    pub next_token: Option<String>,
     #[doc="<p>A string that is found at the beginning of a variable, such as <code>Name</code> or <code>Id</code>.</p> <p>For example, an <code>Evaluation</code> could have the <code>Name</code> <code>2014-09-09-HolidayGiftMailer</code>. To search for this <code>Evaluation</code>, select <code>Name</code> for the <code>FilterVariable</code> and any of the following strings for the <code>Prefix</code>: </p> <ul> <li><p>2014-09</p></li> <li><p>2014-09-09</p></li> <li><p>2014-09-09-Holiday</p></li> </ul>"]
     #[serde(rename="Prefix")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub prefix: Option<ComparatorValue>,
+    pub prefix: Option<String>,
     #[doc="<p>A two-value parameter that determines the sequence of the resulting list of <code>Evaluation</code>.</p> <ul> <li> <code>asc</code> - Arranges the list in ascending order (A-Z, 0-9).</li> <li> <code>dsc</code> - Arranges the list in descending order (Z-A, 9-0).</li> </ul> <p>Results are sorted by <code>FilterVariable</code>.</p>"]
     #[serde(rename="SortOrder")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub sort_order: Option<SortOrder>,
+    pub sort_order: Option<String>,
 }
 
 #[doc="<p>Represents the query results from a <code>DescribeEvaluations</code> operation. The content is essentially a list of <code>Evaluation</code>.</p>"]
@@ -689,11 +673,11 @@ pub struct DescribeEvaluationsOutput {
     #[doc="<p>The ID of the next page in the paginated results that indicates at least one more page follows.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<StringType>,
+    pub next_token: Option<String>,
     #[doc="<p>A list of <code>Evaluation</code> that meet the search criteria. </p>"]
     #[serde(rename="Results")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub results: Option<Evaluations>,
+    pub results: Option<Vec<Evaluation>>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -701,47 +685,47 @@ pub struct DescribeMLModelsInput {
     #[doc="<p>The equal to operator. The <code>MLModel</code> results will have <code>FilterVariable</code> values that exactly match the value specified with <code>EQ</code>.</p>"]
     #[serde(rename="EQ")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub eq: Option<ComparatorValue>,
+    pub eq: Option<String>,
     #[doc="<p>Use one of the following variables to filter a list of <code>MLModel</code>:</p> <ul> <li> <code>CreatedAt</code> - Sets the search criteria to <code>MLModel</code> creation date.</li> <li> <code>Status</code> - Sets the search criteria to <code>MLModel</code> status.</li> <li> <code>Name</code> - Sets the search criteria to the contents of <code>MLModel</code><b> </b> <code>Name</code>.</li> <li> <code>IAMUser</code> - Sets the search criteria to the user account that invoked the <code>MLModel</code> creation.</li> <li> <code>TrainingDataSourceId</code> - Sets the search criteria to the <code>DataSource</code> used to train one or more <code>MLModel</code>.</li> <li> <code>RealtimeEndpointStatus</code> - Sets the search criteria to the <code>MLModel</code> real-time endpoint status.</li> <li> <code>MLModelType</code> - Sets the search criteria to <code>MLModel</code> type: binary, regression, or multi-class.</li> <li> <code>Algorithm</code> - Sets the search criteria to the algorithm that the <code>MLModel</code> uses.</li> <li> <code>TrainingDataURI</code> - Sets the search criteria to the data file(s) used in training a <code>MLModel</code>. The URL can identify either a file or an Amazon Simple Storage Service (Amazon S3) bucket or directory.</li> </ul>"]
     #[serde(rename="FilterVariable")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub filter_variable: Option<MLModelFilterVariable>,
+    pub filter_variable: Option<String>,
     #[doc="<p>The greater than or equal to operator. The <code>MLModel</code> results will have <code>FilterVariable</code> values that are greater than or equal to the value specified with <code>GE</code>. </p>"]
     #[serde(rename="GE")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ge: Option<ComparatorValue>,
+    pub ge: Option<String>,
     #[doc="<p>The greater than operator. The <code>MLModel</code> results will have <code>FilterVariable</code> values that are greater than the value specified with <code>GT</code>.</p>"]
     #[serde(rename="GT")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub gt: Option<ComparatorValue>,
+    pub gt: Option<String>,
     #[doc="<p>The less than or equal to operator. The <code>MLModel</code> results will have <code>FilterVariable</code> values that are less than or equal to the value specified with <code>LE</code>.</p>"]
     #[serde(rename="LE")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub le: Option<ComparatorValue>,
+    pub le: Option<String>,
     #[doc="<p>The less than operator. The <code>MLModel</code> results will have <code>FilterVariable</code> values that are less than the value specified with <code>LT</code>.</p>"]
     #[serde(rename="LT")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub lt: Option<ComparatorValue>,
+    pub lt: Option<String>,
     #[doc="<p>The number of pages of information to include in the result. The range of acceptable values is <code>1</code> through <code>100</code>. The default value is <code>100</code>.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<PageLimit>,
+    pub limit: Option<i64>,
     #[doc="<p>The not equal to operator. The <code>MLModel</code> results will have <code>FilterVariable</code> values not equal to the value specified with <code>NE</code>.</p>"]
     #[serde(rename="NE")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ne: Option<ComparatorValue>,
+    pub ne: Option<String>,
     #[doc="<p>The ID of the page in the paginated results.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<StringType>,
+    pub next_token: Option<String>,
     #[doc="<p>A string that is found at the beginning of a variable, such as <code>Name</code> or <code>Id</code>.</p> <p>For example, an <code>MLModel</code> could have the <code>Name</code> <code>2014-09-09-HolidayGiftMailer</code>. To search for this <code>MLModel</code>, select <code>Name</code> for the <code>FilterVariable</code> and any of the following strings for the <code>Prefix</code>: </p> <ul> <li><p>2014-09</p></li> <li><p>2014-09-09</p></li> <li><p>2014-09-09-Holiday</p></li> </ul>"]
     #[serde(rename="Prefix")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub prefix: Option<ComparatorValue>,
+    pub prefix: Option<String>,
     #[doc="<p>A two-value parameter that determines the sequence of the resulting list of <code>MLModel</code>.</p> <ul> <li> <code>asc</code> - Arranges the list in ascending order (A-Z, 0-9).</li> <li> <code>dsc</code> - Arranges the list in descending order (Z-A, 9-0).</li> </ul> <p>Results are sorted by <code>FilterVariable</code>.</p>"]
     #[serde(rename="SortOrder")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub sort_order: Option<SortOrder>,
+    pub sort_order: Option<String>,
 }
 
 #[doc="<p>Represents the output of a <code>DescribeMLModels</code> operation. The content is essentially a list of <code>MLModel</code>.</p>"]
@@ -750,21 +734,21 @@ pub struct DescribeMLModelsOutput {
     #[doc="<p>The ID of the next page in the paginated results that indicates at least one more page follows.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<StringType>,
+    pub next_token: Option<String>,
     #[doc="<p>A list of <code>MLModel</code> that meet the search criteria.</p>"]
     #[serde(rename="Results")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub results: Option<MLModels>,
+    pub results: Option<Vec<MLModel>>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DescribeTagsInput {
     #[doc="<p>The ID of the ML object. For example, <code>exampleModelId</code>. </p>"]
     #[serde(rename="ResourceId")]
-    pub resource_id: EntityId,
+    pub resource_id: String,
     #[doc="<p>The type of the ML object.</p>"]
     #[serde(rename="ResourceType")]
-    pub resource_type: TaggableResourceType,
+    pub resource_type: String,
 }
 
 #[doc="<p>Amazon ML returns the following elements. </p>"]
@@ -773,104 +757,80 @@ pub struct DescribeTagsOutput {
     #[doc="<p>The ID of the tagged ML object.</p>"]
     #[serde(rename="ResourceId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub resource_id: Option<EntityId>,
+    pub resource_id: Option<String>,
     #[doc="<p>The type of the tagged ML object.</p>"]
     #[serde(rename="ResourceType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub resource_type: Option<TaggableResourceType>,
+    pub resource_type: Option<String>,
     #[doc="<p>A list of tags associated with the ML object.</p>"]
     #[serde(rename="Tags")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
-#[doc="Contains the key values of <code>DetailsMap</code>: <code>PredictiveModelType</code> - Indicates the type of the <code>MLModel</code>. <code>Algorithm</code> - Indicates the algorithm that was used for the <code>MLModel</code>."]
-pub type DetailsAttributes = String;
-#[doc="Provides any additional details regarding the prediction."]
-pub type DetailsMap = ::std::collections::HashMap<DetailsAttributes, DetailsValue>;
-pub type DetailsValue = String;
-pub type EDPPipelineId = String;
-pub type EDPResourceRole = String;
-pub type EDPSecurityGroupId = String;
-pub type EDPSecurityGroupIds = Vec<EDPSecurityGroupId>;
-pub type EDPServiceRole = String;
-pub type EDPSubnetId = String;
-pub type EntityId = String;
-#[doc="<p>A user-supplied name or description of the Amazon ML resource.</p>"]
-pub type EntityName = String;
-#[doc="<p>Object status with the following possible values:</p> <ul> <li><code>PENDING</code></li> <li><code>INPROGRESS</code></li> <li><code>FAILED</code></li> <li><code>COMPLETED</code></li> <li><code>DELETED</code></li> </ul>"]
-pub type EntityStatus = String;
-#[doc="<p>A timestamp represented in epoch time.</p>"]
-pub type EpochTime = f64;
-pub type ErrorCode = i64;
-pub type ErrorMessage = String;
 #[doc="<p> Represents the output of <code>GetEvaluation</code> operation. </p> <p>The content consists of the detailed metadata and data file information and the current status of the <code>Evaluation</code>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Evaluation {
     #[serde(rename="ComputeTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub compute_time: Option<LongType>,
+    pub compute_time: Option<i64>,
     #[doc="<p>The time that the <code>Evaluation</code> was created. The time is expressed in epoch time.</p>"]
     #[serde(rename="CreatedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_at: Option<EpochTime>,
+    pub created_at: Option<f64>,
     #[doc="<p>The AWS user account that invoked the evaluation. The account type can be either an AWS root account or an AWS Identity and Access Management (IAM) user account.</p>"]
     #[serde(rename="CreatedByIamUser")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_by_iam_user: Option<AwsUserArn>,
+    pub created_by_iam_user: Option<String>,
     #[doc="<p>The ID of the <code>DataSource</code> that is used to evaluate the <code>MLModel</code>.</p>"]
     #[serde(rename="EvaluationDataSourceId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub evaluation_data_source_id: Option<EntityId>,
+    pub evaluation_data_source_id: Option<String>,
     #[doc="<p>The ID that is assigned to the <code>Evaluation</code> at creation.</p>"]
     #[serde(rename="EvaluationId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub evaluation_id: Option<EntityId>,
+    pub evaluation_id: Option<String>,
     #[serde(rename="FinishedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub finished_at: Option<EpochTime>,
+    pub finished_at: Option<f64>,
     #[doc="<p>The location and name of the data in Amazon Simple Storage Server (Amazon S3) that is used in the evaluation.</p>"]
     #[serde(rename="InputDataLocationS3")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub input_data_location_s3: Option<S3Url>,
+    pub input_data_location_s3: Option<String>,
     #[doc="<p>The time of the most recent edit to the <code>Evaluation</code>. The time is expressed in epoch time.</p>"]
     #[serde(rename="LastUpdatedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub last_updated_at: Option<EpochTime>,
+    pub last_updated_at: Option<f64>,
     #[doc="<p>The ID of the <code>MLModel</code> that is the focus of the evaluation.</p>"]
     #[serde(rename="MLModelId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ml_model_id: Option<EntityId>,
+    pub ml_model_id: Option<String>,
     #[doc="<p>A description of the most recent details about evaluating the <code>MLModel</code>.</p>"]
     #[serde(rename="Message")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub message: Option<Message>,
+    pub message: Option<String>,
     #[doc="<p>A user-supplied name or description of the <code>Evaluation</code>. </p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<EntityName>,
+    pub name: Option<String>,
     #[doc="<p>Measurements of how well the <code>MLModel</code> performed, using observations referenced by the <code>DataSource</code>. One of the following metrics is returned, based on the type of the <code>MLModel</code>: </p> <ul> <li> <p>BinaryAUC: A binary <code>MLModel</code> uses the Area Under the Curve (AUC) technique to measure performance. </p> </li> <li> <p>RegressionRMSE: A regression <code>MLModel</code> uses the Root Mean Square Error (RMSE) technique to measure performance. RMSE measures the difference between predicted and actual values for a single variable.</p> </li> <li> <p>MulticlassAvgFScore: A multiclass <code>MLModel</code> uses the F1 score technique to measure performance. </p> </li> </ul> <p> For more information about performance metrics, please see the <a href=\"http://docs.aws.amazon.com/machine-learning/latest/dg\">Amazon Machine Learning Developer Guide</a>. </p>"]
     #[serde(rename="PerformanceMetrics")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub performance_metrics: Option<PerformanceMetrics>,
     #[serde(rename="StartedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub started_at: Option<EpochTime>,
+    pub started_at: Option<f64>,
     #[doc="<p>The status of the evaluation. This element can have one of the following values:</p> <ul> <li> <code>PENDING</code> - Amazon Machine Learning (Amazon ML) submitted a request to evaluate an <code>MLModel</code>.</li> <li> <code>INPROGRESS</code> - The evaluation is underway.</li> <li> <code>FAILED</code> - The request to evaluate an <code>MLModel</code> did not run to completion. It is not usable.</li> <li> <code>COMPLETED</code> - The evaluation process completed successfully.</li> <li> <code>DELETED</code> - The <code>Evaluation</code> is marked as deleted. It is not usable.</li> </ul>"]
     #[serde(rename="Status")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status: Option<EntityStatus>,
+    pub status: Option<String>,
 }
 
-#[doc="<p>A list of the variables to use in searching or filtering <code>Evaluation</code>.</p> <ul> <li> <code>CreatedAt</code> - Sets the search criteria to <code>Evaluation</code> creation date.</li> <li> <code>Status</code> - Sets the search criteria to <code>Evaluation</code> status.</li> <li> <code>Name</code> - Sets the search criteria to the contents of <code>Evaluation</code> <b> </b> <code>Name</code>.</li> <li> <code>IAMUser</code> - Sets the search criteria to the user account that invoked an evaluation.</li> <li> <code>MLModelId</code> - Sets the search criteria to the <code>Predictor</code> that was evaluated.</li> <li> <code>DataSourceId</code> - Sets the search criteria to the <code>DataSource</code> used in evaluation.</li> <li> <code>DataUri</code> - Sets the search criteria to the data file(s) used in evaluation. The URL can identify either a file or an Amazon Simple Storage Service (Amazon S3) bucket or directory.</li> </ul>"]
-pub type EvaluationFilterVariable = String;
-pub type Evaluations = Vec<Evaluation>;
-pub type FloatLabel = f32;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetBatchPredictionInput {
     #[doc="<p>An ID assigned to the <code>BatchPrediction</code> at creation.</p>"]
     #[serde(rename="BatchPredictionId")]
-    pub batch_prediction_id: EntityId,
+    pub batch_prediction_id: String,
 }
 
 #[doc="<p>Represents the output of a <code>GetBatchPrediction</code> operation and describes a <code>BatchPrediction</code>.</p>"]
@@ -879,82 +839,82 @@ pub struct GetBatchPredictionOutput {
     #[doc="<p>The ID of the <code>DataSource</code> that was used to create the <code>BatchPrediction</code>. </p>"]
     #[serde(rename="BatchPredictionDataSourceId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub batch_prediction_data_source_id: Option<EntityId>,
+    pub batch_prediction_data_source_id: Option<String>,
     #[doc="<p>An ID assigned to the <code>BatchPrediction</code> at creation. This value should be identical to the value of the <code>BatchPredictionID</code> in the request.</p>"]
     #[serde(rename="BatchPredictionId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub batch_prediction_id: Option<EntityId>,
+    pub batch_prediction_id: Option<String>,
     #[doc="<p>The approximate CPU time in milliseconds that Amazon Machine Learning spent processing the <code>BatchPrediction</code>, normalized and scaled on computation resources. <code>ComputeTime</code> is only available if the <code>BatchPrediction</code> is in the <code>COMPLETED</code> state.</p>"]
     #[serde(rename="ComputeTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub compute_time: Option<LongType>,
+    pub compute_time: Option<i64>,
     #[doc="<p>The time when the <code>BatchPrediction</code> was created. The time is expressed in epoch time.</p>"]
     #[serde(rename="CreatedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_at: Option<EpochTime>,
+    pub created_at: Option<f64>,
     #[doc="<p>The AWS user account that invoked the <code>BatchPrediction</code>. The account type can be either an AWS root account or an AWS Identity and Access Management (IAM) user account.</p>"]
     #[serde(rename="CreatedByIamUser")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_by_iam_user: Option<AwsUserArn>,
+    pub created_by_iam_user: Option<String>,
     #[doc="<p>The epoch time when Amazon Machine Learning marked the <code>BatchPrediction</code> as <code>COMPLETED</code> or <code>FAILED</code>. <code>FinishedAt</code> is only available when the <code>BatchPrediction</code> is in the <code>COMPLETED</code> or <code>FAILED</code> state.</p>"]
     #[serde(rename="FinishedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub finished_at: Option<EpochTime>,
+    pub finished_at: Option<f64>,
     #[doc="<p>The location of the data file or directory in Amazon Simple Storage Service (Amazon S3).</p>"]
     #[serde(rename="InputDataLocationS3")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub input_data_location_s3: Option<S3Url>,
+    pub input_data_location_s3: Option<String>,
     #[doc="<p>The number of invalid records that Amazon Machine Learning saw while processing the <code>BatchPrediction</code>.</p>"]
     #[serde(rename="InvalidRecordCount")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub invalid_record_count: Option<LongType>,
+    pub invalid_record_count: Option<i64>,
     #[doc="<p>The time of the most recent edit to <code>BatchPrediction</code>. The time is expressed in epoch time.</p>"]
     #[serde(rename="LastUpdatedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub last_updated_at: Option<EpochTime>,
+    pub last_updated_at: Option<f64>,
     #[doc="<p>A link to the file that contains logs of the <code>CreateBatchPrediction</code> operation.</p>"]
     #[serde(rename="LogUri")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub log_uri: Option<PresignedS3Url>,
+    pub log_uri: Option<String>,
     #[doc="<p>The ID of the <code>MLModel</code> that generated predictions for the <code>BatchPrediction</code> request.</p>"]
     #[serde(rename="MLModelId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ml_model_id: Option<EntityId>,
+    pub ml_model_id: Option<String>,
     #[doc="<p>A description of the most recent details about processing the batch prediction request.</p>"]
     #[serde(rename="Message")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub message: Option<Message>,
+    pub message: Option<String>,
     #[doc="<p>A user-supplied name or description of the <code>BatchPrediction</code>.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<EntityName>,
+    pub name: Option<String>,
     #[doc="<p>The location of an Amazon S3 bucket or directory to receive the operation results.</p>"]
     #[serde(rename="OutputUri")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub output_uri: Option<S3Url>,
+    pub output_uri: Option<String>,
     #[doc="<p>The epoch time when Amazon Machine Learning marked the <code>BatchPrediction</code> as <code>INPROGRESS</code>. <code>StartedAt</code> isn't available if the <code>BatchPrediction</code> is in the <code>PENDING</code> state.</p>"]
     #[serde(rename="StartedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub started_at: Option<EpochTime>,
+    pub started_at: Option<f64>,
     #[doc="<p>The status of the <code>BatchPrediction</code>, which can be one of the following values:</p> <ul> <li> <code>PENDING</code> - Amazon Machine Learning (Amazon ML) submitted a request to generate batch predictions.</li> <li> <code>INPROGRESS</code> - The batch predictions are in progress.</li> <li> <code>FAILED</code> - The request to perform a batch prediction did not run to completion. It is not usable.</li> <li> <code>COMPLETED</code> - The batch prediction process completed successfully.</li> <li> <code>DELETED</code> - The <code>BatchPrediction</code> is marked as deleted. It is not usable.</li> </ul>"]
     #[serde(rename="Status")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status: Option<EntityStatus>,
+    pub status: Option<String>,
     #[doc="<p>The number of total records that Amazon Machine Learning saw while processing the <code>BatchPrediction</code>.</p>"]
     #[serde(rename="TotalRecordCount")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub total_record_count: Option<LongType>,
+    pub total_record_count: Option<i64>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetDataSourceInput {
     #[doc="<p>The ID assigned to the <code>DataSource</code> at creation.</p>"]
     #[serde(rename="DataSourceId")]
-    pub data_source_id: EntityId,
+    pub data_source_id: String,
     #[doc="<p>Specifies whether the <code>GetDataSource</code> operation should return <code>DataSourceSchema</code>.</p> <p>If true, <code>DataSourceSchema</code> is returned.</p> <p>If false, <code>DataSourceSchema</code> is not returned.</p>"]
     #[serde(rename="Verbose")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub verbose: Option<Verbose>,
+    pub verbose: Option<bool>,
 }
 
 #[doc="<p>Represents the output of a <code>GetDataSource</code> operation and describes a <code>DataSource</code>.</p>"]
@@ -963,63 +923,63 @@ pub struct GetDataSourceOutput {
     #[doc="<p> The parameter is <code>true</code> if statistics need to be generated from the observation data. </p>"]
     #[serde(rename="ComputeStatistics")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub compute_statistics: Option<ComputeStatistics>,
+    pub compute_statistics: Option<bool>,
     #[doc="<p>The approximate CPU time in milliseconds that Amazon Machine Learning spent processing the <code>DataSource</code>, normalized and scaled on computation resources. <code>ComputeTime</code> is only available if the <code>DataSource</code> is in the <code>COMPLETED</code> state and the <code>ComputeStatistics</code> is set to true.</p>"]
     #[serde(rename="ComputeTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub compute_time: Option<LongType>,
+    pub compute_time: Option<i64>,
     #[doc="<p>The time that the <code>DataSource</code> was created. The time is expressed in epoch time.</p>"]
     #[serde(rename="CreatedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_at: Option<EpochTime>,
+    pub created_at: Option<f64>,
     #[doc="<p>The AWS user account from which the <code>DataSource</code> was created. The account type can be either an AWS root account or an AWS Identity and Access Management (IAM) user account.</p>"]
     #[serde(rename="CreatedByIamUser")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_by_iam_user: Option<AwsUserArn>,
+    pub created_by_iam_user: Option<String>,
     #[doc="<p>The location of the data file or directory in Amazon Simple Storage Service (Amazon S3).</p>"]
     #[serde(rename="DataLocationS3")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub data_location_s3: Option<S3Url>,
+    pub data_location_s3: Option<String>,
     #[doc="<p>A JSON string that represents the splitting and rearrangement requirement used when this <code>DataSource</code> was created.</p>"]
     #[serde(rename="DataRearrangement")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub data_rearrangement: Option<DataRearrangement>,
+    pub data_rearrangement: Option<String>,
     #[doc="<p>The total size of observations in the data files.</p>"]
     #[serde(rename="DataSizeInBytes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub data_size_in_bytes: Option<LongType>,
+    pub data_size_in_bytes: Option<i64>,
     #[doc="<p>The ID assigned to the <code>DataSource</code> at creation. This value should be identical to the value of the <code>DataSourceId</code> in the request.</p>"]
     #[serde(rename="DataSourceId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub data_source_id: Option<EntityId>,
+    pub data_source_id: Option<String>,
     #[doc="<p>The schema used by all of the data files of this <code>DataSource</code>.</p> <note><title>Note</title> <p>This parameter is provided as part of the verbose format.</p></note>"]
     #[serde(rename="DataSourceSchema")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub data_source_schema: Option<DataSchema>,
+    pub data_source_schema: Option<String>,
     #[doc="<p>The epoch time when Amazon Machine Learning marked the <code>DataSource</code> as <code>COMPLETED</code> or <code>FAILED</code>. <code>FinishedAt</code> is only available when the <code>DataSource</code> is in the <code>COMPLETED</code> or <code>FAILED</code> state.</p>"]
     #[serde(rename="FinishedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub finished_at: Option<EpochTime>,
+    pub finished_at: Option<f64>,
     #[doc="<p>The time of the most recent edit to the <code>DataSource</code>. The time is expressed in epoch time.</p>"]
     #[serde(rename="LastUpdatedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub last_updated_at: Option<EpochTime>,
+    pub last_updated_at: Option<f64>,
     #[doc="<p>A link to the file containing logs of <code>CreateDataSourceFrom*</code> operations.</p>"]
     #[serde(rename="LogUri")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub log_uri: Option<PresignedS3Url>,
+    pub log_uri: Option<String>,
     #[doc="<p>The user-supplied description of the most recent details about creating the <code>DataSource</code>.</p>"]
     #[serde(rename="Message")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub message: Option<Message>,
+    pub message: Option<String>,
     #[doc="<p>A user-supplied name or description of the <code>DataSource</code>.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<EntityName>,
+    pub name: Option<String>,
     #[doc="<p>The number of data files referenced by the <code>DataSource</code>.</p>"]
     #[serde(rename="NumberOfFiles")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub number_of_files: Option<LongType>,
+    pub number_of_files: Option<i64>,
     #[serde(rename="RDSMetadata")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub rds_metadata: Option<RDSMetadata>,
@@ -1028,22 +988,22 @@ pub struct GetDataSourceOutput {
     pub redshift_metadata: Option<RedshiftMetadata>,
     #[serde(rename="RoleARN")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub role_arn: Option<RoleARN>,
+    pub role_arn: Option<String>,
     #[doc="<p>The epoch time when Amazon Machine Learning marked the <code>DataSource</code> as <code>INPROGRESS</code>. <code>StartedAt</code> isn't available if the <code>DataSource</code> is in the <code>PENDING</code> state.</p>"]
     #[serde(rename="StartedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub started_at: Option<EpochTime>,
+    pub started_at: Option<f64>,
     #[doc="<p>The current status of the <code>DataSource</code>. This element can have one of the following values:</p> <ul> <li> <code>PENDING</code> - Amazon ML submitted a request to create a <code>DataSource</code>.</li> <li> <code>INPROGRESS</code> - The creation process is underway.</li> <li> <code>FAILED</code> - The request to create a <code>DataSource</code> did not run to completion. It is not usable.</li> <li> <code>COMPLETED</code> - The creation process completed successfully.</li> <li> <code>DELETED</code> - The <code>DataSource</code> is marked as deleted. It is not usable.</li> </ul>"]
     #[serde(rename="Status")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status: Option<EntityStatus>,
+    pub status: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetEvaluationInput {
     #[doc="<p>The ID of the <code>Evaluation</code> to retrieve. The evaluation of each <code>MLModel</code> is recorded and cataloged. The ID provides the means to access the information. </p>"]
     #[serde(rename="EvaluationId")]
-    pub evaluation_id: EntityId,
+    pub evaluation_id: String,
 }
 
 #[doc="<p>Represents the output of a <code>GetEvaluation</code> operation and describes an <code>Evaluation</code>.</p>"]
@@ -1052,51 +1012,51 @@ pub struct GetEvaluationOutput {
     #[doc="<p>The approximate CPU time in milliseconds that Amazon Machine Learning spent processing the <code>Evaluation</code>, normalized and scaled on computation resources. <code>ComputeTime</code> is only available if the <code>Evaluation</code> is in the <code>COMPLETED</code> state.</p>"]
     #[serde(rename="ComputeTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub compute_time: Option<LongType>,
+    pub compute_time: Option<i64>,
     #[doc="<p>The time that the <code>Evaluation</code> was created. The time is expressed in epoch time.</p>"]
     #[serde(rename="CreatedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_at: Option<EpochTime>,
+    pub created_at: Option<f64>,
     #[doc="<p>The AWS user account that invoked the evaluation. The account type can be either an AWS root account or an AWS Identity and Access Management (IAM) user account.</p>"]
     #[serde(rename="CreatedByIamUser")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_by_iam_user: Option<AwsUserArn>,
+    pub created_by_iam_user: Option<String>,
     #[doc="<p>The <code>DataSource</code> used for this evaluation.</p>"]
     #[serde(rename="EvaluationDataSourceId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub evaluation_data_source_id: Option<EntityId>,
+    pub evaluation_data_source_id: Option<String>,
     #[doc="<p>The evaluation ID which is same as the <code>EvaluationId</code> in the request.</p>"]
     #[serde(rename="EvaluationId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub evaluation_id: Option<EntityId>,
+    pub evaluation_id: Option<String>,
     #[doc="<p>The epoch time when Amazon Machine Learning marked the <code>Evaluation</code> as <code>COMPLETED</code> or <code>FAILED</code>. <code>FinishedAt</code> is only available when the <code>Evaluation</code> is in the <code>COMPLETED</code> or <code>FAILED</code> state.</p>"]
     #[serde(rename="FinishedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub finished_at: Option<EpochTime>,
+    pub finished_at: Option<f64>,
     #[doc="<p>The location of the data file or directory in Amazon Simple Storage Service (Amazon S3).</p>"]
     #[serde(rename="InputDataLocationS3")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub input_data_location_s3: Option<S3Url>,
+    pub input_data_location_s3: Option<String>,
     #[doc="<p>The time of the most recent edit to the <code>Evaluation</code>. The time is expressed in epoch time.</p>"]
     #[serde(rename="LastUpdatedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub last_updated_at: Option<EpochTime>,
+    pub last_updated_at: Option<f64>,
     #[doc="<p>A link to the file that contains logs of the <code>CreateEvaluation</code> operation.</p>"]
     #[serde(rename="LogUri")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub log_uri: Option<PresignedS3Url>,
+    pub log_uri: Option<String>,
     #[doc="<p>The ID of the <code>MLModel</code> that was the focus of the evaluation.</p>"]
     #[serde(rename="MLModelId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ml_model_id: Option<EntityId>,
+    pub ml_model_id: Option<String>,
     #[doc="<p>A description of the most recent details about evaluating the <code>MLModel</code>.</p>"]
     #[serde(rename="Message")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub message: Option<Message>,
+    pub message: Option<String>,
     #[doc="<p>A user-supplied name or description of the <code>Evaluation</code>. </p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<EntityName>,
+    pub name: Option<String>,
     #[doc="<p>Measurements of how well the <code>MLModel</code> performed using observations referenced by the <code>DataSource</code>. One of the following metric is returned based on the type of the <code>MLModel</code>: </p> <ul> <li> <p>BinaryAUC: A binary <code>MLModel</code> uses the Area Under the Curve (AUC) technique to measure performance. </p> </li> <li> <p>RegressionRMSE: A regression <code>MLModel</code> uses the Root Mean Square Error (RMSE) technique to measure performance. RMSE measures the difference between predicted and actual values for a single variable.</p> </li> <li> <p>MulticlassAvgFScore: A multiclass <code>MLModel</code> uses the F1 score technique to measure performance. </p> </li> </ul> <p> For more information about performance metrics, please see the <a href=\"http://docs.aws.amazon.com/machine-learning/latest/dg\">Amazon Machine Learning Developer Guide</a>. </p>"]
     #[serde(rename="PerformanceMetrics")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1104,22 +1064,22 @@ pub struct GetEvaluationOutput {
     #[doc="<p>The epoch time when Amazon Machine Learning marked the <code>Evaluation</code> as <code>INPROGRESS</code>. <code>StartedAt</code> isn't available if the <code>Evaluation</code> is in the <code>PENDING</code> state.</p>"]
     #[serde(rename="StartedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub started_at: Option<EpochTime>,
+    pub started_at: Option<f64>,
     #[doc="<p>The status of the evaluation. This element can have one of the following values:</p> <ul> <li> <code>PENDING</code> - Amazon Machine Language (Amazon ML) submitted a request to evaluate an <code>MLModel</code>.</li> <li> <code>INPROGRESS</code> - The evaluation is underway.</li> <li> <code>FAILED</code> - The request to evaluate an <code>MLModel</code> did not run to completion. It is not usable.</li> <li> <code>COMPLETED</code> - The evaluation process completed successfully.</li> <li> <code>DELETED</code> - The <code>Evaluation</code> is marked as deleted. It is not usable.</li> </ul>"]
     #[serde(rename="Status")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status: Option<EntityStatus>,
+    pub status: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetMLModelInput {
     #[doc="<p>The ID assigned to the <code>MLModel</code> at creation.</p>"]
     #[serde(rename="MLModelId")]
-    pub ml_model_id: EntityId,
+    pub ml_model_id: String,
     #[doc="<p>Specifies whether the <code>GetMLModel</code> operation should return <code>Recipe</code>.</p> <p>If true, <code>Recipe</code> is returned.</p> <p>If false, <code>Recipe</code> is not returned.</p>"]
     #[serde(rename="Verbose")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub verbose: Option<Verbose>,
+    pub verbose: Option<bool>,
 }
 
 #[doc="<p>Represents the output of a <code>GetMLModel</code> operation, and provides detailed information about a <code>MLModel</code>.</p>"]
@@ -1128,15 +1088,15 @@ pub struct GetMLModelOutput {
     #[doc="<p>The approximate CPU time in milliseconds that Amazon Machine Learning spent processing the <code>MLModel</code>, normalized and scaled on computation resources. <code>ComputeTime</code> is only available if the <code>MLModel</code> is in the <code>COMPLETED</code> state.</p>"]
     #[serde(rename="ComputeTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub compute_time: Option<LongType>,
+    pub compute_time: Option<i64>,
     #[doc="<p>The time that the <code>MLModel</code> was created. The time is expressed in epoch time.</p>"]
     #[serde(rename="CreatedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_at: Option<EpochTime>,
+    pub created_at: Option<f64>,
     #[doc="<p>The AWS user account from which the <code>MLModel</code> was created. The account type can be either an AWS root account or an AWS Identity and Access Management (IAM) user account.</p>"]
     #[serde(rename="CreatedByIamUser")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_by_iam_user: Option<AwsUserArn>,
+    pub created_by_iam_user: Option<String>,
     #[doc="<p>The current endpoint of the <code>MLModel</code></p>"]
     #[serde(rename="EndpointInfo")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1144,181 +1104,165 @@ pub struct GetMLModelOutput {
     #[doc="<p>The epoch time when Amazon Machine Learning marked the <code>MLModel</code> as <code>COMPLETED</code> or <code>FAILED</code>. <code>FinishedAt</code> is only available when the <code>MLModel</code> is in the <code>COMPLETED</code> or <code>FAILED</code> state.</p>"]
     #[serde(rename="FinishedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub finished_at: Option<EpochTime>,
+    pub finished_at: Option<f64>,
     #[doc="<p>The location of the data file or directory in Amazon Simple Storage Service (Amazon S3).</p>"]
     #[serde(rename="InputDataLocationS3")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub input_data_location_s3: Option<S3Url>,
+    pub input_data_location_s3: Option<String>,
     #[doc="<p>The time of the most recent edit to the <code>MLModel</code>. The time is expressed in epoch time.</p>"]
     #[serde(rename="LastUpdatedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub last_updated_at: Option<EpochTime>,
+    pub last_updated_at: Option<f64>,
     #[doc="<p>A link to the file that contains logs of the <code>CreateMLModel</code> operation.</p>"]
     #[serde(rename="LogUri")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub log_uri: Option<PresignedS3Url>,
+    pub log_uri: Option<String>,
     #[doc="<p>The MLModel ID<?oxy_insert_start author=\"annbech\" timestamp=\"20160328T151251-0700\">,<?oxy_insert_end> which is same as the <code>MLModelId</code> in the request.</p>"]
     #[serde(rename="MLModelId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ml_model_id: Option<EntityId>,
+    pub ml_model_id: Option<String>,
     #[doc="<p>Identifies the <code>MLModel</code> category. The following are the available types: </p> <ul> <li>REGRESSION -- Produces a numeric result. For example, \"What price should a house be listed at?\"</li> <li>BINARY -- Produces one of two possible results. For example, \"Is this an e-commerce website?\"</li> <li>MULTICLASS -- Produces one of several possible results. For example, \"Is this a HIGH, LOW or MEDIUM risk trade?\"</li> </ul>"]
     #[serde(rename="MLModelType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ml_model_type: Option<MLModelType>,
+    pub ml_model_type: Option<String>,
     #[doc="<p>A description of the most recent details about accessing the <code>MLModel</code>.</p>"]
     #[serde(rename="Message")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub message: Option<Message>,
+    pub message: Option<String>,
     #[doc="<p>A user-supplied name or description of the <code>MLModel</code>.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<MLModelName>,
+    pub name: Option<String>,
     #[doc="<p>The recipe to use when training the <code>MLModel</code>. The <code>Recipe</code> provides detailed information about the observation data to use during training, and manipulations to perform on the observation data during training.</p> <note><title>Note</title> <p>This parameter is provided as part of the verbose format.</p></note>"]
     #[serde(rename="Recipe")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub recipe: Option<Recipe>,
+    pub recipe: Option<String>,
     #[doc="<p>The schema used by all of the data files referenced by the <code>DataSource</code>.</p> <note><title>Note</title> <p>This parameter is provided as part of the verbose format.</p></note>"]
     #[serde(rename="Schema")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub schema: Option<DataSchema>,
+    pub schema: Option<String>,
     #[doc="<p>The scoring threshold is used in binary classification <code>MLModel</code><?oxy_insert_start author=\"laurama\" timestamp=\"20160329T114851-0700\"> <?oxy_insert_end>models. It marks the boundary between a positive prediction and a negative prediction.</p> <p>Output values greater than or equal to the threshold receive a positive result from the MLModel, such as <code>true</code>. Output values less than the threshold receive a negative response from the MLModel, such as <code>false</code>.</p>"]
     #[serde(rename="ScoreThreshold")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub score_threshold: Option<ScoreThreshold>,
+    pub score_threshold: Option<f32>,
     #[doc="<p>The time of the most recent edit to the <code>ScoreThreshold</code>. The time is expressed in epoch time.</p>"]
     #[serde(rename="ScoreThresholdLastUpdatedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub score_threshold_last_updated_at: Option<EpochTime>,
+    pub score_threshold_last_updated_at: Option<f64>,
     #[serde(rename="SizeInBytes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub size_in_bytes: Option<LongType>,
+    pub size_in_bytes: Option<i64>,
     #[doc="<p>The epoch time when Amazon Machine Learning marked the <code>MLModel</code> as <code>INPROGRESS</code>. <code>StartedAt</code> isn't available if the <code>MLModel</code> is in the <code>PENDING</code> state.</p>"]
     #[serde(rename="StartedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub started_at: Option<EpochTime>,
+    pub started_at: Option<f64>,
     #[doc="<p>The current status of the <code>MLModel</code>. This element can have one of the following values:</p> <ul> <li> <code>PENDING</code> - Amazon Machine Learning (Amazon ML) submitted a request to describe a <code>MLModel</code>.</li> <li> <code>INPROGRESS</code> - The request is processing.</li> <li> <code>FAILED</code> - The request did not run to completion. The ML model isn't usable.</li> <li> <code>COMPLETED</code> - The request completed successfully.</li> <li> <code>DELETED</code> - The <code>MLModel</code> is marked as deleted. It isn't usable.</li> </ul>"]
     #[serde(rename="Status")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status: Option<EntityStatus>,
+    pub status: Option<String>,
     #[doc="<p>The ID of the training <code>DataSource</code>.</p>"]
     #[serde(rename="TrainingDataSourceId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub training_data_source_id: Option<EntityId>,
+    pub training_data_source_id: Option<String>,
     #[doc="<p>A list of the training parameters in the <code>MLModel</code>. The list is implemented as a map of key-value pairs.</p> <p>The following is the current set of training parameters: </p> <ul> <li> <p><code>sgd.maxMLModelSizeInBytes</code> - The maximum allowed size of the model. Depending on the input data, the size of the model might affect its performance.</p> <p> The value is an integer that ranges from <code>100000</code> to <code>2147483648</code>. The default value is <code>33554432</code>.</p> </li> <li><p><code>sgd.maxPasses</code> - The number of times that the training process traverses the observations to build the <code>MLModel</code>. The value is an integer that ranges from <code>1</code> to <code>10000</code>. The default value is <code>10</code>.</p></li> <li><p><code>sgd.shuffleType</code> - Whether Amazon ML shuffles the training data. Shuffling data improves a model's ability to find the optimal solution for a variety of data types. The valid values are <code>auto</code> and <code>none</code>. The default value is <code>none</code>. We strongly recommend that you shuffle your data.</p></li> <li> <p><code>sgd.l1RegularizationAmount</code> - The coefficient regularization L1 norm. It controls overfitting the data by penalizing large coefficients. This tends to drive coefficients to zero, resulting in a sparse feature set. If you use this parameter, start by specifying a small value, such as <code>1.0E-08</code>.</p> <p>The value is a double that ranges from <code>0</code> to <code>MAX_DOUBLE</code>. The default is to not use L1 normalization. This parameter can't be used when <code>L2</code> is specified. Use this parameter sparingly.</p> </li> <li> <p><code>sgd.l2RegularizationAmount</code> - The coefficient regularization L2 norm. It controls overfitting the data by penalizing large coefficients. This tends to drive coefficients to small, nonzero values. If you use this parameter, start by specifying a small value, such as <code>1.0E-08</code>.</p> <p>The value is a double that ranges from <code>0</code> to <code>MAX_DOUBLE</code>. The default is to not use L2 normalization. This parameter can't be used when <code>L1</code> is specified. Use this parameter sparingly.</p> </li> </ul>"]
     #[serde(rename="TrainingParameters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub training_parameters: Option<TrainingParameters>,
+    pub training_parameters: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[doc="<p>Integer type that is a 32-bit signed number.</p>"]
-pub type IntegerType = i64;
-pub type Label = String;
-#[doc="<p>Long integer type that is a 64-bit signed number.</p>"]
-pub type LongType = i64;
 #[doc="<p> Represents the output of a <code>GetMLModel</code> operation. </p> <p>The content consists of the detailed metadata and the current status of the <code>MLModel</code>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct MLModel {
     #[doc="<p>The algorithm used to train the <code>MLModel</code>. The following algorithm is supported:</p> <ul> <li> <code>SGD</code> -- Stochastic gradient descent. The goal of <code>SGD</code> is to minimize the gradient of the loss function. </li> </ul>"]
     #[serde(rename="Algorithm")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub algorithm: Option<Algorithm>,
+    pub algorithm: Option<String>,
     #[serde(rename="ComputeTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub compute_time: Option<LongType>,
+    pub compute_time: Option<i64>,
     #[doc="<p>The time that the <code>MLModel</code> was created. The time is expressed in epoch time.</p>"]
     #[serde(rename="CreatedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_at: Option<EpochTime>,
+    pub created_at: Option<f64>,
     #[doc="<p>The AWS user account from which the <code>MLModel</code> was created. The account type can be either an AWS root account or an AWS Identity and Access Management (IAM) user account.</p>"]
     #[serde(rename="CreatedByIamUser")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_by_iam_user: Option<AwsUserArn>,
+    pub created_by_iam_user: Option<String>,
     #[doc="<p>The current endpoint of the <code>MLModel</code>.</p>"]
     #[serde(rename="EndpointInfo")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub endpoint_info: Option<RealtimeEndpointInfo>,
     #[serde(rename="FinishedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub finished_at: Option<EpochTime>,
+    pub finished_at: Option<f64>,
     #[doc="<p>The location of the data file or directory in Amazon Simple Storage Service (Amazon S3).</p>"]
     #[serde(rename="InputDataLocationS3")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub input_data_location_s3: Option<S3Url>,
+    pub input_data_location_s3: Option<String>,
     #[doc="<p>The time of the most recent edit to the <code>MLModel</code>. The time is expressed in epoch time.</p>"]
     #[serde(rename="LastUpdatedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub last_updated_at: Option<EpochTime>,
+    pub last_updated_at: Option<f64>,
     #[doc="<p>The ID assigned to the <code>MLModel</code> at creation.</p>"]
     #[serde(rename="MLModelId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ml_model_id: Option<EntityId>,
+    pub ml_model_id: Option<String>,
     #[doc="<p>Identifies the <code>MLModel</code> category. The following are the available types:</p> <ul> <li> <code>REGRESSION</code> - Produces a numeric result. For example, \"What price should a house be listed at?\"</li> <li> <code>BINARY</code> - Produces one of two possible results. For example, \"Is this a child-friendly web site?\".</li> <li> <code>MULTICLASS</code> - Produces one of several possible results. For example, \"Is this a HIGH-, LOW-, or MEDIUM<?oxy_delete author=\"annbech\" timestamp=\"20160328T175050-0700\" content=\" \"><?oxy_insert_start author=\"annbech\" timestamp=\"20160328T175050-0700\">-<?oxy_insert_end>risk trade?\".</li> </ul>"]
     #[serde(rename="MLModelType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ml_model_type: Option<MLModelType>,
+    pub ml_model_type: Option<String>,
     #[doc="<p>A description of the most recent details about accessing the <code>MLModel</code>.</p>"]
     #[serde(rename="Message")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub message: Option<Message>,
+    pub message: Option<String>,
     #[doc="<p>A user-supplied name or description of the <code>MLModel</code>.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<MLModelName>,
+    pub name: Option<String>,
     #[serde(rename="ScoreThreshold")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub score_threshold: Option<ScoreThreshold>,
+    pub score_threshold: Option<f32>,
     #[doc="<p>The time of the most recent edit to the <code>ScoreThreshold</code>. The time is expressed in epoch time.</p>"]
     #[serde(rename="ScoreThresholdLastUpdatedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub score_threshold_last_updated_at: Option<EpochTime>,
+    pub score_threshold_last_updated_at: Option<f64>,
     #[serde(rename="SizeInBytes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub size_in_bytes: Option<LongType>,
+    pub size_in_bytes: Option<i64>,
     #[serde(rename="StartedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub started_at: Option<EpochTime>,
+    pub started_at: Option<f64>,
     #[doc="<p>The current status of an <code>MLModel</code>. This element can have one of the following values: </p> <ul> <li> <code>PENDING</code> - Amazon Machine Learning (Amazon ML) submitted a request to create an <code>MLModel</code>.</li> <li> <code>INPROGRESS</code> - The creation process is underway.</li> <li> <code>FAILED</code> - The request to create an <code>MLModel</code> didn't run to completion. The model isn't usable.</li> <li> <code>COMPLETED</code> - The creation process completed successfully.</li> <li> <code>DELETED</code> - The <code>MLModel</code> is marked as deleted. It isn't usable.</li> </ul>"]
     #[serde(rename="Status")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status: Option<EntityStatus>,
+    pub status: Option<String>,
     #[doc="<p>The ID of the training <code>DataSource</code>. The <code>CreateMLModel</code> operation uses the <code>TrainingDataSourceId</code>.</p>"]
     #[serde(rename="TrainingDataSourceId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub training_data_source_id: Option<EntityId>,
+    pub training_data_source_id: Option<String>,
     #[doc="<p>A list of the training parameters in the <code>MLModel</code>. The list is implemented as a map of key-value pairs.</p> <p>The following is the current set of training parameters: </p> <ul> <li> <p><code>sgd.maxMLModelSizeInBytes</code> - The maximum allowed size of the model. Depending on the input data, the size of the model might affect its performance.</p> <p> The value is an integer that ranges from <code>100000</code> to <code>2147483648</code>. The default value is <code>33554432</code>.</p> </li> <li><p><code>sgd.maxPasses</code> - The number of times that the training process traverses the observations to build the <code>MLModel</code>. The value is an integer that ranges from <code>1</code> to <code>10000</code>. The default value is <code>10</code>.</p></li> <li><p><code>sgd.shuffleType</code> - Whether Amazon ML shuffles the training data. Shuffling the data improves a model's ability to find the optimal solution for a variety of data types. The valid values are <code>auto</code> and <code>none</code>. The default value is <code>none</code>.</p></li> <li> <p><code>sgd.l1RegularizationAmount</code> - The coefficient regularization L1 norm, which controls overfitting the data by penalizing large coefficients. This parameter tends to drive coefficients to zero, resulting in sparse feature set. If you use this parameter, start by specifying a small value, such as <code>1.0E-08</code>.</p> <p>The value is a double that ranges from <code>0</code> to <code>MAX_DOUBLE</code>. The default is to not use L1 normalization. This parameter can't be used when <code>L2</code> is specified. Use this parameter sparingly.</p> </li> <li> <p><code>sgd.l2RegularizationAmount</code> - The coefficient regularization L2 norm, which controls overfitting the data by penalizing large coefficients. This tends to drive coefficients to small, nonzero values. If you use this parameter, start by specifying a small value, such as <code>1.0E-08</code>.</p> <p>The value is a double that ranges from <code>0</code> to <code>MAX_DOUBLE</code>. The default is to not use L2 normalization. This parameter can't be used when <code>L1</code> is specified. Use this parameter sparingly.</p> </li> </ul>"]
     #[serde(rename="TrainingParameters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub training_parameters: Option<TrainingParameters>,
+    pub training_parameters: Option<::std::collections::HashMap<String, String>>,
 }
 
-pub type MLModelFilterVariable = String;
-pub type MLModelName = String;
-pub type MLModelType = String;
-pub type MLModels = Vec<MLModel>;
-#[doc="<p> Description of the most recent details about an object.</p>"]
-pub type Message = String;
-pub type PageLimit = i64;
 #[doc="<p>Measurements of how well the <code>MLModel</code> performed on known observations. One of the following metrics is returned, based on the type of the <code>MLModel</code>: </p> <ul> <li> <p>BinaryAUC: The binary <code>MLModel</code> uses the Area Under the Curve (AUC) technique to measure performance. </p> </li> <li> <p>RegressionRMSE: The regression <code>MLModel</code> uses the Root Mean Square Error (RMSE) technique to measure performance. RMSE measures the difference between predicted and actual values for a single variable.</p> </li> <li> <p>MulticlassAvgFScore: The multiclass <code>MLModel</code> uses the F1 score technique to measure performance. </p> </li> </ul> <p> For more information about performance metrics, please see the <a href=\"http://docs.aws.amazon.com/machine-learning/latest/dg\">Amazon Machine Learning Developer Guide</a>. </p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct PerformanceMetrics {
     #[serde(rename="Properties")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub properties: Option<PerformanceMetricsProperties>,
+    pub properties: Option<::std::collections::HashMap<String, String>>,
 }
 
-pub type PerformanceMetricsProperties =
-    ::std::collections::HashMap<PerformanceMetricsPropertyKey, PerformanceMetricsPropertyValue>;
-pub type PerformanceMetricsPropertyKey = String;
-pub type PerformanceMetricsPropertyValue = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct PredictInput {
     #[doc="<p>A unique identifier of the <code>MLModel</code>.</p>"]
     #[serde(rename="MLModelId")]
-    pub ml_model_id: EntityId,
+    pub ml_model_id: String,
     #[serde(rename="PredictEndpoint")]
-    pub predict_endpoint: VipURL,
+    pub predict_endpoint: String,
     #[serde(rename="Record")]
-    pub record: Record,
+    pub record: ::std::collections::HashMap<String, String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -1333,36 +1277,35 @@ pub struct PredictOutput {
 pub struct Prediction {
     #[serde(rename="details")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub details: Option<DetailsMap>,
+    pub details: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>The prediction label for either a <code>BINARY</code> or <code>MULTICLASS</code> <code>MLModel</code>.</p>"]
     #[serde(rename="predictedLabel")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub predicted_label: Option<Label>,
+    pub predicted_label: Option<String>,
     #[serde(rename="predictedScores")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub predicted_scores: Option<ScoreValuePerLabelMap>,
+    pub predicted_scores: Option<::std::collections::HashMap<String, f32>>,
     #[doc="The prediction value for <code>REGRESSION</code> <code>MLModel</code>."]
     #[serde(rename="predictedValue")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub predicted_value: Option<FloatLabel>,
+    pub predicted_value: Option<f32>,
 }
 
-pub type PresignedS3Url = String;
 #[doc="<p>The data specification of an Amazon Relational Database Service (Amazon RDS) <code>DataSource</code>.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct RDSDataSpec {
     #[doc="<p>A JSON string that represents the splitting and rearrangement processing to be applied to a <code>DataSource</code>. If the <code>DataRearrangement</code> parameter is not provided, all of the input data is used to create the <code>Datasource</code>.</p> <p>There are multiple parameters that control what data is used to create a datasource:</p> <ul> <li><p><b><code>percentBegin</code></b></p> <p>Use <code>percentBegin</code> to indicate the beginning of the range of the data used to create the Datasource. If you do not include <code>percentBegin</code> and <code>percentEnd</code>, Amazon ML includes all of the data when creating the datasource.</p></li> <li><p><b><code>percentEnd</code></b></p> <p>Use <code>percentEnd</code> to indicate the end of the range of the data used to create the Datasource. If you do not include <code>percentBegin</code> and <code>percentEnd</code>, Amazon ML includes all of the data when creating the datasource.</p></li> <li><p><b><code>complement</code></b></p> <p>The <code>complement</code> parameter instructs Amazon ML to use the data that is not included in the range of <code>percentBegin</code> to <code>percentEnd</code> to create a datasource. The <code>complement</code> parameter is useful if you need to create complementary datasources for training and evaluation. To create a complementary datasource, use the same values for <code>percentBegin</code> and <code>percentEnd</code>, along with the <code>complement</code> parameter.</p> <p>For example, the following two datasources do not share any data, and can be used to train and evaluate a model. The first datasource has 25 percent of the data, and the second one has 75 percent of the data.</p> <p>Datasource for evaluation: <code>{\"splitting\":{\"percentBegin\":0, \"percentEnd\":25}}</code></p> <p>Datasource for training: <code>{\"splitting\":{\"percentBegin\":0, \"percentEnd\":25, \"complement\":\"true\"}}</code></p> </li> <li><p><b><code>strategy</code></b></p> <p>To change how Amazon ML splits the data for a datasource, use the <code>strategy</code> parameter.</p> <p>The default value for the <code>strategy</code> parameter is <code>sequential</code>, meaning that Amazon ML takes all of the data records between the <code>percentBegin</code> and <code>percentEnd</code> parameters for the datasource, in the order that the records appear in the input data.</p> <p>The following two <code>DataRearrangement</code> lines are examples of sequentially ordered training and evaluation datasources:</p> <p>Datasource for evaluation: <code>{\"splitting\":{\"percentBegin\":70, \"percentEnd\":100, \"strategy\":\"sequential\"}}</code></p> <p>Datasource for training: <code>{\"splitting\":{\"percentBegin\":70, \"percentEnd\":100, \"strategy\":\"sequential\", \"complement\":\"true\"}}</code></p> <p>To randomly split the input data into the proportions indicated by the percentBegin and percentEnd parameters, set the <code>strategy</code> parameter to <code>random</code> and provide a string that is used as the seed value for the random data splitting (for example, you can use the S3 path to your data as the random seed string). If you choose the random split strategy, Amazon ML assigns each row of data a pseudo-random number between 0 and 100, and then selects the rows that have an assigned number between <code>percentBegin</code> and <code>percentEnd</code>. Pseudo-random numbers are assigned using both the input seed string value and the byte offset as a seed, so changing the data results in a different split. Any existing ordering is preserved. The random splitting strategy ensures that variables in the training and evaluation data are distributed similarly. It is useful in the cases where the input data may have an implicit sort order, which would otherwise result in training and evaluation datasources containing non-similar data records.</p> <p>The following two <code>DataRearrangement</code> lines are examples of non-sequentially ordered training and evaluation datasources:</p> <p>Datasource for evaluation: <code>{\"splitting\":{\"percentBegin\":70, \"percentEnd\":100, \"strategy\":\"random\", \"randomSeed\"=\"s3://my_s3_path/bucket/file.csv\"}}</code></p> <p>Datasource for training: <code>{\"splitting\":{\"percentBegin\":70, \"percentEnd\":100, \"strategy\":\"random\", \"randomSeed\"=\"s3://my_s3_path/bucket/file.csv\", \"complement\":\"true\"}}</code></p> </li> </ul>"]
     #[serde(rename="DataRearrangement")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub data_rearrangement: Option<DataRearrangement>,
+    pub data_rearrangement: Option<String>,
     #[doc="<p>A JSON string that represents the schema for an Amazon RDS <code>DataSource</code>. The <code>DataSchema</code> defines the structure of the observation data in the data file(s) referenced in the <code>DataSource</code>.</p> <p>A <code>DataSchema</code> is not required if you specify a <code>DataSchemaUri</code></p> <p>Define your <code>DataSchema</code> as a series of key-value pairs. <code>attributes</code> and <code>excludedVariableNames</code> have an array of key-value pairs for their value. Use the following format to define your <code>DataSchema</code>.</p> <p>{ \"version\": \"1.0\",</p> <p> \"recordAnnotationFieldName\": \"F1\",</p> <p> \"recordWeightFieldName\": \"F2\",</p> <p> \"targetFieldName\": \"F3\",</p> <p> \"dataFormat\": \"CSV\",</p> <p> \"dataFileContainsHeader\": true,</p> <p> \"attributes\": [</p> <p> { \"fieldName\": \"F1\", \"fieldType\": \"TEXT\" }, { \"fieldName\": \"F2\", \"fieldType\": \"NUMERIC\" }, { \"fieldName\": \"F3\", \"fieldType\": \"CATEGORICAL\" }, { \"fieldName\": \"F4\", \"fieldType\": \"NUMERIC\" }, { \"fieldName\": \"F5\", \"fieldType\": \"CATEGORICAL\" }, { \"fieldName\": \"F6\", \"fieldType\": \"TEXT\" }, { \"fieldName\": \"F7\", \"fieldType\": \"WEIGHTED_INT_SEQUENCE\" }, { \"fieldName\": \"F8\", \"fieldType\": \"WEIGHTED_STRING_SEQUENCE\" } ],</p> <p> \"excludedVariableNames\": [ \"F6\" ] } </p> <?oxy_insert_end>"]
     #[serde(rename="DataSchema")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub data_schema: Option<DataSchema>,
+    pub data_schema: Option<String>,
     #[doc="<p>The Amazon S3 location of the <code>DataSchema</code>. </p>"]
     #[serde(rename="DataSchemaUri")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub data_schema_uri: Option<S3Url>,
+    pub data_schema_uri: Option<String>,
     #[doc="<p>The AWS Identity and Access Management (IAM) credentials that are used connect to the Amazon RDS database.</p>"]
     #[serde(rename="DatabaseCredentials")]
     pub database_credentials: RDSDatabaseCredentials,
@@ -1371,123 +1314,107 @@ pub struct RDSDataSpec {
     pub database_information: RDSDatabase,
     #[doc="<p>The role (DataPipelineDefaultResourceRole) assumed by an Amazon Elastic Compute Cloud (Amazon EC2) instance to carry out the copy operation from Amazon RDS to an Amazon S3 task. For more information, see <a href=\"http://docs.aws.amazon.com/datapipeline/latest/DeveloperGuide/dp-iam-roles.html\">Role templates</a> for data pipelines.</p>"]
     #[serde(rename="ResourceRole")]
-    pub resource_role: EDPResourceRole,
+    pub resource_role: String,
     #[doc="<p>The Amazon S3 location for staging Amazon RDS data. The data retrieved from Amazon RDS using <code>SelectSqlQuery</code> is stored in this location.</p>"]
     #[serde(rename="S3StagingLocation")]
-    pub s3_staging_location: S3Url,
+    pub s3_staging_location: String,
     #[doc="<p>The security group IDs to be used to access a VPC-based RDS DB instance. Ensure that there are appropriate ingress rules set up to allow access to the RDS DB instance. This attribute is used by Data Pipeline to carry out the copy operation from Amazon RDS to an Amazon S3 task.</p>"]
     #[serde(rename="SecurityGroupIds")]
-    pub security_group_ids: EDPSecurityGroupIds,
+    pub security_group_ids: Vec<String>,
     #[doc="<p>The query that is used to retrieve the observation data for the <code>DataSource</code>.</p>"]
     #[serde(rename="SelectSqlQuery")]
-    pub select_sql_query: RDSSelectSqlQuery,
+    pub select_sql_query: String,
     #[doc="<p>The role (DataPipelineDefaultRole) assumed by AWS Data Pipeline service to monitor the progress of the copy task from Amazon RDS to Amazon S3. For more information, see <a href=\"http://docs.aws.amazon.com/datapipeline/latest/DeveloperGuide/dp-iam-roles.html\">Role templates</a> for data pipelines.</p>"]
     #[serde(rename="ServiceRole")]
-    pub service_role: EDPServiceRole,
+    pub service_role: String,
     #[doc="<p>The subnet ID to be used to access a VPC-based RDS DB instance. This attribute is used by Data Pipeline to carry out the copy task from Amazon RDS to Amazon S3.</p>"]
     #[serde(rename="SubnetId")]
-    pub subnet_id: EDPSubnetId,
+    pub subnet_id: String,
 }
 
 #[doc="<p>The database details of an Amazon RDS database.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RDSDatabase {
     #[serde(rename="DatabaseName")]
-    pub database_name: RDSDatabaseName,
+    pub database_name: String,
     #[doc="<p>The ID of an RDS DB instance.</p>"]
     #[serde(rename="InstanceIdentifier")]
-    pub instance_identifier: RDSInstanceIdentifier,
+    pub instance_identifier: String,
 }
 
 #[doc="<p>The database credentials to connect to a database on an RDS DB instance.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct RDSDatabaseCredentials {
     #[serde(rename="Password")]
-    pub password: RDSDatabasePassword,
+    pub password: String,
     #[serde(rename="Username")]
-    pub username: RDSDatabaseUsername,
+    pub username: String,
 }
 
-#[doc="<p>The name of a database hosted on an RDS DB instance.</p>"]
-pub type RDSDatabaseName = String;
-#[doc="<p>The password to be used by Amazon ML to connect to a database on an RDS DB instance. The password should have sufficient permissions to execute the <code>RDSSelectQuery</code> query.</p>"]
-pub type RDSDatabasePassword = String;
-#[doc="<p>The username to be used by Amazon ML to connect to database on an Amazon RDS instance. The username should have sufficient permissions to execute an <code>RDSSelectSqlQuery</code> query.</p>"]
-pub type RDSDatabaseUsername = String;
-#[doc="Identifier of RDS DB Instances."]
-pub type RDSInstanceIdentifier = String;
 #[doc="<p>The datasource details that are specific to Amazon RDS.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct RDSMetadata {
     #[doc="<p>The ID of the Data Pipeline instance that is used to carry to copy data from Amazon RDS to Amazon S3. You can use the ID to find details about the instance in the Data Pipeline console.</p>"]
     #[serde(rename="DataPipelineId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub data_pipeline_id: Option<EDPPipelineId>,
+    pub data_pipeline_id: Option<String>,
     #[doc="<p>The database details required to connect to an Amazon RDS.</p>"]
     #[serde(rename="Database")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub database: Option<RDSDatabase>,
     #[serde(rename="DatabaseUserName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub database_user_name: Option<RDSDatabaseUsername>,
+    pub database_user_name: Option<String>,
     #[doc="<p>The role (DataPipelineDefaultResourceRole) assumed by an Amazon EC2 instance to carry out the copy task from Amazon RDS to Amazon S3. For more information, see <a href=\"http://docs.aws.amazon.com/datapipeline/latest/DeveloperGuide/dp-iam-roles.html\">Role templates</a> for data pipelines.</p>"]
     #[serde(rename="ResourceRole")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub resource_role: Option<EDPResourceRole>,
+    pub resource_role: Option<String>,
     #[doc="<p>The SQL query that is supplied during <a>CreateDataSourceFromRDS</a>. Returns only if <code>Verbose</code> is true in <code>GetDataSourceInput</code>. </p>"]
     #[serde(rename="SelectSqlQuery")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub select_sql_query: Option<RDSSelectSqlQuery>,
+    pub select_sql_query: Option<String>,
     #[doc="<p>The role (DataPipelineDefaultRole) assumed by the Data Pipeline service to monitor the progress of the copy task from Amazon RDS to Amazon S3. For more information, see <a href=\"http://docs.aws.amazon.com/datapipeline/latest/DeveloperGuide/dp-iam-roles.html\">Role templates</a> for data pipelines.</p>"]
     #[serde(rename="ServiceRole")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub service_role: Option<EDPServiceRole>,
+    pub service_role: Option<String>,
 }
 
-#[doc="<p>The SQL query to be executed against the Amazon RDS database. The SQL query should be valid for the Amazon RDS type being used. </p>"]
-pub type RDSSelectSqlQuery = String;
 #[doc="<p> Describes the real-time endpoint information for an <code>MLModel</code>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct RealtimeEndpointInfo {
     #[doc="<p>The time that the request to create the real-time endpoint for the <code>MLModel</code> was received. The time is expressed in epoch time.</p>"]
     #[serde(rename="CreatedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_at: Option<EpochTime>,
+    pub created_at: Option<f64>,
     #[doc="<p> The current status of the real-time endpoint for the <code>MLModel</code>. This element can have one of the following values: </p> <ul> <li> <code>NONE</code> - Endpoint does not exist or was previously deleted.</li> <li> <code>READY</code> - Endpoint is ready to be used for real-time predictions.</li> <li> <code>UPDATING</code> - Updating/creating the endpoint. </li> </ul>"]
     #[serde(rename="EndpointStatus")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub endpoint_status: Option<RealtimeEndpointStatus>,
+    pub endpoint_status: Option<String>,
     #[doc="<p>The URI that specifies where to send real-time prediction requests for the <code>MLModel</code>.</p> <note><title>Note</title> <p>The application must wait until the real-time endpoint is ready before using this URI.</p> </note>"]
     #[serde(rename="EndpointUrl")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub endpoint_url: Option<VipURL>,
+    pub endpoint_url: Option<String>,
     #[doc="<p> The maximum processing rate for the real-time endpoint for <code>MLModel</code>, measured in incoming requests per second.</p>"]
     #[serde(rename="PeakRequestsPerSecond")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub peak_requests_per_second: Option<IntegerType>,
+    pub peak_requests_per_second: Option<i64>,
 }
 
-pub type RealtimeEndpointStatus = String;
-pub type Recipe = String;
-#[doc="<p>A map of variable name-value pairs that represent an observation.</p>"]
-pub type Record = ::std::collections::HashMap<VariableName, VariableValue>;
-#[doc="<p>The ID of an Amazon Redshift cluster.</p>"]
-pub type RedshiftClusterIdentifier = String;
 #[doc="<p>Describes the data specification of an Amazon Redshift <code>DataSource</code>.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct RedshiftDataSpec {
     #[doc="<p>A JSON string that represents the splitting and rearrangement processing to be applied to a <code>DataSource</code>. If the <code>DataRearrangement</code> parameter is not provided, all of the input data is used to create the <code>Datasource</code>.</p> <p>There are multiple parameters that control what data is used to create a datasource:</p> <ul> <li><p><b><code>percentBegin</code></b></p> <p>Use <code>percentBegin</code> to indicate the beginning of the range of the data used to create the Datasource. If you do not include <code>percentBegin</code> and <code>percentEnd</code>, Amazon ML includes all of the data when creating the datasource.</p></li> <li><p><b><code>percentEnd</code></b></p> <p>Use <code>percentEnd</code> to indicate the end of the range of the data used to create the Datasource. If you do not include <code>percentBegin</code> and <code>percentEnd</code>, Amazon ML includes all of the data when creating the datasource.</p></li> <li><p><b><code>complement</code></b></p> <p>The <code>complement</code> parameter instructs Amazon ML to use the data that is not included in the range of <code>percentBegin</code> to <code>percentEnd</code> to create a datasource. The <code>complement</code> parameter is useful if you need to create complementary datasources for training and evaluation. To create a complementary datasource, use the same values for <code>percentBegin</code> and <code>percentEnd</code>, along with the <code>complement</code> parameter.</p> <p>For example, the following two datasources do not share any data, and can be used to train and evaluate a model. The first datasource has 25 percent of the data, and the second one has 75 percent of the data.</p> <p>Datasource for evaluation: <code>{\"splitting\":{\"percentBegin\":0, \"percentEnd\":25}}</code></p> <p>Datasource for training: <code>{\"splitting\":{\"percentBegin\":0, \"percentEnd\":25, \"complement\":\"true\"}}</code></p> </li> <li><p><b><code>strategy</code></b></p> <p>To change how Amazon ML splits the data for a datasource, use the <code>strategy</code> parameter.</p> <p>The default value for the <code>strategy</code> parameter is <code>sequential</code>, meaning that Amazon ML takes all of the data records between the <code>percentBegin</code> and <code>percentEnd</code> parameters for the datasource, in the order that the records appear in the input data.</p> <p>The following two <code>DataRearrangement</code> lines are examples of sequentially ordered training and evaluation datasources:</p> <p>Datasource for evaluation: <code>{\"splitting\":{\"percentBegin\":70, \"percentEnd\":100, \"strategy\":\"sequential\"}}</code></p> <p>Datasource for training: <code>{\"splitting\":{\"percentBegin\":70, \"percentEnd\":100, \"strategy\":\"sequential\", \"complement\":\"true\"}}</code></p> <p>To randomly split the input data into the proportions indicated by the percentBegin and percentEnd parameters, set the <code>strategy</code> parameter to <code>random</code> and provide a string that is used as the seed value for the random data splitting (for example, you can use the S3 path to your data as the random seed string). If you choose the random split strategy, Amazon ML assigns each row of data a pseudo-random number between 0 and 100, and then selects the rows that have an assigned number between <code>percentBegin</code> and <code>percentEnd</code>. Pseudo-random numbers are assigned using both the input seed string value and the byte offset as a seed, so changing the data results in a different split. Any existing ordering is preserved. The random splitting strategy ensures that variables in the training and evaluation data are distributed similarly. It is useful in the cases where the input data may have an implicit sort order, which would otherwise result in training and evaluation datasources containing non-similar data records.</p> <p>The following two <code>DataRearrangement</code> lines are examples of non-sequentially ordered training and evaluation datasources:</p> <p>Datasource for evaluation: <code>{\"splitting\":{\"percentBegin\":70, \"percentEnd\":100, \"strategy\":\"random\", \"randomSeed\"=\"s3://my_s3_path/bucket/file.csv\"}}</code></p> <p>Datasource for training: <code>{\"splitting\":{\"percentBegin\":70, \"percentEnd\":100, \"strategy\":\"random\", \"randomSeed\"=\"s3://my_s3_path/bucket/file.csv\", \"complement\":\"true\"}}</code></p> </li> </ul>"]
     #[serde(rename="DataRearrangement")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub data_rearrangement: Option<DataRearrangement>,
+    pub data_rearrangement: Option<String>,
     #[doc="<p>A JSON string that represents the schema for an Amazon Redshift <code>DataSource</code>. The <code>DataSchema</code> defines the structure of the observation data in the data file(s) referenced in the <code>DataSource</code>.</p> <p>A <code>DataSchema</code> is not required if you specify a <code>DataSchemaUri</code>.</p> <p>Define your <code>DataSchema</code> as a series of key-value pairs. <code>attributes</code> and <code>excludedVariableNames</code> have an array of key-value pairs for their value. Use the following format to define your <code>DataSchema</code>.</p> <p>{ \"version\": \"1.0\",</p> <p> \"recordAnnotationFieldName\": \"F1\",</p> <p> \"recordWeightFieldName\": \"F2\",</p> <p> \"targetFieldName\": \"F3\",</p> <p> \"dataFormat\": \"CSV\",</p> <p> \"dataFileContainsHeader\": true,</p> <p> \"attributes\": [</p> <p> { \"fieldName\": \"F1\", \"fieldType\": \"TEXT\" }, { \"fieldName\": \"F2\", \"fieldType\": \"NUMERIC\" }, { \"fieldName\": \"F3\", \"fieldType\": \"CATEGORICAL\" }, { \"fieldName\": \"F4\", \"fieldType\": \"NUMERIC\" }, { \"fieldName\": \"F5\", \"fieldType\": \"CATEGORICAL\" }, { \"fieldName\": \"F6\", \"fieldType\": \"TEXT\" }, { \"fieldName\": \"F7\", \"fieldType\": \"WEIGHTED_INT_SEQUENCE\" }, { \"fieldName\": \"F8\", \"fieldType\": \"WEIGHTED_STRING_SEQUENCE\" } ],</p> <p> \"excludedVariableNames\": [ \"F6\" ] } </p>"]
     #[serde(rename="DataSchema")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub data_schema: Option<DataSchema>,
+    pub data_schema: Option<String>,
     #[doc="<p>Describes the schema location for an Amazon Redshift <code>DataSource</code>.</p>"]
     #[serde(rename="DataSchemaUri")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub data_schema_uri: Option<S3Url>,
+    pub data_schema_uri: Option<String>,
     #[doc="<p>Describes AWS Identity and Access Management (IAM) credentials that are used connect to the Amazon Redshift database.</p>"]
     #[serde(rename="DatabaseCredentials")]
     pub database_credentials: RedshiftDatabaseCredentials,
@@ -1496,112 +1423,86 @@ pub struct RedshiftDataSpec {
     pub database_information: RedshiftDatabase,
     #[doc="<p>Describes an Amazon S3 location to store the result set of the <code>SelectSqlQuery</code> query.</p>"]
     #[serde(rename="S3StagingLocation")]
-    pub s3_staging_location: S3Url,
+    pub s3_staging_location: String,
     #[doc="<p>Describes the SQL Query to execute on an Amazon Redshift database for an Amazon Redshift <code>DataSource</code>.</p>"]
     #[serde(rename="SelectSqlQuery")]
-    pub select_sql_query: RedshiftSelectSqlQuery,
+    pub select_sql_query: String,
 }
 
 #[doc="<p>Describes the database details required to connect to an Amazon Redshift database.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct RedshiftDatabase {
     #[serde(rename="ClusterIdentifier")]
-    pub cluster_identifier: RedshiftClusterIdentifier,
+    pub cluster_identifier: String,
     #[serde(rename="DatabaseName")]
-    pub database_name: RedshiftDatabaseName,
+    pub database_name: String,
 }
 
 #[doc="<p> Describes the database credentials for connecting to a database on an Amazon Redshift cluster.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct RedshiftDatabaseCredentials {
     #[serde(rename="Password")]
-    pub password: RedshiftDatabasePassword,
+    pub password: String,
     #[serde(rename="Username")]
-    pub username: RedshiftDatabaseUsername,
+    pub username: String,
 }
 
-#[doc="<p>The name of a database hosted on an Amazon Redshift cluster.</p>"]
-pub type RedshiftDatabaseName = String;
-#[doc="<p>A password to be used by Amazon ML to connect to a database on an Amazon Redshift cluster. The password should have sufficient permissions to execute a <code>RedshiftSelectSqlQuery</code> query. The password should be valid for an Amazon Redshift <a href=\"http://docs.aws.amazon.com/redshift/latest/dg/r_CREATE_USER.html\">USER</a>.</p>"]
-pub type RedshiftDatabasePassword = String;
-#[doc="<p>A username to be used by Amazon Machine Learning (Amazon ML)to connect to a database on an Amazon Redshift cluster. The username should have sufficient permissions to execute the <code>RedshiftSelectSqlQuery</code> query. The username should be valid for an Amazon Redshift <a href=\"http://docs.aws.amazon.com/redshift/latest/dg/r_CREATE_USER.html\">USER</a>.</p>"]
-pub type RedshiftDatabaseUsername = String;
 #[doc="<p>Describes the <code>DataSource</code> details specific to Amazon Redshift.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct RedshiftMetadata {
     #[serde(rename="DatabaseUserName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub database_user_name: Option<RedshiftDatabaseUsername>,
+    pub database_user_name: Option<String>,
     #[serde(rename="RedshiftDatabase")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub redshift_database: Option<RedshiftDatabase>,
     #[doc="<p> The SQL query that is specified during <a>CreateDataSourceFromRedshift</a>. Returns only if <code>Verbose</code> is true in GetDataSourceInput. </p>"]
     #[serde(rename="SelectSqlQuery")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub select_sql_query: Option<RedshiftSelectSqlQuery>,
+    pub select_sql_query: Option<String>,
 }
 
-#[doc="<p> Describes the SQL query to execute on the Amazon Redshift database. The SQL query should be valid for an Amazon Redshift <a href=\"http://docs.aws.amazon.com/redshift/latest/dg/r_SELECT_synopsis.html\">SELECT</a>. </p>"]
-pub type RedshiftSelectSqlQuery = String;
-#[doc="<p>The Amazon Resource Name (ARN) of an <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html#roles-about-termsandconcepts\">AWS IAM Role</a>, such as the following: arn:aws:iam::account:role/rolename. </p>"]
-pub type RoleARN = String;
 #[doc="<p> Describes the data specification of a <code>DataSource</code>.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct S3DataSpec {
     #[doc="<p>The location of the data file(s) used by a <code>DataSource</code>. The URI specifies a data file or an Amazon Simple Storage Service (Amazon S3) directory or bucket containing data files.</p>"]
     #[serde(rename="DataLocationS3")]
-    pub data_location_s3: S3Url,
+    pub data_location_s3: String,
     #[doc="<p>A JSON string that represents the splitting and rearrangement processing to be applied to a <code>DataSource</code>. If the <code>DataRearrangement</code> parameter is not provided, all of the input data is used to create the <code>Datasource</code>.</p> <p>There are multiple parameters that control what data is used to create a datasource:</p> <ul> <li><p><b><code>percentBegin</code></b></p> <p>Use <code>percentBegin</code> to indicate the beginning of the range of the data used to create the Datasource. If you do not include <code>percentBegin</code> and <code>percentEnd</code>, Amazon ML includes all of the data when creating the datasource.</p></li> <li><p><b><code>percentEnd</code></b></p> <p>Use <code>percentEnd</code> to indicate the end of the range of the data used to create the Datasource. If you do not include <code>percentBegin</code> and <code>percentEnd</code>, Amazon ML includes all of the data when creating the datasource.</p></li> <li><p><b><code>complement</code></b></p> <p>The <code>complement</code> parameter instructs Amazon ML to use the data that is not included in the range of <code>percentBegin</code> to <code>percentEnd</code> to create a datasource. The <code>complement</code> parameter is useful if you need to create complementary datasources for training and evaluation. To create a complementary datasource, use the same values for <code>percentBegin</code> and <code>percentEnd</code>, along with the <code>complement</code> parameter.</p> <p>For example, the following two datasources do not share any data, and can be used to train and evaluate a model. The first datasource has 25 percent of the data, and the second one has 75 percent of the data.</p> <p>Datasource for evaluation: <code>{\"splitting\":{\"percentBegin\":0, \"percentEnd\":25}}</code></p> <p>Datasource for training: <code>{\"splitting\":{\"percentBegin\":0, \"percentEnd\":25, \"complement\":\"true\"}}</code></p> </li> <li><p><b><code>strategy</code></b></p> <p>To change how Amazon ML splits the data for a datasource, use the <code>strategy</code> parameter.</p> <p>The default value for the <code>strategy</code> parameter is <code>sequential</code>, meaning that Amazon ML takes all of the data records between the <code>percentBegin</code> and <code>percentEnd</code> parameters for the datasource, in the order that the records appear in the input data.</p> <p>The following two <code>DataRearrangement</code> lines are examples of sequentially ordered training and evaluation datasources:</p> <p>Datasource for evaluation: <code>{\"splitting\":{\"percentBegin\":70, \"percentEnd\":100, \"strategy\":\"sequential\"}}</code></p> <p>Datasource for training: <code>{\"splitting\":{\"percentBegin\":70, \"percentEnd\":100, \"strategy\":\"sequential\", \"complement\":\"true\"}}</code></p> <p>To randomly split the input data into the proportions indicated by the percentBegin and percentEnd parameters, set the <code>strategy</code> parameter to <code>random</code> and provide a string that is used as the seed value for the random data splitting (for example, you can use the S3 path to your data as the random seed string). If you choose the random split strategy, Amazon ML assigns each row of data a pseudo-random number between 0 and 100, and then selects the rows that have an assigned number between <code>percentBegin</code> and <code>percentEnd</code>. Pseudo-random numbers are assigned using both the input seed string value and the byte offset as a seed, so changing the data results in a different split. Any existing ordering is preserved. The random splitting strategy ensures that variables in the training and evaluation data are distributed similarly. It is useful in the cases where the input data may have an implicit sort order, which would otherwise result in training and evaluation datasources containing non-similar data records.</p> <p>The following two <code>DataRearrangement</code> lines are examples of non-sequentially ordered training and evaluation datasources:</p> <p>Datasource for evaluation: <code>{\"splitting\":{\"percentBegin\":70, \"percentEnd\":100, \"strategy\":\"random\", \"randomSeed\"=\"s3://my_s3_path/bucket/file.csv\"}}</code></p> <p>Datasource for training: <code>{\"splitting\":{\"percentBegin\":70, \"percentEnd\":100, \"strategy\":\"random\", \"randomSeed\"=\"s3://my_s3_path/bucket/file.csv\", \"complement\":\"true\"}}</code></p> </li> </ul>"]
     #[serde(rename="DataRearrangement")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub data_rearrangement: Option<DataRearrangement>,
+    pub data_rearrangement: Option<String>,
     #[doc="<p> A JSON string that represents the schema for an Amazon S3 <code>DataSource</code>. The <code>DataSchema</code> defines the structure of the observation data in the data file(s) referenced in the <code>DataSource</code>.</p> <p>You must provide either the <code>DataSchema</code> or the <code>DataSchemaLocationS3</code>.</p> <p>Define your <code>DataSchema</code> as a series of key-value pairs. <code>attributes</code> and <code>excludedVariableNames</code> have an array of key-value pairs for their value. Use the following format to define your <code>DataSchema</code>.</p> <p>{ \"version\": \"1.0\",</p> <p> \"recordAnnotationFieldName\": \"F1\",</p> <p> \"recordWeightFieldName\": \"F2\",</p> <p> \"targetFieldName\": \"F3\",</p> <p> \"dataFormat\": \"CSV\",</p> <p> \"dataFileContainsHeader\": true,</p> <p> \"attributes\": [</p> <p> { \"fieldName\": \"F1\", \"fieldType\": \"TEXT\" }, { \"fieldName\": \"F2\", \"fieldType\": \"NUMERIC\" }, { \"fieldName\": \"F3\", \"fieldType\": \"CATEGORICAL\" }, { \"fieldName\": \"F4\", \"fieldType\": \"NUMERIC\" }, { \"fieldName\": \"F5\", \"fieldType\": \"CATEGORICAL\" }, { \"fieldName\": \"F6\", \"fieldType\": \"TEXT\" }, { \"fieldName\": \"F7\", \"fieldType\": \"WEIGHTED_INT_SEQUENCE\" }, { \"fieldName\": \"F8\", \"fieldType\": \"WEIGHTED_STRING_SEQUENCE\" } ],</p> <p> \"excludedVariableNames\": [ \"F6\" ] } </p> <?oxy_insert_end>"]
     #[serde(rename="DataSchema")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub data_schema: Option<DataSchema>,
+    pub data_schema: Option<String>,
     #[doc="<p>Describes the schema location in Amazon S3. You must provide either the <code>DataSchema</code> or the <code>DataSchemaLocationS3</code>.</p>"]
     #[serde(rename="DataSchemaLocationS3")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub data_schema_location_s3: Option<S3Url>,
+    pub data_schema_location_s3: Option<String>,
 }
 
-#[doc="<p>A reference to a file or bucket on Amazon Simple Storage Service (Amazon S3).</p>"]
-pub type S3Url = String;
-pub type ScoreThreshold = f32;
-pub type ScoreValue = f32;
-#[doc="Provides the raw classification score corresponding to each label."]
-pub type ScoreValuePerLabelMap = ::std::collections::HashMap<Label, ScoreValue>;
-#[doc="<p>The sort order specified in a listing condition. Possible values include the following:</p> <ul> <li> <code>asc</code> - Present the information in ascending order (from A-Z).</li> <li> <code>dsc</code> - Present the information in descending order (from Z-A).</li> </ul>"]
-pub type SortOrder = String;
-#[doc="<p>String type.</p>"]
-pub type StringType = String;
 #[doc="<p>A custom key-value pair associated with an ML object, such as an ML model.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Tag {
     #[doc="<p>A unique identifier for the tag. Valid characters include Unicode letters, digits, white space, _, ., /, =, +, -, %, and @.</p>"]
     #[serde(rename="Key")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub key: Option<TagKey>,
+    pub key: Option<String>,
     #[doc="<p>An optional string, typically used to describe or define the tag. Valid characters include Unicode letters, digits, white space, _, ., /, =, +, -, %, and @.</p>"]
     #[serde(rename="Value")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub value: Option<TagValue>,
+    pub value: Option<String>,
 }
 
-pub type TagKey = String;
-pub type TagKeyList = Vec<TagKey>;
-pub type TagList = Vec<Tag>;
-pub type TagValue = String;
-pub type TaggableResourceType = String;
-pub type TrainingParameters = ::std::collections::HashMap<StringType, StringType>;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateBatchPredictionInput {
     #[doc="<p>The ID assigned to the <code>BatchPrediction</code> during creation.</p>"]
     #[serde(rename="BatchPredictionId")]
-    pub batch_prediction_id: EntityId,
+    pub batch_prediction_id: String,
     #[doc="<p>A new user-supplied name or description of the <code>BatchPrediction</code>.</p>"]
     #[serde(rename="BatchPredictionName")]
-    pub batch_prediction_name: EntityName,
+    pub batch_prediction_name: String,
 }
 
 #[doc="<p>Represents the output of an <code>UpdateBatchPrediction</code> operation.</p> <p>You can see the updated content by using the <code>GetBatchPrediction</code> operation.</p>"]
@@ -1610,17 +1511,17 @@ pub struct UpdateBatchPredictionOutput {
     #[doc="<p>The ID assigned to the <code>BatchPrediction</code> during creation. This value should be identical to the value of the <code>BatchPredictionId</code> in the request.</p>"]
     #[serde(rename="BatchPredictionId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub batch_prediction_id: Option<EntityId>,
+    pub batch_prediction_id: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateDataSourceInput {
     #[doc="<p>The ID assigned to the <code>DataSource</code> during creation.</p>"]
     #[serde(rename="DataSourceId")]
-    pub data_source_id: EntityId,
+    pub data_source_id: String,
     #[doc="<p>A new user-supplied name or description of the <code>DataSource</code> that will replace the current description. </p>"]
     #[serde(rename="DataSourceName")]
-    pub data_source_name: EntityName,
+    pub data_source_name: String,
 }
 
 #[doc="<p>Represents the output of an <code>UpdateDataSource</code> operation.</p> <p>You can see the updated content by using the <code>GetBatchPrediction</code> operation.</p>"]
@@ -1629,17 +1530,17 @@ pub struct UpdateDataSourceOutput {
     #[doc="<p>The ID assigned to the <code>DataSource</code> during creation. This value should be identical to the value of the <code>DataSourceID</code> in the request.</p>"]
     #[serde(rename="DataSourceId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub data_source_id: Option<EntityId>,
+    pub data_source_id: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateEvaluationInput {
     #[doc="<p>The ID assigned to the <code>Evaluation</code> during creation.</p>"]
     #[serde(rename="EvaluationId")]
-    pub evaluation_id: EntityId,
+    pub evaluation_id: String,
     #[doc="<p>A new user-supplied name or description of the <code>Evaluation</code> that will replace the current content. </p>"]
     #[serde(rename="EvaluationName")]
-    pub evaluation_name: EntityName,
+    pub evaluation_name: String,
 }
 
 #[doc="<p>Represents the output of an <code>UpdateEvaluation</code> operation.</p> <p>You can see the updated content by using the <code>GetEvaluation</code> operation.</p>"]
@@ -1648,22 +1549,22 @@ pub struct UpdateEvaluationOutput {
     #[doc="<p>The ID assigned to the <code>Evaluation</code> during creation. This value should be identical to the value of the <code>Evaluation</code> in the request.</p>"]
     #[serde(rename="EvaluationId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub evaluation_id: Option<EntityId>,
+    pub evaluation_id: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateMLModelInput {
     #[doc="<p>The ID assigned to the <code>MLModel</code> during creation.</p>"]
     #[serde(rename="MLModelId")]
-    pub ml_model_id: EntityId,
+    pub ml_model_id: String,
     #[doc="<p>A user-supplied name or description of the <code>MLModel</code>.</p>"]
     #[serde(rename="MLModelName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ml_model_name: Option<EntityName>,
+    pub ml_model_name: Option<String>,
     #[doc="<p>The <code>ScoreThreshold</code> used in binary classification <code>MLModel</code> that marks the boundary between a positive prediction and a negative prediction.</p> <p>Output values greater than or equal to the <code>ScoreThreshold</code> receive a positive result from the <code>MLModel</code>, such as <code>true</code>. Output values less than the <code>ScoreThreshold</code> receive a negative response from the <code>MLModel</code>, such as <code>false</code>.</p>"]
     #[serde(rename="ScoreThreshold")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub score_threshold: Option<ScoreThreshold>,
+    pub score_threshold: Option<f32>,
 }
 
 #[doc="<p>Represents the output of an <code>UpdateMLModel</code> operation.</p> <p>You can see the updated content by using the <code>GetMLModel</code> operation.</p>"]
@@ -1672,16 +1573,9 @@ pub struct UpdateMLModelOutput {
     #[doc="<p>The ID assigned to the <code>MLModel</code> during creation. This value should be identical to the value of the <code>MLModelID</code> in the request.</p>"]
     #[serde(rename="MLModelId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ml_model_id: Option<EntityId>,
+    pub ml_model_id: Option<String>,
 }
 
-#[doc="<p>The name of a variable. Currently it's used to specify the name of the target value, label, weight, and tags.</p>"]
-pub type VariableName = String;
-#[doc="<p>The value of a variable. Currently it's used to specify values of the target value, weights, and tag variables and for filtering variable values.</p>"]
-pub type VariableValue = String;
-#[doc="<p>Specifies whether a describe operation should return exhaustive or abbreviated information.</p>"]
-pub type Verbose = bool;
-pub type VipURL = String;
 /// Errors returned by AddTags
 #[derive(Debug, PartialEq)]
 pub enum AddTagsError {

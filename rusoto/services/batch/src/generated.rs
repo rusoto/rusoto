@@ -1,3 +1,16 @@
+
+// =================================================================
+//
+//                           * WARNING *
+//
+//                    This file is generated!
+//
+//  Changes made to this file will be overwritten. If changes are
+//  required to the generated code, the service_crategen project
+//  must be updated to generate the changes.
+//
+// =================================================================
+
 #[allow(warnings)]
 use hyper::Client;
 use hyper::status::StatusCode;
@@ -23,7 +36,7 @@ pub struct AttemptContainerDetail {
     #[doc="<p>The exit code for the job attempt. A non-zero exit code is considered a failure.</p>"]
     #[serde(rename="exitCode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub exit_code: Option<Integer>,
+    pub exit_code: Option<i64>,
     #[doc="<p>A short (255 max characters) human-readable string to provide additional details about a running or stopped container.</p>"]
     #[serde(rename="reason")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -44,7 +57,7 @@ pub struct AttemptDetail {
     #[doc="<p>The Unix timestamp for when the attempt was started (when the task transitioned from the <code>PENDING</code> state to the <code>RUNNING</code> state).</p>"]
     #[serde(rename="startedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub started_at: Option<Long>,
+    pub started_at: Option<i64>,
     #[doc="<p>A short, human-readable string to provide additional details about the current status of the job attempt.</p>"]
     #[serde(rename="statusReason")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -52,15 +65,9 @@ pub struct AttemptDetail {
     #[doc="<p>The Unix timestamp for when the attempt was stopped (when the task transitioned from the <code>RUNNING</code> state to the <code>STOPPED</code> state).</p>"]
     #[serde(rename="stoppedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub stopped_at: Option<Long>,
+    pub stopped_at: Option<i64>,
 }
 
-pub type AttemptDetails = Vec<AttemptDetail>;
-pub type Boolean = bool;
-pub type CEState = String;
-pub type CEStatus = String;
-pub type CEType = String;
-pub type CRType = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CancelJobRequest {
     #[doc="<p>A list of up to 100 job IDs to cancel.</p>"]
@@ -97,11 +104,11 @@ pub struct ComputeEnvironmentDetail {
     #[doc="<p>The state of the compute environment. The valid values are <code>ENABLED</code> or <code>DISABLED</code>. An <code>ENABLED</code> state indicates that you can register instances with the compute environment and that the associated instances can accept jobs. </p>"]
     #[serde(rename="state")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub state: Option<CEState>,
+    pub state: Option<String>,
     #[doc="<p>The current status of the compute environment (for example, <code>CREATING</code> or <code>VALID</code>).</p>"]
     #[serde(rename="status")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status: Option<CEStatus>,
+    pub status: Option<String>,
     #[doc="<p>A short, human-readable string to provide additional details about the current status of the compute environment.</p>"]
     #[serde(rename="statusReason")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -109,10 +116,9 @@ pub struct ComputeEnvironmentDetail {
     #[doc="<p>The type of the compute environment.</p>"]
     #[serde(rename="type")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub type_: Option<CEType>,
+    pub type_: Option<String>,
 }
 
-pub type ComputeEnvironmentDetailList = Vec<ComputeEnvironmentDetail>;
 #[doc="<p>The order in which compute environments are tried for job placement within a queue. Compute environments are tried in ascending order. For example, if two compute environments are associated with a job queue, the compute environment with a lower order integer value is tried for job placement first.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ComputeEnvironmentOrder {
@@ -121,21 +127,20 @@ pub struct ComputeEnvironmentOrder {
     pub compute_environment: String,
     #[doc="<p>The order of the compute environment.</p>"]
     #[serde(rename="order")]
-    pub order: Integer,
+    pub order: i64,
 }
 
-pub type ComputeEnvironmentOrders = Vec<ComputeEnvironmentOrder>;
 #[doc="<p>An object representing an AWS Batch compute resource.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ComputeResource {
     #[doc="<p>The minimum percentage that a Spot Instance price must be when compared with the On-Demand price for that instance type before instances are launched. For example, if your bid percentage is 20%, then the Spot price must be below 20% of the current On-Demand price for that EC2 instance.</p>"]
     #[serde(rename="bidPercentage")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub bid_percentage: Option<Integer>,
+    pub bid_percentage: Option<i64>,
     #[doc="<p>The desired number of EC2 vCPUS in the compute environment. </p>"]
     #[serde(rename="desiredvCpus")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub desiredv_cpus: Option<Integer>,
+    pub desiredv_cpus: Option<i64>,
     #[doc="<p>The EC2 key pair that is used for instances launched in the compute environment.</p>"]
     #[serde(rename="ec2KeyPair")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -149,30 +154,30 @@ pub struct ComputeResource {
     pub instance_role: String,
     #[doc="<p>The instances types that may launched.</p>"]
     #[serde(rename="instanceTypes")]
-    pub instance_types: StringList,
+    pub instance_types: Vec<String>,
     #[doc="<p>The maximum number of EC2 vCPUs that an environment can reach. </p>"]
     #[serde(rename="maxvCpus")]
-    pub maxv_cpus: Integer,
+    pub maxv_cpus: i64,
     #[doc="<p>The minimum number of EC2 vCPUs that an environment should maintain. </p>"]
     #[serde(rename="minvCpus")]
-    pub minv_cpus: Integer,
+    pub minv_cpus: i64,
     #[doc="<p>The EC2 security group that is associated with instances launched in the compute environment. </p>"]
     #[serde(rename="securityGroupIds")]
-    pub security_group_ids: StringList,
+    pub security_group_ids: Vec<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon EC2 Spot Fleet IAM role applied to a <code>SPOT</code> compute environment.</p>"]
     #[serde(rename="spotIamFleetRole")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub spot_iam_fleet_role: Option<String>,
     #[doc="<p>The VPC subnets into which the compute resources are launched. </p>"]
     #[serde(rename="subnets")]
-    pub subnets: StringList,
+    pub subnets: Vec<String>,
     #[doc="<p>Key-value pair tags to be applied to resources that are launched in the compute environment. </p>"]
     #[serde(rename="tags")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub tags: Option<TagsMap>,
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>The type of compute environment.</p>"]
     #[serde(rename="type")]
-    pub type_: CRType,
+    pub type_: String,
 }
 
 #[doc="<p>An object representing the attributes of a compute environment that can be updated.</p>"]
@@ -181,15 +186,15 @@ pub struct ComputeResourceUpdate {
     #[doc="<p>The desired number of EC2 vCPUS in the compute environment.</p>"]
     #[serde(rename="desiredvCpus")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub desiredv_cpus: Option<Integer>,
+    pub desiredv_cpus: Option<i64>,
     #[doc="<p>The maximum number of EC2 vCPUs that an environment can reach.</p>"]
     #[serde(rename="maxvCpus")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub maxv_cpus: Option<Integer>,
+    pub maxv_cpus: Option<i64>,
     #[doc="<p>The minimum number of EC2 vCPUs that an environment should maintain.</p>"]
     #[serde(rename="minvCpus")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub minv_cpus: Option<Integer>,
+    pub minv_cpus: Option<i64>,
 }
 
 #[doc="<p>An object representing the details of a container that is part of a job.</p>"]
@@ -198,7 +203,7 @@ pub struct ContainerDetail {
     #[doc="<p>The command that is passed to the container. </p>"]
     #[serde(rename="command")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub command: Option<StringList>,
+    pub command: Option<Vec<String>>,
     #[doc="<p>The Amazon Resource Name (ARN) of the container instance on which the container is running.</p>"]
     #[serde(rename="containerInstanceArn")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -206,11 +211,11 @@ pub struct ContainerDetail {
     #[doc="<p>The environment variables to pass to a container.</p>"]
     #[serde(rename="environment")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub environment: Option<EnvironmentVariables>,
+    pub environment: Option<Vec<KeyValuePair>>,
     #[doc="<p>The exit code to return upon completion.</p>"]
     #[serde(rename="exitCode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub exit_code: Option<Integer>,
+    pub exit_code: Option<i64>,
     #[doc="<p>The image used to start the container.</p>"]
     #[serde(rename="image")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -222,19 +227,19 @@ pub struct ContainerDetail {
     #[doc="<p>The number of MiB of memory reserved for the job.</p>"]
     #[serde(rename="memory")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub memory: Option<Integer>,
+    pub memory: Option<i64>,
     #[doc="<p>The mount points for data volumes in your container.</p>"]
     #[serde(rename="mountPoints")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub mount_points: Option<MountPoints>,
+    pub mount_points: Option<Vec<MountPoint>>,
     #[doc="<p>When this parameter is true, the container is given elevated privileges on the host container instance (similar to the <code>root</code> user).</p>"]
     #[serde(rename="privileged")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub privileged: Option<Boolean>,
+    pub privileged: Option<bool>,
     #[doc="<p>When this parameter is true, the container is given read-only access to its root file system.</p>"]
     #[serde(rename="readonlyRootFilesystem")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub readonly_root_filesystem: Option<Boolean>,
+    pub readonly_root_filesystem: Option<bool>,
     #[doc="<p>A short (255 max characters) human-readable string to provide additional details about a running or stopped container.</p>"]
     #[serde(rename="reason")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -246,7 +251,7 @@ pub struct ContainerDetail {
     #[doc="<p>A list of <code>ulimit</code> values to set in the container.</p>"]
     #[serde(rename="ulimits")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ulimits: Option<Ulimits>,
+    pub ulimits: Option<Vec<Ulimit>>,
     #[doc="<p>The user name to use inside the container.</p>"]
     #[serde(rename="user")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -254,11 +259,11 @@ pub struct ContainerDetail {
     #[doc="<p>The number of VCPUs allocated for the job. </p>"]
     #[serde(rename="vcpus")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub vcpus: Option<Integer>,
+    pub vcpus: Option<i64>,
     #[doc="<p>A list of volumes associated with the job.</p>"]
     #[serde(rename="volumes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub volumes: Option<Volumes>,
+    pub volumes: Option<Vec<Volume>>,
 }
 
 #[doc="<p>The overrides that should be sent to a container.</p>"]
@@ -267,19 +272,19 @@ pub struct ContainerOverrides {
     #[doc="<p>The command to send to the container that overrides the default command from the Docker image or the job definition.</p>"]
     #[serde(rename="command")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub command: Option<StringList>,
+    pub command: Option<Vec<String>>,
     #[doc="<p>The environment variables to send to the container. You can add new environment variables, which are added to the container at launch, or you can override the existing environment variables from the Docker image or the job definition.</p>"]
     #[serde(rename="environment")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub environment: Option<EnvironmentVariables>,
+    pub environment: Option<Vec<KeyValuePair>>,
     #[doc="<p>The number of MiB of memory reserved for the job. This value overrides the value set in the job definition.</p>"]
     #[serde(rename="memory")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub memory: Option<Integer>,
+    pub memory: Option<i64>,
     #[doc="<p>The number of vCPUs to reserve for the container. This value overrides the value set in the job definition.</p>"]
     #[serde(rename="vcpus")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub vcpus: Option<Integer>,
+    pub vcpus: Option<i64>,
 }
 
 #[doc="<p>Container properties are used in job definitions to describe the container that is launched as part of a job.</p>"]
@@ -288,11 +293,11 @@ pub struct ContainerProperties {
     #[doc="<p>The command that is passed to the container. This parameter maps to <code>Cmd</code> in the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container\">Create a container</a> section of the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/\">Docker Remote API</a> and the <code>COMMAND</code> parameter to <a href=\"https://docs.docker.com/engine/reference/run/\">docker run</a>. For more information, see <a href=\"https://docs.docker.com/engine/reference/builder/#cmd\">https://docs.docker.com/engine/reference/builder/#cmd</a>.</p>"]
     #[serde(rename="command")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub command: Option<StringList>,
+    pub command: Option<Vec<String>>,
     #[doc="<p>The environment variables to pass to a container. This parameter maps to <code>Env</code> in the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container\">Create a container</a> section of the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/\">Docker Remote API</a> and the <code>--env</code> option to <a href=\"https://docs.docker.com/engine/reference/run/\">docker run</a>.</p> <important> <p>We do not recommend using plain text environment variables for sensitive information, such as credential data.</p> </important>"]
     #[serde(rename="environment")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub environment: Option<EnvironmentVariables>,
+    pub environment: Option<Vec<KeyValuePair>>,
     #[doc="<p>The image used to start a container. This string is passed directly to the Docker daemon. Images in the Docker Hub registry are available by default. Other repositories are specified with <code> <i>repository-url</i>/<i>image</i>:<i>tag</i> </code>. Up to 255 letters (uppercase and lowercase), numbers, hyphens, underscores, colons, periods, forward slashes, and number signs are allowed. This parameter maps to <code>Image</code> in the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container\">Create a container</a> section of the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/\">Docker Remote API</a> and the <code>IMAGE</code> parameter of <a href=\"https://docs.docker.com/engine/reference/run/\">docker run</a>.</p> <ul> <li> <p>Images in Amazon ECR repositories use the full registry and repository URI (for example, <code>012345678910.dkr.ecr.&lt;region-name&gt;.amazonaws.com/&lt;repository-name&gt;</code>). </p> </li> <li> <p>Images in official repositories on Docker Hub use a single name (for example, <code>ubuntu</code> or <code>mongo</code>).</p> </li> <li> <p>Images in other repositories on Docker Hub are qualified with an organization name (for example, <code>amazon/amazon-ecs-agent</code>).</p> </li> <li> <p>Images in other online repositories are qualified further by a domain name (for example, <code>quay.io/assemblyline/ubuntu</code>).</p> </li> </ul>"]
     #[serde(rename="image")]
     pub image: String,
@@ -302,34 +307,34 @@ pub struct ContainerProperties {
     pub job_role_arn: Option<String>,
     #[doc="<p>The hard limit (in MiB) of memory to present to the container. If your container attempts to exceed the memory specified here, the container is killed. This parameter maps to <code>Memory</code> in the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container\">Create a container</a> section of the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/\">Docker Remote API</a> and the <code>--memory</code> option to <a href=\"https://docs.docker.com/engine/reference/run/\">docker run</a>.</p>"]
     #[serde(rename="memory")]
-    pub memory: Integer,
+    pub memory: i64,
     #[doc="<p>The mount points for data volumes in your container. This parameter maps to <code>Volumes</code> in the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container\">Create a container</a> section of the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/\">Docker Remote API</a> and the <code>--volume</code> option to <a href=\"https://docs.docker.com/engine/reference/run/\">docker run</a>.</p>"]
     #[serde(rename="mountPoints")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub mount_points: Option<MountPoints>,
+    pub mount_points: Option<Vec<MountPoint>>,
     #[doc="<p>When this parameter is true, the container is given elevated privileges on the host container instance (similar to the <code>root</code> user). This parameter maps to <code>Privileged</code> in the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container\">Create a container</a> section of the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/\">Docker Remote API</a> and the <code>--privileged</code> option to <a href=\"https://docs.docker.com/engine/reference/run/\">docker run</a>.</p>"]
     #[serde(rename="privileged")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub privileged: Option<Boolean>,
+    pub privileged: Option<bool>,
     #[doc="<p>When this parameter is true, the container is given read-only access to its root file system. This parameter maps to <code>ReadonlyRootfs</code> in the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container\">Create a container</a> section of the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/\">Docker Remote API</a> and the <code>--read-only</code> option to <code>docker run</code>.</p>"]
     #[serde(rename="readonlyRootFilesystem")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub readonly_root_filesystem: Option<Boolean>,
+    pub readonly_root_filesystem: Option<bool>,
     #[doc="<p>A list of <code>ulimits</code> to set in the container. This parameter maps to <code>Ulimits</code> in the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container\">Create a container</a> section of the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/\">Docker Remote API</a> and the <code>--ulimit</code> option to <a href=\"https://docs.docker.com/engine/reference/run/\">docker run</a>.</p>"]
     #[serde(rename="ulimits")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ulimits: Option<Ulimits>,
+    pub ulimits: Option<Vec<Ulimit>>,
     #[doc="<p>The user name to use inside the container. This parameter maps to <code>User</code> in the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container\">Create a container</a> section of the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/\">Docker Remote API</a> and the <code>--user</code> option to <a href=\"https://docs.docker.com/engine/reference/run/\">docker run</a>.</p>"]
     #[serde(rename="user")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub user: Option<String>,
     #[doc="<p>The number of vCPUs reserved for the container. This parameter maps to <code>CpuShares</code> in the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container\">Create a container</a> section of the <a href=\"https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/\">Docker Remote API</a> and the <code>--cpu-shares</code> option to <a href=\"https://docs.docker.com/engine/reference/run/\">docker run</a>. Each vCPU is equivalent to 1,024 CPU shares.</p>"]
     #[serde(rename="vcpus")]
-    pub vcpus: Integer,
+    pub vcpus: i64,
     #[doc="<p>A list of data volumes used in a job.</p>"]
     #[serde(rename="volumes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub volumes: Option<Volumes>,
+    pub volumes: Option<Vec<Volume>>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -347,10 +352,10 @@ pub struct CreateComputeEnvironmentRequest {
     #[doc="<p>The state of the compute environment. If the state is <code>ENABLED</code>, then the compute environment accepts jobs from a queue and can scale out automatically based on queues.</p>"]
     #[serde(rename="state")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub state: Option<CEState>,
+    pub state: Option<String>,
     #[doc="<p>The type of the compute environment. </p>"]
     #[serde(rename="type")]
-    pub type_: CEType,
+    pub type_: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -369,17 +374,17 @@ pub struct CreateComputeEnvironmentResponse {
 pub struct CreateJobQueueRequest {
     #[doc="<p>The set of compute environments mapped to a job queue and their order relative to each other. The job scheduler uses this parameter to determine which compute environment should execute a given job. Compute environments must be in the <code>VALID</code> state before you can associate them with a job queue. You can associate up to 3 compute environments with a job queue.</p>"]
     #[serde(rename="computeEnvironmentOrder")]
-    pub compute_environment_order: ComputeEnvironmentOrders,
+    pub compute_environment_order: Vec<ComputeEnvironmentOrder>,
     #[doc="<p>The name of the job queue.</p>"]
     #[serde(rename="jobQueueName")]
     pub job_queue_name: String,
     #[doc="<p>The priority of the job queue. Job queues with a higher priority (or a lower integer value for the <code>priority</code> parameter) are evaluated first when associated with same compute environment. Priority is determined in ascending order, for example, a job queue with a priority value of <code>1</code> is given scheduling preference over a job queue with a priority value of <code>10</code>.</p>"]
     #[serde(rename="priority")]
-    pub priority: Integer,
+    pub priority: i64,
     #[doc="<p>The state of the job queue. If the job queue state is <code>ENABLED</code>, it is able to accept jobs.</p>"]
     #[serde(rename="state")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub state: Option<JQState>,
+    pub state: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -427,11 +432,11 @@ pub struct DescribeComputeEnvironmentsRequest {
     #[doc="<p>A list of up to 100 compute environment names or full Amazon Resource Name (ARN) entries. </p>"]
     #[serde(rename="computeEnvironments")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub compute_environments: Option<StringList>,
+    pub compute_environments: Option<Vec<String>>,
     #[doc="<p>The maximum number of cluster results returned by <code>DescribeComputeEnvironments</code> in paginated output. When this parameter is used, <code>DescribeComputeEnvironments</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeComputeEnvironments</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>DescribeComputeEnvironments</code> returns up to 100 results and a <code>nextToken</code> value if applicable.</p>"]
     #[serde(rename="maxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<Integer>,
+    pub max_results: Option<i64>,
     #[doc="<p>The <code>nextToken</code> value returned from a previous paginated <code>DescribeComputeEnvironments</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. This value is <code>null</code> when there are no more results to return.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -443,7 +448,7 @@ pub struct DescribeComputeEnvironmentsResponse {
     #[doc="<p>The list of compute environments.</p>"]
     #[serde(rename="computeEnvironments")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub compute_environments: Option<ComputeEnvironmentDetailList>,
+    pub compute_environments: Option<Vec<ComputeEnvironmentDetail>>,
     #[doc="<p>The <code>nextToken</code> value to include in a future <code>DescribeComputeEnvironments</code> request. When the results of a <code>DescribeJobDefinitions</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -459,11 +464,11 @@ pub struct DescribeJobDefinitionsRequest {
     #[doc="<p>A space-separated list of up to 100 job definition names or full Amazon Resource Name (ARN) entries.</p>"]
     #[serde(rename="jobDefinitions")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub job_definitions: Option<StringList>,
+    pub job_definitions: Option<Vec<String>>,
     #[doc="<p>The maximum number of results returned by <code>DescribeJobDefinitions</code> in paginated output. When this parameter is used, <code>DescribeJobDefinitions</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeJobDefinitions</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>DescribeJobDefinitions</code> returns up to 100 results and a <code>nextToken</code> value if applicable.</p>"]
     #[serde(rename="maxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<Integer>,
+    pub max_results: Option<i64>,
     #[doc="<p>The <code>nextToken</code> value returned from a previous paginated <code>DescribeJobDefinitions</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. This value is <code>null</code> when there are no more results to return.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -479,7 +484,7 @@ pub struct DescribeJobDefinitionsResponse {
     #[doc="<p>The list of job definitions. </p>"]
     #[serde(rename="jobDefinitions")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub job_definitions: Option<JobDefinitionList>,
+    pub job_definitions: Option<Vec<JobDefinition>>,
     #[doc="<p>The <code>nextToken</code> value to include in a future <code>DescribeJobDefinitions</code> request. When the results of a <code>DescribeJobDefinitions</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -491,11 +496,11 @@ pub struct DescribeJobQueuesRequest {
     #[doc="<p>A list of up to 100 queue names or full queue Amazon Resource Name (ARN) entries.</p>"]
     #[serde(rename="jobQueues")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub job_queues: Option<StringList>,
+    pub job_queues: Option<Vec<String>>,
     #[doc="<p>The maximum number of results returned by <code>DescribeJobQueues</code> in paginated output. When this parameter is used, <code>DescribeJobQueues</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeJobQueues</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>DescribeJobQueues</code> returns up to 100 results and a <code>nextToken</code> value if applicable.</p>"]
     #[serde(rename="maxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<Integer>,
+    pub max_results: Option<i64>,
     #[doc="<p>The <code>nextToken</code> value returned from a previous paginated <code>DescribeJobQueues</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. This value is <code>null</code> when there are no more results to return.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -507,7 +512,7 @@ pub struct DescribeJobQueuesResponse {
     #[doc="<p>The list of job queues. </p>"]
     #[serde(rename="jobQueues")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub job_queues: Option<JobQueueDetailList>,
+    pub job_queues: Option<Vec<JobQueueDetail>>,
     #[doc="<p>The <code>nextToken</code> value to include in a future <code>DescribeJobQueues</code> request. When the results of a <code>DescribeJobQueues</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -518,7 +523,7 @@ pub struct DescribeJobQueuesResponse {
 pub struct DescribeJobsRequest {
     #[doc="<p>A space-separated list of up to 100 job IDs.</p>"]
     #[serde(rename="jobs")]
-    pub jobs: StringList,
+    pub jobs: Vec<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -526,10 +531,9 @@ pub struct DescribeJobsResponse {
     #[doc="<p>The list of jobs. </p>"]
     #[serde(rename="jobs")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub jobs: Option<JobDetailList>,
+    pub jobs: Option<Vec<JobDetail>>,
 }
 
-pub type EnvironmentVariables = Vec<KeyValuePair>;
 #[doc="<p>The contents of the <code>host</code> parameter determine whether your data volume persists on the host container instance and where it is stored. If the host parameter is empty, then the Docker daemon assigns a host path for your data volume, but the data is not guaranteed to persist after the containers associated with it stop running.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Host {
@@ -539,9 +543,6 @@ pub struct Host {
     pub source_path: Option<String>,
 }
 
-pub type Integer = i64;
-pub type JQState = String;
-pub type JQStatus = String;
 #[doc="<p>An object representing an AWS Batch job definition.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct JobDefinition {
@@ -558,14 +559,14 @@ pub struct JobDefinition {
     #[doc="<p>Default parameters or parameter substitution placeholders that are set in the job definition. Parameters are specified as a key-value pair mapping. Parameters in a <code>SubmitJob</code> request override any corresponding parameter defaults from the job definition.</p>"]
     #[serde(rename="parameters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub parameters: Option<ParametersMap>,
+    pub parameters: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>The retry strategy to use for failed jobs that are submitted with this job definition.</p>"]
     #[serde(rename="retryStrategy")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub retry_strategy: Option<RetryStrategy>,
     #[doc="<p>The revision of the job definition.</p>"]
     #[serde(rename="revision")]
-    pub revision: Integer,
+    pub revision: i64,
     #[doc="<p>The status of the job definition.</p>"]
     #[serde(rename="status")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -575,8 +576,6 @@ pub struct JobDefinition {
     pub type_: String,
 }
 
-pub type JobDefinitionList = Vec<JobDefinition>;
-pub type JobDefinitionType = String;
 #[doc="<p>An object representing an AWS Batch job dependency.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct JobDependency {
@@ -586,14 +585,13 @@ pub struct JobDependency {
     pub job_id: Option<String>,
 }
 
-pub type JobDependencyList = Vec<JobDependency>;
 #[doc="<p>An object representing an AWS Batch job.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct JobDetail {
     #[doc="<p>A list of job attempts associated with this job.</p>"]
     #[serde(rename="attempts")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub attempts: Option<AttemptDetails>,
+    pub attempts: Option<Vec<AttemptDetail>>,
     #[doc="<p>An object representing the details of the container that is associated with the job.</p>"]
     #[serde(rename="container")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -601,11 +599,11 @@ pub struct JobDetail {
     #[doc="<p>The Unix timestamp for when the job was created (when the task entered the <code>PENDING</code> state). </p>"]
     #[serde(rename="createdAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_at: Option<Long>,
+    pub created_at: Option<i64>,
     #[doc="<p>A list of job names or IDs on which this job depends.</p>"]
     #[serde(rename="dependsOn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub depends_on: Option<JobDependencyList>,
+    pub depends_on: Option<Vec<JobDependency>>,
     #[doc="<p>The job definition that is used by this job.</p>"]
     #[serde(rename="jobDefinition")]
     pub job_definition: String,
@@ -621,17 +619,17 @@ pub struct JobDetail {
     #[doc="<p>Additional parameters passed to the job that replace parameter substitution placeholders or override any corresponding parameter defaults from the job definition. </p>"]
     #[serde(rename="parameters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub parameters: Option<ParametersMap>,
+    pub parameters: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>The retry strategy to use for this job if an attempt fails.</p>"]
     #[serde(rename="retryStrategy")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub retry_strategy: Option<RetryStrategy>,
     #[doc="<p>The Unix timestamp for when the job was started (when the task transitioned from the <code>PENDING</code> state to the <code>RUNNING</code> state). </p>"]
     #[serde(rename="startedAt")]
-    pub started_at: Long,
+    pub started_at: i64,
     #[doc="<p>The current status for the job.</p>"]
     #[serde(rename="status")]
-    pub status: JobStatus,
+    pub status: String,
     #[doc="<p>A short, human-readable string to provide additional details about the current status of the job. </p>"]
     #[serde(rename="statusReason")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -639,16 +637,15 @@ pub struct JobDetail {
     #[doc="<p>The Unix timestamp for when the job was stopped (when the task transitioned from the <code>RUNNING</code> state to the <code>STOPPED</code> state).</p>"]
     #[serde(rename="stoppedAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub stopped_at: Option<Long>,
+    pub stopped_at: Option<i64>,
 }
 
-pub type JobDetailList = Vec<JobDetail>;
 #[doc="<p>An object representing the details of an AWS Batch job queue.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct JobQueueDetail {
     #[doc="<p>The compute environments that are attached to the job queue and the order in which job placement is preferred. Compute environments are selected for job placement in ascending order.</p>"]
     #[serde(rename="computeEnvironmentOrder")]
-    pub compute_environment_order: ComputeEnvironmentOrders,
+    pub compute_environment_order: Vec<ComputeEnvironmentOrder>,
     #[doc="<p>The Amazon Resource Name (ARN) of the job queue.</p>"]
     #[serde(rename="jobQueueArn")]
     pub job_queue_arn: String,
@@ -657,22 +654,20 @@ pub struct JobQueueDetail {
     pub job_queue_name: String,
     #[doc="<p>The priority of the job queue. </p>"]
     #[serde(rename="priority")]
-    pub priority: Integer,
+    pub priority: i64,
     #[doc="<p>Describes the ability of the queue to accept new jobs.</p>"]
     #[serde(rename="state")]
-    pub state: JQState,
+    pub state: String,
     #[doc="<p>The status of the job queue (for example, <code>CREATING</code> or <code>VALID</code>).</p>"]
     #[serde(rename="status")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status: Option<JQStatus>,
+    pub status: Option<String>,
     #[doc="<p>A short, human-readable string to provide additional details about the current status of the job queue.</p>"]
     #[serde(rename="statusReason")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub status_reason: Option<String>,
 }
 
-pub type JobQueueDetailList = Vec<JobQueueDetail>;
-pub type JobStatus = String;
 #[doc="<p>An object representing summary details of a job.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct JobSummary {
@@ -684,7 +679,6 @@ pub struct JobSummary {
     pub job_name: String,
 }
 
-pub type JobSummaryList = Vec<JobSummary>;
 #[doc="<p>A key-value pair object.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct KeyValuePair {
@@ -706,11 +700,11 @@ pub struct ListJobsRequest {
     #[doc="<p>The job status with which to filter jobs in the specified queue.</p>"]
     #[serde(rename="jobStatus")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub job_status: Option<JobStatus>,
+    pub job_status: Option<String>,
     #[doc="<p>The maximum number of results returned by <code>ListJobs</code> in paginated output. When this parameter is used, <code>ListJobs</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListJobs</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>ListJobs</code> returns up to 100 results and a <code>nextToken</code> value if applicable.</p>"]
     #[serde(rename="maxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<Integer>,
+    pub max_results: Option<i64>,
     #[doc="<p>The <code>nextToken</code> value returned from a previous paginated <code>ListJobs</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. This value is <code>null</code> when there are no more results to return.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -721,14 +715,13 @@ pub struct ListJobsRequest {
 pub struct ListJobsResponse {
     #[doc="<p>A list of job summaries that match the request.</p>"]
     #[serde(rename="jobSummaryList")]
-    pub job_summary_list: JobSummaryList,
+    pub job_summary_list: Vec<JobSummary>,
     #[doc="<p>The <code>nextToken</code> value to include in a future <code>ListJobs</code> request. When the results of a <code>ListJobs</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
-pub type Long = i64;
 #[doc="<p>Details on a Docker volume mount point that is used in a job's container properties.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct MountPoint {
@@ -739,15 +732,13 @@ pub struct MountPoint {
     #[doc="<p>If this value is <code>true</code>, the container has read-only access to the volume; otherwise, the container can write to the volume. The default value is <code>false</code>.</p>"]
     #[serde(rename="readOnly")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub read_only: Option<Boolean>,
+    pub read_only: Option<bool>,
     #[doc="<p>The name of the volume to mount.</p>"]
     #[serde(rename="sourceVolume")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub source_volume: Option<String>,
 }
 
-pub type MountPoints = Vec<MountPoint>;
-pub type ParametersMap = ::std::collections::HashMap<String, String>;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct RegisterJobDefinitionRequest {
     #[doc="<p>An object with various properties specific for container-based jobs. This parameter is required if the <code>type</code> parameter is <code>container</code>.</p>"]
@@ -760,14 +751,14 @@ pub struct RegisterJobDefinitionRequest {
     #[doc="<p>Default parameter substitution placeholders to set in the job definition. Parameters are specified as a key-value pair mapping. Parameters in a <code>SubmitJob</code> request override any corresponding parameter defaults from the job definition.</p>"]
     #[serde(rename="parameters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub parameters: Option<ParametersMap>,
+    pub parameters: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>The retry strategy to use for failed jobs that are submitted with this job definition. Any retry strategy that is specified during a <a>SubmitJob</a> operation overrides the retry strategy defined here.</p>"]
     #[serde(rename="retryStrategy")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub retry_strategy: Option<RetryStrategy>,
     #[doc="<p>The type of job definition.</p>"]
     #[serde(rename="type")]
-    pub type_: JobDefinitionType,
+    pub type_: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -780,7 +771,7 @@ pub struct RegisterJobDefinitionResponse {
     pub job_definition_name: String,
     #[doc="<p>The revision of the job definition.</p>"]
     #[serde(rename="revision")]
-    pub revision: Integer,
+    pub revision: i64,
 }
 
 #[doc="<p>The retry strategy associated with a job.</p>"]
@@ -789,10 +780,9 @@ pub struct RetryStrategy {
     #[doc="<p>The number of times to move a job to the <code>RUNNABLE</code> status. You may specify between 1 and 10 attempts. If <code>attempts</code> is greater than one, the job is retried if it fails until it has moved to <code>RUNNABLE</code> that many times.</p>"]
     #[serde(rename="attempts")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub attempts: Option<Integer>,
+    pub attempts: Option<i64>,
 }
 
-pub type StringList = Vec<String>;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct SubmitJobRequest {
     #[doc="<p>A list of container overrides in JSON format that specify the name of a container in the specified job definition and the overrides it should receive. You can override the default command for a container (that is specified in the job definition or the Docker image) with a <code>command</code> override. You can also override existing environment variables (that are specified in the job definition or Docker image) on a container or add new environment variables to it with an <code>environment</code> override.</p>"]
@@ -802,7 +792,7 @@ pub struct SubmitJobRequest {
     #[doc="<p>A list of job IDs on which this job depends. A job can depend upon a maximum of 100 jobs. </p>"]
     #[serde(rename="dependsOn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub depends_on: Option<JobDependencyList>,
+    pub depends_on: Option<Vec<JobDependency>>,
     #[doc="<p>The job definition used by this job. This value can be either a <code>name:revision</code> or the Amazon Resource Name (ARN) for the job definition.</p>"]
     #[serde(rename="jobDefinition")]
     pub job_definition: String,
@@ -815,7 +805,7 @@ pub struct SubmitJobRequest {
     #[doc="<p>Additional parameters passed to the job that replace parameter substitution placeholders that are set in the job definition. Parameters are specified as a key and value pair mapping. Parameters in a <code>SubmitJob</code> request override any corresponding parameter defaults from the job definition.</p>"]
     #[serde(rename="parameters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub parameters: Option<ParametersMap>,
+    pub parameters: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>The retry strategy to use for failed jobs from this <a>SubmitJob</a> operation. When a retry strategy is specified here, it overrides the retry strategy defined in the job definition.</p>"]
     #[serde(rename="retryStrategy")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -832,7 +822,6 @@ pub struct SubmitJobResponse {
     pub job_name: String,
 }
 
-pub type TagsMap = ::std::collections::HashMap<String, String>;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct TerminateJobRequest {
     #[doc="<p>Job IDs to be terminated. Up to 100 jobs can be specified.</p>"]
@@ -851,16 +840,15 @@ pub struct TerminateJobResponse;
 pub struct Ulimit {
     #[doc="<p>The hard limit for the <code>ulimit</code> type.</p>"]
     #[serde(rename="hardLimit")]
-    pub hard_limit: Integer,
+    pub hard_limit: i64,
     #[doc="<p>The <code>type</code> of the <code>ulimit</code>.</p>"]
     #[serde(rename="name")]
     pub name: String,
     #[doc="<p>The soft limit for the <code>ulimit</code> type.</p>"]
     #[serde(rename="softLimit")]
-    pub soft_limit: Integer,
+    pub soft_limit: i64,
 }
 
-pub type Ulimits = Vec<Ulimit>;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateComputeEnvironmentRequest {
     #[doc="<p>The name or full Amazon Resource Name (ARN) of the compute environment to update.</p>"]
@@ -877,7 +865,7 @@ pub struct UpdateComputeEnvironmentRequest {
     #[doc="<p>The state of the compute environment. Compute environments in the <code>ENABLED</code> state can accept jobs from a queue and scale in or out automatically based on the workload demand of its associated queues.</p>"]
     #[serde(rename="state")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub state: Option<CEState>,
+    pub state: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -897,18 +885,18 @@ pub struct UpdateJobQueueRequest {
     #[doc="<p>Details the set of compute environments mapped to a job queue and their order relative to each other. This is one of the parameters used by the job scheduler to determine which compute environment should execute a given job. </p>"]
     #[serde(rename="computeEnvironmentOrder")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub compute_environment_order: Option<ComputeEnvironmentOrders>,
+    pub compute_environment_order: Option<Vec<ComputeEnvironmentOrder>>,
     #[doc="<p>The name or the Amazon Resource Name (ARN) of the job queue.</p>"]
     #[serde(rename="jobQueue")]
     pub job_queue: String,
     #[doc="<p>The priority of the job queue. Job queues with a higher priority (or a lower integer value for the <code>priority</code> parameter) are evaluated first when associated with same compute environment. Priority is determined in ascending order, for example, a job queue with a priority value of <code>1</code> is given scheduling preference over a job queue with a priority value of <code>10</code>.</p>"]
     #[serde(rename="priority")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub priority: Option<Integer>,
+    pub priority: Option<i64>,
     #[doc="<p>Describes the queue's ability to accept new jobs.</p>"]
     #[serde(rename="state")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub state: Option<JQState>,
+    pub state: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -936,7 +924,6 @@ pub struct Volume {
     pub name: Option<String>,
 }
 
-pub type Volumes = Vec<Volume>;
 /// Errors returned by CancelJob
 #[derive(Debug, PartialEq)]
 pub enum CancelJobError {
@@ -2329,6 +2316,7 @@ impl<P, D> Batch for BatchClient<P, D>
         let mut request = SignedRequest::new("POST", "batch", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+
         request.set_payload(Some(encoded.into_bytes()));
 
 
@@ -2370,6 +2358,7 @@ impl<P, D> Batch for BatchClient<P, D>
         let mut request = SignedRequest::new("POST", "batch", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+
         request.set_payload(Some(encoded.into_bytes()));
 
 
@@ -2410,6 +2399,7 @@ impl<P, D> Batch for BatchClient<P, D>
 
         let mut request = SignedRequest::new("POST", "batch", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2455,6 +2445,7 @@ impl<P, D> Batch for BatchClient<P, D>
         let mut request = SignedRequest::new("POST", "batch", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+
         request.set_payload(Some(encoded.into_bytes()));
 
 
@@ -2495,6 +2486,7 @@ impl<P, D> Batch for BatchClient<P, D>
 
         let mut request = SignedRequest::new("POST", "batch", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2540,6 +2532,7 @@ impl<P, D> Batch for BatchClient<P, D>
         let mut request = SignedRequest::new("POST", "batch", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+
         request.set_payload(Some(encoded.into_bytes()));
 
 
@@ -2582,6 +2575,7 @@ impl<P, D> Batch for BatchClient<P, D>
         let mut request = SignedRequest::new("POST", "batch", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+
         request.set_payload(Some(encoded.into_bytes()));
 
 
@@ -2623,6 +2617,7 @@ impl<P, D> Batch for BatchClient<P, D>
 
         let mut request = SignedRequest::new("POST", "batch", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2668,6 +2663,7 @@ impl<P, D> Batch for BatchClient<P, D>
         let mut request = SignedRequest::new("POST", "batch", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+
         request.set_payload(Some(encoded.into_bytes()));
 
 
@@ -2711,6 +2707,7 @@ impl<P, D> Batch for BatchClient<P, D>
         let mut request = SignedRequest::new("POST", "batch", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+
         request.set_payload(Some(encoded.into_bytes()));
 
 
@@ -2750,6 +2747,7 @@ impl<P, D> Batch for BatchClient<P, D>
 
         let mut request = SignedRequest::new("POST", "batch", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2791,6 +2789,7 @@ impl<P, D> Batch for BatchClient<P, D>
 
         let mut request = SignedRequest::new("POST", "batch", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2834,6 +2833,7 @@ impl<P, D> Batch for BatchClient<P, D>
         let mut request = SignedRequest::new("POST", "batch", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+
         request.set_payload(Some(encoded.into_bytes()));
 
 
@@ -2873,6 +2873,7 @@ impl<P, D> Batch for BatchClient<P, D>
 
         let mut request = SignedRequest::new("POST", "batch", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
         request.set_payload(Some(encoded.into_bytes()));
 
@@ -2917,6 +2918,7 @@ impl<P, D> Batch for BatchClient<P, D>
         let mut request = SignedRequest::new("POST", "batch", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+
         request.set_payload(Some(encoded.into_bytes()));
 
 
@@ -2957,6 +2959,7 @@ impl<P, D> Batch for BatchClient<P, D>
 
         let mut request = SignedRequest::new("POST", "batch", self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
 
         request.set_payload(Some(encoded.into_bytes()));
 

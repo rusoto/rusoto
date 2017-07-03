@@ -32,10 +32,10 @@ pub struct AddAttachmentsToSetRequest {
     #[doc="<p>The ID of the attachment set. If an <code>attachmentSetId</code> is not specified, a new attachment set is created, and the ID of the set is returned in the response. If an <code>attachmentSetId</code> is specified, the attachments are added to the specified set, if it exists.</p>"]
     #[serde(rename="attachmentSetId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub attachment_set_id: Option<AttachmentSetId>,
+    pub attachment_set_id: Option<String>,
     #[doc="<p>One or more attachments to add to the set. The limit is 3 attachments per set, and the size limit is 5 MB per attachment.</p>"]
     #[serde(rename="attachments")]
-    pub attachments: Attachments,
+    pub attachments: Vec<Attachment>,
 }
 
 #[doc="<p>The ID and expiry time of the attachment set returned by the <a>AddAttachmentsToSet</a> operation.</p>"]
@@ -44,11 +44,11 @@ pub struct AddAttachmentsToSetResponse {
     #[doc="<p>The ID of the attachment set. If an <code>attachmentSetId</code> was not specified, a new attachment set is created, and the ID of the set is returned in the response. If an <code>attachmentSetId</code> was specified, the attachments are added to the specified set, if it exists.</p>"]
     #[serde(rename="attachmentSetId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub attachment_set_id: Option<AttachmentSetId>,
+    pub attachment_set_id: Option<String>,
     #[doc="<p>The time and date when the attachment set expires.</p>"]
     #[serde(rename="expiryTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub expiry_time: Option<ExpiryTime>,
+    pub expiry_time: Option<String>,
 }
 
 #[doc="<p>To be written.</p>"]
@@ -57,18 +57,18 @@ pub struct AddCommunicationToCaseRequest {
     #[doc="<p>The ID of a set of one or more attachments for the communication to add to the case. Create the set by calling <a>AddAttachmentsToSet</a> </p>"]
     #[serde(rename="attachmentSetId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub attachment_set_id: Option<AttachmentSetId>,
+    pub attachment_set_id: Option<String>,
     #[doc="<p>The AWS Support case ID requested or returned in the call. The case ID is an alphanumeric string formatted as shown in this example: case-<i>12345678910-2013-c4c1d2bf33c5cf47</i> </p>"]
     #[serde(rename="caseId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub case_id: Option<CaseId>,
+    pub case_id: Option<String>,
     #[doc="<p>The email addresses in the CC line of an email to be added to the support case.</p>"]
     #[serde(rename="ccEmailAddresses")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub cc_email_addresses: Option<CcEmailAddressList>,
+    pub cc_email_addresses: Option<Vec<String>>,
     #[doc="<p>The body of an email communication to add to the support case.</p>"]
     #[serde(rename="communicationBody")]
-    pub communication_body: CommunicationBody,
+    pub communication_body: String,
 }
 
 #[doc="<p>The result of the <a>AddCommunicationToCase</a> operation.</p>"]
@@ -77,10 +77,9 @@ pub struct AddCommunicationToCaseResponse {
     #[doc="<p>True if <a>AddCommunicationToCase</a> succeeds. Otherwise, returns an error.</p>"]
     #[serde(rename="result")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub result: Option<SupportResult>,
+    pub result: Option<bool>,
 }
 
-pub type AfterTime = String;
 #[doc="<p>An attachment to a case communication. The attachment consists of the file name and the content of the file.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Attachment {
@@ -91,11 +90,11 @@ pub struct Attachment {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub data: Option<Data>,
+    pub data: Option<Vec<u8>>,
     #[doc="<p>The name of the attachment file.</p>"]
     #[serde(rename="fileName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub file_name: Option<FileName>,
+    pub file_name: Option<String>,
 }
 
 #[doc="<p>The file name and ID of an attachment to a case communication. You can use the ID to retrieve the attachment with the <a>DescribeAttachment</a> operation.</p>"]
@@ -104,42 +103,36 @@ pub struct AttachmentDetails {
     #[doc="<p>The ID of the attachment.</p>"]
     #[serde(rename="attachmentId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub attachment_id: Option<AttachmentId>,
+    pub attachment_id: Option<String>,
     #[doc="<p>The file name of the attachment.</p>"]
     #[serde(rename="fileName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub file_name: Option<FileName>,
+    pub file_name: Option<String>,
 }
 
-pub type AttachmentId = String;
-pub type AttachmentSet = Vec<AttachmentDetails>;
-pub type AttachmentSetId = String;
-pub type Attachments = Vec<Attachment>;
-pub type BeforeTime = String;
-pub type Boolean = bool;
 #[doc="<p>A JSON-formatted object that contains the metadata for a support case. It is contained the response from a <a>DescribeCases</a> request. <b>CaseDetails</b> contains the following fields:</p> <ul> <li> <p> <b>caseId.</b> The AWS Support case ID requested or returned in the call. The case ID is an alphanumeric string formatted as shown in this example: case-<i>12345678910-2013-c4c1d2bf33c5cf47</i>.</p> </li> <li> <p> <b>categoryCode.</b> The category of problem for the AWS Support case. Corresponds to the CategoryCode values returned by a call to <a>DescribeServices</a>.</p> </li> <li> <p> <b>displayId.</b> The identifier for the case on pages in the AWS Support Center.</p> </li> <li> <p> <b>language.</b> The ISO 639-1 code for the language in which AWS provides support. AWS Support currently supports English (\"en\") and Japanese (\"ja\"). Language parameters must be passed explicitly for operations that take them.</p> </li> <li> <p> <b>recentCommunications.</b> One or more <a>Communication</a> objects. Fields of these objects are <code>attachments</code>, <code>body</code>, <code>caseId</code>, <code>submittedBy</code>, and <code>timeCreated</code>.</p> </li> <li> <p> <b>nextToken.</b> A resumption point for pagination.</p> </li> <li> <p> <b>serviceCode.</b> The identifier for the AWS service that corresponds to the service code defined in the call to <a>DescribeServices</a>.</p> </li> <li> <p> <b>severityCode. </b>The severity code assigned to the case. Contains one of the values returned by the call to <a>DescribeSeverityLevels</a>.</p> </li> <li> <p> <b>status.</b> The status of the case in the AWS Support Center.</p> </li> <li> <p> <b>subject.</b> The subject line of the case.</p> </li> <li> <p> <b>submittedBy.</b> The email address of the account that submitted the case.</p> </li> <li> <p> <b>timeCreated.</b> The time the case was created, in ISO-8601 format.</p> </li> </ul>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct CaseDetails {
     #[doc="<p>The AWS Support case ID requested or returned in the call. The case ID is an alphanumeric string formatted as shown in this example: case-<i>12345678910-2013-c4c1d2bf33c5cf47</i> </p>"]
     #[serde(rename="caseId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub case_id: Option<CaseId>,
+    pub case_id: Option<String>,
     #[doc="<p>The category of problem for the AWS Support case.</p>"]
     #[serde(rename="categoryCode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub category_code: Option<CategoryCode>,
+    pub category_code: Option<String>,
     #[doc="<p>The email addresses that receive copies of communication about the case.</p>"]
     #[serde(rename="ccEmailAddresses")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub cc_email_addresses: Option<CcEmailAddressList>,
+    pub cc_email_addresses: Option<Vec<String>>,
     #[doc="<p>The ID displayed for the case in the AWS Support Center. This is a numeric string.</p>"]
     #[serde(rename="displayId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub display_id: Option<DisplayId>,
+    pub display_id: Option<String>,
     #[doc="<p>The ISO 639-1 code for the language in which AWS provides support. AWS Support currently supports English (\"en\") and Japanese (\"ja\"). Language parameters must be passed explicitly for operations that take them.</p>"]
     #[serde(rename="language")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub language: Option<Language>,
+    pub language: Option<String>,
     #[doc="<p>The five most recent communications between you and AWS Support Center, including the IDs of any attachments to the communications. Also includes a <code>nextToken</code> that you can use to retrieve earlier communications.</p>"]
     #[serde(rename="recentCommunications")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -147,115 +140,104 @@ pub struct CaseDetails {
     #[doc="<p>The code for the AWS service returned by the call to <a>DescribeServices</a>.</p>"]
     #[serde(rename="serviceCode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub service_code: Option<ServiceCode>,
+    pub service_code: Option<String>,
     #[doc="<p>The code for the severity level returned by the call to <a>DescribeSeverityLevels</a>.</p>"]
     #[serde(rename="severityCode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub severity_code: Option<SeverityCode>,
+    pub severity_code: Option<String>,
     #[doc="<p>The status of the case.</p>"]
     #[serde(rename="status")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status: Option<Status>,
+    pub status: Option<String>,
     #[doc="<p>The subject line for the case in the AWS Support Center.</p>"]
     #[serde(rename="subject")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub subject: Option<Subject>,
+    pub subject: Option<String>,
     #[doc="<p>The email address of the account that submitted the case.</p>"]
     #[serde(rename="submittedBy")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub submitted_by: Option<SubmittedBy>,
+    pub submitted_by: Option<String>,
     #[doc="<p>The time that the case was case created in the AWS Support Center.</p>"]
     #[serde(rename="timeCreated")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub time_created: Option<TimeCreated>,
+    pub time_created: Option<String>,
 }
 
-pub type CaseId = String;
-pub type CaseIdList = Vec<CaseId>;
-pub type CaseList = Vec<CaseDetails>;
-pub type CaseStatus = String;
 #[doc="<p>A JSON-formatted name/value pair that represents the category name and category code of the problem, selected from the <a>DescribeServices</a> response for each AWS service.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Category {
     #[doc="<p>The category code for the support case.</p>"]
     #[serde(rename="code")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub code: Option<CategoryCode>,
+    pub code: Option<String>,
     #[doc="<p>The category name for the support case.</p>"]
     #[serde(rename="name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<CategoryName>,
+    pub name: Option<String>,
 }
 
-pub type CategoryCode = String;
-pub type CategoryList = Vec<Category>;
-pub type CategoryName = String;
-pub type CcEmailAddress = String;
-pub type CcEmailAddressList = Vec<CcEmailAddress>;
 #[doc="<p>A communication associated with an AWS Support case. The communication consists of the case ID, the message body, attachment information, the account email address, and the date and time of the communication.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Communication {
     #[doc="<p>Information about the attachments to the case communication.</p>"]
     #[serde(rename="attachmentSet")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub attachment_set: Option<AttachmentSet>,
+    pub attachment_set: Option<Vec<AttachmentDetails>>,
     #[doc="<p>The text of the communication between the customer and AWS Support.</p>"]
     #[serde(rename="body")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub body: Option<CommunicationBody>,
+    pub body: Option<String>,
     #[doc="<p>The AWS Support case ID requested or returned in the call. The case ID is an alphanumeric string formatted as shown in this example: case-<i>12345678910-2013-c4c1d2bf33c5cf47</i> </p>"]
     #[serde(rename="caseId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub case_id: Option<CaseId>,
+    pub case_id: Option<String>,
     #[doc="<p>The email address of the account that submitted the AWS Support case.</p>"]
     #[serde(rename="submittedBy")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub submitted_by: Option<SubmittedBy>,
+    pub submitted_by: Option<String>,
     #[doc="<p>The time the communication was created.</p>"]
     #[serde(rename="timeCreated")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub time_created: Option<TimeCreated>,
+    pub time_created: Option<String>,
 }
 
-pub type CommunicationBody = String;
-pub type CommunicationList = Vec<Communication>;
 #[doc="<p/>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateCaseRequest {
     #[doc="<p>The ID of a set of one or more attachments for the case. Create the set by using <a>AddAttachmentsToSet</a>.</p>"]
     #[serde(rename="attachmentSetId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub attachment_set_id: Option<AttachmentSetId>,
+    pub attachment_set_id: Option<String>,
     #[doc="<p>The category of problem for the AWS Support case.</p>"]
     #[serde(rename="categoryCode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub category_code: Option<CategoryCode>,
+    pub category_code: Option<String>,
     #[doc="<p>A list of email addresses that AWS Support copies on case correspondence.</p>"]
     #[serde(rename="ccEmailAddresses")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub cc_email_addresses: Option<CcEmailAddressList>,
+    pub cc_email_addresses: Option<Vec<String>>,
     #[doc="<p>The communication body text when you create an AWS Support case by calling <a>CreateCase</a>.</p>"]
     #[serde(rename="communicationBody")]
-    pub communication_body: CommunicationBody,
+    pub communication_body: String,
     #[doc="<p>The type of issue for the case. You can specify either \"customer-service\" or \"technical.\" If you do not indicate a value, the default is \"technical.\"</p>"]
     #[serde(rename="issueType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub issue_type: Option<IssueType>,
+    pub issue_type: Option<String>,
     #[doc="<p>The ISO 639-1 code for the language in which AWS provides support. AWS Support currently supports English (\"en\") and Japanese (\"ja\"). Language parameters must be passed explicitly for operations that take them.</p>"]
     #[serde(rename="language")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub language: Option<Language>,
+    pub language: Option<String>,
     #[doc="<p>The code for the AWS service returned by the call to <a>DescribeServices</a>.</p>"]
     #[serde(rename="serviceCode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub service_code: Option<ServiceCode>,
+    pub service_code: Option<String>,
     #[doc="<p>The code for the severity level returned by the call to <a>DescribeSeverityLevels</a>.</p> <note> <p>The availability of severity levels depends on each customer's support subscription. In other words, your subscription may not necessarily require the urgent level of response time.</p> </note>"]
     #[serde(rename="severityCode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub severity_code: Option<SeverityCode>,
+    pub severity_code: Option<String>,
     #[doc="<p>The title of the AWS Support case.</p>"]
     #[serde(rename="subject")]
-    pub subject: Subject,
+    pub subject: String,
 }
 
 #[doc="<p>The AWS Support case ID returned by a successful completion of the <a>CreateCase</a> operation. </p>"]
@@ -264,15 +246,14 @@ pub struct CreateCaseResponse {
     #[doc="<p>The AWS Support case ID requested or returned in the call. The case ID is an alphanumeric string formatted as shown in this example: case-<i>12345678910-2013-c4c1d2bf33c5cf47</i> </p>"]
     #[serde(rename="caseId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub case_id: Option<CaseId>,
+    pub case_id: Option<String>,
 }
 
-pub type Data = Vec<u8>;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DescribeAttachmentRequest {
     #[doc="<p>The ID of the attachment to return. Attachment IDs are returned by the <a>DescribeCommunications</a> operation.</p>"]
     #[serde(rename="attachmentId")]
-    pub attachment_id: AttachmentId,
+    pub attachment_id: String,
 }
 
 #[doc="<p>The content and file name of the attachment returned by the <a>DescribeAttachment</a> operation.</p>"]
@@ -290,39 +271,39 @@ pub struct DescribeCasesRequest {
     #[doc="<p>The start date for a filtered date search on support case communications. Case communications are available for 12 months after creation.</p>"]
     #[serde(rename="afterTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub after_time: Option<AfterTime>,
+    pub after_time: Option<String>,
     #[doc="<p>The end date for a filtered date search on support case communications. Case communications are available for 12 months after creation.</p>"]
     #[serde(rename="beforeTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub before_time: Option<BeforeTime>,
+    pub before_time: Option<String>,
     #[doc="<p>A list of ID numbers of the support cases you want returned. The maximum number of cases is 100.</p>"]
     #[serde(rename="caseIdList")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub case_id_list: Option<CaseIdList>,
+    pub case_id_list: Option<Vec<String>>,
     #[doc="<p>The ID displayed for a case in the AWS Support Center user interface.</p>"]
     #[serde(rename="displayId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub display_id: Option<DisplayId>,
+    pub display_id: Option<String>,
     #[doc="<p>Specifies whether communications should be included in the <a>DescribeCases</a> results. The default is <i>true</i>.</p>"]
     #[serde(rename="includeCommunications")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub include_communications: Option<IncludeCommunications>,
+    pub include_communications: Option<bool>,
     #[doc="<p>Specifies whether resolved support cases should be included in the <a>DescribeCases</a> results. The default is <i>false</i>.</p>"]
     #[serde(rename="includeResolvedCases")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub include_resolved_cases: Option<IncludeResolvedCases>,
+    pub include_resolved_cases: Option<bool>,
     #[doc="<p>The ISO 639-1 code for the language in which AWS provides support. AWS Support currently supports English (\"en\") and Japanese (\"ja\"). Language parameters must be passed explicitly for operations that take them.</p>"]
     #[serde(rename="language")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub language: Option<Language>,
+    pub language: Option<String>,
     #[doc="<p>The maximum number of results to return before paginating.</p>"]
     #[serde(rename="maxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<MaxResults>,
+    pub max_results: Option<i64>,
     #[doc="<p>A resumption point for pagination.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
 #[doc="<p>Returns an array of <a>CaseDetails</a> objects and a <code>nextToken</code> that defines a point for pagination in the result set.</p>"]
@@ -331,11 +312,11 @@ pub struct DescribeCasesResponse {
     #[doc="<p>The details for the cases that match the request.</p>"]
     #[serde(rename="cases")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub cases: Option<CaseList>,
+    pub cases: Option<Vec<CaseDetails>>,
     #[doc="<p>A resumption point for pagination.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
 #[doc="<p/>"]
@@ -344,22 +325,22 @@ pub struct DescribeCommunicationsRequest {
     #[doc="<p>The start date for a filtered date search on support case communications. Case communications are available for 12 months after creation.</p>"]
     #[serde(rename="afterTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub after_time: Option<AfterTime>,
+    pub after_time: Option<String>,
     #[doc="<p>The end date for a filtered date search on support case communications. Case communications are available for 12 months after creation.</p>"]
     #[serde(rename="beforeTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub before_time: Option<BeforeTime>,
+    pub before_time: Option<String>,
     #[doc="<p>The AWS Support case ID requested or returned in the call. The case ID is an alphanumeric string formatted as shown in this example: case-<i>12345678910-2013-c4c1d2bf33c5cf47</i> </p>"]
     #[serde(rename="caseId")]
-    pub case_id: CaseId,
+    pub case_id: String,
     #[doc="<p>The maximum number of results to return before paginating.</p>"]
     #[serde(rename="maxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<MaxResults>,
+    pub max_results: Option<i64>,
     #[doc="<p>A resumption point for pagination.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
 #[doc="<p>The communications returned by the <a>DescribeCommunications</a> operation.</p>"]
@@ -368,11 +349,11 @@ pub struct DescribeCommunicationsResponse {
     #[doc="<p>The communications for the case.</p>"]
     #[serde(rename="communications")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub communications: Option<CommunicationList>,
+    pub communications: Option<Vec<Communication>>,
     #[doc="<p>A resumption point for pagination.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
 #[doc="<p/>"]
@@ -381,11 +362,11 @@ pub struct DescribeServicesRequest {
     #[doc="<p>The ISO 639-1 code for the language in which AWS provides support. AWS Support currently supports English (\"en\") and Japanese (\"ja\"). Language parameters must be passed explicitly for operations that take them.</p>"]
     #[serde(rename="language")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub language: Option<Language>,
+    pub language: Option<String>,
     #[doc="<p>A JSON-formatted list of service codes available for AWS services.</p>"]
     #[serde(rename="serviceCodeList")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub service_code_list: Option<ServiceCodeList>,
+    pub service_code_list: Option<Vec<String>>,
 }
 
 #[doc="<p>The list of AWS services returned by the <a>DescribeServices</a> operation.</p>"]
@@ -394,7 +375,7 @@ pub struct DescribeServicesResponse {
     #[doc="<p>A JSON-formatted list of AWS services.</p>"]
     #[serde(rename="services")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub services: Option<ServiceList>,
+    pub services: Option<Vec<Service>>,
 }
 
 #[doc="<p/>"]
@@ -403,7 +384,7 @@ pub struct DescribeSeverityLevelsRequest {
     #[doc="<p>The ISO 639-1 code for the language in which AWS provides support. AWS Support currently supports English (\"en\") and Japanese (\"ja\"). Language parameters must be passed explicitly for operations that take them.</p>"]
     #[serde(rename="language")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub language: Option<Language>,
+    pub language: Option<String>,
 }
 
 #[doc="<p>The list of severity levels returned by the <a>DescribeSeverityLevels</a> operation.</p>"]
@@ -412,7 +393,7 @@ pub struct DescribeSeverityLevelsResponse {
     #[doc="<p>The available severity levels for the support case. Available severity levels are defined by your service level agreement with AWS.</p>"]
     #[serde(rename="severityLevels")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub severity_levels: Option<SeverityLevelsList>,
+    pub severity_levels: Option<Vec<SeverityLevel>>,
 }
 
 #[doc="<p/>"]
@@ -420,7 +401,7 @@ pub struct DescribeSeverityLevelsResponse {
 pub struct DescribeTrustedAdvisorCheckRefreshStatusesRequest {
     #[doc="<p>The IDs of the Trusted Advisor checks to get the status of. <b>Note:</b> Specifying the check ID of a check that is automatically refreshed causes an <code>InvalidParameterValue</code> error.</p>"]
     #[serde(rename="checkIds")]
-    pub check_ids: StringList,
+    pub check_ids: Vec<String>,
 }
 
 #[doc="<p>The statuses of the Trusted Advisor checks returned by the <a>DescribeTrustedAdvisorCheckRefreshStatuses</a> operation.</p>"]
@@ -428,7 +409,7 @@ pub struct DescribeTrustedAdvisorCheckRefreshStatusesRequest {
 pub struct DescribeTrustedAdvisorCheckRefreshStatusesResponse {
     #[doc="<p>The refresh status of the specified Trusted Advisor checks.</p>"]
     #[serde(rename="statuses")]
-    pub statuses: TrustedAdvisorCheckRefreshStatusList,
+    pub statuses: Vec<TrustedAdvisorCheckRefreshStatus>,
 }
 
 #[doc="<p/>"]
@@ -457,7 +438,7 @@ pub struct DescribeTrustedAdvisorCheckResultResponse {
 pub struct DescribeTrustedAdvisorCheckSummariesRequest {
     #[doc="<p>The IDs of the Trusted Advisor checks.</p>"]
     #[serde(rename="checkIds")]
-    pub check_ids: StringList,
+    pub check_ids: Vec<String>,
 }
 
 #[doc="<p>The summaries of the Trusted Advisor checks returned by the <a>DescribeTrustedAdvisorCheckSummaries</a> operation.</p>"]
@@ -465,7 +446,7 @@ pub struct DescribeTrustedAdvisorCheckSummariesRequest {
 pub struct DescribeTrustedAdvisorCheckSummariesResponse {
     #[doc="<p>The summary information for the requested Trusted Advisor checks.</p>"]
     #[serde(rename="summaries")]
-    pub summaries: TrustedAdvisorCheckSummaryList,
+    pub summaries: Vec<TrustedAdvisorCheckSummary>,
 }
 
 #[doc="<p/>"]
@@ -481,32 +462,20 @@ pub struct DescribeTrustedAdvisorChecksRequest {
 pub struct DescribeTrustedAdvisorChecksResponse {
     #[doc="<p>Information about all available Trusted Advisor checks.</p>"]
     #[serde(rename="checks")]
-    pub checks: TrustedAdvisorCheckList,
+    pub checks: Vec<TrustedAdvisorCheckDescription>,
 }
 
-pub type DisplayId = String;
-pub type Double = f64;
-pub type ErrorMessage = String;
-pub type ExpiryTime = String;
-pub type FileName = String;
-pub type IncludeCommunications = bool;
-pub type IncludeResolvedCases = bool;
-pub type IssueType = String;
-pub type Language = String;
-pub type Long = i64;
-pub type MaxResults = i64;
-pub type NextToken = String;
 #[doc="<p>The five most recent communications associated with the case.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct RecentCaseCommunications {
     #[doc="<p>The five most recent communications associated with the case.</p>"]
     #[serde(rename="communications")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub communications: Option<CommunicationList>,
+    pub communications: Option<Vec<Communication>>,
     #[doc="<p>A resumption point for pagination.</p>"]
     #[serde(rename="nextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
 #[doc="<p/>"]
@@ -531,7 +500,7 @@ pub struct ResolveCaseRequest {
     #[doc="<p>The AWS Support case ID requested or returned in the call. The case ID is an alphanumeric string formatted as shown in this example: case-<i>12345678910-2013-c4c1d2bf33c5cf47</i> </p>"]
     #[serde(rename="caseId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub case_id: Option<CaseId>,
+    pub case_id: Option<String>,
 }
 
 #[doc="<p>The status of the case returned by the <a>ResolveCase</a> operation.</p>"]
@@ -540,57 +509,43 @@ pub struct ResolveCaseResponse {
     #[doc="<p>The status of the case after the <a>ResolveCase</a> request was processed.</p>"]
     #[serde(rename="finalCaseStatus")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub final_case_status: Option<CaseStatus>,
+    pub final_case_status: Option<String>,
     #[doc="<p>The status of the case when the <a>ResolveCase</a> request was sent.</p>"]
     #[serde(rename="initialCaseStatus")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub initial_case_status: Option<CaseStatus>,
+    pub initial_case_status: Option<String>,
 }
 
-pub type SupportResult = bool;
 #[doc="<p>Information about an AWS service returned by the <a>DescribeServices</a> operation. </p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Service {
     #[doc="<p>A list of categories that describe the type of support issue a case describes. Categories consist of a category name and a category code. Category names and codes are passed to AWS Support when you call <a>CreateCase</a>.</p>"]
     #[serde(rename="categories")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub categories: Option<CategoryList>,
+    pub categories: Option<Vec<Category>>,
     #[doc="<p>The code for an AWS service returned by the <a>DescribeServices</a> response. The <code>name</code> element contains the corresponding friendly name.</p>"]
     #[serde(rename="code")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub code: Option<ServiceCode>,
+    pub code: Option<String>,
     #[doc="<p>The friendly name for an AWS service. The <code>code</code> element contains the corresponding code.</p>"]
     #[serde(rename="name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<ServiceName>,
+    pub name: Option<String>,
 }
 
-pub type ServiceCode = String;
-pub type ServiceCodeList = Vec<ServiceCode>;
-pub type ServiceList = Vec<Service>;
-pub type ServiceName = String;
-pub type SeverityCode = String;
 #[doc="<p>A code and name pair that represent a severity level that can be applied to a support case.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct SeverityLevel {
     #[doc="<p>One of four values: \"low,\" \"medium,\" \"high,\" and \"urgent\". These values correspond to response times returned to the caller in <code>severityLevel.name</code>. </p>"]
     #[serde(rename="code")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub code: Option<SeverityLevelCode>,
+    pub code: Option<String>,
     #[doc="<p>The name of the severity level that corresponds to the severity level code.</p>"]
     #[serde(rename="name")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub name: Option<SeverityLevelName>,
+    pub name: Option<String>,
 }
 
-pub type SeverityLevelCode = String;
-pub type SeverityLevelName = String;
-pub type SeverityLevelsList = Vec<SeverityLevel>;
-pub type Status = String;
-pub type StringList = Vec<String>;
-pub type Subject = String;
-pub type SubmittedBy = String;
-pub type TimeCreated = String;
 #[doc="<p>The container for summary information that relates to the category of the Trusted Advisor check.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct TrustedAdvisorCategorySpecificSummary {
@@ -614,13 +569,12 @@ pub struct TrustedAdvisorCheckDescription {
     pub id: String,
     #[doc="<p>The column headings for the data returned by the Trusted Advisor check. The order of the headings corresponds to the order of the data in the <b>Metadata</b> element of the <a>TrustedAdvisorResourceDetail</a> for the check. <b>Metadata</b> contains all the data that is shown in the Excel download, even in those cases where the UI shows just summary data. </p>"]
     #[serde(rename="metadata")]
-    pub metadata: StringList,
+    pub metadata: Vec<String>,
     #[doc="<p>The display name for the Trusted Advisor check.</p>"]
     #[serde(rename="name")]
     pub name: String,
 }
 
-pub type TrustedAdvisorCheckList = Vec<TrustedAdvisorCheckDescription>;
 #[doc="<p>The refresh status of a Trusted Advisor check.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct TrustedAdvisorCheckRefreshStatus {
@@ -629,13 +583,12 @@ pub struct TrustedAdvisorCheckRefreshStatus {
     pub check_id: String,
     #[doc="<p>The amount of time, in milliseconds, until the Trusted Advisor check is eligible for refresh.</p>"]
     #[serde(rename="millisUntilNextRefreshable")]
-    pub millis_until_next_refreshable: Long,
+    pub millis_until_next_refreshable: i64,
     #[doc="<p>The status of the Trusted Advisor check for which a refresh has been requested: \"none\", \"enqueued\", \"processing\", \"success\", or \"abandoned\".</p>"]
     #[serde(rename="status")]
     pub status: String,
 }
 
-pub type TrustedAdvisorCheckRefreshStatusList = Vec<TrustedAdvisorCheckRefreshStatus>;
 #[doc="<p>The results of a Trusted Advisor check returned by <a>DescribeTrustedAdvisorCheckResult</a>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct TrustedAdvisorCheckResult {
@@ -647,7 +600,7 @@ pub struct TrustedAdvisorCheckResult {
     pub check_id: String,
     #[doc="<p>The details about each resource listed in the check result.</p>"]
     #[serde(rename="flaggedResources")]
-    pub flagged_resources: TrustedAdvisorResourceDetailList,
+    pub flagged_resources: Vec<TrustedAdvisorResourceDetail>,
     #[serde(rename="resourcesSummary")]
     pub resources_summary: TrustedAdvisorResourcesSummary,
     #[doc="<p>The alert status of the check: \"ok\" (green), \"warning\" (yellow), \"error\" (red), or \"not_available\".</p>"]
@@ -670,7 +623,7 @@ pub struct TrustedAdvisorCheckSummary {
     #[doc="<p>Specifies whether the Trusted Advisor check has flagged resources.</p>"]
     #[serde(rename="hasFlaggedResources")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub has_flagged_resources: Option<Boolean>,
+    pub has_flagged_resources: Option<bool>,
     #[serde(rename="resourcesSummary")]
     pub resources_summary: TrustedAdvisorResourcesSummary,
     #[doc="<p>The alert status of the check: \"ok\" (green), \"warning\" (yellow), \"error\" (red), or \"not_available\".</p>"]
@@ -681,16 +634,15 @@ pub struct TrustedAdvisorCheckSummary {
     pub timestamp: String,
 }
 
-pub type TrustedAdvisorCheckSummaryList = Vec<TrustedAdvisorCheckSummary>;
 #[doc="<p>The estimated cost savings that might be realized if the recommended actions are taken.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct TrustedAdvisorCostOptimizingSummary {
     #[doc="<p>The estimated monthly savings that might be realized if the recommended actions are taken.</p>"]
     #[serde(rename="estimatedMonthlySavings")]
-    pub estimated_monthly_savings: Double,
+    pub estimated_monthly_savings: f64,
     #[doc="<p>The estimated percentage of savings that might be realized if the recommended actions are taken.</p>"]
     #[serde(rename="estimatedPercentMonthlySavings")]
-    pub estimated_percent_monthly_savings: Double,
+    pub estimated_percent_monthly_savings: f64,
 }
 
 #[doc="<p>Contains information about a resource identified by a Trusted Advisor check.</p>"]
@@ -699,10 +651,10 @@ pub struct TrustedAdvisorResourceDetail {
     #[doc="<p>Specifies whether the AWS resource was ignored by Trusted Advisor because it was marked as suppressed by the user.</p>"]
     #[serde(rename="isSuppressed")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub is_suppressed: Option<Boolean>,
+    pub is_suppressed: Option<bool>,
     #[doc="<p>Additional information about the identified resource. The exact metadata and its order can be obtained by inspecting the <a>TrustedAdvisorCheckDescription</a> object returned by the call to <a>DescribeTrustedAdvisorChecks</a>. <b>Metadata</b> contains all the data that is shown in the Excel download, even in those cases where the UI shows just summary data. </p>"]
     #[serde(rename="metadata")]
-    pub metadata: StringList,
+    pub metadata: Vec<String>,
     #[doc="<p>The AWS region in which the identified resource is located.</p>"]
     #[serde(rename="region")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -715,22 +667,21 @@ pub struct TrustedAdvisorResourceDetail {
     pub status: String,
 }
 
-pub type TrustedAdvisorResourceDetailList = Vec<TrustedAdvisorResourceDetail>;
 #[doc="<p>Details about AWS resources that were analyzed in a call to Trusted Advisor <a>DescribeTrustedAdvisorCheckSummaries</a>. </p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct TrustedAdvisorResourcesSummary {
     #[doc="<p>The number of AWS resources that were flagged (listed) by the Trusted Advisor check.</p>"]
     #[serde(rename="resourcesFlagged")]
-    pub resources_flagged: Long,
+    pub resources_flagged: i64,
     #[doc="<p>The number of AWS resources ignored by Trusted Advisor because information was unavailable.</p>"]
     #[serde(rename="resourcesIgnored")]
-    pub resources_ignored: Long,
+    pub resources_ignored: i64,
     #[doc="<p>The number of AWS resources that were analyzed by the Trusted Advisor check.</p>"]
     #[serde(rename="resourcesProcessed")]
-    pub resources_processed: Long,
+    pub resources_processed: i64,
     #[doc="<p>The number of AWS resources ignored by Trusted Advisor because they were marked as suppressed by the user.</p>"]
     #[serde(rename="resourcesSuppressed")]
-    pub resources_suppressed: Long,
+    pub resources_suppressed: i64,
 }
 
 /// Errors returned by AddAttachmentsToSet

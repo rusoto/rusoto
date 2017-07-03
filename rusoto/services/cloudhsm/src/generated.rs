@@ -26,8 +26,6 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-pub type AZ = String;
-pub type AZList = Vec<AZ>;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct AddTagsToResourceRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the AWS CloudHSM resource to tag.</p>"]
@@ -35,7 +33,7 @@ pub struct AddTagsToResourceRequest {
     pub resource_arn: String,
     #[doc="<p>One or more tags.</p>"]
     #[serde(rename="TagList")]
-    pub tag_list: TagList,
+    pub tag_list: Vec<Tag>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -45,21 +43,12 @@ pub struct AddTagsToResourceResponse {
     pub status: String,
 }
 
-pub type Boolean = bool;
-pub type Certificate = String;
-pub type CertificateFingerprint = String;
-pub type ClientArn = String;
-pub type ClientLabel = String;
-pub type ClientList = Vec<ClientArn>;
-pub type ClientToken = String;
-pub type ClientVersion = String;
-pub type CloudHsmObjectState = String;
 #[doc="<p>Contains the inputs for the <a>CreateHapgRequest</a> action.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateHapgRequest {
     #[doc="<p>The label of the new high-availability partition group.</p>"]
     #[serde(rename="Label")]
-    pub label: Label,
+    pub label: String,
 }
 
 #[doc="<p>Contains the output of the <a>CreateHAPartitionGroup</a> action.</p>"]
@@ -68,7 +57,7 @@ pub struct CreateHapgResponse {
     #[doc="<p>The ARN of the high-availability partition group.</p>"]
     #[serde(rename="HapgArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub hapg_arn: Option<HapgArn>,
+    pub hapg_arn: Option<String>,
 }
 
 #[doc="<p>Contains the inputs for the <a>CreateHsm</a> operation.</p>"]
@@ -77,30 +66,30 @@ pub struct CreateHsmRequest {
     #[doc="<p>A user-defined token to ensure idempotence. Subsequent calls to this operation with the same token will be ignored.</p>"]
     #[serde(rename="ClientToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub client_token: Option<ClientToken>,
+    pub client_token: Option<String>,
     #[doc="<p>The IP address to assign to the HSM's ENI.</p> <p>If an IP address is not specified, an IP address will be randomly chosen from the CIDR range of the subnet.</p>"]
     #[serde(rename="EniIp")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub eni_ip: Option<IpAddress>,
+    pub eni_ip: Option<String>,
     #[doc="<p>The external ID from <b>IamRoleArn</b>, if present.</p>"]
     #[serde(rename="ExternalId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub external_id: Option<ExternalId>,
+    pub external_id: Option<String>,
     #[doc="<p>The ARN of an IAM role to enable the AWS CloudHSM service to allocate an ENI on your behalf.</p>"]
     #[serde(rename="IamRoleArn")]
-    pub iam_role_arn: IamRoleArn,
+    pub iam_role_arn: String,
     #[doc="<p>The SSH public key to install on the HSM.</p>"]
     #[serde(rename="SshKey")]
-    pub ssh_key: SshKey,
+    pub ssh_key: String,
     #[doc="<p>The identifier of the subnet in your VPC in which to place the HSM.</p>"]
     #[serde(rename="SubnetId")]
-    pub subnet_id: SubnetId,
+    pub subnet_id: String,
     #[serde(rename="SubscriptionType")]
-    pub subscription_type: SubscriptionType,
+    pub subscription_type: String,
     #[doc="<p>The IP address for the syslog monitoring server. The AWS CloudHSM service only supports one syslog monitoring server.</p>"]
     #[serde(rename="SyslogIp")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub syslog_ip: Option<IpAddress>,
+    pub syslog_ip: Option<String>,
 }
 
 #[doc="<p>Contains the output of the <a>CreateHsm</a> operation.</p>"]
@@ -109,7 +98,7 @@ pub struct CreateHsmResponse {
     #[doc="<p>The ARN of the HSM.</p>"]
     #[serde(rename="HsmArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub hsm_arn: Option<HsmArn>,
+    pub hsm_arn: Option<String>,
 }
 
 #[doc="<p>Contains the inputs for the <a>CreateLunaClient</a> action.</p>"]
@@ -117,11 +106,11 @@ pub struct CreateHsmResponse {
 pub struct CreateLunaClientRequest {
     #[doc="<p>The contents of a Base64-Encoded X.509 v3 certificate to be installed on the HSMs used by this client.</p>"]
     #[serde(rename="Certificate")]
-    pub certificate: Certificate,
+    pub certificate: String,
     #[doc="<p>The label for the client.</p>"]
     #[serde(rename="Label")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub label: Option<ClientLabel>,
+    pub label: Option<String>,
 }
 
 #[doc="<p>Contains the output of the <a>CreateLunaClient</a> action.</p>"]
@@ -130,7 +119,7 @@ pub struct CreateLunaClientResponse {
     #[doc="<p>The ARN of the client.</p>"]
     #[serde(rename="ClientArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub client_arn: Option<ClientArn>,
+    pub client_arn: Option<String>,
 }
 
 #[doc="<p>Contains the inputs for the <a>DeleteHapg</a> action.</p>"]
@@ -138,7 +127,7 @@ pub struct CreateLunaClientResponse {
 pub struct DeleteHapgRequest {
     #[doc="<p>The ARN of the high-availability partition group to delete.</p>"]
     #[serde(rename="HapgArn")]
-    pub hapg_arn: HapgArn,
+    pub hapg_arn: String,
 }
 
 #[doc="<p>Contains the output of the <a>DeleteHapg</a> action.</p>"]
@@ -154,7 +143,7 @@ pub struct DeleteHapgResponse {
 pub struct DeleteHsmRequest {
     #[doc="<p>The ARN of the HSM to delete.</p>"]
     #[serde(rename="HsmArn")]
-    pub hsm_arn: HsmArn,
+    pub hsm_arn: String,
 }
 
 #[doc="<p>Contains the output of the <a>DeleteHsm</a> operation.</p>"]
@@ -169,7 +158,7 @@ pub struct DeleteHsmResponse {
 pub struct DeleteLunaClientRequest {
     #[doc="<p>The ARN of the client to delete.</p>"]
     #[serde(rename="ClientArn")]
-    pub client_arn: ClientArn,
+    pub client_arn: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -184,7 +173,7 @@ pub struct DeleteLunaClientResponse {
 pub struct DescribeHapgRequest {
     #[doc="<p>The ARN of the high-availability partition group to describe.</p>"]
     #[serde(rename="HapgArn")]
-    pub hapg_arn: HapgArn,
+    pub hapg_arn: String,
 }
 
 #[doc="<p>Contains the output of the <a>DescribeHapg</a> action.</p>"]
@@ -193,36 +182,36 @@ pub struct DescribeHapgResponse {
     #[doc="<p>The ARN of the high-availability partition group.</p>"]
     #[serde(rename="HapgArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub hapg_arn: Option<HapgArn>,
+    pub hapg_arn: Option<String>,
     #[doc="<p>The serial number of the high-availability partition group.</p>"]
     #[serde(rename="HapgSerial")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub hapg_serial: Option<String>,
     #[serde(rename="HsmsLastActionFailed")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub hsms_last_action_failed: Option<HsmList>,
+    pub hsms_last_action_failed: Option<Vec<String>>,
     #[serde(rename="HsmsPendingDeletion")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub hsms_pending_deletion: Option<HsmList>,
+    pub hsms_pending_deletion: Option<Vec<String>>,
     #[serde(rename="HsmsPendingRegistration")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub hsms_pending_registration: Option<HsmList>,
+    pub hsms_pending_registration: Option<Vec<String>>,
     #[doc="<p>The label for the high-availability partition group.</p>"]
     #[serde(rename="Label")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub label: Option<Label>,
+    pub label: Option<String>,
     #[doc="<p>The date and time the high-availability partition group was last modified.</p>"]
     #[serde(rename="LastModifiedTimestamp")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub last_modified_timestamp: Option<Timestamp>,
+    pub last_modified_timestamp: Option<String>,
     #[doc="<p>The list of partition serial numbers that belong to the high-availability partition group.</p>"]
     #[serde(rename="PartitionSerialList")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub partition_serial_list: Option<PartitionSerialList>,
+    pub partition_serial_list: Option<Vec<String>>,
     #[doc="<p>The state of the high-availability partition group.</p>"]
     #[serde(rename="State")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub state: Option<CloudHsmObjectState>,
+    pub state: Option<String>,
 }
 
 #[doc="<p>Contains the inputs for the <a>DescribeHsm</a> operation. </p>"]
@@ -231,11 +220,11 @@ pub struct DescribeHsmRequest {
     #[doc="<p>The ARN of the HSM. Either the <i>HsmArn</i> or the <i>SerialNumber</i> parameter must be specified.</p>"]
     #[serde(rename="HsmArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub hsm_arn: Option<HsmArn>,
+    pub hsm_arn: Option<String>,
     #[doc="<p>The serial number of the HSM. Either the <i>HsmArn</i> or the <i>HsmSerialNumber</i> parameter must be specified.</p>"]
     #[serde(rename="HsmSerialNumber")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub hsm_serial_number: Option<HsmSerialNumber>,
+    pub hsm_serial_number: Option<String>,
 }
 
 #[doc="<p>Contains the output of the <a>DescribeHsm</a> operation.</p>"]
@@ -244,19 +233,19 @@ pub struct DescribeHsmResponse {
     #[doc="<p>The Availability Zone that the HSM is in.</p>"]
     #[serde(rename="AvailabilityZone")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub availability_zone: Option<AZ>,
+    pub availability_zone: Option<String>,
     #[doc="<p>The identifier of the elastic network interface (ENI) attached to the HSM.</p>"]
     #[serde(rename="EniId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub eni_id: Option<EniId>,
+    pub eni_id: Option<String>,
     #[doc="<p>The IP address assigned to the HSM's ENI.</p>"]
     #[serde(rename="EniIp")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub eni_ip: Option<IpAddress>,
+    pub eni_ip: Option<String>,
     #[doc="<p>The ARN of the HSM.</p>"]
     #[serde(rename="HsmArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub hsm_arn: Option<HsmArn>,
+    pub hsm_arn: Option<String>,
     #[doc="<p>The HSM model type.</p>"]
     #[serde(rename="HsmType")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -264,19 +253,19 @@ pub struct DescribeHsmResponse {
     #[doc="<p>The ARN of the IAM role assigned to the HSM.</p>"]
     #[serde(rename="IamRoleArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub iam_role_arn: Option<IamRoleArn>,
+    pub iam_role_arn: Option<String>,
     #[doc="<p>The list of partitions on the HSM.</p>"]
     #[serde(rename="Partitions")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub partitions: Option<PartitionList>,
+    pub partitions: Option<Vec<String>>,
     #[doc="<p>The serial number of the HSM.</p>"]
     #[serde(rename="SerialNumber")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub serial_number: Option<HsmSerialNumber>,
+    pub serial_number: Option<String>,
     #[doc="<p>The date and time that the server certificate was last updated.</p>"]
     #[serde(rename="ServerCertLastUpdated")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub server_cert_last_updated: Option<Timestamp>,
+    pub server_cert_last_updated: Option<String>,
     #[doc="<p>The URI of the certificate server.</p>"]
     #[serde(rename="ServerCertUri")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -288,15 +277,15 @@ pub struct DescribeHsmResponse {
     #[doc="<p>The date and time that the SSH key was last updated.</p>"]
     #[serde(rename="SshKeyLastUpdated")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ssh_key_last_updated: Option<Timestamp>,
+    pub ssh_key_last_updated: Option<String>,
     #[doc="<p>The public SSH key.</p>"]
     #[serde(rename="SshPublicKey")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ssh_public_key: Option<SshKey>,
+    pub ssh_public_key: Option<String>,
     #[doc="<p>The status of the HSM.</p>"]
     #[serde(rename="Status")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status: Option<HsmStatus>,
+    pub status: Option<String>,
     #[doc="<p>Contains additional information about the status of the HSM.</p>"]
     #[serde(rename="StatusDetails")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -304,18 +293,18 @@ pub struct DescribeHsmResponse {
     #[doc="<p>The identifier of the subnet that the HSM is in.</p>"]
     #[serde(rename="SubnetId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub subnet_id: Option<SubnetId>,
+    pub subnet_id: Option<String>,
     #[doc="<p>The subscription end date.</p>"]
     #[serde(rename="SubscriptionEndDate")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub subscription_end_date: Option<Timestamp>,
+    pub subscription_end_date: Option<String>,
     #[doc="<p>The subscription start date.</p>"]
     #[serde(rename="SubscriptionStartDate")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub subscription_start_date: Option<Timestamp>,
+    pub subscription_start_date: Option<String>,
     #[serde(rename="SubscriptionType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub subscription_type: Option<SubscriptionType>,
+    pub subscription_type: Option<String>,
     #[doc="<p>The name of the HSM vendor.</p>"]
     #[serde(rename="VendorName")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -323,7 +312,7 @@ pub struct DescribeHsmResponse {
     #[doc="<p>The identifier of the VPC that the HSM is in.</p>"]
     #[serde(rename="VpcId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub vpc_id: Option<VpcId>,
+    pub vpc_id: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -331,11 +320,11 @@ pub struct DescribeLunaClientRequest {
     #[doc="<p>The certificate fingerprint.</p>"]
     #[serde(rename="CertificateFingerprint")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub certificate_fingerprint: Option<CertificateFingerprint>,
+    pub certificate_fingerprint: Option<String>,
     #[doc="<p>The ARN of the client.</p>"]
     #[serde(rename="ClientArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub client_arn: Option<ClientArn>,
+    pub client_arn: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -343,38 +332,36 @@ pub struct DescribeLunaClientResponse {
     #[doc="<p>The certificate installed on the HSMs used by this client.</p>"]
     #[serde(rename="Certificate")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub certificate: Option<Certificate>,
+    pub certificate: Option<String>,
     #[doc="<p>The certificate fingerprint.</p>"]
     #[serde(rename="CertificateFingerprint")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub certificate_fingerprint: Option<CertificateFingerprint>,
+    pub certificate_fingerprint: Option<String>,
     #[doc="<p>The ARN of the client.</p>"]
     #[serde(rename="ClientArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub client_arn: Option<ClientArn>,
+    pub client_arn: Option<String>,
     #[doc="<p>The label of the client.</p>"]
     #[serde(rename="Label")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub label: Option<Label>,
+    pub label: Option<String>,
     #[doc="<p>The date and time the client was last modified.</p>"]
     #[serde(rename="LastModifiedTimestamp")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub last_modified_timestamp: Option<Timestamp>,
+    pub last_modified_timestamp: Option<String>,
 }
 
-pub type EniId = String;
-pub type ExternalId = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetConfigRequest {
     #[doc="<p>The ARN of the client.</p>"]
     #[serde(rename="ClientArn")]
-    pub client_arn: ClientArn,
+    pub client_arn: String,
     #[doc="<p>The client version.</p>"]
     #[serde(rename="ClientVersion")]
-    pub client_version: ClientVersion,
+    pub client_version: String,
     #[doc="<p>A list of ARNs that identify the high-availability partition groups that are associated with the client.</p>"]
     #[serde(rename="HapgList")]
-    pub hapg_list: HapgList,
+    pub hapg_list: Vec<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -393,17 +380,6 @@ pub struct GetConfigResponse {
     pub config_type: Option<String>,
 }
 
-pub type HapgArn = String;
-pub type HapgList = Vec<HapgArn>;
-#[doc="<p>An ARN that identifies an HSM.</p>"]
-pub type HsmArn = String;
-#[doc="<p>Contains a list of ARNs that identify the HSMs.</p>"]
-pub type HsmList = Vec<HsmArn>;
-pub type HsmSerialNumber = String;
-pub type HsmStatus = String;
-pub type IamRoleArn = String;
-pub type IpAddress = String;
-pub type Label = String;
 #[doc="<p>Contains the inputs for the <a>ListAvailableZones</a> action.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListAvailableZonesRequest;
@@ -413,7 +389,7 @@ pub struct ListAvailableZonesResponse {
     #[doc="<p>The list of Availability Zones that have available AWS CloudHSM capacity.</p>"]
     #[serde(rename="AZList")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub az_list: Option<AZList>,
+    pub az_list: Option<Vec<String>>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -421,18 +397,18 @@ pub struct ListHapgsRequest {
     #[doc="<p>The <i>NextToken</i> value from a previous call to <a>ListHapgs</a>. Pass null if this is the first call.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ListHapgsResponse {
     #[doc="<p>The list of high-availability partition groups.</p>"]
     #[serde(rename="HapgList")]
-    pub hapg_list: HapgList,
+    pub hapg_list: Vec<String>,
     #[doc="<p>If not null, more results are available. Pass this value to <a>ListHapgs</a> to retrieve the next set of items.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -440,7 +416,7 @@ pub struct ListHsmsRequest {
     #[doc="<p>The <i>NextToken</i> value from a previous call to <a>ListHsms</a>. Pass null if this is the first call.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
 }
 
 #[doc="<p>Contains the output of the <a>ListHsms</a> operation.</p>"]
@@ -449,11 +425,11 @@ pub struct ListHsmsResponse {
     #[doc="<p>The list of ARNs that identify the HSMs.</p>"]
     #[serde(rename="HsmList")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub hsm_list: Option<HsmList>,
+    pub hsm_list: Option<Vec<String>>,
     #[doc="<p>If not null, more results are available. Pass this value to <a>ListHsms</a> to retrieve the next set of items.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -461,18 +437,18 @@ pub struct ListLunaClientsRequest {
     #[doc="<p>The <i>NextToken</i> value from a previous call to <a>ListLunaClients</a>. Pass null if this is the first call.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ListLunaClientsResponse {
     #[doc="<p>The list of clients.</p>"]
     #[serde(rename="ClientList")]
-    pub client_list: ClientList,
+    pub client_list: Vec<String>,
     #[doc="<p>If not null, more results are available. Pass this to <a>ListLunaClients</a> to retrieve the next set of items.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -486,22 +462,22 @@ pub struct ListTagsForResourceRequest {
 pub struct ListTagsForResourceResponse {
     #[doc="<p>One or more tags.</p>"]
     #[serde(rename="TagList")]
-    pub tag_list: TagList,
+    pub tag_list: Vec<Tag>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ModifyHapgRequest {
     #[doc="<p>The ARN of the high-availability partition group to modify.</p>"]
     #[serde(rename="HapgArn")]
-    pub hapg_arn: HapgArn,
+    pub hapg_arn: String,
     #[doc="<p>The new label for the high-availability partition group.</p>"]
     #[serde(rename="Label")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub label: Option<Label>,
+    pub label: Option<String>,
     #[doc="<p>The list of partition serial numbers to make members of the high-availability partition group.</p>"]
     #[serde(rename="PartitionSerialList")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub partition_serial_list: Option<PartitionSerialList>,
+    pub partition_serial_list: Option<Vec<String>>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -509,7 +485,7 @@ pub struct ModifyHapgResponse {
     #[doc="<p>The ARN of the high-availability partition group.</p>"]
     #[serde(rename="HapgArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub hapg_arn: Option<HapgArn>,
+    pub hapg_arn: Option<String>,
 }
 
 #[doc="<p>Contains the inputs for the <a>ModifyHsm</a> operation.</p>"]
@@ -518,26 +494,26 @@ pub struct ModifyHsmRequest {
     #[doc="<p>The new IP address for the elastic network interface (ENI) attached to the HSM.</p> <p>If the HSM is moved to a different subnet, and an IP address is not specified, an IP address will be randomly chosen from the CIDR range of the new subnet.</p>"]
     #[serde(rename="EniIp")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub eni_ip: Option<IpAddress>,
+    pub eni_ip: Option<String>,
     #[doc="<p>The new external ID.</p>"]
     #[serde(rename="ExternalId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub external_id: Option<ExternalId>,
+    pub external_id: Option<String>,
     #[doc="<p>The ARN of the HSM to modify.</p>"]
     #[serde(rename="HsmArn")]
-    pub hsm_arn: HsmArn,
+    pub hsm_arn: String,
     #[doc="<p>The new IAM role ARN.</p>"]
     #[serde(rename="IamRoleArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub iam_role_arn: Option<IamRoleArn>,
+    pub iam_role_arn: Option<String>,
     #[doc="<p>The new identifier of the subnet that the HSM is in. The new subnet must be in the same Availability Zone as the current subnet.</p>"]
     #[serde(rename="SubnetId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub subnet_id: Option<SubnetId>,
+    pub subnet_id: Option<String>,
     #[doc="<p>The new IP address for the syslog monitoring server. The AWS CloudHSM service only supports one syslog monitoring server.</p>"]
     #[serde(rename="SyslogIp")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub syslog_ip: Option<IpAddress>,
+    pub syslog_ip: Option<String>,
 }
 
 #[doc="<p>Contains the output of the <a>ModifyHsm</a> operation.</p>"]
@@ -546,17 +522,17 @@ pub struct ModifyHsmResponse {
     #[doc="<p>The ARN of the HSM.</p>"]
     #[serde(rename="HsmArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub hsm_arn: Option<HsmArn>,
+    pub hsm_arn: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ModifyLunaClientRequest {
     #[doc="<p>The new certificate for the client.</p>"]
     #[serde(rename="Certificate")]
-    pub certificate: Certificate,
+    pub certificate: String,
     #[doc="<p>The ARN of the client.</p>"]
     #[serde(rename="ClientArn")]
-    pub client_arn: ClientArn,
+    pub client_arn: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -564,14 +540,9 @@ pub struct ModifyLunaClientResponse {
     #[doc="<p>The ARN of the client.</p>"]
     #[serde(rename="ClientArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub client_arn: Option<ClientArn>,
+    pub client_arn: Option<String>,
 }
 
-pub type PaginationToken = String;
-pub type PartitionArn = String;
-pub type PartitionList = Vec<PartitionArn>;
-pub type PartitionSerial = String;
-pub type PartitionSerialList = Vec<PartitionSerial>;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct RemoveTagsFromResourceRequest {
     #[doc="<p>The Amazon Resource Name (ARN) of the AWS CloudHSM resource.</p>"]
@@ -579,7 +550,7 @@ pub struct RemoveTagsFromResourceRequest {
     pub resource_arn: String,
     #[doc="<p>The tag key or keys to remove.</p> <p>Specify only the tag key to remove (not the value). To overwrite the value for an existing tag, use <a>AddTagsToResource</a>.</p>"]
     #[serde(rename="TagKeyList")]
-    pub tag_key_list: TagKeyList,
+    pub tag_key_list: Vec<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -589,27 +560,17 @@ pub struct RemoveTagsFromResourceResponse {
     pub status: String,
 }
 
-pub type SshKey = String;
-pub type SubnetId = String;
-#[doc="<p>Specifies the type of subscription for the HSM.</p> <ul> <li><b>PRODUCTION</b> - The HSM is being used in a production environment.</li> <li><b>TRIAL</b> - The HSM is being used in a product trial.</li> </ul>"]
-pub type SubscriptionType = String;
 #[doc="<p>A key-value pair that identifies or specifies metadata about an AWS CloudHSM resource.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Tag {
     #[doc="<p>The key of the tag.</p>"]
     #[serde(rename="Key")]
-    pub key: TagKey,
+    pub key: String,
     #[doc="<p>The value of the tag.</p>"]
     #[serde(rename="Value")]
-    pub value: TagValue,
+    pub value: String,
 }
 
-pub type TagKey = String;
-pub type TagKeyList = Vec<TagKey>;
-pub type TagList = Vec<Tag>;
-pub type TagValue = String;
-pub type Timestamp = String;
-pub type VpcId = String;
 /// Errors returned by AddTagsToResource
 #[derive(Debug, PartialEq)]
 pub enum AddTagsToResourceError {

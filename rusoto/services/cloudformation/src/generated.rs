@@ -41,9 +41,9 @@ enum DeserializerNext {
 #[derive(Default,Debug,Clone)]
 pub struct AccountLimit {
     #[doc="<p>The name of the account limit. Currently, the only account limit is <code>StackLimit</code>.</p>"]
-    pub name: Option<LimitName>,
+    pub name: Option<String>,
     #[doc="<p>The value that is associated with the account limit name.</p>"]
-    pub value: Option<LimitValue>,
+    pub value: Option<i64>,
 }
 
 struct AccountLimitDeserializer;
@@ -92,13 +92,12 @@ impl AccountLimitDeserializer {
 
     }
 }
-pub type AccountLimitList = Vec<AccountLimit>;
 struct AccountLimitListDeserializer;
 impl AccountLimitListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AccountLimitList, XmlParseError> {
+                                       -> Result<Vec<AccountLimit>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -134,13 +133,12 @@ impl AccountLimitListDeserializer {
 
     }
 }
-pub type AllowedValue = String;
 struct AllowedValueDeserializer;
 impl AllowedValueDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AllowedValue, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -149,13 +147,12 @@ impl AllowedValueDeserializer {
 
     }
 }
-pub type AllowedValues = Vec<AllowedValue>;
 struct AllowedValuesDeserializer;
 impl AllowedValuesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AllowedValues, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -195,9 +192,9 @@ impl AllowedValuesDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CancelUpdateStackInput {
     #[doc="<p>A unique identifier for this <code>CancelUpdateStack</code> request. Specify this token if you plan to retry requests so that AWS CloudFormation knows that you're not attempting to cancel an update on a stack with the same name. You might retry <code>CancelUpdateStack</code> requests to ensure that AWS CloudFormation successfully received them.</p>"]
-    pub client_request_token: Option<ClientRequestToken>,
+    pub client_request_token: Option<String>,
     #[doc="<p>The name or the unique stack ID that is associated with the stack.</p>"]
-    pub stack_name: StackName,
+    pub stack_name: String,
 }
 
 
@@ -218,13 +215,12 @@ impl CancelUpdateStackInputSerializer {
     }
 }
 
-pub type Capabilities = Vec<Capability>;
 struct CapabilitiesDeserializer;
 impl CapabilitiesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Capabilities, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -264,7 +260,7 @@ impl CapabilitiesDeserializer {
 /// Serialize `Capabilities` contents to a `SignedRequest`.
 struct CapabilitiesSerializer;
 impl CapabilitiesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Capabilities) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -272,13 +268,12 @@ impl CapabilitiesSerializer {
     }
 }
 
-pub type CapabilitiesReason = String;
 struct CapabilitiesReasonDeserializer;
 impl CapabilitiesReasonDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CapabilitiesReason, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -287,13 +282,12 @@ impl CapabilitiesReasonDeserializer {
 
     }
 }
-pub type Capability = String;
 struct CapabilityDeserializer;
 impl CapabilityDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Capability, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -302,13 +296,12 @@ impl CapabilityDeserializer {
 
     }
 }
-pub type CausingEntity = String;
 struct CausingEntityDeserializer;
 impl CausingEntityDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CausingEntity, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -323,7 +316,7 @@ pub struct Change {
     #[doc="<p>A <code>ResourceChange</code> structure that describes the resource and action that AWS CloudFormation will perform.</p>"]
     pub resource_change: Option<ResourceChange>,
     #[doc="<p>The type of entity that AWS CloudFormation changes. Currently, the only entity type is <code>Resource</code>.</p>"]
-    pub type_: Option<ChangeType>,
+    pub type_: Option<String>,
 }
 
 struct ChangeDeserializer;
@@ -373,13 +366,12 @@ impl ChangeDeserializer {
 
     }
 }
-pub type ChangeAction = String;
 struct ChangeActionDeserializer;
 impl ChangeActionDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ChangeAction, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -388,13 +380,12 @@ impl ChangeActionDeserializer {
 
     }
 }
-pub type ChangeSetId = String;
 struct ChangeSetIdDeserializer;
 impl ChangeSetIdDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ChangeSetId, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -403,13 +394,12 @@ impl ChangeSetIdDeserializer {
 
     }
 }
-pub type ChangeSetName = String;
 struct ChangeSetNameDeserializer;
 impl ChangeSetNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ChangeSetName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -418,14 +408,12 @@ impl ChangeSetNameDeserializer {
 
     }
 }
-pub type ChangeSetNameOrId = String;
-pub type ChangeSetStatus = String;
 struct ChangeSetStatusDeserializer;
 impl ChangeSetStatusDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ChangeSetStatus, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -434,13 +422,12 @@ impl ChangeSetStatusDeserializer {
 
     }
 }
-pub type ChangeSetStatusReason = String;
 struct ChangeSetStatusReasonDeserializer;
 impl ChangeSetStatusReasonDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ChangeSetStatusReason, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -449,13 +436,12 @@ impl ChangeSetStatusReasonDeserializer {
 
     }
 }
-pub type ChangeSetSummaries = Vec<ChangeSetSummary>;
 struct ChangeSetSummariesDeserializer;
 impl ChangeSetSummariesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ChangeSetSummaries, XmlParseError> {
+                                       -> Result<Vec<ChangeSetSummary>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -495,23 +481,23 @@ impl ChangeSetSummariesDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ChangeSetSummary {
     #[doc="<p>The ID of the change set.</p>"]
-    pub change_set_id: Option<ChangeSetId>,
+    pub change_set_id: Option<String>,
     #[doc="<p>The name of the change set.</p>"]
-    pub change_set_name: Option<ChangeSetName>,
+    pub change_set_name: Option<String>,
     #[doc="<p>The start time when the change set was created, in UTC.</p>"]
-    pub creation_time: Option<CreationTime>,
+    pub creation_time: Option<String>,
     #[doc="<p>Descriptive information about the change set.</p>"]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[doc="<p>If the change set execution status is <code>AVAILABLE</code>, you can execute the change set. If you can’t execute the change set, the status indicates why. For example, a change set might be in an <code>UNAVAILABLE</code> state because AWS CloudFormation is still creating it or in an <code>OBSOLETE</code> state because the stack was already updated.</p>"]
-    pub execution_status: Option<ExecutionStatus>,
+    pub execution_status: Option<String>,
     #[doc="<p>The ID of the stack with which the change set is associated.</p>"]
-    pub stack_id: Option<StackId>,
+    pub stack_id: Option<String>,
     #[doc="<p>The name of the stack with which the change set is associated.</p>"]
-    pub stack_name: Option<StackName>,
+    pub stack_name: Option<String>,
     #[doc="<p>The state of the change set, such as <code>CREATE_IN_PROGRESS</code>, <code>CREATE_COMPLETE</code>, or <code>FAILED</code>.</p>"]
-    pub status: Option<ChangeSetStatus>,
+    pub status: Option<String>,
     #[doc="<p>A description of the change set's status. For example, if your change set is in the <code>FAILED</code> state, AWS CloudFormation shows the error message.</p>"]
-    pub status_reason: Option<ChangeSetStatusReason>,
+    pub status_reason: Option<String>,
 }
 
 struct ChangeSetSummaryDeserializer;
@@ -595,14 +581,12 @@ impl ChangeSetSummaryDeserializer {
 
     }
 }
-pub type ChangeSetType = String;
-pub type ChangeSource = String;
 struct ChangeSourceDeserializer;
 impl ChangeSourceDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ChangeSource, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -611,13 +595,12 @@ impl ChangeSourceDeserializer {
 
     }
 }
-pub type ChangeType = String;
 struct ChangeTypeDeserializer;
 impl ChangeTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ChangeType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -626,13 +609,12 @@ impl ChangeTypeDeserializer {
 
     }
 }
-pub type Changes = Vec<Change>;
 struct ChangesDeserializer;
 impl ChangesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Changes, XmlParseError> {
+                                       -> Result<Vec<Change>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -668,13 +650,12 @@ impl ChangesDeserializer {
 
     }
 }
-pub type ClientRequestToken = String;
 struct ClientRequestTokenDeserializer;
 impl ClientRequestTokenDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ClientRequestToken, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -683,18 +664,17 @@ impl ClientRequestTokenDeserializer {
 
     }
 }
-pub type ClientToken = String;
 #[doc="<p>The input for the <a>ContinueUpdateRollback</a> action.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct ContinueUpdateRollbackInput {
     #[doc="<p>A unique identifier for this <code>ContinueUpdateRollback</code> request. Specify this token if you plan to retry requests so that AWS CloudFormation knows that you're not attempting to continue the rollback to a stack with the same name. You might retry <code>ContinueUpdateRollback</code> requests to ensure that AWS CloudFormation successfully received them.</p>"]
-    pub client_request_token: Option<ClientRequestToken>,
+    pub client_request_token: Option<String>,
     #[doc="<p>A list of the logical IDs of the resources that AWS CloudFormation skips during the continue update rollback operation. You can specify only resources that are in the <code>UPDATE_FAILED</code> state because a rollback failed. You can't specify resources that are in the <code>UPDATE_FAILED</code> state for other reasons, for example, because an update was canceled. To check why a resource update failed, use the <a>DescribeStackResources</a> action, and view the resource status reason. </p> <important> <p>Specify this property to skip rolling back resources that AWS CloudFormation can't successfully roll back. We recommend that you <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html#troubleshooting-errors-update-rollback-failed\"> troubleshoot</a> resources before skipping them. AWS CloudFormation sets the status of the specified resources to <code>UPDATE_COMPLETE</code> and continues to roll back the stack. After the rollback is complete, the state of the skipped resources will be inconsistent with the state of the resources in the stack template. Before performing another stack update, you must update the stack or resources to be consistent with each other. If you don't, subsequent stack updates might fail, and the stack will become unrecoverable. </p> </important> <p>Specify the minimum number of resources required to successfully roll back your stack. For example, a failed resource update might cause dependent resources to fail. In this case, it might not be necessary to skip the dependent resources. </p> <p>To specify resources in a nested stack, use the following format: <code>NestedStackName.ResourceLogicalID</code>. If the <code>ResourceLogicalID</code> is a stack resource (<code>Type: AWS::CloudFormation::Stack</code>), it must be in one of the following states: <code>DELETE_IN_PROGRESS</code>, <code>DELETE_COMPLETE</code>, or <code>DELETE_FAILED</code>. </p>"]
-    pub resources_to_skip: Option<ResourcesToSkip>,
+    pub resources_to_skip: Option<Vec<String>>,
     #[doc="<p>The Amazon Resource Name (ARN) of an AWS Identity and Access Management (IAM) role that AWS CloudFormation assumes to roll back the stack. AWS CloudFormation uses the role's credentials to make calls on your behalf. AWS CloudFormation always uses this role for all future operations on the stack. As long as users have permission to operate on the stack, AWS CloudFormation uses this role even if the users don't have permission to pass it. Ensure that the role grants least privilege.</p> <p>If you don't specify a value, AWS CloudFormation uses the role that was previously associated with the stack. If no role is available, AWS CloudFormation uses a temporary session that is generated from your user credentials.</p>"]
-    pub role_arn: Option<RoleARN>,
+    pub role_arn: Option<String>,
     #[doc="<p>The name or the unique ID of the stack that you want to continue rolling back.</p> <note> <p>Don't specify the name of a nested stack (a stack that was created by using the <code>AWS::CloudFormation::Stack</code> resource). Instead, use this operation on the parent stack (the stack that contains the <code>AWS::CloudFormation::Stack</code> resource).</p> </note>"]
-    pub stack_name: StackNameOrId,
+    pub stack_name: String,
 }
 
 
@@ -747,33 +727,33 @@ impl ContinueUpdateRollbackOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateChangeSetInput {
     #[doc="<p>A list of values that you must specify before AWS CloudFormation can update certain stacks. Some stack templates might include resources that can affect permissions in your AWS account, for example, by creating new AWS Identity and Access Management (IAM) users. For those stacks, you must explicitly acknowledge their capabilities by specifying this parameter.</p> <p>The only valid values are <code>CAPABILITY_IAM</code> and <code>CAPABILITY_NAMED_IAM</code>. The following resources require you to specify this parameter: <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-accesskey.html\"> AWS::IAM::AccessKey</a>, <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-group.html\"> AWS::IAM::Group</a>, <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html\"> AWS::IAM::InstanceProfile</a>, <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-policy.html\"> AWS::IAM::Policy</a>, <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html\"> AWS::IAM::Role</a>, <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-user.html\"> AWS::IAM::User</a>, and <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-addusertogroup.html\"> AWS::IAM::UserToGroupAddition</a>. If your stack template contains these resources, we recommend that you review all permissions associated with them and edit their permissions if necessary.</p> <p>If you have IAM resources, you can specify either capability. If you have IAM resources with custom names, you must specify <code>CAPABILITY_NAMED_IAM</code>. If you don't specify this parameter, this action returns an <code>InsufficientCapabilities</code> error.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#capabilities\">Acknowledging IAM Resources in AWS CloudFormation Templates</a>.</p>"]
-    pub capabilities: Option<Capabilities>,
+    pub capabilities: Option<Vec<String>>,
     #[doc="<p>The name of the change set. The name must be unique among all change sets that are associated with the specified stack.</p> <p>A change set name can contain only alphanumeric, case sensitive characters and hyphens. It must start with an alphabetic character and cannot exceed 128 characters.</p>"]
-    pub change_set_name: ChangeSetName,
+    pub change_set_name: String,
     #[doc="<p>The type of change set operation. To create a change set for a new stack, specify <code>CREATE</code>. To create a change set for an existing stack, specify <code>UPDATE</code>.</p> <p>If you create a change set for a new stack, AWS Cloudformation creates a stack with a unique stack ID, but no template or resources. The stack will be in the <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-describing-stacks.html#d0e11995\"> <code>REVIEW_IN_PROGRESS</code> </a> state until you execute the change set.</p> <p>By default, AWS CloudFormation specifies <code>UPDATE</code>. You can't use the <code>UPDATE</code> type to create a change set for a new stack or the <code>CREATE</code> type to create a change set for an existing stack.</p>"]
-    pub change_set_type: Option<ChangeSetType>,
+    pub change_set_type: Option<String>,
     #[doc="<p>A unique identifier for this <code>CreateChangeSet</code> request. Specify this token if you plan to retry requests so that AWS CloudFormation knows that you're not attempting to create another change set with the same name. You might retry <code>CreateChangeSet</code> requests to ensure that AWS CloudFormation successfully received them.</p>"]
-    pub client_token: Option<ClientToken>,
+    pub client_token: Option<String>,
     #[doc="<p>A description to help you identify this change set.</p>"]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[doc="<p>The Amazon Resource Names (ARNs) of Amazon Simple Notification Service (Amazon SNS) topics that AWS CloudFormation associates with the stack. To remove all associated notification topics, specify an empty list.</p>"]
-    pub notification_ar_ns: Option<NotificationARNs>,
+    pub notification_ar_ns: Option<Vec<String>>,
     #[doc="<p>A list of <code>Parameter</code> structures that specify input parameters for the change set. For more information, see the <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_Parameter.html\">Parameter</a> data type.</p>"]
-    pub parameters: Option<Parameters>,
+    pub parameters: Option<Vec<Parameter>>,
     #[doc="<p>The template resource types that you have permissions to work with if you execute this change set, such as <code>AWS::EC2::Instance</code>, <code>AWS::EC2::*</code>, or <code>Custom::MyCustomInstance</code>.</p> <p>If the list of resource types doesn't include a resource type that you're updating, the stack update fails. By default, AWS CloudFormation grants permissions to all resource types. AWS Identity and Access Management (IAM) uses this parameter for condition keys in IAM policies for AWS CloudFormation. For more information, see <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html\">Controlling Access with AWS Identity and Access Management</a> in the AWS CloudFormation User Guide.</p>"]
-    pub resource_types: Option<ResourceTypes>,
+    pub resource_types: Option<Vec<String>>,
     #[doc="<p>The Amazon Resource Name (ARN) of an AWS Identity and Access Management (IAM) role that AWS CloudFormation assumes when executing the change set. AWS CloudFormation uses the role's credentials to make calls on your behalf. AWS CloudFormation uses this role for all future operations on the stack. As long as users have permission to operate on the stack, AWS CloudFormation uses this role even if the users don't have permission to pass it. Ensure that the role grants least privilege.</p> <p>If you don't specify a value, AWS CloudFormation uses the role that was previously associated with the stack. If no role is available, AWS CloudFormation uses a temporary session that is generated from your user credentials.</p>"]
-    pub role_arn: Option<RoleARN>,
+    pub role_arn: Option<String>,
     #[doc="<p>The name or the unique ID of the stack for which you are creating a change set. AWS CloudFormation generates the change set by comparing this stack's information with the information that you submit, such as a modified template or different parameter input values.</p>"]
-    pub stack_name: StackNameOrId,
+    pub stack_name: String,
     #[doc="<p>Key-value pairs to associate with this stack. AWS CloudFormation also propagates these tags to resources in the stack. You can specify a maximum of 10 tags.</p>"]
-    pub tags: Option<Tags>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>A structure that contains the body of the revised template, with a minimum length of 1 byte and a maximum length of 51,200 bytes. AWS CloudFormation generates the change set by comparing this template with the template of the stack that you specified.</p> <p>Conditional: You must specify only <code>TemplateBody</code> or <code>TemplateURL</code>.</p>"]
-    pub template_body: Option<TemplateBody>,
+    pub template_body: Option<String>,
     #[doc="<p>The location of the file that contains the revised template. The URL must point to a template (max size: 460,800 bytes) that is located in an S3 bucket. AWS CloudFormation generates the change set by comparing this template with the stack that you specified.</p> <p>Conditional: You must specify only <code>TemplateBody</code> or <code>TemplateURL</code>.</p>"]
-    pub template_url: Option<TemplateURL>,
+    pub template_url: Option<String>,
     #[doc="<p>Whether to reuse the template that is associated with the stack to create the change set.</p>"]
-    pub use_previous_template: Option<UsePreviousTemplate>,
+    pub use_previous_template: Option<bool>,
 }
 
 
@@ -842,9 +822,9 @@ impl CreateChangeSetInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateChangeSetOutput {
     #[doc="<p>The Amazon Resource Name (ARN) of the change set.</p>"]
-    pub id: Option<ChangeSetId>,
+    pub id: Option<String>,
     #[doc="<p>The unique ID of the stack.</p>"]
-    pub stack_id: Option<StackId>,
+    pub stack_id: Option<String>,
 }
 
 struct CreateChangeSetOutputDeserializer;
@@ -896,35 +876,35 @@ impl CreateChangeSetOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateStackInput {
     #[doc="<p>A list of values that you must specify before AWS CloudFormation can create certain stacks. Some stack templates might include resources that can affect permissions in your AWS account, for example, by creating new AWS Identity and Access Management (IAM) users. For those stacks, you must explicitly acknowledge their capabilities by specifying this parameter.</p> <p>The only valid values are <code>CAPABILITY_IAM</code> and <code>CAPABILITY_NAMED_IAM</code>. The following resources require you to specify this parameter: <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-accesskey.html\"> AWS::IAM::AccessKey</a>, <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-group.html\"> AWS::IAM::Group</a>, <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html\"> AWS::IAM::InstanceProfile</a>, <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-policy.html\"> AWS::IAM::Policy</a>, <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html\"> AWS::IAM::Role</a>, <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-user.html\"> AWS::IAM::User</a>, and <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-addusertogroup.html\"> AWS::IAM::UserToGroupAddition</a>. If your stack template contains these resources, we recommend that you review all permissions associated with them and edit their permissions if necessary.</p> <p>If you have IAM resources, you can specify either capability. If you have IAM resources with custom names, you must specify <code>CAPABILITY_NAMED_IAM</code>. If you don't specify this parameter, this action returns an <code>InsufficientCapabilities</code> error.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#capabilities\">Acknowledging IAM Resources in AWS CloudFormation Templates</a>.</p>"]
-    pub capabilities: Option<Capabilities>,
+    pub capabilities: Option<Vec<String>>,
     #[doc="<p>A unique identifier for this <code>CreateStack</code> request. Specify this token if you plan to retry requests so that AWS CloudFormation knows that you're not attempting to create a stack with the same name. You might retry <code>CreateStack</code> requests to ensure that AWS CloudFormation successfully received them.</p>"]
-    pub client_request_token: Option<ClientRequestToken>,
+    pub client_request_token: Option<String>,
     #[doc="<p>Set to <code>true</code> to disable rollback of the stack if stack creation failed. You can specify either <code>DisableRollback</code> or <code>OnFailure</code>, but not both.</p> <p>Default: <code>false</code> </p>"]
-    pub disable_rollback: Option<DisableRollback>,
+    pub disable_rollback: Option<bool>,
     #[doc="<p>The Simple Notification Service (SNS) topic ARNs to publish stack related events. You can find your SNS topic ARNs using the SNS console or your Command Line Interface (CLI).</p>"]
-    pub notification_ar_ns: Option<NotificationARNs>,
+    pub notification_ar_ns: Option<Vec<String>>,
     #[doc="<p>Determines what action will be taken if stack creation fails. This must be one of: DO_NOTHING, ROLLBACK, or DELETE. You can specify either <code>OnFailure</code> or <code>DisableRollback</code>, but not both.</p> <p>Default: <code>ROLLBACK</code> </p>"]
-    pub on_failure: Option<OnFailure>,
+    pub on_failure: Option<String>,
     #[doc="<p>A list of <code>Parameter</code> structures that specify input parameters for the stack. For more information, see the <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_Parameter.html\">Parameter</a> data type.</p>"]
-    pub parameters: Option<Parameters>,
+    pub parameters: Option<Vec<Parameter>>,
     #[doc="<p>The template resource types that you have permissions to work with for this create stack action, such as <code>AWS::EC2::Instance</code>, <code>AWS::EC2::*</code>, or <code>Custom::MyCustomInstance</code>. Use the following syntax to describe template resource types: <code>AWS::*</code> (for all AWS resource), <code>Custom::*</code> (for all custom resources), <code>Custom::<i>logical_ID</i> </code> (for a specific custom resource), <code>AWS::<i>service_name</i>::*</code> (for all resources of a particular AWS service), and <code>AWS::<i>service_name</i>::<i>resource_logical_ID</i> </code> (for a specific AWS resource).</p> <p>If the list of resource types doesn't include a resource that you're creating, the stack creation fails. By default, AWS CloudFormation grants permissions to all resource types. AWS Identity and Access Management (IAM) uses this parameter for AWS CloudFormation-specific condition keys in IAM policies. For more information, see <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html\">Controlling Access with AWS Identity and Access Management</a>.</p>"]
-    pub resource_types: Option<ResourceTypes>,
+    pub resource_types: Option<Vec<String>>,
     #[doc="<p>The Amazon Resource Name (ARN) of an AWS Identity and Access Management (IAM) role that AWS CloudFormation assumes to create the stack. AWS CloudFormation uses the role's credentials to make calls on your behalf. AWS CloudFormation always uses this role for all future operations on the stack. As long as users have permission to operate on the stack, AWS CloudFormation uses this role even if the users don't have permission to pass it. Ensure that the role grants least privilege.</p> <p>If you don't specify a value, AWS CloudFormation uses the role that was previously associated with the stack. If no role is available, AWS CloudFormation uses a temporary session that is generated from your user credentials.</p>"]
-    pub role_arn: Option<RoleARN>,
+    pub role_arn: Option<String>,
     #[doc="<p>The name that is associated with the stack. The name must be unique in the region in which you are creating the stack.</p> <note> <p>A stack name can contain only alphanumeric characters (case sensitive) and hyphens. It must start with an alphabetic character and cannot be longer than 128 characters.</p> </note>"]
-    pub stack_name: StackName,
+    pub stack_name: String,
     #[doc="<p>Structure containing the stack policy body. For more information, go to <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/protect-stack-resources.html\"> Prevent Updates to Stack Resources</a> in the <i>AWS CloudFormation User Guide</i>. You can specify either the <code>StackPolicyBody</code> or the <code>StackPolicyURL</code> parameter, but not both.</p>"]
-    pub stack_policy_body: Option<StackPolicyBody>,
+    pub stack_policy_body: Option<String>,
     #[doc="<p>Location of a file containing the stack policy. The URL must point to a policy (maximum size: 16 KB) located in an S3 bucket in the same region as the stack. You can specify either the <code>StackPolicyBody</code> or the <code>StackPolicyURL</code> parameter, but not both.</p>"]
-    pub stack_policy_url: Option<StackPolicyURL>,
+    pub stack_policy_url: Option<String>,
     #[doc="<p>Key-value pairs to associate with this stack. AWS CloudFormation also propagates these tags to the resources created in the stack. A maximum number of 10 tags can be specified.</p>"]
-    pub tags: Option<Tags>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>Structure containing the template body with a minimum length of 1 byte and a maximum length of 51,200 bytes. For more information, go to <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html\">Template Anatomy</a> in the AWS CloudFormation User Guide.</p> <p>Conditional: You must specify either the <code>TemplateBody</code> or the <code>TemplateURL</code> parameter, but not both.</p>"]
-    pub template_body: Option<TemplateBody>,
+    pub template_body: Option<String>,
     #[doc="<p>Location of file containing the template body. The URL must point to a template (max size: 460,800 bytes) that is located in an Amazon S3 bucket. For more information, go to the <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html\">Template Anatomy</a> in the AWS CloudFormation User Guide.</p> <p>Conditional: You must specify either the <code>TemplateBody</code> or the <code>TemplateURL</code> parameter, but not both.</p>"]
-    pub template_url: Option<TemplateURL>,
+    pub template_url: Option<String>,
     #[doc="<p>The amount of time that can pass before the stack status becomes CREATE_FAILED; if <code>DisableRollback</code> is not set or is set to <code>false</code>, the stack will be rolled back.</p>"]
-    pub timeout_in_minutes: Option<TimeoutMinutes>,
+    pub timeout_in_minutes: Option<i64>,
 }
 
 
@@ -998,7 +978,7 @@ impl CreateStackInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateStackOutput {
     #[doc="<p>Unique identifier of the stack.</p>"]
-    pub stack_id: Option<StackId>,
+    pub stack_id: Option<String>,
 }
 
 struct CreateStackOutputDeserializer;
@@ -1043,13 +1023,12 @@ impl CreateStackOutputDeserializer {
 
     }
 }
-pub type CreationTime = String;
 struct CreationTimeDeserializer;
 impl CreationTimeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CreationTime, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1062,9 +1041,9 @@ impl CreationTimeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteChangeSetInput {
     #[doc="<p>The name or Amazon Resource Name (ARN) of the change set that you want to delete.</p>"]
-    pub change_set_name: ChangeSetNameOrId,
+    pub change_set_name: String,
     #[doc="<p>If you specified the name of a change set to delete, specify the stack name or ID (ARN) that is associated with it.</p>"]
-    pub stack_name: Option<StackNameOrId>,
+    pub stack_name: Option<String>,
 }
 
 
@@ -1110,13 +1089,13 @@ impl DeleteChangeSetOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteStackInput {
     #[doc="<p>A unique identifier for this <code>DeleteStack</code> request. Specify this token if you plan to retry requests so that AWS CloudFormation knows that you're not attempting to delete a stack with the same name. You might retry <code>DeleteStack</code> requests to ensure that AWS CloudFormation successfully received them.</p>"]
-    pub client_request_token: Option<ClientRequestToken>,
+    pub client_request_token: Option<String>,
     #[doc="<p>For stacks in the <code>DELETE_FAILED</code> state, a list of resource logical IDs that are associated with the resources you want to retain. During deletion, AWS CloudFormation deletes the stack but does not delete the retained resources.</p> <p>Retaining resources is useful when you cannot delete a resource, such as a non-empty S3 bucket, but you want to delete the stack.</p>"]
-    pub retain_resources: Option<RetainResources>,
+    pub retain_resources: Option<Vec<String>>,
     #[doc="<p>The Amazon Resource Name (ARN) of an AWS Identity and Access Management (IAM) role that AWS CloudFormation assumes to delete the stack. AWS CloudFormation uses the role's credentials to make calls on your behalf.</p> <p>If you don't specify a value, AWS CloudFormation uses the role that was previously associated with the stack. If no role is available, AWS CloudFormation uses a temporary session that is generated from your user credentials.</p>"]
-    pub role_arn: Option<RoleARN>,
+    pub role_arn: Option<String>,
     #[doc="<p>The name or the unique stack ID that is associated with the stack.</p>"]
-    pub stack_name: StackName,
+    pub stack_name: String,
 }
 
 
@@ -1145,13 +1124,12 @@ impl DeleteStackInputSerializer {
     }
 }
 
-pub type DeletionTime = String;
 struct DeletionTimeDeserializer;
 impl DeletionTimeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DeletionTime, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1164,7 +1142,7 @@ impl DeletionTimeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeAccountLimitsInput {
     #[doc="<p>A string that identifies the next page of limits that you want to retrieve.</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
 
@@ -1188,9 +1166,9 @@ impl DescribeAccountLimitsInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeAccountLimitsOutput {
     #[doc="<p>An account limit structure that contain a list of AWS CloudFormation account limits and their values.</p>"]
-    pub account_limits: Option<AccountLimitList>,
+    pub account_limits: Option<Vec<AccountLimit>>,
     #[doc="<p>If the output exceeds 1 MB in size, a string that identifies the next page of limits. If no additional page exists, this value is null.</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
 struct DescribeAccountLimitsOutputDeserializer;
@@ -1244,11 +1222,11 @@ impl DescribeAccountLimitsOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeChangeSetInput {
     #[doc="<p>The name or Amazon Resource Name (ARN) of the change set that you want to describe.</p>"]
-    pub change_set_name: ChangeSetNameOrId,
+    pub change_set_name: String,
     #[doc="<p>A string (provided by the <a>DescribeChangeSet</a> response output) that identifies the next page of information that you want to retrieve.</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
     #[doc="<p>If you specified the name of a change set, specify the stack name or ID (ARN) of the change set you want to describe.</p>"]
-    pub stack_name: Option<StackNameOrId>,
+    pub stack_name: Option<String>,
 }
 
 
@@ -1277,35 +1255,35 @@ impl DescribeChangeSetInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeChangeSetOutput {
     #[doc="<p>If you execute the change set, the list of capabilities that were explicitly acknowledged when the change set was created.</p>"]
-    pub capabilities: Option<Capabilities>,
+    pub capabilities: Option<Vec<String>>,
     #[doc="<p>The ARN of the change set.</p>"]
-    pub change_set_id: Option<ChangeSetId>,
+    pub change_set_id: Option<String>,
     #[doc="<p>The name of the change set.</p>"]
-    pub change_set_name: Option<ChangeSetName>,
+    pub change_set_name: Option<String>,
     #[doc="<p>A list of <code>Change</code> structures that describes the resources AWS CloudFormation changes if you execute the change set.</p>"]
-    pub changes: Option<Changes>,
+    pub changes: Option<Vec<Change>>,
     #[doc="<p>The start time when the change set was created, in UTC.</p>"]
-    pub creation_time: Option<CreationTime>,
+    pub creation_time: Option<String>,
     #[doc="<p>Information about the change set.</p>"]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[doc="<p>If the change set execution status is <code>AVAILABLE</code>, you can execute the change set. If you can’t execute the change set, the status indicates why. For example, a change set might be in an <code>UNAVAILABLE</code> state because AWS CloudFormation is still creating it or in an <code>OBSOLETE</code> state because the stack was already updated.</p>"]
-    pub execution_status: Option<ExecutionStatus>,
+    pub execution_status: Option<String>,
     #[doc="<p>If the output exceeds 1 MB, a string that identifies the next page of changes. If there is no additional page, this value is null.</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
     #[doc="<p>The ARNs of the Amazon Simple Notification Service (Amazon SNS) topics that will be associated with the stack if you execute the change set.</p>"]
-    pub notification_ar_ns: Option<NotificationARNs>,
+    pub notification_ar_ns: Option<Vec<String>>,
     #[doc="<p>A list of <code>Parameter</code> structures that describes the input parameters and their values used to create the change set. For more information, see the <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_Parameter.html\">Parameter</a> data type.</p>"]
-    pub parameters: Option<Parameters>,
+    pub parameters: Option<Vec<Parameter>>,
     #[doc="<p>The ARN of the stack that is associated with the change set.</p>"]
-    pub stack_id: Option<StackId>,
+    pub stack_id: Option<String>,
     #[doc="<p>The name of the stack that is associated with the change set.</p>"]
-    pub stack_name: Option<StackName>,
+    pub stack_name: Option<String>,
     #[doc="<p>The current status of the change set, such as <code>CREATE_IN_PROGRESS</code>, <code>CREATE_COMPLETE</code>, or <code>FAILED</code>.</p>"]
-    pub status: Option<ChangeSetStatus>,
+    pub status: Option<String>,
     #[doc="<p>A description of the change set's status. For example, if your attempt to create a change set failed, AWS CloudFormation shows the error message.</p>"]
-    pub status_reason: Option<ChangeSetStatusReason>,
+    pub status_reason: Option<String>,
     #[doc="<p>If you execute the change set, the tags that will be associated with the stack.</p>"]
-    pub tags: Option<Tags>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 struct DescribeChangeSetOutputDeserializer;
@@ -1418,9 +1396,9 @@ impl DescribeChangeSetOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeStackEventsInput {
     #[doc="<p>A string that identifies the next page of events that you want to retrieve.</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
     #[doc="<p>The name or the unique stack ID that is associated with the stack, which are not always interchangeable:</p> <ul> <li> <p>Running stacks: You can specify either the stack's name or its unique stack ID.</p> </li> <li> <p>Deleted stacks: You must specify the unique stack ID.</p> </li> </ul> <p>Default: There is no default value.</p>"]
-    pub stack_name: Option<StackName>,
+    pub stack_name: Option<String>,
 }
 
 
@@ -1447,9 +1425,9 @@ impl DescribeStackEventsInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeStackEventsOutput {
     #[doc="<p>If the output exceeds 1 MB in size, a string that identifies the next page of events. If no additional page exists, this value is null.</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
     #[doc="<p>A list of <code>StackEvents</code> structures.</p>"]
-    pub stack_events: Option<StackEvents>,
+    pub stack_events: Option<Vec<StackEvent>>,
 }
 
 struct DescribeStackEventsOutputDeserializer;
@@ -1503,9 +1481,9 @@ impl DescribeStackEventsOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeStackResourceInput {
     #[doc="<p>The logical name of the resource as specified in the template.</p> <p>Default: There is no default value.</p>"]
-    pub logical_resource_id: LogicalResourceId,
+    pub logical_resource_id: String,
     #[doc="<p>The name or the unique stack ID that is associated with the stack, which are not always interchangeable:</p> <ul> <li> <p>Running stacks: You can specify either the stack's name or its unique stack ID.</p> </li> <li> <p>Deleted stacks: You must specify the unique stack ID.</p> </li> </ul> <p>Default: There is no default value.</p>"]
-    pub stack_name: StackName,
+    pub stack_name: String,
 }
 
 
@@ -1579,11 +1557,11 @@ impl DescribeStackResourceOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeStackResourcesInput {
     #[doc="<p>The logical name of the resource as specified in the template.</p> <p>Default: There is no default value.</p>"]
-    pub logical_resource_id: Option<LogicalResourceId>,
+    pub logical_resource_id: Option<String>,
     #[doc="<p>The name or unique identifier that corresponds to a physical instance ID of a resource supported by AWS CloudFormation.</p> <p>For example, for an Amazon Elastic Compute Cloud (EC2) instance, <code>PhysicalResourceId</code> corresponds to the <code>InstanceId</code>. You can pass the EC2 <code>InstanceId</code> to <code>DescribeStackResources</code> to find which stack the instance belongs to and what other resources are part of the stack.</p> <p>Required: Conditional. If you do not specify <code>PhysicalResourceId</code>, you must specify <code>StackName</code>.</p> <p>Default: There is no default value.</p>"]
-    pub physical_resource_id: Option<PhysicalResourceId>,
+    pub physical_resource_id: Option<String>,
     #[doc="<p>The name or the unique stack ID that is associated with the stack, which are not always interchangeable:</p> <ul> <li> <p>Running stacks: You can specify either the stack's name or its unique stack ID.</p> </li> <li> <p>Deleted stacks: You must specify the unique stack ID.</p> </li> </ul> <p>Default: There is no default value.</p> <p>Required: Conditional. If you do not specify <code>StackName</code>, you must specify <code>PhysicalResourceId</code>.</p>"]
-    pub stack_name: Option<StackName>,
+    pub stack_name: Option<String>,
 }
 
 
@@ -1613,7 +1591,7 @@ impl DescribeStackResourcesInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeStackResourcesOutput {
     #[doc="<p>A list of <code>StackResource</code> structures.</p>"]
-    pub stack_resources: Option<StackResources>,
+    pub stack_resources: Option<Vec<StackResource>>,
 }
 
 struct DescribeStackResourcesOutputDeserializer;
@@ -1663,9 +1641,9 @@ impl DescribeStackResourcesOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeStacksInput {
     #[doc="<p>A string that identifies the next page of stacks that you want to retrieve.</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
     #[doc="<p>The name or the unique stack ID that is associated with the stack, which are not always interchangeable:</p> <ul> <li> <p>Running stacks: You can specify either the stack's name or its unique stack ID.</p> </li> <li> <p>Deleted stacks: You must specify the unique stack ID.</p> </li> </ul> <p>Default: There is no default value.</p>"]
-    pub stack_name: Option<StackName>,
+    pub stack_name: Option<String>,
 }
 
 
@@ -1692,9 +1670,9 @@ impl DescribeStacksInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeStacksOutput {
     #[doc="<p>If the output exceeds 1 MB in size, a string that identifies the next page of stacks. If no additional page exists, this value is null.</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
     #[doc="<p>A list of stack structures.</p>"]
-    pub stacks: Option<Stacks>,
+    pub stacks: Option<Vec<Stack>>,
 }
 
 struct DescribeStacksOutputDeserializer;
@@ -1743,13 +1721,12 @@ impl DescribeStacksOutputDeserializer {
 
     }
 }
-pub type Description = String;
 struct DescriptionDeserializer;
 impl DescriptionDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Description, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1758,13 +1735,12 @@ impl DescriptionDeserializer {
 
     }
 }
-pub type DisableRollback = bool;
 struct DisableRollbackDeserializer;
 impl DisableRollbackDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DisableRollback, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -1777,11 +1753,11 @@ impl DisableRollbackDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct EstimateTemplateCostInput {
     #[doc="<p>A list of <code>Parameter</code> structures that specify input parameters.</p>"]
-    pub parameters: Option<Parameters>,
+    pub parameters: Option<Vec<Parameter>>,
     #[doc="<p>Structure containing the template body with a minimum length of 1 byte and a maximum length of 51,200 bytes. (For more information, go to <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html\">Template Anatomy</a> in the AWS CloudFormation User Guide.)</p> <p>Conditional: You must pass <code>TemplateBody</code> or <code>TemplateURL</code>. If both are passed, only <code>TemplateBody</code> is used.</p>"]
-    pub template_body: Option<TemplateBody>,
+    pub template_body: Option<String>,
     #[doc="<p>Location of file containing the template body. The URL must point to a template that is located in an Amazon S3 bucket. For more information, go to <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html\">Template Anatomy</a> in the AWS CloudFormation User Guide.</p> <p>Conditional: You must pass <code>TemplateURL</code> or <code>TemplateBody</code>. If both are passed, only <code>TemplateBody</code> is used.</p>"]
-    pub template_url: Option<TemplateURL>,
+    pub template_url: Option<String>,
 }
 
 
@@ -1813,7 +1789,7 @@ impl EstimateTemplateCostInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct EstimateTemplateCostOutput {
     #[doc="<p>An AWS Simple Monthly Calculator URL with a query string that describes the resources required to run the template.</p>"]
-    pub url: Option<Url>,
+    pub url: Option<String>,
 }
 
 struct EstimateTemplateCostOutputDeserializer;
@@ -1857,13 +1833,12 @@ impl EstimateTemplateCostOutputDeserializer {
 
     }
 }
-pub type EvaluationType = String;
 struct EvaluationTypeDeserializer;
 impl EvaluationTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EvaluationType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1872,13 +1847,12 @@ impl EvaluationTypeDeserializer {
 
     }
 }
-pub type EventId = String;
 struct EventIdDeserializer;
 impl EventIdDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EventId, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1891,11 +1865,11 @@ impl EventIdDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ExecuteChangeSetInput {
     #[doc="<p>The name or ARN of the change set that you want use to update the specified stack.</p>"]
-    pub change_set_name: ChangeSetNameOrId,
+    pub change_set_name: String,
     #[doc="<p>A unique identifier for this <code>ExecuteChangeSet</code> request. Specify this token if you plan to retry requests so that AWS CloudFormation knows that you're not attempting to execute a change set to update a stack with the same name. You might retry <code>ExecuteChangeSet</code> requests to ensure that AWS CloudFormation successfully received them.</p>"]
-    pub client_request_token: Option<ClientRequestToken>,
+    pub client_request_token: Option<String>,
     #[doc="<p>If you specified the name of a change set, specify the stack name or ID (ARN) that is associated with the change set you want to execute.</p>"]
-    pub stack_name: Option<StackNameOrId>,
+    pub stack_name: Option<String>,
 }
 
 
@@ -1940,13 +1914,12 @@ impl ExecuteChangeSetOutputDeserializer {
 
     }
 }
-pub type ExecutionStatus = String;
 struct ExecutionStatusDeserializer;
 impl ExecutionStatusDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ExecutionStatus, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1959,11 +1932,11 @@ impl ExecutionStatusDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct Export {
     #[doc="<p>The stack that contains the exported output name and value.</p>"]
-    pub exporting_stack_id: Option<StackId>,
+    pub exporting_stack_id: Option<String>,
     #[doc="<p>The name of exported output value. Use this name and the <code>Fn::ImportValue</code> function to import the associated value into other stacks. The name is defined in the <code>Export</code> field in the associated stack's <code>Outputs</code> section.</p>"]
-    pub name: Option<ExportName>,
+    pub name: Option<String>,
     #[doc="<p>The value of the exported output, such as a resource physical ID. This value is defined in the <code>Export</code> field in the associated stack's <code>Outputs</code> section.</p>"]
-    pub value: Option<ExportValue>,
+    pub value: Option<String>,
 }
 
 struct ExportDeserializer;
@@ -2017,13 +1990,12 @@ impl ExportDeserializer {
 
     }
 }
-pub type ExportName = String;
 struct ExportNameDeserializer;
 impl ExportNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ExportName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2032,13 +2004,12 @@ impl ExportNameDeserializer {
 
     }
 }
-pub type ExportValue = String;
 struct ExportValueDeserializer;
 impl ExportValueDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ExportValue, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2047,13 +2018,12 @@ impl ExportValueDeserializer {
 
     }
 }
-pub type Exports = Vec<Export>;
 struct ExportsDeserializer;
 impl ExportsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Exports, XmlParseError> {
+                                       -> Result<Vec<Export>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -2093,7 +2063,7 @@ impl ExportsDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetStackPolicyInput {
     #[doc="<p>The name or unique stack ID that is associated with the stack whose policy you want to get.</p>"]
-    pub stack_name: StackName,
+    pub stack_name: String,
 }
 
 
@@ -2115,7 +2085,7 @@ impl GetStackPolicyInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetStackPolicyOutput {
     #[doc="<p>Structure containing the stack policy body. (For more information, go to <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/protect-stack-resources.html\"> Prevent Updates to Stack Resources</a> in the AWS CloudFormation User Guide.)</p>"]
-    pub stack_policy_body: Option<StackPolicyBody>,
+    pub stack_policy_body: Option<String>,
 }
 
 struct GetStackPolicyOutputDeserializer;
@@ -2165,11 +2135,11 @@ impl GetStackPolicyOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetTemplateInput {
     #[doc="<p>The name or Amazon Resource Name (ARN) of a change set for which AWS CloudFormation returns the associated template. If you specify a name, you must also specify the <code>StackName</code>.</p>"]
-    pub change_set_name: Option<ChangeSetNameOrId>,
+    pub change_set_name: Option<String>,
     #[doc="<p>The name or the unique stack ID that is associated with the stack, which are not always interchangeable:</p> <ul> <li> <p>Running stacks: You can specify either the stack's name or its unique stack ID.</p> </li> <li> <p>Deleted stacks: You must specify the unique stack ID.</p> </li> </ul> <p>Default: There is no default value.</p>"]
-    pub stack_name: Option<StackName>,
+    pub stack_name: Option<String>,
     #[doc="<p>For templates that include transforms, the stage of the template that AWS CloudFormation returns. To get the user-submitted template, specify <code>Original</code>. To get the template after AWS CloudFormation has processed all transforms, specify <code>Processed</code>. </p> <p>If the template doesn't include transforms, <code>Original</code> and <code>Processed</code> return the same template. By default, AWS CloudFormation specifies <code>Original</code>. </p>"]
-    pub template_stage: Option<TemplateStage>,
+    pub template_stage: Option<String>,
 }
 
 
@@ -2199,9 +2169,9 @@ impl GetTemplateInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetTemplateOutput {
     #[doc="<p>The stage of the template that you can retrieve. For stacks, the <code>Original</code> and <code>Processed</code> templates are always available. For change sets, the <code>Original</code> template is always available. After AWS CloudFormation finishes creating the change set, the <code>Processed</code> template becomes available.</p>"]
-    pub stages_available: Option<StageList>,
+    pub stages_available: Option<Vec<String>>,
     #[doc="<p>Structure containing the template body. (For more information, go to <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html\">Template Anatomy</a> in the AWS CloudFormation User Guide.)</p> <p>AWS CloudFormation returns the same template that was used when the stack was created.</p>"]
-    pub template_body: Option<TemplateBody>,
+    pub template_body: Option<String>,
 }
 
 struct GetTemplateOutputDeserializer;
@@ -2256,11 +2226,11 @@ impl GetTemplateOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetTemplateSummaryInput {
     #[doc="<p>The name or the stack ID that is associated with the stack, which are not always interchangeable. For running stacks, you can specify either the stack's name or its unique stack ID. For deleted stack, you must specify the unique stack ID.</p> <p>Conditional: You must specify only one of the following parameters: <code>StackName</code>, <code>TemplateBody</code>, or <code>TemplateURL</code>.</p>"]
-    pub stack_name: Option<StackNameOrId>,
+    pub stack_name: Option<String>,
     #[doc="<p>Structure containing the template body with a minimum length of 1 byte and a maximum length of 51,200 bytes. For more information about templates, see <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html\">Template Anatomy</a> in the AWS CloudFormation User Guide.</p> <p>Conditional: You must specify only one of the following parameters: <code>StackName</code>, <code>TemplateBody</code>, or <code>TemplateURL</code>.</p>"]
-    pub template_body: Option<TemplateBody>,
+    pub template_body: Option<String>,
     #[doc="<p>Location of file containing the template body. The URL must point to a template (max size: 460,800 bytes) that is located in an Amazon S3 bucket. For more information about templates, see <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html\">Template Anatomy</a> in the AWS CloudFormation User Guide.</p> <p>Conditional: You must specify only one of the following parameters: <code>StackName</code>, <code>TemplateBody</code>, or <code>TemplateURL</code>.</p>"]
-    pub template_url: Option<TemplateURL>,
+    pub template_url: Option<String>,
 }
 
 
@@ -2290,21 +2260,21 @@ impl GetTemplateSummaryInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetTemplateSummaryOutput {
     #[doc="<p>The capabilities found within the template. If your template contains IAM resources, you must specify the CAPABILITY_IAM or CAPABILITY_NAMED_IAM value for this parameter when you use the <a>CreateStack</a> or <a>UpdateStack</a> actions with your template; otherwise, those actions return an InsufficientCapabilities error.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#capabilities\">Acknowledging IAM Resources in AWS CloudFormation Templates</a>.</p>"]
-    pub capabilities: Option<Capabilities>,
+    pub capabilities: Option<Vec<String>>,
     #[doc="<p>The list of resources that generated the values in the <code>Capabilities</code> response element.</p>"]
-    pub capabilities_reason: Option<CapabilitiesReason>,
+    pub capabilities_reason: Option<String>,
     #[doc="<p>A list of the transforms that are declared in the template.</p>"]
-    pub declared_transforms: Option<TransformsList>,
+    pub declared_transforms: Option<Vec<String>>,
     #[doc="<p>The value that is defined in the <code>Description</code> property of the template.</p>"]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[doc="<p>The value that is defined for the <code>Metadata</code> property of the template.</p>"]
-    pub metadata: Option<Metadata>,
+    pub metadata: Option<String>,
     #[doc="<p>A list of parameter declarations that describe various properties for each parameter.</p>"]
-    pub parameters: Option<ParameterDeclarations>,
+    pub parameters: Option<Vec<ParameterDeclaration>>,
     #[doc="<p>A list of all the template resource types that are defined in the template, such as <code>AWS::EC2::Instance</code>, <code>AWS::Dynamo::Table</code>, and <code>Custom::MyCustomInstance</code>.</p>"]
-    pub resource_types: Option<ResourceTypes>,
+    pub resource_types: Option<Vec<String>>,
     #[doc="<p>The AWS template format version, which identifies the capabilities of the template.</p>"]
-    pub version: Option<Version>,
+    pub version: Option<String>,
 }
 
 struct GetTemplateSummaryOutputDeserializer;
@@ -2383,13 +2353,12 @@ impl GetTemplateSummaryOutputDeserializer {
 
     }
 }
-pub type Imports = Vec<StackName>;
 struct ImportsDeserializer;
 impl ImportsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Imports, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -2425,13 +2394,12 @@ impl ImportsDeserializer {
 
     }
 }
-pub type LastUpdatedTime = String;
 struct LastUpdatedTimeDeserializer;
 impl LastUpdatedTimeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LastUpdatedTime, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2440,13 +2408,12 @@ impl LastUpdatedTimeDeserializer {
 
     }
 }
-pub type LimitName = String;
 struct LimitNameDeserializer;
 impl LimitNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LimitName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2455,13 +2422,12 @@ impl LimitNameDeserializer {
 
     }
 }
-pub type LimitValue = i64;
 struct LimitValueDeserializer;
 impl LimitValueDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LimitValue, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -2474,9 +2440,9 @@ impl LimitValueDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListChangeSetsInput {
     #[doc="<p>A string (provided by the <a>ListChangeSets</a> response output) that identifies the next page of change sets that you want to retrieve.</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
     #[doc="<p>The name or the Amazon Resource Name (ARN) of the stack for which you want to list change sets.</p>"]
-    pub stack_name: StackNameOrId,
+    pub stack_name: String,
 }
 
 
@@ -2501,9 +2467,9 @@ impl ListChangeSetsInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListChangeSetsOutput {
     #[doc="<p>If the output exceeds 1 MB, a string that identifies the next page of change sets. If there is no additional page, this value is null.</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
     #[doc="<p>A list of <code>ChangeSetSummary</code> structures that provides the ID and status of each change set for the specified stack.</p>"]
-    pub summaries: Option<ChangeSetSummaries>,
+    pub summaries: Option<Vec<ChangeSetSummary>>,
 }
 
 struct ListChangeSetsOutputDeserializer;
@@ -2556,7 +2522,7 @@ impl ListChangeSetsOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListExportsInput {
     #[doc="<p>A string (provided by the <a>ListExports</a> response output) that identifies the next page of exported output values that you asked to retrieve.</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
 
@@ -2579,9 +2545,9 @@ impl ListExportsInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListExportsOutput {
     #[doc="<p>The output for the <a>ListExports</a> action.</p>"]
-    pub exports: Option<Exports>,
+    pub exports: Option<Vec<Export>>,
     #[doc="<p>If the output exceeds 100 exported output values, a string that identifies the next page of exports. If there is no additional page, this value is null.</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
 struct ListExportsOutputDeserializer;
@@ -2633,9 +2599,9 @@ impl ListExportsOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListImportsInput {
     #[doc="<p>The name of the exported output value. AWS CloudFormation returns the stack names that are importing this value. </p>"]
-    pub export_name: ExportName,
+    pub export_name: String,
     #[doc="<p>A string (provided by the <a>ListImports</a> response output) that identifies the next page of stacks that are importing the specified exported output value. </p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
 
@@ -2659,9 +2625,9 @@ impl ListImportsInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListImportsOutput {
     #[doc="<p>A list of stack names that are importing the specified exported output value. </p>"]
-    pub imports: Option<Imports>,
+    pub imports: Option<Vec<String>>,
     #[doc="<p>A string that identifies the next page of exports. If there is no additional page, this value is null.</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
 struct ListImportsOutputDeserializer;
@@ -2714,9 +2680,9 @@ impl ListImportsOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListStackResourcesInput {
     #[doc="<p>A string that identifies the next page of stack resources that you want to retrieve.</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
     #[doc="<p>The name or the unique stack ID that is associated with the stack, which are not always interchangeable:</p> <ul> <li> <p>Running stacks: You can specify either the stack's name or its unique stack ID.</p> </li> <li> <p>Deleted stacks: You must specify the unique stack ID.</p> </li> </ul> <p>Default: There is no default value.</p>"]
-    pub stack_name: StackName,
+    pub stack_name: String,
 }
 
 
@@ -2741,9 +2707,9 @@ impl ListStackResourcesInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListStackResourcesOutput {
     #[doc="<p>If the output exceeds 1 MB, a string that identifies the next page of stack resources. If no additional page exists, this value is null.</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
     #[doc="<p>A list of <code>StackResourceSummary</code> structures.</p>"]
-    pub stack_resource_summaries: Option<StackResourceSummaries>,
+    pub stack_resource_summaries: Option<Vec<StackResourceSummary>>,
 }
 
 struct ListStackResourcesOutputDeserializer;
@@ -2797,9 +2763,9 @@ impl ListStackResourcesOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListStacksInput {
     #[doc="<p>A string that identifies the next page of stacks that you want to retrieve.</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
     #[doc="<p>Stack status to use as a filter. Specify one or more stack status codes to list only stacks with the specified status codes. For a complete list of stack status codes, see the <code>StackStatus</code> parameter of the <a>Stack</a> data type.</p>"]
-    pub stack_status_filter: Option<StackStatusFilter>,
+    pub stack_status_filter: Option<Vec<String>>,
 }
 
 
@@ -2828,9 +2794,9 @@ impl ListStacksInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ListStacksOutput {
     #[doc="<p>If the output exceeds 1 MB in size, a string that identifies the next page of stacks. If no additional page exists, this value is null.</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
     #[doc="<p>A list of <code>StackSummary</code> structures containing information about the specified stacks.</p>"]
-    pub stack_summaries: Option<StackSummaries>,
+    pub stack_summaries: Option<Vec<StackSummary>>,
 }
 
 struct ListStacksOutputDeserializer;
@@ -2880,13 +2846,12 @@ impl ListStacksOutputDeserializer {
 
     }
 }
-pub type LogicalResourceId = String;
 struct LogicalResourceIdDeserializer;
 impl LogicalResourceIdDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LogicalResourceId, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2895,13 +2860,12 @@ impl LogicalResourceIdDeserializer {
 
     }
 }
-pub type Metadata = String;
 struct MetadataDeserializer;
 impl MetadataDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Metadata, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2910,13 +2874,12 @@ impl MetadataDeserializer {
 
     }
 }
-pub type NextToken = String;
 struct NextTokenDeserializer;
 impl NextTokenDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NextToken, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2925,13 +2888,12 @@ impl NextTokenDeserializer {
 
     }
 }
-pub type NoEcho = bool;
 struct NoEchoDeserializer;
 impl NoEchoDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NoEcho, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -2940,13 +2902,12 @@ impl NoEchoDeserializer {
 
     }
 }
-pub type NotificationARN = String;
 struct NotificationARNDeserializer;
 impl NotificationARNDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NotificationARN, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2955,13 +2916,12 @@ impl NotificationARNDeserializer {
 
     }
 }
-pub type NotificationARNs = Vec<NotificationARN>;
 struct NotificationARNsDeserializer;
 impl NotificationARNsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NotificationARNs, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -3001,7 +2961,7 @@ impl NotificationARNsDeserializer {
 /// Serialize `NotificationARNs` contents to a `SignedRequest`.
 struct NotificationARNsSerializer;
 impl NotificationARNsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &NotificationARNs) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -3009,16 +2969,15 @@ impl NotificationARNsSerializer {
     }
 }
 
-pub type OnFailure = String;
 #[doc="<p>The Output data type.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct Output {
     #[doc="<p>User defined description associated with the output.</p>"]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[doc="<p>The key associated with the output.</p>"]
-    pub output_key: Option<OutputKey>,
+    pub output_key: Option<String>,
     #[doc="<p>The value associated with the output.</p>"]
-    pub output_value: Option<OutputValue>,
+    pub output_value: Option<String>,
 }
 
 struct OutputDeserializer;
@@ -3073,13 +3032,12 @@ impl OutputDeserializer {
 
     }
 }
-pub type OutputKey = String;
 struct OutputKeyDeserializer;
 impl OutputKeyDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<OutputKey, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3088,13 +3046,12 @@ impl OutputKeyDeserializer {
 
     }
 }
-pub type OutputValue = String;
 struct OutputValueDeserializer;
 impl OutputValueDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<OutputValue, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3103,13 +3060,12 @@ impl OutputValueDeserializer {
 
     }
 }
-pub type Outputs = Vec<Output>;
 struct OutputsDeserializer;
 impl OutputsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Outputs, XmlParseError> {
+                                       -> Result<Vec<Output>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -3149,11 +3105,11 @@ impl OutputsDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct Parameter {
     #[doc="<p>The key associated with the parameter. If you don't specify a key and value for a particular parameter, AWS CloudFormation uses the default value that is specified in your template.</p>"]
-    pub parameter_key: Option<ParameterKey>,
+    pub parameter_key: Option<String>,
     #[doc="<p>The value associated with the parameter.</p>"]
-    pub parameter_value: Option<ParameterValue>,
+    pub parameter_value: Option<String>,
     #[doc="<p>During a stack update, use the existing parameter value that the stack is using for a given parameter key. If you specify <code>true</code>, do not specify a parameter value.</p>"]
-    pub use_previous_value: Option<UsePreviousValue>,
+    pub use_previous_value: Option<bool>,
 }
 
 struct ParameterDeserializer;
@@ -3237,7 +3193,7 @@ impl ParameterSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ParameterConstraints {
     #[doc="<p>A list of values that are permitted for a parameter.</p>"]
-    pub allowed_values: Option<AllowedValues>,
+    pub allowed_values: Option<Vec<String>>,
 }
 
 struct ParameterConstraintsDeserializer;
@@ -3287,17 +3243,17 @@ impl ParameterConstraintsDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ParameterDeclaration {
     #[doc="<p>The default value of the parameter.</p>"]
-    pub default_value: Option<ParameterValue>,
+    pub default_value: Option<String>,
     #[doc="<p>The description that is associate with the parameter.</p>"]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[doc="<p>Flag that indicates whether the parameter value is shown as plain text in logs and in the AWS Management Console.</p>"]
-    pub no_echo: Option<NoEcho>,
+    pub no_echo: Option<bool>,
     #[doc="<p>The criteria that AWS CloudFormation uses to validate parameter values.</p>"]
     pub parameter_constraints: Option<ParameterConstraints>,
     #[doc="<p>The name that is associated with the parameter.</p>"]
-    pub parameter_key: Option<ParameterKey>,
+    pub parameter_key: Option<String>,
     #[doc="<p>The type of parameter.</p>"]
-    pub parameter_type: Option<ParameterType>,
+    pub parameter_type: Option<String>,
 }
 
 struct ParameterDeclarationDeserializer;
@@ -3367,13 +3323,12 @@ impl ParameterDeclarationDeserializer {
 
     }
 }
-pub type ParameterDeclarations = Vec<ParameterDeclaration>;
 struct ParameterDeclarationsDeserializer;
 impl ParameterDeclarationsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ParameterDeclarations, XmlParseError> {
+                                       -> Result<Vec<ParameterDeclaration>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -3410,13 +3365,12 @@ impl ParameterDeclarationsDeserializer {
 
     }
 }
-pub type ParameterKey = String;
 struct ParameterKeyDeserializer;
 impl ParameterKeyDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ParameterKey, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3425,13 +3379,12 @@ impl ParameterKeyDeserializer {
 
     }
 }
-pub type ParameterType = String;
 struct ParameterTypeDeserializer;
 impl ParameterTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ParameterType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3440,13 +3393,12 @@ impl ParameterTypeDeserializer {
 
     }
 }
-pub type ParameterValue = String;
 struct ParameterValueDeserializer;
 impl ParameterValueDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ParameterValue, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3455,13 +3407,12 @@ impl ParameterValueDeserializer {
 
     }
 }
-pub type Parameters = Vec<Parameter>;
 struct ParametersDeserializer;
 impl ParametersDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Parameters, XmlParseError> {
+                                       -> Result<Vec<Parameter>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -3501,7 +3452,7 @@ impl ParametersDeserializer {
 /// Serialize `Parameters` contents to a `SignedRequest`.
 struct ParametersSerializer;
 impl ParametersSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Parameters) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<Parameter>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             ParameterSerializer::serialize(params, &key, obj);
@@ -3509,13 +3460,12 @@ impl ParametersSerializer {
     }
 }
 
-pub type PhysicalResourceId = String;
 struct PhysicalResourceIdDeserializer;
 impl PhysicalResourceIdDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PhysicalResourceId, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3524,13 +3474,12 @@ impl PhysicalResourceIdDeserializer {
 
     }
 }
-pub type PropertyName = String;
 struct PropertyNameDeserializer;
 impl PropertyNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PropertyName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3539,13 +3488,12 @@ impl PropertyNameDeserializer {
 
     }
 }
-pub type Replacement = String;
 struct ReplacementDeserializer;
 impl ReplacementDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Replacement, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3554,13 +3502,12 @@ impl ReplacementDeserializer {
 
     }
 }
-pub type RequiresRecreation = String;
 struct RequiresRecreationDeserializer;
 impl RequiresRecreationDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<RequiresRecreation, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3569,13 +3516,12 @@ impl RequiresRecreationDeserializer {
 
     }
 }
-pub type ResourceAttribute = String;
 struct ResourceAttributeDeserializer;
 impl ResourceAttributeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ResourceAttribute, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3588,19 +3534,19 @@ impl ResourceAttributeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ResourceChange {
     #[doc="<p>The action that AWS CloudFormation takes on the resource, such as <code>Add</code> (adds a new resource), <code>Modify</code> (changes a resource), or <code>Remove</code> (deletes a resource).</p>"]
-    pub action: Option<ChangeAction>,
+    pub action: Option<String>,
     #[doc="<p>For the <code>Modify</code> action, a list of <code>ResourceChangeDetail</code> structures that describes the changes that AWS CloudFormation will make to the resource. </p>"]
-    pub details: Option<ResourceChangeDetails>,
+    pub details: Option<Vec<ResourceChangeDetail>>,
     #[doc="<p>The resource's logical ID, which is defined in the stack's template.</p>"]
-    pub logical_resource_id: Option<LogicalResourceId>,
+    pub logical_resource_id: Option<String>,
     #[doc="<p>The resource's physical ID (resource name). Resources that you are adding don't have physical IDs because they haven't been created.</p>"]
-    pub physical_resource_id: Option<PhysicalResourceId>,
+    pub physical_resource_id: Option<String>,
     #[doc="<p>For the <code>Modify</code> action, indicates whether AWS CloudFormation will replace the resource by creating a new one and deleting the old one. This value depends on the value of the <code>RequiresRecreation</code> property in the <code>ResourceTargetDefinition</code> structure. For example, if the <code>RequiresRecreation</code> field is <code>Always</code> and the <code>Evaluation</code> field is <code>Static</code>, <code>Replacement</code> is <code>True</code>. If the <code>RequiresRecreation</code> field is <code>Always</code> and the <code>Evaluation</code> field is <code>Dynamic</code>, <code>Replacement</code> is <code>Conditionally</code>.</p> <p>If you have multiple changes with different <code>RequiresRecreation</code> values, the <code>Replacement</code> value depends on the change with the most impact. A <code>RequiresRecreation</code> value of <code>Always</code> has the most impact, followed by <code>Conditionally</code>, and then <code>Never</code>.</p>"]
-    pub replacement: Option<Replacement>,
+    pub replacement: Option<String>,
     #[doc="<p>The type of AWS CloudFormation resource, such as <code>AWS::S3::Bucket</code>.</p>"]
-    pub resource_type: Option<ResourceType>,
+    pub resource_type: Option<String>,
     #[doc="<p>For the <code>Modify</code> action, indicates which resource attribute is triggering this update, such as a change in the resource attribute's <code>Metadata</code>, <code>Properties</code>, or <code>Tags</code>.</p>"]
-    pub scope: Option<Scope>,
+    pub scope: Option<Vec<String>>,
 }
 
 struct ResourceChangeDeserializer;
@@ -3677,11 +3623,11 @@ impl ResourceChangeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ResourceChangeDetail {
     #[doc="<p>The identity of the entity that triggered this change. This entity is a member of the group that is specified by the <code>ChangeSource</code> field. For example, if you modified the value of the <code>KeyPairName</code> parameter, the <code>CausingEntity</code> is the name of the parameter (<code>KeyPairName</code>).</p> <p>If the <code>ChangeSource</code> value is <code>DirectModification</code>, no value is given for <code>CausingEntity</code>.</p>"]
-    pub causing_entity: Option<CausingEntity>,
+    pub causing_entity: Option<String>,
     #[doc="<p>The group to which the <code>CausingEntity</code> value belongs. There are five entity groups:</p> <ul> <li> <p> <code>ResourceReference</code> entities are <code>Ref</code> intrinsic functions that refer to resources in the template, such as <code>{ \"Ref\" : \"MyEC2InstanceResource\" }</code>.</p> </li> <li> <p> <code>ParameterReference</code> entities are <code>Ref</code> intrinsic functions that get template parameter values, such as <code>{ \"Ref\" : \"MyPasswordParameter\" }</code>.</p> </li> <li> <p> <code>ResourceAttribute</code> entities are <code>Fn::GetAtt</code> intrinsic functions that get resource attribute values, such as <code>{ \"Fn::GetAtt\" : [ \"MyEC2InstanceResource\", \"PublicDnsName\" ] }</code>.</p> </li> <li> <p> <code>DirectModification</code> entities are changes that are made directly to the template.</p> </li> <li> <p> <code>Automatic</code> entities are <code>AWS::CloudFormation::Stack</code> resource types, which are also known as nested stacks. If you made no changes to the <code>AWS::CloudFormation::Stack</code> resource, AWS CloudFormation sets the <code>ChangeSource</code> to <code>Automatic</code> because the nested stack's template might have changed. Changes to a nested stack's template aren't visible to AWS CloudFormation until you run an update on the parent stack.</p> </li> </ul>"]
-    pub change_source: Option<ChangeSource>,
+    pub change_source: Option<String>,
     #[doc="<p>Indicates whether AWS CloudFormation can determine the target value, and whether the target value will change before you execute a change set.</p> <p>For <code>Static</code> evaluations, AWS CloudFormation can determine that the target value will change, and its value. For example, if you directly modify the <code>InstanceType</code> property of an EC2 instance, AWS CloudFormation knows that this property value will change, and its value, so this is a <code>Static</code> evaluation.</p> <p>For <code>Dynamic</code> evaluations, cannot determine the target value because it depends on the result of an intrinsic function, such as a <code>Ref</code> or <code>Fn::GetAtt</code> intrinsic function, when the stack is updated. For example, if your template includes a reference to a resource that is conditionally recreated, the value of the reference (the physical ID of the resource) might change, depending on if the resource is recreated. If the resource is recreated, it will have a new physical ID, so all references to that resource will also be updated.</p>"]
-    pub evaluation: Option<EvaluationType>,
+    pub evaluation: Option<String>,
     #[doc="<p>A <code>ResourceTargetDefinition</code> structure that describes the field that AWS CloudFormation will change and whether the resource will be recreated.</p>"]
     pub target: Option<ResourceTargetDefinition>,
 }
@@ -3742,13 +3688,12 @@ impl ResourceChangeDetailDeserializer {
 
     }
 }
-pub type ResourceChangeDetails = Vec<ResourceChangeDetail>;
 struct ResourceChangeDetailsDeserializer;
 impl ResourceChangeDetailsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ResourceChangeDetails, XmlParseError> {
+                                       -> Result<Vec<ResourceChangeDetail>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -3785,13 +3730,12 @@ impl ResourceChangeDetailsDeserializer {
 
     }
 }
-pub type ResourceProperties = String;
 struct ResourcePropertiesDeserializer;
 impl ResourcePropertiesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ResourceProperties, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3800,15 +3744,12 @@ impl ResourcePropertiesDeserializer {
 
     }
 }
-pub type ResourceSignalStatus = String;
-pub type ResourceSignalUniqueId = String;
-pub type ResourceStatus = String;
 struct ResourceStatusDeserializer;
 impl ResourceStatusDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ResourceStatus, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3817,13 +3758,12 @@ impl ResourceStatusDeserializer {
 
     }
 }
-pub type ResourceStatusReason = String;
 struct ResourceStatusReasonDeserializer;
 impl ResourceStatusReasonDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ResourceStatusReason, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3836,11 +3776,11 @@ impl ResourceStatusReasonDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ResourceTargetDefinition {
     #[doc="<p>Indicates which resource attribute is triggering this update, such as a change in the resource attribute's <code>Metadata</code>, <code>Properties</code>, or <code>Tags</code>.</p>"]
-    pub attribute: Option<ResourceAttribute>,
+    pub attribute: Option<String>,
     #[doc="<p>If the <code>Attribute</code> value is <code>Properties</code>, the name of the property. For all other attributes, the value is null.</p>"]
-    pub name: Option<PropertyName>,
+    pub name: Option<String>,
     #[doc="<p>If the <code>Attribute</code> value is <code>Properties</code>, indicates whether a change to this property causes the resource to be recreated. The value can be <code>Never</code>, <code>Always</code>, or <code>Conditionally</code>. To determine the conditions for a <code>Conditionally</code> recreation, see the update behavior for that <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html\">property</a> in the AWS CloudFormation User Guide.</p>"]
-    pub requires_recreation: Option<RequiresRecreation>,
+    pub requires_recreation: Option<String>,
 }
 
 struct ResourceTargetDefinitionDeserializer;
@@ -3895,14 +3835,12 @@ impl ResourceTargetDefinitionDeserializer {
 
     }
 }
-pub type ResourceToSkip = String;
-pub type ResourceType = String;
 struct ResourceTypeDeserializer;
 impl ResourceTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ResourceType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3911,13 +3849,12 @@ impl ResourceTypeDeserializer {
 
     }
 }
-pub type ResourceTypes = Vec<ResourceType>;
 struct ResourceTypesDeserializer;
 impl ResourceTypesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ResourceTypes, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -3957,7 +3894,7 @@ impl ResourceTypesDeserializer {
 /// Serialize `ResourceTypes` contents to a `SignedRequest`.
 struct ResourceTypesSerializer;
 impl ResourceTypesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ResourceTypes) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -3965,12 +3902,11 @@ impl ResourceTypesSerializer {
     }
 }
 
-pub type ResourcesToSkip = Vec<ResourceToSkip>;
 
 /// Serialize `ResourcesToSkip` contents to a `SignedRequest`.
 struct ResourcesToSkipSerializer;
 impl ResourcesToSkipSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ResourcesToSkip) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -3978,12 +3914,11 @@ impl ResourcesToSkipSerializer {
     }
 }
 
-pub type RetainResources = Vec<LogicalResourceId>;
 
 /// Serialize `RetainResources` contents to a `SignedRequest`.
 struct RetainResourcesSerializer;
 impl RetainResourcesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RetainResources) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -3991,13 +3926,12 @@ impl RetainResourcesSerializer {
     }
 }
 
-pub type RoleARN = String;
 struct RoleARNDeserializer;
 impl RoleARNDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<RoleARN, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4006,13 +3940,12 @@ impl RoleARNDeserializer {
 
     }
 }
-pub type Scope = Vec<ResourceAttribute>;
 struct ScopeDeserializer;
 impl ScopeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Scope, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4052,11 +3985,11 @@ impl ScopeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct SetStackPolicyInput {
     #[doc="<p>The name or unique stack ID that you want to associate a policy with.</p>"]
-    pub stack_name: StackName,
+    pub stack_name: String,
     #[doc="<p>Structure containing the stack policy body. For more information, go to <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/protect-stack-resources.html\"> Prevent Updates to Stack Resources</a> in the AWS CloudFormation User Guide. You can specify either the <code>StackPolicyBody</code> or the <code>StackPolicyURL</code> parameter, but not both.</p>"]
-    pub stack_policy_body: Option<StackPolicyBody>,
+    pub stack_policy_body: Option<String>,
     #[doc="<p>Location of a file containing the stack policy. The URL must point to a policy (maximum size: 16 KB) located in an S3 bucket in the same region as the stack. You can specify either the <code>StackPolicyBody</code> or the <code>StackPolicyURL</code> parameter, but not both.</p>"]
-    pub stack_policy_url: Option<StackPolicyURL>,
+    pub stack_policy_url: Option<String>,
 }
 
 
@@ -4084,13 +4017,13 @@ impl SetStackPolicyInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct SignalResourceInput {
     #[doc="<p>The logical ID of the resource that you want to signal. The logical ID is the name of the resource that given in the template.</p>"]
-    pub logical_resource_id: LogicalResourceId,
+    pub logical_resource_id: String,
     #[doc="<p>The stack name or unique stack ID that includes the resource that you want to signal.</p>"]
-    pub stack_name: StackNameOrId,
+    pub stack_name: String,
     #[doc="<p>The status of the signal, which is either success or failure. A failure signal causes AWS CloudFormation to immediately fail the stack creation or update.</p>"]
-    pub status: ResourceSignalStatus,
+    pub status: String,
     #[doc="<p>A unique ID of the signal. When you signal Amazon EC2 instances or Auto Scaling groups, specify the instance ID that you are signaling as the unique ID. If you send multiple signals to a single resource (such as signaling a wait condition), each signal requires a different unique ID.</p>"]
-    pub unique_id: ResourceSignalUniqueId,
+    pub unique_id: String,
 }
 
 
@@ -4116,37 +4049,37 @@ impl SignalResourceInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct Stack {
     #[doc="<p>The capabilities allowed in the stack.</p>"]
-    pub capabilities: Option<Capabilities>,
+    pub capabilities: Option<Vec<String>>,
     #[doc="<p>The unique ID of the change set.</p>"]
-    pub change_set_id: Option<ChangeSetId>,
+    pub change_set_id: Option<String>,
     #[doc="<p>The time at which the stack was created.</p>"]
-    pub creation_time: CreationTime,
+    pub creation_time: String,
     #[doc="<p>A user-defined description associated with the stack.</p>"]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[doc="<p>Boolean to enable or disable rollback on stack creation failures:</p> <ul> <li> <p> <code>true</code>: disable rollback</p> </li> <li> <p> <code>false</code>: enable rollback</p> </li> </ul>"]
-    pub disable_rollback: Option<DisableRollback>,
+    pub disable_rollback: Option<bool>,
     #[doc="<p>The time the stack was last updated. This field will only be returned if the stack has been updated at least once.</p>"]
-    pub last_updated_time: Option<LastUpdatedTime>,
+    pub last_updated_time: Option<String>,
     #[doc="<p>SNS topic ARNs to which stack related events are published.</p>"]
-    pub notification_ar_ns: Option<NotificationARNs>,
+    pub notification_ar_ns: Option<Vec<String>>,
     #[doc="<p>A list of output structures.</p>"]
-    pub outputs: Option<Outputs>,
+    pub outputs: Option<Vec<Output>>,
     #[doc="<p>A list of <code>Parameter</code> structures.</p>"]
-    pub parameters: Option<Parameters>,
+    pub parameters: Option<Vec<Parameter>>,
     #[doc="<p>The Amazon Resource Name (ARN) of an AWS Identity and Access Management (IAM) role that is associated with the stack. During a stack operation, AWS CloudFormation uses this role's credentials to make calls on your behalf.</p>"]
-    pub role_arn: Option<RoleARN>,
+    pub role_arn: Option<String>,
     #[doc="<p>Unique identifier of the stack.</p>"]
-    pub stack_id: Option<StackId>,
+    pub stack_id: Option<String>,
     #[doc="<p>The name associated with the stack.</p>"]
-    pub stack_name: StackName,
+    pub stack_name: String,
     #[doc="<p>Current status of the stack.</p>"]
-    pub stack_status: StackStatus,
+    pub stack_status: String,
     #[doc="<p>Success/failure message associated with the stack status.</p>"]
-    pub stack_status_reason: Option<StackStatusReason>,
+    pub stack_status_reason: Option<String>,
     #[doc="<p>A list of <code>Tag</code>s that specify information about the stack.</p>"]
-    pub tags: Option<Tags>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>The amount of time within which stack creation should complete.</p>"]
-    pub timeout_in_minutes: Option<TimeoutMinutes>,
+    pub timeout_in_minutes: Option<i64>,
 }
 
 struct StackDeserializer;
@@ -4262,27 +4195,27 @@ impl StackDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct StackEvent {
     #[doc="<p>The token passed to the operation that generated this event.</p> <p>For example, if you execute a <code>CreateStack</code> operation with the token <code>token1</code>, then all the <code>StackEvents</code> generated by that operation will have <code>ClientRequestToken</code> set as <code>token1</code>.</p>"]
-    pub client_request_token: Option<ClientRequestToken>,
+    pub client_request_token: Option<String>,
     #[doc="<p>The unique ID of this event.</p>"]
-    pub event_id: EventId,
+    pub event_id: String,
     #[doc="<p>The logical name of the resource specified in the template.</p>"]
-    pub logical_resource_id: Option<LogicalResourceId>,
+    pub logical_resource_id: Option<String>,
     #[doc="<p>The name or unique identifier associated with the physical instance of the resource.</p>"]
-    pub physical_resource_id: Option<PhysicalResourceId>,
+    pub physical_resource_id: Option<String>,
     #[doc="<p>BLOB of the properties used to create the resource.</p>"]
-    pub resource_properties: Option<ResourceProperties>,
+    pub resource_properties: Option<String>,
     #[doc="<p>Current status of the resource.</p>"]
-    pub resource_status: Option<ResourceStatus>,
+    pub resource_status: Option<String>,
     #[doc="<p>Success/failure message associated with the resource.</p>"]
-    pub resource_status_reason: Option<ResourceStatusReason>,
+    pub resource_status_reason: Option<String>,
     #[doc="<p>Type of resource. (For more information, go to <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html\"> AWS Resource Types Reference</a> in the AWS CloudFormation User Guide.)</p>"]
-    pub resource_type: Option<ResourceType>,
+    pub resource_type: Option<String>,
     #[doc="<p>The unique ID name of the instance of the stack.</p>"]
-    pub stack_id: StackId,
+    pub stack_id: String,
     #[doc="<p>The name associated with a stack.</p>"]
-    pub stack_name: StackName,
+    pub stack_name: String,
     #[doc="<p>Time the status was updated.</p>"]
-    pub timestamp: Timestamp,
+    pub timestamp: String,
 }
 
 struct StackEventDeserializer;
@@ -4372,13 +4305,12 @@ impl StackEventDeserializer {
 
     }
 }
-pub type StackEvents = Vec<StackEvent>;
 struct StackEventsDeserializer;
 impl StackEventsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<StackEvents, XmlParseError> {
+                                       -> Result<Vec<StackEvent>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4414,13 +4346,12 @@ impl StackEventsDeserializer {
 
     }
 }
-pub type StackId = String;
 struct StackIdDeserializer;
 impl StackIdDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<StackId, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4429,13 +4360,12 @@ impl StackIdDeserializer {
 
     }
 }
-pub type StackName = String;
 struct StackNameDeserializer;
 impl StackNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<StackName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4444,14 +4374,12 @@ impl StackNameDeserializer {
 
     }
 }
-pub type StackNameOrId = String;
-pub type StackPolicyBody = String;
 struct StackPolicyBodyDeserializer;
 impl StackPolicyBodyDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<StackPolicyBody, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4460,30 +4388,27 @@ impl StackPolicyBodyDeserializer {
 
     }
 }
-pub type StackPolicyDuringUpdateBody = String;
-pub type StackPolicyDuringUpdateURL = String;
-pub type StackPolicyURL = String;
 #[doc="<p>The StackResource data type.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct StackResource {
     #[doc="<p>User defined description associated with the resource.</p>"]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[doc="<p>The logical name of the resource specified in the template.</p>"]
-    pub logical_resource_id: LogicalResourceId,
+    pub logical_resource_id: String,
     #[doc="<p>The name or unique identifier that corresponds to a physical instance ID of a resource supported by AWS CloudFormation.</p>"]
-    pub physical_resource_id: Option<PhysicalResourceId>,
+    pub physical_resource_id: Option<String>,
     #[doc="<p>Current status of the resource.</p>"]
-    pub resource_status: ResourceStatus,
+    pub resource_status: String,
     #[doc="<p>Success/failure message associated with the resource.</p>"]
-    pub resource_status_reason: Option<ResourceStatusReason>,
+    pub resource_status_reason: Option<String>,
     #[doc="<p>Type of resource. (For more information, go to <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html\"> AWS Resource Types Reference</a> in the AWS CloudFormation User Guide.)</p>"]
-    pub resource_type: ResourceType,
+    pub resource_type: String,
     #[doc="<p>Unique identifier of the stack.</p>"]
-    pub stack_id: Option<StackId>,
+    pub stack_id: Option<String>,
     #[doc="<p>The name associated with the stack.</p>"]
-    pub stack_name: Option<StackName>,
+    pub stack_name: Option<String>,
     #[doc="<p>Time the status was updated.</p>"]
-    pub timestamp: Timestamp,
+    pub timestamp: String,
 }
 
 struct StackResourceDeserializer;
@@ -4569,25 +4494,25 @@ impl StackResourceDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct StackResourceDetail {
     #[doc="<p>User defined description associated with the resource.</p>"]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[doc="<p>Time the status was updated.</p>"]
-    pub last_updated_timestamp: Timestamp,
+    pub last_updated_timestamp: String,
     #[doc="<p>The logical name of the resource specified in the template.</p>"]
-    pub logical_resource_id: LogicalResourceId,
+    pub logical_resource_id: String,
     #[doc="<p>The content of the <code>Metadata</code> attribute declared for the resource. For more information, see <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-metadata.html\">Metadata Attribute</a> in the AWS CloudFormation User Guide.</p>"]
-    pub metadata: Option<Metadata>,
+    pub metadata: Option<String>,
     #[doc="<p>The name or unique identifier that corresponds to a physical instance ID of a resource supported by AWS CloudFormation.</p>"]
-    pub physical_resource_id: Option<PhysicalResourceId>,
+    pub physical_resource_id: Option<String>,
     #[doc="<p>Current status of the resource.</p>"]
-    pub resource_status: ResourceStatus,
+    pub resource_status: String,
     #[doc="<p>Success/failure message associated with the resource.</p>"]
-    pub resource_status_reason: Option<ResourceStatusReason>,
+    pub resource_status_reason: Option<String>,
     #[doc="<p>Type of resource. ((For more information, go to <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html\"> AWS Resource Types Reference</a> in the AWS CloudFormation User Guide.)</p>"]
-    pub resource_type: ResourceType,
+    pub resource_type: String,
     #[doc="<p>Unique identifier of the stack.</p>"]
-    pub stack_id: Option<StackId>,
+    pub stack_id: Option<String>,
     #[doc="<p>The name associated with the stack.</p>"]
-    pub stack_name: Option<StackName>,
+    pub stack_name: Option<String>,
 }
 
 struct StackResourceDetailDeserializer;
@@ -4674,13 +4599,12 @@ impl StackResourceDetailDeserializer {
 
     }
 }
-pub type StackResourceSummaries = Vec<StackResourceSummary>;
 struct StackResourceSummariesDeserializer;
 impl StackResourceSummariesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<StackResourceSummaries, XmlParseError> {
+                                       -> Result<Vec<StackResourceSummary>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4721,17 +4645,17 @@ impl StackResourceSummariesDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct StackResourceSummary {
     #[doc="<p>Time the status was updated.</p>"]
-    pub last_updated_timestamp: Timestamp,
+    pub last_updated_timestamp: String,
     #[doc="<p>The logical name of the resource specified in the template.</p>"]
-    pub logical_resource_id: LogicalResourceId,
+    pub logical_resource_id: String,
     #[doc="<p>The name or unique identifier that corresponds to a physical instance ID of the resource.</p>"]
-    pub physical_resource_id: Option<PhysicalResourceId>,
+    pub physical_resource_id: Option<String>,
     #[doc="<p>Current status of the resource.</p>"]
-    pub resource_status: ResourceStatus,
+    pub resource_status: String,
     #[doc="<p>Success/failure message associated with the resource.</p>"]
-    pub resource_status_reason: Option<ResourceStatusReason>,
+    pub resource_status_reason: Option<String>,
     #[doc="<p>Type of resource. (For more information, go to <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html\"> AWS Resource Types Reference</a> in the AWS CloudFormation User Guide.)</p>"]
-    pub resource_type: ResourceType,
+    pub resource_type: String,
 }
 
 struct StackResourceSummaryDeserializer;
@@ -4801,13 +4725,12 @@ impl StackResourceSummaryDeserializer {
 
     }
 }
-pub type StackResources = Vec<StackResource>;
 struct StackResourcesDeserializer;
 impl StackResourcesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<StackResources, XmlParseError> {
+                                       -> Result<Vec<StackResource>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4843,13 +4766,12 @@ impl StackResourcesDeserializer {
 
     }
 }
-pub type StackStatus = String;
 struct StackStatusDeserializer;
 impl StackStatusDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<StackStatus, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4858,12 +4780,11 @@ impl StackStatusDeserializer {
 
     }
 }
-pub type StackStatusFilter = Vec<StackStatus>;
 
 /// Serialize `StackStatusFilter` contents to a `SignedRequest`.
 struct StackStatusFilterSerializer;
 impl StackStatusFilterSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &StackStatusFilter) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -4871,13 +4792,12 @@ impl StackStatusFilterSerializer {
     }
 }
 
-pub type StackStatusReason = String;
 struct StackStatusReasonDeserializer;
 impl StackStatusReasonDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<StackStatusReason, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4886,13 +4806,12 @@ impl StackStatusReasonDeserializer {
 
     }
 }
-pub type StackSummaries = Vec<StackSummary>;
 struct StackSummariesDeserializer;
 impl StackSummariesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<StackSummaries, XmlParseError> {
+                                       -> Result<Vec<StackSummary>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4932,21 +4851,21 @@ impl StackSummariesDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct StackSummary {
     #[doc="<p>The time the stack was created.</p>"]
-    pub creation_time: CreationTime,
+    pub creation_time: String,
     #[doc="<p>The time the stack was deleted.</p>"]
-    pub deletion_time: Option<DeletionTime>,
+    pub deletion_time: Option<String>,
     #[doc="<p>The time the stack was last updated. This field will only be returned if the stack has been updated at least once.</p>"]
-    pub last_updated_time: Option<LastUpdatedTime>,
+    pub last_updated_time: Option<String>,
     #[doc="<p>Unique stack identifier.</p>"]
-    pub stack_id: Option<StackId>,
+    pub stack_id: Option<String>,
     #[doc="<p>The name associated with the stack.</p>"]
-    pub stack_name: StackName,
+    pub stack_name: String,
     #[doc="<p>The current status of the stack.</p>"]
-    pub stack_status: StackStatus,
+    pub stack_status: String,
     #[doc="<p>Success/Failure message associated with the stack status.</p>"]
-    pub stack_status_reason: Option<StackStatusReason>,
+    pub stack_status_reason: Option<String>,
     #[doc="<p>The template description of the template used to create the stack.</p>"]
-    pub template_description: Option<TemplateDescription>,
+    pub template_description: Option<String>,
 }
 
 struct StackSummaryDeserializer;
@@ -5023,13 +4942,12 @@ impl StackSummaryDeserializer {
 
     }
 }
-pub type Stacks = Vec<Stack>;
 struct StacksDeserializer;
 impl StacksDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Stacks, XmlParseError> {
+                                       -> Result<Vec<Stack>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5065,13 +4983,12 @@ impl StacksDeserializer {
 
     }
 }
-pub type StageList = Vec<TemplateStage>;
 struct StageListDeserializer;
 impl StageListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<StageList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5111,9 +5028,9 @@ impl StageListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct Tag {
     #[doc="<p> <i>Required</i>. A string used to identify this tag. You can specify a maximum of 128 characters for a tag key. Tags owned by Amazon Web Services (AWS) have the reserved prefix: <code>aws:</code>.</p>"]
-    pub key: Option<TagKey>,
+    pub key: Option<String>,
     #[doc="<p> <i>Required</i>. A string containing the value for this tag. You can specify a maximum of 256 characters for a tag value.</p>"]
-    pub value: Option<TagValue>,
+    pub value: Option<String>,
 }
 
 struct TagDeserializer;
@@ -5181,13 +5098,12 @@ impl TagSerializer {
     }
 }
 
-pub type TagKey = String;
 struct TagKeyDeserializer;
 impl TagKeyDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TagKey, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5196,13 +5112,12 @@ impl TagKeyDeserializer {
 
     }
 }
-pub type TagValue = String;
 struct TagValueDeserializer;
 impl TagValueDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TagValue, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5211,13 +5126,12 @@ impl TagValueDeserializer {
 
     }
 }
-pub type Tags = Vec<Tag>;
 struct TagsDeserializer;
 impl TagsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Tags, XmlParseError> {
+                                       -> Result<Vec<Tag>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5257,7 +5171,7 @@ impl TagsDeserializer {
 /// Serialize `Tags` contents to a `SignedRequest`.
 struct TagsSerializer;
 impl TagsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Tags) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<Tag>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             TagSerializer::serialize(params, &key, obj);
@@ -5265,13 +5179,12 @@ impl TagsSerializer {
     }
 }
 
-pub type TemplateBody = String;
 struct TemplateBodyDeserializer;
 impl TemplateBodyDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TemplateBody, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5280,13 +5193,12 @@ impl TemplateBodyDeserializer {
 
     }
 }
-pub type TemplateDescription = String;
 struct TemplateDescriptionDeserializer;
 impl TemplateDescriptionDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TemplateDescription, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5299,13 +5211,13 @@ impl TemplateDescriptionDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct TemplateParameter {
     #[doc="<p>The default value associated with the parameter.</p>"]
-    pub default_value: Option<ParameterValue>,
+    pub default_value: Option<String>,
     #[doc="<p>User defined description associated with the parameter.</p>"]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[doc="<p>Flag indicating whether the parameter should be displayed as plain text in logs and UIs.</p>"]
-    pub no_echo: Option<NoEcho>,
+    pub no_echo: Option<bool>,
     #[doc="<p>The name associated with the parameter.</p>"]
-    pub parameter_key: Option<ParameterKey>,
+    pub parameter_key: Option<String>,
 }
 
 struct TemplateParameterDeserializer;
@@ -5365,13 +5277,12 @@ impl TemplateParameterDeserializer {
 
     }
 }
-pub type TemplateParameters = Vec<TemplateParameter>;
 struct TemplateParametersDeserializer;
 impl TemplateParametersDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TemplateParameters, XmlParseError> {
+                                       -> Result<Vec<TemplateParameter>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5407,13 +5318,12 @@ impl TemplateParametersDeserializer {
 
     }
 }
-pub type TemplateStage = String;
 struct TemplateStageDeserializer;
 impl TemplateStageDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TemplateStage, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5422,14 +5332,12 @@ impl TemplateStageDeserializer {
 
     }
 }
-pub type TemplateURL = String;
-pub type TimeoutMinutes = i64;
 struct TimeoutMinutesDeserializer;
 impl TimeoutMinutesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TimeoutMinutes, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -5438,13 +5346,12 @@ impl TimeoutMinutesDeserializer {
 
     }
 }
-pub type Timestamp = String;
 struct TimestampDeserializer;
 impl TimestampDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Timestamp, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5453,13 +5360,12 @@ impl TimestampDeserializer {
 
     }
 }
-pub type TransformName = String;
 struct TransformNameDeserializer;
 impl TransformNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TransformName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5468,13 +5374,12 @@ impl TransformNameDeserializer {
 
     }
 }
-pub type TransformsList = Vec<TransformName>;
 struct TransformsListDeserializer;
 impl TransformsListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TransformsList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5514,35 +5419,35 @@ impl TransformsListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct UpdateStackInput {
     #[doc="<p>A list of values that you must specify before AWS CloudFormation can update certain stacks. Some stack templates might include resources that can affect permissions in your AWS account, for example, by creating new AWS Identity and Access Management (IAM) users. For those stacks, you must explicitly acknowledge their capabilities by specifying this parameter.</p> <p>The only valid values are <code>CAPABILITY_IAM</code> and <code>CAPABILITY_NAMED_IAM</code>. The following resources require you to specify this parameter: <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-accesskey.html\"> AWS::IAM::AccessKey</a>, <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-group.html\"> AWS::IAM::Group</a>, <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html\"> AWS::IAM::InstanceProfile</a>, <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-policy.html\"> AWS::IAM::Policy</a>, <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html\"> AWS::IAM::Role</a>, <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-user.html\"> AWS::IAM::User</a>, and <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-addusertogroup.html\"> AWS::IAM::UserToGroupAddition</a>. If your stack template contains these resources, we recommend that you review all permissions associated with them and edit their permissions if necessary.</p> <p>If you have IAM resources, you can specify either capability. If you have IAM resources with custom names, you must specify <code>CAPABILITY_NAMED_IAM</code>. If you don't specify this parameter, this action returns an <code>InsufficientCapabilities</code> error.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#capabilities\">Acknowledging IAM Resources in AWS CloudFormation Templates</a>.</p>"]
-    pub capabilities: Option<Capabilities>,
+    pub capabilities: Option<Vec<String>>,
     #[doc="<p>A unique identifier for this <code>UpdateStack</code> request. Specify this token if you plan to retry requests so that AWS CloudFormation knows that you're not attempting to update a stack with the same name. You might retry <code>UpdateStack</code> requests to ensure that AWS CloudFormation successfully received them.</p>"]
-    pub client_request_token: Option<ClientRequestToken>,
+    pub client_request_token: Option<String>,
     #[doc="<p>Amazon Simple Notification Service topic Amazon Resource Names (ARNs) that AWS CloudFormation associates with the stack. Specify an empty list to remove all notification topics.</p>"]
-    pub notification_ar_ns: Option<NotificationARNs>,
+    pub notification_ar_ns: Option<Vec<String>>,
     #[doc="<p>A list of <code>Parameter</code> structures that specify input parameters for the stack. For more information, see the <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_Parameter.html\">Parameter</a> data type.</p>"]
-    pub parameters: Option<Parameters>,
+    pub parameters: Option<Vec<Parameter>>,
     #[doc="<p>The template resource types that you have permissions to work with for this update stack action, such as <code>AWS::EC2::Instance</code>, <code>AWS::EC2::*</code>, or <code>Custom::MyCustomInstance</code>.</p> <p>If the list of resource types doesn't include a resource that you're updating, the stack update fails. By default, AWS CloudFormation grants permissions to all resource types. AWS Identity and Access Management (IAM) uses this parameter for AWS CloudFormation-specific condition keys in IAM policies. For more information, see <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html\">Controlling Access with AWS Identity and Access Management</a>.</p>"]
-    pub resource_types: Option<ResourceTypes>,
+    pub resource_types: Option<Vec<String>>,
     #[doc="<p>The Amazon Resource Name (ARN) of an AWS Identity and Access Management (IAM) role that AWS CloudFormation assumes to update the stack. AWS CloudFormation uses the role's credentials to make calls on your behalf. AWS CloudFormation always uses this role for all future operations on the stack. As long as users have permission to operate on the stack, AWS CloudFormation uses this role even if the users don't have permission to pass it. Ensure that the role grants least privilege.</p> <p>If you don't specify a value, AWS CloudFormation uses the role that was previously associated with the stack. If no role is available, AWS CloudFormation uses a temporary session that is generated from your user credentials.</p>"]
-    pub role_arn: Option<RoleARN>,
+    pub role_arn: Option<String>,
     #[doc="<p>The name or unique stack ID of the stack to update.</p>"]
-    pub stack_name: StackName,
+    pub stack_name: String,
     #[doc="<p>Structure containing a new stack policy body. You can specify either the <code>StackPolicyBody</code> or the <code>StackPolicyURL</code> parameter, but not both.</p> <p>You might update the stack policy, for example, in order to protect a new resource that you created during a stack update. If you do not specify a stack policy, the current policy that is associated with the stack is unchanged.</p>"]
-    pub stack_policy_body: Option<StackPolicyBody>,
+    pub stack_policy_body: Option<String>,
     #[doc="<p>Structure containing the temporary overriding stack policy body. You can specify either the <code>StackPolicyDuringUpdateBody</code> or the <code>StackPolicyDuringUpdateURL</code> parameter, but not both.</p> <p>If you want to update protected resources, specify a temporary overriding stack policy during this update. If you do not specify a stack policy, the current policy that is associated with the stack will be used.</p>"]
-    pub stack_policy_during_update_body: Option<StackPolicyDuringUpdateBody>,
+    pub stack_policy_during_update_body: Option<String>,
     #[doc="<p>Location of a file containing the temporary overriding stack policy. The URL must point to a policy (max size: 16KB) located in an S3 bucket in the same region as the stack. You can specify either the <code>StackPolicyDuringUpdateBody</code> or the <code>StackPolicyDuringUpdateURL</code> parameter, but not both.</p> <p>If you want to update protected resources, specify a temporary overriding stack policy during this update. If you do not specify a stack policy, the current policy that is associated with the stack will be used.</p>"]
-    pub stack_policy_during_update_url: Option<StackPolicyDuringUpdateURL>,
+    pub stack_policy_during_update_url: Option<String>,
     #[doc="<p>Location of a file containing the updated stack policy. The URL must point to a policy (max size: 16KB) located in an S3 bucket in the same region as the stack. You can specify either the <code>StackPolicyBody</code> or the <code>StackPolicyURL</code> parameter, but not both.</p> <p>You might update the stack policy, for example, in order to protect a new resource that you created during a stack update. If you do not specify a stack policy, the current policy that is associated with the stack is unchanged.</p>"]
-    pub stack_policy_url: Option<StackPolicyURL>,
+    pub stack_policy_url: Option<String>,
     #[doc="<p>Key-value pairs to associate with this stack. AWS CloudFormation also propagates these tags to supported resources in the stack. You can specify a maximum number of 10 tags.</p> <p>If you don't specify this parameter, AWS CloudFormation doesn't modify the stack's tags. If you specify an empty value, AWS CloudFormation removes all associated tags.</p>"]
-    pub tags: Option<Tags>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>Structure containing the template body with a minimum length of 1 byte and a maximum length of 51,200 bytes. (For more information, go to <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html\">Template Anatomy</a> in the AWS CloudFormation User Guide.)</p> <p>Conditional: You must specify only one of the following parameters: <code>TemplateBody</code>, <code>TemplateURL</code>, or set the <code>UsePreviousTemplate</code> to <code>true</code>.</p>"]
-    pub template_body: Option<TemplateBody>,
+    pub template_body: Option<String>,
     #[doc="<p>Location of file containing the template body. The URL must point to a template that is located in an Amazon S3 bucket. For more information, go to <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html\">Template Anatomy</a> in the AWS CloudFormation User Guide.</p> <p>Conditional: You must specify only one of the following parameters: <code>TemplateBody</code>, <code>TemplateURL</code>, or set the <code>UsePreviousTemplate</code> to <code>true</code>.</p>"]
-    pub template_url: Option<TemplateURL>,
+    pub template_url: Option<String>,
     #[doc="<p>Reuse the existing template that is associated with the stack that you are updating.</p> <p>Conditional: You must specify only one of the following parameters: <code>TemplateBody</code>, <code>TemplateURL</code>, or set the <code>UsePreviousTemplate</code> to <code>true</code>.</p>"]
-    pub use_previous_template: Option<UsePreviousTemplate>,
+    pub use_previous_template: Option<bool>,
 }
 
 
@@ -5617,7 +5522,7 @@ impl UpdateStackInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct UpdateStackOutput {
     #[doc="<p>Unique identifier of the stack.</p>"]
-    pub stack_id: Option<StackId>,
+    pub stack_id: Option<String>,
 }
 
 struct UpdateStackOutputDeserializer;
@@ -5662,13 +5567,12 @@ impl UpdateStackOutputDeserializer {
 
     }
 }
-pub type Url = String;
 struct UrlDeserializer;
 impl UrlDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Url, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5677,14 +5581,12 @@ impl UrlDeserializer {
 
     }
 }
-pub type UsePreviousTemplate = bool;
-pub type UsePreviousValue = bool;
 struct UsePreviousValueDeserializer;
 impl UsePreviousValueDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<UsePreviousValue, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -5697,9 +5599,9 @@ impl UsePreviousValueDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ValidateTemplateInput {
     #[doc="<p>Structure containing the template body with a minimum length of 1 byte and a maximum length of 51,200 bytes. For more information, go to <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html\">Template Anatomy</a> in the AWS CloudFormation User Guide.</p> <p>Conditional: You must pass <code>TemplateURL</code> or <code>TemplateBody</code>. If both are passed, only <code>TemplateBody</code> is used.</p>"]
-    pub template_body: Option<TemplateBody>,
+    pub template_body: Option<String>,
     #[doc="<p>Location of file containing the template body. The URL must point to a template (max size: 460,800 bytes) that is located in an Amazon S3 bucket. For more information, go to <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html\">Template Anatomy</a> in the AWS CloudFormation User Guide.</p> <p>Conditional: You must pass <code>TemplateURL</code> or <code>TemplateBody</code>. If both are passed, only <code>TemplateBody</code> is used.</p>"]
-    pub template_url: Option<TemplateURL>,
+    pub template_url: Option<String>,
 }
 
 
@@ -5726,15 +5628,15 @@ impl ValidateTemplateInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ValidateTemplateOutput {
     #[doc="<p>The capabilities found within the template. If your template contains IAM resources, you must specify the CAPABILITY_IAM or CAPABILITY_NAMED_IAM value for this parameter when you use the <a>CreateStack</a> or <a>UpdateStack</a> actions with your template; otherwise, those actions return an InsufficientCapabilities error.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#capabilities\">Acknowledging IAM Resources in AWS CloudFormation Templates</a>.</p>"]
-    pub capabilities: Option<Capabilities>,
+    pub capabilities: Option<Vec<String>>,
     #[doc="<p>The list of resources that generated the values in the <code>Capabilities</code> response element.</p>"]
-    pub capabilities_reason: Option<CapabilitiesReason>,
+    pub capabilities_reason: Option<String>,
     #[doc="<p>A list of the transforms that are declared in the template.</p>"]
-    pub declared_transforms: Option<TransformsList>,
+    pub declared_transforms: Option<Vec<String>>,
     #[doc="<p>The description found within the template.</p>"]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[doc="<p>A list of <code>TemplateParameter</code> structures.</p>"]
-    pub parameters: Option<TemplateParameters>,
+    pub parameters: Option<Vec<TemplateParameter>>,
 }
 
 struct ValidateTemplateOutputDeserializer;
@@ -5800,13 +5702,12 @@ impl ValidateTemplateOutputDeserializer {
 
     }
 }
-pub type Version = String;
 struct VersionDeserializer;
 impl VersionDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Version, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));

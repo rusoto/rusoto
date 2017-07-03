@@ -31,34 +31,32 @@ use serde_json::from_str;
 pub struct AddTagsToStreamInput {
     #[doc="<p>The name of the stream.</p>"]
     #[serde(rename="StreamName")]
-    pub stream_name: StreamName,
+    pub stream_name: String,
     #[doc="<p>The set of key-value pairs to use to create the tags.</p>"]
     #[serde(rename="Tags")]
-    pub tags: TagMap,
+    pub tags: ::std::collections::HashMap<String, String>,
 }
 
-pub type BooleanObject = bool;
 #[doc="<p>Represents the input for <code>CreateStream</code>.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateStreamInput {
     #[doc="<p>The number of shards that the stream will use. The throughput of the stream is a function of the number of shards; more shards are required for greater provisioned throughput.</p> <p>DefaultShardLimit;</p>"]
     #[serde(rename="ShardCount")]
-    pub shard_count: PositiveIntegerObject,
+    pub shard_count: i64,
     #[doc="<p>A name to identify the stream. The stream name is scoped to the AWS account used by the application that creates the stream. It is also scoped by region. That is, two streams in two different AWS accounts can have the same name, and two streams in the same AWS account but in two different regions can have the same name.</p>"]
     #[serde(rename="StreamName")]
-    pub stream_name: StreamName,
+    pub stream_name: String,
 }
 
-pub type Data = Vec<u8>;
 #[doc="<p>Represents the input for <a>DecreaseStreamRetentionPeriod</a>.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DecreaseStreamRetentionPeriodInput {
     #[doc="<p>The new retention period of the stream, in hours. Must be less than the current retention period.</p>"]
     #[serde(rename="RetentionPeriodHours")]
-    pub retention_period_hours: PositiveIntegerObject,
+    pub retention_period_hours: i64,
     #[doc="<p>The name of the stream to modify.</p>"]
     #[serde(rename="StreamName")]
-    pub stream_name: StreamName,
+    pub stream_name: String,
 }
 
 #[doc="<p>Represents the input for <a>DeleteStream</a>.</p>"]
@@ -66,7 +64,7 @@ pub struct DecreaseStreamRetentionPeriodInput {
 pub struct DeleteStreamInput {
     #[doc="<p>The name of the stream to delete.</p>"]
     #[serde(rename="StreamName")]
-    pub stream_name: StreamName,
+    pub stream_name: String,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -76,10 +74,10 @@ pub struct DescribeLimitsInput;
 pub struct DescribeLimitsOutput {
     #[doc="<p>The number of open shards.</p>"]
     #[serde(rename="OpenShardCount")]
-    pub open_shard_count: ShardCountObject,
+    pub open_shard_count: i64,
     #[doc="<p>The maximum number of shards.</p>"]
     #[serde(rename="ShardLimit")]
-    pub shard_limit: ShardCountObject,
+    pub shard_limit: i64,
 }
 
 #[doc="<p>Represents the input for <code>DescribeStream</code>.</p>"]
@@ -88,17 +86,16 @@ pub struct DescribeStreamInput {
     #[doc="<p>The shard ID of the shard to start with.</p>"]
     #[serde(rename="ExclusiveStartShardId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub exclusive_start_shard_id: Option<ShardId>,
+    pub exclusive_start_shard_id: Option<String>,
     #[doc="<p>The maximum number of shards to return in a single call. The default value is 100. If you specify a value greater than 100, at most 100 shards are returned.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<DescribeStreamInputLimit>,
+    pub limit: Option<i64>,
     #[doc="<p>The name of the stream to describe.</p>"]
     #[serde(rename="StreamName")]
-    pub stream_name: StreamName,
+    pub stream_name: String,
 }
 
-pub type DescribeStreamInputLimit = i64;
 #[doc="<p>Represents the output for <code>DescribeStream</code>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DescribeStreamOutput {
@@ -112,10 +109,10 @@ pub struct DescribeStreamOutput {
 pub struct DisableEnhancedMonitoringInput {
     #[doc="<p>List of shard-level metrics to disable.</p> <p>The following are the valid shard-level metrics. The value \"<code>ALL</code>\" disables every metric.</p> <ul> <li> <p> <code>IncomingBytes</code> </p> </li> <li> <p> <code>IncomingRecords</code> </p> </li> <li> <p> <code>OutgoingBytes</code> </p> </li> <li> <p> <code>OutgoingRecords</code> </p> </li> <li> <p> <code>WriteProvisionedThroughputExceeded</code> </p> </li> <li> <p> <code>ReadProvisionedThroughputExceeded</code> </p> </li> <li> <p> <code>IteratorAgeMilliseconds</code> </p> </li> <li> <p> <code>ALL</code> </p> </li> </ul> <p>For more information, see <a href=\"http://docs.aws.amazon.com/kinesis/latest/dev/monitoring-with-cloudwatch.html\">Monitoring the Amazon Kinesis Streams Service with Amazon CloudWatch</a> in the <i>Amazon Kinesis Streams Developer Guide</i>.</p>"]
     #[serde(rename="ShardLevelMetrics")]
-    pub shard_level_metrics: MetricsNameList,
+    pub shard_level_metrics: Vec<String>,
     #[doc="<p>The name of the Amazon Kinesis stream for which to disable enhanced monitoring.</p>"]
     #[serde(rename="StreamName")]
-    pub stream_name: StreamName,
+    pub stream_name: String,
 }
 
 #[doc="<p>Represents the input for <a>EnableEnhancedMonitoring</a>.</p>"]
@@ -123,10 +120,10 @@ pub struct DisableEnhancedMonitoringInput {
 pub struct EnableEnhancedMonitoringInput {
     #[doc="<p>List of shard-level metrics to enable.</p> <p>The following are the valid shard-level metrics. The value \"<code>ALL</code>\" enables every metric.</p> <ul> <li> <p> <code>IncomingBytes</code> </p> </li> <li> <p> <code>IncomingRecords</code> </p> </li> <li> <p> <code>OutgoingBytes</code> </p> </li> <li> <p> <code>OutgoingRecords</code> </p> </li> <li> <p> <code>WriteProvisionedThroughputExceeded</code> </p> </li> <li> <p> <code>ReadProvisionedThroughputExceeded</code> </p> </li> <li> <p> <code>IteratorAgeMilliseconds</code> </p> </li> <li> <p> <code>ALL</code> </p> </li> </ul> <p>For more information, see <a href=\"http://docs.aws.amazon.com/kinesis/latest/dev/monitoring-with-cloudwatch.html\">Monitoring the Amazon Kinesis Streams Service with Amazon CloudWatch</a> in the <i>Amazon Kinesis Streams Developer Guide</i>.</p>"]
     #[serde(rename="ShardLevelMetrics")]
-    pub shard_level_metrics: MetricsNameList,
+    pub shard_level_metrics: Vec<String>,
     #[doc="<p>The name of the stream for which to enable enhanced monitoring.</p>"]
     #[serde(rename="StreamName")]
-    pub stream_name: StreamName,
+    pub stream_name: String,
 }
 
 #[doc="<p>Represents enhanced metrics types.</p>"]
@@ -135,56 +132,52 @@ pub struct EnhancedMetrics {
     #[doc="<p>List of shard-level metrics.</p> <p>The following are the valid shard-level metrics. The value \"<code>ALL</code>\" enhances every metric.</p> <ul> <li> <p> <code>IncomingBytes</code> </p> </li> <li> <p> <code>IncomingRecords</code> </p> </li> <li> <p> <code>OutgoingBytes</code> </p> </li> <li> <p> <code>OutgoingRecords</code> </p> </li> <li> <p> <code>WriteProvisionedThroughputExceeded</code> </p> </li> <li> <p> <code>ReadProvisionedThroughputExceeded</code> </p> </li> <li> <p> <code>IteratorAgeMilliseconds</code> </p> </li> <li> <p> <code>ALL</code> </p> </li> </ul> <p>For more information, see <a href=\"http://docs.aws.amazon.com/kinesis/latest/dev/monitoring-with-cloudwatch.html\">Monitoring the Amazon Kinesis Streams Service with Amazon CloudWatch</a> in the <i>Amazon Kinesis Streams Developer Guide</i>.</p>"]
     #[serde(rename="ShardLevelMetrics")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub shard_level_metrics: Option<MetricsNameList>,
+    pub shard_level_metrics: Option<Vec<String>>,
 }
 
-pub type EnhancedMonitoringList = Vec<EnhancedMetrics>;
 #[doc="<p>Represents the output for <a>EnableEnhancedMonitoring</a> and <a>DisableEnhancedMonitoring</a>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct EnhancedMonitoringOutput {
     #[doc="<p>Represents the current state of the metrics that are in the enhanced state before the operation.</p>"]
     #[serde(rename="CurrentShardLevelMetrics")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub current_shard_level_metrics: Option<MetricsNameList>,
+    pub current_shard_level_metrics: Option<Vec<String>>,
     #[doc="<p>Represents the list of all the metrics that would be in the enhanced state after the operation.</p>"]
     #[serde(rename="DesiredShardLevelMetrics")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub desired_shard_level_metrics: Option<MetricsNameList>,
+    pub desired_shard_level_metrics: Option<Vec<String>>,
     #[doc="<p>The name of the Amazon Kinesis stream.</p>"]
     #[serde(rename="StreamName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub stream_name: Option<StreamName>,
+    pub stream_name: Option<String>,
 }
 
-pub type ErrorCode = String;
-pub type ErrorMessage = String;
 #[doc="<p>Represents the input for <a>GetRecords</a>.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetRecordsInput {
     #[doc="<p>The maximum number of records to return. Specify a value of up to 10,000. If you specify a value that is greater than 10,000, <a>GetRecords</a> throws <code>InvalidArgumentException</code>.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<GetRecordsInputLimit>,
+    pub limit: Option<i64>,
     #[doc="<p>The position in the shard from which you want to start sequentially reading data records. A shard iterator specifies this position using the sequence number of a data record in the shard.</p>"]
     #[serde(rename="ShardIterator")]
-    pub shard_iterator: ShardIterator,
+    pub shard_iterator: String,
 }
 
-pub type GetRecordsInputLimit = i64;
 #[doc="<p>Represents the output for <a>GetRecords</a>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct GetRecordsOutput {
     #[doc="<p>The number of milliseconds the <a>GetRecords</a> response is from the tip of the stream, indicating how far behind current time the consumer is. A value of zero indicates record processing is caught up, and there are no new records to process at this moment.</p>"]
     #[serde(rename="MillisBehindLatest")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub millis_behind_latest: Option<MillisBehindLatest>,
+    pub millis_behind_latest: Option<i64>,
     #[doc="<p>The next position in the shard from which to start sequentially reading data records. If set to <code>null</code>, the shard has been closed and the requested iterator will not return any more data. </p>"]
     #[serde(rename="NextShardIterator")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_shard_iterator: Option<ShardIterator>,
+    pub next_shard_iterator: Option<String>,
     #[doc="<p>The data records retrieved from the shard.</p>"]
     #[serde(rename="Records")]
-    pub records: RecordList,
+    pub records: Vec<Record>,
 }
 
 #[doc="<p>Represents the input for <code>GetShardIterator</code>.</p>"]
@@ -192,21 +185,21 @@ pub struct GetRecordsOutput {
 pub struct GetShardIteratorInput {
     #[doc="<p>The shard ID of the Amazon Kinesis shard to get the iterator for.</p>"]
     #[serde(rename="ShardId")]
-    pub shard_id: ShardId,
+    pub shard_id: String,
     #[doc="<p>Determines how the shard iterator is used to start reading data records from the shard.</p> <p>The following are the valid Amazon Kinesis shard iterator types:</p> <ul> <li> <p>AT_SEQUENCE_NUMBER - Start reading from the position denoted by a specific sequence number, provided in the value <code>StartingSequenceNumber</code>.</p> </li> <li> <p>AFTER_SEQUENCE_NUMBER - Start reading right after the position denoted by a specific sequence number, provided in the value <code>StartingSequenceNumber</code>.</p> </li> <li> <p>AT_TIMESTAMP - Start reading from the position denoted by a specific timestamp, provided in the value <code>Timestamp</code>.</p> </li> <li> <p>TRIM_HORIZON - Start reading at the last untrimmed record in the shard in the system, which is the oldest data record in the shard.</p> </li> <li> <p>LATEST - Start reading just after the most recent record in the shard, so that you always read the most recent data in the shard.</p> </li> </ul>"]
     #[serde(rename="ShardIteratorType")]
-    pub shard_iterator_type: ShardIteratorType,
+    pub shard_iterator_type: String,
     #[doc="<p>The sequence number of the data record in the shard from which to start reading. Used with shard iterator type AT_SEQUENCE_NUMBER and AFTER_SEQUENCE_NUMBER.</p>"]
     #[serde(rename="StartingSequenceNumber")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub starting_sequence_number: Option<SequenceNumber>,
+    pub starting_sequence_number: Option<String>,
     #[doc="<p>The name of the Amazon Kinesis stream.</p>"]
     #[serde(rename="StreamName")]
-    pub stream_name: StreamName,
+    pub stream_name: String,
     #[doc="<p>The timestamp of the data record from which to start reading. Used with shard iterator type AT_TIMESTAMP. A timestamp is the Unix epoch date with precision in milliseconds. For example, <code>2016-04-04T19:58:46.480-00:00</code> or <code>1459799926.480</code>. If a record with this exact timestamp does not exist, the iterator returned is for the next (later) record. If the timestamp is older than the current trim horizon, the iterator returned is for the oldest untrimmed data record (TRIM_HORIZON).</p>"]
     #[serde(rename="Timestamp")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub timestamp: Option<Timestamp>,
+    pub timestamp: Option<f64>,
 }
 
 #[doc="<p>Represents the output for <code>GetShardIterator</code>.</p>"]
@@ -215,19 +208,18 @@ pub struct GetShardIteratorOutput {
     #[doc="<p>The position in the shard from which to start reading data records sequentially. A shard iterator specifies this position using the sequence number of a data record in a shard.</p>"]
     #[serde(rename="ShardIterator")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub shard_iterator: Option<ShardIterator>,
+    pub shard_iterator: Option<String>,
 }
 
-pub type HashKey = String;
 #[doc="<p>The range of possible hash key values for the shard, which is a set of ordered contiguous positive integers.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct HashKeyRange {
     #[doc="<p>The ending hash key of the hash key range.</p>"]
     #[serde(rename="EndingHashKey")]
-    pub ending_hash_key: HashKey,
+    pub ending_hash_key: String,
     #[doc="<p>The starting hash key of the hash key range.</p>"]
     #[serde(rename="StartingHashKey")]
-    pub starting_hash_key: HashKey,
+    pub starting_hash_key: String,
 }
 
 #[doc="<p>Represents the input for <a>IncreaseStreamRetentionPeriod</a>.</p>"]
@@ -235,10 +227,10 @@ pub struct HashKeyRange {
 pub struct IncreaseStreamRetentionPeriodInput {
     #[doc="<p>The new retention period of the stream, in hours. Must be more than the current retention period.</p>"]
     #[serde(rename="RetentionPeriodHours")]
-    pub retention_period_hours: PositiveIntegerObject,
+    pub retention_period_hours: i64,
     #[doc="<p>The name of the stream to modify.</p>"]
     #[serde(rename="StreamName")]
-    pub stream_name: StreamName,
+    pub stream_name: String,
 }
 
 #[doc="<p>Represents the input for <code>ListStreams</code>.</p>"]
@@ -247,23 +239,22 @@ pub struct ListStreamsInput {
     #[doc="<p>The name of the stream to start the list with.</p>"]
     #[serde(rename="ExclusiveStartStreamName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub exclusive_start_stream_name: Option<StreamName>,
+    pub exclusive_start_stream_name: Option<String>,
     #[doc="<p>The maximum number of streams to list.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<ListStreamsInputLimit>,
+    pub limit: Option<i64>,
 }
 
-pub type ListStreamsInputLimit = i64;
 #[doc="<p>Represents the output for <code>ListStreams</code>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ListStreamsOutput {
     #[doc="<p>If set to <code>true</code>, there are more streams available to list.</p>"]
     #[serde(rename="HasMoreStreams")]
-    pub has_more_streams: BooleanObject,
+    pub has_more_streams: bool,
     #[doc="<p>The names of the streams that are associated with the AWS account making the <code>ListStreams</code> request.</p>"]
     #[serde(rename="StreamNames")]
-    pub stream_names: StreamNameList,
+    pub stream_names: Vec<String>,
 }
 
 #[doc="<p>Represents the input for <code>ListTagsForStream</code>.</p>"]
@@ -272,26 +263,25 @@ pub struct ListTagsForStreamInput {
     #[doc="<p>The key to use as the starting point for the list of tags. If this parameter is set, <code>ListTagsForStream</code> gets all tags that occur after <code>ExclusiveStartTagKey</code>. </p>"]
     #[serde(rename="ExclusiveStartTagKey")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub exclusive_start_tag_key: Option<TagKey>,
+    pub exclusive_start_tag_key: Option<String>,
     #[doc="<p>The number of tags to return. If this number is less than the total number of tags associated with the stream, <code>HasMoreTags</code> is set to <code>true</code>. To list additional tags, set <code>ExclusiveStartTagKey</code> to the last key in the response.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<ListTagsForStreamInputLimit>,
+    pub limit: Option<i64>,
     #[doc="<p>The name of the stream.</p>"]
     #[serde(rename="StreamName")]
-    pub stream_name: StreamName,
+    pub stream_name: String,
 }
 
-pub type ListTagsForStreamInputLimit = i64;
 #[doc="<p>Represents the output for <code>ListTagsForStream</code>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ListTagsForStreamOutput {
     #[doc="<p>If set to <code>true</code>, more tags are available. To request additional tags, set <code>ExclusiveStartTagKey</code> to the key of the last tag returned.</p>"]
     #[serde(rename="HasMoreTags")]
-    pub has_more_tags: BooleanObject,
+    pub has_more_tags: bool,
     #[doc="<p>A list of tags associated with <code>StreamName</code>, starting with the first tag after <code>ExclusiveStartTagKey</code> and up to the specified <code>Limit</code>. </p>"]
     #[serde(rename="Tags")]
-    pub tags: TagList,
+    pub tags: Vec<Tag>,
 }
 
 #[doc="<p>Represents the input for <code>MergeShards</code>.</p>"]
@@ -299,20 +289,15 @@ pub struct ListTagsForStreamOutput {
 pub struct MergeShardsInput {
     #[doc="<p>The shard ID of the adjacent shard for the merge.</p>"]
     #[serde(rename="AdjacentShardToMerge")]
-    pub adjacent_shard_to_merge: ShardId,
+    pub adjacent_shard_to_merge: String,
     #[doc="<p>The shard ID of the shard to combine with the adjacent shard for the merge.</p>"]
     #[serde(rename="ShardToMerge")]
-    pub shard_to_merge: ShardId,
+    pub shard_to_merge: String,
     #[doc="<p>The name of the stream for the merge.</p>"]
     #[serde(rename="StreamName")]
-    pub stream_name: StreamName,
+    pub stream_name: String,
 }
 
-pub type MetricsName = String;
-pub type MetricsNameList = Vec<MetricsName>;
-pub type MillisBehindLatest = i64;
-pub type PartitionKey = String;
-pub type PositiveIntegerObject = i64;
 #[doc="<p>Represents the input for <code>PutRecord</code>.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct PutRecordInput {
@@ -323,21 +308,21 @@ pub struct PutRecordInput {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub data: Data,
+    pub data: Vec<u8>,
     #[doc="<p>The hash value used to explicitly determine the shard the data record is assigned to by overriding the partition key hash.</p>"]
     #[serde(rename="ExplicitHashKey")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub explicit_hash_key: Option<HashKey>,
+    pub explicit_hash_key: Option<String>,
     #[doc="<p>Determines which shard in the stream the data record is assigned to. Partition keys are Unicode strings with a maximum length limit of 256 characters for each key. Amazon Kinesis uses the partition key as input to a hash function that maps the partition key and associated data to a specific shard. Specifically, an MD5 hash function is used to map partition keys to 128-bit integer values and to map associated data records to shards. As a result of this hashing mechanism, all data records with the same partition key map to the same shard within the stream.</p>"]
     #[serde(rename="PartitionKey")]
-    pub partition_key: PartitionKey,
+    pub partition_key: String,
     #[doc="<p>Guarantees strictly increasing sequence numbers, for puts from the same client and to the same partition key. Usage: set the <code>SequenceNumberForOrdering</code> of record <i>n</i> to the sequence number of record <i>n-1</i> (as returned in the result when putting record <i>n-1</i>). If this parameter is not set, records will be coarsely ordered based on arrival time.</p>"]
     #[serde(rename="SequenceNumberForOrdering")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub sequence_number_for_ordering: Option<SequenceNumber>,
+    pub sequence_number_for_ordering: Option<String>,
     #[doc="<p>The name of the stream to put the data record into.</p>"]
     #[serde(rename="StreamName")]
-    pub stream_name: StreamName,
+    pub stream_name: String,
 }
 
 #[doc="<p>Represents the output for <code>PutRecord</code>.</p>"]
@@ -345,10 +330,10 @@ pub struct PutRecordInput {
 pub struct PutRecordOutput {
     #[doc="<p>The sequence number identifier that was assigned to the put data record. The sequence number for the record is unique across all records in the stream. A sequence number is the identifier associated with every record put into the stream.</p>"]
     #[serde(rename="SequenceNumber")]
-    pub sequence_number: SequenceNumber,
+    pub sequence_number: String,
     #[doc="<p>The shard ID of the shard where the data record was placed.</p>"]
     #[serde(rename="ShardId")]
-    pub shard_id: ShardId,
+    pub shard_id: String,
 }
 
 #[doc="<p>A <code>PutRecords</code> request.</p>"]
@@ -356,10 +341,10 @@ pub struct PutRecordOutput {
 pub struct PutRecordsInput {
     #[doc="<p>The records associated with the request.</p>"]
     #[serde(rename="Records")]
-    pub records: PutRecordsRequestEntryList,
+    pub records: Vec<PutRecordsRequestEntry>,
     #[doc="<p>The stream name associated with the request.</p>"]
     #[serde(rename="StreamName")]
-    pub stream_name: StreamName,
+    pub stream_name: String,
 }
 
 #[doc="<p> <code>PutRecords</code> results.</p>"]
@@ -368,10 +353,10 @@ pub struct PutRecordsOutput {
     #[doc="<p>The number of unsuccessfully processed records in a <code>PutRecords</code> request.</p>"]
     #[serde(rename="FailedRecordCount")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub failed_record_count: Option<PositiveIntegerObject>,
+    pub failed_record_count: Option<i64>,
     #[doc="<p>An array of successfully and unsuccessfully processed record results, correlated with the request by natural ordering. A record that is successfully added to a stream includes <code>SequenceNumber</code> and <code>ShardId</code> in the result. A record that fails to be added to a stream includes <code>ErrorCode</code> and <code>ErrorMessage</code> in the result.</p>"]
     #[serde(rename="Records")]
-    pub records: PutRecordsResultEntryList,
+    pub records: Vec<PutRecordsResultEntry>,
 }
 
 #[doc="<p>Represents the output for <code>PutRecords</code>.</p>"]
@@ -384,46 +369,44 @@ pub struct PutRecordsRequestEntry {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub data: Data,
+    pub data: Vec<u8>,
     #[doc="<p>The hash value used to determine explicitly the shard that the data record is assigned to by overriding the partition key hash.</p>"]
     #[serde(rename="ExplicitHashKey")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub explicit_hash_key: Option<HashKey>,
+    pub explicit_hash_key: Option<String>,
     #[doc="<p>Determines which shard in the stream the data record is assigned to. Partition keys are Unicode strings with a maximum length limit of 256 characters for each key. Amazon Kinesis uses the partition key as input to a hash function that maps the partition key and associated data to a specific shard. Specifically, an MD5 hash function is used to map partition keys to 128-bit integer values and to map associated data records to shards. As a result of this hashing mechanism, all data records with the same partition key map to the same shard within the stream.</p>"]
     #[serde(rename="PartitionKey")]
-    pub partition_key: PartitionKey,
+    pub partition_key: String,
 }
 
-pub type PutRecordsRequestEntryList = Vec<PutRecordsRequestEntry>;
 #[doc="<p>Represents the result of an individual record from a <code>PutRecords</code> request. A record that is successfully added to a stream includes <code>SequenceNumber</code> and <code>ShardId</code> in the result. A record that fails to be added to the stream includes <code>ErrorCode</code> and <code>ErrorMessage</code> in the result.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct PutRecordsResultEntry {
     #[doc="<p>The error code for an individual record result. <code>ErrorCodes</code> can be either <code>ProvisionedThroughputExceededException</code> or <code>InternalFailure</code>.</p>"]
     #[serde(rename="ErrorCode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub error_code: Option<ErrorCode>,
+    pub error_code: Option<String>,
     #[doc="<p>The error message for an individual record result. An <code>ErrorCode</code> value of <code>ProvisionedThroughputExceededException</code> has an error message that includes the account ID, stream name, and shard ID. An <code>ErrorCode</code> value of <code>InternalFailure</code> has the error message <code>\"Internal Service Failure\"</code>.</p>"]
     #[serde(rename="ErrorMessage")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub error_message: Option<ErrorMessage>,
+    pub error_message: Option<String>,
     #[doc="<p>The sequence number for an individual record result.</p>"]
     #[serde(rename="SequenceNumber")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub sequence_number: Option<SequenceNumber>,
+    pub sequence_number: Option<String>,
     #[doc="<p>The shard ID for an individual record result.</p>"]
     #[serde(rename="ShardId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub shard_id: Option<ShardId>,
+    pub shard_id: Option<String>,
 }
 
-pub type PutRecordsResultEntryList = Vec<PutRecordsResultEntry>;
 #[doc="<p>The unit of data of the Amazon Kinesis stream, which is composed of a sequence number, a partition key, and a data blob.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Record {
     #[doc="<p>The approximate time that the record was inserted into the stream.</p>"]
     #[serde(rename="ApproximateArrivalTimestamp")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub approximate_arrival_timestamp: Option<Timestamp>,
+    pub approximate_arrival_timestamp: Option<f64>,
     #[doc="<p>The data blob. The data in the blob is both opaque and immutable to the Amazon Kinesis service, which does not inspect, interpret, or change the data in the blob in any way. When the data blob (the payload before base64-encoding) is added to the partition key size, the total size must not exceed the maximum record size (1 MB).</p>"]
     #[serde(rename="Data")]
     #[serde(
@@ -431,39 +414,36 @@ pub struct Record {
                             serialize_with="::rusoto_core::serialization::SerdeBlob::serialize_blob",
                             default,
                         )]
-    pub data: Data,
+    pub data: Vec<u8>,
     #[doc="<p>Identifies which shard in the stream the data record is assigned to.</p>"]
     #[serde(rename="PartitionKey")]
-    pub partition_key: PartitionKey,
+    pub partition_key: String,
     #[doc="<p>The unique identifier of the record in the stream.</p>"]
     #[serde(rename="SequenceNumber")]
-    pub sequence_number: SequenceNumber,
+    pub sequence_number: String,
 }
 
-pub type RecordList = Vec<Record>;
 #[doc="<p>Represents the input for <code>RemoveTagsFromStream</code>.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct RemoveTagsFromStreamInput {
     #[doc="<p>The name of the stream.</p>"]
     #[serde(rename="StreamName")]
-    pub stream_name: StreamName,
+    pub stream_name: String,
     #[doc="<p>A list of tag keys. Each corresponding tag is removed from the stream.</p>"]
     #[serde(rename="TagKeys")]
-    pub tag_keys: TagKeyList,
+    pub tag_keys: Vec<String>,
 }
 
-pub type ScalingType = String;
-pub type SequenceNumber = String;
 #[doc="<p>The range of possible sequence numbers for the shard.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct SequenceNumberRange {
     #[doc="<p>The ending sequence number for the range. Shards that are in the OPEN state have an ending sequence number of <code>null</code>.</p>"]
     #[serde(rename="EndingSequenceNumber")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub ending_sequence_number: Option<SequenceNumber>,
+    pub ending_sequence_number: Option<String>,
     #[doc="<p>The starting sequence number for the range.</p>"]
     #[serde(rename="StartingSequenceNumber")]
-    pub starting_sequence_number: SequenceNumber,
+    pub starting_sequence_number: String,
 }
 
 #[doc="<p>A uniquely identified group of data records in an Amazon Kinesis stream.</p>"]
@@ -472,103 +452,88 @@ pub struct Shard {
     #[doc="<p>The shard ID of the shard adjacent to the shard's parent.</p>"]
     #[serde(rename="AdjacentParentShardId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub adjacent_parent_shard_id: Option<ShardId>,
+    pub adjacent_parent_shard_id: Option<String>,
     #[doc="<p>The range of possible hash key values for the shard, which is a set of ordered contiguous positive integers.</p>"]
     #[serde(rename="HashKeyRange")]
     pub hash_key_range: HashKeyRange,
     #[doc="<p>The shard ID of the shard's parent.</p>"]
     #[serde(rename="ParentShardId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub parent_shard_id: Option<ShardId>,
+    pub parent_shard_id: Option<String>,
     #[doc="<p>The range of possible sequence numbers for the shard.</p>"]
     #[serde(rename="SequenceNumberRange")]
     pub sequence_number_range: SequenceNumberRange,
     #[doc="<p>The unique identifier of the shard within the stream.</p>"]
     #[serde(rename="ShardId")]
-    pub shard_id: ShardId,
+    pub shard_id: String,
 }
 
-pub type ShardCountObject = i64;
-pub type ShardId = String;
-pub type ShardIterator = String;
-pub type ShardIteratorType = String;
-pub type ShardList = Vec<Shard>;
 #[doc="<p>Represents the input for <code>SplitShard</code>.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct SplitShardInput {
     #[doc="<p>A hash key value for the starting hash key of one of the child shards created by the split. The hash key range for a given shard constitutes a set of ordered contiguous positive integers. The value for <code>NewStartingHashKey</code> must be in the range of hash keys being mapped into the shard. The <code>NewStartingHashKey</code> hash key value and all higher hash key values in hash key range are distributed to one of the child shards. All the lower hash key values in the range are distributed to the other child shard.</p>"]
     #[serde(rename="NewStartingHashKey")]
-    pub new_starting_hash_key: HashKey,
+    pub new_starting_hash_key: String,
     #[doc="<p>The shard ID of the shard to split.</p>"]
     #[serde(rename="ShardToSplit")]
-    pub shard_to_split: ShardId,
+    pub shard_to_split: String,
     #[doc="<p>The name of the stream for the shard split.</p>"]
     #[serde(rename="StreamName")]
-    pub stream_name: StreamName,
+    pub stream_name: String,
 }
 
-pub type StreamARN = String;
 #[doc="<p>Represents the output for <a>DescribeStream</a>.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct StreamDescription {
     #[doc="<p>Represents the current enhanced monitoring settings of the stream.</p>"]
     #[serde(rename="EnhancedMonitoring")]
-    pub enhanced_monitoring: EnhancedMonitoringList,
+    pub enhanced_monitoring: Vec<EnhancedMetrics>,
     #[doc="<p>If set to <code>true</code>, more shards in the stream are available to describe.</p>"]
     #[serde(rename="HasMoreShards")]
-    pub has_more_shards: BooleanObject,
+    pub has_more_shards: bool,
     #[doc="<p>The current retention period, in hours.</p>"]
     #[serde(rename="RetentionPeriodHours")]
-    pub retention_period_hours: PositiveIntegerObject,
+    pub retention_period_hours: i64,
     #[doc="<p>The shards that comprise the stream.</p>"]
     #[serde(rename="Shards")]
-    pub shards: ShardList,
+    pub shards: Vec<Shard>,
     #[doc="<p>The Amazon Resource Name (ARN) for the stream being described.</p>"]
     #[serde(rename="StreamARN")]
-    pub stream_arn: StreamARN,
+    pub stream_arn: String,
     #[doc="<p>The approximate time that the stream was created.</p>"]
     #[serde(rename="StreamCreationTimestamp")]
-    pub stream_creation_timestamp: Timestamp,
+    pub stream_creation_timestamp: f64,
     #[doc="<p>The name of the stream being described.</p>"]
     #[serde(rename="StreamName")]
-    pub stream_name: StreamName,
+    pub stream_name: String,
     #[doc="<p>The current status of the stream being described. The stream status is one of the following states:</p> <ul> <li> <p> <code>CREATING</code> - The stream is being created. Amazon Kinesis immediately returns and sets <code>StreamStatus</code> to <code>CREATING</code>.</p> </li> <li> <p> <code>DELETING</code> - The stream is being deleted. The specified stream is in the <code>DELETING</code> state until Amazon Kinesis completes the deletion.</p> </li> <li> <p> <code>ACTIVE</code> - The stream exists and is ready for read and write operations or deletion. You should perform read and write operations only on an <code>ACTIVE</code> stream.</p> </li> <li> <p> <code>UPDATING</code> - Shards in the stream are being merged or split. Read and write operations continue to work while the stream is in the <code>UPDATING</code> state.</p> </li> </ul>"]
     #[serde(rename="StreamStatus")]
-    pub stream_status: StreamStatus,
+    pub stream_status: String,
 }
 
-pub type StreamName = String;
-pub type StreamNameList = Vec<StreamName>;
-pub type StreamStatus = String;
 #[doc="<p>Metadata assigned to the stream, consisting of a key-value pair.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Tag {
     #[doc="<p>A unique identifier for the tag. Maximum length: 128 characters. Valid characters: Unicode letters, digits, white space, _ . / = + - % @</p>"]
     #[serde(rename="Key")]
-    pub key: TagKey,
+    pub key: String,
     #[doc="<p>An optional string, typically used to describe or define the tag. Maximum length: 256 characters. Valid characters: Unicode letters, digits, white space, _ . / = + - % @</p>"]
     #[serde(rename="Value")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub value: Option<TagValue>,
+    pub value: Option<String>,
 }
 
-pub type TagKey = String;
-pub type TagKeyList = Vec<TagKey>;
-pub type TagList = Vec<Tag>;
-pub type TagMap = ::std::collections::HashMap<TagKey, TagValue>;
-pub type TagValue = String;
-pub type Timestamp = f64;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateShardCountInput {
     #[doc="<p>The scaling type. Uniform scaling creates shards of equal size.</p>"]
     #[serde(rename="ScalingType")]
-    pub scaling_type: ScalingType,
+    pub scaling_type: String,
     #[doc="<p>The name of the stream.</p>"]
     #[serde(rename="StreamName")]
-    pub stream_name: StreamName,
+    pub stream_name: String,
     #[doc="<p>The new number of shards.</p>"]
     #[serde(rename="TargetShardCount")]
-    pub target_shard_count: PositiveIntegerObject,
+    pub target_shard_count: i64,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -576,15 +541,15 @@ pub struct UpdateShardCountOutput {
     #[doc="<p>The current number of shards.</p>"]
     #[serde(rename="CurrentShardCount")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub current_shard_count: Option<PositiveIntegerObject>,
+    pub current_shard_count: Option<i64>,
     #[doc="<p>The name of the stream.</p>"]
     #[serde(rename="StreamName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub stream_name: Option<StreamName>,
+    pub stream_name: Option<String>,
     #[doc="<p>The updated number of shards.</p>"]
     #[serde(rename="TargetShardCount")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub target_shard_count: Option<PositiveIntegerObject>,
+    pub target_shard_count: Option<i64>,
 }
 
 /// Errors returned by AddTagsToStream

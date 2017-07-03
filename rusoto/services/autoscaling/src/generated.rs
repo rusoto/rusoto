@@ -37,13 +37,12 @@ enum DeserializerNext {
     Skip,
     Element(String),
 }
-pub type Activities = Vec<Activity>;
 struct ActivitiesDeserializer;
 impl ActivitiesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Activities, XmlParseError> {
+                                       -> Result<Vec<Activity>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -82,9 +81,9 @@ impl ActivitiesDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ActivitiesType {
     #[doc="<p>The scaling activities. Activities are sorted by start time. Activities still in progress are described first.</p>"]
-    pub activities: Activities,
+    pub activities: Vec<Activity>,
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
-    pub next_token: Option<XmlString>,
+    pub next_token: Option<String>,
 }
 
 struct ActivitiesTypeDeserializer;
@@ -137,25 +136,25 @@ impl ActivitiesTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct Activity {
     #[doc="<p>The ID of the activity.</p>"]
-    pub activity_id: XmlString,
+    pub activity_id: String,
     #[doc="<p>The name of the Auto Scaling group.</p>"]
-    pub auto_scaling_group_name: XmlStringMaxLen255,
+    pub auto_scaling_group_name: String,
     #[doc="<p>The reason the activity began.</p>"]
-    pub cause: XmlStringMaxLen1023,
+    pub cause: String,
     #[doc="<p>A friendly, more verbose description of the activity.</p>"]
-    pub description: Option<XmlString>,
+    pub description: Option<String>,
     #[doc="<p>The details about the activity.</p>"]
-    pub details: Option<XmlString>,
+    pub details: Option<String>,
     #[doc="<p>The end time of the activity.</p>"]
-    pub end_time: Option<TimestampType>,
+    pub end_time: Option<String>,
     #[doc="<p>A value between 0 and 100 that indicates the progress of the activity.</p>"]
-    pub progress: Option<Progress>,
+    pub progress: Option<i64>,
     #[doc="<p>The start time of the activity.</p>"]
-    pub start_time: TimestampType,
+    pub start_time: String,
     #[doc="<p>The current status of the activity.</p>"]
-    pub status_code: ScalingActivityStatusCode,
+    pub status_code: String,
     #[doc="<p>A friendly, more verbose description of the activity status.</p>"]
-    pub status_message: Option<XmlStringMaxLen255>,
+    pub status_message: Option<String>,
 }
 
 struct ActivityDeserializer;
@@ -240,12 +239,11 @@ impl ActivityDeserializer {
 
     }
 }
-pub type ActivityIds = Vec<XmlString>;
 
 /// Serialize `ActivityIds` contents to a `SignedRequest`.
 struct ActivityIdsSerializer;
 impl ActivityIdsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ActivityIds) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -305,7 +303,7 @@ impl ActivityTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct AdjustmentType {
     #[doc="<p>The policy adjustment type. The valid values are <code>ChangeInCapacity</code>, <code>ExactCapacity</code>, and <code>PercentChangeInCapacity</code>.</p>"]
-    pub adjustment_type: Option<XmlStringMaxLen255>,
+    pub adjustment_type: Option<String>,
 }
 
 struct AdjustmentTypeDeserializer;
@@ -351,13 +349,12 @@ impl AdjustmentTypeDeserializer {
 
     }
 }
-pub type AdjustmentTypes = Vec<AdjustmentType>;
 struct AdjustmentTypesDeserializer;
 impl AdjustmentTypesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AdjustmentTypes, XmlParseError> {
+                                       -> Result<Vec<AdjustmentType>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -397,9 +394,9 @@ impl AdjustmentTypesDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct Alarm {
     #[doc="<p>The Amazon Resource Name (ARN) of the alarm.</p>"]
-    pub alarm_arn: Option<ResourceName>,
+    pub alarm_arn: Option<String>,
     #[doc="<p>The name of the alarm.</p>"]
-    pub alarm_name: Option<XmlStringMaxLen255>,
+    pub alarm_name: Option<String>,
 }
 
 struct AlarmDeserializer;
@@ -450,13 +447,12 @@ impl AlarmDeserializer {
 
     }
 }
-pub type Alarms = Vec<Alarm>;
 struct AlarmsDeserializer;
 impl AlarmsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Alarms, XmlParseError> {
+                                       -> Result<Vec<Alarm>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -492,13 +488,12 @@ impl AlarmsDeserializer {
 
     }
 }
-pub type AsciiStringMaxLen255 = String;
 struct AsciiStringMaxLen255Deserializer;
 impl AsciiStringMaxLen255Deserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AsciiStringMaxLen255, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -507,13 +502,12 @@ impl AsciiStringMaxLen255Deserializer {
 
     }
 }
-pub type AssociatePublicIpAddress = bool;
 struct AssociatePublicIpAddressDeserializer;
 impl AssociatePublicIpAddressDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AssociatePublicIpAddress, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -525,9 +519,9 @@ impl AssociatePublicIpAddressDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct AttachInstancesQuery {
     #[doc="<p>The name of the group.</p>"]
-    pub auto_scaling_group_name: ResourceName,
+    pub auto_scaling_group_name: String,
     #[doc="<p>One or more instance IDs.</p>"]
-    pub instance_ids: Option<InstanceIds>,
+    pub instance_ids: Option<Vec<String>>,
 }
 
 
@@ -574,9 +568,9 @@ impl AttachLoadBalancerTargetGroupsResultTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct AttachLoadBalancerTargetGroupsType {
     #[doc="<p>The name of the Auto Scaling group.</p>"]
-    pub auto_scaling_group_name: ResourceName,
+    pub auto_scaling_group_name: String,
     #[doc="<p>The Amazon Resource Names (ARN) of the target groups.</p>"]
-    pub target_group_ar_ns: TargetGroupARNs,
+    pub target_group_ar_ns: Vec<String>,
 }
 
 
@@ -620,9 +614,9 @@ impl AttachLoadBalancersResultTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct AttachLoadBalancersType {
     #[doc="<p>The name of the group.</p>"]
-    pub auto_scaling_group_name: ResourceName,
+    pub auto_scaling_group_name: String,
     #[doc="<p>One or more load balancer names.</p>"]
-    pub load_balancer_names: LoadBalancerNames,
+    pub load_balancer_names: Vec<String>,
 }
 
 
@@ -648,49 +642,49 @@ impl AttachLoadBalancersTypeSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct AutoScalingGroup {
     #[doc="<p>The Amazon Resource Name (ARN) of the group.</p>"]
-    pub auto_scaling_group_arn: Option<ResourceName>,
+    pub auto_scaling_group_arn: Option<String>,
     #[doc="<p>The name of the group.</p>"]
-    pub auto_scaling_group_name: XmlStringMaxLen255,
+    pub auto_scaling_group_name: String,
     #[doc="<p>One or more Availability Zones for the group.</p>"]
-    pub availability_zones: AvailabilityZones,
+    pub availability_zones: Vec<String>,
     #[doc="<p>The date and time the group was created.</p>"]
-    pub created_time: TimestampType,
+    pub created_time: String,
     #[doc="<p>The amount of time, in seconds, after a scaling activity completes before another scaling activity can start.</p>"]
-    pub default_cooldown: Cooldown,
+    pub default_cooldown: i64,
     #[doc="<p>The desired size of the group.</p>"]
-    pub desired_capacity: AutoScalingGroupDesiredCapacity,
+    pub desired_capacity: i64,
     #[doc="<p>The metrics enabled for the group.</p>"]
-    pub enabled_metrics: Option<EnabledMetrics>,
+    pub enabled_metrics: Option<Vec<EnabledMetric>>,
     #[doc="<p>The amount of time, in seconds, that Auto Scaling waits before checking the health status of an EC2 instance that has come into service.</p>"]
-    pub health_check_grace_period: Option<HealthCheckGracePeriod>,
+    pub health_check_grace_period: Option<i64>,
     #[doc="<p>The service to use for the health checks. The valid values are <code>EC2</code> and <code>ELB</code>.</p>"]
-    pub health_check_type: XmlStringMaxLen32,
+    pub health_check_type: String,
     #[doc="<p>The EC2 instances associated with the group.</p>"]
-    pub instances: Option<Instances>,
+    pub instances: Option<Vec<Instance>>,
     #[doc="<p>The name of the associated launch configuration.</p>"]
-    pub launch_configuration_name: Option<XmlStringMaxLen255>,
+    pub launch_configuration_name: Option<String>,
     #[doc="<p>One or more load balancers associated with the group.</p>"]
-    pub load_balancer_names: Option<LoadBalancerNames>,
+    pub load_balancer_names: Option<Vec<String>>,
     #[doc="<p>The maximum size of the group.</p>"]
-    pub max_size: AutoScalingGroupMaxSize,
+    pub max_size: i64,
     #[doc="<p>The minimum size of the group.</p>"]
-    pub min_size: AutoScalingGroupMinSize,
+    pub min_size: i64,
     #[doc="<p>Indicates whether newly launched instances are protected from termination by Auto Scaling when scaling in.</p>"]
-    pub new_instances_protected_from_scale_in: Option<InstanceProtected>,
+    pub new_instances_protected_from_scale_in: Option<bool>,
     #[doc="<p>The name of the placement group into which you'll launch your instances, if any. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html\">Placement Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-    pub placement_group: Option<XmlStringMaxLen255>,
+    pub placement_group: Option<String>,
     #[doc="<p>The current state of the group when <a>DeleteAutoScalingGroup</a> is in progress.</p>"]
-    pub status: Option<XmlStringMaxLen255>,
+    pub status: Option<String>,
     #[doc="<p>The suspended processes associated with the group.</p>"]
-    pub suspended_processes: Option<SuspendedProcesses>,
+    pub suspended_processes: Option<Vec<SuspendedProcess>>,
     #[doc="<p>The tags for the group.</p>"]
-    pub tags: Option<TagDescriptionList>,
+    pub tags: Option<Vec<TagDescription>>,
     #[doc="<p>The Amazon Resource Names (ARN) of the target groups for your load balancer.</p>"]
-    pub target_group_ar_ns: Option<TargetGroupARNs>,
+    pub target_group_ar_ns: Option<Vec<String>>,
     #[doc="<p>The termination policies for the group.</p>"]
-    pub termination_policies: Option<TerminationPolicies>,
+    pub termination_policies: Option<Vec<String>>,
     #[doc="<p>One or more subnet IDs, if applicable, separated by commas.</p> <p>If you specify <code>VPCZoneIdentifier</code> and <code>AvailabilityZones</code>, ensure that the Availability Zones of the subnets match the values for <code>AvailabilityZones</code>.</p>"]
-    pub vpc_zone_identifier: Option<XmlStringMaxLen2047>,
+    pub vpc_zone_identifier: Option<String>,
 }
 
 struct AutoScalingGroupDeserializer;
@@ -836,14 +830,12 @@ impl AutoScalingGroupDeserializer {
 
     }
 }
-pub type AutoScalingGroupDesiredCapacity = i64;
 struct AutoScalingGroupDesiredCapacityDeserializer;
 impl AutoScalingGroupDesiredCapacityDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<AutoScalingGroupDesiredCapacity, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -852,13 +844,12 @@ impl AutoScalingGroupDesiredCapacityDeserializer {
 
     }
 }
-pub type AutoScalingGroupMaxSize = i64;
 struct AutoScalingGroupMaxSizeDeserializer;
 impl AutoScalingGroupMaxSizeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AutoScalingGroupMaxSize, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -867,13 +858,12 @@ impl AutoScalingGroupMaxSizeDeserializer {
 
     }
 }
-pub type AutoScalingGroupMinSize = i64;
 struct AutoScalingGroupMinSizeDeserializer;
 impl AutoScalingGroupMinSizeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AutoScalingGroupMinSize, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -882,12 +872,11 @@ impl AutoScalingGroupMinSizeDeserializer {
 
     }
 }
-pub type AutoScalingGroupNames = Vec<ResourceName>;
 
 /// Serialize `AutoScalingGroupNames` contents to a `SignedRequest`.
 struct AutoScalingGroupNamesSerializer;
 impl AutoScalingGroupNamesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AutoScalingGroupNames) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -898,11 +887,11 @@ impl AutoScalingGroupNamesSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct AutoScalingGroupNamesType {
     #[doc="<p>The group names. If you omit this parameter, all Auto Scaling groups are described.</p>"]
-    pub auto_scaling_group_names: Option<AutoScalingGroupNames>,
+    pub auto_scaling_group_names: Option<Vec<String>>,
     #[doc="<p>The maximum number of items to return with this call. The default value is 50 and the maximum value is 100.</p>"]
-    pub max_records: Option<MaxRecords>,
+    pub max_records: Option<i64>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    pub next_token: Option<XmlString>,
+    pub next_token: Option<String>,
 }
 
 
@@ -933,13 +922,12 @@ impl AutoScalingGroupNamesTypeSerializer {
     }
 }
 
-pub type AutoScalingGroups = Vec<AutoScalingGroup>;
 struct AutoScalingGroupsDeserializer;
 impl AutoScalingGroupsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AutoScalingGroups, XmlParseError> {
+                                       -> Result<Vec<AutoScalingGroup>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -978,9 +966,9 @@ impl AutoScalingGroupsDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct AutoScalingGroupsType {
     #[doc="<p>The groups.</p>"]
-    pub auto_scaling_groups: AutoScalingGroups,
+    pub auto_scaling_groups: Vec<AutoScalingGroup>,
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
-    pub next_token: Option<XmlString>,
+    pub next_token: Option<String>,
 }
 
 struct AutoScalingGroupsTypeDeserializer;
@@ -1034,19 +1022,19 @@ impl AutoScalingGroupsTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct AutoScalingInstanceDetails {
     #[doc="<p>The name of the Auto Scaling group associated with the instance.</p>"]
-    pub auto_scaling_group_name: XmlStringMaxLen255,
+    pub auto_scaling_group_name: String,
     #[doc="<p>The Availability Zone for the instance.</p>"]
-    pub availability_zone: XmlStringMaxLen255,
+    pub availability_zone: String,
     #[doc="<p>The last reported health status of this instance. \"Healthy\" means that the instance is healthy and should remain in service. \"Unhealthy\" means that the instance is unhealthy and Auto Scaling should terminate and replace it.</p>"]
-    pub health_status: XmlStringMaxLen32,
+    pub health_status: String,
     #[doc="<p>The ID of the instance.</p>"]
-    pub instance_id: XmlStringMaxLen19,
+    pub instance_id: String,
     #[doc="<p>The launch configuration used to launch the instance. This value is not available if you attached the instance to the Auto Scaling group.</p>"]
-    pub launch_configuration_name: XmlStringMaxLen255,
+    pub launch_configuration_name: String,
     #[doc="<p>The lifecycle state for the instance. For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroupLifecycle.html\">Auto Scaling Lifecycle</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-    pub lifecycle_state: XmlStringMaxLen32,
+    pub lifecycle_state: String,
     #[doc="<p>Indicates whether the instance is protected from termination by Auto Scaling when scaling in.</p>"]
-    pub protected_from_scale_in: InstanceProtected,
+    pub protected_from_scale_in: bool,
 }
 
 struct AutoScalingInstanceDetailsDeserializer;
@@ -1122,13 +1110,13 @@ impl AutoScalingInstanceDetailsDeserializer {
 
     }
 }
-pub type AutoScalingInstances = Vec<AutoScalingInstanceDetails>;
 struct AutoScalingInstancesDeserializer;
 impl AutoScalingInstancesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<AutoScalingInstances, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<Vec<AutoScalingInstanceDetails>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -1168,9 +1156,9 @@ impl AutoScalingInstancesDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct AutoScalingInstancesType {
     #[doc="<p>The instances.</p>"]
-    pub auto_scaling_instances: Option<AutoScalingInstances>,
+    pub auto_scaling_instances: Option<Vec<AutoScalingInstanceDetails>>,
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
-    pub next_token: Option<XmlString>,
+    pub next_token: Option<String>,
 }
 
 struct AutoScalingInstancesTypeDeserializer;
@@ -1220,13 +1208,12 @@ impl AutoScalingInstancesTypeDeserializer {
 
     }
 }
-pub type AutoScalingNotificationTypes = Vec<XmlStringMaxLen255>;
 struct AutoScalingNotificationTypesDeserializer;
 impl AutoScalingNotificationTypesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AutoScalingNotificationTypes, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -1267,7 +1254,7 @@ impl AutoScalingNotificationTypesDeserializer {
 /// Serialize `AutoScalingNotificationTypes` contents to a `SignedRequest`.
 struct AutoScalingNotificationTypesSerializer;
 impl AutoScalingNotificationTypesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AutoScalingNotificationTypes) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -1275,13 +1262,12 @@ impl AutoScalingNotificationTypesSerializer {
     }
 }
 
-pub type AvailabilityZones = Vec<XmlStringMaxLen255>;
 struct AvailabilityZonesDeserializer;
 impl AvailabilityZonesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AvailabilityZones, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -1322,7 +1308,7 @@ impl AvailabilityZonesDeserializer {
 /// Serialize `AvailabilityZones` contents to a `SignedRequest`.
 struct AvailabilityZonesSerializer;
 impl AvailabilityZonesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AvailabilityZones) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -1330,14 +1316,12 @@ impl AvailabilityZonesSerializer {
     }
 }
 
-pub type BlockDeviceEbsDeleteOnTermination = bool;
 struct BlockDeviceEbsDeleteOnTerminationDeserializer;
 impl BlockDeviceEbsDeleteOnTerminationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<BlockDeviceEbsDeleteOnTermination, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -1346,13 +1330,12 @@ impl BlockDeviceEbsDeleteOnTerminationDeserializer {
 
     }
 }
-pub type BlockDeviceEbsEncrypted = bool;
 struct BlockDeviceEbsEncryptedDeserializer;
 impl BlockDeviceEbsEncryptedDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<BlockDeviceEbsEncrypted, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -1361,13 +1344,12 @@ impl BlockDeviceEbsEncryptedDeserializer {
 
     }
 }
-pub type BlockDeviceEbsIops = i64;
 struct BlockDeviceEbsIopsDeserializer;
 impl BlockDeviceEbsIopsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<BlockDeviceEbsIops, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -1376,13 +1358,12 @@ impl BlockDeviceEbsIopsDeserializer {
 
     }
 }
-pub type BlockDeviceEbsVolumeSize = i64;
 struct BlockDeviceEbsVolumeSizeDeserializer;
 impl BlockDeviceEbsVolumeSizeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<BlockDeviceEbsVolumeSize, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -1391,13 +1372,12 @@ impl BlockDeviceEbsVolumeSizeDeserializer {
 
     }
 }
-pub type BlockDeviceEbsVolumeType = String;
 struct BlockDeviceEbsVolumeTypeDeserializer;
 impl BlockDeviceEbsVolumeTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<BlockDeviceEbsVolumeType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1410,13 +1390,13 @@ impl BlockDeviceEbsVolumeTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct BlockDeviceMapping {
     #[doc="<p>The device name exposed to the EC2 instance (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p>"]
-    pub device_name: XmlStringMaxLen255,
+    pub device_name: String,
     #[doc="<p>The information about the Amazon EBS volume.</p>"]
     pub ebs: Option<Ebs>,
     #[doc="<p>Suppresses a device mapping.</p> <p>If this parameter is true for the root device, the instance might fail the EC2 health check. Auto Scaling launches a replacement instance if the instance fails the health check.</p>"]
-    pub no_device: Option<NoDevice>,
+    pub no_device: Option<bool>,
     #[doc="<p>The name of the virtual device (for example, <code>ephemeral0</code>).</p>"]
-    pub virtual_name: Option<XmlStringMaxLen255>,
+    pub virtual_name: Option<String>,
 }
 
 struct BlockDeviceMappingDeserializer;
@@ -1499,13 +1479,12 @@ impl BlockDeviceMappingSerializer {
     }
 }
 
-pub type BlockDeviceMappings = Vec<BlockDeviceMapping>;
 struct BlockDeviceMappingsDeserializer;
 impl BlockDeviceMappingsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<BlockDeviceMappings, XmlParseError> {
+                                       -> Result<Vec<BlockDeviceMapping>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -1546,7 +1525,7 @@ impl BlockDeviceMappingsDeserializer {
 /// Serialize `BlockDeviceMappings` contents to a `SignedRequest`.
 struct BlockDeviceMappingsSerializer;
 impl BlockDeviceMappingsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &BlockDeviceMappings) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<BlockDeviceMapping>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             BlockDeviceMappingSerializer::serialize(params, &key, obj);
@@ -1554,13 +1533,12 @@ impl BlockDeviceMappingsSerializer {
     }
 }
 
-pub type ClassicLinkVPCSecurityGroups = Vec<XmlStringMaxLen255>;
 struct ClassicLinkVPCSecurityGroupsDeserializer;
 impl ClassicLinkVPCSecurityGroupsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ClassicLinkVPCSecurityGroups, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -1601,7 +1579,7 @@ impl ClassicLinkVPCSecurityGroupsDeserializer {
 /// Serialize `ClassicLinkVPCSecurityGroups` contents to a `SignedRequest`.
 struct ClassicLinkVPCSecurityGroupsSerializer;
 impl ClassicLinkVPCSecurityGroupsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ClassicLinkVPCSecurityGroups) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -1631,15 +1609,15 @@ impl CompleteLifecycleActionAnswerDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CompleteLifecycleActionType {
     #[doc="<p>The name of the group for the lifecycle hook.</p>"]
-    pub auto_scaling_group_name: ResourceName,
+    pub auto_scaling_group_name: String,
     #[doc="<p>The ID of the instance.</p>"]
-    pub instance_id: Option<XmlStringMaxLen19>,
+    pub instance_id: Option<String>,
     #[doc="<p>The action for the group to take. This parameter can be either <code>CONTINUE</code> or <code>ABANDON</code>.</p>"]
-    pub lifecycle_action_result: LifecycleActionResult,
+    pub lifecycle_action_result: String,
     #[doc="<p>A universally unique identifier (UUID) that identifies a specific lifecycle action associated with an instance. Auto Scaling sends this token to the notification target you specified when you created the lifecycle hook.</p>"]
-    pub lifecycle_action_token: Option<LifecycleActionToken>,
+    pub lifecycle_action_token: Option<String>,
     #[doc="<p>The name of the lifecycle hook.</p>"]
-    pub lifecycle_hook_name: AsciiStringMaxLen255,
+    pub lifecycle_hook_name: String,
 }
 
 
@@ -1669,13 +1647,12 @@ impl CompleteLifecycleActionTypeSerializer {
     }
 }
 
-pub type Cooldown = i64;
 struct CooldownDeserializer;
 impl CooldownDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Cooldown, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -1687,39 +1664,39 @@ impl CooldownDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateAutoScalingGroupType {
     #[doc="<p>The name of the group. This name must be unique within the scope of your AWS account.</p>"]
-    pub auto_scaling_group_name: XmlStringMaxLen255,
+    pub auto_scaling_group_name: String,
     #[doc="<p>One or more Availability Zones for the group. This parameter is optional if you specify one or more subnets.</p>"]
-    pub availability_zones: Option<AvailabilityZones>,
+    pub availability_zones: Option<Vec<String>>,
     #[doc="<p>The amount of time, in seconds, after a scaling activity completes before another scaling activity can start. The default is 300.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/Cooldown.html\">Auto Scaling Cooldowns</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-    pub default_cooldown: Option<Cooldown>,
+    pub default_cooldown: Option<i64>,
     #[doc="<p>The number of EC2 instances that should be running in the group. This number must be greater than or equal to the minimum size of the group and less than or equal to the maximum size of the group. If you do not specify a desired capacity, the default is the minimum size of the group.</p>"]
-    pub desired_capacity: Option<AutoScalingGroupDesiredCapacity>,
+    pub desired_capacity: Option<i64>,
     #[doc="<p>The amount of time, in seconds, that Auto Scaling waits before checking the health status of an EC2 instance that has come into service. During this time, any health check failures for the instance are ignored. The default is 0.</p> <p>This parameter is required if you are adding an <code>ELB</code> health check.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/healthcheck.html\">Health Checks</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-    pub health_check_grace_period: Option<HealthCheckGracePeriod>,
+    pub health_check_grace_period: Option<i64>,
     #[doc="<p>The service to use for the health checks. The valid values are <code>EC2</code> and <code>ELB</code>.</p> <p>By default, health checks use Amazon EC2 instance status checks to determine the health of an instance. For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/healthcheck.html\">Health Checks</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-    pub health_check_type: Option<XmlStringMaxLen32>,
+    pub health_check_type: Option<String>,
     #[doc="<p>The ID of the instance used to create a launch configuration for the group. Alternatively, specify a launch configuration instead of an EC2 instance.</p> <p>When you specify an ID of an instance, Auto Scaling creates a new launch configuration and associates it with the group. This launch configuration derives its attributes from the specified instance, with the exception of the block device mapping.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/create-asg-from-instance.html\">Create an Auto Scaling Group Using an EC2 Instance</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-    pub instance_id: Option<XmlStringMaxLen19>,
+    pub instance_id: Option<String>,
     #[doc="<p>The name of the launch configuration. Alternatively, specify an EC2 instance instead of a launch configuration.</p>"]
-    pub launch_configuration_name: Option<ResourceName>,
+    pub launch_configuration_name: Option<String>,
     #[doc="<p>One or more Classic Load Balancers. To specify an Application Load Balancer, use <code>TargetGroupARNs</code> instead.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/create-asg-from-instance.html\">Using a Load Balancer With an Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-    pub load_balancer_names: Option<LoadBalancerNames>,
+    pub load_balancer_names: Option<Vec<String>>,
     #[doc="<p>The maximum size of the group.</p>"]
-    pub max_size: AutoScalingGroupMaxSize,
+    pub max_size: i64,
     #[doc="<p>The minimum size of the group.</p>"]
-    pub min_size: AutoScalingGroupMinSize,
+    pub min_size: i64,
     #[doc="<p>Indicates whether newly launched instances are protected from termination by Auto Scaling when scaling in.</p>"]
-    pub new_instances_protected_from_scale_in: Option<InstanceProtected>,
+    pub new_instances_protected_from_scale_in: Option<bool>,
     #[doc="<p>The name of the placement group into which you'll launch your instances, if any. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html\">Placement Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-    pub placement_group: Option<XmlStringMaxLen255>,
+    pub placement_group: Option<String>,
     #[doc="<p>One or more tags.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/autoscaling-tagging.html\">Tagging Auto Scaling Groups and Instances</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-    pub tags: Option<Tags>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>The Amazon Resource Names (ARN) of the target groups.</p>"]
-    pub target_group_ar_ns: Option<TargetGroupARNs>,
+    pub target_group_ar_ns: Option<Vec<String>>,
     #[doc="<p>One or more termination policies used to select the instance to terminate. These policies are executed in the order that they are listed.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/as-instance-termination.html\">Controlling Which Instances Auto Scaling Terminates During Scale In</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-    pub termination_policies: Option<TerminationPolicies>,
+    pub termination_policies: Option<Vec<String>>,
     #[doc="<p>A comma-separated list of subnet identifiers for your virtual private cloud (VPC).</p> <p>If you specify subnets and Availability Zones with this call, ensure that the subnets' Availability Zones match the Availability Zones specified.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/asg-in-vpc.html\">Launching Auto Scaling Instances in a VPC</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-    pub vpc_zone_identifier: Option<XmlStringMaxLen2047>,
+    pub vpc_zone_identifier: Option<String>,
 }
 
 
@@ -1802,41 +1779,41 @@ impl CreateAutoScalingGroupTypeSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateLaunchConfigurationType {
     #[doc="<p>Used for groups that launch instances into a virtual private cloud (VPC). Specifies whether to assign a public IP address to each instance. For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/asg-in-vpc.html\">Launching Auto Scaling Instances in a VPC</a> in the <i>Auto Scaling User Guide</i>.</p> <p>If you specify this parameter, be sure to specify at least one subnet when you create your group.</p> <p>Default: If the instance is launched into a default subnet, the default is <code>true</code>. If the instance is launched into a nondefault subnet, the default is <code>false</code>. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-supported-platforms.html\">Supported Platforms</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-    pub associate_public_ip_address: Option<AssociatePublicIpAddress>,
+    pub associate_public_ip_address: Option<bool>,
     #[doc="<p>One or more mappings that specify how block devices are exposed to the instance. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-device-mapping-concepts.html\">Block Device Mapping</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-    pub block_device_mappings: Option<BlockDeviceMappings>,
+    pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
     #[doc="<p>The ID of a ClassicLink-enabled VPC to link your EC2-Classic instances to. This parameter is supported only if you are launching EC2-Classic instances. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html\">ClassicLink</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-    pub classic_link_vpc_id: Option<XmlStringMaxLen255>,
+    pub classic_link_vpc_id: Option<String>,
     #[doc="<p>The IDs of one or more security groups for the specified ClassicLink-enabled VPC. This parameter is required if you specify a ClassicLink-enabled VPC, and is not supported otherwise. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html\">ClassicLink</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-    pub classic_link_vpc_security_groups: Option<ClassicLinkVPCSecurityGroups>,
+    pub classic_link_vpc_security_groups: Option<Vec<String>>,
     #[doc="<p>Indicates whether the instance is optimized for Amazon EBS I/O. By default, the instance is not optimized for EBS I/O. The optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal I/O performance. This optimization is not available with all instance types. Additional usage charges apply. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSOptimized.html\">Amazon EBS-Optimized Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-    pub ebs_optimized: Option<EbsOptimized>,
+    pub ebs_optimized: Option<bool>,
     #[doc="<p>The name or the Amazon Resource Name (ARN) of the instance profile associated with the IAM role for the instance.</p> <p>EC2 instances launched with an IAM role will automatically have AWS security credentials available. You can use IAM roles with Auto Scaling to automatically enable applications running on your EC2 instances to securely access other AWS resources. For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/us-iam-role.html\">Launch Auto Scaling Instances with an IAM Role</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-    pub iam_instance_profile: Option<XmlStringMaxLen1600>,
+    pub iam_instance_profile: Option<String>,
     #[doc="<p>The ID of the Amazon Machine Image (AMI) to use to launch your EC2 instances.</p> <p>If you do not specify <code>InstanceId</code>, you must specify <code>ImageId</code>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-ami.html\">Finding an AMI</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-    pub image_id: Option<XmlStringMaxLen255>,
+    pub image_id: Option<String>,
     #[doc="<p>The ID of the instance to use to create the launch configuration. The new launch configuration derives attributes from the instance, with the exception of the block device mapping.</p> <p>If you do not specify <code>InstanceId</code>, you must specify both <code>ImageId</code> and <code>InstanceType</code>.</p> <p>To create a launch configuration with a block device mapping or override any other instance attributes, specify them as part of the same request.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/create-lc-with-instanceID.html\">Create a Launch Configuration Using an EC2 Instance</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-    pub instance_id: Option<XmlStringMaxLen19>,
+    pub instance_id: Option<String>,
     #[doc="<p>Enables detailed monitoring (<code>true</code>) or basic monitoring (<code>false</code>) for the Auto Scaling instances. The default is <code>true</code>.</p>"]
     pub instance_monitoring: Option<InstanceMonitoring>,
     #[doc="<p>The instance type of the EC2 instance.</p> <p>If you do not specify <code>InstanceId</code>, you must specify <code>InstanceType</code>.</p> <p>For information about available instance types, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#AvailableInstanceTypes\">Available Instance Types</a> in the <i>Amazon Elastic Compute Cloud User Guide.</i> </p>"]
-    pub instance_type: Option<XmlStringMaxLen255>,
+    pub instance_type: Option<String>,
     #[doc="<p>The ID of the kernel associated with the AMI.</p>"]
-    pub kernel_id: Option<XmlStringMaxLen255>,
+    pub kernel_id: Option<String>,
     #[doc="<p>The name of the key pair. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html\">Amazon EC2 Key Pairs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-    pub key_name: Option<XmlStringMaxLen255>,
+    pub key_name: Option<String>,
     #[doc="<p>The name of the launch configuration. This name must be unique within the scope of your AWS account.</p>"]
-    pub launch_configuration_name: XmlStringMaxLen255,
+    pub launch_configuration_name: String,
     #[doc="<p>The tenancy of the instance. An instance with a tenancy of <code>dedicated</code> runs on single-tenant hardware and can only be launched into a VPC.</p> <p>You must set the value of this parameter to <code>dedicated</code> if want to launch Dedicated Instances into a shared tenancy VPC (VPC with instance placement tenancy attribute set to <code>default</code>).</p> <p>If you specify this parameter, be sure to specify at least one subnet when you create your group.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/asg-in-vpc.html\">Launching Auto Scaling Instances in a VPC</a> in the <i>Auto Scaling User Guide</i>.</p> <p>Valid values: <code>default</code> | <code>dedicated</code> </p>"]
-    pub placement_tenancy: Option<XmlStringMaxLen64>,
+    pub placement_tenancy: Option<String>,
     #[doc="<p>The ID of the RAM disk associated with the AMI.</p>"]
-    pub ramdisk_id: Option<XmlStringMaxLen255>,
+    pub ramdisk_id: Option<String>,
     #[doc="<p>One or more security groups with which to associate the instances.</p> <p>If your instances are launched in EC2-Classic, you can either specify security group names or the security group IDs. For more information about security groups for EC2-Classic, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html\">Amazon EC2 Security Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>If your instances are launched into a VPC, specify security group IDs. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html\">Security Groups for Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-    pub security_groups: Option<SecurityGroups>,
+    pub security_groups: Option<Vec<String>>,
     #[doc="<p>The maximum hourly price to be paid for any Spot Instance launched to fulfill the request. Spot Instances are launched when the price you specify exceeds the current Spot market price. For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/US-SpotInstances.html\">Launching Spot Instances in Your Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-    pub spot_price: Option<SpotPrice>,
+    pub spot_price: Option<String>,
     #[doc="<p>The user data to make available to the launched EC2 instances. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html\">Instance Metadata and User Data</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-    pub user_data: Option<XmlStringUserData>,
+    pub user_data: Option<String>,
 }
 
 
@@ -1923,7 +1900,7 @@ impl CreateLaunchConfigurationTypeSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateOrUpdateTagsType {
     #[doc="<p>One or more tags.</p>"]
-    pub tags: Tags,
+    pub tags: Vec<Tag>,
 }
 
 
@@ -1944,9 +1921,9 @@ impl CreateOrUpdateTagsTypeSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteAutoScalingGroupType {
     #[doc="<p>The name of the group to delete.</p>"]
-    pub auto_scaling_group_name: ResourceName,
+    pub auto_scaling_group_name: String,
     #[doc="<p>Specifies that the group will be deleted along with all instances associated with the group, without waiting for all instances to be terminated. This parameter also deletes any lifecycle actions associated with the group.</p>"]
-    pub force_delete: Option<ForceDelete>,
+    pub force_delete: Option<bool>,
 }
 
 
@@ -1991,9 +1968,9 @@ impl DeleteLifecycleHookAnswerDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteLifecycleHookType {
     #[doc="<p>The name of the Auto Scaling group for the lifecycle hook.</p>"]
-    pub auto_scaling_group_name: ResourceName,
+    pub auto_scaling_group_name: String,
     #[doc="<p>The name of the lifecycle hook.</p>"]
-    pub lifecycle_hook_name: AsciiStringMaxLen255,
+    pub lifecycle_hook_name: String,
 }
 
 
@@ -2017,9 +1994,9 @@ impl DeleteLifecycleHookTypeSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteNotificationConfigurationType {
     #[doc="<p>The name of the Auto Scaling group.</p>"]
-    pub auto_scaling_group_name: ResourceName,
+    pub auto_scaling_group_name: String,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (SNS) topic.</p>"]
-    pub topic_arn: ResourceName,
+    pub topic_arn: String,
 }
 
 
@@ -2042,9 +2019,9 @@ impl DeleteNotificationConfigurationTypeSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeletePolicyType {
     #[doc="<p>The name of the Auto Scaling group.</p>"]
-    pub auto_scaling_group_name: Option<ResourceName>,
+    pub auto_scaling_group_name: Option<String>,
     #[doc="<p>The name or Amazon Resource Name (ARN) of the policy.</p>"]
-    pub policy_name: ResourceName,
+    pub policy_name: String,
 }
 
 
@@ -2069,9 +2046,9 @@ impl DeletePolicyTypeSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteScheduledActionType {
     #[doc="<p>The name of the Auto Scaling group.</p>"]
-    pub auto_scaling_group_name: ResourceName,
+    pub auto_scaling_group_name: String,
     #[doc="<p>The name of the action to delete.</p>"]
-    pub scheduled_action_name: ResourceName,
+    pub scheduled_action_name: String,
 }
 
 
@@ -2095,7 +2072,7 @@ impl DeleteScheduledActionTypeSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteTagsType {
     #[doc="<p>One or more tags.</p>"]
-    pub tags: Tags,
+    pub tags: Vec<Tag>,
 }
 
 
@@ -2116,13 +2093,13 @@ impl DeleteTagsTypeSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeAccountLimitsAnswer {
     #[doc="<p>The maximum number of groups allowed for your AWS account. The default limit is 20 per region.</p>"]
-    pub max_number_of_auto_scaling_groups: Option<MaxNumberOfAutoScalingGroups>,
+    pub max_number_of_auto_scaling_groups: Option<i64>,
     #[doc="<p>The maximum number of launch configurations allowed for your AWS account. The default limit is 100 per region.</p>"]
-    pub max_number_of_launch_configurations: Option<MaxNumberOfLaunchConfigurations>,
+    pub max_number_of_launch_configurations: Option<i64>,
     #[doc="<p>The current number of groups for your AWS account.</p>"]
-    pub number_of_auto_scaling_groups: Option<NumberOfAutoScalingGroups>,
+    pub number_of_auto_scaling_groups: Option<i64>,
     #[doc="<p>The current number of launch configurations for your AWS account.</p>"]
-    pub number_of_launch_configurations: Option<NumberOfLaunchConfigurations>,
+    pub number_of_launch_configurations: Option<i64>,
 }
 
 struct DescribeAccountLimitsAnswerDeserializer;
@@ -2178,7 +2155,7 @@ impl DescribeAccountLimitsAnswerDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeAdjustmentTypesAnswer {
     #[doc="<p>The policy adjustment types.</p>"]
-    pub adjustment_types: Option<AdjustmentTypes>,
+    pub adjustment_types: Option<Vec<AdjustmentType>>,
 }
 
 struct DescribeAdjustmentTypesAnswerDeserializer;
@@ -2227,11 +2204,11 @@ impl DescribeAdjustmentTypesAnswerDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeAutoScalingInstancesType {
     #[doc="<p>The instances to describe; up to 50 instance IDs. If you omit this parameter, all Auto Scaling instances are described. If you specify an ID that does not exist, it is ignored with no error.</p>"]
-    pub instance_ids: Option<InstanceIds>,
+    pub instance_ids: Option<Vec<String>>,
     #[doc="<p>The maximum number of items to return with this call. The default value is 50 and the maximum value is 100.</p>"]
-    pub max_records: Option<MaxRecords>,
+    pub max_records: Option<i64>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    pub next_token: Option<XmlString>,
+    pub next_token: Option<String>,
 }
 
 
@@ -2263,7 +2240,7 @@ impl DescribeAutoScalingInstancesTypeSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeAutoScalingNotificationTypesAnswer {
     #[doc="<p>The notification types.</p>"]
-    pub auto_scaling_notification_types: Option<AutoScalingNotificationTypes>,
+    pub auto_scaling_notification_types: Option<Vec<String>>,
 }
 
 struct DescribeAutoScalingNotificationTypesAnswerDeserializer;
@@ -2311,7 +2288,7 @@ impl DescribeAutoScalingNotificationTypesAnswerDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeLifecycleHookTypesAnswer {
     #[doc="<p>The lifecycle hook types.</p>"]
-    pub lifecycle_hook_types: Option<AutoScalingNotificationTypes>,
+    pub lifecycle_hook_types: Option<Vec<String>>,
 }
 
 struct DescribeLifecycleHookTypesAnswerDeserializer;
@@ -2359,7 +2336,7 @@ impl DescribeLifecycleHookTypesAnswerDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeLifecycleHooksAnswer {
     #[doc="<p>The lifecycle hooks for the specified group.</p>"]
-    pub lifecycle_hooks: Option<LifecycleHooks>,
+    pub lifecycle_hooks: Option<Vec<LifecycleHook>>,
 }
 
 struct DescribeLifecycleHooksAnswerDeserializer;
@@ -2408,9 +2385,9 @@ impl DescribeLifecycleHooksAnswerDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeLifecycleHooksType {
     #[doc="<p>The name of the group.</p>"]
-    pub auto_scaling_group_name: ResourceName,
+    pub auto_scaling_group_name: String,
     #[doc="<p>The names of one or more lifecycle hooks. If you omit this parameter, all lifecycle hooks are described.</p>"]
-    pub lifecycle_hook_names: Option<LifecycleHookNames>,
+    pub lifecycle_hook_names: Option<Vec<String>>,
 }
 
 
@@ -2437,11 +2414,11 @@ impl DescribeLifecycleHooksTypeSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeLoadBalancerTargetGroupsRequest {
     #[doc="<p>The name of the Auto Scaling group.</p>"]
-    pub auto_scaling_group_name: ResourceName,
+    pub auto_scaling_group_name: String,
     #[doc="<p>The maximum number of items to return with this call. The default value is 50 and the maximum value is 100.</p>"]
-    pub max_records: Option<MaxRecords>,
+    pub max_records: Option<i64>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    pub next_token: Option<XmlString>,
+    pub next_token: Option<String>,
 }
 
 
@@ -2470,9 +2447,9 @@ impl DescribeLoadBalancerTargetGroupsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeLoadBalancerTargetGroupsResponse {
     #[doc="<p>Information about the target groups.</p>"]
-    pub load_balancer_target_groups: Option<LoadBalancerTargetGroupStates>,
+    pub load_balancer_target_groups: Option<Vec<LoadBalancerTargetGroupState>>,
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
-    pub next_token: Option<XmlString>,
+    pub next_token: Option<String>,
 }
 
 struct DescribeLoadBalancerTargetGroupsResponseDeserializer;
@@ -2524,11 +2501,11 @@ impl DescribeLoadBalancerTargetGroupsResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeLoadBalancersRequest {
     #[doc="<p>The name of the group.</p>"]
-    pub auto_scaling_group_name: ResourceName,
+    pub auto_scaling_group_name: String,
     #[doc="<p>The maximum number of items to return with this call. The default value is 50 and the maximum value is 100.</p>"]
-    pub max_records: Option<MaxRecords>,
+    pub max_records: Option<i64>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    pub next_token: Option<XmlString>,
+    pub next_token: Option<String>,
 }
 
 
@@ -2557,9 +2534,9 @@ impl DescribeLoadBalancersRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeLoadBalancersResponse {
     #[doc="<p>The load balancers.</p>"]
-    pub load_balancers: Option<LoadBalancerStates>,
+    pub load_balancers: Option<Vec<LoadBalancerState>>,
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
-    pub next_token: Option<XmlString>,
+    pub next_token: Option<String>,
 }
 
 struct DescribeLoadBalancersResponseDeserializer;
@@ -2612,9 +2589,9 @@ impl DescribeLoadBalancersResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeMetricCollectionTypesAnswer {
     #[doc="<p>The granularities for the metrics.</p>"]
-    pub granularities: Option<MetricGranularityTypes>,
+    pub granularities: Option<Vec<MetricGranularityType>>,
     #[doc="<p>One or more metrics.</p>"]
-    pub metrics: Option<MetricCollectionTypes>,
+    pub metrics: Option<Vec<MetricCollectionType>>,
 }
 
 struct DescribeMetricCollectionTypesAnswerDeserializer;
@@ -2669,9 +2646,9 @@ impl DescribeMetricCollectionTypesAnswerDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeNotificationConfigurationsAnswer {
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
-    pub next_token: Option<XmlString>,
+    pub next_token: Option<String>,
     #[doc="<p>The notification configurations.</p>"]
-    pub notification_configurations: NotificationConfigurations,
+    pub notification_configurations: Vec<NotificationConfiguration>,
 }
 
 struct DescribeNotificationConfigurationsAnswerDeserializer;
@@ -2725,11 +2702,11 @@ impl DescribeNotificationConfigurationsAnswerDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeNotificationConfigurationsType {
     #[doc="<p>The name of the group.</p>"]
-    pub auto_scaling_group_names: Option<AutoScalingGroupNames>,
+    pub auto_scaling_group_names: Option<Vec<String>>,
     #[doc="<p>The maximum number of items to return with this call. The default value is 50 and the maximum value is 100.</p>"]
-    pub max_records: Option<MaxRecords>,
+    pub max_records: Option<i64>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    pub next_token: Option<XmlString>,
+    pub next_token: Option<String>,
 }
 
 
@@ -2763,15 +2740,15 @@ impl DescribeNotificationConfigurationsTypeSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribePoliciesType {
     #[doc="<p>The name of the group.</p>"]
-    pub auto_scaling_group_name: Option<ResourceName>,
+    pub auto_scaling_group_name: Option<String>,
     #[doc="<p>The maximum number of items to be returned with each call. The default value is 50 and the maximum value is 100.</p>"]
-    pub max_records: Option<MaxRecords>,
+    pub max_records: Option<i64>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    pub next_token: Option<XmlString>,
+    pub next_token: Option<String>,
     #[doc="<p>One or more policy names or policy ARNs to be described. If you omit this parameter, all policy names are described. If an group name is provided, the results are limited to that group. This list is limited to 50 items. If you specify an unknown policy name, it is ignored with no error.</p>"]
-    pub policy_names: Option<PolicyNames>,
+    pub policy_names: Option<Vec<String>>,
     #[doc="<p>One or more policy types. Valid values are <code>SimpleScaling</code> and <code>StepScaling</code>.</p>"]
-    pub policy_types: Option<PolicyTypes>,
+    pub policy_types: Option<Vec<String>>,
 }
 
 
@@ -2812,13 +2789,13 @@ impl DescribePoliciesTypeSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeScalingActivitiesType {
     #[doc="<p>The activity IDs of the desired scaling activities. If you omit this parameter, all activities for the past six weeks are described. If you specify an Auto Scaling group, the results are limited to that group. The list of requested activities cannot contain more than 50 items. If unknown activities are requested, they are ignored with no error.</p>"]
-    pub activity_ids: Option<ActivityIds>,
+    pub activity_ids: Option<Vec<String>>,
     #[doc="<p>The name of the group.</p>"]
-    pub auto_scaling_group_name: Option<ResourceName>,
+    pub auto_scaling_group_name: Option<String>,
     #[doc="<p>The maximum number of items to return with this call. The default value is 100.</p>"]
-    pub max_records: Option<MaxRecords>,
+    pub max_records: Option<i64>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    pub next_token: Option<XmlString>,
+    pub next_token: Option<String>,
 }
 
 
@@ -2854,17 +2831,17 @@ impl DescribeScalingActivitiesTypeSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeScheduledActionsType {
     #[doc="<p>The name of the group.</p>"]
-    pub auto_scaling_group_name: Option<ResourceName>,
+    pub auto_scaling_group_name: Option<String>,
     #[doc="<p>The latest scheduled start time to return. If scheduled action names are provided, this parameter is ignored.</p>"]
-    pub end_time: Option<TimestampType>,
+    pub end_time: Option<String>,
     #[doc="<p>The maximum number of items to return with this call. The default value is 50 and the maximum value is 100.</p>"]
-    pub max_records: Option<MaxRecords>,
+    pub max_records: Option<i64>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    pub next_token: Option<XmlString>,
+    pub next_token: Option<String>,
     #[doc="<p>Describes one or more scheduled actions. If you omit this parameter, all scheduled actions are described. If you specify an unknown scheduled action, it is ignored with no error.</p> <p>You can describe up to a maximum of 50 instances with a single call. If there are more items to return, the call returns a token. To get the next set of items, repeat the call with the returned token.</p>"]
-    pub scheduled_action_names: Option<ScheduledActionNames>,
+    pub scheduled_action_names: Option<Vec<String>>,
     #[doc="<p>The earliest scheduled start time to return. If scheduled action names are provided, this parameter is ignored.</p>"]
-    pub start_time: Option<TimestampType>,
+    pub start_time: Option<String>,
 }
 
 
@@ -2908,11 +2885,11 @@ impl DescribeScheduledActionsTypeSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeTagsType {
     #[doc="<p>A filter used to scope the tags to return.</p>"]
-    pub filters: Option<Filters>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>The maximum number of items to return with this call. The default value is 50 and the maximum value is 100.</p>"]
-    pub max_records: Option<MaxRecords>,
+    pub max_records: Option<i64>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    pub next_token: Option<XmlString>,
+    pub next_token: Option<String>,
 }
 
 
@@ -2942,7 +2919,7 @@ impl DescribeTagsTypeSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeTerminationPolicyTypesAnswer {
     #[doc="<p>The termination policies supported by Auto Scaling (<code>OldestInstance</code>, <code>OldestLaunchConfiguration</code>, <code>NewestInstance</code>, <code>ClosestToNextInstanceHour</code>, and <code>Default</code>).</p>"]
-    pub termination_policy_types: Option<TerminationPolicies>,
+    pub termination_policy_types: Option<Vec<String>>,
 }
 
 struct DescribeTerminationPolicyTypesAnswerDeserializer;
@@ -2992,7 +2969,7 @@ impl DescribeTerminationPolicyTypesAnswerDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DetachInstancesAnswer {
     #[doc="<p>The activities related to detaching the instances from the Auto Scaling group.</p>"]
-    pub activities: Option<Activities>,
+    pub activities: Option<Vec<Activity>>,
 }
 
 struct DetachInstancesAnswerDeserializer;
@@ -3040,11 +3017,11 @@ impl DetachInstancesAnswerDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DetachInstancesQuery {
     #[doc="<p>The name of the group.</p>"]
-    pub auto_scaling_group_name: ResourceName,
+    pub auto_scaling_group_name: String,
     #[doc="<p>One or more instance IDs.</p>"]
-    pub instance_ids: Option<InstanceIds>,
+    pub instance_ids: Option<Vec<String>>,
     #[doc="<p>If <code>True</code>, the Auto Scaling group decrements the desired capacity value by the number of instances detached.</p>"]
-    pub should_decrement_desired_capacity: ShouldDecrementDesiredCapacity,
+    pub should_decrement_desired_capacity: bool,
 }
 
 
@@ -3093,9 +3070,9 @@ impl DetachLoadBalancerTargetGroupsResultTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DetachLoadBalancerTargetGroupsType {
     #[doc="<p>The name of the Auto Scaling group.</p>"]
-    pub auto_scaling_group_name: ResourceName,
+    pub auto_scaling_group_name: String,
     #[doc="<p>The Amazon Resource Names (ARN) of the target groups.</p>"]
-    pub target_group_ar_ns: TargetGroupARNs,
+    pub target_group_ar_ns: Vec<String>,
 }
 
 
@@ -3139,9 +3116,9 @@ impl DetachLoadBalancersResultTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DetachLoadBalancersType {
     #[doc="<p>The name of the Auto Scaling group.</p>"]
-    pub auto_scaling_group_name: ResourceName,
+    pub auto_scaling_group_name: String,
     #[doc="<p>One or more load balancer names.</p>"]
-    pub load_balancer_names: LoadBalancerNames,
+    pub load_balancer_names: Vec<String>,
 }
 
 
@@ -3166,9 +3143,9 @@ impl DetachLoadBalancersTypeSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DisableMetricsCollectionQuery {
     #[doc="<p>The name or Amazon Resource Name (ARN) of the group.</p>"]
-    pub auto_scaling_group_name: ResourceName,
+    pub auto_scaling_group_name: String,
     #[doc="<p>One or more of the following metrics. If you omit this parameter, all metrics are disabled.</p> <ul> <li> <p> <code>GroupMinSize</code> </p> </li> <li> <p> <code>GroupMaxSize</code> </p> </li> <li> <p> <code>GroupDesiredCapacity</code> </p> </li> <li> <p> <code>GroupInServiceInstances</code> </p> </li> <li> <p> <code>GroupPendingInstances</code> </p> </li> <li> <p> <code>GroupStandbyInstances</code> </p> </li> <li> <p> <code>GroupTerminatingInstances</code> </p> </li> <li> <p> <code>GroupTotalInstances</code> </p> </li> </ul>"]
-    pub metrics: Option<Metrics>,
+    pub metrics: Option<Vec<String>>,
 }
 
 
@@ -3194,17 +3171,17 @@ impl DisableMetricsCollectionQuerySerializer {
 #[derive(Default,Debug,Clone)]
 pub struct Ebs {
     #[doc="<p>Indicates whether the volume is deleted on instance termination.</p> <p>Default: <code>true</code> </p>"]
-    pub delete_on_termination: Option<BlockDeviceEbsDeleteOnTermination>,
+    pub delete_on_termination: Option<bool>,
     #[doc="<p>Indicates whether the volume should be encrypted. Encrypted EBS volumes must be attached to instances that support Amazon EBS encryption. Volumes that are created from encrypted snapshots are automatically encrypted. There is no way to create an encrypted volume from an unencrypted snapshot or an unencrypted volume from an encrypted snapshot. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html\">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-    pub encrypted: Option<BlockDeviceEbsEncrypted>,
+    pub encrypted: Option<bool>,
     #[doc="<p>The number of I/O operations per second (IOPS) to provision for the volume.</p> <p>Constraint: Required when the volume type is <code>io1</code>.</p>"]
-    pub iops: Option<BlockDeviceEbsIops>,
+    pub iops: Option<i64>,
     #[doc="<p>The ID of the snapshot.</p>"]
-    pub snapshot_id: Option<XmlStringMaxLen255>,
+    pub snapshot_id: Option<String>,
     #[doc="<p>The volume size, in GiB. For <code>standard</code> volumes, specify a value from 1 to 1,024. For <code>io1</code> volumes, specify a value from 4 to 16,384. For <code>gp2</code> volumes, specify a value from 1 to 16,384. If you specify a snapshot, the volume size must be equal to or larger than the snapshot size.</p> <p>Default: If you create a volume from a snapshot and you don't specify a volume size, the default is the snapshot size.</p>"]
-    pub volume_size: Option<BlockDeviceEbsVolumeSize>,
+    pub volume_size: Option<i64>,
     #[doc="<p>The volume type. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html\">Amazon EBS Volume Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Valid values: <code>standard</code> | <code>io1</code> | <code>gp2</code> </p> <p>Default: <code>standard</code> </p>"]
-    pub volume_type: Option<BlockDeviceEbsVolumeType>,
+    pub volume_type: Option<String>,
 }
 
 struct EbsDeserializer;
@@ -3304,13 +3281,12 @@ impl EbsSerializer {
     }
 }
 
-pub type EbsOptimized = bool;
 struct EbsOptimizedDeserializer;
 impl EbsOptimizedDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EbsOptimized, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -3322,11 +3298,11 @@ impl EbsOptimizedDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct EnableMetricsCollectionQuery {
     #[doc="<p>The name or ARN of the Auto Scaling group.</p>"]
-    pub auto_scaling_group_name: ResourceName,
+    pub auto_scaling_group_name: String,
     #[doc="<p>The granularity to associate with the metrics to collect. The only valid value is <code>1Minute</code>.</p>"]
-    pub granularity: XmlStringMaxLen255,
+    pub granularity: String,
     #[doc="<p>One or more of the following metrics. If you omit this parameter, all metrics are enabled.</p> <ul> <li> <p> <code>GroupMinSize</code> </p> </li> <li> <p> <code>GroupMaxSize</code> </p> </li> <li> <p> <code>GroupDesiredCapacity</code> </p> </li> <li> <p> <code>GroupInServiceInstances</code> </p> </li> <li> <p> <code>GroupPendingInstances</code> </p> </li> <li> <p> <code>GroupStandbyInstances</code> </p> </li> <li> <p> <code>GroupTerminatingInstances</code> </p> </li> <li> <p> <code>GroupTotalInstances</code> </p> </li> </ul>"]
-    pub metrics: Option<Metrics>,
+    pub metrics: Option<Vec<String>>,
 }
 
 
@@ -3353,9 +3329,9 @@ impl EnableMetricsCollectionQuerySerializer {
 #[derive(Default,Debug,Clone)]
 pub struct EnabledMetric {
     #[doc="<p>The granularity of the metric. The only valid value is <code>1Minute</code>.</p>"]
-    pub granularity: Option<XmlStringMaxLen255>,
+    pub granularity: Option<String>,
     #[doc="<p>One of the following metrics:</p> <ul> <li> <p> <code>GroupMinSize</code> </p> </li> <li> <p> <code>GroupMaxSize</code> </p> </li> <li> <p> <code>GroupDesiredCapacity</code> </p> </li> <li> <p> <code>GroupInServiceInstances</code> </p> </li> <li> <p> <code>GroupPendingInstances</code> </p> </li> <li> <p> <code>GroupStandbyInstances</code> </p> </li> <li> <p> <code>GroupTerminatingInstances</code> </p> </li> <li> <p> <code>GroupTotalInstances</code> </p> </li> </ul>"]
-    pub metric: Option<XmlStringMaxLen255>,
+    pub metric: Option<String>,
 }
 
 struct EnabledMetricDeserializer;
@@ -3406,13 +3382,12 @@ impl EnabledMetricDeserializer {
 
     }
 }
-pub type EnabledMetrics = Vec<EnabledMetric>;
 struct EnabledMetricsDeserializer;
 impl EnabledMetricsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EnabledMetrics, XmlParseError> {
+                                       -> Result<Vec<EnabledMetric>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -3451,7 +3426,7 @@ impl EnabledMetricsDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct EnterStandbyAnswer {
     #[doc="<p>The activities related to moving instances into <code>Standby</code> mode.</p>"]
-    pub activities: Option<Activities>,
+    pub activities: Option<Vec<Activity>>,
 }
 
 struct EnterStandbyAnswerDeserializer;
@@ -3499,11 +3474,11 @@ impl EnterStandbyAnswerDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct EnterStandbyQuery {
     #[doc="<p>The name of the Auto Scaling group.</p>"]
-    pub auto_scaling_group_name: ResourceName,
+    pub auto_scaling_group_name: String,
     #[doc="<p>One or more instances to move into <code>Standby</code> mode. You must specify at least one instance ID.</p>"]
-    pub instance_ids: Option<InstanceIds>,
+    pub instance_ids: Option<Vec<String>>,
     #[doc="<p>Specifies whether the instances moved to <code>Standby</code> mode count as part of the Auto Scaling group's desired capacity. If set, the desired capacity for the Auto Scaling group decrements by the number of instances moved to <code>Standby</code> mode.</p>"]
-    pub should_decrement_desired_capacity: ShouldDecrementDesiredCapacity,
+    pub should_decrement_desired_capacity: bool,
 }
 
 
@@ -3529,13 +3504,12 @@ impl EnterStandbyQuerySerializer {
     }
 }
 
-pub type EstimatedInstanceWarmup = i64;
 struct EstimatedInstanceWarmupDeserializer;
 impl EstimatedInstanceWarmupDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EstimatedInstanceWarmup, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -3547,15 +3521,15 @@ impl EstimatedInstanceWarmupDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ExecutePolicyType {
     #[doc="<p>The name or Amazon Resource Name (ARN) of the Auto Scaling group.</p>"]
-    pub auto_scaling_group_name: Option<ResourceName>,
+    pub auto_scaling_group_name: Option<String>,
     #[doc="<p>The breach threshold for the alarm.</p> <p>This parameter is required if the policy type is <code>StepScaling</code> and not supported otherwise.</p>"]
-    pub breach_threshold: Option<MetricScale>,
+    pub breach_threshold: Option<f64>,
     #[doc="<p>If this parameter is true, Auto Scaling waits for the cooldown period to complete before executing the policy. Otherwise, Auto Scaling executes the policy without waiting for the cooldown period to complete.</p> <p>This parameter is not supported if the policy type is <code>StepScaling</code>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/Cooldown.html\">Auto Scaling Cooldowns</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-    pub honor_cooldown: Option<HonorCooldown>,
+    pub honor_cooldown: Option<bool>,
     #[doc="<p>The metric value to compare to <code>BreachThreshold</code>. This enables you to execute a policy of type <code>StepScaling</code> and determine which step adjustment to use. For example, if the breach threshold is 50 and you want to use a step adjustment with a lower bound of 0 and an upper bound of 10, you can set the metric value to 59.</p> <p>If you specify a metric value that doesn't correspond to a step adjustment for the policy, the call returns an error.</p> <p>This parameter is required if the policy type is <code>StepScaling</code> and not supported otherwise.</p>"]
-    pub metric_value: Option<MetricScale>,
+    pub metric_value: Option<f64>,
     #[doc="<p>The name or ARN of the policy.</p>"]
-    pub policy_name: ResourceName,
+    pub policy_name: String,
 }
 
 
@@ -3592,7 +3566,7 @@ impl ExecutePolicyTypeSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ExitStandbyAnswer {
     #[doc="<p>The activities related to moving instances out of <code>Standby</code> mode.</p>"]
-    pub activities: Option<Activities>,
+    pub activities: Option<Vec<Activity>>,
 }
 
 struct ExitStandbyAnswerDeserializer;
@@ -3640,9 +3614,9 @@ impl ExitStandbyAnswerDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ExitStandbyQuery {
     #[doc="<p>The name of the Auto Scaling group.</p>"]
-    pub auto_scaling_group_name: ResourceName,
+    pub auto_scaling_group_name: String,
     #[doc="<p>One or more instance IDs. You must specify at least one instance ID.</p>"]
-    pub instance_ids: Option<InstanceIds>,
+    pub instance_ids: Option<Vec<String>>,
 }
 
 
@@ -3670,9 +3644,9 @@ impl ExitStandbyQuerySerializer {
 #[derive(Default,Debug,Clone)]
 pub struct Filter {
     #[doc="<p>The name of the filter. The valid values are: <code>\"auto-scaling-group\"</code>, <code>\"key\"</code>, <code>\"value\"</code>, and <code>\"propagate-at-launch\"</code>.</p>"]
-    pub name: Option<XmlString>,
+    pub name: Option<String>,
     #[doc="<p>The value of the filter.</p>"]
-    pub values: Option<Values>,
+    pub values: Option<Vec<String>>,
 }
 
 
@@ -3695,12 +3669,11 @@ impl FilterSerializer {
     }
 }
 
-pub type Filters = Vec<Filter>;
 
 /// Serialize `Filters` contents to a `SignedRequest`.
 struct FiltersSerializer;
 impl FiltersSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Filters) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<Filter>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             FilterSerializer::serialize(params, &key, obj);
@@ -3708,14 +3681,12 @@ impl FiltersSerializer {
     }
 }
 
-pub type ForceDelete = bool;
-pub type GlobalTimeout = i64;
 struct GlobalTimeoutDeserializer;
 impl GlobalTimeoutDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<GlobalTimeout, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -3724,13 +3695,12 @@ impl GlobalTimeoutDeserializer {
 
     }
 }
-pub type HealthCheckGracePeriod = i64;
 struct HealthCheckGracePeriodDeserializer;
 impl HealthCheckGracePeriodDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<HealthCheckGracePeriod, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -3739,13 +3709,12 @@ impl HealthCheckGracePeriodDeserializer {
 
     }
 }
-pub type HeartbeatTimeout = i64;
 struct HeartbeatTimeoutDeserializer;
 impl HeartbeatTimeoutDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<HeartbeatTimeout, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -3754,22 +3723,21 @@ impl HeartbeatTimeoutDeserializer {
 
     }
 }
-pub type HonorCooldown = bool;
 #[doc="<p>Describes an EC2 instance.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct Instance {
     #[doc="<p>The Availability Zone in which the instance is running.</p>"]
-    pub availability_zone: XmlStringMaxLen255,
+    pub availability_zone: String,
     #[doc="<p>The last reported health status of the instance. \"Healthy\" means that the instance is healthy and should remain in service. \"Unhealthy\" means that the instance is unhealthy and Auto Scaling should terminate and replace it.</p>"]
-    pub health_status: XmlStringMaxLen32,
+    pub health_status: String,
     #[doc="<p>The ID of the instance.</p>"]
-    pub instance_id: XmlStringMaxLen19,
+    pub instance_id: String,
     #[doc="<p>The launch configuration associated with the instance.</p>"]
-    pub launch_configuration_name: XmlStringMaxLen255,
+    pub launch_configuration_name: String,
     #[doc="<p>A description of the current lifecycle state. Note that the <code>Quarantined</code> state is not used.</p>"]
-    pub lifecycle_state: LifecycleState,
+    pub lifecycle_state: String,
     #[doc="<p>Indicates whether the instance is protected from termination by Auto Scaling when scaling in.</p>"]
-    pub protected_from_scale_in: InstanceProtected,
+    pub protected_from_scale_in: bool,
 }
 
 struct InstanceDeserializer;
@@ -3840,12 +3808,11 @@ impl InstanceDeserializer {
 
     }
 }
-pub type InstanceIds = Vec<XmlStringMaxLen19>;
 
 /// Serialize `InstanceIds` contents to a `SignedRequest`.
 struct InstanceIdsSerializer;
 impl InstanceIdsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &InstanceIds) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -3857,7 +3824,7 @@ impl InstanceIdsSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct InstanceMonitoring {
     #[doc="<p>If <code>true</code>, detailed monitoring is enabled. Otherwise, basic monitoring is enabled.</p>"]
-    pub enabled: Option<MonitoringEnabled>,
+    pub enabled: Option<bool>,
 }
 
 struct InstanceMonitoringDeserializer;
@@ -3921,13 +3888,12 @@ impl InstanceMonitoringSerializer {
     }
 }
 
-pub type InstanceProtected = bool;
 struct InstanceProtectedDeserializer;
 impl InstanceProtectedDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<InstanceProtected, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -3936,13 +3902,12 @@ impl InstanceProtectedDeserializer {
 
     }
 }
-pub type Instances = Vec<Instance>;
 struct InstancesDeserializer;
 impl InstancesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Instances, XmlParseError> {
+                                       -> Result<Vec<Instance>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -3982,43 +3947,43 @@ impl InstancesDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct LaunchConfiguration {
     #[doc="<p>[EC2-VPC] Indicates whether to assign a public IP address to each instance.</p>"]
-    pub associate_public_ip_address: Option<AssociatePublicIpAddress>,
+    pub associate_public_ip_address: Option<bool>,
     #[doc="<p>A block device mapping, which specifies the block devices for the instance.</p>"]
-    pub block_device_mappings: Option<BlockDeviceMappings>,
+    pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
     #[doc="<p>The ID of a ClassicLink-enabled VPC to link your EC2-Classic instances to. This parameter can only be used if you are launching EC2-Classic instances. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html\">ClassicLink</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-    pub classic_link_vpc_id: Option<XmlStringMaxLen255>,
+    pub classic_link_vpc_id: Option<String>,
     #[doc="<p>The IDs of one or more security groups for the VPC specified in <code>ClassicLinkVPCId</code>. This parameter is required if you specify a ClassicLink-enabled VPC, and cannot be used otherwise. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html\">ClassicLink</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-    pub classic_link_vpc_security_groups: Option<ClassicLinkVPCSecurityGroups>,
+    pub classic_link_vpc_security_groups: Option<Vec<String>>,
     #[doc="<p>The creation date and time for the launch configuration.</p>"]
-    pub created_time: TimestampType,
+    pub created_time: String,
     #[doc="<p>Controls whether the instance is optimized for EBS I/O (<code>true</code>) or not (<code>false</code>).</p>"]
-    pub ebs_optimized: Option<EbsOptimized>,
+    pub ebs_optimized: Option<bool>,
     #[doc="<p>The name or Amazon Resource Name (ARN) of the instance profile associated with the IAM role for the instance.</p>"]
-    pub iam_instance_profile: Option<XmlStringMaxLen1600>,
+    pub iam_instance_profile: Option<String>,
     #[doc="<p>The ID of the Amazon Machine Image (AMI).</p>"]
-    pub image_id: XmlStringMaxLen255,
+    pub image_id: String,
     #[doc="<p>Controls whether instances in this group are launched with detailed (<code>true</code>) or basic (<code>false</code>) monitoring.</p>"]
     pub instance_monitoring: Option<InstanceMonitoring>,
     #[doc="<p>The instance type for the instances.</p>"]
-    pub instance_type: XmlStringMaxLen255,
+    pub instance_type: String,
     #[doc="<p>The ID of the kernel associated with the AMI.</p>"]
-    pub kernel_id: Option<XmlStringMaxLen255>,
+    pub kernel_id: Option<String>,
     #[doc="<p>The name of the key pair.</p>"]
-    pub key_name: Option<XmlStringMaxLen255>,
+    pub key_name: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the launch configuration.</p>"]
-    pub launch_configuration_arn: Option<ResourceName>,
+    pub launch_configuration_arn: Option<String>,
     #[doc="<p>The name of the launch configuration.</p>"]
-    pub launch_configuration_name: XmlStringMaxLen255,
+    pub launch_configuration_name: String,
     #[doc="<p>The tenancy of the instance, either <code>default</code> or <code>dedicated</code>. An instance with <code>dedicated</code> tenancy runs in an isolated, single-tenant hardware and can only be launched into a VPC.</p>"]
-    pub placement_tenancy: Option<XmlStringMaxLen64>,
+    pub placement_tenancy: Option<String>,
     #[doc="<p>The ID of the RAM disk associated with the AMI.</p>"]
-    pub ramdisk_id: Option<XmlStringMaxLen255>,
+    pub ramdisk_id: Option<String>,
     #[doc="<p>The security groups to associate with the instances.</p>"]
-    pub security_groups: Option<SecurityGroups>,
+    pub security_groups: Option<Vec<String>>,
     #[doc="<p>The price to bid when launching Spot Instances.</p>"]
-    pub spot_price: Option<SpotPrice>,
+    pub spot_price: Option<String>,
     #[doc="<p>The user data available to the instances.</p>"]
-    pub user_data: Option<XmlStringUserData>,
+    pub user_data: Option<String>,
 }
 
 struct LaunchConfigurationDeserializer;
@@ -4150,7 +4115,7 @@ impl LaunchConfigurationDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct LaunchConfigurationNameType {
     #[doc="<p>The name of the launch configuration.</p>"]
-    pub launch_configuration_name: ResourceName,
+    pub launch_configuration_name: String,
 }
 
 
@@ -4169,12 +4134,11 @@ impl LaunchConfigurationNameTypeSerializer {
     }
 }
 
-pub type LaunchConfigurationNames = Vec<ResourceName>;
 
 /// Serialize `LaunchConfigurationNames` contents to a `SignedRequest`.
 struct LaunchConfigurationNamesSerializer;
 impl LaunchConfigurationNamesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &LaunchConfigurationNames) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -4185,11 +4149,11 @@ impl LaunchConfigurationNamesSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct LaunchConfigurationNamesType {
     #[doc="<p>The launch configuration names. If you omit this parameter, all launch configurations are described.</p>"]
-    pub launch_configuration_names: Option<LaunchConfigurationNames>,
+    pub launch_configuration_names: Option<Vec<String>>,
     #[doc="<p>The maximum number of items to return with this call. The default value is 50 and the maximum value is 100.</p>"]
-    pub max_records: Option<MaxRecords>,
+    pub max_records: Option<i64>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a previous call.)</p>"]
-    pub next_token: Option<XmlString>,
+    pub next_token: Option<String>,
 }
 
 
@@ -4220,13 +4184,12 @@ impl LaunchConfigurationNamesTypeSerializer {
     }
 }
 
-pub type LaunchConfigurations = Vec<LaunchConfiguration>;
 struct LaunchConfigurationsDeserializer;
 impl LaunchConfigurationsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LaunchConfigurations, XmlParseError> {
+                                       -> Result<Vec<LaunchConfiguration>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4266,9 +4229,9 @@ impl LaunchConfigurationsDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct LaunchConfigurationsType {
     #[doc="<p>The launch configurations.</p>"]
-    pub launch_configurations: LaunchConfigurations,
+    pub launch_configurations: Vec<LaunchConfiguration>,
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
-    pub next_token: Option<XmlString>,
+    pub next_token: Option<String>,
 }
 
 struct LaunchConfigurationsTypeDeserializer;
@@ -4318,13 +4281,12 @@ impl LaunchConfigurationsTypeDeserializer {
 
     }
 }
-pub type LifecycleActionResult = String;
 struct LifecycleActionResultDeserializer;
 impl LifecycleActionResultDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LifecycleActionResult, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4333,28 +4295,27 @@ impl LifecycleActionResultDeserializer {
 
     }
 }
-pub type LifecycleActionToken = String;
 #[doc="<p>Describes a lifecycle hook, which tells Auto Scaling that you want to perform an action when an instance launches or terminates. When you have a lifecycle hook in place, the Auto Scaling group will either:</p> <ul> <li> <p>Pause the instance after it launches, but before it is put into service</p> </li> <li> <p>Pause the instance as it terminates, but before it is fully terminated</p> </li> </ul> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroupLifecycle.html\">Auto Scaling Lifecycle</a> in the <i>Auto Scaling User Guide</i>.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct LifecycleHook {
     #[doc="<p>The name of the Auto Scaling group for the lifecycle hook.</p>"]
-    pub auto_scaling_group_name: Option<ResourceName>,
+    pub auto_scaling_group_name: Option<String>,
     #[doc="<p>Defines the action the Auto Scaling group should take when the lifecycle hook timeout elapses or if an unexpected failure occurs. The valid values are <code>CONTINUE</code> and <code>ABANDON</code>. The default value is <code>CONTINUE</code>.</p>"]
-    pub default_result: Option<LifecycleActionResult>,
+    pub default_result: Option<String>,
     #[doc="<p>The maximum time, in seconds, that an instance can remain in a <code>Pending:Wait</code> or <code>Terminating:Wait</code> state. The maximum is 172800 seconds (48 hours) or 100 times <code>HeartbeatTimeout</code>, whichever is smaller.</p>"]
-    pub global_timeout: Option<GlobalTimeout>,
+    pub global_timeout: Option<i64>,
     #[doc="<p>The maximum time, in seconds, that can elapse before the lifecycle hook times out. The default is 3600 seconds (1 hour). When the lifecycle hook times out, Auto Scaling performs the default action. You can prevent the lifecycle hook from timing out by calling <a>RecordLifecycleActionHeartbeat</a>.</p>"]
-    pub heartbeat_timeout: Option<HeartbeatTimeout>,
+    pub heartbeat_timeout: Option<i64>,
     #[doc="<p>The name of the lifecycle hook.</p>"]
-    pub lifecycle_hook_name: Option<AsciiStringMaxLen255>,
+    pub lifecycle_hook_name: Option<String>,
     #[doc="<p>The state of the EC2 instance to which you want to attach the lifecycle hook. For a list of lifecycle hook types, see <a>DescribeLifecycleHookTypes</a>.</p>"]
-    pub lifecycle_transition: Option<LifecycleTransition>,
+    pub lifecycle_transition: Option<String>,
     #[doc="<p>Additional information that you want to include any time Auto Scaling sends a message to the notification target.</p>"]
-    pub notification_metadata: Option<XmlStringMaxLen1023>,
+    pub notification_metadata: Option<String>,
     #[doc="<p>The ARN of the notification target that Auto Scaling uses to notify you when an instance is in the transition state for the lifecycle hook. This ARN target can be either an SQS queue or an SNS topic. The notification message sent to the target includes the following:</p> <ul> <li> <p>Lifecycle action token</p> </li> <li> <p>User account ID</p> </li> <li> <p>Name of the Auto Scaling group</p> </li> <li> <p>Lifecycle hook name</p> </li> <li> <p>EC2 instance ID</p> </li> <li> <p>Lifecycle transition</p> </li> <li> <p>Notification metadata</p> </li> </ul>"]
-    pub notification_target_arn: Option<ResourceName>,
+    pub notification_target_arn: Option<String>,
     #[doc="<p>The ARN of the IAM role that allows the Auto Scaling group to publish to the specified notification target.</p>"]
-    pub role_arn: Option<ResourceName>,
+    pub role_arn: Option<String>,
 }
 
 struct LifecycleHookDeserializer;
@@ -4439,12 +4400,11 @@ impl LifecycleHookDeserializer {
 
     }
 }
-pub type LifecycleHookNames = Vec<AsciiStringMaxLen255>;
 
 /// Serialize `LifecycleHookNames` contents to a `SignedRequest`.
 struct LifecycleHookNamesSerializer;
 impl LifecycleHookNamesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &LifecycleHookNames) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -4452,13 +4412,12 @@ impl LifecycleHookNamesSerializer {
     }
 }
 
-pub type LifecycleHooks = Vec<LifecycleHook>;
 struct LifecycleHooksDeserializer;
 impl LifecycleHooksDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LifecycleHooks, XmlParseError> {
+                                       -> Result<Vec<LifecycleHook>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4494,13 +4453,12 @@ impl LifecycleHooksDeserializer {
 
     }
 }
-pub type LifecycleState = String;
 struct LifecycleStateDeserializer;
 impl LifecycleStateDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LifecycleState, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4509,13 +4467,12 @@ impl LifecycleStateDeserializer {
 
     }
 }
-pub type LifecycleTransition = String;
 struct LifecycleTransitionDeserializer;
 impl LifecycleTransitionDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LifecycleTransition, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4524,13 +4481,12 @@ impl LifecycleTransitionDeserializer {
 
     }
 }
-pub type LoadBalancerNames = Vec<XmlStringMaxLen255>;
 struct LoadBalancerNamesDeserializer;
 impl LoadBalancerNamesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LoadBalancerNames, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4571,7 +4527,7 @@ impl LoadBalancerNamesDeserializer {
 /// Serialize `LoadBalancerNames` contents to a `SignedRequest`.
 struct LoadBalancerNamesSerializer;
 impl LoadBalancerNamesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &LoadBalancerNames) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -4583,9 +4539,9 @@ impl LoadBalancerNamesSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct LoadBalancerState {
     #[doc="<p>The name of the load balancer.</p>"]
-    pub load_balancer_name: Option<XmlStringMaxLen255>,
+    pub load_balancer_name: Option<String>,
     #[doc="<p>One of the following load balancer states:</p> <ul> <li> <p> <code>Adding</code> - The instances in the group are being registered with the load balancer.</p> </li> <li> <p> <code>Added</code> - All instances in the group are registered with the load balancer.</p> </li> <li> <p> <code>InService</code> - At least one instance in the group passed an ELB health check.</p> </li> <li> <p> <code>Removing</code> - The instances in the group are being deregistered from the load balancer. If connection draining is enabled, Elastic Load Balancing waits for in-flight requests to complete before deregistering the instances.</p> </li> <li> <p> <code>Removed</code> - All instances in the group are deregistered from the load balancer.</p> </li> </ul>"]
-    pub state: Option<XmlStringMaxLen255>,
+    pub state: Option<String>,
 }
 
 struct LoadBalancerStateDeserializer;
@@ -4636,13 +4592,12 @@ impl LoadBalancerStateDeserializer {
 
     }
 }
-pub type LoadBalancerStates = Vec<LoadBalancerState>;
 struct LoadBalancerStatesDeserializer;
 impl LoadBalancerStatesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LoadBalancerStates, XmlParseError> {
+                                       -> Result<Vec<LoadBalancerState>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4682,9 +4637,9 @@ impl LoadBalancerStatesDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct LoadBalancerTargetGroupState {
     #[doc="<p>The Amazon Resource Name (ARN) of the target group.</p>"]
-    pub load_balancer_target_group_arn: Option<XmlStringMaxLen511>,
+    pub load_balancer_target_group_arn: Option<String>,
     #[doc="<p>The state of the target group.</p> <ul> <li> <p> <code>Adding</code> - The Auto Scaling instances are being registered with the target group.</p> </li> <li> <p> <code>Added</code> - All Auto Scaling instances are registered with the target group.</p> </li> <li> <p> <code>InService</code> - At least one Auto Scaling instance passed an ELB health check.</p> </li> <li> <p> <code>Removing</code> - The Auto Scaling instances are being deregistered from the target group. If connection draining is enabled, Elastic Load Balancing waits for in-flight requests to complete before deregistering the instances.</p> </li> <li> <p> <code>Removed</code> - All Auto Scaling instances are deregistered from the target group.</p> </li> </ul>"]
-    pub state: Option<XmlStringMaxLen255>,
+    pub state: Option<String>,
 }
 
 struct LoadBalancerTargetGroupStateDeserializer;
@@ -4735,13 +4690,13 @@ impl LoadBalancerTargetGroupStateDeserializer {
 
     }
 }
-pub type LoadBalancerTargetGroupStates = Vec<LoadBalancerTargetGroupState>;
 struct LoadBalancerTargetGroupStatesDeserializer;
 impl LoadBalancerTargetGroupStatesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<LoadBalancerTargetGroupStates, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<Vec<LoadBalancerTargetGroupState>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4777,13 +4732,12 @@ impl LoadBalancerTargetGroupStatesDeserializer {
 
     }
 }
-pub type MaxNumberOfAutoScalingGroups = i64;
 struct MaxNumberOfAutoScalingGroupsDeserializer;
 impl MaxNumberOfAutoScalingGroupsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<MaxNumberOfAutoScalingGroups, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -4792,14 +4746,12 @@ impl MaxNumberOfAutoScalingGroupsDeserializer {
 
     }
 }
-pub type MaxNumberOfLaunchConfigurations = i64;
 struct MaxNumberOfLaunchConfigurationsDeserializer;
 impl MaxNumberOfLaunchConfigurationsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<MaxNumberOfLaunchConfigurations, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -4808,12 +4760,11 @@ impl MaxNumberOfLaunchConfigurationsDeserializer {
 
     }
 }
-pub type MaxRecords = i64;
 #[doc="<p>Describes a metric.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct MetricCollectionType {
     #[doc="<p>One of the following metrics:</p> <ul> <li> <p> <code>GroupMinSize</code> </p> </li> <li> <p> <code>GroupMaxSize</code> </p> </li> <li> <p> <code>GroupDesiredCapacity</code> </p> </li> <li> <p> <code>GroupInServiceInstances</code> </p> </li> <li> <p> <code>GroupPendingInstances</code> </p> </li> <li> <p> <code>GroupStandbyInstances</code> </p> </li> <li> <p> <code>GroupTerminatingInstances</code> </p> </li> <li> <p> <code>GroupTotalInstances</code> </p> </li> </ul>"]
-    pub metric: Option<XmlStringMaxLen255>,
+    pub metric: Option<String>,
 }
 
 struct MetricCollectionTypeDeserializer;
@@ -4859,13 +4810,12 @@ impl MetricCollectionTypeDeserializer {
 
     }
 }
-pub type MetricCollectionTypes = Vec<MetricCollectionType>;
 struct MetricCollectionTypesDeserializer;
 impl MetricCollectionTypesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<MetricCollectionTypes, XmlParseError> {
+                                       -> Result<Vec<MetricCollectionType>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4906,7 +4856,7 @@ impl MetricCollectionTypesDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct MetricGranularityType {
     #[doc="<p>The granularity. The only valid value is <code>1Minute</code>.</p>"]
-    pub granularity: Option<XmlStringMaxLen255>,
+    pub granularity: Option<String>,
 }
 
 struct MetricGranularityTypeDeserializer;
@@ -4952,13 +4902,12 @@ impl MetricGranularityTypeDeserializer {
 
     }
 }
-pub type MetricGranularityTypes = Vec<MetricGranularityType>;
 struct MetricGranularityTypesDeserializer;
 impl MetricGranularityTypesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<MetricGranularityTypes, XmlParseError> {
+                                       -> Result<Vec<MetricGranularityType>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4995,13 +4944,12 @@ impl MetricGranularityTypesDeserializer {
 
     }
 }
-pub type MetricScale = f64;
 struct MetricScaleDeserializer;
 impl MetricScaleDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<MetricScale, XmlParseError> {
+                                       -> Result<f64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = f64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -5010,12 +4958,11 @@ impl MetricScaleDeserializer {
 
     }
 }
-pub type Metrics = Vec<XmlStringMaxLen255>;
 
 /// Serialize `Metrics` contents to a `SignedRequest`.
 struct MetricsSerializer;
 impl MetricsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Metrics) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -5023,13 +4970,12 @@ impl MetricsSerializer {
     }
 }
 
-pub type MinAdjustmentMagnitude = i64;
 struct MinAdjustmentMagnitudeDeserializer;
 impl MinAdjustmentMagnitudeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<MinAdjustmentMagnitude, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -5038,13 +4984,12 @@ impl MinAdjustmentMagnitudeDeserializer {
 
     }
 }
-pub type MinAdjustmentStep = i64;
 struct MinAdjustmentStepDeserializer;
 impl MinAdjustmentStepDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<MinAdjustmentStep, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -5053,13 +4998,12 @@ impl MinAdjustmentStepDeserializer {
 
     }
 }
-pub type MonitoringEnabled = bool;
 struct MonitoringEnabledDeserializer;
 impl MonitoringEnabledDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<MonitoringEnabled, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -5068,13 +5012,12 @@ impl MonitoringEnabledDeserializer {
 
     }
 }
-pub type NoDevice = bool;
 struct NoDeviceDeserializer;
 impl NoDeviceDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NoDevice, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -5087,11 +5030,11 @@ impl NoDeviceDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct NotificationConfiguration {
     #[doc="<p>The name of the group.</p>"]
-    pub auto_scaling_group_name: Option<ResourceName>,
+    pub auto_scaling_group_name: Option<String>,
     #[doc="<p>One of the following event notification types:</p> <ul> <li> <p> <code>autoscaling:EC2_INSTANCE_LAUNCH</code> </p> </li> <li> <p> <code>autoscaling:EC2_INSTANCE_LAUNCH_ERROR</code> </p> </li> <li> <p> <code>autoscaling:EC2_INSTANCE_TERMINATE</code> </p> </li> <li> <p> <code>autoscaling:EC2_INSTANCE_TERMINATE_ERROR</code> </p> </li> <li> <p> <code>autoscaling:TEST_NOTIFICATION</code> </p> </li> </ul>"]
-    pub notification_type: Option<XmlStringMaxLen255>,
+    pub notification_type: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (SNS) topic.</p>"]
-    pub topic_arn: Option<ResourceName>,
+    pub topic_arn: Option<String>,
 }
 
 struct NotificationConfigurationDeserializer;
@@ -5147,13 +5090,12 @@ impl NotificationConfigurationDeserializer {
 
     }
 }
-pub type NotificationConfigurations = Vec<NotificationConfiguration>;
 struct NotificationConfigurationsDeserializer;
 impl NotificationConfigurationsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NotificationConfigurations, XmlParseError> {
+                                       -> Result<Vec<NotificationConfiguration>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5190,14 +5132,12 @@ impl NotificationConfigurationsDeserializer {
 
     }
 }
-pub type NotificationTargetResourceName = String;
-pub type NumberOfAutoScalingGroups = i64;
 struct NumberOfAutoScalingGroupsDeserializer;
 impl NumberOfAutoScalingGroupsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NumberOfAutoScalingGroups, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -5206,13 +5146,12 @@ impl NumberOfAutoScalingGroupsDeserializer {
 
     }
 }
-pub type NumberOfLaunchConfigurations = i64;
 struct NumberOfLaunchConfigurationsDeserializer;
 impl NumberOfLaunchConfigurationsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NumberOfLaunchConfigurations, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -5224,9 +5163,9 @@ impl NumberOfLaunchConfigurationsDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct PoliciesType {
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
-    pub next_token: Option<XmlString>,
+    pub next_token: Option<String>,
     #[doc="<p>The scaling policies.</p>"]
-    pub scaling_policies: Option<ScalingPolicies>,
+    pub scaling_policies: Option<Vec<ScalingPolicy>>,
 }
 
 struct PoliciesTypeDeserializer;
@@ -5279,7 +5218,7 @@ impl PoliciesTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct PolicyARNType {
     #[doc="<p>The Amazon Resource Name (ARN) of the policy.</p>"]
-    pub policy_arn: Option<ResourceName>,
+    pub policy_arn: Option<String>,
 }
 
 struct PolicyARNTypeDeserializer;
@@ -5325,13 +5264,12 @@ impl PolicyARNTypeDeserializer {
 
     }
 }
-pub type PolicyIncrement = i64;
 struct PolicyIncrementDeserializer;
 impl PolicyIncrementDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PolicyIncrement, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -5340,12 +5278,11 @@ impl PolicyIncrementDeserializer {
 
     }
 }
-pub type PolicyNames = Vec<ResourceName>;
 
 /// Serialize `PolicyNames` contents to a `SignedRequest`.
 struct PolicyNamesSerializer;
 impl PolicyNamesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &PolicyNames) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -5353,12 +5290,11 @@ impl PolicyNamesSerializer {
     }
 }
 
-pub type PolicyTypes = Vec<XmlStringMaxLen64>;
 
 /// Serialize `PolicyTypes` contents to a `SignedRequest`.
 struct PolicyTypesSerializer;
 impl PolicyTypesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &PolicyTypes) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -5366,12 +5302,11 @@ impl PolicyTypesSerializer {
     }
 }
 
-pub type ProcessNames = Vec<XmlStringMaxLen255>;
 
 /// Serialize `ProcessNames` contents to a `SignedRequest`.
 struct ProcessNamesSerializer;
 impl ProcessNamesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ProcessNames) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -5383,7 +5318,7 @@ impl ProcessNamesSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ProcessType {
     #[doc="<p>One of the following processes:</p> <ul> <li> <p> <code>Launch</code> </p> </li> <li> <p> <code>Terminate</code> </p> </li> <li> <p> <code>AddToLoadBalancer</code> </p> </li> <li> <p> <code>AlarmNotification</code> </p> </li> <li> <p> <code>AZRebalance</code> </p> </li> <li> <p> <code>HealthCheck</code> </p> </li> <li> <p> <code>ReplaceUnhealthy</code> </p> </li> <li> <p> <code>ScheduledActions</code> </p> </li> </ul>"]
-    pub process_name: XmlStringMaxLen255,
+    pub process_name: String,
 }
 
 struct ProcessTypeDeserializer;
@@ -5429,13 +5364,12 @@ impl ProcessTypeDeserializer {
 
     }
 }
-pub type Processes = Vec<ProcessType>;
 struct ProcessesDeserializer;
 impl ProcessesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Processes, XmlParseError> {
+                                       -> Result<Vec<ProcessType>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5474,7 +5408,7 @@ impl ProcessesDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ProcessesType {
     #[doc="<p>The names of the process types.</p>"]
-    pub processes: Option<Processes>,
+    pub processes: Option<Vec<ProcessType>>,
 }
 
 struct ProcessesTypeDeserializer;
@@ -5519,13 +5453,12 @@ impl ProcessesTypeDeserializer {
 
     }
 }
-pub type Progress = i64;
 struct ProgressDeserializer;
 impl ProgressDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Progress, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -5534,13 +5467,12 @@ impl ProgressDeserializer {
 
     }
 }
-pub type PropagateAtLaunch = bool;
 struct PropagateAtLaunchDeserializer;
 impl PropagateAtLaunchDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PropagateAtLaunch, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -5549,7 +5481,6 @@ impl PropagateAtLaunchDeserializer {
 
     }
 }
-pub type ProtectedFromScaleIn = bool;
 #[derive(Default,Debug,Clone)]
 pub struct PutLifecycleHookAnswer;
 
@@ -5572,21 +5503,21 @@ impl PutLifecycleHookAnswerDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct PutLifecycleHookType {
     #[doc="<p>The name of the Auto Scaling group to which you want to assign the lifecycle hook.</p>"]
-    pub auto_scaling_group_name: ResourceName,
+    pub auto_scaling_group_name: String,
     #[doc="<p>Defines the action the Auto Scaling group should take when the lifecycle hook timeout elapses or if an unexpected failure occurs. This parameter can be either <code>CONTINUE</code> or <code>ABANDON</code>. The default value is <code>ABANDON</code>.</p>"]
-    pub default_result: Option<LifecycleActionResult>,
+    pub default_result: Option<String>,
     #[doc="<p>The amount of time, in seconds, that can elapse before the lifecycle hook times out. When the lifecycle hook times out, Auto Scaling performs the default action. You can prevent the lifecycle hook from timing out by calling <a>RecordLifecycleActionHeartbeat</a>. The default is 3600 seconds (1 hour).</p>"]
-    pub heartbeat_timeout: Option<HeartbeatTimeout>,
+    pub heartbeat_timeout: Option<i64>,
     #[doc="<p>The name of the lifecycle hook.</p>"]
-    pub lifecycle_hook_name: AsciiStringMaxLen255,
+    pub lifecycle_hook_name: String,
     #[doc="<p>The instance state to which you want to attach the lifecycle hook. For a list of lifecycle hook types, see <a>DescribeLifecycleHookTypes</a>.</p> <p>This parameter is required for new lifecycle hooks, but optional when updating existing hooks.</p>"]
-    pub lifecycle_transition: Option<LifecycleTransition>,
+    pub lifecycle_transition: Option<String>,
     #[doc="<p>Contains additional information that you want to include any time Auto Scaling sends a message to the notification target.</p>"]
-    pub notification_metadata: Option<XmlStringMaxLen1023>,
+    pub notification_metadata: Option<String>,
     #[doc="<p>The ARN of the notification target that Auto Scaling will use to notify you when an instance is in the transition state for the lifecycle hook. This target can be either an SQS queue or an SNS topic. If you specify an empty string, this overrides the current ARN.</p> <p>This operation uses the JSON format when sending notifications to an Amazon SQS queue, and an email key/value pair format when sending notifications to an Amazon SNS topic.</p> <p>When you specify a notification target, Auto Scaling sends it a test message. Test messages contains the following additional key/value pair: <code>\"Event\": \"autoscaling:TEST_NOTIFICATION\"</code>.</p>"]
-    pub notification_target_arn: Option<NotificationTargetResourceName>,
+    pub notification_target_arn: Option<String>,
     #[doc="<p>The ARN of the IAM role that allows the Auto Scaling group to publish to the specified notification target.</p> <p>This parameter is required for new lifecycle hooks, but optional when updating existing hooks.</p>"]
-    pub role_arn: Option<ResourceName>,
+    pub role_arn: Option<String>,
 }
 
 
@@ -5632,11 +5563,11 @@ impl PutLifecycleHookTypeSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct PutNotificationConfigurationType {
     #[doc="<p>The name of the Auto Scaling group.</p>"]
-    pub auto_scaling_group_name: ResourceName,
+    pub auto_scaling_group_name: String,
     #[doc="<p>The type of event that will cause the notification to be sent. For details about notification types supported by Auto Scaling, see <a>DescribeAutoScalingNotificationTypes</a>.</p>"]
-    pub notification_types: AutoScalingNotificationTypes,
+    pub notification_types: Vec<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (SNS) topic.</p>"]
-    pub topic_arn: ResourceName,
+    pub topic_arn: String,
 }
 
 
@@ -5664,27 +5595,27 @@ impl PutNotificationConfigurationTypeSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct PutScalingPolicyType {
     #[doc="<p>The adjustment type. Valid values are <code>ChangeInCapacity</code>, <code>ExactCapacity</code>, and <code>PercentChangeInCapacity</code>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/as-scale-based-on-demand.html\">Dynamic Scaling</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-    pub adjustment_type: XmlStringMaxLen255,
+    pub adjustment_type: String,
     #[doc="<p>The name or ARN of the group.</p>"]
-    pub auto_scaling_group_name: ResourceName,
+    pub auto_scaling_group_name: String,
     #[doc="<p>The amount of time, in seconds, after a scaling activity completes and before the next scaling activity can start. If this parameter is not specified, the default cooldown period for the group applies.</p> <p>This parameter is not supported unless the policy type is <code>SimpleScaling</code>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/Cooldown.html\">Auto Scaling Cooldowns</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-    pub cooldown: Option<Cooldown>,
+    pub cooldown: Option<i64>,
     #[doc="<p>The estimated time, in seconds, until a newly launched instance can contribute to the CloudWatch metrics. The default is to use the value specified for the default cooldown period for the group.</p> <p>This parameter is not supported if the policy type is <code>SimpleScaling</code>.</p>"]
-    pub estimated_instance_warmup: Option<EstimatedInstanceWarmup>,
+    pub estimated_instance_warmup: Option<i64>,
     #[doc="<p>The aggregation type for the CloudWatch metrics. Valid values are <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code>. If the aggregation type is null, the value is treated as <code>Average</code>.</p> <p>This parameter is not supported if the policy type is <code>SimpleScaling</code>.</p>"]
-    pub metric_aggregation_type: Option<XmlStringMaxLen32>,
+    pub metric_aggregation_type: Option<String>,
     #[doc="<p>The minimum number of instances to scale. If the value of <code>AdjustmentType</code> is <code>PercentChangeInCapacity</code>, the scaling policy changes the <code>DesiredCapacity</code> of the Auto Scaling group by at least this many instances. Otherwise, the error is <code>ValidationError</code>.</p>"]
-    pub min_adjustment_magnitude: Option<MinAdjustmentMagnitude>,
+    pub min_adjustment_magnitude: Option<i64>,
     #[doc="<p>Available for backward compatibility. Use <code>MinAdjustmentMagnitude</code> instead.</p>"]
-    pub min_adjustment_step: Option<MinAdjustmentStep>,
+    pub min_adjustment_step: Option<i64>,
     #[doc="<p>The name of the policy.</p>"]
-    pub policy_name: XmlStringMaxLen255,
+    pub policy_name: String,
     #[doc="<p>The policy type. Valid values are <code>SimpleScaling</code> and <code>StepScaling</code>. If the policy type is null, the value is treated as <code>SimpleScaling</code>.</p>"]
-    pub policy_type: Option<XmlStringMaxLen64>,
+    pub policy_type: Option<String>,
     #[doc="<p>The amount by which to scale, based on the specified adjustment type. A positive value adds to the current capacity while a negative number removes from the current capacity.</p> <p>This parameter is required if the policy type is <code>SimpleScaling</code> and not supported otherwise.</p>"]
-    pub scaling_adjustment: Option<PolicyIncrement>,
+    pub scaling_adjustment: Option<i64>,
     #[doc="<p>A set of adjustments that enable you to scale based on the size of the alarm breach.</p> <p>This parameter is required if the policy type is <code>StepScaling</code> and not supported otherwise.</p>"]
-    pub step_adjustments: Option<StepAdjustments>,
+    pub step_adjustments: Option<Vec<StepAdjustment>>,
 }
 
 
@@ -5741,23 +5672,23 @@ impl PutScalingPolicyTypeSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct PutScheduledUpdateGroupActionType {
     #[doc="<p>The name or Amazon Resource Name (ARN) of the Auto Scaling group.</p>"]
-    pub auto_scaling_group_name: ResourceName,
+    pub auto_scaling_group_name: String,
     #[doc="<p>The number of EC2 instances that should be running in the group.</p>"]
-    pub desired_capacity: Option<AutoScalingGroupDesiredCapacity>,
+    pub desired_capacity: Option<i64>,
     #[doc="<p>The time for the recurring schedule to end. Auto Scaling does not perform the action after this time.</p>"]
-    pub end_time: Option<TimestampType>,
+    pub end_time: Option<String>,
     #[doc="<p>The maximum size for the Auto Scaling group.</p>"]
-    pub max_size: Option<AutoScalingGroupMaxSize>,
+    pub max_size: Option<i64>,
     #[doc="<p>The minimum size for the Auto Scaling group.</p>"]
-    pub min_size: Option<AutoScalingGroupMinSize>,
+    pub min_size: Option<i64>,
     #[doc="<p>The recurring schedule for this action, in Unix cron syntax format. For more information, see <a href=\"http://en.wikipedia.org/wiki/Cron\">Cron</a> in Wikipedia.</p>"]
-    pub recurrence: Option<XmlStringMaxLen255>,
+    pub recurrence: Option<String>,
     #[doc="<p>The name of this scaling action.</p>"]
-    pub scheduled_action_name: XmlStringMaxLen255,
+    pub scheduled_action_name: String,
     #[doc="<p>The time for this action to start, in \"YYYY-MM-DDThh:mm:ssZ\" format in UTC/GMT only (for example, <code>2014-06-01T00:00:00Z</code>).</p> <p>If you specify <code>Recurrence</code> and <code>StartTime</code>, Auto Scaling performs the action at this time, and then performs the action based on the specified recurrence.</p> <p>If you try to schedule your action in the past, Auto Scaling returns an error message.</p>"]
-    pub start_time: Option<TimestampType>,
+    pub start_time: Option<String>,
     #[doc="<p>This parameter is deprecated.</p>"]
-    pub time: Option<TimestampType>,
+    pub time: Option<String>,
 }
 
 
@@ -5825,13 +5756,13 @@ impl RecordLifecycleActionHeartbeatAnswerDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct RecordLifecycleActionHeartbeatType {
     #[doc="<p>The name of the Auto Scaling group for the hook.</p>"]
-    pub auto_scaling_group_name: ResourceName,
+    pub auto_scaling_group_name: String,
     #[doc="<p>The ID of the instance.</p>"]
-    pub instance_id: Option<XmlStringMaxLen19>,
+    pub instance_id: Option<String>,
     #[doc="<p>A token that uniquely identifies a specific lifecycle action associated with an instance. Auto Scaling sends this token to the notification target you specified when you created the lifecycle hook.</p>"]
-    pub lifecycle_action_token: Option<LifecycleActionToken>,
+    pub lifecycle_action_token: Option<String>,
     #[doc="<p>The name of the lifecycle hook.</p>"]
-    pub lifecycle_hook_name: AsciiStringMaxLen255,
+    pub lifecycle_hook_name: String,
 }
 
 
@@ -5859,13 +5790,12 @@ impl RecordLifecycleActionHeartbeatTypeSerializer {
     }
 }
 
-pub type ResourceName = String;
 struct ResourceNameDeserializer;
 impl ResourceNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ResourceName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5874,13 +5804,12 @@ impl ResourceNameDeserializer {
 
     }
 }
-pub type ScalingActivityStatusCode = String;
 struct ScalingActivityStatusCodeDeserializer;
 impl ScalingActivityStatusCodeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ScalingActivityStatusCode, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5889,13 +5818,12 @@ impl ScalingActivityStatusCodeDeserializer {
 
     }
 }
-pub type ScalingPolicies = Vec<ScalingPolicy>;
 struct ScalingPoliciesDeserializer;
 impl ScalingPoliciesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ScalingPolicies, XmlParseError> {
+                                       -> Result<Vec<ScalingPolicy>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5935,31 +5863,31 @@ impl ScalingPoliciesDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ScalingPolicy {
     #[doc="<p>The adjustment type, which specifies how <code>ScalingAdjustment</code> is interpreted. Valid values are <code>ChangeInCapacity</code>, <code>ExactCapacity</code>, and <code>PercentChangeInCapacity</code>.</p>"]
-    pub adjustment_type: Option<XmlStringMaxLen255>,
+    pub adjustment_type: Option<String>,
     #[doc="<p>The CloudWatch alarms related to the policy.</p>"]
-    pub alarms: Option<Alarms>,
+    pub alarms: Option<Vec<Alarm>>,
     #[doc="<p>The name of the Auto Scaling group associated with this scaling policy.</p>"]
-    pub auto_scaling_group_name: Option<XmlStringMaxLen255>,
+    pub auto_scaling_group_name: Option<String>,
     #[doc="<p>The amount of time, in seconds, after a scaling activity completes before any further dynamic scaling activities can start.</p>"]
-    pub cooldown: Option<Cooldown>,
+    pub cooldown: Option<i64>,
     #[doc="<p>The estimated time, in seconds, until a newly launched instance can contribute to the CloudWatch metrics.</p>"]
-    pub estimated_instance_warmup: Option<EstimatedInstanceWarmup>,
+    pub estimated_instance_warmup: Option<i64>,
     #[doc="<p>The aggregation type for the CloudWatch metrics. Valid values are <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code>.</p>"]
-    pub metric_aggregation_type: Option<XmlStringMaxLen32>,
+    pub metric_aggregation_type: Option<String>,
     #[doc="<p>The minimum number of instances to scale. If the value of <code>AdjustmentType</code> is <code>PercentChangeInCapacity</code>, the scaling policy changes the <code>DesiredCapacity</code> of the Auto Scaling group by at least this many instances. Otherwise, the error is <code>ValidationError</code>.</p>"]
-    pub min_adjustment_magnitude: Option<MinAdjustmentMagnitude>,
+    pub min_adjustment_magnitude: Option<i64>,
     #[doc="<p>Available for backward compatibility. Use <code>MinAdjustmentMagnitude</code> instead.</p>"]
-    pub min_adjustment_step: Option<MinAdjustmentStep>,
+    pub min_adjustment_step: Option<i64>,
     #[doc="<p>The Amazon Resource Name (ARN) of the policy.</p>"]
-    pub policy_arn: Option<ResourceName>,
+    pub policy_arn: Option<String>,
     #[doc="<p>The name of the scaling policy.</p>"]
-    pub policy_name: Option<XmlStringMaxLen255>,
+    pub policy_name: Option<String>,
     #[doc="<p>The policy type. Valid values are <code>SimpleScaling</code> and <code>StepScaling</code>.</p>"]
-    pub policy_type: Option<XmlStringMaxLen64>,
+    pub policy_type: Option<String>,
     #[doc="<p>The amount by which to scale, based on the specified adjustment type. A positive value adds to the current capacity while a negative number removes from the current capacity.</p>"]
-    pub scaling_adjustment: Option<PolicyIncrement>,
+    pub scaling_adjustment: Option<i64>,
     #[doc="<p>A set of adjustments that enable you to scale based on the size of the alarm breach.</p>"]
-    pub step_adjustments: Option<StepAdjustments>,
+    pub step_adjustments: Option<Vec<StepAdjustment>>,
 }
 
 struct ScalingPolicyDeserializer;
@@ -6066,9 +5994,9 @@ impl ScalingPolicyDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ScalingProcessQuery {
     #[doc="<p>The name or Amazon Resource Name (ARN) of the Auto Scaling group.</p>"]
-    pub auto_scaling_group_name: ResourceName,
+    pub auto_scaling_group_name: String,
     #[doc="<p>One or more of the following processes. If you omit this parameter, all processes are specified.</p> <ul> <li> <p> <code>Launch</code> </p> </li> <li> <p> <code>Terminate</code> </p> </li> <li> <p> <code>HealthCheck</code> </p> </li> <li> <p> <code>ReplaceUnhealthy</code> </p> </li> <li> <p> <code>AZRebalance</code> </p> </li> <li> <p> <code>AlarmNotification</code> </p> </li> <li> <p> <code>ScheduledActions</code> </p> </li> <li> <p> <code>AddToLoadBalancer</code> </p> </li> </ul>"]
-    pub scaling_processes: Option<ProcessNames>,
+    pub scaling_processes: Option<Vec<String>>,
 }
 
 
@@ -6092,12 +6020,11 @@ impl ScalingProcessQuerySerializer {
     }
 }
 
-pub type ScheduledActionNames = Vec<ResourceName>;
 
 /// Serialize `ScheduledActionNames` contents to a `SignedRequest`.
 struct ScheduledActionNamesSerializer;
 impl ScheduledActionNamesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ScheduledActionNames) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -6108,9 +6035,9 @@ impl ScheduledActionNamesSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ScheduledActionsType {
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
-    pub next_token: Option<XmlString>,
+    pub next_token: Option<String>,
     #[doc="<p>The scheduled actions.</p>"]
-    pub scheduled_update_group_actions: Option<ScheduledUpdateGroupActions>,
+    pub scheduled_update_group_actions: Option<Vec<ScheduledUpdateGroupAction>>,
 }
 
 struct ScheduledActionsTypeDeserializer;
@@ -6162,25 +6089,25 @@ impl ScheduledActionsTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ScheduledUpdateGroupAction {
     #[doc="<p>The name of the group.</p>"]
-    pub auto_scaling_group_name: Option<XmlStringMaxLen255>,
+    pub auto_scaling_group_name: Option<String>,
     #[doc="<p>The number of instances you prefer to maintain in the group.</p>"]
-    pub desired_capacity: Option<AutoScalingGroupDesiredCapacity>,
+    pub desired_capacity: Option<i64>,
     #[doc="<p>The date and time that the action is scheduled to end. This date and time can be up to one month in the future.</p>"]
-    pub end_time: Option<TimestampType>,
+    pub end_time: Option<String>,
     #[doc="<p>The maximum size of the group.</p>"]
-    pub max_size: Option<AutoScalingGroupMaxSize>,
+    pub max_size: Option<i64>,
     #[doc="<p>The minimum size of the group.</p>"]
-    pub min_size: Option<AutoScalingGroupMinSize>,
+    pub min_size: Option<i64>,
     #[doc="<p>The recurring schedule for the action.</p>"]
-    pub recurrence: Option<XmlStringMaxLen255>,
+    pub recurrence: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the scheduled action.</p>"]
-    pub scheduled_action_arn: Option<ResourceName>,
+    pub scheduled_action_arn: Option<String>,
     #[doc="<p>The name of the scheduled action.</p>"]
-    pub scheduled_action_name: Option<XmlStringMaxLen255>,
+    pub scheduled_action_name: Option<String>,
     #[doc="<p>The date and time that the action is scheduled to begin. This date and time can be up to one month in the future.</p> <p>When <code>StartTime</code> and <code>EndTime</code> are specified with <code>Recurrence</code>, they form the boundaries of when the recurring action will start and stop.</p>"]
-    pub start_time: Option<TimestampType>,
+    pub start_time: Option<String>,
     #[doc="<p>This parameter is deprecated.</p>"]
-    pub time: Option<TimestampType>,
+    pub time: Option<String>,
 }
 
 struct ScheduledUpdateGroupActionDeserializer;
@@ -6268,13 +6195,13 @@ impl ScheduledUpdateGroupActionDeserializer {
 
     }
 }
-pub type ScheduledUpdateGroupActions = Vec<ScheduledUpdateGroupAction>;
 struct ScheduledUpdateGroupActionsDeserializer;
 impl ScheduledUpdateGroupActionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<ScheduledUpdateGroupActions, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<Vec<ScheduledUpdateGroupAction>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -6311,13 +6238,12 @@ impl ScheduledUpdateGroupActionsDeserializer {
 
     }
 }
-pub type SecurityGroups = Vec<XmlString>;
 struct SecurityGroupsDeserializer;
 impl SecurityGroupsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SecurityGroups, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -6357,7 +6283,7 @@ impl SecurityGroupsDeserializer {
 /// Serialize `SecurityGroups` contents to a `SignedRequest`.
 struct SecurityGroupsSerializer;
 impl SecurityGroupsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SecurityGroups) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -6368,11 +6294,11 @@ impl SecurityGroupsSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct SetDesiredCapacityType {
     #[doc="<p>The name of the Auto Scaling group.</p>"]
-    pub auto_scaling_group_name: ResourceName,
+    pub auto_scaling_group_name: String,
     #[doc="<p>The number of EC2 instances that should be running in the Auto Scaling group.</p>"]
-    pub desired_capacity: AutoScalingGroupDesiredCapacity,
+    pub desired_capacity: i64,
     #[doc="<p>By default, <code>SetDesiredCapacity</code> overrides any cooldown period associated with the Auto Scaling group. Specify <code>True</code> to make Auto Scaling to wait for the cool-down period associated with the Auto Scaling group to complete before initiating a scaling activity to set your Auto Scaling group to its new capacity.</p>"]
-    pub honor_cooldown: Option<HonorCooldown>,
+    pub honor_cooldown: Option<bool>,
 }
 
 
@@ -6400,11 +6326,11 @@ impl SetDesiredCapacityTypeSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct SetInstanceHealthQuery {
     #[doc="<p>The health status of the instance. Set to <code>Healthy</code> if you want the instance to remain in service. Set to <code>Unhealthy</code> if you want the instance to be out of service. Auto Scaling will terminate and replace the unhealthy instance.</p>"]
-    pub health_status: XmlStringMaxLen32,
+    pub health_status: String,
     #[doc="<p>The ID of the instance.</p>"]
-    pub instance_id: XmlStringMaxLen19,
+    pub instance_id: String,
     #[doc="<p>If the Auto Scaling group of the specified instance has a <code>HealthCheckGracePeriod</code> specified for the group, by default, this call will respect the grace period. Set this to <code>False</code>, if you do not want the call to respect the grace period associated with the group.</p> <p>For more information, see the description of the health check grace period for <a>CreateAutoScalingGroup</a>.</p>"]
-    pub should_respect_grace_period: Option<ShouldRespectGracePeriod>,
+    pub should_respect_grace_period: Option<bool>,
 }
 
 
@@ -6449,11 +6375,11 @@ impl SetInstanceProtectionAnswerDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct SetInstanceProtectionQuery {
     #[doc="<p>The name of the group.</p>"]
-    pub auto_scaling_group_name: ResourceName,
+    pub auto_scaling_group_name: String,
     #[doc="<p>One or more instance IDs.</p>"]
-    pub instance_ids: InstanceIds,
+    pub instance_ids: Vec<String>,
     #[doc="<p>Indicates whether the instance is protected from termination by Auto Scaling when scaling in.</p>"]
-    pub protected_from_scale_in: ProtectedFromScaleIn,
+    pub protected_from_scale_in: bool,
 }
 
 
@@ -6477,15 +6403,12 @@ impl SetInstanceProtectionQuerySerializer {
     }
 }
 
-pub type ShouldDecrementDesiredCapacity = bool;
-pub type ShouldRespectGracePeriod = bool;
-pub type SpotPrice = String;
 struct SpotPriceDeserializer;
 impl SpotPriceDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SpotPrice, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -6498,11 +6421,11 @@ impl SpotPriceDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct StepAdjustment {
     #[doc="<p>The lower bound for the difference between the alarm threshold and the CloudWatch metric. If the metric value is above the breach threshold, the lower bound is inclusive (the metric must be greater than or equal to the threshold plus the lower bound). Otherwise, it is exclusive (the metric must be greater than the threshold plus the lower bound). A null value indicates negative infinity.</p>"]
-    pub metric_interval_lower_bound: Option<MetricScale>,
+    pub metric_interval_lower_bound: Option<f64>,
     #[doc="<p>The upper bound for the difference between the alarm threshold and the CloudWatch metric. If the metric value is above the breach threshold, the upper bound is exclusive (the metric must be less than the threshold plus the upper bound). Otherwise, it is inclusive (the metric must be less than or equal to the threshold plus the upper bound). A null value indicates positive infinity.</p> <p>The upper bound must be greater than the lower bound.</p>"]
-    pub metric_interval_upper_bound: Option<MetricScale>,
+    pub metric_interval_upper_bound: Option<f64>,
     #[doc="<p>The amount by which to scale, based on the specified adjustment type. A positive value adds to the current capacity while a negative number removes from the current capacity.</p>"]
-    pub scaling_adjustment: PolicyIncrement,
+    pub scaling_adjustment: i64,
 }
 
 struct StepAdjustmentDeserializer;
@@ -6582,13 +6505,12 @@ impl StepAdjustmentSerializer {
     }
 }
 
-pub type StepAdjustments = Vec<StepAdjustment>;
 struct StepAdjustmentsDeserializer;
 impl StepAdjustmentsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<StepAdjustments, XmlParseError> {
+                                       -> Result<Vec<StepAdjustment>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -6628,7 +6550,7 @@ impl StepAdjustmentsDeserializer {
 /// Serialize `StepAdjustments` contents to a `SignedRequest`.
 struct StepAdjustmentsSerializer;
 impl StepAdjustmentsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &StepAdjustments) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<StepAdjustment>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             StepAdjustmentSerializer::serialize(params, &key, obj);
@@ -6640,9 +6562,9 @@ impl StepAdjustmentsSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct SuspendedProcess {
     #[doc="<p>The name of the suspended process.</p>"]
-    pub process_name: Option<XmlStringMaxLen255>,
+    pub process_name: Option<String>,
     #[doc="<p>The reason that the process was suspended.</p>"]
-    pub suspension_reason: Option<XmlStringMaxLen255>,
+    pub suspension_reason: Option<String>,
 }
 
 struct SuspendedProcessDeserializer;
@@ -6693,13 +6615,12 @@ impl SuspendedProcessDeserializer {
 
     }
 }
-pub type SuspendedProcesses = Vec<SuspendedProcess>;
 struct SuspendedProcessesDeserializer;
 impl SuspendedProcessesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SuspendedProcesses, XmlParseError> {
+                                       -> Result<Vec<SuspendedProcess>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -6739,15 +6660,15 @@ impl SuspendedProcessesDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct Tag {
     #[doc="<p>The tag key.</p>"]
-    pub key: TagKey,
+    pub key: String,
     #[doc="<p>Determines whether the tag is added to new instances as they are launched in the group.</p>"]
-    pub propagate_at_launch: Option<PropagateAtLaunch>,
+    pub propagate_at_launch: Option<bool>,
     #[doc="<p>The name of the group.</p>"]
-    pub resource_id: Option<XmlString>,
+    pub resource_id: Option<String>,
     #[doc="<p>The type of resource. The only supported value is <code>auto-scaling-group</code>.</p>"]
-    pub resource_type: Option<XmlString>,
+    pub resource_type: Option<String>,
     #[doc="<p>The tag value.</p>"]
-    pub value: Option<TagValue>,
+    pub value: Option<String>,
 }
 
 
@@ -6782,15 +6703,15 @@ impl TagSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct TagDescription {
     #[doc="<p>The tag key.</p>"]
-    pub key: Option<TagKey>,
+    pub key: Option<String>,
     #[doc="<p>Determines whether the tag is added to new instances as they are launched in the group.</p>"]
-    pub propagate_at_launch: Option<PropagateAtLaunch>,
+    pub propagate_at_launch: Option<bool>,
     #[doc="<p>The name of the group.</p>"]
-    pub resource_id: Option<XmlString>,
+    pub resource_id: Option<String>,
     #[doc="<p>The type of resource. The only supported value is <code>auto-scaling-group</code>.</p>"]
-    pub resource_type: Option<XmlString>,
+    pub resource_type: Option<String>,
     #[doc="<p>The tag value.</p>"]
-    pub value: Option<TagValue>,
+    pub value: Option<String>,
 }
 
 struct TagDescriptionDeserializer;
@@ -6852,13 +6773,12 @@ impl TagDescriptionDeserializer {
 
     }
 }
-pub type TagDescriptionList = Vec<TagDescription>;
 struct TagDescriptionListDeserializer;
 impl TagDescriptionListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TagDescriptionList, XmlParseError> {
+                                       -> Result<Vec<TagDescription>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -6894,13 +6814,12 @@ impl TagDescriptionListDeserializer {
 
     }
 }
-pub type TagKey = String;
 struct TagKeyDeserializer;
 impl TagKeyDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TagKey, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -6909,13 +6828,12 @@ impl TagKeyDeserializer {
 
     }
 }
-pub type TagValue = String;
 struct TagValueDeserializer;
 impl TagValueDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TagValue, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -6924,12 +6842,11 @@ impl TagValueDeserializer {
 
     }
 }
-pub type Tags = Vec<Tag>;
 
 /// Serialize `Tags` contents to a `SignedRequest`.
 struct TagsSerializer;
 impl TagsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Tags) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<Tag>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             TagSerializer::serialize(params, &key, obj);
@@ -6940,9 +6857,9 @@ impl TagsSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct TagsType {
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
-    pub next_token: Option<XmlString>,
+    pub next_token: Option<String>,
     #[doc="<p>One or more tags.</p>"]
-    pub tags: Option<TagDescriptionList>,
+    pub tags: Option<Vec<TagDescription>>,
 }
 
 struct TagsTypeDeserializer;
@@ -6992,13 +6909,12 @@ impl TagsTypeDeserializer {
 
     }
 }
-pub type TargetGroupARNs = Vec<XmlStringMaxLen511>;
 struct TargetGroupARNsDeserializer;
 impl TargetGroupARNsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TargetGroupARNs, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -7039,7 +6955,7 @@ impl TargetGroupARNsDeserializer {
 /// Serialize `TargetGroupARNs` contents to a `SignedRequest`.
 struct TargetGroupARNsSerializer;
 impl TargetGroupARNsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &TargetGroupARNs) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -7050,9 +6966,9 @@ impl TargetGroupARNsSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct TerminateInstanceInAutoScalingGroupType {
     #[doc="<p>The ID of the instance.</p>"]
-    pub instance_id: XmlStringMaxLen19,
+    pub instance_id: String,
     #[doc="<p>If <code>true</code>, terminating the instance also decrements the size of the Auto Scaling group.</p>"]
-    pub should_decrement_desired_capacity: ShouldDecrementDesiredCapacity,
+    pub should_decrement_desired_capacity: bool,
 }
 
 
@@ -7072,13 +6988,12 @@ impl TerminateInstanceInAutoScalingGroupTypeSerializer {
     }
 }
 
-pub type TerminationPolicies = Vec<XmlStringMaxLen1600>;
 struct TerminationPoliciesDeserializer;
 impl TerminationPoliciesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TerminationPolicies, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -7119,7 +7034,7 @@ impl TerminationPoliciesDeserializer {
 /// Serialize `TerminationPolicies` contents to a `SignedRequest`.
 struct TerminationPoliciesSerializer;
 impl TerminationPoliciesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &TerminationPolicies) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -7127,13 +7042,12 @@ impl TerminationPoliciesSerializer {
     }
 }
 
-pub type TimestampType = String;
 struct TimestampTypeDeserializer;
 impl TimestampTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TimestampType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7145,31 +7059,31 @@ impl TimestampTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct UpdateAutoScalingGroupType {
     #[doc="<p>The name of the Auto Scaling group.</p>"]
-    pub auto_scaling_group_name: ResourceName,
+    pub auto_scaling_group_name: String,
     #[doc="<p>One or more Availability Zones for the group.</p>"]
-    pub availability_zones: Option<AvailabilityZones>,
+    pub availability_zones: Option<Vec<String>>,
     #[doc="<p>The amount of time, in seconds, after a scaling activity completes before another scaling activity can start. The default is 300.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/Cooldown.html\">Auto Scaling Cooldowns</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-    pub default_cooldown: Option<Cooldown>,
+    pub default_cooldown: Option<i64>,
     #[doc="<p>The number of EC2 instances that should be running in the Auto Scaling group. This number must be greater than or equal to the minimum size of the group and less than or equal to the maximum size of the group.</p>"]
-    pub desired_capacity: Option<AutoScalingGroupDesiredCapacity>,
+    pub desired_capacity: Option<i64>,
     #[doc="<p>The amount of time, in seconds, that Auto Scaling waits before checking the health status of an EC2 instance that has come into service. The default is 0.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/healthcheck.html\">Health Checks</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-    pub health_check_grace_period: Option<HealthCheckGracePeriod>,
+    pub health_check_grace_period: Option<i64>,
     #[doc="<p>The service to use for the health checks. The valid values are <code>EC2</code> and <code>ELB</code>.</p>"]
-    pub health_check_type: Option<XmlStringMaxLen32>,
+    pub health_check_type: Option<String>,
     #[doc="<p>The name of the launch configuration.</p>"]
-    pub launch_configuration_name: Option<ResourceName>,
+    pub launch_configuration_name: Option<String>,
     #[doc="<p>The maximum size of the Auto Scaling group.</p>"]
-    pub max_size: Option<AutoScalingGroupMaxSize>,
+    pub max_size: Option<i64>,
     #[doc="<p>The minimum size of the Auto Scaling group.</p>"]
-    pub min_size: Option<AutoScalingGroupMinSize>,
+    pub min_size: Option<i64>,
     #[doc="<p>Indicates whether newly launched instances are protected from termination by Auto Scaling when scaling in.</p>"]
-    pub new_instances_protected_from_scale_in: Option<InstanceProtected>,
+    pub new_instances_protected_from_scale_in: Option<bool>,
     #[doc="<p>The name of the placement group into which you'll launch your instances, if any. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html\">Placement Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-    pub placement_group: Option<XmlStringMaxLen255>,
+    pub placement_group: Option<String>,
     #[doc="<p>A standalone termination policy or a list of termination policies used to select the instance to terminate. The policies are executed in the order that they are listed.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/as-instance-termination.html\">Controlling Which Instances Auto Scaling Terminates During Scale In</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-    pub termination_policies: Option<TerminationPolicies>,
+    pub termination_policies: Option<Vec<String>>,
     #[doc="<p>The ID of the subnet, if you are launching into a VPC. You can specify several subnets in a comma-separated list.</p> <p>When you specify <code>VPCZoneIdentifier</code> with <code>AvailabilityZones</code>, ensure that the subnets' Availability Zones match the values you specify for <code>AvailabilityZones</code>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/asg-in-vpc.html\">Launching Auto Scaling Instances in a VPC</a> in the <i>Auto Scaling User Guide</i>.</p>"]
-    pub vpc_zone_identifier: Option<XmlStringMaxLen2047>,
+    pub vpc_zone_identifier: Option<String>,
 }
 
 
@@ -7237,12 +7151,11 @@ impl UpdateAutoScalingGroupTypeSerializer {
     }
 }
 
-pub type Values = Vec<XmlString>;
 
 /// Serialize `Values` contents to a `SignedRequest`.
 struct ValuesSerializer;
 impl ValuesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Values) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -7250,13 +7163,12 @@ impl ValuesSerializer {
     }
 }
 
-pub type XmlString = String;
 struct XmlStringDeserializer;
 impl XmlStringDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<XmlString, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7265,13 +7177,12 @@ impl XmlStringDeserializer {
 
     }
 }
-pub type XmlStringMaxLen1023 = String;
 struct XmlStringMaxLen1023Deserializer;
 impl XmlStringMaxLen1023Deserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<XmlStringMaxLen1023, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7280,13 +7191,12 @@ impl XmlStringMaxLen1023Deserializer {
 
     }
 }
-pub type XmlStringMaxLen1600 = String;
 struct XmlStringMaxLen1600Deserializer;
 impl XmlStringMaxLen1600Deserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<XmlStringMaxLen1600, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7295,13 +7205,12 @@ impl XmlStringMaxLen1600Deserializer {
 
     }
 }
-pub type XmlStringMaxLen19 = String;
 struct XmlStringMaxLen19Deserializer;
 impl XmlStringMaxLen19Deserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<XmlStringMaxLen19, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7310,13 +7219,12 @@ impl XmlStringMaxLen19Deserializer {
 
     }
 }
-pub type XmlStringMaxLen2047 = String;
 struct XmlStringMaxLen2047Deserializer;
 impl XmlStringMaxLen2047Deserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<XmlStringMaxLen2047, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7325,13 +7233,12 @@ impl XmlStringMaxLen2047Deserializer {
 
     }
 }
-pub type XmlStringMaxLen255 = String;
 struct XmlStringMaxLen255Deserializer;
 impl XmlStringMaxLen255Deserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<XmlStringMaxLen255, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7340,13 +7247,12 @@ impl XmlStringMaxLen255Deserializer {
 
     }
 }
-pub type XmlStringMaxLen32 = String;
 struct XmlStringMaxLen32Deserializer;
 impl XmlStringMaxLen32Deserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<XmlStringMaxLen32, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7355,13 +7261,12 @@ impl XmlStringMaxLen32Deserializer {
 
     }
 }
-pub type XmlStringMaxLen511 = String;
 struct XmlStringMaxLen511Deserializer;
 impl XmlStringMaxLen511Deserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<XmlStringMaxLen511, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7370,13 +7275,12 @@ impl XmlStringMaxLen511Deserializer {
 
     }
 }
-pub type XmlStringMaxLen64 = String;
 struct XmlStringMaxLen64Deserializer;
 impl XmlStringMaxLen64Deserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<XmlStringMaxLen64, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7385,13 +7289,12 @@ impl XmlStringMaxLen64Deserializer {
 
     }
 }
-pub type XmlStringUserData = String;
 struct XmlStringUserDataDeserializer;
 impl XmlStringUserDataDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<XmlStringUserData, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));

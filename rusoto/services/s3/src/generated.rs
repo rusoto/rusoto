@@ -39,12 +39,11 @@ enum DeserializerNext {
 }
 use md5;
 use rustc_serialize::base64::{ToBase64, Config, CharacterSet, Newline};
-pub type AbortDate = String;
 #[doc="Specifies the days since the initiation of an Incomplete Multipart Upload that Lifecycle will wait before permanently removing all parts of the upload."]
 #[derive(Default,Clone,Debug)]
 pub struct AbortIncompleteMultipartUpload {
     #[doc="Indicates the number of days that must pass since initiation for Lifecycle to abort an Incomplete Multipart Upload."]
-    pub days_after_initiation: Option<DaysAfterInitiation>,
+    pub days_after_initiation: Option<i64>,
 }
 
 struct AbortIncompleteMultipartUploadDeserializer;
@@ -107,7 +106,7 @@ impl AbortIncompleteMultipartUploadSerializer {
 
 #[derive(Default,Clone,Debug)]
 pub struct AbortMultipartUploadOutput {
-    pub request_charged: Option<RequestCharged>,
+    pub request_charged: Option<String>,
 }
 
 struct AbortMultipartUploadOutputDeserializer;
@@ -128,17 +127,16 @@ impl AbortMultipartUploadOutputDeserializer {
 }
 #[derive(Default,Clone,Debug)]
 pub struct AbortMultipartUploadRequest {
-    pub bucket: BucketName,
-    pub key: ObjectKey,
-    pub request_payer: Option<RequestPayer>,
-    pub upload_id: MultipartUploadId,
+    pub bucket: String,
+    pub key: String,
+    pub request_payer: Option<String>,
+    pub upload_id: String,
 }
 
-pub type AbortRuleId = String;
 #[derive(Default,Clone,Debug)]
 pub struct AccelerateConfiguration {
     #[doc="The accelerate configuration of the bucket."]
-    pub status: Option<BucketAccelerateStatus>,
+    pub status: Option<String>,
 }
 
 
@@ -155,11 +153,10 @@ impl AccelerateConfigurationSerializer {
     }
 }
 
-pub type AcceptRanges = String;
 #[derive(Default,Clone,Debug)]
 pub struct AccessControlPolicy {
     #[doc="A list of grants."]
-    pub grants: Option<Grants>,
+    pub grants: Option<Vec<Grant>>,
     pub owner: Option<Owner>,
 }
 
@@ -180,13 +177,12 @@ impl AccessControlPolicySerializer {
     }
 }
 
-pub type AccountId = String;
 struct AccountIdDeserializer;
 impl AccountIdDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AccountId, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -199,20 +195,19 @@ impl AccountIdDeserializer {
 pub struct AccountIdSerializer;
 impl AccountIdSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &AccountId) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type AllowedHeader = String;
 struct AllowedHeaderDeserializer;
 impl AllowedHeaderDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AllowedHeader, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -225,20 +220,19 @@ impl AllowedHeaderDeserializer {
 pub struct AllowedHeaderSerializer;
 impl AllowedHeaderSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &AllowedHeader) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type AllowedHeaders = Vec<AllowedHeader>;
 struct AllowedHeadersDeserializer;
 impl AllowedHeadersDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AllowedHeaders, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
 
@@ -265,7 +259,7 @@ impl AllowedHeadersDeserializer {
 pub struct AllowedHeadersSerializer;
 impl AllowedHeadersSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &AllowedHeaders) -> String {
+    pub fn serialize(name: &str, obj: &Vec<String>) -> String {
         let mut parts: Vec<String> = Vec::new();
         for element in obj {
             parts.push(AllowedHeaderSerializer::serialize(name, element));
@@ -274,13 +268,12 @@ impl AllowedHeadersSerializer {
     }
 }
 
-pub type AllowedMethod = String;
 struct AllowedMethodDeserializer;
 impl AllowedMethodDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AllowedMethod, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -293,20 +286,19 @@ impl AllowedMethodDeserializer {
 pub struct AllowedMethodSerializer;
 impl AllowedMethodSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &AllowedMethod) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type AllowedMethods = Vec<AllowedMethod>;
 struct AllowedMethodsDeserializer;
 impl AllowedMethodsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AllowedMethods, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
 
@@ -333,7 +325,7 @@ impl AllowedMethodsDeserializer {
 pub struct AllowedMethodsSerializer;
 impl AllowedMethodsSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &AllowedMethods) -> String {
+    pub fn serialize(name: &str, obj: &Vec<String>) -> String {
         let mut parts: Vec<String> = Vec::new();
         for element in obj {
             parts.push(AllowedMethodSerializer::serialize(name, element));
@@ -342,13 +334,12 @@ impl AllowedMethodsSerializer {
     }
 }
 
-pub type AllowedOrigin = String;
 struct AllowedOriginDeserializer;
 impl AllowedOriginDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AllowedOrigin, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -361,20 +352,19 @@ impl AllowedOriginDeserializer {
 pub struct AllowedOriginSerializer;
 impl AllowedOriginSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &AllowedOrigin) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type AllowedOrigins = Vec<AllowedOrigin>;
 struct AllowedOriginsDeserializer;
 impl AllowedOriginsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AllowedOrigins, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
 
@@ -401,7 +391,7 @@ impl AllowedOriginsDeserializer {
 pub struct AllowedOriginsSerializer;
 impl AllowedOriginsSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &AllowedOrigins) -> String {
+    pub fn serialize(name: &str, obj: &Vec<String>) -> String {
         let mut parts: Vec<String> = Vec::new();
         for element in obj {
             parts.push(AllowedOriginSerializer::serialize(name, element));
@@ -413,9 +403,9 @@ impl AllowedOriginsSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct AnalyticsAndOperator {
     #[doc="The prefix to use when evaluating an AND predicate."]
-    pub prefix: Option<Prefix>,
+    pub prefix: Option<String>,
     #[doc="The list of tags to use when evaluating an AND predicate."]
-    pub tags: Option<TagSet>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 struct AnalyticsAndOperatorDeserializer;
@@ -485,7 +475,7 @@ pub struct AnalyticsConfiguration {
     #[doc="The filter used to describe a set of objects for analyses. A filter must have exactly one prefix, one tag, or one conjunction (AnalyticsAndOperator). If no filter is provided, all objects will be considered in any analysis."]
     pub filter: Option<AnalyticsFilter>,
     #[doc="The identifier used to represent an analytics configuration."]
-    pub id: AnalyticsId,
+    pub id: String,
     #[doc="If present, it indicates that data related to access patterns will be collected and made available to analyze the tradeoffs between different storage classes."]
     pub storage_class_analysis: StorageClassAnalysis,
 }
@@ -558,13 +548,12 @@ impl AnalyticsConfigurationSerializer {
     }
 }
 
-pub type AnalyticsConfigurationList = Vec<AnalyticsConfiguration>;
 struct AnalyticsConfigurationListDeserializer;
 impl AnalyticsConfigurationListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AnalyticsConfigurationList, XmlParseError> {
+                                       -> Result<Vec<AnalyticsConfiguration>, XmlParseError> {
 
         let mut obj = vec![];
 
@@ -655,7 +644,7 @@ pub struct AnalyticsFilter {
     #[doc="A conjunction (logical AND) of predicates, which is used in evaluating an analytics filter. The operator must have at least two predicates."]
     pub and: Option<AnalyticsAndOperator>,
     #[doc="The prefix to use when evaluating an analytics filter."]
-    pub prefix: Option<Prefix>,
+    pub prefix: Option<String>,
     #[doc="The tag to use when evaluating an analytics filter."]
     pub tag: Option<Tag>,
 }
@@ -730,13 +719,12 @@ impl AnalyticsFilterSerializer {
     }
 }
 
-pub type AnalyticsId = String;
 struct AnalyticsIdDeserializer;
 impl AnalyticsIdDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AnalyticsId, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -749,7 +737,7 @@ impl AnalyticsIdDeserializer {
 pub struct AnalyticsIdSerializer;
 impl AnalyticsIdSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &AnalyticsId) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
@@ -759,13 +747,13 @@ impl AnalyticsIdSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct AnalyticsS3BucketDestination {
     #[doc="The Amazon resource name (ARN) of the bucket to which data is exported."]
-    pub bucket: BucketName,
+    pub bucket: String,
     #[doc="The account ID that owns the destination bucket. If no account ID is provided, the owner will not be validated prior to exporting data."]
-    pub bucket_account_id: Option<AccountId>,
+    pub bucket_account_id: Option<String>,
     #[doc="The file format used when exporting data to Amazon S3."]
-    pub format: AnalyticsS3ExportFileFormat,
+    pub format: String,
     #[doc="The prefix to use when exporting data. The exported data begins with this prefix."]
-    pub prefix: Option<Prefix>,
+    pub prefix: Option<String>,
 }
 
 struct AnalyticsS3BucketDestinationDeserializer;
@@ -842,13 +830,12 @@ impl AnalyticsS3BucketDestinationSerializer {
     }
 }
 
-pub type AnalyticsS3ExportFileFormat = String;
 struct AnalyticsS3ExportFileFormatDeserializer;
 impl AnalyticsS3ExportFileFormatDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AnalyticsS3ExportFileFormat, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -861,19 +848,18 @@ impl AnalyticsS3ExportFileFormatDeserializer {
 pub struct AnalyticsS3ExportFileFormatSerializer;
 impl AnalyticsS3ExportFileFormatSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &AnalyticsS3ExportFileFormat) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type Body = Vec<u8>;
 
 pub struct BodySerializer;
 impl BodySerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Body) -> String {
+    pub fn serialize(name: &str, obj: &Vec<u8>) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = String::from_utf8(obj.to_vec()).expect("Not a UTF-8 string"))
@@ -883,9 +869,9 @@ impl BodySerializer {
 #[derive(Default,Clone,Debug)]
 pub struct Bucket {
     #[doc="Date the bucket was created."]
-    pub creation_date: Option<CreationDate>,
+    pub creation_date: Option<String>,
     #[doc="The name of the bucket."]
-    pub name: Option<BucketName>,
+    pub name: Option<String>,
 }
 
 struct BucketDeserializer;
@@ -935,13 +921,12 @@ impl BucketDeserializer {
 
     }
 }
-pub type BucketAccelerateStatus = String;
 struct BucketAccelerateStatusDeserializer;
 impl BucketAccelerateStatusDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<BucketAccelerateStatus, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -954,17 +939,16 @@ impl BucketAccelerateStatusDeserializer {
 pub struct BucketAccelerateStatusSerializer;
 impl BucketAccelerateStatusSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &BucketAccelerateStatus) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type BucketCannedACL = String;
 #[derive(Default,Clone,Debug)]
 pub struct BucketLifecycleConfiguration {
-    pub rules: LifecycleRules,
+    pub rules: Vec<LifecycleRule>,
 }
 
 
@@ -979,13 +963,12 @@ impl BucketLifecycleConfigurationSerializer {
     }
 }
 
-pub type BucketLocationConstraint = String;
 struct BucketLocationConstraintDeserializer;
 impl BucketLocationConstraintDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<BucketLocationConstraint, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -998,7 +981,7 @@ impl BucketLocationConstraintDeserializer {
 pub struct BucketLocationConstraintSerializer;
 impl BucketLocationConstraintSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &BucketLocationConstraint) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
@@ -1024,13 +1007,12 @@ impl BucketLoggingStatusSerializer {
     }
 }
 
-pub type BucketLogsPermission = String;
 struct BucketLogsPermissionDeserializer;
 impl BucketLogsPermissionDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<BucketLogsPermission, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1043,20 +1025,19 @@ impl BucketLogsPermissionDeserializer {
 pub struct BucketLogsPermissionSerializer;
 impl BucketLogsPermissionSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &BucketLogsPermission) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type BucketName = String;
 struct BucketNameDeserializer;
 impl BucketNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<BucketName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1069,20 +1050,19 @@ impl BucketNameDeserializer {
 pub struct BucketNameSerializer;
 impl BucketNameSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &BucketName) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type BucketVersioningStatus = String;
 struct BucketVersioningStatusDeserializer;
 impl BucketVersioningStatusDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<BucketVersioningStatus, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1095,20 +1075,19 @@ impl BucketVersioningStatusDeserializer {
 pub struct BucketVersioningStatusSerializer;
 impl BucketVersioningStatusSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &BucketVersioningStatus) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type Buckets = Vec<Bucket>;
 struct BucketsDeserializer;
 impl BucketsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Buckets, XmlParseError> {
+                                       -> Result<Vec<Bucket>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -1146,7 +1125,7 @@ impl BucketsDeserializer {
 }
 #[derive(Default,Clone,Debug)]
 pub struct CORSConfiguration {
-    pub cors_rules: CORSRules,
+    pub cors_rules: Vec<CORSRule>,
 }
 
 
@@ -1164,15 +1143,15 @@ impl CORSConfigurationSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct CORSRule {
     #[doc="Specifies which headers are allowed in a pre-flight OPTIONS request."]
-    pub allowed_headers: Option<AllowedHeaders>,
+    pub allowed_headers: Option<Vec<String>>,
     #[doc="Identifies HTTP methods that the domain/origin specified in the rule is allowed to execute."]
-    pub allowed_methods: AllowedMethods,
+    pub allowed_methods: Vec<String>,
     #[doc="One or more origins you want customers to be able to access the bucket from."]
-    pub allowed_origins: AllowedOrigins,
+    pub allowed_origins: Vec<String>,
     #[doc="One or more headers in the response that you want customers to be able to access from their applications (for example, from a JavaScript XMLHttpRequest object)."]
-    pub expose_headers: Option<ExposeHeaders>,
+    pub expose_headers: Option<Vec<String>>,
     #[doc="The time in seconds that your browser is to cache the preflight response for the specified resource."]
-    pub max_age_seconds: Option<MaxAgeSeconds>,
+    pub max_age_seconds: Option<i64>,
 }
 
 struct CORSRuleDeserializer;
@@ -1260,13 +1239,12 @@ impl CORSRuleSerializer {
     }
 }
 
-pub type CORSRules = Vec<CORSRule>;
 struct CORSRulesDeserializer;
 impl CORSRulesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CORSRules, XmlParseError> {
+                                       -> Result<Vec<CORSRule>, XmlParseError> {
 
         let mut obj = vec![];
 
@@ -1293,7 +1271,7 @@ impl CORSRulesDeserializer {
 pub struct CORSRulesSerializer;
 impl CORSRulesSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &CORSRules) -> String {
+    pub fn serialize(name: &str, obj: &Vec<CORSRule>) -> String {
         let mut parts: Vec<String> = Vec::new();
         for element in obj {
             parts.push(CORSRuleSerializer::serialize(name, element));
@@ -1302,14 +1280,12 @@ impl CORSRulesSerializer {
     }
 }
 
-pub type CacheControl = String;
-pub type CloudFunction = String;
 struct CloudFunctionDeserializer;
 impl CloudFunctionDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CloudFunction, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1322,7 +1298,7 @@ impl CloudFunctionDeserializer {
 pub struct CloudFunctionSerializer;
 impl CloudFunctionSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &CloudFunction) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
@@ -1331,10 +1307,10 @@ impl CloudFunctionSerializer {
 
 #[derive(Default,Clone,Debug)]
 pub struct CloudFunctionConfiguration {
-    pub cloud_function: Option<CloudFunction>,
-    pub events: Option<EventList>,
-    pub id: Option<NotificationId>,
-    pub invocation_role: Option<CloudFunctionInvocationRole>,
+    pub cloud_function: Option<String>,
+    pub events: Option<Vec<String>>,
+    pub id: Option<String>,
+    pub invocation_role: Option<String>,
 }
 
 struct CloudFunctionConfigurationDeserializer;
@@ -1414,13 +1390,12 @@ impl CloudFunctionConfigurationSerializer {
     }
 }
 
-pub type CloudFunctionInvocationRole = String;
 struct CloudFunctionInvocationRoleDeserializer;
 impl CloudFunctionInvocationRoleDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CloudFunctionInvocationRole, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1433,20 +1408,19 @@ impl CloudFunctionInvocationRoleDeserializer {
 pub struct CloudFunctionInvocationRoleSerializer;
 impl CloudFunctionInvocationRoleSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &CloudFunctionInvocationRole) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type Code = String;
 struct CodeDeserializer;
 impl CodeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Code, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1457,7 +1431,7 @@ impl CodeDeserializer {
 }
 #[derive(Default,Clone,Debug)]
 pub struct CommonPrefix {
-    pub prefix: Option<Prefix>,
+    pub prefix: Option<String>,
 }
 
 struct CommonPrefixDeserializer;
@@ -1502,13 +1476,12 @@ impl CommonPrefixDeserializer {
 
     }
 }
-pub type CommonPrefixList = Vec<CommonPrefix>;
 struct CommonPrefixListDeserializer;
 impl CommonPrefixListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CommonPrefixList, XmlParseError> {
+                                       -> Result<Vec<CommonPrefix>, XmlParseError> {
 
         let mut obj = vec![];
 
@@ -1533,20 +1506,20 @@ impl CommonPrefixListDeserializer {
 }
 #[derive(Default,Clone,Debug)]
 pub struct CompleteMultipartUploadOutput {
-    pub bucket: Option<BucketName>,
+    pub bucket: Option<String>,
     #[doc="Entity tag of the object."]
-    pub e_tag: Option<ETag>,
+    pub e_tag: Option<String>,
     #[doc="If the object expiration is configured, this will contain the expiration date (expiry-date) and rule ID (rule-id). The value of rule-id is URL encoded."]
-    pub expiration: Option<Expiration>,
-    pub key: Option<ObjectKey>,
-    pub location: Option<Location>,
-    pub request_charged: Option<RequestCharged>,
+    pub expiration: Option<String>,
+    pub key: Option<String>,
+    pub location: Option<String>,
+    pub request_charged: Option<String>,
     #[doc="If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object."]
-    pub ssekms_key_id: Option<SSEKMSKeyId>,
+    pub ssekms_key_id: Option<String>,
     #[doc="The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms)."]
-    pub server_side_encryption: Option<ServerSideEncryption>,
+    pub server_side_encryption: Option<String>,
     #[doc="Version of the object."]
-    pub version_id: Option<ObjectVersionId>,
+    pub version_id: Option<String>,
 }
 
 struct CompleteMultipartUploadOutputDeserializer;
@@ -1603,16 +1576,16 @@ impl CompleteMultipartUploadOutputDeserializer {
 }
 #[derive(Default,Clone,Debug)]
 pub struct CompleteMultipartUploadRequest {
-    pub bucket: BucketName,
-    pub key: ObjectKey,
+    pub bucket: String,
+    pub key: String,
     pub multipart_upload: Option<CompletedMultipartUpload>,
-    pub request_payer: Option<RequestPayer>,
-    pub upload_id: MultipartUploadId,
+    pub request_payer: Option<String>,
+    pub upload_id: String,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct CompletedMultipartUpload {
-    pub parts: Option<CompletedPartList>,
+    pub parts: Option<Vec<CompletedPart>>,
 }
 
 
@@ -1632,9 +1605,9 @@ impl CompletedMultipartUploadSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct CompletedPart {
     #[doc="Entity tag returned when the part was uploaded."]
-    pub e_tag: Option<ETag>,
+    pub e_tag: Option<String>,
     #[doc="Part number that identifies the part. This is a positive integer between 1 and 10,000."]
-    pub part_number: Option<PartNumber>,
+    pub part_number: Option<i64>,
 }
 
 
@@ -1654,12 +1627,11 @@ impl CompletedPartSerializer {
     }
 }
 
-pub type CompletedPartList = Vec<CompletedPart>;
 
 pub struct CompletedPartListSerializer;
 impl CompletedPartListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &CompletedPartList) -> String {
+    pub fn serialize(name: &str, obj: &Vec<CompletedPart>) -> String {
         let mut parts: Vec<String> = Vec::new();
         for element in obj {
             parts.push(CompletedPartSerializer::serialize(name, element));
@@ -1671,9 +1643,9 @@ impl CompletedPartListSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct Condition {
     #[doc="The HTTP error code when the redirect is applied. In the event of an error, if the error code equals this value, then the specified redirect is applied. Required when parent element Condition is specified and sibling KeyPrefixEquals is not specified. If both are specified, then both must be true for the redirect to be applied."]
-    pub http_error_code_returned_equals: Option<HttpErrorCodeReturnedEquals>,
+    pub http_error_code_returned_equals: Option<String>,
     #[doc="The object key name prefix when the redirect is applied. For example, to redirect requests for ExamplePage.html, the key prefix will be ExamplePage.html. To redirect request for all pages with the prefix docs/, the key prefix will be /docs, which identifies all objects in the docs/ folder. Required when the parent element Condition is specified and sibling HttpErrorCodeReturnedEquals is not specified. If both conditions are specified, both must be true for the redirect to be applied."]
-    pub key_prefix_equals: Option<KeyPrefixEquals>,
+    pub key_prefix_equals: Option<String>,
 }
 
 struct ConditionDeserializer;
@@ -1740,30 +1712,23 @@ impl ConditionSerializer {
     }
 }
 
-pub type ContentDisposition = String;
-pub type ContentEncoding = String;
-pub type ContentLanguage = String;
-pub type ContentLength = i64;
-pub type ContentMD5 = String;
-pub type ContentRange = String;
-pub type ContentType = String;
 #[derive(Default,Clone,Debug)]
 pub struct CopyObjectOutput {
     pub copy_object_result: Option<CopyObjectResult>,
-    pub copy_source_version_id: Option<CopySourceVersionId>,
+    pub copy_source_version_id: Option<String>,
     #[doc="If the object expiration is configured, the response includes this header."]
-    pub expiration: Option<Expiration>,
-    pub request_charged: Option<RequestCharged>,
+    pub expiration: Option<String>,
+    pub request_charged: Option<String>,
     #[doc="If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used."]
-    pub sse_customer_algorithm: Option<SSECustomerAlgorithm>,
+    pub sse_customer_algorithm: Option<String>,
     #[doc="If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key."]
-    pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
+    pub sse_customer_key_md5: Option<String>,
     #[doc="If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object."]
-    pub ssekms_key_id: Option<SSEKMSKeyId>,
+    pub ssekms_key_id: Option<String>,
     #[doc="The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms)."]
-    pub server_side_encryption: Option<ServerSideEncryption>,
+    pub server_side_encryption: Option<String>,
     #[doc="Version ID of the newly created copy."]
-    pub version_id: Option<ObjectVersionId>,
+    pub version_id: Option<String>,
 }
 
 struct CopyObjectOutputDeserializer;
@@ -1812,74 +1777,74 @@ impl CopyObjectOutputDeserializer {
 #[derive(Default,Clone,Debug)]
 pub struct CopyObjectRequest {
     #[doc="The canned ACL to apply to the object."]
-    pub acl: Option<ObjectCannedACL>,
-    pub bucket: BucketName,
+    pub acl: Option<String>,
+    pub bucket: String,
     #[doc="Specifies caching behavior along the request/reply chain."]
-    pub cache_control: Option<CacheControl>,
+    pub cache_control: Option<String>,
     #[doc="Specifies presentational information for the object."]
-    pub content_disposition: Option<ContentDisposition>,
+    pub content_disposition: Option<String>,
     #[doc="Specifies what content encodings have been applied to the object and thus what decoding mechanisms must be applied to obtain the media-type referenced by the Content-Type header field."]
-    pub content_encoding: Option<ContentEncoding>,
+    pub content_encoding: Option<String>,
     #[doc="The language the content is in."]
-    pub content_language: Option<ContentLanguage>,
+    pub content_language: Option<String>,
     #[doc="A standard MIME type describing the format of the object data."]
-    pub content_type: Option<ContentType>,
+    pub content_type: Option<String>,
     #[doc="The name of the source bucket and key name of the source object, separated by a slash (/). Must be URL-encoded."]
-    pub copy_source: CopySource,
+    pub copy_source: String,
     #[doc="Copies the object if its entity tag (ETag) matches the specified tag."]
-    pub copy_source_if_match: Option<CopySourceIfMatch>,
+    pub copy_source_if_match: Option<String>,
     #[doc="Copies the object if it has been modified since the specified time."]
-    pub copy_source_if_modified_since: Option<CopySourceIfModifiedSince>,
+    pub copy_source_if_modified_since: Option<String>,
     #[doc="Copies the object if its entity tag (ETag) is different than the specified ETag."]
-    pub copy_source_if_none_match: Option<CopySourceIfNoneMatch>,
+    pub copy_source_if_none_match: Option<String>,
     #[doc="Copies the object if it hasn't been modified since the specified time."]
-    pub copy_source_if_unmodified_since: Option<CopySourceIfUnmodifiedSince>,
+    pub copy_source_if_unmodified_since: Option<String>,
     #[doc="Specifies the algorithm to use when decrypting the source object (e.g., AES256)."]
-    pub copy_source_sse_customer_algorithm: Option<CopySourceSSECustomerAlgorithm>,
+    pub copy_source_sse_customer_algorithm: Option<String>,
     #[doc="Specifies the customer-provided encryption key for Amazon S3 to use to decrypt the source object. The encryption key provided in this header must be one that was used when the source object was created."]
-    pub copy_source_sse_customer_key: Option<CopySourceSSECustomerKey>,
+    pub copy_source_sse_customer_key: Option<String>,
     #[doc="Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error."]
-    pub copy_source_sse_customer_key_md5: Option<CopySourceSSECustomerKeyMD5>,
+    pub copy_source_sse_customer_key_md5: Option<String>,
     #[doc="The date and time at which the object is no longer cacheable."]
-    pub expires: Option<Expires>,
+    pub expires: Option<String>,
     #[doc="Gives the grantee READ, READ_ACP, and WRITE_ACP permissions on the object."]
-    pub grant_full_control: Option<GrantFullControl>,
+    pub grant_full_control: Option<String>,
     #[doc="Allows grantee to read the object data and its metadata."]
-    pub grant_read: Option<GrantRead>,
+    pub grant_read: Option<String>,
     #[doc="Allows grantee to read the object ACL."]
-    pub grant_read_acp: Option<GrantReadACP>,
+    pub grant_read_acp: Option<String>,
     #[doc="Allows grantee to write the ACL for the applicable object."]
-    pub grant_write_acp: Option<GrantWriteACP>,
-    pub key: ObjectKey,
+    pub grant_write_acp: Option<String>,
+    pub key: String,
     #[doc="A map of metadata to store with the object in S3."]
-    pub metadata: Option<Metadata>,
+    pub metadata: Option<::std::collections::HashMap<String, String>>,
     #[doc="Specifies whether the metadata is copied from the source object or replaced with metadata provided in the request."]
-    pub metadata_directive: Option<MetadataDirective>,
-    pub request_payer: Option<RequestPayer>,
+    pub metadata_directive: Option<String>,
+    pub request_payer: Option<String>,
     #[doc="Specifies the algorithm to use to when encrypting the object (e.g., AES256)."]
-    pub sse_customer_algorithm: Option<SSECustomerAlgorithm>,
+    pub sse_customer_algorithm: Option<String>,
     #[doc="Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header."]
-    pub sse_customer_key: Option<SSECustomerKey>,
+    pub sse_customer_key: Option<String>,
     #[doc="Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error."]
-    pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
+    pub sse_customer_key_md5: Option<String>,
     #[doc="Specifies the AWS KMS key ID to use for object encryption. All GET and PUT requests for an object protected by AWS KMS will fail if not made via SSL or using SigV4. Documentation on configuring any of the officially supported AWS SDKs and CLI can be found at http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingAWSSDK.html#specify-signature-version"]
-    pub ssekms_key_id: Option<SSEKMSKeyId>,
+    pub ssekms_key_id: Option<String>,
     #[doc="The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms)."]
-    pub server_side_encryption: Option<ServerSideEncryption>,
+    pub server_side_encryption: Option<String>,
     #[doc="The type of storage to use for the object. Defaults to 'STANDARD'."]
-    pub storage_class: Option<StorageClass>,
+    pub storage_class: Option<String>,
     #[doc="The tag-set for the object destination object this value must be used in conjunction with the TaggingDirective. The tag-set must be encoded as URL Query parameters"]
-    pub tagging: Option<TaggingHeader>,
+    pub tagging: Option<String>,
     #[doc="Specifies whether the object tag-set are copied from the source object or replaced with tag-set provided in the request."]
-    pub tagging_directive: Option<TaggingDirective>,
+    pub tagging_directive: Option<String>,
     #[doc="If the bucket is configured as a website, redirects requests for this object to another object in the same bucket or to an external URL. Amazon S3 stores the value of this header in the object metadata."]
-    pub website_redirect_location: Option<WebsiteRedirectLocation>,
+    pub website_redirect_location: Option<String>,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct CopyObjectResult {
-    pub e_tag: Option<ETag>,
-    pub last_modified: Option<LastModified>,
+    pub e_tag: Option<String>,
+    pub last_modified: Option<String>,
 }
 
 struct CopyObjectResultDeserializer;
@@ -1931,9 +1896,9 @@ impl CopyObjectResultDeserializer {
 #[derive(Default,Clone,Debug)]
 pub struct CopyPartResult {
     #[doc="Entity tag of the object."]
-    pub e_tag: Option<ETag>,
+    pub e_tag: Option<String>,
     #[doc="Date and time at which the object was uploaded."]
-    pub last_modified: Option<LastModified>,
+    pub last_modified: Option<String>,
 }
 
 struct CopyPartResultDeserializer;
@@ -1982,20 +1947,10 @@ impl CopyPartResultDeserializer {
 
     }
 }
-pub type CopySource = String;
-pub type CopySourceIfMatch = String;
-pub type CopySourceIfModifiedSince = String;
-pub type CopySourceIfNoneMatch = String;
-pub type CopySourceIfUnmodifiedSince = String;
-pub type CopySourceRange = String;
-pub type CopySourceSSECustomerAlgorithm = String;
-pub type CopySourceSSECustomerKey = String;
-pub type CopySourceSSECustomerKeyMD5 = String;
-pub type CopySourceVersionId = String;
 #[derive(Default,Clone,Debug)]
 pub struct CreateBucketConfiguration {
     #[doc="Specifies the region where the bucket will be created. If you don't specify a region, the bucket will be created in US Standard."]
-    pub location_constraint: Option<BucketLocationConstraint>,
+    pub location_constraint: Option<String>,
 }
 
 
@@ -2015,7 +1970,7 @@ impl CreateBucketConfigurationSerializer {
 
 #[derive(Default,Clone,Debug)]
 pub struct CreateBucketOutput {
-    pub location: Option<Location>,
+    pub location: Option<String>,
 }
 
 struct CreateBucketOutputDeserializer;
@@ -2037,42 +1992,42 @@ impl CreateBucketOutputDeserializer {
 #[derive(Default,Clone,Debug)]
 pub struct CreateBucketRequest {
     #[doc="The canned ACL to apply to the bucket."]
-    pub acl: Option<BucketCannedACL>,
-    pub bucket: BucketName,
+    pub acl: Option<String>,
+    pub bucket: String,
     pub create_bucket_configuration: Option<CreateBucketConfiguration>,
     #[doc="Allows grantee the read, write, read ACP, and write ACP permissions on the bucket."]
-    pub grant_full_control: Option<GrantFullControl>,
+    pub grant_full_control: Option<String>,
     #[doc="Allows grantee to list the objects in the bucket."]
-    pub grant_read: Option<GrantRead>,
+    pub grant_read: Option<String>,
     #[doc="Allows grantee to read the bucket ACL."]
-    pub grant_read_acp: Option<GrantReadACP>,
+    pub grant_read_acp: Option<String>,
     #[doc="Allows grantee to create, overwrite, and delete any object in the bucket."]
-    pub grant_write: Option<GrantWrite>,
+    pub grant_write: Option<String>,
     #[doc="Allows grantee to write the ACL for the applicable bucket."]
-    pub grant_write_acp: Option<GrantWriteACP>,
+    pub grant_write_acp: Option<String>,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct CreateMultipartUploadOutput {
     #[doc="Date when multipart upload will become eligible for abort operation by lifecycle."]
-    pub abort_date: Option<AbortDate>,
+    pub abort_date: Option<String>,
     #[doc="Id of the lifecycle rule that makes a multipart upload eligible for abort operation."]
-    pub abort_rule_id: Option<AbortRuleId>,
+    pub abort_rule_id: Option<String>,
     #[doc="Name of the bucket to which the multipart upload was initiated."]
-    pub bucket: Option<BucketName>,
+    pub bucket: Option<String>,
     #[doc="Object key for which the multipart upload was initiated."]
-    pub key: Option<ObjectKey>,
-    pub request_charged: Option<RequestCharged>,
+    pub key: Option<String>,
+    pub request_charged: Option<String>,
     #[doc="If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used."]
-    pub sse_customer_algorithm: Option<SSECustomerAlgorithm>,
+    pub sse_customer_algorithm: Option<String>,
     #[doc="If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key."]
-    pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
+    pub sse_customer_key_md5: Option<String>,
     #[doc="If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object."]
-    pub ssekms_key_id: Option<SSEKMSKeyId>,
+    pub ssekms_key_id: Option<String>,
     #[doc="The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms)."]
-    pub server_side_encryption: Option<ServerSideEncryption>,
+    pub server_side_encryption: Option<String>,
     #[doc="ID for the initiated multipart upload."]
-    pub upload_id: Option<MultipartUploadId>,
+    pub upload_id: Option<String>,
 }
 
 struct CreateMultipartUploadOutputDeserializer;
@@ -2128,55 +2083,54 @@ impl CreateMultipartUploadOutputDeserializer {
 #[derive(Default,Clone,Debug)]
 pub struct CreateMultipartUploadRequest {
     #[doc="The canned ACL to apply to the object."]
-    pub acl: Option<ObjectCannedACL>,
-    pub bucket: BucketName,
+    pub acl: Option<String>,
+    pub bucket: String,
     #[doc="Specifies caching behavior along the request/reply chain."]
-    pub cache_control: Option<CacheControl>,
+    pub cache_control: Option<String>,
     #[doc="Specifies presentational information for the object."]
-    pub content_disposition: Option<ContentDisposition>,
+    pub content_disposition: Option<String>,
     #[doc="Specifies what content encodings have been applied to the object and thus what decoding mechanisms must be applied to obtain the media-type referenced by the Content-Type header field."]
-    pub content_encoding: Option<ContentEncoding>,
+    pub content_encoding: Option<String>,
     #[doc="The language the content is in."]
-    pub content_language: Option<ContentLanguage>,
+    pub content_language: Option<String>,
     #[doc="A standard MIME type describing the format of the object data."]
-    pub content_type: Option<ContentType>,
+    pub content_type: Option<String>,
     #[doc="The date and time at which the object is no longer cacheable."]
-    pub expires: Option<Expires>,
+    pub expires: Option<String>,
     #[doc="Gives the grantee READ, READ_ACP, and WRITE_ACP permissions on the object."]
-    pub grant_full_control: Option<GrantFullControl>,
+    pub grant_full_control: Option<String>,
     #[doc="Allows grantee to read the object data and its metadata."]
-    pub grant_read: Option<GrantRead>,
+    pub grant_read: Option<String>,
     #[doc="Allows grantee to read the object ACL."]
-    pub grant_read_acp: Option<GrantReadACP>,
+    pub grant_read_acp: Option<String>,
     #[doc="Allows grantee to write the ACL for the applicable object."]
-    pub grant_write_acp: Option<GrantWriteACP>,
-    pub key: ObjectKey,
+    pub grant_write_acp: Option<String>,
+    pub key: String,
     #[doc="A map of metadata to store with the object in S3."]
-    pub metadata: Option<Metadata>,
-    pub request_payer: Option<RequestPayer>,
+    pub metadata: Option<::std::collections::HashMap<String, String>>,
+    pub request_payer: Option<String>,
     #[doc="Specifies the algorithm to use to when encrypting the object (e.g., AES256)."]
-    pub sse_customer_algorithm: Option<SSECustomerAlgorithm>,
+    pub sse_customer_algorithm: Option<String>,
     #[doc="Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header."]
-    pub sse_customer_key: Option<SSECustomerKey>,
+    pub sse_customer_key: Option<String>,
     #[doc="Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error."]
-    pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
+    pub sse_customer_key_md5: Option<String>,
     #[doc="Specifies the AWS KMS key ID to use for object encryption. All GET and PUT requests for an object protected by AWS KMS will fail if not made via SSL or using SigV4. Documentation on configuring any of the officially supported AWS SDKs and CLI can be found at http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingAWSSDK.html#specify-signature-version"]
-    pub ssekms_key_id: Option<SSEKMSKeyId>,
+    pub ssekms_key_id: Option<String>,
     #[doc="The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms)."]
-    pub server_side_encryption: Option<ServerSideEncryption>,
+    pub server_side_encryption: Option<String>,
     #[doc="The type of storage to use for the object. Defaults to 'STANDARD'."]
-    pub storage_class: Option<StorageClass>,
+    pub storage_class: Option<String>,
     #[doc="If the bucket is configured as a website, redirects requests for this object to another object in the same bucket or to an external URL. Amazon S3 stores the value of this header in the object metadata."]
-    pub website_redirect_location: Option<WebsiteRedirectLocation>,
+    pub website_redirect_location: Option<String>,
 }
 
-pub type CreationDate = String;
 struct CreationDateDeserializer;
 impl CreationDateDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CreationDate, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2185,13 +2139,12 @@ impl CreationDateDeserializer {
 
     }
 }
-pub type Date = String;
 struct DateDeserializer;
 impl DateDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Date, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2204,20 +2157,19 @@ impl DateDeserializer {
 pub struct DateSerializer;
 impl DateSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Date) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type Days = i64;
 struct DaysDeserializer;
 impl DaysDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Days, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -2230,20 +2182,19 @@ impl DaysDeserializer {
 pub struct DaysSerializer;
 impl DaysSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Days) -> String {
+    pub fn serialize(name: &str, obj: &i64) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type DaysAfterInitiation = i64;
 struct DaysAfterInitiationDeserializer;
 impl DaysAfterInitiationDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DaysAfterInitiation, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -2256,7 +2207,7 @@ impl DaysAfterInitiationDeserializer {
 pub struct DaysAfterInitiationSerializer;
 impl DaysAfterInitiationSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &DaysAfterInitiation) -> String {
+    pub fn serialize(name: &str, obj: &i64) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
@@ -2265,9 +2216,9 @@ impl DaysAfterInitiationSerializer {
 
 #[derive(Default,Clone,Debug)]
 pub struct Delete {
-    pub objects: ObjectIdentifierList,
+    pub objects: Vec<ObjectIdentifier>,
     #[doc="Element to enable quiet mode for the request. When you add this element, you must set its value to true."]
-    pub quiet: Option<Quiet>,
+    pub quiet: Option<bool>,
 }
 
 
@@ -2288,69 +2239,68 @@ impl DeleteSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct DeleteBucketAnalyticsConfigurationRequest {
     #[doc="The name of the bucket from which an analytics configuration is deleted."]
-    pub bucket: BucketName,
+    pub bucket: String,
     #[doc="The identifier used to represent an analytics configuration."]
-    pub id: AnalyticsId,
+    pub id: String,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct DeleteBucketCorsRequest {
-    pub bucket: BucketName,
+    pub bucket: String,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct DeleteBucketInventoryConfigurationRequest {
     #[doc="The name of the bucket containing the inventory configuration to delete."]
-    pub bucket: BucketName,
+    pub bucket: String,
     #[doc="The ID used to identify the inventory configuration."]
-    pub id: InventoryId,
+    pub id: String,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct DeleteBucketLifecycleRequest {
-    pub bucket: BucketName,
+    pub bucket: String,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct DeleteBucketMetricsConfigurationRequest {
     #[doc="The name of the bucket containing the metrics configuration to delete."]
-    pub bucket: BucketName,
+    pub bucket: String,
     #[doc="The ID used to identify the metrics configuration."]
-    pub id: MetricsId,
+    pub id: String,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct DeleteBucketPolicyRequest {
-    pub bucket: BucketName,
+    pub bucket: String,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct DeleteBucketReplicationRequest {
-    pub bucket: BucketName,
+    pub bucket: String,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct DeleteBucketRequest {
-    pub bucket: BucketName,
+    pub bucket: String,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct DeleteBucketTaggingRequest {
-    pub bucket: BucketName,
+    pub bucket: String,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct DeleteBucketWebsiteRequest {
-    pub bucket: BucketName,
+    pub bucket: String,
 }
 
-pub type DeleteMarker = bool;
 struct DeleteMarkerDeserializer;
 impl DeleteMarkerDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DeleteMarker, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -2362,14 +2312,14 @@ impl DeleteMarkerDeserializer {
 #[derive(Default,Clone,Debug)]
 pub struct DeleteMarkerEntry {
     #[doc="Specifies whether the object is (true) or is not (false) the latest version of an object."]
-    pub is_latest: Option<IsLatest>,
+    pub is_latest: Option<bool>,
     #[doc="The object key."]
-    pub key: Option<ObjectKey>,
+    pub key: Option<String>,
     #[doc="Date and time the object was last modified."]
-    pub last_modified: Option<LastModified>,
+    pub last_modified: Option<String>,
     pub owner: Option<Owner>,
     #[doc="Version ID of an object."]
-    pub version_id: Option<ObjectVersionId>,
+    pub version_id: Option<String>,
 }
 
 struct DeleteMarkerEntryDeserializer;
@@ -2430,13 +2380,12 @@ impl DeleteMarkerEntryDeserializer {
 
     }
 }
-pub type DeleteMarkerVersionId = String;
 struct DeleteMarkerVersionIdDeserializer;
 impl DeleteMarkerVersionIdDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DeleteMarkerVersionId, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2445,13 +2394,12 @@ impl DeleteMarkerVersionIdDeserializer {
 
     }
 }
-pub type DeleteMarkers = Vec<DeleteMarkerEntry>;
 struct DeleteMarkersDeserializer;
 impl DeleteMarkersDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DeleteMarkers, XmlParseError> {
+                                       -> Result<Vec<DeleteMarkerEntry>, XmlParseError> {
 
         let mut obj = vec![];
 
@@ -2477,10 +2425,10 @@ impl DeleteMarkersDeserializer {
 #[derive(Default,Clone,Debug)]
 pub struct DeleteObjectOutput {
     #[doc="Specifies whether the versioned object that was permanently deleted was (true) or was not (false) a delete marker."]
-    pub delete_marker: Option<DeleteMarker>,
-    pub request_charged: Option<RequestCharged>,
+    pub delete_marker: Option<bool>,
+    pub request_charged: Option<String>,
     #[doc="Returns the version ID of the delete marker created as a result of the DELETE operation."]
-    pub version_id: Option<ObjectVersionId>,
+    pub version_id: Option<String>,
 }
 
 struct DeleteObjectOutputDeserializer;
@@ -2501,19 +2449,19 @@ impl DeleteObjectOutputDeserializer {
 }
 #[derive(Default,Clone,Debug)]
 pub struct DeleteObjectRequest {
-    pub bucket: BucketName,
-    pub key: ObjectKey,
+    pub bucket: String,
+    pub key: String,
     #[doc="The concatenation of the authentication device's serial number, a space, and the value that is displayed on your authentication device."]
-    pub mfa: Option<MFA>,
-    pub request_payer: Option<RequestPayer>,
+    pub mfa: Option<String>,
+    pub request_payer: Option<String>,
     #[doc="VersionId used to reference a specific version of the object."]
-    pub version_id: Option<ObjectVersionId>,
+    pub version_id: Option<String>,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct DeleteObjectTaggingOutput {
     #[doc="The versionId of the object the tag-set was removed from."]
-    pub version_id: Option<ObjectVersionId>,
+    pub version_id: Option<String>,
 }
 
 struct DeleteObjectTaggingOutputDeserializer;
@@ -2534,17 +2482,17 @@ impl DeleteObjectTaggingOutputDeserializer {
 }
 #[derive(Default,Clone,Debug)]
 pub struct DeleteObjectTaggingRequest {
-    pub bucket: BucketName,
-    pub key: ObjectKey,
+    pub bucket: String,
+    pub key: String,
     #[doc="The versionId of the object that the tag-set will be removed from."]
-    pub version_id: Option<ObjectVersionId>,
+    pub version_id: Option<String>,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct DeleteObjectsOutput {
-    pub deleted: Option<DeletedObjects>,
-    pub errors: Option<Errors>,
-    pub request_charged: Option<RequestCharged>,
+    pub deleted: Option<Vec<DeletedObject>>,
+    pub errors: Option<Vec<S3Error>>,
+    pub request_charged: Option<String>,
 }
 
 struct DeleteObjectsOutputDeserializer;
@@ -2596,19 +2544,19 @@ impl DeleteObjectsOutputDeserializer {
 }
 #[derive(Default,Clone,Debug)]
 pub struct DeleteObjectsRequest {
-    pub bucket: BucketName,
+    pub bucket: String,
     pub delete: Delete,
     #[doc="The concatenation of the authentication device's serial number, a space, and the value that is displayed on your authentication device."]
-    pub mfa: Option<MFA>,
-    pub request_payer: Option<RequestPayer>,
+    pub mfa: Option<String>,
+    pub request_payer: Option<String>,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct DeletedObject {
-    pub delete_marker: Option<DeleteMarker>,
-    pub delete_marker_version_id: Option<DeleteMarkerVersionId>,
-    pub key: Option<ObjectKey>,
-    pub version_id: Option<ObjectVersionId>,
+    pub delete_marker: Option<bool>,
+    pub delete_marker_version_id: Option<String>,
+    pub key: Option<String>,
+    pub version_id: Option<String>,
 }
 
 struct DeletedObjectDeserializer;
@@ -2667,13 +2615,12 @@ impl DeletedObjectDeserializer {
 
     }
 }
-pub type DeletedObjects = Vec<DeletedObject>;
 struct DeletedObjectsDeserializer;
 impl DeletedObjectsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DeletedObjects, XmlParseError> {
+                                       -> Result<Vec<DeletedObject>, XmlParseError> {
 
         let mut obj = vec![];
 
@@ -2696,13 +2643,12 @@ impl DeletedObjectsDeserializer {
 
     }
 }
-pub type Delimiter = String;
 struct DelimiterDeserializer;
 impl DelimiterDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Delimiter, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2715,7 +2661,7 @@ impl DelimiterDeserializer {
 pub struct DelimiterSerializer;
 impl DelimiterSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Delimiter) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
@@ -2725,9 +2671,9 @@ impl DelimiterSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct Destination {
     #[doc="Amazon resource name (ARN) of the bucket where you want Amazon S3 to store replicas of the object identified by the rule."]
-    pub bucket: BucketName,
+    pub bucket: String,
     #[doc="The class of storage used to store the object."]
-    pub storage_class: Option<StorageClass>,
+    pub storage_class: Option<String>,
 }
 
 struct DestinationDeserializer;
@@ -2791,13 +2737,12 @@ impl DestinationSerializer {
     }
 }
 
-pub type DisplayName = String;
 struct DisplayNameDeserializer;
 impl DisplayNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DisplayName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2810,20 +2755,19 @@ impl DisplayNameDeserializer {
 pub struct DisplayNameSerializer;
 impl DisplayNameSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &DisplayName) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type ETag = String;
 struct ETagDeserializer;
 impl ETagDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ETag, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2836,20 +2780,19 @@ impl ETagDeserializer {
 pub struct ETagSerializer;
 impl ETagSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &ETag) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type EmailAddress = String;
 struct EmailAddressDeserializer;
 impl EmailAddressDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EmailAddress, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2862,21 +2805,19 @@ impl EmailAddressDeserializer {
 pub struct EmailAddressSerializer;
 impl EmailAddressSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &EmailAddress) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-#[doc="Requests Amazon S3 to encode the object keys in the response and specifies the encoding method to use. An object key may contain any Unicode character; however, XML 1.0 parser cannot parse some characters, such as characters with an ASCII value from 0 to 10. For characters that are not supported in XML 1.0, you can add this parameter to request that Amazon S3 encode the keys in the response."]
-pub type EncodingType = String;
 struct EncodingTypeDeserializer;
 impl EncodingTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EncodingType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2889,7 +2830,7 @@ impl EncodingTypeDeserializer {
 pub struct EncodingTypeSerializer;
 impl EncodingTypeSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &EncodingType) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
@@ -2898,10 +2839,10 @@ impl EncodingTypeSerializer {
 
 #[derive(Default,Clone,Debug)]
 pub struct S3Error {
-    pub code: Option<Code>,
-    pub key: Option<ObjectKey>,
-    pub message: Option<Message>,
-    pub version_id: Option<ObjectVersionId>,
+    pub code: Option<String>,
+    pub key: Option<String>,
+    pub message: Option<String>,
+    pub version_id: Option<String>,
 }
 
 struct S3ErrorDeserializer;
@@ -2960,7 +2901,7 @@ impl S3ErrorDeserializer {
 #[derive(Default,Clone,Debug)]
 pub struct ErrorDocument {
     #[doc="The object key name to use when a 4XX class error occurs."]
-    pub key: ObjectKey,
+    pub key: String,
 }
 
 struct ErrorDocumentDeserializer;
@@ -3016,13 +2957,12 @@ impl ErrorDocumentSerializer {
     }
 }
 
-pub type Errors = Vec<S3Error>;
 struct ErrorsDeserializer;
 impl ErrorsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Errors, XmlParseError> {
+                                       -> Result<Vec<S3Error>, XmlParseError> {
 
         let mut obj = vec![];
 
@@ -3045,14 +2985,12 @@ impl ErrorsDeserializer {
 
     }
 }
-#[doc="Bucket event for which to send notifications."]
-pub type Event = String;
 struct EventDeserializer;
 impl EventDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Event, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3065,20 +3003,19 @@ impl EventDeserializer {
 pub struct EventSerializer;
 impl EventSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Event) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type EventList = Vec<Event>;
 struct EventListDeserializer;
 impl EventListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EventList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
 
@@ -3105,7 +3042,7 @@ impl EventListDeserializer {
 pub struct EventListSerializer;
 impl EventListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &EventList) -> String {
+    pub fn serialize(name: &str, obj: &Vec<String>) -> String {
         let mut parts: Vec<String> = Vec::new();
         for element in obj {
             parts.push(EventSerializer::serialize(name, element));
@@ -3114,14 +3051,12 @@ impl EventListSerializer {
     }
 }
 
-pub type Expiration = String;
-pub type ExpirationStatus = String;
 struct ExpirationStatusDeserializer;
 impl ExpirationStatusDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ExpirationStatus, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3134,20 +3069,19 @@ impl ExpirationStatusDeserializer {
 pub struct ExpirationStatusSerializer;
 impl ExpirationStatusSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &ExpirationStatus) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type ExpiredObjectDeleteMarker = bool;
 struct ExpiredObjectDeleteMarkerDeserializer;
 impl ExpiredObjectDeleteMarkerDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ExpiredObjectDeleteMarker, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -3160,21 +3094,19 @@ impl ExpiredObjectDeleteMarkerDeserializer {
 pub struct ExpiredObjectDeleteMarkerSerializer;
 impl ExpiredObjectDeleteMarkerSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &ExpiredObjectDeleteMarker) -> String {
+    pub fn serialize(name: &str, obj: &bool) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type Expires = String;
-pub type ExposeHeader = String;
 struct ExposeHeaderDeserializer;
 impl ExposeHeaderDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ExposeHeader, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3187,20 +3119,19 @@ impl ExposeHeaderDeserializer {
 pub struct ExposeHeaderSerializer;
 impl ExposeHeaderSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &ExposeHeader) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type ExposeHeaders = Vec<ExposeHeader>;
 struct ExposeHeadersDeserializer;
 impl ExposeHeadersDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ExposeHeaders, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
 
@@ -3227,7 +3158,7 @@ impl ExposeHeadersDeserializer {
 pub struct ExposeHeadersSerializer;
 impl ExposeHeadersSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &ExposeHeaders) -> String {
+    pub fn serialize(name: &str, obj: &Vec<String>) -> String {
         let mut parts: Vec<String> = Vec::new();
         for element in obj {
             parts.push(ExposeHeaderSerializer::serialize(name, element));
@@ -3236,12 +3167,11 @@ impl ExposeHeadersSerializer {
     }
 }
 
-pub type FetchOwner = bool;
 
 pub struct FetchOwnerSerializer;
 impl FetchOwnerSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &FetchOwner) -> String {
+    pub fn serialize(name: &str, obj: &bool) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
@@ -3252,8 +3182,8 @@ impl FetchOwnerSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct FilterRule {
     #[doc="Object key name prefix or suffix identifying one or more objects to which the filtering rule applies. Maximum prefix length can be up to 1,024 characters. Overlapping prefixes and suffixes are not supported. For more information, go to <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html\">Configuring Event Notifications</a> in the Amazon Simple Storage Service Developer Guide."]
-    pub name: Option<FilterRuleName>,
-    pub value: Option<FilterRuleValue>,
+    pub name: Option<String>,
+    pub value: Option<String>,
 }
 
 struct FilterRuleDeserializer;
@@ -3319,14 +3249,12 @@ impl FilterRuleSerializer {
     }
 }
 
-#[doc="A list of containers for key value pair that defines the criteria for the filter rule."]
-pub type FilterRuleList = Vec<FilterRule>;
 struct FilterRuleListDeserializer;
 impl FilterRuleListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<FilterRuleList, XmlParseError> {
+                                       -> Result<Vec<FilterRule>, XmlParseError> {
 
         let mut obj = vec![];
 
@@ -3353,7 +3281,7 @@ impl FilterRuleListDeserializer {
 pub struct FilterRuleListSerializer;
 impl FilterRuleListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &FilterRuleList) -> String {
+    pub fn serialize(name: &str, obj: &Vec<FilterRule>) -> String {
         let mut parts: Vec<String> = Vec::new();
         for element in obj {
             parts.push(FilterRuleSerializer::serialize(name, element));
@@ -3362,13 +3290,12 @@ impl FilterRuleListSerializer {
     }
 }
 
-pub type FilterRuleName = String;
 struct FilterRuleNameDeserializer;
 impl FilterRuleNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<FilterRuleName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3381,20 +3308,19 @@ impl FilterRuleNameDeserializer {
 pub struct FilterRuleNameSerializer;
 impl FilterRuleNameSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &FilterRuleName) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type FilterRuleValue = String;
 struct FilterRuleValueDeserializer;
 impl FilterRuleValueDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<FilterRuleValue, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3407,7 +3333,7 @@ impl FilterRuleValueDeserializer {
 pub struct FilterRuleValueSerializer;
 impl FilterRuleValueSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &FilterRuleValue) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
@@ -3417,7 +3343,7 @@ impl FilterRuleValueSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct GetBucketAccelerateConfigurationOutput {
     #[doc="The accelerate configuration of the bucket."]
-    pub status: Option<BucketAccelerateStatus>,
+    pub status: Option<String>,
 }
 
 struct GetBucketAccelerateConfigurationOutputDeserializer;
@@ -3467,13 +3393,13 @@ impl GetBucketAccelerateConfigurationOutputDeserializer {
 #[derive(Default,Clone,Debug)]
 pub struct GetBucketAccelerateConfigurationRequest {
     #[doc="Name of the bucket for which the accelerate configuration is retrieved."]
-    pub bucket: BucketName,
+    pub bucket: String,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct GetBucketAclOutput {
     #[doc="A list of grants."]
-    pub grants: Option<Grants>,
+    pub grants: Option<Vec<Grant>>,
     pub owner: Option<Owner>,
 }
 
@@ -3524,7 +3450,7 @@ impl GetBucketAclOutputDeserializer {
 }
 #[derive(Default,Clone,Debug)]
 pub struct GetBucketAclRequest {
-    pub bucket: BucketName,
+    pub bucket: String,
 }
 
 #[derive(Default,Clone,Debug)]
@@ -3580,14 +3506,14 @@ impl GetBucketAnalyticsConfigurationOutputDeserializer {
 #[derive(Default,Clone,Debug)]
 pub struct GetBucketAnalyticsConfigurationRequest {
     #[doc="The name of the bucket from which an analytics configuration is retrieved."]
-    pub bucket: BucketName,
+    pub bucket: String,
     #[doc="The identifier used to represent an analytics configuration."]
-    pub id: AnalyticsId,
+    pub id: String,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct GetBucketCorsOutput {
-    pub cors_rules: Option<CORSRules>,
+    pub cors_rules: Option<Vec<CORSRule>>,
 }
 
 struct GetBucketCorsOutputDeserializer;
@@ -3634,7 +3560,7 @@ impl GetBucketCorsOutputDeserializer {
 }
 #[derive(Default,Clone,Debug)]
 pub struct GetBucketCorsRequest {
-    pub bucket: BucketName,
+    pub bucket: String,
 }
 
 #[derive(Default,Clone,Debug)]
@@ -3690,14 +3616,14 @@ impl GetBucketInventoryConfigurationOutputDeserializer {
 #[derive(Default,Clone,Debug)]
 pub struct GetBucketInventoryConfigurationRequest {
     #[doc="The name of the bucket containing the inventory configuration to retrieve."]
-    pub bucket: BucketName,
+    pub bucket: String,
     #[doc="The ID used to identify the inventory configuration."]
-    pub id: InventoryId,
+    pub id: String,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct GetBucketLifecycleConfigurationOutput {
-    pub rules: Option<LifecycleRules>,
+    pub rules: Option<Vec<LifecycleRule>>,
 }
 
 struct GetBucketLifecycleConfigurationOutputDeserializer;
@@ -3745,12 +3671,12 @@ impl GetBucketLifecycleConfigurationOutputDeserializer {
 }
 #[derive(Default,Clone,Debug)]
 pub struct GetBucketLifecycleConfigurationRequest {
-    pub bucket: BucketName,
+    pub bucket: String,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct GetBucketLifecycleOutput {
-    pub rules: Option<Rules>,
+    pub rules: Option<Vec<Rule>>,
 }
 
 struct GetBucketLifecycleOutputDeserializer;
@@ -3796,12 +3722,12 @@ impl GetBucketLifecycleOutputDeserializer {
 }
 #[derive(Default,Clone,Debug)]
 pub struct GetBucketLifecycleRequest {
-    pub bucket: BucketName,
+    pub bucket: String,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct GetBucketLocationOutput {
-    pub location_constraint: Option<BucketLocationConstraint>,
+    pub location_constraint: Option<String>,
 }
 
 struct GetBucketLocationOutputDeserializer;
@@ -3819,7 +3745,7 @@ impl GetBucketLocationOutputDeserializer {
 }
 #[derive(Default,Clone,Debug)]
 pub struct GetBucketLocationRequest {
-    pub bucket: BucketName,
+    pub bucket: String,
 }
 
 #[derive(Default,Clone,Debug)]
@@ -3872,7 +3798,7 @@ impl GetBucketLoggingOutputDeserializer {
 }
 #[derive(Default,Clone,Debug)]
 pub struct GetBucketLoggingRequest {
-    pub bucket: BucketName,
+    pub bucket: String,
 }
 
 #[derive(Default,Clone,Debug)]
@@ -3928,26 +3854,26 @@ impl GetBucketMetricsConfigurationOutputDeserializer {
 #[derive(Default,Clone,Debug)]
 pub struct GetBucketMetricsConfigurationRequest {
     #[doc="The name of the bucket containing the metrics configuration to retrieve."]
-    pub bucket: BucketName,
+    pub bucket: String,
     #[doc="The ID used to identify the metrics configuration."]
-    pub id: MetricsId,
+    pub id: String,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct GetBucketNotificationConfigurationRequest {
     #[doc="Name of the bucket to get the notification configuration for."]
-    pub bucket: BucketName,
+    pub bucket: String,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct GetBucketPolicyOutput {
     #[doc="The bucket policy as a JSON document."]
-    pub policy: Option<Policy>,
+    pub policy: Option<String>,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct GetBucketPolicyRequest {
-    pub bucket: BucketName,
+    pub bucket: String,
 }
 
 #[derive(Default,Clone,Debug)]
@@ -3998,13 +3924,13 @@ impl GetBucketReplicationOutputDeserializer {
 }
 #[derive(Default,Clone,Debug)]
 pub struct GetBucketReplicationRequest {
-    pub bucket: BucketName,
+    pub bucket: String,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct GetBucketRequestPaymentOutput {
     #[doc="Specifies who pays for the download and request fees."]
-    pub payer: Option<Payer>,
+    pub payer: Option<String>,
 }
 
 struct GetBucketRequestPaymentOutputDeserializer;
@@ -4050,12 +3976,12 @@ impl GetBucketRequestPaymentOutputDeserializer {
 }
 #[derive(Default,Clone,Debug)]
 pub struct GetBucketRequestPaymentRequest {
-    pub bucket: BucketName,
+    pub bucket: String,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct GetBucketTaggingOutput {
-    pub tag_set: TagSet,
+    pub tag_set: Vec<Tag>,
 }
 
 struct GetBucketTaggingOutputDeserializer;
@@ -4101,15 +4027,15 @@ impl GetBucketTaggingOutputDeserializer {
 }
 #[derive(Default,Clone,Debug)]
 pub struct GetBucketTaggingRequest {
-    pub bucket: BucketName,
+    pub bucket: String,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct GetBucketVersioningOutput {
     #[doc="Specifies whether MFA delete is enabled in the bucket versioning configuration. This element is only returned if the bucket has been configured with MFA delete. If the bucket has never been so configured, this element is not returned."]
-    pub mfa_delete: Option<MFADeleteStatus>,
+    pub mfa_delete: Option<String>,
     #[doc="The versioning state of the bucket."]
-    pub status: Option<BucketVersioningStatus>,
+    pub status: Option<String>,
 }
 
 struct GetBucketVersioningOutputDeserializer;
@@ -4162,7 +4088,7 @@ impl GetBucketVersioningOutputDeserializer {
 }
 #[derive(Default,Clone,Debug)]
 pub struct GetBucketVersioningRequest {
-    pub bucket: BucketName,
+    pub bucket: String,
 }
 
 #[derive(Default,Clone,Debug)]
@@ -4170,7 +4096,7 @@ pub struct GetBucketWebsiteOutput {
     pub error_document: Option<ErrorDocument>,
     pub index_document: Option<IndexDocument>,
     pub redirect_all_requests_to: Option<RedirectAllRequestsTo>,
-    pub routing_rules: Option<RoutingRules>,
+    pub routing_rules: Option<Vec<RoutingRule>>,
 }
 
 struct GetBucketWebsiteOutputDeserializer;
@@ -4233,15 +4159,15 @@ impl GetBucketWebsiteOutputDeserializer {
 }
 #[derive(Default,Clone,Debug)]
 pub struct GetBucketWebsiteRequest {
-    pub bucket: BucketName,
+    pub bucket: String,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct GetObjectAclOutput {
     #[doc="A list of grants."]
-    pub grants: Option<Grants>,
+    pub grants: Option<Vec<Grant>>,
     pub owner: Option<Owner>,
-    pub request_charged: Option<RequestCharged>,
+    pub request_charged: Option<String>,
 }
 
 struct GetObjectAclOutputDeserializer;
@@ -4291,112 +4217,112 @@ impl GetObjectAclOutputDeserializer {
 }
 #[derive(Default,Clone,Debug)]
 pub struct GetObjectAclRequest {
-    pub bucket: BucketName,
-    pub key: ObjectKey,
-    pub request_payer: Option<RequestPayer>,
+    pub bucket: String,
+    pub key: String,
+    pub request_payer: Option<String>,
     #[doc="VersionId used to reference a specific version of the object."]
-    pub version_id: Option<ObjectVersionId>,
+    pub version_id: Option<String>,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct GetObjectOutput {
-    pub accept_ranges: Option<AcceptRanges>,
+    pub accept_ranges: Option<String>,
     #[doc="Object data."]
-    pub body: Option<Body>,
+    pub body: Option<Vec<u8>>,
     #[doc="Specifies caching behavior along the request/reply chain."]
-    pub cache_control: Option<CacheControl>,
+    pub cache_control: Option<String>,
     #[doc="Specifies presentational information for the object."]
-    pub content_disposition: Option<ContentDisposition>,
+    pub content_disposition: Option<String>,
     #[doc="Specifies what content encodings have been applied to the object and thus what decoding mechanisms must be applied to obtain the media-type referenced by the Content-Type header field."]
-    pub content_encoding: Option<ContentEncoding>,
+    pub content_encoding: Option<String>,
     #[doc="The language the content is in."]
-    pub content_language: Option<ContentLanguage>,
+    pub content_language: Option<String>,
     #[doc="Size of the body in bytes."]
-    pub content_length: Option<ContentLength>,
+    pub content_length: Option<i64>,
     #[doc="The portion of the object returned in the response."]
-    pub content_range: Option<ContentRange>,
+    pub content_range: Option<String>,
     #[doc="A standard MIME type describing the format of the object data."]
-    pub content_type: Option<ContentType>,
+    pub content_type: Option<String>,
     #[doc="Specifies whether the object retrieved was (true) or was not (false) a Delete Marker. If false, this response header does not appear in the response."]
-    pub delete_marker: Option<DeleteMarker>,
+    pub delete_marker: Option<bool>,
     #[doc="An ETag is an opaque identifier assigned by a web server to a specific version of a resource found at a URL"]
-    pub e_tag: Option<ETag>,
+    pub e_tag: Option<String>,
     #[doc="If the object expiration is configured (see PUT Bucket lifecycle), the response includes this header. It includes the expiry-date and rule-id key value pairs providing object expiration information. The value of the rule-id is URL encoded."]
-    pub expiration: Option<Expiration>,
+    pub expiration: Option<String>,
     #[doc="The date and time at which the object is no longer cacheable."]
-    pub expires: Option<Expires>,
+    pub expires: Option<String>,
     #[doc="Last modified date of the object"]
-    pub last_modified: Option<LastModified>,
+    pub last_modified: Option<String>,
     #[doc="A map of metadata to store with the object in S3."]
-    pub metadata: Option<Metadata>,
+    pub metadata: Option<::std::collections::HashMap<String, String>>,
     #[doc="This is set to the number of metadata entries not returned in x-amz-meta headers. This can happen if you create metadata using an API like SOAP that supports more flexible metadata than the REST API. For example, using SOAP, you can create metadata whose values are not legal HTTP headers."]
-    pub missing_meta: Option<MissingMeta>,
+    pub missing_meta: Option<i64>,
     #[doc="The count of parts this object has."]
-    pub parts_count: Option<PartsCount>,
-    pub replication_status: Option<ReplicationStatus>,
-    pub request_charged: Option<RequestCharged>,
+    pub parts_count: Option<i64>,
+    pub replication_status: Option<String>,
+    pub request_charged: Option<String>,
     #[doc="Provides information about object restoration operation and expiration time of the restored object copy."]
-    pub restore: Option<Restore>,
+    pub restore: Option<String>,
     #[doc="If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used."]
-    pub sse_customer_algorithm: Option<SSECustomerAlgorithm>,
+    pub sse_customer_algorithm: Option<String>,
     #[doc="If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key."]
-    pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
+    pub sse_customer_key_md5: Option<String>,
     #[doc="If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object."]
-    pub ssekms_key_id: Option<SSEKMSKeyId>,
+    pub ssekms_key_id: Option<String>,
     #[doc="The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms)."]
-    pub server_side_encryption: Option<ServerSideEncryption>,
-    pub storage_class: Option<StorageClass>,
+    pub server_side_encryption: Option<String>,
+    pub storage_class: Option<String>,
     #[doc="The number of tags, if any, on the object."]
-    pub tag_count: Option<TagCount>,
+    pub tag_count: Option<i64>,
     #[doc="Version of the object."]
-    pub version_id: Option<ObjectVersionId>,
+    pub version_id: Option<String>,
     #[doc="If the bucket is configured as a website, redirects requests for this object to another object in the same bucket or to an external URL. Amazon S3 stores the value of this header in the object metadata."]
-    pub website_redirect_location: Option<WebsiteRedirectLocation>,
+    pub website_redirect_location: Option<String>,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct GetObjectRequest {
-    pub bucket: BucketName,
+    pub bucket: String,
     #[doc="Return the object only if its entity tag (ETag) is the same as the one specified, otherwise return a 412 (precondition failed)."]
-    pub if_match: Option<IfMatch>,
+    pub if_match: Option<String>,
     #[doc="Return the object only if it has been modified since the specified time, otherwise return a 304 (not modified)."]
-    pub if_modified_since: Option<IfModifiedSince>,
+    pub if_modified_since: Option<String>,
     #[doc="Return the object only if its entity tag (ETag) is different from the one specified, otherwise return a 304 (not modified)."]
-    pub if_none_match: Option<IfNoneMatch>,
+    pub if_none_match: Option<String>,
     #[doc="Return the object only if it has not been modified since the specified time, otherwise return a 412 (precondition failed)."]
-    pub if_unmodified_since: Option<IfUnmodifiedSince>,
-    pub key: ObjectKey,
+    pub if_unmodified_since: Option<String>,
+    pub key: String,
     #[doc="Part number of the object being read. This is a positive integer between 1 and 10,000. Effectively performs a 'ranged' GET request for the part specified. Useful for downloading just a part of an object."]
-    pub part_number: Option<PartNumber>,
+    pub part_number: Option<i64>,
     #[doc="Downloads the specified range bytes of an object. For more information about the HTTP Range header, go to http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35."]
-    pub range: Option<Range>,
-    pub request_payer: Option<RequestPayer>,
+    pub range: Option<String>,
+    pub request_payer: Option<String>,
     #[doc="Sets the Cache-Control header of the response."]
-    pub response_cache_control: Option<ResponseCacheControl>,
+    pub response_cache_control: Option<String>,
     #[doc="Sets the Content-Disposition header of the response"]
-    pub response_content_disposition: Option<ResponseContentDisposition>,
+    pub response_content_disposition: Option<String>,
     #[doc="Sets the Content-Encoding header of the response."]
-    pub response_content_encoding: Option<ResponseContentEncoding>,
+    pub response_content_encoding: Option<String>,
     #[doc="Sets the Content-Language header of the response."]
-    pub response_content_language: Option<ResponseContentLanguage>,
+    pub response_content_language: Option<String>,
     #[doc="Sets the Content-Type header of the response."]
-    pub response_content_type: Option<ResponseContentType>,
+    pub response_content_type: Option<String>,
     #[doc="Sets the Expires header of the response."]
-    pub response_expires: Option<ResponseExpires>,
+    pub response_expires: Option<String>,
     #[doc="Specifies the algorithm to use to when encrypting the object (e.g., AES256)."]
-    pub sse_customer_algorithm: Option<SSECustomerAlgorithm>,
+    pub sse_customer_algorithm: Option<String>,
     #[doc="Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header."]
-    pub sse_customer_key: Option<SSECustomerKey>,
+    pub sse_customer_key: Option<String>,
     #[doc="Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error."]
-    pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
+    pub sse_customer_key_md5: Option<String>,
     #[doc="VersionId used to reference a specific version of the object."]
-    pub version_id: Option<ObjectVersionId>,
+    pub version_id: Option<String>,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct GetObjectTaggingOutput {
-    pub tag_set: TagSet,
-    pub version_id: Option<ObjectVersionId>,
+    pub tag_set: Vec<Tag>,
+    pub version_id: Option<String>,
 }
 
 struct GetObjectTaggingOutputDeserializer;
@@ -4442,28 +4368,28 @@ impl GetObjectTaggingOutputDeserializer {
 }
 #[derive(Default,Clone,Debug)]
 pub struct GetObjectTaggingRequest {
-    pub bucket: BucketName,
-    pub key: ObjectKey,
-    pub version_id: Option<ObjectVersionId>,
+    pub bucket: String,
+    pub key: String,
+    pub version_id: Option<String>,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct GetObjectTorrentOutput {
-    pub body: Option<Body>,
-    pub request_charged: Option<RequestCharged>,
+    pub body: Option<Vec<u8>>,
+    pub request_charged: Option<String>,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct GetObjectTorrentRequest {
-    pub bucket: BucketName,
-    pub key: ObjectKey,
-    pub request_payer: Option<RequestPayer>,
+    pub bucket: String,
+    pub key: String,
+    pub request_payer: Option<String>,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct GlacierJobParameters {
     #[doc="Glacier retrieval tier at which the restore will be processed."]
-    pub tier: Tier,
+    pub tier: String,
 }
 
 
@@ -4482,7 +4408,7 @@ impl GlacierJobParametersSerializer {
 pub struct Grant {
     pub grantee: Option<Grantee>,
     #[doc="Specifies the permission given to the grantee."]
-    pub permission: Option<Permission>,
+    pub permission: Option<String>,
 }
 
 struct GrantDeserializer;
@@ -4548,23 +4474,18 @@ impl GrantSerializer {
     }
 }
 
-pub type GrantFullControl = String;
-pub type GrantRead = String;
-pub type GrantReadACP = String;
-pub type GrantWrite = String;
-pub type GrantWriteACP = String;
 #[derive(Default,Clone,Debug)]
 pub struct Grantee {
     #[doc="Screen name of the grantee."]
-    pub display_name: Option<DisplayName>,
+    pub display_name: Option<String>,
     #[doc="Email address of the grantee."]
-    pub email_address: Option<EmailAddress>,
+    pub email_address: Option<String>,
     #[doc="The canonical user ID of the grantee."]
-    pub id: Option<ID>,
+    pub id: Option<String>,
     #[doc="Type of grantee"]
-    pub type_: Type,
+    pub type_: String,
     #[doc="URI of the grantee group."]
-    pub uri: Option<URI>,
+    pub uri: Option<String>,
 }
 
 struct GranteeDeserializer;
@@ -4648,13 +4569,12 @@ impl GranteeSerializer {
     }
 }
 
-pub type Grants = Vec<Grant>;
 struct GrantsDeserializer;
 impl GrantsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Grants, XmlParseError> {
+                                       -> Result<Vec<Grant>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4694,7 +4614,7 @@ impl GrantsDeserializer {
 pub struct GrantsSerializer;
 impl GrantsSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Grants) -> String {
+    pub fn serialize(name: &str, obj: &Vec<Grant>) -> String {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
@@ -4707,57 +4627,57 @@ impl GrantsSerializer {
 
 #[derive(Default,Clone,Debug)]
 pub struct HeadBucketRequest {
-    pub bucket: BucketName,
+    pub bucket: String,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct HeadObjectOutput {
-    pub accept_ranges: Option<AcceptRanges>,
+    pub accept_ranges: Option<String>,
     #[doc="Specifies caching behavior along the request/reply chain."]
-    pub cache_control: Option<CacheControl>,
+    pub cache_control: Option<String>,
     #[doc="Specifies presentational information for the object."]
-    pub content_disposition: Option<ContentDisposition>,
+    pub content_disposition: Option<String>,
     #[doc="Specifies what content encodings have been applied to the object and thus what decoding mechanisms must be applied to obtain the media-type referenced by the Content-Type header field."]
-    pub content_encoding: Option<ContentEncoding>,
+    pub content_encoding: Option<String>,
     #[doc="The language the content is in."]
-    pub content_language: Option<ContentLanguage>,
+    pub content_language: Option<String>,
     #[doc="Size of the body in bytes."]
-    pub content_length: Option<ContentLength>,
+    pub content_length: Option<i64>,
     #[doc="A standard MIME type describing the format of the object data."]
-    pub content_type: Option<ContentType>,
+    pub content_type: Option<String>,
     #[doc="Specifies whether the object retrieved was (true) or was not (false) a Delete Marker. If false, this response header does not appear in the response."]
-    pub delete_marker: Option<DeleteMarker>,
+    pub delete_marker: Option<bool>,
     #[doc="An ETag is an opaque identifier assigned by a web server to a specific version of a resource found at a URL"]
-    pub e_tag: Option<ETag>,
+    pub e_tag: Option<String>,
     #[doc="If the object expiration is configured (see PUT Bucket lifecycle), the response includes this header. It includes the expiry-date and rule-id key value pairs providing object expiration information. The value of the rule-id is URL encoded."]
-    pub expiration: Option<Expiration>,
+    pub expiration: Option<String>,
     #[doc="The date and time at which the object is no longer cacheable."]
-    pub expires: Option<Expires>,
+    pub expires: Option<String>,
     #[doc="Last modified date of the object"]
-    pub last_modified: Option<LastModified>,
+    pub last_modified: Option<String>,
     #[doc="A map of metadata to store with the object in S3."]
-    pub metadata: Option<Metadata>,
+    pub metadata: Option<::std::collections::HashMap<String, String>>,
     #[doc="This is set to the number of metadata entries not returned in x-amz-meta headers. This can happen if you create metadata using an API like SOAP that supports more flexible metadata than the REST API. For example, using SOAP, you can create metadata whose values are not legal HTTP headers."]
-    pub missing_meta: Option<MissingMeta>,
+    pub missing_meta: Option<i64>,
     #[doc="The count of parts this object has."]
-    pub parts_count: Option<PartsCount>,
-    pub replication_status: Option<ReplicationStatus>,
-    pub request_charged: Option<RequestCharged>,
+    pub parts_count: Option<i64>,
+    pub replication_status: Option<String>,
+    pub request_charged: Option<String>,
     #[doc="Provides information about object restoration operation and expiration time of the restored object copy."]
-    pub restore: Option<Restore>,
+    pub restore: Option<String>,
     #[doc="If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used."]
-    pub sse_customer_algorithm: Option<SSECustomerAlgorithm>,
+    pub sse_customer_algorithm: Option<String>,
     #[doc="If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key."]
-    pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
+    pub sse_customer_key_md5: Option<String>,
     #[doc="If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object."]
-    pub ssekms_key_id: Option<SSEKMSKeyId>,
+    pub ssekms_key_id: Option<String>,
     #[doc="The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms)."]
-    pub server_side_encryption: Option<ServerSideEncryption>,
-    pub storage_class: Option<StorageClass>,
+    pub server_side_encryption: Option<String>,
+    pub storage_class: Option<String>,
     #[doc="Version of the object."]
-    pub version_id: Option<ObjectVersionId>,
+    pub version_id: Option<String>,
     #[doc="If the bucket is configured as a website, redirects requests for this object to another object in the same bucket or to an external URL. Amazon S3 stores the value of this header in the object metadata."]
-    pub website_redirect_location: Option<WebsiteRedirectLocation>,
+    pub website_redirect_location: Option<String>,
 }
 
 struct HeadObjectOutputDeserializer;
@@ -4778,38 +4698,37 @@ impl HeadObjectOutputDeserializer {
 }
 #[derive(Default,Clone,Debug)]
 pub struct HeadObjectRequest {
-    pub bucket: BucketName,
+    pub bucket: String,
     #[doc="Return the object only if its entity tag (ETag) is the same as the one specified, otherwise return a 412 (precondition failed)."]
-    pub if_match: Option<IfMatch>,
+    pub if_match: Option<String>,
     #[doc="Return the object only if it has been modified since the specified time, otherwise return a 304 (not modified)."]
-    pub if_modified_since: Option<IfModifiedSince>,
+    pub if_modified_since: Option<String>,
     #[doc="Return the object only if its entity tag (ETag) is different from the one specified, otherwise return a 304 (not modified)."]
-    pub if_none_match: Option<IfNoneMatch>,
+    pub if_none_match: Option<String>,
     #[doc="Return the object only if it has not been modified since the specified time, otherwise return a 412 (precondition failed)."]
-    pub if_unmodified_since: Option<IfUnmodifiedSince>,
-    pub key: ObjectKey,
+    pub if_unmodified_since: Option<String>,
+    pub key: String,
     #[doc="Part number of the object being read. This is a positive integer between 1 and 10,000. Effectively performs a 'ranged' HEAD request for the part specified. Useful querying about the size of the part and the number of parts in this object."]
-    pub part_number: Option<PartNumber>,
+    pub part_number: Option<i64>,
     #[doc="Downloads the specified range bytes of an object. For more information about the HTTP Range header, go to http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35."]
-    pub range: Option<Range>,
-    pub request_payer: Option<RequestPayer>,
+    pub range: Option<String>,
+    pub request_payer: Option<String>,
     #[doc="Specifies the algorithm to use to when encrypting the object (e.g., AES256)."]
-    pub sse_customer_algorithm: Option<SSECustomerAlgorithm>,
+    pub sse_customer_algorithm: Option<String>,
     #[doc="Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header."]
-    pub sse_customer_key: Option<SSECustomerKey>,
+    pub sse_customer_key: Option<String>,
     #[doc="Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error."]
-    pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
+    pub sse_customer_key_md5: Option<String>,
     #[doc="VersionId used to reference a specific version of the object."]
-    pub version_id: Option<ObjectVersionId>,
+    pub version_id: Option<String>,
 }
 
-pub type HostName = String;
 struct HostNameDeserializer;
 impl HostNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<HostName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4822,20 +4741,19 @@ impl HostNameDeserializer {
 pub struct HostNameSerializer;
 impl HostNameSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &HostName) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type HttpErrorCodeReturnedEquals = String;
 struct HttpErrorCodeReturnedEqualsDeserializer;
 impl HttpErrorCodeReturnedEqualsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<HttpErrorCodeReturnedEquals, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4848,20 +4766,19 @@ impl HttpErrorCodeReturnedEqualsDeserializer {
 pub struct HttpErrorCodeReturnedEqualsSerializer;
 impl HttpErrorCodeReturnedEqualsSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &HttpErrorCodeReturnedEquals) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type HttpRedirectCode = String;
 struct HttpRedirectCodeDeserializer;
 impl HttpRedirectCodeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<HttpRedirectCode, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4874,18 +4791,19 @@ impl HttpRedirectCodeDeserializer {
 pub struct HttpRedirectCodeSerializer;
 impl HttpRedirectCodeSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &HttpRedirectCode) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type ID = String;
 struct IDDeserializer;
 impl IDDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<ID, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4898,21 +4816,17 @@ impl IDDeserializer {
 pub struct IDSerializer;
 impl IDSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &ID) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type IfMatch = String;
-pub type IfModifiedSince = String;
-pub type IfNoneMatch = String;
-pub type IfUnmodifiedSince = String;
 #[derive(Default,Clone,Debug)]
 pub struct IndexDocument {
     #[doc="A suffix that is appended to a request that is for a directory on the website endpoint (e.g. if the suffix is index.html and you make a request to samplebucket/images/ the data that is returned will be for the object with the key name images/index.html) The suffix must not be empty and must not include a slash character."]
-    pub suffix: Suffix,
+    pub suffix: String,
 }
 
 struct IndexDocumentDeserializer;
@@ -4968,13 +4882,12 @@ impl IndexDocumentSerializer {
     }
 }
 
-pub type Initiated = String;
 struct InitiatedDeserializer;
 impl InitiatedDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Initiated, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4986,9 +4899,9 @@ impl InitiatedDeserializer {
 #[derive(Default,Clone,Debug)]
 pub struct Initiator {
     #[doc="Name of the Principal."]
-    pub display_name: Option<DisplayName>,
+    pub display_name: Option<String>,
     #[doc="If the principal is an AWS account, it provides the Canonical User ID. If the principal is an IAM User, it provides a user ARN value."]
-    pub id: Option<ID>,
+    pub id: Option<String>,
 }
 
 struct InitiatorDeserializer;
@@ -5044,13 +4957,13 @@ pub struct InventoryConfiguration {
     #[doc="Specifies an inventory filter. The inventory only includes objects that meet the filter's criteria."]
     pub filter: Option<InventoryFilter>,
     #[doc="The ID used to identify the inventory configuration."]
-    pub id: InventoryId,
+    pub id: String,
     #[doc="Specifies which object version(s) to included in the inventory results."]
-    pub included_object_versions: InventoryIncludedObjectVersions,
+    pub included_object_versions: String,
     #[doc="Specifies whether the inventory is enabled or disabled."]
-    pub is_enabled: IsEnabled,
+    pub is_enabled: bool,
     #[doc="Contains the optional fields that are included in the inventory results."]
-    pub optional_fields: Option<InventoryOptionalFields>,
+    pub optional_fields: Option<Vec<String>>,
     #[doc="Specifies the schedule for generating inventory results."]
     pub schedule: InventorySchedule,
 }
@@ -5145,13 +5058,12 @@ impl InventoryConfigurationSerializer {
     }
 }
 
-pub type InventoryConfigurationList = Vec<InventoryConfiguration>;
 struct InventoryConfigurationListDeserializer;
 impl InventoryConfigurationListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<InventoryConfigurationList, XmlParseError> {
+                                       -> Result<Vec<InventoryConfiguration>, XmlParseError> {
 
         let mut obj = vec![];
 
@@ -5240,7 +5152,7 @@ impl InventoryDestinationSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct InventoryFilter {
     #[doc="The prefix that an object must have to be included in the inventory results."]
-    pub prefix: Prefix,
+    pub prefix: String,
 }
 
 struct InventoryFilterDeserializer;
@@ -5296,13 +5208,12 @@ impl InventoryFilterSerializer {
     }
 }
 
-pub type InventoryFormat = String;
 struct InventoryFormatDeserializer;
 impl InventoryFormatDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<InventoryFormat, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5315,20 +5226,19 @@ impl InventoryFormatDeserializer {
 pub struct InventoryFormatSerializer;
 impl InventoryFormatSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &InventoryFormat) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type InventoryFrequency = String;
 struct InventoryFrequencyDeserializer;
 impl InventoryFrequencyDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<InventoryFrequency, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5341,20 +5251,19 @@ impl InventoryFrequencyDeserializer {
 pub struct InventoryFrequencySerializer;
 impl InventoryFrequencySerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &InventoryFrequency) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type InventoryId = String;
 struct InventoryIdDeserializer;
 impl InventoryIdDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<InventoryId, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5367,21 +5276,19 @@ impl InventoryIdDeserializer {
 pub struct InventoryIdSerializer;
 impl InventoryIdSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &InventoryId) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type InventoryIncludedObjectVersions = String;
 struct InventoryIncludedObjectVersionsDeserializer;
 impl InventoryIncludedObjectVersionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<InventoryIncludedObjectVersions, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5394,20 +5301,19 @@ impl InventoryIncludedObjectVersionsDeserializer {
 pub struct InventoryIncludedObjectVersionsSerializer;
 impl InventoryIncludedObjectVersionsSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &InventoryIncludedObjectVersions) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type InventoryOptionalField = String;
 struct InventoryOptionalFieldDeserializer;
 impl InventoryOptionalFieldDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<InventoryOptionalField, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5420,20 +5326,19 @@ impl InventoryOptionalFieldDeserializer {
 pub struct InventoryOptionalFieldSerializer;
 impl InventoryOptionalFieldSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &InventoryOptionalField) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type InventoryOptionalFields = Vec<InventoryOptionalField>;
 struct InventoryOptionalFieldsDeserializer;
 impl InventoryOptionalFieldsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<InventoryOptionalFields, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5474,7 +5379,7 @@ impl InventoryOptionalFieldsDeserializer {
 pub struct InventoryOptionalFieldsSerializer;
 impl InventoryOptionalFieldsSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &InventoryOptionalFields) -> String {
+    pub fn serialize(name: &str, obj: &Vec<String>) -> String {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
@@ -5488,13 +5393,13 @@ impl InventoryOptionalFieldsSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct InventoryS3BucketDestination {
     #[doc="The ID of the account that owns the destination bucket."]
-    pub account_id: Option<AccountId>,
+    pub account_id: Option<String>,
     #[doc="The Amazon resource name (ARN) of the bucket where inventory results will be published."]
-    pub bucket: BucketName,
+    pub bucket: String,
     #[doc="Specifies the output format of the inventory results."]
-    pub format: InventoryFormat,
+    pub format: String,
     #[doc="The prefix that is prepended to all inventory results."]
-    pub prefix: Option<Prefix>,
+    pub prefix: Option<String>,
 }
 
 struct InventoryS3BucketDestinationDeserializer;
@@ -5572,7 +5477,7 @@ impl InventoryS3BucketDestinationSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct InventorySchedule {
     #[doc="Specifies how frequently inventory results are produced."]
-    pub frequency: InventoryFrequency,
+    pub frequency: String,
 }
 
 struct InventoryScheduleDeserializer;
@@ -5630,13 +5535,12 @@ impl InventoryScheduleSerializer {
     }
 }
 
-pub type IsEnabled = bool;
 struct IsEnabledDeserializer;
 impl IsEnabledDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<IsEnabled, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -5649,20 +5553,19 @@ impl IsEnabledDeserializer {
 pub struct IsEnabledSerializer;
 impl IsEnabledSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &IsEnabled) -> String {
+    pub fn serialize(name: &str, obj: &bool) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type IsLatest = bool;
 struct IsLatestDeserializer;
 impl IsLatestDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<IsLatest, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -5671,13 +5574,12 @@ impl IsLatestDeserializer {
 
     }
 }
-pub type IsTruncated = bool;
 struct IsTruncatedDeserializer;
 impl IsTruncatedDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<IsTruncated, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -5686,13 +5588,12 @@ impl IsTruncatedDeserializer {
 
     }
 }
-pub type KeyCount = i64;
 struct KeyCountDeserializer;
 impl KeyCountDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<KeyCount, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -5701,13 +5602,12 @@ impl KeyCountDeserializer {
 
     }
 }
-pub type KeyMarker = String;
 struct KeyMarkerDeserializer;
 impl KeyMarkerDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<KeyMarker, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5720,20 +5620,19 @@ impl KeyMarkerDeserializer {
 pub struct KeyMarkerSerializer;
 impl KeyMarkerSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &KeyMarker) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type KeyPrefixEquals = String;
 struct KeyPrefixEqualsDeserializer;
 impl KeyPrefixEqualsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<KeyPrefixEquals, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5746,20 +5645,19 @@ impl KeyPrefixEqualsDeserializer {
 pub struct KeyPrefixEqualsSerializer;
 impl KeyPrefixEqualsSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &KeyPrefixEquals) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type LambdaFunctionArn = String;
 struct LambdaFunctionArnDeserializer;
 impl LambdaFunctionArnDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LambdaFunctionArn, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5772,7 +5670,7 @@ impl LambdaFunctionArnDeserializer {
 pub struct LambdaFunctionArnSerializer;
 impl LambdaFunctionArnSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &LambdaFunctionArn) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
@@ -5782,11 +5680,11 @@ impl LambdaFunctionArnSerializer {
 #[doc="Container for specifying the AWS Lambda notification configuration."]
 #[derive(Default,Clone,Debug)]
 pub struct LambdaFunctionConfiguration {
-    pub events: EventList,
+    pub events: Vec<String>,
     pub filter: Option<NotificationConfigurationFilter>,
-    pub id: Option<NotificationId>,
+    pub id: Option<String>,
     #[doc="Lambda cloud function ARN that Amazon S3 can invoke when it detects events of the specified type."]
-    pub lambda_function_arn: LambdaFunctionArn,
+    pub lambda_function_arn: String,
 }
 
 struct LambdaFunctionConfigurationDeserializer;
@@ -5862,14 +5760,13 @@ impl LambdaFunctionConfigurationSerializer {
     }
 }
 
-pub type LambdaFunctionConfigurationList = Vec<LambdaFunctionConfiguration>;
 struct LambdaFunctionConfigurationListDeserializer;
 impl LambdaFunctionConfigurationListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>
         (tag_name: &str,
          stack: &mut T)
-         -> Result<LambdaFunctionConfigurationList, XmlParseError> {
+         -> Result<Vec<LambdaFunctionConfiguration>, XmlParseError> {
 
         let mut obj = vec![];
 
@@ -5897,7 +5794,7 @@ impl LambdaFunctionConfigurationListDeserializer {
 pub struct LambdaFunctionConfigurationListSerializer;
 impl LambdaFunctionConfigurationListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &LambdaFunctionConfigurationList) -> String {
+    pub fn serialize(name: &str, obj: &Vec<LambdaFunctionConfiguration>) -> String {
         let mut parts: Vec<String> = Vec::new();
         for element in obj {
             parts.push(LambdaFunctionConfigurationSerializer::serialize(name, element));
@@ -5906,13 +5803,12 @@ impl LambdaFunctionConfigurationListSerializer {
     }
 }
 
-pub type LastModified = String;
 struct LastModifiedDeserializer;
 impl LastModifiedDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LastModified, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5923,7 +5819,7 @@ impl LastModifiedDeserializer {
 }
 #[derive(Default,Clone,Debug)]
 pub struct LifecycleConfiguration {
-    pub rules: Rules,
+    pub rules: Vec<Rule>,
 }
 
 
@@ -5941,11 +5837,11 @@ impl LifecycleConfigurationSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct LifecycleExpiration {
     #[doc="Indicates at what date the object is to be moved or deleted. Should be in GMT ISO 8601 Format."]
-    pub date: Option<Date>,
+    pub date: Option<String>,
     #[doc="Indicates the lifetime, in days, of the objects that are subject to the rule. The value must be a non-zero positive integer."]
-    pub days: Option<Days>,
+    pub days: Option<i64>,
     #[doc="Indicates whether Amazon S3 will remove a delete marker with no noncurrent versions. If set to true, the delete marker will be expired; if set to false the policy takes no action. This cannot be specified with Days or Date in a Lifecycle Expiration Policy."]
-    pub expired_object_delete_marker: Option<ExpiredObjectDeleteMarker>,
+    pub expired_object_delete_marker: Option<bool>,
 }
 
 struct LifecycleExpirationDeserializer;
@@ -6022,12 +5918,12 @@ pub struct LifecycleRule {
     pub expiration: Option<LifecycleExpiration>,
     pub filter: Option<LifecycleRuleFilter>,
     #[doc="Unique identifier for the rule. The value cannot be longer than 255 characters."]
-    pub id: Option<ID>,
+    pub id: Option<String>,
     pub noncurrent_version_expiration: Option<NoncurrentVersionExpiration>,
-    pub noncurrent_version_transitions: Option<NoncurrentVersionTransitionList>,
+    pub noncurrent_version_transitions: Option<Vec<NoncurrentVersionTransition>>,
     #[doc="If 'Enabled', the rule is currently being applied. If 'Disabled', the rule is not currently being applied."]
-    pub status: ExpirationStatus,
-    pub transitions: Option<TransitionList>,
+    pub status: String,
+    pub transitions: Option<Vec<Transition>>,
 }
 
 struct LifecycleRuleDeserializer;
@@ -6138,9 +6034,9 @@ impl LifecycleRuleSerializer {
 #[doc="This is used in a Lifecycle Rule Filter to apply a logical AND to two or more predicates. The Lifecycle Rule will apply to any object matching all of the predicates configured inside the And operator."]
 #[derive(Default,Clone,Debug)]
 pub struct LifecycleRuleAndOperator {
-    pub prefix: Option<Prefix>,
+    pub prefix: Option<String>,
     #[doc="All of these tags must exist in the object's tag set in order for the rule to apply."]
-    pub tags: Option<TagSet>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 struct LifecycleRuleAndOperatorDeserializer;
@@ -6210,7 +6106,7 @@ impl LifecycleRuleAndOperatorSerializer {
 pub struct LifecycleRuleFilter {
     pub and: Option<LifecycleRuleAndOperator>,
     #[doc="Prefix identifying one or more objects to which the rule applies."]
-    pub prefix: Option<Prefix>,
+    pub prefix: Option<String>,
     #[doc="This tag must exist in the object's tag set in order for the rule to apply."]
     pub tag: Option<Tag>,
 }
@@ -6283,13 +6179,12 @@ impl LifecycleRuleFilterSerializer {
     }
 }
 
-pub type LifecycleRules = Vec<LifecycleRule>;
 struct LifecycleRulesDeserializer;
 impl LifecycleRulesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LifecycleRules, XmlParseError> {
+                                       -> Result<Vec<LifecycleRule>, XmlParseError> {
 
         let mut obj = vec![];
 
@@ -6316,7 +6211,7 @@ impl LifecycleRulesDeserializer {
 pub struct LifecycleRulesSerializer;
 impl LifecycleRulesSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &LifecycleRules) -> String {
+    pub fn serialize(name: &str, obj: &Vec<LifecycleRule>) -> String {
         let mut parts: Vec<String> = Vec::new();
         for element in obj {
             parts.push(LifecycleRuleSerializer::serialize(name, element));
@@ -6328,13 +6223,13 @@ impl LifecycleRulesSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct ListBucketAnalyticsConfigurationsOutput {
     #[doc="The list of analytics configurations for a bucket."]
-    pub analytics_configuration_list: Option<AnalyticsConfigurationList>,
+    pub analytics_configuration_list: Option<Vec<AnalyticsConfiguration>>,
     #[doc="The ContinuationToken that represents where this request began."]
-    pub continuation_token: Option<Token>,
+    pub continuation_token: Option<String>,
     #[doc="Indicates whether the returned list of analytics configurations is complete. A value of true indicates that the list is not complete and the NextContinuationToken will be provided for a subsequent request."]
-    pub is_truncated: Option<IsTruncated>,
+    pub is_truncated: Option<bool>,
     #[doc="NextContinuationToken is sent when isTruncated is true, which indicates that there are more analytics configurations to list. The next request must include this NextContinuationToken. The token is obfuscated and is not a usable value."]
-    pub next_continuation_token: Option<NextToken>,
+    pub next_continuation_token: Option<String>,
 }
 
 struct ListBucketAnalyticsConfigurationsOutputDeserializer;
@@ -6397,21 +6292,21 @@ impl ListBucketAnalyticsConfigurationsOutputDeserializer {
 #[derive(Default,Clone,Debug)]
 pub struct ListBucketAnalyticsConfigurationsRequest {
     #[doc="The name of the bucket from which analytics configurations are retrieved."]
-    pub bucket: BucketName,
+    pub bucket: String,
     #[doc="The ContinuationToken that represents a placeholder from where this request should begin."]
-    pub continuation_token: Option<Token>,
+    pub continuation_token: Option<String>,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct ListBucketInventoryConfigurationsOutput {
     #[doc="If sent in the request, the marker that is used as a starting point for this inventory configuration list response."]
-    pub continuation_token: Option<Token>,
+    pub continuation_token: Option<String>,
     #[doc="The list of inventory configurations for a bucket."]
-    pub inventory_configuration_list: Option<InventoryConfigurationList>,
+    pub inventory_configuration_list: Option<Vec<InventoryConfiguration>>,
     #[doc="Indicates whether the returned list of inventory configurations is truncated in this response. A value of true indicates that the list is truncated."]
-    pub is_truncated: Option<IsTruncated>,
+    pub is_truncated: Option<bool>,
     #[doc="The marker used to continue this inventory configuration listing. Use the NextContinuationToken from this response to continue the listing in a subsequent request. The continuation token is an opaque value that Amazon S3 understands."]
-    pub next_continuation_token: Option<NextToken>,
+    pub next_continuation_token: Option<String>,
 }
 
 struct ListBucketInventoryConfigurationsOutputDeserializer;
@@ -6474,21 +6369,21 @@ impl ListBucketInventoryConfigurationsOutputDeserializer {
 #[derive(Default,Clone,Debug)]
 pub struct ListBucketInventoryConfigurationsRequest {
     #[doc="The name of the bucket containing the inventory configurations to retrieve."]
-    pub bucket: BucketName,
+    pub bucket: String,
     #[doc="The marker used to continue an inventory configuration listing that has been truncated. Use the NextContinuationToken from a previously truncated list response to continue the listing. The continuation token is an opaque value that Amazon S3 understands."]
-    pub continuation_token: Option<Token>,
+    pub continuation_token: Option<String>,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct ListBucketMetricsConfigurationsOutput {
     #[doc="The marker that is used as a starting point for this metrics configuration list response. This value is present if it was sent in the request."]
-    pub continuation_token: Option<Token>,
+    pub continuation_token: Option<String>,
     #[doc="Indicates whether the returned list of metrics configurations is complete. A value of true indicates that the list is not complete and the NextContinuationToken will be provided for a subsequent request."]
-    pub is_truncated: Option<IsTruncated>,
+    pub is_truncated: Option<bool>,
     #[doc="The list of metrics configurations for a bucket."]
-    pub metrics_configuration_list: Option<MetricsConfigurationList>,
+    pub metrics_configuration_list: Option<Vec<MetricsConfiguration>>,
     #[doc="The marker used to continue a metrics configuration listing that has been truncated. Use the NextContinuationToken from a previously truncated list response to continue the listing. The continuation token is an opaque value that Amazon S3 understands."]
-    pub next_continuation_token: Option<NextToken>,
+    pub next_continuation_token: Option<String>,
 }
 
 struct ListBucketMetricsConfigurationsOutputDeserializer;
@@ -6551,14 +6446,14 @@ impl ListBucketMetricsConfigurationsOutputDeserializer {
 #[derive(Default,Clone,Debug)]
 pub struct ListBucketMetricsConfigurationsRequest {
     #[doc="The name of the bucket containing the metrics configurations to retrieve."]
-    pub bucket: BucketName,
+    pub bucket: String,
     #[doc="The marker that is used to continue a metrics configuration listing that has been truncated. Use the NextContinuationToken from a previously truncated list response to continue the listing. The continuation token is an opaque value that Amazon S3 understands."]
-    pub continuation_token: Option<Token>,
+    pub continuation_token: Option<String>,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct ListBucketsOutput {
-    pub buckets: Option<Buckets>,
+    pub buckets: Option<Vec<Bucket>>,
     pub owner: Option<Owner>,
 }
 
@@ -6610,26 +6505,26 @@ impl ListBucketsOutputDeserializer {
 #[derive(Default,Clone,Debug)]
 pub struct ListMultipartUploadsOutput {
     #[doc="Name of the bucket to which the multipart upload was initiated."]
-    pub bucket: Option<BucketName>,
-    pub common_prefixes: Option<CommonPrefixList>,
-    pub delimiter: Option<Delimiter>,
+    pub bucket: Option<String>,
+    pub common_prefixes: Option<Vec<CommonPrefix>>,
+    pub delimiter: Option<String>,
     #[doc="Encoding type used by Amazon S3 to encode object keys in the response."]
-    pub encoding_type: Option<EncodingType>,
+    pub encoding_type: Option<String>,
     #[doc="Indicates whether the returned list of multipart uploads is truncated. A value of true indicates that the list was truncated. The list can be truncated if the number of multipart uploads exceeds the limit allowed or specified by max uploads."]
-    pub is_truncated: Option<IsTruncated>,
+    pub is_truncated: Option<bool>,
     #[doc="The key at or after which the listing began."]
-    pub key_marker: Option<KeyMarker>,
+    pub key_marker: Option<String>,
     #[doc="Maximum number of multipart uploads that could have been included in the response."]
-    pub max_uploads: Option<MaxUploads>,
+    pub max_uploads: Option<i64>,
     #[doc="When a list is truncated, this element specifies the value that should be used for the key-marker request parameter in a subsequent request."]
-    pub next_key_marker: Option<NextKeyMarker>,
+    pub next_key_marker: Option<String>,
     #[doc="When a list is truncated, this element specifies the value that should be used for the upload-id-marker request parameter in a subsequent request."]
-    pub next_upload_id_marker: Option<NextUploadIdMarker>,
+    pub next_upload_id_marker: Option<String>,
     #[doc="When a prefix is provided in the request, this field contains the specified prefix. The result contains only keys starting with the specified prefix."]
-    pub prefix: Option<Prefix>,
+    pub prefix: Option<String>,
     #[doc="Upload ID after which listing began."]
-    pub upload_id_marker: Option<UploadIdMarker>,
-    pub uploads: Option<MultipartUploadList>,
+    pub upload_id_marker: Option<String>,
+    pub uploads: Option<Vec<MultipartUpload>>,
 }
 
 struct ListMultipartUploadsOutputDeserializer;
@@ -6728,40 +6623,40 @@ impl ListMultipartUploadsOutputDeserializer {
 }
 #[derive(Default,Clone,Debug)]
 pub struct ListMultipartUploadsRequest {
-    pub bucket: BucketName,
+    pub bucket: String,
     #[doc="Character you use to group keys."]
-    pub delimiter: Option<Delimiter>,
-    pub encoding_type: Option<EncodingType>,
+    pub delimiter: Option<String>,
+    pub encoding_type: Option<String>,
     #[doc="Together with upload-id-marker, this parameter specifies the multipart upload after which listing should begin."]
-    pub key_marker: Option<KeyMarker>,
+    pub key_marker: Option<String>,
     #[doc="Sets the maximum number of multipart uploads, from 1 to 1,000, to return in the response body. 1,000 is the maximum number of uploads that can be returned in a response."]
-    pub max_uploads: Option<MaxUploads>,
+    pub max_uploads: Option<i64>,
     #[doc="Lists in-progress uploads only for those keys that begin with the specified prefix."]
-    pub prefix: Option<Prefix>,
+    pub prefix: Option<String>,
     #[doc="Together with key-marker, specifies the multipart upload after which listing should begin. If key-marker is not specified, the upload-id-marker parameter is ignored."]
-    pub upload_id_marker: Option<UploadIdMarker>,
+    pub upload_id_marker: Option<String>,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct ListObjectVersionsOutput {
-    pub common_prefixes: Option<CommonPrefixList>,
-    pub delete_markers: Option<DeleteMarkers>,
-    pub delimiter: Option<Delimiter>,
+    pub common_prefixes: Option<Vec<CommonPrefix>>,
+    pub delete_markers: Option<Vec<DeleteMarkerEntry>>,
+    pub delimiter: Option<String>,
     #[doc="Encoding type used by Amazon S3 to encode object keys in the response."]
-    pub encoding_type: Option<EncodingType>,
+    pub encoding_type: Option<String>,
     #[doc="A flag that indicates whether or not Amazon S3 returned all of the results that satisfied the search criteria. If your results were truncated, you can make a follow-up paginated request using the NextKeyMarker and NextVersionIdMarker response parameters as a starting place in another request to return the rest of the results."]
-    pub is_truncated: Option<IsTruncated>,
+    pub is_truncated: Option<bool>,
     #[doc="Marks the last Key returned in a truncated response."]
-    pub key_marker: Option<KeyMarker>,
-    pub max_keys: Option<MaxKeys>,
-    pub name: Option<BucketName>,
+    pub key_marker: Option<String>,
+    pub max_keys: Option<i64>,
+    pub name: Option<String>,
     #[doc="Use this value for the key marker request parameter in a subsequent request."]
-    pub next_key_marker: Option<NextKeyMarker>,
+    pub next_key_marker: Option<String>,
     #[doc="Use this value for the next version id marker parameter in a subsequent request."]
-    pub next_version_id_marker: Option<NextVersionIdMarker>,
-    pub prefix: Option<Prefix>,
-    pub version_id_marker: Option<VersionIdMarker>,
-    pub versions: Option<ObjectVersionList>,
+    pub next_version_id_marker: Option<String>,
+    pub prefix: Option<String>,
+    pub version_id_marker: Option<String>,
+    pub versions: Option<Vec<ObjectVersion>>,
 }
 
 struct ListObjectVersionsOutputDeserializer;
@@ -6864,35 +6759,35 @@ impl ListObjectVersionsOutputDeserializer {
 }
 #[derive(Default,Clone,Debug)]
 pub struct ListObjectVersionsRequest {
-    pub bucket: BucketName,
+    pub bucket: String,
     #[doc="A delimiter is a character you use to group keys."]
-    pub delimiter: Option<Delimiter>,
-    pub encoding_type: Option<EncodingType>,
+    pub delimiter: Option<String>,
+    pub encoding_type: Option<String>,
     #[doc="Specifies the key to start with when listing objects in a bucket."]
-    pub key_marker: Option<KeyMarker>,
+    pub key_marker: Option<String>,
     #[doc="Sets the maximum number of keys returned in the response. The response might contain fewer keys but will never contain more."]
-    pub max_keys: Option<MaxKeys>,
+    pub max_keys: Option<i64>,
     #[doc="Limits the response to keys that begin with the specified prefix."]
-    pub prefix: Option<Prefix>,
+    pub prefix: Option<String>,
     #[doc="Specifies the object version you want to start listing from."]
-    pub version_id_marker: Option<VersionIdMarker>,
+    pub version_id_marker: Option<String>,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct ListObjectsOutput {
-    pub common_prefixes: Option<CommonPrefixList>,
-    pub contents: Option<ObjectList>,
-    pub delimiter: Option<Delimiter>,
+    pub common_prefixes: Option<Vec<CommonPrefix>>,
+    pub contents: Option<Vec<Object>>,
+    pub delimiter: Option<String>,
     #[doc="Encoding type used by Amazon S3 to encode object keys in the response."]
-    pub encoding_type: Option<EncodingType>,
+    pub encoding_type: Option<String>,
     #[doc="A flag that indicates whether or not Amazon S3 returned all of the results that satisfied the search criteria."]
-    pub is_truncated: Option<IsTruncated>,
-    pub marker: Option<Marker>,
-    pub max_keys: Option<MaxKeys>,
-    pub name: Option<BucketName>,
+    pub is_truncated: Option<bool>,
+    pub marker: Option<String>,
+    pub max_keys: Option<i64>,
+    pub name: Option<String>,
     #[doc="When response is truncated (the IsTruncated element value in the response is true), you can use the key name in this field as marker in the subsequent request to get next set of objects. Amazon S3 lists objects in alphabetical order Note: This element is returned only if you have delimiter request parameter specified. If response does not include the NextMaker and it is truncated, you can use the value of the last Key in the response as the marker in the subsequent request to get the next set of object keys."]
-    pub next_marker: Option<NextMarker>,
-    pub prefix: Option<Prefix>,
+    pub next_marker: Option<String>,
+    pub prefix: Option<String>,
 }
 
 struct ListObjectsOutputDeserializer;
@@ -6979,46 +6874,46 @@ impl ListObjectsOutputDeserializer {
 }
 #[derive(Default,Clone,Debug)]
 pub struct ListObjectsRequest {
-    pub bucket: BucketName,
+    pub bucket: String,
     #[doc="A delimiter is a character you use to group keys."]
-    pub delimiter: Option<Delimiter>,
-    pub encoding_type: Option<EncodingType>,
+    pub delimiter: Option<String>,
+    pub encoding_type: Option<String>,
     #[doc="Specifies the key to start with when listing objects in a bucket."]
-    pub marker: Option<Marker>,
+    pub marker: Option<String>,
     #[doc="Sets the maximum number of keys returned in the response. The response might contain fewer keys but will never contain more."]
-    pub max_keys: Option<MaxKeys>,
+    pub max_keys: Option<i64>,
     #[doc="Limits the response to keys that begin with the specified prefix."]
-    pub prefix: Option<Prefix>,
+    pub prefix: Option<String>,
     #[doc="Confirms that the requester knows that she or he will be charged for the list objects request. Bucket owners need not specify this parameter in their requests."]
-    pub request_payer: Option<RequestPayer>,
+    pub request_payer: Option<String>,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct ListObjectsV2Output {
     #[doc="CommonPrefixes contains all (if there are any) keys between Prefix and the next occurrence of the string specified by delimiter"]
-    pub common_prefixes: Option<CommonPrefixList>,
+    pub common_prefixes: Option<Vec<CommonPrefix>>,
     #[doc="Metadata about each object returned."]
-    pub contents: Option<ObjectList>,
+    pub contents: Option<Vec<Object>>,
     #[doc="ContinuationToken indicates Amazon S3 that the list is being continued on this bucket with a token. ContinuationToken is obfuscated and is not a real key"]
-    pub continuation_token: Option<Token>,
+    pub continuation_token: Option<String>,
     #[doc="A delimiter is a character you use to group keys."]
-    pub delimiter: Option<Delimiter>,
+    pub delimiter: Option<String>,
     #[doc="Encoding type used by Amazon S3 to encode object keys in the response."]
-    pub encoding_type: Option<EncodingType>,
+    pub encoding_type: Option<String>,
     #[doc="A flag that indicates whether or not Amazon S3 returned all of the results that satisfied the search criteria."]
-    pub is_truncated: Option<IsTruncated>,
+    pub is_truncated: Option<bool>,
     #[doc="KeyCount is the number of keys returned with this request. KeyCount will always be less than equals to MaxKeys field. Say you ask for 50 keys, your result will include less than equals 50 keys"]
-    pub key_count: Option<KeyCount>,
+    pub key_count: Option<i64>,
     #[doc="Sets the maximum number of keys returned in the response. The response might contain fewer keys but will never contain more."]
-    pub max_keys: Option<MaxKeys>,
+    pub max_keys: Option<i64>,
     #[doc="Name of the bucket to list."]
-    pub name: Option<BucketName>,
+    pub name: Option<String>,
     #[doc="NextContinuationToken is sent when isTruncated is true which means there are more keys in the bucket that can be listed. The next list requests to Amazon S3 can be continued with this NextContinuationToken. NextContinuationToken is obfuscated and is not a real key"]
-    pub next_continuation_token: Option<NextToken>,
+    pub next_continuation_token: Option<String>,
     #[doc="Limits the response to keys that begin with the specified prefix."]
-    pub prefix: Option<Prefix>,
+    pub prefix: Option<String>,
     #[doc="StartAfter is where you want Amazon S3 to start listing from. Amazon S3 starts listing after this specified key. StartAfter can be any key in the bucket"]
-    pub start_after: Option<StartAfter>,
+    pub start_after: Option<String>,
 }
 
 struct ListObjectsV2OutputDeserializer;
@@ -7116,52 +7011,52 @@ impl ListObjectsV2OutputDeserializer {
 #[derive(Default,Clone,Debug)]
 pub struct ListObjectsV2Request {
     #[doc="Name of the bucket to list."]
-    pub bucket: BucketName,
+    pub bucket: String,
     #[doc="ContinuationToken indicates Amazon S3 that the list is being continued on this bucket with a token. ContinuationToken is obfuscated and is not a real key"]
-    pub continuation_token: Option<Token>,
+    pub continuation_token: Option<String>,
     #[doc="A delimiter is a character you use to group keys."]
-    pub delimiter: Option<Delimiter>,
+    pub delimiter: Option<String>,
     #[doc="Encoding type used by Amazon S3 to encode object keys in the response."]
-    pub encoding_type: Option<EncodingType>,
+    pub encoding_type: Option<String>,
     #[doc="The owner field is not present in listV2 by default, if you want to return owner field with each key in the result then set the fetch owner field to true"]
-    pub fetch_owner: Option<FetchOwner>,
+    pub fetch_owner: Option<bool>,
     #[doc="Sets the maximum number of keys returned in the response. The response might contain fewer keys but will never contain more."]
-    pub max_keys: Option<MaxKeys>,
+    pub max_keys: Option<i64>,
     #[doc="Limits the response to keys that begin with the specified prefix."]
-    pub prefix: Option<Prefix>,
+    pub prefix: Option<String>,
     #[doc="Confirms that the requester knows that she or he will be charged for the list objects request in V2 style. Bucket owners need not specify this parameter in their requests."]
-    pub request_payer: Option<RequestPayer>,
+    pub request_payer: Option<String>,
     #[doc="StartAfter is where you want Amazon S3 to start listing from. Amazon S3 starts listing after this specified key. StartAfter can be any key in the bucket"]
-    pub start_after: Option<StartAfter>,
+    pub start_after: Option<String>,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct ListPartsOutput {
     #[doc="Date when multipart upload will become eligible for abort operation by lifecycle."]
-    pub abort_date: Option<AbortDate>,
+    pub abort_date: Option<String>,
     #[doc="Id of the lifecycle rule that makes a multipart upload eligible for abort operation."]
-    pub abort_rule_id: Option<AbortRuleId>,
+    pub abort_rule_id: Option<String>,
     #[doc="Name of the bucket to which the multipart upload was initiated."]
-    pub bucket: Option<BucketName>,
+    pub bucket: Option<String>,
     #[doc="Identifies who initiated the multipart upload."]
     pub initiator: Option<Initiator>,
     #[doc="Indicates whether the returned list of parts is truncated."]
-    pub is_truncated: Option<IsTruncated>,
+    pub is_truncated: Option<bool>,
     #[doc="Object key for which the multipart upload was initiated."]
-    pub key: Option<ObjectKey>,
+    pub key: Option<String>,
     #[doc="Maximum number of parts that were allowed in the response."]
-    pub max_parts: Option<MaxParts>,
+    pub max_parts: Option<i64>,
     #[doc="When a list is truncated, this element specifies the last part in the list, as well as the value to use for the part-number-marker request parameter in a subsequent request."]
-    pub next_part_number_marker: Option<NextPartNumberMarker>,
+    pub next_part_number_marker: Option<i64>,
     pub owner: Option<Owner>,
     #[doc="Part number after which listing begins."]
-    pub part_number_marker: Option<PartNumberMarker>,
-    pub parts: Option<Parts>,
-    pub request_charged: Option<RequestCharged>,
+    pub part_number_marker: Option<i64>,
+    pub parts: Option<Vec<Part>>,
+    pub request_charged: Option<String>,
     #[doc="The class of storage used to store the object."]
-    pub storage_class: Option<StorageClass>,
+    pub storage_class: Option<String>,
     #[doc="Upload ID identifying the multipart upload whose parts are being listed."]
-    pub upload_id: Option<MultipartUploadId>,
+    pub upload_id: Option<String>,
 }
 
 struct ListPartsOutputDeserializer;
@@ -7250,24 +7145,23 @@ impl ListPartsOutputDeserializer {
 }
 #[derive(Default,Clone,Debug)]
 pub struct ListPartsRequest {
-    pub bucket: BucketName,
-    pub key: ObjectKey,
+    pub bucket: String,
+    pub key: String,
     #[doc="Sets the maximum number of parts to return."]
-    pub max_parts: Option<MaxParts>,
+    pub max_parts: Option<i64>,
     #[doc="Specifies the part after which listing should begin. Only parts with higher part numbers will be listed."]
-    pub part_number_marker: Option<PartNumberMarker>,
-    pub request_payer: Option<RequestPayer>,
+    pub part_number_marker: Option<i64>,
+    pub request_payer: Option<String>,
     #[doc="Upload ID identifying the multipart upload whose parts are being listed."]
-    pub upload_id: MultipartUploadId,
+    pub upload_id: String,
 }
 
-pub type Location = String;
 struct LocationDeserializer;
 impl LocationDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Location, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7279,10 +7173,10 @@ impl LocationDeserializer {
 #[derive(Default,Clone,Debug)]
 pub struct LoggingEnabled {
     #[doc="Specifies the bucket where you want Amazon S3 to store server access logs. You can have your logs delivered to any bucket that you own, including the same bucket that is being logged. You can also configure multiple buckets to deliver their logs to the same target bucket. In this case you should choose a different TargetPrefix for each source bucket so that the delivered log files can be distinguished by key."]
-    pub target_bucket: Option<TargetBucket>,
-    pub target_grants: Option<TargetGrants>,
+    pub target_bucket: Option<String>,
+    pub target_grants: Option<Vec<TargetGrant>>,
     #[doc="This element lets you specify a prefix for the keys that the log files will be stored under."]
-    pub target_prefix: Option<TargetPrefix>,
+    pub target_prefix: Option<String>,
 }
 
 struct LoggingEnabledDeserializer;
@@ -7358,26 +7252,23 @@ impl LoggingEnabledSerializer {
     }
 }
 
-pub type MFA = String;
-pub type MFADelete = String;
 
 pub struct MFADeleteSerializer;
 impl MFADeleteSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &MFADelete) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type MFADeleteStatus = String;
 struct MFADeleteStatusDeserializer;
 impl MFADeleteStatusDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<MFADeleteStatus, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7386,13 +7277,12 @@ impl MFADeleteStatusDeserializer {
 
     }
 }
-pub type Marker = String;
 struct MarkerDeserializer;
 impl MarkerDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Marker, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7405,20 +7295,19 @@ impl MarkerDeserializer {
 pub struct MarkerSerializer;
 impl MarkerSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Marker) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type MaxAgeSeconds = i64;
 struct MaxAgeSecondsDeserializer;
 impl MaxAgeSecondsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<MaxAgeSeconds, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -7431,20 +7320,19 @@ impl MaxAgeSecondsDeserializer {
 pub struct MaxAgeSecondsSerializer;
 impl MaxAgeSecondsSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &MaxAgeSeconds) -> String {
+    pub fn serialize(name: &str, obj: &i64) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type MaxKeys = i64;
 struct MaxKeysDeserializer;
 impl MaxKeysDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<MaxKeys, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -7457,20 +7345,19 @@ impl MaxKeysDeserializer {
 pub struct MaxKeysSerializer;
 impl MaxKeysSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &MaxKeys) -> String {
+    pub fn serialize(name: &str, obj: &i64) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type MaxParts = i64;
 struct MaxPartsDeserializer;
 impl MaxPartsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<MaxParts, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -7483,20 +7370,19 @@ impl MaxPartsDeserializer {
 pub struct MaxPartsSerializer;
 impl MaxPartsSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &MaxParts) -> String {
+    pub fn serialize(name: &str, obj: &i64) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type MaxUploads = i64;
 struct MaxUploadsDeserializer;
 impl MaxUploadsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<MaxUploads, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -7509,20 +7395,19 @@ impl MaxUploadsDeserializer {
 pub struct MaxUploadsSerializer;
 impl MaxUploadsSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &MaxUploads) -> String {
+    pub fn serialize(name: &str, obj: &i64) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type Message = String;
 struct MessageDeserializer;
 impl MessageDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Message, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7531,16 +7416,12 @@ impl MessageDeserializer {
 
     }
 }
-pub type Metadata = ::std::collections::HashMap<MetadataKey, MetadataValue>;
-pub type MetadataDirective = String;
-pub type MetadataKey = String;
-pub type MetadataValue = String;
 #[derive(Default,Clone,Debug)]
 pub struct MetricsAndOperator {
     #[doc="The prefix used when evaluating an AND predicate."]
-    pub prefix: Option<Prefix>,
+    pub prefix: Option<String>,
     #[doc="The list of tags used when evaluating an AND predicate."]
-    pub tags: Option<TagSet>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 struct MetricsAndOperatorDeserializer;
@@ -7610,7 +7491,7 @@ pub struct MetricsConfiguration {
     #[doc="Specifies a metrics configuration filter. The metrics configuration will only include objects that meet the filter's criteria. A filter must be a prefix, a tag, or a conjunction (MetricsAndOperator)."]
     pub filter: Option<MetricsFilter>,
     #[doc="The ID used to identify the metrics configuration."]
-    pub id: MetricsId,
+    pub id: String,
 }
 
 struct MetricsConfigurationDeserializer;
@@ -7673,13 +7554,12 @@ impl MetricsConfigurationSerializer {
     }
 }
 
-pub type MetricsConfigurationList = Vec<MetricsConfiguration>;
 struct MetricsConfigurationListDeserializer;
 impl MetricsConfigurationListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<MetricsConfigurationList, XmlParseError> {
+                                       -> Result<Vec<MetricsConfiguration>, XmlParseError> {
 
         let mut obj = vec![];
 
@@ -7707,7 +7587,7 @@ pub struct MetricsFilter {
     #[doc="A conjunction (logical AND) of predicates, which is used in evaluating a metrics filter. The operator must have at least two predicates, and an object must match all of the predicates in order for the filter to apply."]
     pub and: Option<MetricsAndOperator>,
     #[doc="The prefix used when evaluating a metrics filter."]
-    pub prefix: Option<Prefix>,
+    pub prefix: Option<String>,
     #[doc="The tag used when evaluating a metrics filter."]
     pub tag: Option<Tag>,
 }
@@ -7782,13 +7662,12 @@ impl MetricsFilterSerializer {
     }
 }
 
-pub type MetricsId = String;
 struct MetricsIdDeserializer;
 impl MetricsIdDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<MetricsId, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7801,27 +7680,26 @@ impl MetricsIdDeserializer {
 pub struct MetricsIdSerializer;
 impl MetricsIdSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &MetricsId) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type MissingMeta = i64;
 #[derive(Default,Clone,Debug)]
 pub struct MultipartUpload {
     #[doc="Date and time at which the multipart upload was initiated."]
-    pub initiated: Option<Initiated>,
+    pub initiated: Option<String>,
     #[doc="Identifies who initiated the multipart upload."]
     pub initiator: Option<Initiator>,
     #[doc="Key of the object for which the multipart upload was initiated."]
-    pub key: Option<ObjectKey>,
+    pub key: Option<String>,
     pub owner: Option<Owner>,
     #[doc="The class of storage used to store the object."]
-    pub storage_class: Option<StorageClass>,
+    pub storage_class: Option<String>,
     #[doc="Upload ID that identifies the multipart upload."]
-    pub upload_id: Option<MultipartUploadId>,
+    pub upload_id: Option<String>,
 }
 
 struct MultipartUploadDeserializer;
@@ -7886,13 +7764,12 @@ impl MultipartUploadDeserializer {
 
     }
 }
-pub type MultipartUploadId = String;
 struct MultipartUploadIdDeserializer;
 impl MultipartUploadIdDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<MultipartUploadId, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7905,20 +7782,19 @@ impl MultipartUploadIdDeserializer {
 pub struct MultipartUploadIdSerializer;
 impl MultipartUploadIdSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &MultipartUploadId) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type MultipartUploadList = Vec<MultipartUpload>;
 struct MultipartUploadListDeserializer;
 impl MultipartUploadListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<MultipartUploadList, XmlParseError> {
+                                       -> Result<Vec<MultipartUpload>, XmlParseError> {
 
         let mut obj = vec![];
 
@@ -7941,13 +7817,12 @@ impl MultipartUploadListDeserializer {
 
     }
 }
-pub type NextKeyMarker = String;
 struct NextKeyMarkerDeserializer;
 impl NextKeyMarkerDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NextKeyMarker, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7956,13 +7831,12 @@ impl NextKeyMarkerDeserializer {
 
     }
 }
-pub type NextMarker = String;
 struct NextMarkerDeserializer;
 impl NextMarkerDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NextMarker, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7971,13 +7845,12 @@ impl NextMarkerDeserializer {
 
     }
 }
-pub type NextPartNumberMarker = i64;
 struct NextPartNumberMarkerDeserializer;
 impl NextPartNumberMarkerDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NextPartNumberMarker, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -7986,13 +7859,12 @@ impl NextPartNumberMarkerDeserializer {
 
     }
 }
-pub type NextToken = String;
 struct NextTokenDeserializer;
 impl NextTokenDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NextToken, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -8001,13 +7873,12 @@ impl NextTokenDeserializer {
 
     }
 }
-pub type NextUploadIdMarker = String;
 struct NextUploadIdMarkerDeserializer;
 impl NextUploadIdMarkerDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NextUploadIdMarker, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -8016,13 +7887,12 @@ impl NextUploadIdMarkerDeserializer {
 
     }
 }
-pub type NextVersionIdMarker = String;
 struct NextVersionIdMarkerDeserializer;
 impl NextVersionIdMarkerDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NextVersionIdMarker, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -8035,7 +7905,7 @@ impl NextVersionIdMarkerDeserializer {
 #[derive(Default,Clone,Debug)]
 pub struct NoncurrentVersionExpiration {
     #[doc="Specifies the number of days an object is noncurrent before Amazon S3 can perform the associated action. For information about the noncurrent days calculations, see <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html\">How Amazon S3 Calculates When an Object Became Noncurrent</a> in the Amazon Simple Storage Service Developer Guide."]
-    pub noncurrent_days: Option<Days>,
+    pub noncurrent_days: Option<i64>,
 }
 
 struct NoncurrentVersionExpirationDeserializer;
@@ -8098,9 +7968,9 @@ impl NoncurrentVersionExpirationSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct NoncurrentVersionTransition {
     #[doc="Specifies the number of days an object is noncurrent before Amazon S3 can perform the associated action. For information about the noncurrent days calculations, see <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html\">How Amazon S3 Calculates When an Object Became Noncurrent</a> in the Amazon Simple Storage Service Developer Guide."]
-    pub noncurrent_days: Option<Days>,
+    pub noncurrent_days: Option<i64>,
     #[doc="The class of storage used to store the object."]
-    pub storage_class: Option<TransitionStorageClass>,
+    pub storage_class: Option<String>,
 }
 
 struct NoncurrentVersionTransitionDeserializer;
@@ -8167,14 +8037,13 @@ impl NoncurrentVersionTransitionSerializer {
     }
 }
 
-pub type NoncurrentVersionTransitionList = Vec<NoncurrentVersionTransition>;
 struct NoncurrentVersionTransitionListDeserializer;
 impl NoncurrentVersionTransitionListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>
         (tag_name: &str,
          stack: &mut T)
-         -> Result<NoncurrentVersionTransitionList, XmlParseError> {
+         -> Result<Vec<NoncurrentVersionTransition>, XmlParseError> {
 
         let mut obj = vec![];
 
@@ -8202,7 +8071,7 @@ impl NoncurrentVersionTransitionListDeserializer {
 pub struct NoncurrentVersionTransitionListSerializer;
 impl NoncurrentVersionTransitionListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &NoncurrentVersionTransitionList) -> String {
+    pub fn serialize(name: &str, obj: &Vec<NoncurrentVersionTransition>) -> String {
         let mut parts: Vec<String> = Vec::new();
         for element in obj {
             parts.push(NoncurrentVersionTransitionSerializer::serialize(name, element));
@@ -8214,9 +8083,9 @@ impl NoncurrentVersionTransitionListSerializer {
 #[doc="Container for specifying the notification configuration of the bucket. If this element is empty, notifications are turned off on the bucket."]
 #[derive(Default,Clone,Debug)]
 pub struct NotificationConfiguration {
-    pub lambda_function_configurations: Option<LambdaFunctionConfigurationList>,
-    pub queue_configurations: Option<QueueConfigurationList>,
-    pub topic_configurations: Option<TopicConfigurationList>,
+    pub lambda_function_configurations: Option<Vec<LambdaFunctionConfiguration>>,
+    pub queue_configurations: Option<Vec<QueueConfiguration>>,
+    pub topic_configurations: Option<Vec<TopicConfiguration>>,
 }
 
 struct NotificationConfigurationDeserializer;
@@ -8432,14 +8301,12 @@ impl NotificationConfigurationFilterSerializer {
     }
 }
 
-#[doc="Optional unique identifier for configurations in a notification configuration. If you don't provide one, Amazon S3 will assign an ID."]
-pub type NotificationId = String;
 struct NotificationIdDeserializer;
 impl NotificationIdDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NotificationId, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -8452,7 +8319,7 @@ impl NotificationIdDeserializer {
 pub struct NotificationIdSerializer;
 impl NotificationIdSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &NotificationId) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
@@ -8461,13 +8328,13 @@ impl NotificationIdSerializer {
 
 #[derive(Default,Clone,Debug)]
 pub struct Object {
-    pub e_tag: Option<ETag>,
-    pub key: Option<ObjectKey>,
-    pub last_modified: Option<LastModified>,
+    pub e_tag: Option<String>,
+    pub key: Option<String>,
+    pub last_modified: Option<String>,
     pub owner: Option<Owner>,
-    pub size: Option<Size>,
+    pub size: Option<i64>,
     #[doc="The class of storage used to store the object."]
-    pub storage_class: Option<ObjectStorageClass>,
+    pub storage_class: Option<String>,
 }
 
 struct ObjectDeserializer;
@@ -8530,13 +8397,12 @@ impl ObjectDeserializer {
 
     }
 }
-pub type ObjectCannedACL = String;
 #[derive(Default,Clone,Debug)]
 pub struct ObjectIdentifier {
     #[doc="Key name of the object to delete."]
-    pub key: ObjectKey,
+    pub key: String,
     #[doc="VersionId for the specific version of the object to delete."]
-    pub version_id: Option<ObjectVersionId>,
+    pub version_id: Option<String>,
 }
 
 
@@ -8554,12 +8420,11 @@ impl ObjectIdentifierSerializer {
     }
 }
 
-pub type ObjectIdentifierList = Vec<ObjectIdentifier>;
 
 pub struct ObjectIdentifierListSerializer;
 impl ObjectIdentifierListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &ObjectIdentifierList) -> String {
+    pub fn serialize(name: &str, obj: &Vec<ObjectIdentifier>) -> String {
         let mut parts: Vec<String> = Vec::new();
         for element in obj {
             parts.push(ObjectIdentifierSerializer::serialize(name, element));
@@ -8568,13 +8433,12 @@ impl ObjectIdentifierListSerializer {
     }
 }
 
-pub type ObjectKey = String;
 struct ObjectKeyDeserializer;
 impl ObjectKeyDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ObjectKey, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -8587,20 +8451,19 @@ impl ObjectKeyDeserializer {
 pub struct ObjectKeySerializer;
 impl ObjectKeySerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &ObjectKey) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type ObjectList = Vec<Object>;
 struct ObjectListDeserializer;
 impl ObjectListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ObjectList, XmlParseError> {
+                                       -> Result<Vec<Object>, XmlParseError> {
 
         let mut obj = vec![];
 
@@ -8623,13 +8486,12 @@ impl ObjectListDeserializer {
 
     }
 }
-pub type ObjectStorageClass = String;
 struct ObjectStorageClassDeserializer;
 impl ObjectStorageClassDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ObjectStorageClass, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -8640,20 +8502,20 @@ impl ObjectStorageClassDeserializer {
 }
 #[derive(Default,Clone,Debug)]
 pub struct ObjectVersion {
-    pub e_tag: Option<ETag>,
+    pub e_tag: Option<String>,
     #[doc="Specifies whether the object is (true) or is not (false) the latest version of an object."]
-    pub is_latest: Option<IsLatest>,
+    pub is_latest: Option<bool>,
     #[doc="The object key."]
-    pub key: Option<ObjectKey>,
+    pub key: Option<String>,
     #[doc="Date and time the object was last modified."]
-    pub last_modified: Option<LastModified>,
+    pub last_modified: Option<String>,
     pub owner: Option<Owner>,
     #[doc="Size in bytes of the object."]
-    pub size: Option<Size>,
+    pub size: Option<i64>,
     #[doc="The class of storage used to store the object."]
-    pub storage_class: Option<ObjectVersionStorageClass>,
+    pub storage_class: Option<String>,
     #[doc="Version ID of an object."]
-    pub version_id: Option<ObjectVersionId>,
+    pub version_id: Option<String>,
 }
 
 struct ObjectVersionDeserializer;
@@ -8723,13 +8585,12 @@ impl ObjectVersionDeserializer {
 
     }
 }
-pub type ObjectVersionId = String;
 struct ObjectVersionIdDeserializer;
 impl ObjectVersionIdDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ObjectVersionId, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -8742,20 +8603,19 @@ impl ObjectVersionIdDeserializer {
 pub struct ObjectVersionIdSerializer;
 impl ObjectVersionIdSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &ObjectVersionId) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type ObjectVersionList = Vec<ObjectVersion>;
 struct ObjectVersionListDeserializer;
 impl ObjectVersionListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ObjectVersionList, XmlParseError> {
+                                       -> Result<Vec<ObjectVersion>, XmlParseError> {
 
         let mut obj = vec![];
 
@@ -8778,13 +8638,12 @@ impl ObjectVersionListDeserializer {
 
     }
 }
-pub type ObjectVersionStorageClass = String;
 struct ObjectVersionStorageClassDeserializer;
 impl ObjectVersionStorageClassDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ObjectVersionStorageClass, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -8795,8 +8654,8 @@ impl ObjectVersionStorageClassDeserializer {
 }
 #[derive(Default,Clone,Debug)]
 pub struct Owner {
-    pub display_name: Option<DisplayName>,
-    pub id: Option<ID>,
+    pub display_name: Option<String>,
+    pub id: Option<String>,
 }
 
 struct OwnerDeserializer;
@@ -8865,13 +8724,13 @@ impl OwnerSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct Part {
     #[doc="Entity tag returned when the part was uploaded."]
-    pub e_tag: Option<ETag>,
+    pub e_tag: Option<String>,
     #[doc="Date and time at which the part was uploaded."]
-    pub last_modified: Option<LastModified>,
+    pub last_modified: Option<String>,
     #[doc="Part number identifying the part. This is a positive integer between 1 and 10,000."]
-    pub part_number: Option<PartNumber>,
+    pub part_number: Option<i64>,
     #[doc="Size of the uploaded part data."]
-    pub size: Option<Size>,
+    pub size: Option<i64>,
 }
 
 struct PartDeserializer;
@@ -8928,13 +8787,12 @@ impl PartDeserializer {
 
     }
 }
-pub type PartNumber = i64;
 struct PartNumberDeserializer;
 impl PartNumberDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PartNumber, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -8947,20 +8805,19 @@ impl PartNumberDeserializer {
 pub struct PartNumberSerializer;
 impl PartNumberSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &PartNumber) -> String {
+    pub fn serialize(name: &str, obj: &i64) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type PartNumberMarker = i64;
 struct PartNumberMarkerDeserializer;
 impl PartNumberMarkerDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PartNumberMarker, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -8973,20 +8830,19 @@ impl PartNumberMarkerDeserializer {
 pub struct PartNumberMarkerSerializer;
 impl PartNumberMarkerSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &PartNumberMarker) -> String {
+    pub fn serialize(name: &str, obj: &i64) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type Parts = Vec<Part>;
 struct PartsDeserializer;
 impl PartsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Parts, XmlParseError> {
+                                       -> Result<Vec<Part>, XmlParseError> {
 
         let mut obj = vec![];
 
@@ -9009,14 +8865,12 @@ impl PartsDeserializer {
 
     }
 }
-pub type PartsCount = i64;
-pub type Payer = String;
 struct PayerDeserializer;
 impl PayerDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Payer, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -9029,20 +8883,19 @@ impl PayerDeserializer {
 pub struct PayerSerializer;
 impl PayerSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Payer) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type Permission = String;
 struct PermissionDeserializer;
 impl PermissionDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Permission, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -9055,32 +8908,30 @@ impl PermissionDeserializer {
 pub struct PermissionSerializer;
 impl PermissionSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Permission) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type Policy = String;
 
 pub struct PolicySerializer;
 impl PolicySerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Policy) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type Prefix = String;
 struct PrefixDeserializer;
 impl PrefixDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Prefix, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -9093,20 +8944,19 @@ impl PrefixDeserializer {
 pub struct PrefixSerializer;
 impl PrefixSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Prefix) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type Protocol = String;
 struct ProtocolDeserializer;
 impl ProtocolDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Protocol, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -9119,7 +8969,7 @@ impl ProtocolDeserializer {
 pub struct ProtocolSerializer;
 impl ProtocolSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Protocol) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
@@ -9131,26 +8981,26 @@ pub struct PutBucketAccelerateConfigurationRequest {
     #[doc="Specifies the Accelerate Configuration you want to set for the bucket."]
     pub accelerate_configuration: AccelerateConfiguration,
     #[doc="Name of the bucket for which the accelerate configuration is set."]
-    pub bucket: BucketName,
+    pub bucket: String,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct PutBucketAclRequest {
     #[doc="The canned ACL to apply to the bucket."]
-    pub acl: Option<BucketCannedACL>,
+    pub acl: Option<String>,
     pub access_control_policy: Option<AccessControlPolicy>,
-    pub bucket: BucketName,
-    pub content_md5: Option<ContentMD5>,
+    pub bucket: String,
+    pub content_md5: Option<String>,
     #[doc="Allows grantee the read, write, read ACP, and write ACP permissions on the bucket."]
-    pub grant_full_control: Option<GrantFullControl>,
+    pub grant_full_control: Option<String>,
     #[doc="Allows grantee to list the objects in the bucket."]
-    pub grant_read: Option<GrantRead>,
+    pub grant_read: Option<String>,
     #[doc="Allows grantee to read the bucket ACL."]
-    pub grant_read_acp: Option<GrantReadACP>,
+    pub grant_read_acp: Option<String>,
     #[doc="Allows grantee to create, overwrite, and delete any object in the bucket."]
-    pub grant_write: Option<GrantWrite>,
+    pub grant_write: Option<String>,
     #[doc="Allows grantee to write the ACL for the applicable bucket."]
-    pub grant_write_acp: Option<GrantWriteACP>,
+    pub grant_write_acp: Option<String>,
 }
 
 #[derive(Default,Clone,Debug)]
@@ -9158,119 +9008,119 @@ pub struct PutBucketAnalyticsConfigurationRequest {
     #[doc="The configuration and any analyses for the analytics filter."]
     pub analytics_configuration: AnalyticsConfiguration,
     #[doc="The name of the bucket to which an analytics configuration is stored."]
-    pub bucket: BucketName,
+    pub bucket: String,
     #[doc="The identifier used to represent an analytics configuration."]
-    pub id: AnalyticsId,
+    pub id: String,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct PutBucketCorsRequest {
-    pub bucket: BucketName,
+    pub bucket: String,
     pub cors_configuration: CORSConfiguration,
-    pub content_md5: Option<ContentMD5>,
+    pub content_md5: Option<String>,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct PutBucketInventoryConfigurationRequest {
     #[doc="The name of the bucket where the inventory configuration will be stored."]
-    pub bucket: BucketName,
+    pub bucket: String,
     #[doc="The ID used to identify the inventory configuration."]
-    pub id: InventoryId,
+    pub id: String,
     #[doc="Specifies the inventory configuration."]
     pub inventory_configuration: InventoryConfiguration,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct PutBucketLifecycleConfigurationRequest {
-    pub bucket: BucketName,
+    pub bucket: String,
     pub lifecycle_configuration: Option<BucketLifecycleConfiguration>,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct PutBucketLifecycleRequest {
-    pub bucket: BucketName,
-    pub content_md5: Option<ContentMD5>,
+    pub bucket: String,
+    pub content_md5: Option<String>,
     pub lifecycle_configuration: Option<LifecycleConfiguration>,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct PutBucketLoggingRequest {
-    pub bucket: BucketName,
+    pub bucket: String,
     pub bucket_logging_status: BucketLoggingStatus,
-    pub content_md5: Option<ContentMD5>,
+    pub content_md5: Option<String>,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct PutBucketMetricsConfigurationRequest {
     #[doc="The name of the bucket for which the metrics configuration is set."]
-    pub bucket: BucketName,
+    pub bucket: String,
     #[doc="The ID used to identify the metrics configuration."]
-    pub id: MetricsId,
+    pub id: String,
     #[doc="Specifies the metrics configuration."]
     pub metrics_configuration: MetricsConfiguration,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct PutBucketNotificationConfigurationRequest {
-    pub bucket: BucketName,
+    pub bucket: String,
     pub notification_configuration: NotificationConfiguration,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct PutBucketNotificationRequest {
-    pub bucket: BucketName,
-    pub content_md5: Option<ContentMD5>,
+    pub bucket: String,
+    pub content_md5: Option<String>,
     pub notification_configuration: NotificationConfigurationDeprecated,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct PutBucketPolicyRequest {
-    pub bucket: BucketName,
-    pub content_md5: Option<ContentMD5>,
+    pub bucket: String,
+    pub content_md5: Option<String>,
     #[doc="The bucket policy as a JSON document."]
-    pub policy: Policy,
+    pub policy: String,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct PutBucketReplicationRequest {
-    pub bucket: BucketName,
-    pub content_md5: Option<ContentMD5>,
+    pub bucket: String,
+    pub content_md5: Option<String>,
     pub replication_configuration: ReplicationConfiguration,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct PutBucketRequestPaymentRequest {
-    pub bucket: BucketName,
-    pub content_md5: Option<ContentMD5>,
+    pub bucket: String,
+    pub content_md5: Option<String>,
     pub request_payment_configuration: RequestPaymentConfiguration,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct PutBucketTaggingRequest {
-    pub bucket: BucketName,
-    pub content_md5: Option<ContentMD5>,
+    pub bucket: String,
+    pub content_md5: Option<String>,
     pub tagging: Tagging,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct PutBucketVersioningRequest {
-    pub bucket: BucketName,
-    pub content_md5: Option<ContentMD5>,
+    pub bucket: String,
+    pub content_md5: Option<String>,
     #[doc="The concatenation of the authentication device's serial number, a space, and the value that is displayed on your authentication device."]
-    pub mfa: Option<MFA>,
+    pub mfa: Option<String>,
     pub versioning_configuration: VersioningConfiguration,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct PutBucketWebsiteRequest {
-    pub bucket: BucketName,
-    pub content_md5: Option<ContentMD5>,
+    pub bucket: String,
+    pub content_md5: Option<String>,
     pub website_configuration: WebsiteConfiguration,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct PutObjectAclOutput {
-    pub request_charged: Option<RequestCharged>,
+    pub request_charged: Option<String>,
 }
 
 struct PutObjectAclOutputDeserializer;
@@ -9292,43 +9142,43 @@ impl PutObjectAclOutputDeserializer {
 #[derive(Default,Clone,Debug)]
 pub struct PutObjectAclRequest {
     #[doc="The canned ACL to apply to the object."]
-    pub acl: Option<ObjectCannedACL>,
+    pub acl: Option<String>,
     pub access_control_policy: Option<AccessControlPolicy>,
-    pub bucket: BucketName,
-    pub content_md5: Option<ContentMD5>,
+    pub bucket: String,
+    pub content_md5: Option<String>,
     #[doc="Allows grantee the read, write, read ACP, and write ACP permissions on the bucket."]
-    pub grant_full_control: Option<GrantFullControl>,
+    pub grant_full_control: Option<String>,
     #[doc="Allows grantee to list the objects in the bucket."]
-    pub grant_read: Option<GrantRead>,
+    pub grant_read: Option<String>,
     #[doc="Allows grantee to read the bucket ACL."]
-    pub grant_read_acp: Option<GrantReadACP>,
+    pub grant_read_acp: Option<String>,
     #[doc="Allows grantee to create, overwrite, and delete any object in the bucket."]
-    pub grant_write: Option<GrantWrite>,
+    pub grant_write: Option<String>,
     #[doc="Allows grantee to write the ACL for the applicable bucket."]
-    pub grant_write_acp: Option<GrantWriteACP>,
-    pub key: ObjectKey,
-    pub request_payer: Option<RequestPayer>,
+    pub grant_write_acp: Option<String>,
+    pub key: String,
+    pub request_payer: Option<String>,
     #[doc="VersionId used to reference a specific version of the object."]
-    pub version_id: Option<ObjectVersionId>,
+    pub version_id: Option<String>,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct PutObjectOutput {
     #[doc="Entity tag for the uploaded object."]
-    pub e_tag: Option<ETag>,
+    pub e_tag: Option<String>,
     #[doc="If the object expiration is configured, this will contain the expiration date (expiry-date) and rule ID (rule-id). The value of rule-id is URL encoded."]
-    pub expiration: Option<Expiration>,
-    pub request_charged: Option<RequestCharged>,
+    pub expiration: Option<String>,
+    pub request_charged: Option<String>,
     #[doc="If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used."]
-    pub sse_customer_algorithm: Option<SSECustomerAlgorithm>,
+    pub sse_customer_algorithm: Option<String>,
     #[doc="If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key."]
-    pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
+    pub sse_customer_key_md5: Option<String>,
     #[doc="If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object."]
-    pub ssekms_key_id: Option<SSEKMSKeyId>,
+    pub ssekms_key_id: Option<String>,
     #[doc="The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms)."]
-    pub server_side_encryption: Option<ServerSideEncryption>,
+    pub server_side_encryption: Option<String>,
     #[doc="Version of the object."]
-    pub version_id: Option<ObjectVersionId>,
+    pub version_id: Option<String>,
 }
 
 struct PutObjectOutputDeserializer;
@@ -9350,61 +9200,61 @@ impl PutObjectOutputDeserializer {
 #[derive(Default,Clone,Debug)]
 pub struct PutObjectRequest {
     #[doc="The canned ACL to apply to the object."]
-    pub acl: Option<ObjectCannedACL>,
+    pub acl: Option<String>,
     #[doc="Object data."]
-    pub body: Option<Body>,
+    pub body: Option<Vec<u8>>,
     #[doc="Name of the bucket to which the PUT operation was initiated."]
-    pub bucket: BucketName,
+    pub bucket: String,
     #[doc="Specifies caching behavior along the request/reply chain."]
-    pub cache_control: Option<CacheControl>,
+    pub cache_control: Option<String>,
     #[doc="Specifies presentational information for the object."]
-    pub content_disposition: Option<ContentDisposition>,
+    pub content_disposition: Option<String>,
     #[doc="Specifies what content encodings have been applied to the object and thus what decoding mechanisms must be applied to obtain the media-type referenced by the Content-Type header field."]
-    pub content_encoding: Option<ContentEncoding>,
+    pub content_encoding: Option<String>,
     #[doc="The language the content is in."]
-    pub content_language: Option<ContentLanguage>,
+    pub content_language: Option<String>,
     #[doc="Size of the body in bytes. This parameter is useful when the size of the body cannot be determined automatically."]
-    pub content_length: Option<ContentLength>,
+    pub content_length: Option<i64>,
     #[doc="The base64-encoded 128-bit MD5 digest of the part data."]
-    pub content_md5: Option<ContentMD5>,
+    pub content_md5: Option<String>,
     #[doc="A standard MIME type describing the format of the object data."]
-    pub content_type: Option<ContentType>,
+    pub content_type: Option<String>,
     #[doc="The date and time at which the object is no longer cacheable."]
-    pub expires: Option<Expires>,
+    pub expires: Option<String>,
     #[doc="Gives the grantee READ, READ_ACP, and WRITE_ACP permissions on the object."]
-    pub grant_full_control: Option<GrantFullControl>,
+    pub grant_full_control: Option<String>,
     #[doc="Allows grantee to read the object data and its metadata."]
-    pub grant_read: Option<GrantRead>,
+    pub grant_read: Option<String>,
     #[doc="Allows grantee to read the object ACL."]
-    pub grant_read_acp: Option<GrantReadACP>,
+    pub grant_read_acp: Option<String>,
     #[doc="Allows grantee to write the ACL for the applicable object."]
-    pub grant_write_acp: Option<GrantWriteACP>,
+    pub grant_write_acp: Option<String>,
     #[doc="Object key for which the PUT operation was initiated."]
-    pub key: ObjectKey,
+    pub key: String,
     #[doc="A map of metadata to store with the object in S3."]
-    pub metadata: Option<Metadata>,
-    pub request_payer: Option<RequestPayer>,
+    pub metadata: Option<::std::collections::HashMap<String, String>>,
+    pub request_payer: Option<String>,
     #[doc="Specifies the algorithm to use to when encrypting the object (e.g., AES256)."]
-    pub sse_customer_algorithm: Option<SSECustomerAlgorithm>,
+    pub sse_customer_algorithm: Option<String>,
     #[doc="Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header."]
-    pub sse_customer_key: Option<SSECustomerKey>,
+    pub sse_customer_key: Option<String>,
     #[doc="Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error."]
-    pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
+    pub sse_customer_key_md5: Option<String>,
     #[doc="Specifies the AWS KMS key ID to use for object encryption. All GET and PUT requests for an object protected by AWS KMS will fail if not made via SSL or using SigV4. Documentation on configuring any of the officially supported AWS SDKs and CLI can be found at http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingAWSSDK.html#specify-signature-version"]
-    pub ssekms_key_id: Option<SSEKMSKeyId>,
+    pub ssekms_key_id: Option<String>,
     #[doc="The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms)."]
-    pub server_side_encryption: Option<ServerSideEncryption>,
+    pub server_side_encryption: Option<String>,
     #[doc="The type of storage to use for the object. Defaults to 'STANDARD'."]
-    pub storage_class: Option<StorageClass>,
+    pub storage_class: Option<String>,
     #[doc="The tag-set for the object. The tag-set must be encoded as URL Query parameters"]
-    pub tagging: Option<TaggingHeader>,
+    pub tagging: Option<String>,
     #[doc="If the bucket is configured as a website, redirects requests for this object to another object in the same bucket or to an external URL. Amazon S3 stores the value of this header in the object metadata."]
-    pub website_redirect_location: Option<WebsiteRedirectLocation>,
+    pub website_redirect_location: Option<String>,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct PutObjectTaggingOutput {
-    pub version_id: Option<ObjectVersionId>,
+    pub version_id: Option<String>,
 }
 
 struct PutObjectTaggingOutputDeserializer;
@@ -9425,20 +9275,19 @@ impl PutObjectTaggingOutputDeserializer {
 }
 #[derive(Default,Clone,Debug)]
 pub struct PutObjectTaggingRequest {
-    pub bucket: BucketName,
-    pub content_md5: Option<ContentMD5>,
-    pub key: ObjectKey,
+    pub bucket: String,
+    pub content_md5: Option<String>,
+    pub key: String,
     pub tagging: Tagging,
-    pub version_id: Option<ObjectVersionId>,
+    pub version_id: Option<String>,
 }
 
-pub type QueueArn = String;
 struct QueueArnDeserializer;
 impl QueueArnDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<QueueArn, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -9451,7 +9300,7 @@ impl QueueArnDeserializer {
 pub struct QueueArnSerializer;
 impl QueueArnSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &QueueArn) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
@@ -9461,11 +9310,11 @@ impl QueueArnSerializer {
 #[doc="Container for specifying an configuration when you want Amazon S3 to publish events to an Amazon Simple Queue Service (Amazon SQS) queue."]
 #[derive(Default,Clone,Debug)]
 pub struct QueueConfiguration {
-    pub events: EventList,
+    pub events: Vec<String>,
     pub filter: Option<NotificationConfigurationFilter>,
-    pub id: Option<NotificationId>,
+    pub id: Option<String>,
     #[doc="Amazon SQS queue ARN to which Amazon S3 will publish a message when it detects events of specified type."]
-    pub queue_arn: QueueArn,
+    pub queue_arn: String,
 }
 
 struct QueueConfigurationDeserializer;
@@ -9540,9 +9389,9 @@ impl QueueConfigurationSerializer {
 
 #[derive(Default,Clone,Debug)]
 pub struct QueueConfigurationDeprecated {
-    pub events: Option<EventList>,
-    pub id: Option<NotificationId>,
-    pub queue: Option<QueueArn>,
+    pub events: Option<Vec<String>>,
+    pub id: Option<String>,
+    pub queue: Option<String>,
 }
 
 struct QueueConfigurationDeprecatedDeserializer;
@@ -9615,13 +9464,12 @@ impl QueueConfigurationDeprecatedSerializer {
     }
 }
 
-pub type QueueConfigurationList = Vec<QueueConfiguration>;
 struct QueueConfigurationListDeserializer;
 impl QueueConfigurationListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<QueueConfigurationList, XmlParseError> {
+                                       -> Result<Vec<QueueConfiguration>, XmlParseError> {
 
         let mut obj = vec![];
 
@@ -9648,7 +9496,7 @@ impl QueueConfigurationListDeserializer {
 pub struct QueueConfigurationListSerializer;
 impl QueueConfigurationListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &QueueConfigurationList) -> String {
+    pub fn serialize(name: &str, obj: &Vec<QueueConfiguration>) -> String {
         let mut parts: Vec<String> = Vec::new();
         for element in obj {
             parts.push(QueueConfigurationSerializer::serialize(name, element));
@@ -9657,31 +9505,29 @@ impl QueueConfigurationListSerializer {
     }
 }
 
-pub type Quiet = bool;
 
 pub struct QuietSerializer;
 impl QuietSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Quiet) -> String {
+    pub fn serialize(name: &str, obj: &bool) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type Range = String;
 #[derive(Default,Clone,Debug)]
 pub struct Redirect {
     #[doc="The host name to use in the redirect request."]
-    pub host_name: Option<HostName>,
+    pub host_name: Option<String>,
     #[doc="The HTTP redirect code to use on the response. Not required if one of the siblings is present."]
-    pub http_redirect_code: Option<HttpRedirectCode>,
+    pub http_redirect_code: Option<String>,
     #[doc="Protocol to use (http, https) when redirecting requests. The default is the protocol that is used in the original request."]
-    pub protocol: Option<Protocol>,
+    pub protocol: Option<String>,
     #[doc="The object key prefix to use in the redirect request. For example, to redirect requests for all pages with prefix docs/ (objects in the docs/ folder) to documents/, you can set a condition block with KeyPrefixEquals set to docs/ and in the Redirect set ReplaceKeyPrefixWith to /documents. Not required if one of the siblings is present. Can be present only if ReplaceKeyWith is not provided."]
-    pub replace_key_prefix_with: Option<ReplaceKeyPrefixWith>,
+    pub replace_key_prefix_with: Option<String>,
     #[doc="The specific object key to use in the redirect request. For example, redirect request to error.html. Not required if one of the sibling is present. Can be present only if ReplaceKeyPrefixWith is not provided."]
-    pub replace_key_with: Option<ReplaceKeyWith>,
+    pub replace_key_with: Option<String>,
 }
 
 struct RedirectDeserializer;
@@ -9776,9 +9622,9 @@ impl RedirectSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct RedirectAllRequestsTo {
     #[doc="Name of the host where requests will be redirected."]
-    pub host_name: HostName,
+    pub host_name: String,
     #[doc="Protocol to use (http, https) when redirecting requests. The default is the protocol that is used in the original request."]
-    pub protocol: Option<Protocol>,
+    pub protocol: Option<String>,
 }
 
 struct RedirectAllRequestsToDeserializer;
@@ -9842,13 +9688,12 @@ impl RedirectAllRequestsToSerializer {
     }
 }
 
-pub type ReplaceKeyPrefixWith = String;
 struct ReplaceKeyPrefixWithDeserializer;
 impl ReplaceKeyPrefixWithDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ReplaceKeyPrefixWith, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -9861,20 +9706,19 @@ impl ReplaceKeyPrefixWithDeserializer {
 pub struct ReplaceKeyPrefixWithSerializer;
 impl ReplaceKeyPrefixWithSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &ReplaceKeyPrefixWith) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type ReplaceKeyWith = String;
 struct ReplaceKeyWithDeserializer;
 impl ReplaceKeyWithDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ReplaceKeyWith, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -9887,7 +9731,7 @@ impl ReplaceKeyWithDeserializer {
 pub struct ReplaceKeyWithSerializer;
 impl ReplaceKeyWithSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &ReplaceKeyWith) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
@@ -9898,9 +9742,9 @@ impl ReplaceKeyWithSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct ReplicationConfiguration {
     #[doc="Amazon Resource Name (ARN) of an IAM role for Amazon S3 to assume when replicating the objects."]
-    pub role: Role,
+    pub role: String,
     #[doc="Container for information about a particular replication rule. Replication configuration must have at least one rule and can contain up to 1,000 rules."]
-    pub rules: ReplicationRules,
+    pub rules: Vec<ReplicationRule>,
 }
 
 struct ReplicationConfigurationDeserializer;
@@ -9965,11 +9809,11 @@ impl ReplicationConfigurationSerializer {
 pub struct ReplicationRule {
     pub destination: Destination,
     #[doc="Unique identifier for the rule. The value cannot be longer than 255 characters."]
-    pub id: Option<ID>,
+    pub id: Option<String>,
     #[doc="Object keyname prefix identifying one or more objects to which the rule applies. Maximum prefix length can be up to 1,024 characters. Overlapping prefixes are not supported."]
-    pub prefix: Prefix,
+    pub prefix: String,
     #[doc="The rule is ignored if status is not Enabled."]
-    pub status: ReplicationRuleStatus,
+    pub status: String,
 }
 
 struct ReplicationRuleDeserializer;
@@ -10042,13 +9886,12 @@ impl ReplicationRuleSerializer {
     }
 }
 
-pub type ReplicationRuleStatus = String;
 struct ReplicationRuleStatusDeserializer;
 impl ReplicationRuleStatusDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ReplicationRuleStatus, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -10061,20 +9904,19 @@ impl ReplicationRuleStatusDeserializer {
 pub struct ReplicationRuleStatusSerializer;
 impl ReplicationRuleStatusSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &ReplicationRuleStatus) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type ReplicationRules = Vec<ReplicationRule>;
 struct ReplicationRulesDeserializer;
 impl ReplicationRulesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ReplicationRules, XmlParseError> {
+                                       -> Result<Vec<ReplicationRule>, XmlParseError> {
 
         let mut obj = vec![];
 
@@ -10101,7 +9943,7 @@ impl ReplicationRulesDeserializer {
 pub struct ReplicationRulesSerializer;
 impl ReplicationRulesSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &ReplicationRules) -> String {
+    pub fn serialize(name: &str, obj: &Vec<ReplicationRule>) -> String {
         let mut parts: Vec<String> = Vec::new();
         for element in obj {
             parts.push(ReplicationRuleSerializer::serialize(name, element));
@@ -10110,15 +9952,10 @@ impl ReplicationRulesSerializer {
     }
 }
 
-pub type ReplicationStatus = String;
-#[doc="If present, indicates that the requester was successfully charged for the request."]
-pub type RequestCharged = String;
-#[doc="Confirms that the requester knows that she or he will be charged for the request. Bucket owners need not specify this parameter in their requests. Documentation on downloading objects from requester pays buckets can be found at http://docs.aws.amazon.com/AmazonS3/latest/dev/ObjectsinRequesterPaysBuckets.html"]
-pub type RequestPayer = String;
 #[derive(Default,Clone,Debug)]
 pub struct RequestPaymentConfiguration {
     #[doc="Specifies who pays for the download and request fees."]
-    pub payer: Payer,
+    pub payer: String,
 }
 
 
@@ -10133,82 +9970,75 @@ impl RequestPaymentConfigurationSerializer {
     }
 }
 
-pub type ResponseCacheControl = String;
 
 pub struct ResponseCacheControlSerializer;
 impl ResponseCacheControlSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &ResponseCacheControl) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type ResponseContentDisposition = String;
 
 pub struct ResponseContentDispositionSerializer;
 impl ResponseContentDispositionSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &ResponseContentDisposition) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type ResponseContentEncoding = String;
 
 pub struct ResponseContentEncodingSerializer;
 impl ResponseContentEncodingSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &ResponseContentEncoding) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type ResponseContentLanguage = String;
 
 pub struct ResponseContentLanguageSerializer;
 impl ResponseContentLanguageSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &ResponseContentLanguage) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type ResponseContentType = String;
 
 pub struct ResponseContentTypeSerializer;
 impl ResponseContentTypeSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &ResponseContentType) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type ResponseExpires = String;
 
 pub struct ResponseExpiresSerializer;
 impl ResponseExpiresSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &ResponseExpires) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type Restore = String;
 #[derive(Default,Clone,Debug)]
 pub struct RestoreObjectOutput {
-    pub request_charged: Option<RequestCharged>,
+    pub request_charged: Option<String>,
 }
 
 struct RestoreObjectOutputDeserializer;
@@ -10229,17 +10059,17 @@ impl RestoreObjectOutputDeserializer {
 }
 #[derive(Default,Clone,Debug)]
 pub struct RestoreObjectRequest {
-    pub bucket: BucketName,
-    pub key: ObjectKey,
-    pub request_payer: Option<RequestPayer>,
+    pub bucket: String,
+    pub key: String,
+    pub request_payer: Option<String>,
     pub restore_request: Option<RestoreRequest>,
-    pub version_id: Option<ObjectVersionId>,
+    pub version_id: Option<String>,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct RestoreRequest {
     #[doc="Lifetime of the active copy in days"]
-    pub days: Days,
+    pub days: i64,
     #[doc="Glacier related prameters pertaining to this job."]
     pub glacier_job_parameters: Option<GlacierJobParameters>,
 }
@@ -10259,13 +10089,12 @@ impl RestoreRequestSerializer {
     }
 }
 
-pub type Role = String;
 struct RoleDeserializer;
 impl RoleDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Role, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -10278,7 +10107,7 @@ impl RoleDeserializer {
 pub struct RoleSerializer;
 impl RoleSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Role) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
@@ -10354,13 +10183,12 @@ impl RoutingRuleSerializer {
     }
 }
 
-pub type RoutingRules = Vec<RoutingRule>;
 struct RoutingRulesDeserializer;
 impl RoutingRulesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<RoutingRules, XmlParseError> {
+                                       -> Result<Vec<RoutingRule>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -10400,7 +10228,7 @@ impl RoutingRulesDeserializer {
 pub struct RoutingRulesSerializer;
 impl RoutingRulesSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &RoutingRules) -> String {
+    pub fn serialize(name: &str, obj: &Vec<RoutingRule>) -> String {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
@@ -10416,13 +10244,13 @@ pub struct Rule {
     pub abort_incomplete_multipart_upload: Option<AbortIncompleteMultipartUpload>,
     pub expiration: Option<LifecycleExpiration>,
     #[doc="Unique identifier for the rule. The value cannot be longer than 255 characters."]
-    pub id: Option<ID>,
+    pub id: Option<String>,
     pub noncurrent_version_expiration: Option<NoncurrentVersionExpiration>,
     pub noncurrent_version_transition: Option<NoncurrentVersionTransition>,
     #[doc="Prefix identifying one or more objects to which the rule applies."]
-    pub prefix: Prefix,
+    pub prefix: String,
     #[doc="If 'Enabled', the rule is currently being applied. If 'Disabled', the rule is not currently being applied."]
-    pub status: ExpirationStatus,
+    pub status: String,
     pub transition: Option<Transition>,
 }
 
@@ -10526,13 +10354,12 @@ impl RuleSerializer {
     }
 }
 
-pub type Rules = Vec<Rule>;
 struct RulesDeserializer;
 impl RulesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Rules, XmlParseError> {
+                                       -> Result<Vec<Rule>, XmlParseError> {
 
         let mut obj = vec![];
 
@@ -10559,7 +10386,7 @@ impl RulesDeserializer {
 pub struct RulesSerializer;
 impl RulesSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Rules) -> String {
+    pub fn serialize(name: &str, obj: &Vec<Rule>) -> String {
         let mut parts: Vec<String> = Vec::new();
         for element in obj {
             parts.push(RuleSerializer::serialize(name, element));
@@ -10571,7 +10398,7 @@ impl RulesSerializer {
 #[doc="Container for object key name prefix and suffix filtering rules."]
 #[derive(Default,Clone,Debug)]
 pub struct S3KeyFilter {
-    pub filter_rules: Option<FilterRuleList>,
+    pub filter_rules: Option<Vec<FilterRule>>,
 }
 
 struct S3KeyFilterDeserializer;
@@ -10631,18 +10458,12 @@ impl S3KeyFilterSerializer {
     }
 }
 
-pub type SSECustomerAlgorithm = String;
-pub type SSECustomerKey = String;
-pub type SSECustomerKeyMD5 = String;
-pub type SSEKMSKeyId = String;
-pub type ServerSideEncryption = String;
-pub type Size = i64;
 struct SizeDeserializer;
 impl SizeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Size, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -10651,13 +10472,12 @@ impl SizeDeserializer {
 
     }
 }
-pub type StartAfter = String;
 struct StartAfterDeserializer;
 impl StartAfterDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<StartAfter, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -10670,20 +10490,19 @@ impl StartAfterDeserializer {
 pub struct StartAfterSerializer;
 impl StartAfterSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &StartAfter) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type StorageClass = String;
 struct StorageClassDeserializer;
 impl StorageClassDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<StorageClass, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -10696,7 +10515,7 @@ impl StorageClassDeserializer {
 pub struct StorageClassSerializer;
 impl StorageClassSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &StorageClass) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
@@ -10769,7 +10588,7 @@ pub struct StorageClassAnalysisDataExport {
     #[doc="The place to store the data for an analysis."]
     pub destination: AnalyticsExportDestination,
     #[doc="The version of the output schema to use when exporting data. Must be V_1."]
-    pub output_schema_version: StorageClassAnalysisSchemaVersion,
+    pub output_schema_version: String,
 }
 
 struct StorageClassAnalysisDataExportDeserializer;
@@ -10833,14 +10652,12 @@ impl StorageClassAnalysisDataExportSerializer {
     }
 }
 
-pub type StorageClassAnalysisSchemaVersion = String;
 struct StorageClassAnalysisSchemaVersionDeserializer;
 impl StorageClassAnalysisSchemaVersionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<StorageClassAnalysisSchemaVersion, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -10853,20 +10670,19 @@ impl StorageClassAnalysisSchemaVersionDeserializer {
 pub struct StorageClassAnalysisSchemaVersionSerializer;
 impl StorageClassAnalysisSchemaVersionSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &StorageClassAnalysisSchemaVersion) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type Suffix = String;
 struct SuffixDeserializer;
 impl SuffixDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Suffix, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -10879,7 +10695,7 @@ impl SuffixDeserializer {
 pub struct SuffixSerializer;
 impl SuffixSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Suffix) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
@@ -10889,9 +10705,9 @@ impl SuffixSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct Tag {
     #[doc="Name of the tag."]
-    pub key: ObjectKey,
+    pub key: String,
     #[doc="Value of the tag."]
-    pub value: Value,
+    pub value: String,
 }
 
 struct TagDeserializer;
@@ -10951,14 +10767,12 @@ impl TagSerializer {
     }
 }
 
-pub type TagCount = i64;
-pub type TagSet = Vec<Tag>;
 struct TagSetDeserializer;
 impl TagSetDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TagSet, XmlParseError> {
+                                       -> Result<Vec<Tag>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -10998,7 +10812,7 @@ impl TagSetDeserializer {
 pub struct TagSetSerializer;
 impl TagSetSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &TagSet) -> String {
+    pub fn serialize(name: &str, obj: &Vec<Tag>) -> String {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
@@ -11011,7 +10825,7 @@ impl TagSetSerializer {
 
 #[derive(Default,Clone,Debug)]
 pub struct Tagging {
-    pub tag_set: TagSet,
+    pub tag_set: Vec<Tag>,
 }
 
 
@@ -11026,15 +10840,12 @@ impl TaggingSerializer {
     }
 }
 
-pub type TaggingDirective = String;
-pub type TaggingHeader = String;
-pub type TargetBucket = String;
 struct TargetBucketDeserializer;
 impl TargetBucketDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TargetBucket, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -11047,7 +10858,7 @@ impl TargetBucketDeserializer {
 pub struct TargetBucketSerializer;
 impl TargetBucketSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &TargetBucket) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
@@ -11058,7 +10869,7 @@ impl TargetBucketSerializer {
 pub struct TargetGrant {
     pub grantee: Option<Grantee>,
     #[doc="Logging permissions assigned to the Grantee for the bucket."]
-    pub permission: Option<BucketLogsPermission>,
+    pub permission: Option<String>,
 }
 
 struct TargetGrantDeserializer;
@@ -11125,13 +10936,12 @@ impl TargetGrantSerializer {
     }
 }
 
-pub type TargetGrants = Vec<TargetGrant>;
 struct TargetGrantsDeserializer;
 impl TargetGrantsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TargetGrants, XmlParseError> {
+                                       -> Result<Vec<TargetGrant>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -11171,7 +10981,7 @@ impl TargetGrantsDeserializer {
 pub struct TargetGrantsSerializer;
 impl TargetGrantsSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &TargetGrants) -> String {
+    pub fn serialize(name: &str, obj: &Vec<TargetGrant>) -> String {
         let mut parts: Vec<String> = Vec::new();
         parts.push(format!("<{}>", name));
         for element in obj {
@@ -11182,13 +10992,12 @@ impl TargetGrantsSerializer {
     }
 }
 
-pub type TargetPrefix = String;
 struct TargetPrefixDeserializer;
 impl TargetPrefixDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TargetPrefix, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -11201,32 +11010,30 @@ impl TargetPrefixDeserializer {
 pub struct TargetPrefixSerializer;
 impl TargetPrefixSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &TargetPrefix) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type Tier = String;
 
 pub struct TierSerializer;
 impl TierSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Tier) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type Token = String;
 struct TokenDeserializer;
 impl TokenDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Token, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -11239,20 +11046,19 @@ impl TokenDeserializer {
 pub struct TokenSerializer;
 impl TokenSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Token) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type TopicArn = String;
 struct TopicArnDeserializer;
 impl TopicArnDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TopicArn, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -11265,7 +11071,7 @@ impl TopicArnDeserializer {
 pub struct TopicArnSerializer;
 impl TopicArnSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &TopicArn) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
@@ -11275,11 +11081,11 @@ impl TopicArnSerializer {
 #[doc="Container for specifying the configuration when you want Amazon S3 to publish events to an Amazon Simple Notification Service (Amazon SNS) topic."]
 #[derive(Default,Clone,Debug)]
 pub struct TopicConfiguration {
-    pub events: EventList,
+    pub events: Vec<String>,
     pub filter: Option<NotificationConfigurationFilter>,
-    pub id: Option<NotificationId>,
+    pub id: Option<String>,
     #[doc="Amazon SNS topic ARN to which Amazon S3 will publish a message when it detects events of specified type."]
-    pub topic_arn: TopicArn,
+    pub topic_arn: String,
 }
 
 struct TopicConfigurationDeserializer;
@@ -11354,10 +11160,10 @@ impl TopicConfigurationSerializer {
 
 #[derive(Default,Clone,Debug)]
 pub struct TopicConfigurationDeprecated {
-    pub events: Option<EventList>,
-    pub id: Option<NotificationId>,
+    pub events: Option<Vec<String>>,
+    pub id: Option<String>,
     #[doc="Amazon SNS topic to which Amazon S3 will publish a message to report the specified events for the bucket."]
-    pub topic: Option<TopicArn>,
+    pub topic: Option<String>,
 }
 
 struct TopicConfigurationDeprecatedDeserializer;
@@ -11430,13 +11236,12 @@ impl TopicConfigurationDeprecatedSerializer {
     }
 }
 
-pub type TopicConfigurationList = Vec<TopicConfiguration>;
 struct TopicConfigurationListDeserializer;
 impl TopicConfigurationListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TopicConfigurationList, XmlParseError> {
+                                       -> Result<Vec<TopicConfiguration>, XmlParseError> {
 
         let mut obj = vec![];
 
@@ -11463,7 +11268,7 @@ impl TopicConfigurationListDeserializer {
 pub struct TopicConfigurationListSerializer;
 impl TopicConfigurationListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &TopicConfigurationList) -> String {
+    pub fn serialize(name: &str, obj: &Vec<TopicConfiguration>) -> String {
         let mut parts: Vec<String> = Vec::new();
         for element in obj {
             parts.push(TopicConfigurationSerializer::serialize(name, element));
@@ -11475,11 +11280,11 @@ impl TopicConfigurationListSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct Transition {
     #[doc="Indicates at what date the object is to be moved or deleted. Should be in GMT ISO 8601 Format."]
-    pub date: Option<Date>,
+    pub date: Option<String>,
     #[doc="Indicates the lifetime, in days, of the objects that are subject to the rule. The value must be a non-zero positive integer."]
-    pub days: Option<Days>,
+    pub days: Option<i64>,
     #[doc="The class of storage used to store the object."]
-    pub storage_class: Option<TransitionStorageClass>,
+    pub storage_class: Option<String>,
 }
 
 struct TransitionDeserializer;
@@ -11551,13 +11356,12 @@ impl TransitionSerializer {
     }
 }
 
-pub type TransitionList = Vec<Transition>;
 struct TransitionListDeserializer;
 impl TransitionListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TransitionList, XmlParseError> {
+                                       -> Result<Vec<Transition>, XmlParseError> {
 
         let mut obj = vec![];
 
@@ -11584,7 +11388,7 @@ impl TransitionListDeserializer {
 pub struct TransitionListSerializer;
 impl TransitionListSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &TransitionList) -> String {
+    pub fn serialize(name: &str, obj: &Vec<Transition>) -> String {
         let mut parts: Vec<String> = Vec::new();
         for element in obj {
             parts.push(TransitionSerializer::serialize(name, element));
@@ -11593,13 +11397,12 @@ impl TransitionListSerializer {
     }
 }
 
-pub type TransitionStorageClass = String;
 struct TransitionStorageClassDeserializer;
 impl TransitionStorageClassDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TransitionStorageClass, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -11612,20 +11415,19 @@ impl TransitionStorageClassDeserializer {
 pub struct TransitionStorageClassSerializer;
 impl TransitionStorageClassSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &TransitionStorageClass) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type Type = String;
 struct TypeDeserializer;
 impl TypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Type, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -11638,20 +11440,19 @@ impl TypeDeserializer {
 pub struct TypeSerializer;
 impl TypeSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Type) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type URI = String;
 struct URIDeserializer;
 impl URIDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<URI, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -11664,20 +11465,19 @@ impl URIDeserializer {
 pub struct URISerializer;
 impl URISerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &URI) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type UploadIdMarker = String;
 struct UploadIdMarkerDeserializer;
 impl UploadIdMarkerDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<UploadIdMarker, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -11690,7 +11490,7 @@ impl UploadIdMarkerDeserializer {
 pub struct UploadIdMarkerSerializer;
 impl UploadIdMarkerSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &UploadIdMarker) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
@@ -11701,16 +11501,16 @@ impl UploadIdMarkerSerializer {
 pub struct UploadPartCopyOutput {
     pub copy_part_result: Option<CopyPartResult>,
     #[doc="The version of the source object that was copied, if you have enabled versioning on the source bucket."]
-    pub copy_source_version_id: Option<CopySourceVersionId>,
-    pub request_charged: Option<RequestCharged>,
+    pub copy_source_version_id: Option<String>,
+    pub request_charged: Option<String>,
     #[doc="If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used."]
-    pub sse_customer_algorithm: Option<SSECustomerAlgorithm>,
+    pub sse_customer_algorithm: Option<String>,
     #[doc="If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key."]
-    pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
+    pub sse_customer_key_md5: Option<String>,
     #[doc="If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object."]
-    pub ssekms_key_id: Option<SSEKMSKeyId>,
+    pub ssekms_key_id: Option<String>,
     #[doc="The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms)."]
-    pub server_side_encryption: Option<ServerSideEncryption>,
+    pub server_side_encryption: Option<String>,
 }
 
 struct UploadPartCopyOutputDeserializer;
@@ -11758,52 +11558,52 @@ impl UploadPartCopyOutputDeserializer {
 }
 #[derive(Default,Clone,Debug)]
 pub struct UploadPartCopyRequest {
-    pub bucket: BucketName,
+    pub bucket: String,
     #[doc="The name of the source bucket and key name of the source object, separated by a slash (/). Must be URL-encoded."]
-    pub copy_source: CopySource,
+    pub copy_source: String,
     #[doc="Copies the object if its entity tag (ETag) matches the specified tag."]
-    pub copy_source_if_match: Option<CopySourceIfMatch>,
+    pub copy_source_if_match: Option<String>,
     #[doc="Copies the object if it has been modified since the specified time."]
-    pub copy_source_if_modified_since: Option<CopySourceIfModifiedSince>,
+    pub copy_source_if_modified_since: Option<String>,
     #[doc="Copies the object if its entity tag (ETag) is different than the specified ETag."]
-    pub copy_source_if_none_match: Option<CopySourceIfNoneMatch>,
+    pub copy_source_if_none_match: Option<String>,
     #[doc="Copies the object if it hasn't been modified since the specified time."]
-    pub copy_source_if_unmodified_since: Option<CopySourceIfUnmodifiedSince>,
+    pub copy_source_if_unmodified_since: Option<String>,
     #[doc="The range of bytes to copy from the source object. The range value must use the form bytes=first-last, where the first and last are the zero-based byte offsets to copy. For example, bytes=0-9 indicates that you want to copy the first ten bytes of the source. You can copy a range only if the source object is greater than 5 GB."]
-    pub copy_source_range: Option<CopySourceRange>,
+    pub copy_source_range: Option<String>,
     #[doc="Specifies the algorithm to use when decrypting the source object (e.g., AES256)."]
-    pub copy_source_sse_customer_algorithm: Option<CopySourceSSECustomerAlgorithm>,
+    pub copy_source_sse_customer_algorithm: Option<String>,
     #[doc="Specifies the customer-provided encryption key for Amazon S3 to use to decrypt the source object. The encryption key provided in this header must be one that was used when the source object was created."]
-    pub copy_source_sse_customer_key: Option<CopySourceSSECustomerKey>,
+    pub copy_source_sse_customer_key: Option<String>,
     #[doc="Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error."]
-    pub copy_source_sse_customer_key_md5: Option<CopySourceSSECustomerKeyMD5>,
-    pub key: ObjectKey,
+    pub copy_source_sse_customer_key_md5: Option<String>,
+    pub key: String,
     #[doc="Part number of part being copied. This is a positive integer between 1 and 10,000."]
-    pub part_number: PartNumber,
-    pub request_payer: Option<RequestPayer>,
+    pub part_number: i64,
+    pub request_payer: Option<String>,
     #[doc="Specifies the algorithm to use to when encrypting the object (e.g., AES256)."]
-    pub sse_customer_algorithm: Option<SSECustomerAlgorithm>,
+    pub sse_customer_algorithm: Option<String>,
     #[doc="Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header. This must be the same encryption key specified in the initiate multipart upload request."]
-    pub sse_customer_key: Option<SSECustomerKey>,
+    pub sse_customer_key: Option<String>,
     #[doc="Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error."]
-    pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
+    pub sse_customer_key_md5: Option<String>,
     #[doc="Upload ID identifying the multipart upload whose part is being copied."]
-    pub upload_id: MultipartUploadId,
+    pub upload_id: String,
 }
 
 #[derive(Default,Clone,Debug)]
 pub struct UploadPartOutput {
     #[doc="Entity tag for the uploaded object."]
-    pub e_tag: Option<ETag>,
-    pub request_charged: Option<RequestCharged>,
+    pub e_tag: Option<String>,
+    pub request_charged: Option<String>,
     #[doc="If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used."]
-    pub sse_customer_algorithm: Option<SSECustomerAlgorithm>,
+    pub sse_customer_algorithm: Option<String>,
     #[doc="If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key."]
-    pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
+    pub sse_customer_key_md5: Option<String>,
     #[doc="If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object."]
-    pub ssekms_key_id: Option<SSEKMSKeyId>,
+    pub ssekms_key_id: Option<String>,
     #[doc="The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms)."]
-    pub server_side_encryption: Option<ServerSideEncryption>,
+    pub server_side_encryption: Option<String>,
 }
 
 struct UploadPartOutputDeserializer;
@@ -11825,35 +11625,34 @@ impl UploadPartOutputDeserializer {
 #[derive(Default,Clone,Debug)]
 pub struct UploadPartRequest {
     #[doc="Object data."]
-    pub body: Option<Body>,
+    pub body: Option<Vec<u8>>,
     #[doc="Name of the bucket to which the multipart upload was initiated."]
-    pub bucket: BucketName,
+    pub bucket: String,
     #[doc="Size of the body in bytes. This parameter is useful when the size of the body cannot be determined automatically."]
-    pub content_length: Option<ContentLength>,
+    pub content_length: Option<i64>,
     #[doc="The base64-encoded 128-bit MD5 digest of the part data."]
-    pub content_md5: Option<ContentMD5>,
+    pub content_md5: Option<String>,
     #[doc="Object key for which the multipart upload was initiated."]
-    pub key: ObjectKey,
+    pub key: String,
     #[doc="Part number of part being uploaded. This is a positive integer between 1 and 10,000."]
-    pub part_number: PartNumber,
-    pub request_payer: Option<RequestPayer>,
+    pub part_number: i64,
+    pub request_payer: Option<String>,
     #[doc="Specifies the algorithm to use to when encrypting the object (e.g., AES256)."]
-    pub sse_customer_algorithm: Option<SSECustomerAlgorithm>,
+    pub sse_customer_algorithm: Option<String>,
     #[doc="Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header. This must be the same encryption key specified in the initiate multipart upload request."]
-    pub sse_customer_key: Option<SSECustomerKey>,
+    pub sse_customer_key: Option<String>,
     #[doc="Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error."]
-    pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
+    pub sse_customer_key_md5: Option<String>,
     #[doc="Upload ID identifying the multipart upload whose part is being uploaded."]
-    pub upload_id: MultipartUploadId,
+    pub upload_id: String,
 }
 
-pub type Value = String;
 struct ValueDeserializer;
 impl ValueDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Value, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -11866,20 +11665,19 @@ impl ValueDeserializer {
 pub struct ValueSerializer;
 impl ValueSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &Value) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
     }
 }
 
-pub type VersionIdMarker = String;
 struct VersionIdMarkerDeserializer;
 impl VersionIdMarkerDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VersionIdMarker, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -11892,7 +11690,7 @@ impl VersionIdMarkerDeserializer {
 pub struct VersionIdMarkerSerializer;
 impl VersionIdMarkerSerializer {
     #[allow(unused_variables, warnings)]
-    pub fn serialize(name: &str, obj: &VersionIdMarker) -> String {
+    pub fn serialize(name: &str, obj: &String) -> String {
         format!("<{name}>{value}</{name}>",
                 name = name,
                 value = obj.to_string())
@@ -11902,9 +11700,9 @@ impl VersionIdMarkerSerializer {
 #[derive(Default,Clone,Debug)]
 pub struct VersioningConfiguration {
     #[doc="Specifies whether MFA delete is enabled in the bucket versioning configuration. This element is only returned if the bucket has been configured with MFA delete. If the bucket has never been so configured, this element is not returned."]
-    pub mfa_delete: Option<MFADelete>,
+    pub mfa_delete: Option<String>,
     #[doc="The versioning state of the bucket."]
-    pub status: Option<BucketVersioningStatus>,
+    pub status: Option<String>,
 }
 
 
@@ -11929,7 +11727,7 @@ pub struct WebsiteConfiguration {
     pub error_document: Option<ErrorDocument>,
     pub index_document: Option<IndexDocument>,
     pub redirect_all_requests_to: Option<RedirectAllRequestsTo>,
-    pub routing_rules: Option<RoutingRules>,
+    pub routing_rules: Option<Vec<RoutingRule>>,
 }
 
 
@@ -11956,7 +11754,6 @@ impl WebsiteConfigurationSerializer {
     }
 }
 
-pub type WebsiteRedirectLocation = String;
 /// Errors returned by AbortMultipartUpload
 #[derive(Debug, PartialEq)]
 pub enum AbortMultipartUploadError {

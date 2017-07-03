@@ -36,7 +36,7 @@ pub struct Application {
     #[doc="<p>An application can be disabled after image creation if there is a problem.</p>"]
     #[serde(rename="Enabled")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub enabled: Option<Boolean>,
+    pub enabled: Option<bool>,
     #[doc="<p>The URL for the application icon. This URL may be time-limited.</p>"]
     #[serde(rename="IconURL")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -52,15 +52,13 @@ pub struct Application {
     #[doc="<p>Additional attributes that describe the application.</p>"]
     #[serde(rename="Metadata")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub metadata: Option<Metadata>,
+    pub metadata: Option<::std::collections::HashMap<String, String>>,
     #[doc="<p>The unique identifier for the application.</p>"]
     #[serde(rename="Name")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub name: Option<String>,
 }
 
-pub type Applications = Vec<Application>;
-pub type Arn = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct AssociateFleetRequest {
     #[doc="<p>The name of the fleet to associate.</p>"]
@@ -74,15 +72,12 @@ pub struct AssociateFleetRequest {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct AssociateFleetResult;
 
-pub type AuthenticationType = String;
-pub type Boolean = bool;
-pub type BooleanObject = bool;
 #[doc="<p>The capacity configuration for the fleet.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ComputeCapacity {
     #[doc="<p>The desired number of streaming instances.</p>"]
     #[serde(rename="DesiredInstances")]
-    pub desired_instances: Integer,
+    pub desired_instances: i64,
 }
 
 #[doc="<p>The capacity information for the fleet.</p>"]
@@ -91,18 +86,18 @@ pub struct ComputeCapacityStatus {
     #[doc="<p>The number of currently available instances that can be used to stream sessions.</p>"]
     #[serde(rename="Available")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub available: Option<Integer>,
+    pub available: Option<i64>,
     #[doc="<p>The desired number of streaming instances.</p>"]
     #[serde(rename="Desired")]
-    pub desired: Integer,
+    pub desired: i64,
     #[doc="<p>The number of instances that are being used for streaming.</p>"]
     #[serde(rename="InUse")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub in_use: Option<Integer>,
+    pub in_use: Option<i64>,
     #[doc="<p>The total number of simultaneous streaming instances that are running.</p>"]
     #[serde(rename="Running")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub running: Option<Integer>,
+    pub running: Option<i64>,
 }
 
 #[doc="<p>Contains the parameters for the new fleet to create.</p>"]
@@ -114,19 +109,19 @@ pub struct CreateFleetRequest {
     #[doc="<p>The description of the fleet.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[doc="<p>The time after disconnection when a session is considered to have ended. If a user who got disconnected reconnects within this timeout interval, the user is connected back to their previous session. The input can be any numeric value in seconds between 60 and 57600. </p>"]
     #[serde(rename="DisconnectTimeoutInSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub disconnect_timeout_in_seconds: Option<Integer>,
+    pub disconnect_timeout_in_seconds: Option<i64>,
     #[doc="<p>The display name of the fleet.</p>"]
     #[serde(rename="DisplayName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub display_name: Option<DisplayName>,
+    pub display_name: Option<String>,
     #[doc="<p>Enables or disables default Internet access for the fleet.</p>"]
     #[serde(rename="EnableDefaultInternetAccess")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub enable_default_internet_access: Option<BooleanObject>,
+    pub enable_default_internet_access: Option<bool>,
     #[doc="<p>Unique name of the image used by the fleet.</p>"]
     #[serde(rename="ImageName")]
     pub image_name: String,
@@ -136,10 +131,10 @@ pub struct CreateFleetRequest {
     #[doc="<p>The maximum time for which a streaming session can run. The input can be any numeric value in seconds between 600 and 57600.</p>"]
     #[serde(rename="MaxUserDurationInSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_user_duration_in_seconds: Option<Integer>,
+    pub max_user_duration_in_seconds: Option<i64>,
     #[doc="<p>A unique identifier for the fleet.</p>"]
     #[serde(rename="Name")]
-    pub name: Name,
+    pub name: String,
     #[doc="<p>The VPC configuration for the fleet.</p>"]
     #[serde(rename="VpcConfig")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -159,18 +154,18 @@ pub struct CreateStackRequest {
     #[doc="<p>The description displayed to end users on the AppStream 2.0 portal.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[doc="<p>The name displayed to end users on the AppStream 2.0 portal.</p>"]
     #[serde(rename="DisplayName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub display_name: Option<DisplayName>,
+    pub display_name: Option<String>,
     #[doc="<p>The unique identifier for this stack.</p>"]
     #[serde(rename="Name")]
     pub name: String,
     #[doc="<p>The storage connectors to be enabled for the stack.</p>"]
     #[serde(rename="StorageConnectors")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub storage_connectors: Option<StorageConnectorList>,
+    pub storage_connectors: Option<Vec<StorageConnector>>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -199,11 +194,11 @@ pub struct CreateStreamingURLRequest {
     pub stack_name: String,
     #[doc="<p>A unique user ID for whom the URL is generated.</p>"]
     #[serde(rename="UserId")]
-    pub user_id: UserId,
+    pub user_id: String,
     #[doc="<p>The duration up to which the URL returned by this action is valid. The input can be any numeric value in seconds between 1 and 604800 seconds.</p>"]
     #[serde(rename="Validity")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub validity: Option<Long>,
+    pub validity: Option<i64>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -211,7 +206,7 @@ pub struct CreateStreamingURLResult {
     #[doc="<p>Elapsed seconds after the Unix epoch, at which time this URL expires.</p>"]
     #[serde(rename="Expires")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub expires: Option<Timestamp>,
+    pub expires: Option<f64>,
     #[doc="<p>The URL to start the AppStream 2.0 streaming session.</p>"]
     #[serde(rename="StreamingURL")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -243,7 +238,7 @@ pub struct DescribeFleetsRequest {
     #[doc="<p>The fleet names to describe. Use null to describe all the fleets for the AWS account.</p>"]
     #[serde(rename="Names")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub names: Option<StringList>,
+    pub names: Option<Vec<String>>,
     #[doc="<p>The pagination token to use to retrieve the next page of results for this operation. If this value is null, it retrieves the first page.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -255,7 +250,7 @@ pub struct DescribeFleetsResult {
     #[doc="<p>The list of fleet details.</p>"]
     #[serde(rename="Fleets")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub fleets: Option<FleetList>,
+    pub fleets: Option<Vec<Fleet>>,
     #[doc="<p>The pagination token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -267,7 +262,7 @@ pub struct DescribeImagesRequest {
     #[doc="<p>A specific list of images to describe.</p>"]
     #[serde(rename="Names")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub names: Option<StringList>,
+    pub names: Option<Vec<String>>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -275,7 +270,7 @@ pub struct DescribeImagesResult {
     #[doc="<p>The list of images.</p>"]
     #[serde(rename="Images")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub images: Option<ImageList>,
+    pub images: Option<Vec<Image>>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -283,14 +278,14 @@ pub struct DescribeSessionsRequest {
     #[doc="<p>The authentication method of the user. It can be <code>API</code> for a user authenticated using a streaming URL, or <code>SAML</code> for a SAML federated user. If an authentication type is not provided, the operation defaults to users authenticated using a streaming URL.</p>"]
     #[serde(rename="AuthenticationType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub authentication_type: Option<AuthenticationType>,
+    pub authentication_type: Option<String>,
     #[doc="<p>The name of the fleet for which to list sessions.</p>"]
     #[serde(rename="FleetName")]
     pub fleet_name: String,
     #[doc="<p>The size of each page of results. The default value is 20 and the maximum supported value is 50.</p>"]
     #[serde(rename="Limit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub limit: Option<Integer>,
+    pub limit: Option<i64>,
     #[doc="<p>The pagination token to use to retrieve the next page of results for this operation. If this value is null, it retrieves the first page.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -301,7 +296,7 @@ pub struct DescribeSessionsRequest {
     #[doc="<p>The user for whom to list sessions. Use null to describe all the sessions for the stack and fleet.</p>"]
     #[serde(rename="UserId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub user_id: Option<UserId>,
+    pub user_id: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -313,7 +308,7 @@ pub struct DescribeSessionsResult {
     #[doc="<p>The list of streaming sessions.</p>"]
     #[serde(rename="Sessions")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub sessions: Option<SessionList>,
+    pub sessions: Option<Vec<Session>>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -321,7 +316,7 @@ pub struct DescribeStacksRequest {
     #[doc="<p>The stack names to describe. Use null to describe all the stacks for the AWS account.</p>"]
     #[serde(rename="Names")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub names: Option<StringList>,
+    pub names: Option<Vec<String>>,
     #[doc="<p>The pagination token to use to retrieve the next page of results for this operation. If this value is null, it retrieves the first page.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -337,10 +332,9 @@ pub struct DescribeStacksResult {
     #[doc="<p>The list of stack details.</p>"]
     #[serde(rename="Stacks")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub stacks: Option<StackList>,
+    pub stacks: Option<Vec<Stack>>,
 }
 
-pub type Description = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DisassociateFleetRequest {
     #[doc="<p>The name of the fleet to disassociate.</p>"]
@@ -354,9 +348,6 @@ pub struct DisassociateFleetRequest {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DisassociateFleetResult;
 
-pub type DisplayName = String;
-#[doc="<p>The error message in the exception.</p>"]
-pub type ErrorMessage = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ExpireSessionRequest {
     #[doc="<p>The unique identifier of the streaming session to be stopped.</p>"]
@@ -372,14 +363,14 @@ pub struct ExpireSessionResult;
 pub struct Fleet {
     #[doc="<p>The ARN for the fleet.</p>"]
     #[serde(rename="Arn")]
-    pub arn: Arn,
+    pub arn: String,
     #[doc="<p>The capacity information for the fleet.</p>"]
     #[serde(rename="ComputeCapacityStatus")]
     pub compute_capacity_status: ComputeCapacityStatus,
     #[doc="<p>The time at which the fleet was created.</p>"]
     #[serde(rename="CreatedTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_time: Option<Timestamp>,
+    pub created_time: Option<f64>,
     #[doc="<p>The description displayed to end users on the AppStream 2.0 portal.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -387,7 +378,7 @@ pub struct Fleet {
     #[doc="<p>The time after disconnection when a session is considered to have ended. If a user who got disconnected reconnects within this timeout interval, the user is connected back to their previous session. The input can be any numeric value in seconds between 60 and 57600.</p>"]
     #[serde(rename="DisconnectTimeoutInSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub disconnect_timeout_in_seconds: Option<Integer>,
+    pub disconnect_timeout_in_seconds: Option<i64>,
     #[doc="<p>The name displayed to end users on the AppStream 2.0 portal.</p>"]
     #[serde(rename="DisplayName")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -395,11 +386,11 @@ pub struct Fleet {
     #[doc="<p>Whether default Internet access is enabled for the fleet. </p>"]
     #[serde(rename="EnableDefaultInternetAccess")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub enable_default_internet_access: Option<BooleanObject>,
+    pub enable_default_internet_access: Option<bool>,
     #[doc="<p>The list of fleet errors is appended to this list.</p>"]
     #[serde(rename="FleetErrors")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub fleet_errors: Option<FleetErrors>,
+    pub fleet_errors: Option<Vec<FleetError>>,
     #[doc="<p>The image used by the fleet.</p>"]
     #[serde(rename="ImageName")]
     pub image_name: String,
@@ -409,60 +400,51 @@ pub struct Fleet {
     #[doc="<p>The maximum time for which a streaming session can run. The value can be any numeric value in seconds between 600 and 57600.</p>"]
     #[serde(rename="MaxUserDurationInSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_user_duration_in_seconds: Option<Integer>,
+    pub max_user_duration_in_seconds: Option<i64>,
     #[doc="<p>The name of the fleet.</p>"]
     #[serde(rename="Name")]
     pub name: String,
     #[doc="<p>The current state for the fleet.</p>"]
     #[serde(rename="State")]
-    pub state: FleetState,
+    pub state: String,
     #[doc="<p>The VPC configuration for the fleet.</p>"]
     #[serde(rename="VpcConfig")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub vpc_config: Option<VpcConfig>,
 }
 
-#[doc="<p>Fleet attribute.</p>"]
-pub type FleetAttribute = String;
-#[doc="<p>A list of fleet attributes.</p>"]
-pub type FleetAttributes = Vec<FleetAttribute>;
 #[doc="<p>The details of the fleet error.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct FleetError {
     #[doc="<p>The error code for the fleet error.</p>"]
     #[serde(rename="ErrorCode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub error_code: Option<FleetErrorCode>,
+    pub error_code: Option<String>,
     #[doc="<p>The error message generated when the fleet has errors.</p>"]
     #[serde(rename="ErrorMessage")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub error_message: Option<String>,
 }
 
-pub type FleetErrorCode = String;
-pub type FleetErrors = Vec<FleetError>;
-#[doc="<p>A list of fleets.</p>"]
-pub type FleetList = Vec<Fleet>;
-pub type FleetState = String;
 #[doc="<p>New streaming instances are booted from images. The image stores the application catalog and is connected to fleets.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Image {
     #[doc="<p>The applications associated with an image.</p>"]
     #[serde(rename="Applications")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub applications: Option<Applications>,
+    pub applications: Option<Vec<Application>>,
     #[doc="<p>The ARN for the image.</p>"]
     #[serde(rename="Arn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub arn: Option<Arn>,
+    pub arn: Option<String>,
     #[doc="<p>The source image ARN from which this image was created.</p>"]
     #[serde(rename="BaseImageArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub base_image_arn: Option<Arn>,
+    pub base_image_arn: Option<String>,
     #[doc="<p>The timestamp when the image was created.</p>"]
     #[serde(rename="CreatedTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_time: Option<Timestamp>,
+    pub created_time: Option<f64>,
     #[doc="<p>A meaningful description for the image.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -474,22 +456,22 @@ pub struct Image {
     #[doc="<p>Whether an image builder can be launched from this image.</p>"]
     #[serde(rename="ImageBuilderSupported")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub image_builder_supported: Option<Boolean>,
+    pub image_builder_supported: Option<bool>,
     #[doc="<p>The unique identifier for the image.</p>"]
     #[serde(rename="Name")]
     pub name: String,
     #[doc="<p>The operating system platform of the image.</p>"]
     #[serde(rename="Platform")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub platform: Option<PlatformType>,
+    pub platform: Option<String>,
     #[doc="<p>The AWS release date of the public base image. For private images, this date is the release date of the base image from which the image was created.</p>"]
     #[serde(rename="PublicBaseImageReleasedDate")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub public_base_image_released_date: Option<Timestamp>,
+    pub public_base_image_released_date: Option<f64>,
     #[doc="<p>The image starts in the <b>PENDING</b> state, and then moves to <b>AVAILABLE</b> if image creation succeeds and <b>FAILED</b> if image creation has failed.</p>"]
     #[serde(rename="State")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub state: Option<ImageState>,
+    pub state: Option<String>,
     #[doc="<p>The reason why the last state change occurred.</p>"]
     #[serde(rename="StateChangeReason")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -497,26 +479,22 @@ pub struct Image {
     #[doc="<p>The visibility of an image to the user; images can be public or private.</p>"]
     #[serde(rename="Visibility")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub visibility: Option<VisibilityType>,
+    pub visibility: Option<String>,
 }
 
-pub type ImageList = Vec<Image>;
-pub type ImageState = String;
 #[doc="<p>The reason why the last state change occurred.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ImageStateChangeReason {
     #[doc="<p>The state change reason code of the image.</p>"]
     #[serde(rename="Code")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub code: Option<ImageStateChangeReasonCode>,
+    pub code: Option<String>,
     #[doc="<p>The state change reason message to the end user.</p>"]
     #[serde(rename="Message")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub message: Option<String>,
 }
 
-pub type ImageStateChangeReasonCode = String;
-pub type Integer = i64;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListAssociatedFleetsRequest {
     #[doc="<p>The pagination token to use to retrieve the next page of results for this operation. If this value is null, it retrieves the first page.</p>"]
@@ -534,7 +512,7 @@ pub struct ListAssociatedFleetsResult {
     #[doc="<p>The names of associated fleets.</p>"]
     #[serde(rename="Names")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub names: Option<StringList>,
+    pub names: Option<Vec<String>>,
     #[doc="<p>The pagination token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -558,28 +536,20 @@ pub struct ListAssociatedStacksResult {
     #[doc="<p>The names of associated stacks.</p>"]
     #[serde(rename="Names")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub names: Option<StringList>,
+    pub names: Option<Vec<String>>,
     #[doc="<p>The pagination token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
-pub type Long = i64;
-pub type Metadata = ::std::collections::HashMap<String, String>;
-pub type Name = String;
-pub type PlatformType = String;
-#[doc="<p>The ARN of the resource.</p>"]
-pub type ResourceIdentifier = String;
-#[doc="<p>A list of security groups.</p>"]
-pub type SecurityGroupIdList = Vec<String>;
 #[doc="<p>Contains the parameters for a streaming session.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Session {
     #[doc="<p>The authentication method of the user for whom the session was created. It can be <code>API</code> for a user authenticated using a streaming URL or <code>SAML</code> for a SAML federated user.</p>"]
     #[serde(rename="AuthenticationType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub authentication_type: Option<AuthenticationType>,
+    pub authentication_type: Option<String>,
     #[doc="<p>The name of the fleet for which the streaming session was created.</p>"]
     #[serde(rename="FleetName")]
     pub fleet_name: String,
@@ -591,27 +561,23 @@ pub struct Session {
     pub stack_name: String,
     #[doc="<p>The current state of the streaming session.</p>"]
     #[serde(rename="State")]
-    pub state: SessionState,
+    pub state: String,
     #[doc="<p>The identifier of the user for whom the session was created.</p>"]
     #[serde(rename="UserId")]
-    pub user_id: UserId,
+    pub user_id: String,
 }
 
-#[doc="<p>List of sessions.</p>"]
-pub type SessionList = Vec<Session>;
-#[doc="<p>Possible values for the state of a streaming session.</p>"]
-pub type SessionState = String;
 #[doc="<p>Details about a stack.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Stack {
     #[doc="<p>The ARN of the stack.</p>"]
     #[serde(rename="Arn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub arn: Option<Arn>,
+    pub arn: Option<String>,
     #[doc="<p>The timestamp when the stack was created.</p>"]
     #[serde(rename="CreatedTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub created_time: Option<Timestamp>,
+    pub created_time: Option<f64>,
     #[doc="<p>A meaningful description for the stack.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -626,11 +592,11 @@ pub struct Stack {
     #[doc="<p>The list of errors associated with the stack.</p>"]
     #[serde(rename="StackErrors")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub stack_errors: Option<StackErrors>,
+    pub stack_errors: Option<Vec<StackError>>,
     #[doc="<p>The storage connectors to be enabled for the stack.</p>"]
     #[serde(rename="StorageConnectors")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub storage_connectors: Option<StorageConnectorList>,
+    pub storage_connectors: Option<Vec<StorageConnector>>,
 }
 
 #[doc="<p>Contains the parameters for a stack error.</p>"]
@@ -639,18 +605,13 @@ pub struct StackError {
     #[doc="<p>The error code of a stack error.</p>"]
     #[serde(rename="ErrorCode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub error_code: Option<StackErrorCode>,
+    pub error_code: Option<String>,
     #[doc="<p>The error message of a stack error.</p>"]
     #[serde(rename="ErrorMessage")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub error_message: Option<String>,
 }
 
-pub type StackErrorCode = String;
-#[doc="<p>A list of stack errors.</p>"]
-pub type StackErrors = Vec<StackError>;
-#[doc="<p>A list of stacks.</p>"]
-pub type StackList = Vec<Stack>;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct StartFleetRequest {
     #[doc="<p>The name of the fleet to start.</p>"]
@@ -676,27 +637,19 @@ pub struct StopFleetResult;
 pub struct StorageConnector {
     #[doc="<p>The type of storage connector. The possible values include: HOMEFOLDERS.</p>"]
     #[serde(rename="ConnectorType")]
-    pub connector_type: StorageConnectorType,
+    pub connector_type: String,
     #[doc="<p>The ARN associated with the storage connector.</p>"]
     #[serde(rename="ResourceIdentifier")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub resource_identifier: Option<ResourceIdentifier>,
+    pub resource_identifier: Option<String>,
 }
 
-#[doc="<p>A list of storage connectors.</p>"]
-pub type StorageConnectorList = Vec<StorageConnector>;
-#[doc="<p>The type of storage connector. The possible values include: HOMEFOLDERS.</p>"]
-pub type StorageConnectorType = String;
-pub type StringList = Vec<String>;
-#[doc="<p>A list of subnet IDs.</p>"]
-pub type SubnetIdList = Vec<String>;
-pub type Timestamp = f64;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateFleetRequest {
     #[doc="<p>Fleet attributes to be deleted.</p>"]
     #[serde(rename="AttributesToDelete")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub attributes_to_delete: Option<FleetAttributes>,
+    pub attributes_to_delete: Option<Vec<String>>,
     #[doc="<p>The parameters for the capacity allocated to the fleet. </p>"]
     #[serde(rename="ComputeCapacity")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -704,19 +657,19 @@ pub struct UpdateFleetRequest {
     #[doc="<p>The description displayed to end users on the AppStream 2.0 portal.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[doc="<p>The time after disconnection when a session is considered to have ended. If a user who got disconnected reconnects within this timeout interval, the user is connected back to their previous session. The input can be any numeric value in seconds between 60 and 57600.</p>"]
     #[serde(rename="DisconnectTimeoutInSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub disconnect_timeout_in_seconds: Option<Integer>,
+    pub disconnect_timeout_in_seconds: Option<i64>,
     #[doc="<p>The name displayed to end users on the AppStream 2.0 portal.</p>"]
     #[serde(rename="DisplayName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub display_name: Option<DisplayName>,
+    pub display_name: Option<String>,
     #[doc="<p>Enables or disables default Internet access for the fleet.</p>"]
     #[serde(rename="EnableDefaultInternetAccess")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub enable_default_internet_access: Option<BooleanObject>,
+    pub enable_default_internet_access: Option<bool>,
     #[doc="<p>The image name from which a fleet is created.</p>"]
     #[serde(rename="ImageName")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -728,7 +681,7 @@ pub struct UpdateFleetRequest {
     #[doc="<p>The maximum time for which a streaming session can run. The input can be any numeric value in seconds between 600 and 57600.</p>"]
     #[serde(rename="MaxUserDurationInSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_user_duration_in_seconds: Option<Integer>,
+    pub max_user_duration_in_seconds: Option<i64>,
     #[doc="<p>The name of the fleet.</p>"]
     #[serde(rename="Name")]
     pub name: String,
@@ -751,22 +704,22 @@ pub struct UpdateStackRequest {
     #[doc="<p>Remove all the storage connectors currently enabled for the stack.</p>"]
     #[serde(rename="DeleteStorageConnectors")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub delete_storage_connectors: Option<Boolean>,
+    pub delete_storage_connectors: Option<bool>,
     #[doc="<p>The description displayed to end users on the AppStream 2.0 portal.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[doc="<p>The name displayed to end users on the AppStream 2.0 portal.</p>"]
     #[serde(rename="DisplayName")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub display_name: Option<DisplayName>,
+    pub display_name: Option<String>,
     #[doc="<p>The name of the stack to update.</p>"]
     #[serde(rename="Name")]
     pub name: String,
     #[doc="<p>The storage connectors to be enabled for the stack.</p>"]
     #[serde(rename="StorageConnectors")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub storage_connectors: Option<StorageConnectorList>,
+    pub storage_connectors: Option<Vec<StorageConnector>>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -777,19 +730,17 @@ pub struct UpdateStackResult {
     pub stack: Option<Stack>,
 }
 
-pub type UserId = String;
-pub type VisibilityType = String;
 #[doc="<p>VPC configuration information.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct VpcConfig {
     #[doc="<p>Security groups associated with the fleet.</p>"]
     #[serde(rename="SecurityGroupIds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub security_group_ids: Option<SecurityGroupIdList>,
+    pub security_group_ids: Option<Vec<String>>,
     #[doc="<p>The list of subnets to which a network interface is established from the fleet instance.</p>"]
     #[serde(rename="SubnetIds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub subnet_ids: Option<SubnetIdList>,
+    pub subnet_ids: Option<Vec<String>>,
 }
 
 /// Errors returned by AssociateFleet

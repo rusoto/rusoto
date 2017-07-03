@@ -32,7 +32,7 @@ pub struct Address {
     #[doc="<p>The unique ID for an address.</p>"]
     #[serde(rename="AddressId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub address_id: Option<AddressId>,
+    pub address_id: Option<String>,
     #[doc="<p>The city in an address that a Snowball is to be delivered to.</p>"]
     #[serde(rename="City")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -48,7 +48,7 @@ pub struct Address {
     #[doc="<p>If the address you are creating is a primary address, then set this option to true. This field is not supported in most regions.</p>"]
     #[serde(rename="IsRestricted")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub is_restricted: Option<Boolean>,
+    pub is_restricted: Option<bool>,
     #[doc="<p>This field is no longer used and the value is ignored.</p>"]
     #[serde(rename="Landmark")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -87,14 +87,11 @@ pub struct Address {
     pub street_3: Option<String>,
 }
 
-pub type AddressId = String;
-pub type AddressList = Vec<Address>;
-pub type Boolean = bool;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CancelClusterRequest {
     #[doc="<p>The 39-character ID for the cluster that you want to cancel, for example <code>CID123e4567-e89b-12d3-a456-426655440000</code>.</p>"]
     #[serde(rename="ClusterId")]
-    pub cluster_id: ClusterId,
+    pub cluster_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -104,13 +101,12 @@ pub struct CancelClusterResult;
 pub struct CancelJobRequest {
     #[doc="<p>The 39-character job ID for the job that you want to cancel, for example <code>JID123e4567-e89b-12d3-a456-426655440000</code>.</p>"]
     #[serde(rename="JobId")]
-    pub job_id: JobId,
+    pub job_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct CancelJobResult;
 
-pub type ClusterId = String;
 #[doc="<p>Contains a cluster's state, a cluster's ID, and other important information.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ClusterListEntry {
@@ -121,25 +117,24 @@ pub struct ClusterListEntry {
     #[doc="<p>The current state of this cluster. For information about the state of a specific node, see <a>JobListEntry$JobState</a>.</p>"]
     #[serde(rename="ClusterState")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub cluster_state: Option<ClusterState>,
+    pub cluster_state: Option<String>,
     #[doc="<p>The creation date for this cluster.</p>"]
     #[serde(rename="CreationDate")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub creation_date: Option<Timestamp>,
+    pub creation_date: Option<f64>,
     #[doc="<p>Defines an optional description of the cluster, for example <code>Environmental Data Cluster-01</code>.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
 }
 
-pub type ClusterListEntryList = Vec<ClusterListEntry>;
 #[doc="<p>Contains metadata about a specific cluster.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ClusterMetadata {
     #[doc="<p>The automatically generated ID for a specific address.</p>"]
     #[serde(rename="AddressId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub address_id: Option<AddressId>,
+    pub address_id: Option<String>,
     #[doc="<p>The automatically generated ID for a cluster.</p>"]
     #[serde(rename="ClusterId")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -147,11 +142,11 @@ pub struct ClusterMetadata {
     #[doc="<p>The current status of the cluster.</p>"]
     #[serde(rename="ClusterState")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub cluster_state: Option<ClusterState>,
+    pub cluster_state: Option<String>,
     #[doc="<p>The creation date for this cluster.</p>"]
     #[serde(rename="CreationDate")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub creation_date: Option<Timestamp>,
+    pub creation_date: Option<f64>,
     #[doc="<p>The optional description of the cluster.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -159,15 +154,15 @@ pub struct ClusterMetadata {
     #[doc="<p>The ID of the address that you want a cluster shipped to, after it will be shipped to its primary address. This field is not supported in most regions.</p>"]
     #[serde(rename="ForwardingAddressId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub forwarding_address_id: Option<AddressId>,
+    pub forwarding_address_id: Option<String>,
     #[doc="<p>The type of job for this cluster. Currently, the only job type supported for clusters is <code>LOCAL_USE</code>.</p>"]
     #[serde(rename="JobType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub job_type: Option<JobType>,
+    pub job_type: Option<String>,
     #[doc="<p>The <code>KmsKeyARN</code> Amazon Resource Name (ARN) associated with this cluster. This ARN was created using the <a href=\"http://docs.aws.amazon.com/kms/latest/APIReference/API_CreateKey.html\">CreateKey</a> API action in AWS Key Management Service (AWS KMS).</p>"]
     #[serde(rename="KmsKeyARN")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub kms_key_arn: Option<KmsKeyARN>,
+    pub kms_key_arn: Option<String>,
     #[doc="<p>The Amazon Simple Notification Service (Amazon SNS) notification settings for this cluster.</p>"]
     #[serde(rename="Notification")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -179,18 +174,17 @@ pub struct ClusterMetadata {
     #[doc="<p>The role ARN associated with this cluster. This ARN was created using the <a href=\"http://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateRole.html\">CreateRole</a> API action in AWS Identity and Access Management (IAM).</p>"]
     #[serde(rename="RoleARN")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub role_arn: Option<RoleARN>,
+    pub role_arn: Option<String>,
     #[doc="<p>The shipping speed for each node in this cluster. This speed doesn't dictate how soon you'll get each Snowball Edge appliance, rather it represents how quickly each appliance moves to its destination while in transit. Regional shipping speeds are as follows:</p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, appliances shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snowball Edges shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snowball Edges are delivered in one to seven days.</p> </li> <li> <p>In the US, you have access to one-day shipping and two-day shipping.</p> </li> </ul>"]
     #[serde(rename="ShippingOption")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub shipping_option: Option<ShippingOption>,
+    pub shipping_option: Option<String>,
     #[doc="<p>The type of AWS Snowball appliance to use for this cluster. Currently, the only supported appliance type for cluster jobs is <code>EDGE</code>.</p>"]
     #[serde(rename="SnowballType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub snowball_type: Option<SnowballType>,
+    pub snowball_type: Option<String>,
 }
 
-pub type ClusterState = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateAddressRequest {
     #[doc="<p>The address that you want the Snowball shipped to.</p>"]
@@ -210,7 +204,7 @@ pub struct CreateAddressResult {
 pub struct CreateClusterRequest {
     #[doc="<p>The ID for the address that you want the cluster shipped to.&gt;</p>"]
     #[serde(rename="AddressId")]
-    pub address_id: AddressId,
+    pub address_id: String,
     #[doc="<p>An optional description of this specific cluster, for example <code>Environmental Data Cluster-01</code>.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -218,14 +212,14 @@ pub struct CreateClusterRequest {
     #[doc="<p>The forwarding address ID for a cluster. This field is not supported in most regions.</p>"]
     #[serde(rename="ForwardingAddressId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub forwarding_address_id: Option<AddressId>,
+    pub forwarding_address_id: Option<String>,
     #[doc="<p>The type of job for this cluster. Currently, the only job type supported for clusters is <code>LOCAL_USE</code>.</p>"]
     #[serde(rename="JobType")]
-    pub job_type: JobType,
+    pub job_type: String,
     #[doc="<p>The <code>KmsKeyARN</code> value that you want to associate with this cluster. <code>KmsKeyARN</code> values are created by using the <a href=\"http://docs.aws.amazon.com/kms/latest/APIReference/API_CreateKey.html\">CreateKey</a> API action in AWS Key Management Service (AWS KMS). </p>"]
     #[serde(rename="KmsKeyARN")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub kms_key_arn: Option<KmsKeyARN>,
+    pub kms_key_arn: Option<String>,
     #[doc="<p>The Amazon Simple Notification Service (Amazon SNS) notification settings for this cluster.</p>"]
     #[serde(rename="Notification")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -235,14 +229,14 @@ pub struct CreateClusterRequest {
     pub resources: JobResource,
     #[doc="<p>The <code>RoleARN</code> that you want to associate with this cluster. <code>RoleArn</code> values are created by using the <a href=\"http://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateRole.html\">CreateRole</a> API action in AWS Identity and Access Management (IAM).</p>"]
     #[serde(rename="RoleARN")]
-    pub role_arn: RoleARN,
+    pub role_arn: String,
     #[doc="<p>The shipping speed for each node in this cluster. This speed doesn't dictate how soon you'll get each Snowball Edge appliance, rather it represents how quickly each appliance moves to its destination while in transit. Regional shipping speeds are as follows:</p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, appliances shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snowball Edges shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snowball Edges are delivered in one to seven days.</p> </li> <li> <p>In the US, you have access to one-day shipping and two-day shipping.</p> </li> </ul>"]
     #[serde(rename="ShippingOption")]
-    pub shipping_option: ShippingOption,
+    pub shipping_option: String,
     #[doc="<p>The type of AWS Snowball appliance to use for this cluster. Currently, the only supported appliance type for cluster jobs is <code>EDGE</code>.</p>"]
     #[serde(rename="SnowballType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub snowball_type: Option<SnowballType>,
+    pub snowball_type: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -250,7 +244,7 @@ pub struct CreateClusterResult {
     #[doc="<p>The automatically generated ID for a cluster.</p>"]
     #[serde(rename="ClusterId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub cluster_id: Option<ClusterId>,
+    pub cluster_id: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -258,11 +252,11 @@ pub struct CreateJobRequest {
     #[doc="<p>The ID for the address that you want the Snowball shipped to.</p>"]
     #[serde(rename="AddressId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub address_id: Option<AddressId>,
+    pub address_id: Option<String>,
     #[doc="<p>The ID of a cluster. If you're creating a job for a node in a cluster, you need to provide only this <code>clusterId</code> value. The other job attributes are inherited from the cluster.</p>"]
     #[serde(rename="ClusterId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub cluster_id: Option<ClusterId>,
+    pub cluster_id: Option<String>,
     #[doc="<p>Defines an optional description of this specific job, for example <code>Important Photos 2016-08-11</code>.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -270,15 +264,15 @@ pub struct CreateJobRequest {
     #[doc="<p>The forwarding address ID for a job. This field is not supported in most regions.</p>"]
     #[serde(rename="ForwardingAddressId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub forwarding_address_id: Option<AddressId>,
+    pub forwarding_address_id: Option<String>,
     #[doc="<p>Defines the type of job that you're creating. </p>"]
     #[serde(rename="JobType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub job_type: Option<JobType>,
+    pub job_type: Option<String>,
     #[doc="<p>The <code>KmsKeyARN</code> that you want to associate with this job. <code>KmsKeyARN</code>s are created using the <a href=\"http://docs.aws.amazon.com/kms/latest/APIReference/API_CreateKey.html\">CreateKey</a> AWS Key Management Service (KMS) API action.</p>"]
     #[serde(rename="KmsKeyARN")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub kms_key_arn: Option<KmsKeyARN>,
+    pub kms_key_arn: Option<String>,
     #[doc="<p>Defines the Amazon Simple Notification Service (Amazon SNS) notification settings for this job.</p>"]
     #[serde(rename="Notification")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -290,19 +284,19 @@ pub struct CreateJobRequest {
     #[doc="<p>The <code>RoleARN</code> that you want to associate with this job. <code>RoleArn</code>s are created using the <a href=\"http://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateRole.html\">CreateRole</a> AWS Identity and Access Management (IAM) API action.</p>"]
     #[serde(rename="RoleARN")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub role_arn: Option<RoleARN>,
+    pub role_arn: Option<String>,
     #[doc="<p>The shipping speed for this job. This speed doesn't dictate how soon you'll get the Snowball, rather it represents how quickly the Snowball moves to its destination while in transit. Regional shipping speeds are as follows:</p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, Snowballs shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snowballs shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snowballs are delivered in one to seven days.</p> </li> <li> <p>In the US, you have access to one-day shipping and two-day shipping.</p> </li> </ul>"]
     #[serde(rename="ShippingOption")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub shipping_option: Option<ShippingOption>,
+    pub shipping_option: Option<String>,
     #[doc="<p>If your job is being created in one of the US regions, you have the option of specifying what size Snowball you'd like for this job. In all other regions, Snowballs come with 80 TB in storage capacity.</p>"]
     #[serde(rename="SnowballCapacityPreference")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub snowball_capacity_preference: Option<SnowballCapacity>,
+    pub snowball_capacity_preference: Option<String>,
     #[doc="<p>The type of AWS Snowball appliance to use for this job. Currently, the only supported appliance type for cluster jobs is <code>EDGE</code>.</p>"]
     #[serde(rename="SnowballType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub snowball_type: Option<SnowballType>,
+    pub snowball_type: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -310,7 +304,7 @@ pub struct CreateJobResult {
     #[doc="<p>The automatically generated ID for a job, for example <code>JID123e4567-e89b-12d3-a456-426655440000</code>.</p>"]
     #[serde(rename="JobId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub job_id: Option<JobId>,
+    pub job_id: Option<String>,
 }
 
 #[doc="<p>Defines the real-time status of a Snowball's data transfer while the appliance is at AWS. This data is only available while a job has a <code>JobState</code> value of <code>InProgress</code>, for both import and export jobs.</p>"]
@@ -319,26 +313,26 @@ pub struct DataTransfer {
     #[doc="<p>The number of bytes transferred between a Snowball and Amazon S3.</p>"]
     #[serde(rename="BytesTransferred")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub bytes_transferred: Option<Long>,
+    pub bytes_transferred: Option<i64>,
     #[doc="<p>The number of objects transferred between a Snowball and Amazon S3.</p>"]
     #[serde(rename="ObjectsTransferred")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub objects_transferred: Option<Long>,
+    pub objects_transferred: Option<i64>,
     #[doc="<p>The total bytes of data for a transfer between a Snowball and Amazon S3. This value is set to 0 (zero) until all the keys that will be transferred have been listed.</p>"]
     #[serde(rename="TotalBytes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub total_bytes: Option<Long>,
+    pub total_bytes: Option<i64>,
     #[doc="<p>The total number of objects for a transfer between a Snowball and Amazon S3. This value is set to 0 (zero) until all the keys that will be transferred have been listed.</p>"]
     #[serde(rename="TotalObjects")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub total_objects: Option<Long>,
+    pub total_objects: Option<i64>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DescribeAddressRequest {
     #[doc="<p>The automatically generated ID for a specific address.</p>"]
     #[serde(rename="AddressId")]
-    pub address_id: AddressId,
+    pub address_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -354,7 +348,7 @@ pub struct DescribeAddressesRequest {
     #[doc="<p>The number of <code>ADDRESS</code> objects to return.</p>"]
     #[serde(rename="MaxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<ListLimit>,
+    pub max_results: Option<i64>,
     #[doc="<p>HTTP requests are stateless. To identify what object comes \"next\" in the list of <code>ADDRESS</code> objects, you have the option of specifying a value for <code>NextToken</code> as the starting point for your list of returned addresses.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -366,7 +360,7 @@ pub struct DescribeAddressesResult {
     #[doc="<p>The Snowball shipping addresses that were created for this account.</p>"]
     #[serde(rename="Addresses")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub addresses: Option<AddressList>,
+    pub addresses: Option<Vec<Address>>,
     #[doc="<p>HTTP requests are stateless. If you use the automatically generated <code>NextToken</code> value in your next <code>DescribeAddresses</code> call, your list of returned addresses will start from this point in the array.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -377,7 +371,7 @@ pub struct DescribeAddressesResult {
 pub struct DescribeClusterRequest {
     #[doc="<p>The automatically generated ID for a cluster.</p>"]
     #[serde(rename="ClusterId")]
-    pub cluster_id: ClusterId,
+    pub cluster_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -392,7 +386,7 @@ pub struct DescribeClusterResult {
 pub struct DescribeJobRequest {
     #[doc="<p>The automatically generated ID for a job, for example <code>JID123e4567-e89b-12d3-a456-426655440000</code>.</p>"]
     #[serde(rename="JobId")]
-    pub job_id: JobId,
+    pub job_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -404,7 +398,7 @@ pub struct DescribeJobResult {
     #[doc="<p>Information about a specific job part (in the case of an export job), including shipping information, job status, and other important metadata.</p>"]
     #[serde(rename="SubJobMetadata")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub sub_job_metadata: Option<JobMetadataList>,
+    pub sub_job_metadata: Option<Vec<JobMetadata>>,
 }
 
 #[doc="<p>The container for the <a>EventTriggerDefinition$EventResourceARN</a>.</p>"]
@@ -413,15 +407,14 @@ pub struct EventTriggerDefinition {
     #[doc="<p>The Amazon Resource Name (ARN) for any local Amazon S3 resource that is an AWS Lambda function's event trigger associated with this job.</p>"]
     #[serde(rename="EventResourceARN")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub event_resource_arn: Option<ResourceARN>,
+    pub event_resource_arn: Option<String>,
 }
 
-pub type EventTriggerDefinitionList = Vec<EventTriggerDefinition>;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetJobManifestRequest {
     #[doc="<p>The ID for a job that you want to get the manifest file for, for example <code>JID123e4567-e89b-12d3-a456-426655440000</code>.</p>"]
     #[serde(rename="JobId")]
-    pub job_id: JobId,
+    pub job_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -436,7 +429,7 @@ pub struct GetJobManifestResult {
 pub struct GetJobUnlockCodeRequest {
     #[doc="<p>The ID for the job that you want to get the <code>UnlockCode</code> value for, for example <code>JID123e4567-e89b-12d3-a456-426655440000</code>.</p>"]
     #[serde(rename="JobId")]
-    pub job_id: JobId,
+    pub job_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -455,22 +448,20 @@ pub struct GetSnowballUsageResult {
     #[doc="<p>The service limit for number of Snowballs this account can have at once. The default service limit is 1 (one).</p>"]
     #[serde(rename="SnowballLimit")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub snowball_limit: Option<Integer>,
+    pub snowball_limit: Option<i64>,
     #[doc="<p>The number of Snowballs that this account is currently using.</p>"]
     #[serde(rename="SnowballsInUse")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub snowballs_in_use: Option<Integer>,
+    pub snowballs_in_use: Option<i64>,
 }
 
-pub type Integer = i64;
-pub type JobId = String;
 #[doc="<p>Each <code>JobListEntry</code> object contains a job's state, a job's ID, and a value that indicates whether the job is a job part, in the case of an export job.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct JobListEntry {
     #[doc="<p>The creation date for this job.</p>"]
     #[serde(rename="CreationDate")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub creation_date: Option<Timestamp>,
+    pub creation_date: Option<f64>,
     #[doc="<p>The optional description of this specific job, for example <code>Important Photos 2016-08-11</code>.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -478,7 +469,7 @@ pub struct JobListEntry {
     #[doc="<p>A value that indicates that this job is a master job. A master job represents a successful request to create an export job. Master jobs aren't associated with any Snowballs. Instead, each master job will have at least one job part, and each job part is associated with a Snowball. It might take some time before the job parts associated with a particular master job are listed, because they are created after the master job is created.</p>"]
     #[serde(rename="IsMaster")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub is_master: Option<Boolean>,
+    pub is_master: Option<bool>,
     #[doc="<p>The automatically generated ID for a job, for example <code>JID123e4567-e89b-12d3-a456-426655440000</code>.</p>"]
     #[serde(rename="JobId")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -486,18 +477,17 @@ pub struct JobListEntry {
     #[doc="<p>The current state of this job.</p>"]
     #[serde(rename="JobState")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub job_state: Option<JobState>,
+    pub job_state: Option<String>,
     #[doc="<p>The type of job.</p>"]
     #[serde(rename="JobType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub job_type: Option<JobType>,
+    pub job_type: Option<String>,
     #[doc="<p>The type of appliance used with this job.</p>"]
     #[serde(rename="SnowballType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub snowball_type: Option<SnowballType>,
+    pub snowball_type: Option<String>,
 }
 
-pub type JobListEntryList = Vec<JobListEntry>;
 #[doc="<p>Contains job logs. Whenever Snowball is used to import data into or export data out of Amazon S3, you'll have the option of downloading a PDF job report. Job logs are returned as a part of the response syntax of the <code>DescribeJob</code> action in the <code>JobMetadata</code> data type. The job logs can be accessed for up to 60 minutes after this request has been made. To access any of the job logs after 60 minutes have passed, you'll have to make another call to the <code>DescribeJob</code> action.</p> <p>For import jobs, the PDF job report becomes available at the end of the import process. For export jobs, your job report typically becomes available while the Snowball for your job part is being delivered to you.</p> <p>The job report provides you insight into the state of your Amazon S3 data transfer. The report includes details about your job or job part for your records.</p> <p>For deeper visibility into the status of your transferred objects, you can look at the two associated logs: a success log and a failure log. The logs are saved in comma-separated value (CSV) format, and the name of each log includes the ID of the job or job part that the log describes.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct JobLogs {
@@ -521,7 +511,7 @@ pub struct JobMetadata {
     #[doc="<p>The ID for the address that you want the Snowball shipped to.</p>"]
     #[serde(rename="AddressId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub address_id: Option<AddressId>,
+    pub address_id: Option<String>,
     #[doc="<p>The 39-character ID for the cluster, for example <code>CID123e4567-e89b-12d3-a456-426655440000</code>.</p>"]
     #[serde(rename="ClusterId")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -529,7 +519,7 @@ pub struct JobMetadata {
     #[doc="<p>The creation date for this job.</p>"]
     #[serde(rename="CreationDate")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub creation_date: Option<Timestamp>,
+    pub creation_date: Option<f64>,
     #[doc="<p>A value that defines the real-time status of a Snowball's data transfer while the appliance is at AWS. This data is only available while a job has a <code>JobState</code> value of <code>InProgress</code>, for both import and export jobs.</p>"]
     #[serde(rename="DataTransferProgress")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -541,7 +531,7 @@ pub struct JobMetadata {
     #[doc="<p>The ID of the address that you want a job shipped to, after it will be shipped to its primary address. This field is not supported in most regions.</p>"]
     #[serde(rename="ForwardingAddressId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub forwarding_address_id: Option<AddressId>,
+    pub forwarding_address_id: Option<String>,
     #[doc="<p>The automatically generated ID for a job, for example <code>JID123e4567-e89b-12d3-a456-426655440000</code>.</p>"]
     #[serde(rename="JobId")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -553,15 +543,15 @@ pub struct JobMetadata {
     #[doc="<p>The current status of the jobs.</p>"]
     #[serde(rename="JobState")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub job_state: Option<JobState>,
+    pub job_state: Option<String>,
     #[doc="<p>The type of job.</p>"]
     #[serde(rename="JobType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub job_type: Option<JobType>,
+    pub job_type: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) for the AWS Key Management Service (AWS KMS) key associated with this job. This ARN was created using the <a href=\"http://docs.aws.amazon.com/kms/latest/APIReference/API_CreateKey.html\">CreateKey</a> API action in AWS KMS.</p>"]
     #[serde(rename="KmsKeyARN")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub kms_key_arn: Option<KmsKeyARN>,
+    pub kms_key_arn: Option<String>,
     #[doc="<p>The Amazon Simple Notification Service (Amazon SNS) notification settings associated with a specific job. The <code>Notification</code> object is returned as a part of the response syntax of the <code>DescribeJob</code> action in the <code>JobMetadata</code> data type.</p>"]
     #[serde(rename="Notification")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -573,7 +563,7 @@ pub struct JobMetadata {
     #[doc="<p>The role ARN associated with this job. This ARN was created using the <a href=\"http://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateRole.html\">CreateRole</a> API action in AWS Identity and Access Management (IAM).</p>"]
     #[serde(rename="RoleARN")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub role_arn: Option<RoleARN>,
+    pub role_arn: Option<String>,
     #[doc="<p>A job's shipping information, including inbound and outbound tracking numbers and shipping speed options.</p>"]
     #[serde(rename="ShippingDetails")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -581,30 +571,26 @@ pub struct JobMetadata {
     #[doc="<p>The Snowball capacity preference for this job, specified at job creation. In US regions, you can choose between 50 TB and 80 TB Snowballs. All other regions use 80 TB capacity Snowballs.</p>"]
     #[serde(rename="SnowballCapacityPreference")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub snowball_capacity_preference: Option<SnowballCapacity>,
+    pub snowball_capacity_preference: Option<String>,
     #[doc="<p>The type of appliance used with this job.</p>"]
     #[serde(rename="SnowballType")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub snowball_type: Option<SnowballType>,
+    pub snowball_type: Option<String>,
 }
 
-pub type JobMetadataList = Vec<JobMetadata>;
 #[doc="<p>Contains an array of <code>S3Resource</code> objects. Each <code>S3Resource</code> object represents an Amazon S3 bucket that your transferred data will be exported from or imported into.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct JobResource {
     #[doc="<p>The Python-language Lambda functions for this job.</p>"]
     #[serde(rename="LambdaResources")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub lambda_resources: Option<LambdaResourceList>,
+    pub lambda_resources: Option<Vec<LambdaResource>>,
     #[doc="<p>An array of <code>S3Resource</code> objects.</p>"]
     #[serde(rename="S3Resources")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub s3_resources: Option<S3ResourceList>,
+    pub s3_resources: Option<Vec<S3Resource>>,
 }
 
-pub type JobState = String;
-pub type JobStateList = Vec<JobState>;
-pub type JobType = String;
 #[doc="<p>Contains a key range. For export jobs, a <code>S3Resource</code> object can have an optional <code>KeyRange</code> value. The length of the range is defined at job creation, and has either an inclusive <code>BeginMarker</code>, an inclusive <code>EndMarker</code>, or both. Ranges are UTF-8 binary sorted.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct KeyRange {
@@ -618,30 +604,28 @@ pub struct KeyRange {
     pub end_marker: Option<String>,
 }
 
-pub type KmsKeyARN = String;
 #[doc="<p>Identifies </p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct LambdaResource {
     #[doc="<p>The array of ARNs for <a>S3Resource</a> objects to trigger the <a>LambdaResource</a> objects associated with this job.</p>"]
     #[serde(rename="EventTriggers")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub event_triggers: Option<EventTriggerDefinitionList>,
+    pub event_triggers: Option<Vec<EventTriggerDefinition>>,
     #[doc="<p>An Amazon Resource Name (ARN) that represents an AWS Lambda function to be triggered by PUT object actions on the associated local Amazon S3 resource.</p>"]
     #[serde(rename="LambdaArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub lambda_arn: Option<ResourceARN>,
+    pub lambda_arn: Option<String>,
 }
 
-pub type LambdaResourceList = Vec<LambdaResource>;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListClusterJobsRequest {
     #[doc="<p>The 39-character ID for the cluster that you want to list, for example <code>CID123e4567-e89b-12d3-a456-426655440000</code>.</p>"]
     #[serde(rename="ClusterId")]
-    pub cluster_id: ClusterId,
+    pub cluster_id: String,
     #[doc="<p>The number of <code>JobListEntry</code> objects to return.</p>"]
     #[serde(rename="MaxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<ListLimit>,
+    pub max_results: Option<i64>,
     #[doc="<p>HTTP requests are stateless. To identify what object comes \"next\" in the list of <code>JobListEntry</code> objects, you have the option of specifying <code>NextToken</code> as the starting point for your returned list.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -653,7 +637,7 @@ pub struct ListClusterJobsResult {
     #[doc="<p>Each <code>JobListEntry</code> object contains a job's state, a job's ID, and a value that indicates whether the job is a job part, in the case of export jobs. </p>"]
     #[serde(rename="JobListEntries")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub job_list_entries: Option<JobListEntryList>,
+    pub job_list_entries: Option<Vec<JobListEntry>>,
     #[doc="<p>HTTP requests are stateless. If you use the automatically generated <code>NextToken</code> value in your next <code>ListClusterJobsResult</code> call, your list of returned jobs will start from this point in the array.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -665,7 +649,7 @@ pub struct ListClustersRequest {
     #[doc="<p>The number of <code>ClusterListEntry</code> objects to return.</p>"]
     #[serde(rename="MaxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<ListLimit>,
+    pub max_results: Option<i64>,
     #[doc="<p>HTTP requests are stateless. To identify what object comes \"next\" in the list of <code>ClusterListEntry</code> objects, you have the option of specifying <code>NextToken</code> as the starting point for your returned list.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -677,7 +661,7 @@ pub struct ListClustersResult {
     #[doc="<p>Each <code>ClusterListEntry</code> object contains a cluster's state, a cluster's ID, and other important status information.</p>"]
     #[serde(rename="ClusterListEntries")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub cluster_list_entries: Option<ClusterListEntryList>,
+    pub cluster_list_entries: Option<Vec<ClusterListEntry>>,
     #[doc="<p>HTTP requests are stateless. If you use the automatically generated <code>NextToken</code> value in your next <code>ClusterListEntry</code> call, your list of returned clusters will start from this point in the array.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -689,7 +673,7 @@ pub struct ListJobsRequest {
     #[doc="<p>The number of <code>JobListEntry</code> objects to return.</p>"]
     #[serde(rename="MaxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<ListLimit>,
+    pub max_results: Option<i64>,
     #[doc="<p>HTTP requests are stateless. To identify what object comes \"next\" in the list of <code>JobListEntry</code> objects, you have the option of specifying <code>NextToken</code> as the starting point for your returned list.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -701,48 +685,43 @@ pub struct ListJobsResult {
     #[doc="<p>Each <code>JobListEntry</code> object contains a job's state, a job's ID, and a value that indicates whether the job is a job part, in the case of export jobs. </p>"]
     #[serde(rename="JobListEntries")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub job_list_entries: Option<JobListEntryList>,
+    pub job_list_entries: Option<Vec<JobListEntry>>,
     #[doc="<p>HTTP requests are stateless. If you use this automatically generated <code>NextToken</code> value in your next <code>ListJobs</code> call, your returned <code>JobListEntry</code> objects will start from this point in the array.</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub next_token: Option<String>,
 }
 
-pub type ListLimit = i64;
-pub type Long = i64;
 #[doc="<p>The Amazon Simple Notification Service (Amazon SNS) notification settings associated with a specific job. The <code>Notification</code> object is returned as a part of the response syntax of the <code>DescribeJob</code> action in the <code>JobMetadata</code> data type.</p> <p>When the notification settings are defined during job creation, you can choose to notify based on a specific set of job states using the <code>JobStatesToNotify</code> array of strings, or you can specify that you want to have Amazon SNS notifications sent out for all job states with <code>NotifyAll</code> set to true.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct Notification {
     #[doc="<p>The list of job states that will trigger a notification for this job.</p>"]
     #[serde(rename="JobStatesToNotify")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub job_states_to_notify: Option<JobStateList>,
+    pub job_states_to_notify: Option<Vec<String>>,
     #[doc="<p>Any change in job state will trigger a notification for this job.</p>"]
     #[serde(rename="NotifyAll")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub notify_all: Option<Boolean>,
+    pub notify_all: Option<bool>,
     #[doc="<p>The new SNS <code>TopicArn</code> that you want to associate with this job. You can create Amazon Resource Names (ARNs) for topics by using the <a href=\"http://docs.aws.amazon.com/sns/latest/api/API_CreateTopic.html\">CreateTopic</a> Amazon SNS API action.</p> <p>You can subscribe email addresses to an Amazon SNS topic through the AWS Management Console, or by using the <a href=\"http://docs.aws.amazon.com/sns/latest/api/API_Subscribe.html\">Subscribe</a> AWS Simple Notification Service (SNS) API action.</p>"]
     #[serde(rename="SnsTopicARN")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub sns_topic_arn: Option<SnsTopicARN>,
+    pub sns_topic_arn: Option<String>,
 }
 
-pub type ResourceARN = String;
-pub type RoleARN = String;
 #[doc="<p>Each <code>S3Resource</code> object represents an Amazon S3 bucket that your transferred data will be exported from or imported into. For export jobs, this object can have an optional <code>KeyRange</code> value. The length of the range is defined at job creation, and has either an inclusive <code>BeginMarker</code>, an inclusive <code>EndMarker</code>, or both. Ranges are UTF-8 binary sorted.</p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct S3Resource {
     #[doc="<p>The Amazon Resource Name (ARN) of an Amazon S3 bucket.</p>"]
     #[serde(rename="BucketArn")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub bucket_arn: Option<ResourceARN>,
+    pub bucket_arn: Option<String>,
     #[doc="<p>For export jobs, you can provide an optional <code>KeyRange</code> within a specific Amazon S3 bucket. The length of the range is defined at job creation, and has either an inclusive <code>BeginMarker</code>, an inclusive <code>EndMarker</code>, or both. Ranges are UTF-8 binary sorted.</p>"]
     #[serde(rename="KeyRange")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub key_range: Option<KeyRange>,
 }
 
-pub type S3ResourceList = Vec<S3Resource>;
 #[doc="<p>The <code>Status</code> and <code>TrackingNumber</code> information for an inbound or outbound shipment.</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Shipment {
@@ -770,23 +749,18 @@ pub struct ShippingDetails {
     #[doc="<p>The shipping speed for a particular job. This speed doesn't dictate how soon you'll get the Snowball from the job's creation date. This speed represents how quickly it moves to its destination while in transit. Regional shipping speeds are as follows:</p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, Snowballs shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snowballs shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snowballs are delivered in one to seven days.</p> </li> <li> <p>In the United States of America (US), you have access to one-day shipping and two-day shipping.</p> </li> </ul>"]
     #[serde(rename="ShippingOption")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub shipping_option: Option<ShippingOption>,
+    pub shipping_option: Option<String>,
 }
 
-pub type ShippingOption = String;
-pub type SnowballCapacity = String;
-pub type SnowballType = String;
-pub type SnsTopicARN = String;
-pub type Timestamp = f64;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateClusterRequest {
     #[doc="<p>The ID of the updated <a>Address</a> object.</p>"]
     #[serde(rename="AddressId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub address_id: Option<AddressId>,
+    pub address_id: Option<String>,
     #[doc="<p>The cluster ID of the cluster that you want to update, for example <code>CID123e4567-e89b-12d3-a456-426655440000</code>.</p>"]
     #[serde(rename="ClusterId")]
-    pub cluster_id: ClusterId,
+    pub cluster_id: String,
     #[doc="<p>The updated description of this cluster.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -794,7 +768,7 @@ pub struct UpdateClusterRequest {
     #[doc="<p>The updated ID for the forwarding address for a cluster. This field is not supported in most regions.</p>"]
     #[serde(rename="ForwardingAddressId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub forwarding_address_id: Option<AddressId>,
+    pub forwarding_address_id: Option<String>,
     #[doc="<p>The new or updated <a>Notification</a> object.</p>"]
     #[serde(rename="Notification")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -806,11 +780,11 @@ pub struct UpdateClusterRequest {
     #[doc="<p>The new role Amazon Resource Name (ARN) that you want to associate with this cluster. To create a role ARN, use the <a href=\"http://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateRole.html\">CreateRole</a> API action in AWS Identity and Access Management (IAM).</p>"]
     #[serde(rename="RoleARN")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub role_arn: Option<RoleARN>,
+    pub role_arn: Option<String>,
     #[doc="<p>The updated shipping option value of this cluster's <a>ShippingDetails</a> object.</p>"]
     #[serde(rename="ShippingOption")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub shipping_option: Option<ShippingOption>,
+    pub shipping_option: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -821,7 +795,7 @@ pub struct UpdateJobRequest {
     #[doc="<p>The ID of the updated <a>Address</a> object.</p>"]
     #[serde(rename="AddressId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub address_id: Option<AddressId>,
+    pub address_id: Option<String>,
     #[doc="<p>The updated description of this job's <a>JobMetadata</a> object.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -829,10 +803,10 @@ pub struct UpdateJobRequest {
     #[doc="<p>The updated ID for the forwarding address for a job. This field is not supported in most regions.</p>"]
     #[serde(rename="ForwardingAddressId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub forwarding_address_id: Option<AddressId>,
+    pub forwarding_address_id: Option<String>,
     #[doc="<p>The job ID of the job that you want to update, for example <code>JID123e4567-e89b-12d3-a456-426655440000</code>.</p>"]
     #[serde(rename="JobId")]
-    pub job_id: JobId,
+    pub job_id: String,
     #[doc="<p>The new or updated <a>Notification</a> object.</p>"]
     #[serde(rename="Notification")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -844,15 +818,15 @@ pub struct UpdateJobRequest {
     #[doc="<p>The new role Amazon Resource Name (ARN) that you want to associate with this job. To create a role ARN, use the <a href=\"http://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateRole.html\">CreateRole</a>AWS Identity and Access Management (IAM) API action.</p>"]
     #[serde(rename="RoleARN")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub role_arn: Option<RoleARN>,
+    pub role_arn: Option<String>,
     #[doc="<p>The updated shipping option value of this job's <a>ShippingDetails</a> object.</p>"]
     #[serde(rename="ShippingOption")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub shipping_option: Option<ShippingOption>,
+    pub shipping_option: Option<String>,
     #[doc="<p>The updated <code>SnowballCapacityPreference</code> of this job's <a>JobMetadata</a> object. The 50 TB Snowballs are only available in the US regions.</p>"]
     #[serde(rename="SnowballCapacityPreference")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub snowball_capacity_preference: Option<SnowballCapacity>,
+    pub snowball_capacity_preference: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]

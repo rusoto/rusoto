@@ -41,11 +41,11 @@ enum DeserializerNext {
 #[derive(Default,Debug,Clone)]
 pub struct AcceptReservedInstancesExchangeQuoteRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The IDs of the Convertible Reserved Instances to exchange for other Convertible Reserved Instances of the same or higher value.</p>"]
-    pub reserved_instance_ids: ReservedInstanceIdSet,
+    pub reserved_instance_ids: Vec<String>,
     #[doc="<p>The configurations of the Convertible Reserved Instance offerings that you are purchasing in this exchange.</p>"]
-    pub target_configurations: Option<TargetConfigurationRequestSet>,
+    pub target_configurations: Option<Vec<TargetConfigurationRequest>>,
 }
 
 
@@ -131,7 +131,7 @@ impl AcceptReservedInstancesExchangeQuoteResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct AcceptVpcPeeringConnectionRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the VPC peering connection.</p>"]
     pub vpc_peering_connection_id: Option<String>,
 }
@@ -214,7 +214,7 @@ pub struct AccountAttribute {
     #[doc="<p>The name of the account attribute.</p>"]
     pub attribute_name: Option<String>,
     #[doc="<p>One or more values for the account attribute.</p>"]
-    pub attribute_values: Option<AccountAttributeValueList>,
+    pub attribute_values: Option<Vec<AccountAttributeValue>>,
 }
 
 struct AccountAttributeDeserializer;
@@ -262,13 +262,12 @@ impl AccountAttributeDeserializer {
 
     }
 }
-pub type AccountAttributeList = Vec<AccountAttribute>;
 struct AccountAttributeListDeserializer;
 impl AccountAttributeListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AccountAttributeList, XmlParseError> {
+                                       -> Result<Vec<AccountAttribute>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -304,13 +303,11 @@ impl AccountAttributeListDeserializer {
 
     }
 }
-pub type AccountAttributeName = String;
-pub type AccountAttributeNameStringList = Vec<AccountAttributeName>;
 
 /// Serialize `AccountAttributeNameStringList` contents to a `SignedRequest`.
 struct AccountAttributeNameStringListSerializer;
 impl AccountAttributeNameStringListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AccountAttributeNameStringList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -368,13 +365,12 @@ impl AccountAttributeValueDeserializer {
 
     }
 }
-pub type AccountAttributeValueList = Vec<AccountAttributeValue>;
 struct AccountAttributeValueListDeserializer;
 impl AccountAttributeValueListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AccountAttributeValueList, XmlParseError> {
+                                       -> Result<Vec<AccountAttributeValue>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -415,7 +411,7 @@ impl AccountAttributeValueListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ActiveInstance {
     #[doc="<p>The health status of the instance. If the status of either the instance status check or the system status check is <code>impaired</code>, the health status of the instance is <code>unhealthy</code>. Otherwise, the health status is <code>healthy</code>.</p>"]
-    pub instance_health: Option<InstanceHealthStatus>,
+    pub instance_health: Option<String>,
     #[doc="<p>The ID of the instance.</p>"]
     pub instance_id: Option<String>,
     #[doc="<p>The instance type.</p>"]
@@ -480,13 +476,12 @@ impl ActiveInstanceDeserializer {
 
     }
 }
-pub type ActiveInstanceSet = Vec<ActiveInstance>;
 struct ActiveInstanceSetDeserializer;
 impl ActiveInstanceSetDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ActiveInstanceSet, XmlParseError> {
+                                       -> Result<Vec<ActiveInstance>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -522,13 +517,12 @@ impl ActiveInstanceSetDeserializer {
 
     }
 }
-pub type ActivityStatus = String;
 struct ActivityStatusDeserializer;
 impl ActivityStatusDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ActivityStatus, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -545,7 +539,7 @@ pub struct Address {
     #[doc="<p>The ID representing the association of the address with an instance in a VPC.</p>"]
     pub association_id: Option<String>,
     #[doc="<p>Indicates whether this Elastic IP address is for use with instances in EC2-Classic (<code>standard</code>) or instances in a VPC (<code>vpc</code>).</p>"]
-    pub domain: Option<DomainType>,
+    pub domain: Option<String>,
     #[doc="<p>The ID of the instance that the address is associated with (if any).</p>"]
     pub instance_id: Option<String>,
     #[doc="<p>The ID of the network interface.</p>"]
@@ -631,13 +625,12 @@ impl AddressDeserializer {
 
     }
 }
-pub type AddressList = Vec<Address>;
 struct AddressListDeserializer;
 impl AddressListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AddressList, XmlParseError> {
+                                       -> Result<Vec<Address>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -673,14 +666,13 @@ impl AddressListDeserializer {
 
     }
 }
-pub type Affinity = String;
 #[doc="<p>Contains the parameters for AllocateAddress.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct AllocateAddressRequest {
     #[doc="<p>Set to <code>vpc</code> to allocate the address for use with instances in a VPC.</p> <p>Default: The address is for use with instances in EC2-Classic.</p>"]
-    pub domain: Option<DomainType>,
+    pub domain: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
 }
 
 
@@ -709,7 +701,7 @@ pub struct AllocateAddressResult {
     #[doc="<p>[EC2-VPC] The ID that AWS assigns to represent the allocation of the Elastic IP address for use with instances in a VPC.</p>"]
     pub allocation_id: Option<String>,
     #[doc="<p>Indicates whether this Elastic IP address is for use with instances in EC2-Classic (<code>standard</code>) or instances in a VPC (<code>vpc</code>).</p>"]
-    pub domain: Option<DomainType>,
+    pub domain: Option<String>,
     #[doc="<p>The Elastic IP address.</p>"]
     pub public_ip: Option<String>,
 }
@@ -768,7 +760,7 @@ impl AllocateAddressResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct AllocateHostsRequest {
     #[doc="<p>This is enabled by default. This property allows instances to be automatically placed onto available Dedicated Hosts, when you are launching instances without specifying a host ID.</p> <p>Default: Enabled</p>"]
-    pub auto_placement: Option<AutoPlacement>,
+    pub auto_placement: Option<String>,
     #[doc="<p>The Availability Zone for the Dedicated Hosts.</p>"]
     pub availability_zone: String,
     #[doc="<p>Unique, case-sensitive identifier you provide to ensure idempotency of the request. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html\">How to Ensure Idempotency</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. </p>"]
@@ -776,7 +768,7 @@ pub struct AllocateHostsRequest {
     #[doc="<p>Specify the instance type that you want your Dedicated Hosts to be configured for. When you specify the instance type, that is the only instance type that you can launch onto that host.</p>"]
     pub instance_type: String,
     #[doc="<p>The number of Dedicated Hosts you want to allocate to your account with these parameters.</p>"]
-    pub quantity: Integer,
+    pub quantity: i64,
 }
 
 
@@ -808,7 +800,7 @@ impl AllocateHostsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct AllocateHostsResult {
     #[doc="<p>The ID of the allocated Dedicated Host. This is used when you want to launch an instance onto a specific host.</p>"]
-    pub host_ids: Option<ResponseHostIdList>,
+    pub host_ids: Option<Vec<String>>,
 }
 
 struct AllocateHostsResultDeserializer;
@@ -854,12 +846,11 @@ impl AllocateHostsResultDeserializer {
 
     }
 }
-pub type AllocationIdList = Vec<String>;
 
 /// Serialize `AllocationIdList` contents to a `SignedRequest`.
 struct AllocationIdListSerializer;
 impl AllocationIdListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AllocationIdList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -867,13 +858,12 @@ impl AllocationIdListSerializer {
     }
 }
 
-pub type AllocationState = String;
 struct AllocationStateDeserializer;
 impl AllocationStateDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AllocationState, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -882,13 +872,12 @@ impl AllocationStateDeserializer {
 
     }
 }
-pub type AllocationStrategy = String;
 struct AllocationStrategyDeserializer;
 impl AllocationStrategyDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AllocationStrategy, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -897,13 +886,12 @@ impl AllocationStrategyDeserializer {
 
     }
 }
-pub type ArchitectureValues = String;
 struct ArchitectureValuesDeserializer;
 impl ArchitectureValuesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ArchitectureValues, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -915,9 +903,9 @@ impl ArchitectureValuesDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct AssignIpv6AddressesRequest {
     #[doc="<p>The number of IPv6 addresses to assign to the network interface. Amazon EC2 automatically selects the IPv6 addresses from the subnet range. You can't use this option if specifying specific IPv6 addresses.</p>"]
-    pub ipv_6_address_count: Option<Integer>,
+    pub ipv_6_address_count: Option<i64>,
     #[doc="<p>One or more specific IPv6 addresses to be assigned to the network interface. You can't use this option if you're specifying a number of IPv6 addresses.</p>"]
-    pub ipv_6_addresses: Option<Ipv6AddressList>,
+    pub ipv_6_addresses: Option<Vec<String>>,
     #[doc="<p>The ID of the network interface.</p>"]
     pub network_interface_id: String,
 }
@@ -950,7 +938,7 @@ impl AssignIpv6AddressesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct AssignIpv6AddressesResult {
     #[doc="<p>The IPv6 addresses assigned to the network interface.</p>"]
-    pub assigned_ipv_6_addresses: Option<Ipv6AddressList>,
+    pub assigned_ipv_6_addresses: Option<Vec<String>>,
     #[doc="<p>The ID of the network interface.</p>"]
     pub network_interface_id: Option<String>,
 }
@@ -1007,13 +995,13 @@ impl AssignIpv6AddressesResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct AssignPrivateIpAddressesRequest {
     #[doc="<p>Indicates whether to allow an IP address that is already assigned to another network interface or instance to be reassigned to the specified network interface.</p>"]
-    pub allow_reassignment: Option<Boolean>,
+    pub allow_reassignment: Option<bool>,
     #[doc="<p>The ID of the network interface.</p>"]
     pub network_interface_id: String,
     #[doc="<p>One or more IP addresses to be assigned as a secondary private IP address to the network interface. You can't specify this parameter when also specifying a number of secondary IP addresses.</p> <p>If you don't specify an IP address, Amazon EC2 automatically selects an IP address within the subnet range.</p>"]
-    pub private_ip_addresses: Option<PrivateIpAddressStringList>,
+    pub private_ip_addresses: Option<Vec<String>>,
     #[doc="<p>The number of secondary IP addresses to assign to the network interface. You can't specify this parameter when also specifying private IP addresses.</p>"]
-    pub secondary_private_ip_address_count: Option<Integer>,
+    pub secondary_private_ip_address_count: Option<i64>,
 }
 
 
@@ -1053,9 +1041,9 @@ pub struct AssociateAddressRequest {
     #[doc="<p>[EC2-VPC] The allocation ID. This is required for EC2-VPC.</p>"]
     pub allocation_id: Option<String>,
     #[doc="<p>[EC2-VPC] For a VPC in an EC2-Classic account, specify true to allow an Elastic IP address that is already associated with an instance or network interface to be reassociated with the specified instance or network interface. Otherwise, the operation fails. In a VPC in an EC2-VPC-only account, reassociation is automatic, therefore you can specify false to ensure the operation fails if the Elastic IP address is already associated with another resource.</p>"]
-    pub allow_reassociation: Option<Boolean>,
+    pub allow_reassociation: Option<bool>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the instance. This is required for EC2-Classic. For EC2-VPC, you can specify either the instance ID or the network interface ID, but not both. The operation fails if you specify an instance ID unless exactly one network interface is attached.</p>"]
     pub instance_id: Option<String>,
     #[doc="<p>[EC2-VPC] The ID of the network interface. If the instance has more than one network interface, you must specify a network interface ID.</p>"]
@@ -1157,7 +1145,7 @@ pub struct AssociateDhcpOptionsRequest {
     #[doc="<p>The ID of the DHCP options set, or <code>default</code> to associate no DHCP options with the VPC.</p>"]
     pub dhcp_options_id: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the VPC.</p>"]
     pub vpc_id: String,
 }
@@ -1262,7 +1250,7 @@ impl AssociateIamInstanceProfileResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct AssociateRouteTableRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the route table.</p>"]
     pub route_table_id: String,
     #[doc="<p>The ID of the subnet.</p>"]
@@ -1419,7 +1407,7 @@ impl AssociateSubnetCidrBlockResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct AssociateVpcCidrBlockRequest {
     #[doc="<p>Requests an Amazon-provided IPv6 CIDR block with a /56 prefix length for the VPC. You cannot specify the range of IPv6 addresses, or the size of the CIDR block.</p>"]
-    pub amazon_provided_ipv_6_cidr_block: Option<Boolean>,
+    pub amazon_provided_ipv_6_cidr_block: Option<bool>,
     #[doc="<p>The ID of the VPC.</p>"]
     pub vpc_id: String,
 }
@@ -1496,12 +1484,11 @@ impl AssociateVpcCidrBlockResultDeserializer {
 
     }
 }
-pub type AssociationIdList = Vec<String>;
 
 /// Serialize `AssociationIdList` contents to a `SignedRequest`.
 struct AssociationIdListSerializer;
 impl AssociationIdListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AssociationIdList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -1513,9 +1500,9 @@ impl AssociationIdListSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct AttachClassicLinkVpcRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of one or more of the VPC's security groups. You cannot specify security groups from a different VPC.</p>"]
-    pub groups: GroupIdStringList,
+    pub groups: Vec<String>,
     #[doc="<p>The ID of an EC2-Classic instance to link to the ClassicLink-enabled VPC.</p>"]
     pub instance_id: String,
     #[doc="<p>The ID of a ClassicLink-enabled VPC.</p>"]
@@ -1548,7 +1535,7 @@ impl AttachClassicLinkVpcRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct AttachClassicLinkVpcResult {
     #[doc="<p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>"]
-    pub return_: Option<Boolean>,
+    pub return_: Option<bool>,
 }
 
 struct AttachClassicLinkVpcResultDeserializer;
@@ -1597,7 +1584,7 @@ impl AttachClassicLinkVpcResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct AttachInternetGatewayRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the Internet gateway.</p>"]
     pub internet_gateway_id: String,
     #[doc="<p>The ID of the VPC.</p>"]
@@ -1628,9 +1615,9 @@ impl AttachInternetGatewayRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct AttachNetworkInterfaceRequest {
     #[doc="<p>The index of the device for the network interface attachment.</p>"]
-    pub device_index: Integer,
+    pub device_index: i64,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the instance.</p>"]
     pub instance_id: String,
     #[doc="<p>The ID of the network interface.</p>"]
@@ -1714,7 +1701,7 @@ pub struct AttachVolumeRequest {
     #[doc="<p>The device name to expose to the instance (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p>"]
     pub device: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the instance.</p>"]
     pub instance_id: String,
     #[doc="<p>The ID of the EBS volume. The volume and instance must be within the same Availability Zone.</p>"]
@@ -1745,7 +1732,7 @@ impl AttachVolumeRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct AttachVpnGatewayRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the VPC.</p>"]
     pub vpc_id: String,
     #[doc="<p>The ID of the virtual private gateway.</p>"]
@@ -1822,13 +1809,12 @@ impl AttachVpnGatewayResultDeserializer {
 
     }
 }
-pub type AttachmentStatus = String;
 struct AttachmentStatusDeserializer;
 impl AttachmentStatusDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AttachmentStatus, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1841,7 +1827,7 @@ impl AttachmentStatusDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct AttributeBooleanValue {
     #[doc="<p>The attribute value. The valid values are <code>true</code> or <code>false</code>.</p>"]
-    pub value: Option<Boolean>,
+    pub value: Option<bool>,
 }
 
 struct AttributeBooleanValueDeserializer;
@@ -1974,13 +1960,13 @@ pub struct AuthorizeSecurityGroupEgressRequest {
     #[doc="<p>The CIDR IPv4 address range. We recommend that you specify the CIDR range in a set of IP permissions instead.</p>"]
     pub cidr_ip: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The start of port range for the TCP and UDP protocols, or an ICMP type number. We recommend that you specify the port range in a set of IP permissions instead.</p>"]
-    pub from_port: Option<Integer>,
+    pub from_port: Option<i64>,
     #[doc="<p>The ID of the security group.</p>"]
     pub group_id: String,
     #[doc="<p>A set of IP permissions. You can't specify a destination security group and a CIDR IP address range.</p>"]
-    pub ip_permissions: Option<IpPermissionList>,
+    pub ip_permissions: Option<Vec<IpPermission>>,
     #[doc="<p>The IP protocol name or number. We recommend that you specify the protocol in a set of IP permissions instead.</p>"]
     pub ip_protocol: Option<String>,
     #[doc="<p>The name of a destination security group. To authorize outbound access to a destination security group, we recommend that you use a set of IP permissions instead.</p>"]
@@ -1988,7 +1974,7 @@ pub struct AuthorizeSecurityGroupEgressRequest {
     #[doc="<p>The AWS account number for a destination security group. To authorize outbound access to a destination security group, we recommend that you use a set of IP permissions instead.</p>"]
     pub source_security_group_owner_id: Option<String>,
     #[doc="<p>The end of port range for the TCP and UDP protocols, or an ICMP type number. We recommend that you specify the port range in a set of IP permissions instead.</p>"]
-    pub to_port: Option<Integer>,
+    pub to_port: Option<i64>,
 }
 
 
@@ -2041,15 +2027,15 @@ pub struct AuthorizeSecurityGroupIngressRequest {
     #[doc="<p>The CIDR IPv4 address range. You can't specify this parameter when specifying a source security group.</p>"]
     pub cidr_ip: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The start of port range for the TCP and UDP protocols, or an ICMP/ICMPv6 type number. For the ICMP/ICMPv6 type number, use <code>-1</code> to specify all types.</p>"]
-    pub from_port: Option<Integer>,
+    pub from_port: Option<i64>,
     #[doc="<p>The ID of the security group. Required for a nondefault VPC.</p>"]
     pub group_id: Option<String>,
     #[doc="<p>[EC2-Classic, default VPC] The name of the security group.</p>"]
     pub group_name: Option<String>,
     #[doc="<p>A set of IP permissions. Can be used to specify multiple rules in a single command.</p>"]
-    pub ip_permissions: Option<IpPermissionList>,
+    pub ip_permissions: Option<Vec<IpPermission>>,
     #[doc="<p>The IP protocol name (<code>tcp</code>, <code>udp</code>, <code>icmp</code>) or number (see <a href=\"http://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml\">Protocol Numbers</a>). (VPC only) Use <code>-1</code> to specify all protocols. If you specify <code>-1</code>, or a protocol number other than <code>tcp</code>, <code>udp</code>, <code>icmp</code>, or <code>58</code> (ICMPv6), traffic on all ports is allowed, regardless of any ports you specify. For <code>tcp</code>, <code>udp</code>, and <code>icmp</code>, you must specify a port range. For protocol <code>58</code> (ICMPv6), you can optionally specify a port range; if you don't, traffic for all types and codes is allowed.</p>"]
     pub ip_protocol: Option<String>,
     #[doc="<p>[EC2-Classic, default VPC] The name of the source security group. You can't specify this parameter in combination with the following parameters: the CIDR IP address range, the start of the port range, the IP protocol, and the end of the port range. Creates rules that grant full ICMP, UDP, and TCP access. To create a rule with a specific IP protocol and port range, use a set of IP permissions instead. For EC2-VPC, the source security group must be in the same VPC.</p>"]
@@ -2057,7 +2043,7 @@ pub struct AuthorizeSecurityGroupIngressRequest {
     #[doc="<p>[EC2-Classic] The AWS account number for the source security group, if the source security group is in a different account. You can't specify this parameter in combination with the following parameters: the CIDR IP address range, the IP protocol, the start of the port range, and the end of the port range. Creates rules that grant full ICMP, UDP, and TCP access. To create a rule with a specific IP protocol and port range, use a set of IP permissions instead.</p>"]
     pub source_security_group_owner_id: Option<String>,
     #[doc="<p>The end of port range for the TCP and UDP protocols, or an ICMP/ICMPv6 code number. For the ICMP/ICMPv6 code number, use <code>-1</code> to specify all codes.</p>"]
-    pub to_port: Option<Integer>,
+    pub to_port: Option<i64>,
 }
 
 
@@ -2109,13 +2095,12 @@ impl AuthorizeSecurityGroupIngressRequestSerializer {
     }
 }
 
-pub type AutoPlacement = String;
 struct AutoPlacementDeserializer;
 impl AutoPlacementDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AutoPlacement, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2128,11 +2113,11 @@ impl AutoPlacementDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct AvailabilityZone {
     #[doc="<p>Any messages about the Availability Zone.</p>"]
-    pub messages: Option<AvailabilityZoneMessageList>,
+    pub messages: Option<Vec<AvailabilityZoneMessage>>,
     #[doc="<p>The name of the region.</p>"]
     pub region_name: Option<String>,
     #[doc="<p>The state of the Availability Zone.</p>"]
-    pub state: Option<AvailabilityZoneState>,
+    pub state: Option<String>,
     #[doc="<p>The name of the Availability Zone.</p>"]
     pub zone_name: Option<String>,
 }
@@ -2191,13 +2176,12 @@ impl AvailabilityZoneDeserializer {
 
     }
 }
-pub type AvailabilityZoneList = Vec<AvailabilityZone>;
 struct AvailabilityZoneListDeserializer;
 impl AvailabilityZoneListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AvailabilityZoneList, XmlParseError> {
+                                       -> Result<Vec<AvailabilityZone>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -2282,13 +2266,12 @@ impl AvailabilityZoneMessageDeserializer {
 
     }
 }
-pub type AvailabilityZoneMessageList = Vec<AvailabilityZoneMessage>;
 struct AvailabilityZoneMessageListDeserializer;
 impl AvailabilityZoneMessageListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AvailabilityZoneMessageList, XmlParseError> {
+                                       -> Result<Vec<AvailabilityZoneMessage>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -2325,13 +2308,12 @@ impl AvailabilityZoneMessageListDeserializer {
 
     }
 }
-pub type AvailabilityZoneState = String;
 struct AvailabilityZoneStateDeserializer;
 impl AvailabilityZoneStateDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AvailabilityZoneState, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2344,9 +2326,9 @@ impl AvailabilityZoneStateDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct AvailableCapacity {
     #[doc="<p>The total number of instances that the Dedicated Host supports.</p>"]
-    pub available_instance_capacity: Option<AvailableInstanceCapacityList>,
+    pub available_instance_capacity: Option<Vec<InstanceCapacity>>,
     #[doc="<p>The number of vCPUs available on the Dedicated Host.</p>"]
-    pub available_v_cpus: Option<Integer>,
+    pub available_v_cpus: Option<i64>,
 }
 
 struct AvailableCapacityDeserializer;
@@ -2395,13 +2377,12 @@ impl AvailableCapacityDeserializer {
 
     }
 }
-pub type AvailableInstanceCapacityList = Vec<InstanceCapacity>;
 struct AvailableInstanceCapacityListDeserializer;
 impl AvailableInstanceCapacityListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AvailableInstanceCapacityList, XmlParseError> {
+                                       -> Result<Vec<InstanceCapacity>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -2437,13 +2418,12 @@ impl AvailableInstanceCapacityListDeserializer {
 
     }
 }
-pub type BatchState = String;
 struct BatchStateDeserializer;
 impl BatchStateDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<BatchState, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2452,12 +2432,11 @@ impl BatchStateDeserializer {
 
     }
 }
-pub type BillingProductList = Vec<String>;
 
 /// Serialize `BillingProductList` contents to a `SignedRequest`.
 struct BillingProductListSerializer;
 impl BillingProductListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &BillingProductList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -2465,13 +2444,12 @@ impl BillingProductListSerializer {
     }
 }
 
-pub type Blob = Vec<u8>;
 struct BlobDeserializer;
 impl BlobDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Blob, XmlParseError> {
+                                       -> Result<Vec<u8>, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack)).into_bytes();
         try!(end_element(tag_name, stack));
@@ -2482,7 +2460,7 @@ impl BlobDeserializer {
 }
 #[derive(Default,Debug,Clone)]
 pub struct BlobAttributeValue {
-    pub value: Option<Blob>,
+    pub value: Option<Vec<u8>>,
 }
 
 
@@ -2598,13 +2576,12 @@ impl BlockDeviceMappingSerializer {
     }
 }
 
-pub type BlockDeviceMappingList = Vec<BlockDeviceMapping>;
 struct BlockDeviceMappingListDeserializer;
 impl BlockDeviceMappingListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<BlockDeviceMappingList, XmlParseError> {
+                                       -> Result<Vec<BlockDeviceMapping>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -2644,7 +2621,7 @@ impl BlockDeviceMappingListDeserializer {
 /// Serialize `BlockDeviceMappingList` contents to a `SignedRequest`.
 struct BlockDeviceMappingListSerializer;
 impl BlockDeviceMappingListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &BlockDeviceMappingList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<BlockDeviceMapping>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             BlockDeviceMappingSerializer::serialize(params, &key, obj);
@@ -2652,12 +2629,11 @@ impl BlockDeviceMappingListSerializer {
     }
 }
 
-pub type BlockDeviceMappingRequestList = Vec<BlockDeviceMapping>;
 
 /// Serialize `BlockDeviceMappingRequestList` contents to a `SignedRequest`.
 struct BlockDeviceMappingRequestListSerializer;
 impl BlockDeviceMappingRequestListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &BlockDeviceMappingRequestList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<BlockDeviceMapping>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             BlockDeviceMappingSerializer::serialize(params, &key, obj);
@@ -2665,13 +2641,12 @@ impl BlockDeviceMappingRequestListSerializer {
     }
 }
 
-pub type Boolean = bool;
 struct BooleanDeserializer;
 impl BooleanDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Boolean, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -2680,12 +2655,11 @@ impl BooleanDeserializer {
 
     }
 }
-pub type BundleIdStringList = Vec<String>;
 
 /// Serialize `BundleIdStringList` contents to a `SignedRequest`.
 struct BundleIdStringListSerializer;
 impl BundleIdStringListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &BundleIdStringList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -2697,7 +2671,7 @@ impl BundleIdStringListSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct BundleInstanceRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the instance to bundle.</p> <p>Type: String</p> <p>Default: None</p> <p>Required: Yes</p>"]
     pub instance_id: String,
     #[doc="<p>The bucket in which to store the AMI. You can specify a bucket that you already own or a new bucket that Amazon EC2 creates on your behalf. If you specify a bucket that belongs to someone else, Amazon EC2 returns an error.</p>"]
@@ -2785,13 +2759,13 @@ pub struct BundleTask {
     #[doc="<p>The level of task completion, as a percent (for example, 20%).</p>"]
     pub progress: Option<String>,
     #[doc="<p>The time this task started.</p>"]
-    pub start_time: Option<DateTime>,
+    pub start_time: Option<String>,
     #[doc="<p>The state of the task.</p>"]
-    pub state: Option<BundleTaskState>,
+    pub state: Option<String>,
     #[doc="<p>The Amazon S3 storage locations.</p>"]
     pub storage: Option<Storage>,
     #[doc="<p>The time of the most recent update for the task.</p>"]
-    pub update_time: Option<DateTime>,
+    pub update_time: Option<String>,
 }
 
 struct BundleTaskDeserializer;
@@ -2919,13 +2893,12 @@ impl BundleTaskErrorDeserializer {
 
     }
 }
-pub type BundleTaskList = Vec<BundleTask>;
 struct BundleTaskListDeserializer;
 impl BundleTaskListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<BundleTaskList, XmlParseError> {
+                                       -> Result<Vec<BundleTask>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -2961,13 +2934,12 @@ impl BundleTaskListDeserializer {
 
     }
 }
-pub type BundleTaskState = String;
 struct BundleTaskStateDeserializer;
 impl BundleTaskStateDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<BundleTaskState, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2976,13 +2948,12 @@ impl BundleTaskStateDeserializer {
 
     }
 }
-pub type CancelBatchErrorCode = String;
 struct CancelBatchErrorCodeDeserializer;
 impl CancelBatchErrorCodeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CancelBatchErrorCode, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2997,7 +2968,7 @@ pub struct CancelBundleTaskRequest {
     #[doc="<p>The ID of the bundle task.</p>"]
     pub bundle_id: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
 }
 
 
@@ -3074,7 +3045,7 @@ pub struct CancelConversionRequest {
     #[doc="<p>The ID of the conversion task.</p>"]
     pub conversion_task_id: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The reason for canceling the conversion task.</p>"]
     pub reason_message: Option<String>,
 }
@@ -3130,7 +3101,7 @@ pub struct CancelImportTaskRequest {
     #[doc="<p>The reason for canceling the task.</p>"]
     pub cancel_reason: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the import image or import snapshot task to be canceled.</p>"]
     pub import_task_id: Option<String>,
 }
@@ -3245,7 +3216,7 @@ impl CancelReservedInstancesListingRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct CancelReservedInstancesListingResult {
     #[doc="<p>The Reserved Instance listing.</p>"]
-    pub reserved_instances_listings: Option<ReservedInstancesListingList>,
+    pub reserved_instances_listings: Option<Vec<ReservedInstancesListing>>,
 }
 
 struct CancelReservedInstancesListingResultDeserializer;
@@ -3294,7 +3265,7 @@ impl CancelReservedInstancesListingResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CancelSpotFleetRequestsError {
     #[doc="<p>The error code.</p>"]
-    pub code: CancelBatchErrorCode,
+    pub code: String,
     #[doc="<p>The description for the error code.</p>"]
     pub message: String,
 }
@@ -3401,14 +3372,13 @@ impl CancelSpotFleetRequestsErrorItemDeserializer {
 
     }
 }
-pub type CancelSpotFleetRequestsErrorSet = Vec<CancelSpotFleetRequestsErrorItem>;
 struct CancelSpotFleetRequestsErrorSetDeserializer;
 impl CancelSpotFleetRequestsErrorSetDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>
         (tag_name: &str,
          stack: &mut T)
-         -> Result<CancelSpotFleetRequestsErrorSet, XmlParseError> {
+         -> Result<Vec<CancelSpotFleetRequestsErrorItem>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -3448,11 +3418,11 @@ impl CancelSpotFleetRequestsErrorSetDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CancelSpotFleetRequestsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The IDs of the Spot fleet requests.</p>"]
-    pub spot_fleet_request_ids: ValueStringList,
+    pub spot_fleet_request_ids: Vec<String>,
     #[doc="<p>Indicates whether to terminate instances for a Spot fleet request if it is canceled successfully.</p>"]
-    pub terminate_instances: Boolean,
+    pub terminate_instances: bool,
 }
 
 
@@ -3481,9 +3451,9 @@ impl CancelSpotFleetRequestsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct CancelSpotFleetRequestsResponse {
     #[doc="<p>Information about the Spot fleet requests that are successfully canceled.</p>"]
-    pub successful_fleet_requests: Option<CancelSpotFleetRequestsSuccessSet>,
+    pub successful_fleet_requests: Option<Vec<CancelSpotFleetRequestsSuccessItem>>,
     #[doc="<p>Information about the Spot fleet requests that are not successfully canceled.</p>"]
-    pub unsuccessful_fleet_requests: Option<CancelSpotFleetRequestsErrorSet>,
+    pub unsuccessful_fleet_requests: Option<Vec<CancelSpotFleetRequestsErrorItem>>,
 }
 
 struct CancelSpotFleetRequestsResponseDeserializer;
@@ -3535,9 +3505,9 @@ impl CancelSpotFleetRequestsResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CancelSpotFleetRequestsSuccessItem {
     #[doc="<p>The current state of the Spot fleet request.</p>"]
-    pub current_spot_fleet_request_state: BatchState,
+    pub current_spot_fleet_request_state: String,
     #[doc="<p>The previous state of the Spot fleet request.</p>"]
-    pub previous_spot_fleet_request_state: BatchState,
+    pub previous_spot_fleet_request_state: String,
     #[doc="<p>The ID of the Spot fleet request.</p>"]
     pub spot_fleet_request_id: String,
 }
@@ -3595,14 +3565,13 @@ impl CancelSpotFleetRequestsSuccessItemDeserializer {
 
     }
 }
-pub type CancelSpotFleetRequestsSuccessSet = Vec<CancelSpotFleetRequestsSuccessItem>;
 struct CancelSpotFleetRequestsSuccessSetDeserializer;
 impl CancelSpotFleetRequestsSuccessSetDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>
         (tag_name: &str,
          stack: &mut T)
-         -> Result<CancelSpotFleetRequestsSuccessSet, XmlParseError> {
+         -> Result<Vec<CancelSpotFleetRequestsSuccessItem>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -3638,13 +3607,12 @@ impl CancelSpotFleetRequestsSuccessSetDeserializer {
 
     }
 }
-pub type CancelSpotInstanceRequestState = String;
 struct CancelSpotInstanceRequestStateDeserializer;
 impl CancelSpotInstanceRequestStateDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CancelSpotInstanceRequestState, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3657,9 +3625,9 @@ impl CancelSpotInstanceRequestStateDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CancelSpotInstanceRequestsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more Spot instance request IDs.</p>"]
-    pub spot_instance_request_ids: SpotInstanceRequestIdList,
+    pub spot_instance_request_ids: Vec<String>,
 }
 
 
@@ -3688,7 +3656,7 @@ impl CancelSpotInstanceRequestsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct CancelSpotInstanceRequestsResult {
     #[doc="<p>One or more Spot instance requests.</p>"]
-    pub cancelled_spot_instance_requests: Option<CancelledSpotInstanceRequestList>,
+    pub cancelled_spot_instance_requests: Option<Vec<CancelledSpotInstanceRequest>>,
 }
 
 struct CancelSpotInstanceRequestsResultDeserializer;
@@ -3739,7 +3707,7 @@ pub struct CancelledSpotInstanceRequest {
     #[doc="<p>The ID of the Spot instance request.</p>"]
     pub spot_instance_request_id: Option<String>,
     #[doc="<p>The state of the Spot instance request.</p>"]
-    pub state: Option<CancelSpotInstanceRequestState>,
+    pub state: Option<String>,
 }
 
 struct CancelledSpotInstanceRequestDeserializer;
@@ -3788,14 +3756,13 @@ impl CancelledSpotInstanceRequestDeserializer {
 
     }
 }
-pub type CancelledSpotInstanceRequestList = Vec<CancelledSpotInstanceRequest>;
 struct CancelledSpotInstanceRequestListDeserializer;
 impl CancelledSpotInstanceRequestListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>
         (tag_name: &str,
          stack: &mut T)
-         -> Result<CancelledSpotInstanceRequestList, XmlParseError> {
+         -> Result<Vec<CancelledSpotInstanceRequest>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -3835,7 +3802,7 @@ impl CancelledSpotInstanceRequestListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ClassicLinkDnsSupport {
     #[doc="<p>Indicates whether ClassicLink DNS support is enabled for the VPC.</p>"]
-    pub classic_link_dns_supported: Option<Boolean>,
+    pub classic_link_dns_supported: Option<bool>,
     #[doc="<p>The ID of the VPC.</p>"]
     pub vpc_id: Option<String>,
 }
@@ -3887,13 +3854,12 @@ impl ClassicLinkDnsSupportDeserializer {
 
     }
 }
-pub type ClassicLinkDnsSupportList = Vec<ClassicLinkDnsSupport>;
 struct ClassicLinkDnsSupportListDeserializer;
 impl ClassicLinkDnsSupportListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ClassicLinkDnsSupportList, XmlParseError> {
+                                       -> Result<Vec<ClassicLinkDnsSupport>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -3934,11 +3900,11 @@ impl ClassicLinkDnsSupportListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ClassicLinkInstance {
     #[doc="<p>A list of security groups.</p>"]
-    pub groups: Option<GroupIdentifierList>,
+    pub groups: Option<Vec<GroupIdentifier>>,
     #[doc="<p>The ID of the instance.</p>"]
     pub instance_id: Option<String>,
     #[doc="<p>Any tags assigned to the instance.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>The ID of the VPC.</p>"]
     pub vpc_id: Option<String>,
 }
@@ -3998,13 +3964,12 @@ impl ClassicLinkInstanceDeserializer {
 
     }
 }
-pub type ClassicLinkInstanceList = Vec<ClassicLinkInstance>;
 struct ClassicLinkInstanceListDeserializer;
 impl ClassicLinkInstanceListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ClassicLinkInstanceList, XmlParseError> {
+                                       -> Result<Vec<ClassicLinkInstance>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4046,11 +4011,11 @@ pub struct ClientData {
     #[doc="<p>A user-defined comment about the disk upload.</p>"]
     pub comment: Option<String>,
     #[doc="<p>The time that the disk upload ends.</p>"]
-    pub upload_end: Option<DateTime>,
+    pub upload_end: Option<String>,
     #[doc="<p>The size of the uploaded disk image, in GiB.</p>"]
-    pub upload_size: Option<Double>,
+    pub upload_size: Option<f64>,
     #[doc="<p>The time that the disk upload starts.</p>"]
-    pub upload_start: Option<DateTime>,
+    pub upload_start: Option<String>,
 }
 
 
@@ -4084,7 +4049,7 @@ impl ClientDataSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ConfirmProductInstanceRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the instance.</p>"]
     pub instance_id: String,
     #[doc="<p>The product code. This must be a product code that you own.</p>"]
@@ -4116,7 +4081,7 @@ pub struct ConfirmProductInstanceResult {
     #[doc="<p>The AWS account ID of the instance owner. This is only present if the product code is attached to the instance.</p>"]
     pub owner_id: Option<String>,
     #[doc="<p>The return value of the request. Returns <code>true</code> if the specified product code is owned by the requester and associated with the specified instance.</p>"]
-    pub return_: Option<Boolean>,
+    pub return_: Option<bool>,
 }
 
 struct ConfirmProductInstanceResultDeserializer;
@@ -4165,13 +4130,12 @@ impl ConfirmProductInstanceResultDeserializer {
 
     }
 }
-pub type ContainerFormat = String;
 struct ContainerFormatDeserializer;
 impl ContainerFormatDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ContainerFormat, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4180,12 +4144,11 @@ impl ContainerFormatDeserializer {
 
     }
 }
-pub type ConversionIdStringList = Vec<String>;
 
 /// Serialize `ConversionIdStringList` contents to a `SignedRequest`.
 struct ConversionIdStringListSerializer;
 impl ConversionIdStringListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ConversionIdStringList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -4205,11 +4168,11 @@ pub struct ConversionTask {
     #[doc="<p>If the task is for importing a volume, this contains information about the import volume task.</p>"]
     pub import_volume: Option<ImportVolumeTaskDetails>,
     #[doc="<p>The state of the conversion task.</p>"]
-    pub state: ConversionTaskState,
+    pub state: String,
     #[doc="<p>The status message related to the conversion task.</p>"]
     pub status_message: Option<String>,
     #[doc="<p>Any tags assigned to the task.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 struct ConversionTaskDeserializer;
@@ -4279,13 +4242,12 @@ impl ConversionTaskDeserializer {
 
     }
 }
-pub type ConversionTaskState = String;
 struct ConversionTaskStateDeserializer;
 impl ConversionTaskStateDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ConversionTaskState, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4302,9 +4264,9 @@ pub struct CopyImageRequest {
     #[doc="<p>A description for the new AMI in the destination region.</p>"]
     pub description: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>Specifies whether the destination snapshots of the copied image should be encrypted. The default CMK for EBS is used unless a non-default AWS Key Management Service (AWS KMS) CMK is specified with <code>KmsKeyId</code>. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html\">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-    pub encrypted: Option<Boolean>,
+    pub encrypted: Option<bool>,
     #[doc="<p>The full ARN of the AWS Key Management Service (AWS KMS) CMK to use when encrypting the snapshots of an image during a copy operation. This parameter is only required if you want to use a non-default CMK; if this parameter is not specified, the default CMK for EBS is used. The ARN contains the <code>arn:aws:kms</code> namespace, followed by the region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>. The specified CMK must exist in the region that the snapshot is being copied to. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set.</p>"]
     pub kms_key_id: Option<String>,
     #[doc="<p>The name of the new AMI in the destination region.</p>"]
@@ -4406,9 +4368,9 @@ pub struct CopySnapshotRequest {
     #[doc="<p>The destination region to use in the <code>PresignedUrl</code> parameter of a snapshot copy operation. This parameter is only valid for specifying the destination region in a <code>PresignedUrl</code> parameter, where it is required.</p> <note> <p> <code>CopySnapshot</code> sends the snapshot copy to the regional endpoint that you send the HTTP request to, such as <code>ec2.us-east-1.amazonaws.com</code> (in the AWS CLI, this is specified with the <code>--region</code> parameter or the default region in your AWS configuration file).</p> </note>"]
     pub destination_region: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>Specifies whether the destination snapshot should be encrypted. You can encrypt a copy of an unencrypted snapshot using this flag, but you cannot use it to create an unencrypted copy from an encrypted snapshot. Your default CMK for EBS is used unless a non-default AWS Key Management Service (AWS KMS) CMK is specified with <code>KmsKeyId</code>. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html\">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-    pub encrypted: Option<Boolean>,
+    pub encrypted: Option<bool>,
     #[doc="<p>The full ARN of the AWS Key Management Service (AWS KMS) CMK to use when creating the snapshot copy. This parameter is only required if you want to use a non-default CMK; if this parameter is not specified, the default CMK for EBS is used. The ARN contains the <code>arn:aws:kms</code> namespace, followed by the region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>. The specified CMK must exist in the region that the snapshot is being copied to. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set.</p>"]
     pub kms_key_id: Option<String>,
     #[doc="<p>The pre-signed URL that facilitates copying an encrypted snapshot. This parameter is only required when copying an encrypted snapshot with the Amazon EC2 Query API; it is available as an optional parameter in all other cases. The <code>PresignedUrl</code> should use the snapshot source endpoint, the <code>CopySnapshot</code> action, and include the <code>SourceRegion</code>, <code>SourceSnapshotId</code>, and <code>DestinationRegion</code> parameters. The <code>PresignedUrl</code> must be signed using AWS Signature Version 4. Because EBS snapshots are stored in Amazon S3, the signing algorithm for this parameter uses the same logic that is described in <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html\">Authenticating Requests by Using Query Parameters (AWS Signature Version 4)</a> in the <i>Amazon Simple Storage Service API Reference</i>. An invalid or improperly signed <code>PresignedUrl</code> will cause the copy operation to fail asynchronously, and the snapshot will move to an <code>error</code> state.</p>"]
@@ -4508,13 +4470,13 @@ impl CopySnapshotResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateCustomerGatewayRequest {
     #[doc="<p>For devices that support BGP, the customer gateway's BGP ASN.</p> <p>Default: 65000</p>"]
-    pub bgp_asn: Integer,
+    pub bgp_asn: i64,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The Internet-routable IP address for the customer gateway's outside interface. The address must be static.</p>"]
     pub public_ip: String,
     #[doc="<p>The type of VPN connection that this customer gateway supports (<code>ipsec.1</code>).</p>"]
-    pub type_: GatewayType,
+    pub type_: String,
 }
 
 
@@ -4591,9 +4553,9 @@ impl CreateCustomerGatewayResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateDhcpOptionsRequest {
     #[doc="<p>A DHCP configuration option.</p>"]
-    pub dhcp_configurations: NewDhcpConfigurationList,
+    pub dhcp_configurations: Vec<NewDhcpConfiguration>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
 }
 
 
@@ -4673,7 +4635,7 @@ pub struct CreateEgressOnlyInternetGatewayRequest {
     #[doc="<p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html\">How to Ensure Idempotency</a>.</p>"]
     pub client_token: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the VPC for which to create the egress-only Internet gateway.</p>"]
     pub vpc_id: String,
 }
@@ -4763,11 +4725,11 @@ pub struct CreateFlowLogsRequest {
     #[doc="<p>The name of the CloudWatch log group.</p>"]
     pub log_group_name: String,
     #[doc="<p>One or more subnet, network interface, or VPC IDs.</p> <p>Constraints: Maximum of 1000 resources</p>"]
-    pub resource_ids: ValueStringList,
+    pub resource_ids: Vec<String>,
     #[doc="<p>The type of resource on which to create the flow log.</p>"]
-    pub resource_type: FlowLogsResourceType,
+    pub resource_type: String,
     #[doc="<p>The type of traffic to log.</p>"]
-    pub traffic_type: TrafficType,
+    pub traffic_type: String,
 }
 
 
@@ -4802,9 +4764,9 @@ pub struct CreateFlowLogsResult {
     #[doc="<p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request.</p>"]
     pub client_token: Option<String>,
     #[doc="<p>The IDs of the flow logs.</p>"]
-    pub flow_log_ids: Option<ValueStringList>,
+    pub flow_log_ids: Option<Vec<String>>,
     #[doc="<p>Information about the flow logs that could not be created successfully.</p>"]
-    pub unsuccessful: Option<UnsuccessfulItemSet>,
+    pub unsuccessful: Option<Vec<UnsuccessfulItem>>,
 }
 
 struct CreateFlowLogsResultDeserializer;
@@ -4866,7 +4828,7 @@ pub struct CreateFpgaImageRequest {
     #[doc="<p>A description for the AFI.</p>"]
     pub description: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The location of the encrypted design checkpoint in Amazon S3. The input must be a tarball.</p>"]
     pub input_storage_location: StorageLocation,
     #[doc="<p>The location in Amazon S3 for the output logs.</p>"]
@@ -4968,17 +4930,17 @@ impl CreateFpgaImageResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateImageRequest {
     #[doc="<p>Information about one or more block device mappings.</p>"]
-    pub block_device_mappings: Option<BlockDeviceMappingRequestList>,
+    pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
     #[doc="<p>A description for the new image.</p>"]
     pub description: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the instance.</p>"]
     pub instance_id: String,
     #[doc="<p>A name for the new image.</p> <p>Constraints: 3-128 alphanumeric characters, parentheses (()), square brackets ([]), spaces ( ), periods (.), slashes (/), dashes (-), single quotes ('), at-signs (@), or underscores(_)</p>"]
     pub name: String,
     #[doc="<p>By default, Amazon EC2 attempts to shut down and reboot the instance before creating the image. If the 'No Reboot' option is set, Amazon EC2 doesn't shut down the instance before creating the image. When this option is used, file system integrity on the created image can't be guaranteed.</p>"]
-    pub no_reboot: Option<Boolean>,
+    pub no_reboot: Option<bool>,
 }
 
 
@@ -5073,7 +5035,7 @@ pub struct CreateInstanceExportTaskRequest {
     #[doc="<p>The ID of the instance.</p>"]
     pub instance_id: String,
     #[doc="<p>The target virtualization environment.</p>"]
-    pub target_environment: Option<ExportEnvironment>,
+    pub target_environment: Option<String>,
 }
 
 
@@ -5158,7 +5120,7 @@ impl CreateInstanceExportTaskResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateInternetGatewayRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
 }
 
 
@@ -5232,7 +5194,7 @@ impl CreateInternetGatewayResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateKeyPairRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>A unique name for the key pair.</p> <p>Constraints: Up to 255 ASCII characters</p>"]
     pub key_name: String,
 }
@@ -5347,9 +5309,9 @@ pub struct CreateNetworkAclEntryRequest {
     #[doc="<p>The IPv4 network range to allow or deny, in CIDR notation (for example <code>172.16.0.0/24</code>).</p>"]
     pub cidr_block: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>Indicates whether this is an egress rule (rule is applied to traffic leaving the subnet).</p>"]
-    pub egress: Boolean,
+    pub egress: bool,
     #[doc="<p>ICMP protocol: The ICMP or ICMPv6 type and code. Required if specifying the ICMP protocol, or protocol 58 (ICMPv6) with an IPv6 CIDR block.</p>"]
     pub icmp_type_code: Option<IcmpTypeCode>,
     #[doc="<p>The IPv6 network range to allow or deny, in CIDR notation (for example <code>2001:db8:1234:1a00::/64</code>).</p>"]
@@ -5361,9 +5323,9 @@ pub struct CreateNetworkAclEntryRequest {
     #[doc="<p>The protocol. A value of <code>-1</code> or <code>all</code> means all protocols. If you specify <code>all</code>, <code>-1</code>, or a protocol number other than <code>tcp</code>, <code>udp</code>, or <code>icmp</code>, traffic on all ports is allowed, regardless of any ports or ICMP types or codes you specify. If you specify protocol <code>58</code> (ICMPv6) and specify an IPv4 CIDR block, traffic for all ICMP types and codes allowed, regardless of any that you specify. If you specify protocol <code>58</code> (ICMPv6) and specify an IPv6 CIDR block, you must specify an ICMP type and code.</p>"]
     pub protocol: String,
     #[doc="<p>Indicates whether to allow or deny the traffic that matches the rule.</p>"]
-    pub rule_action: RuleAction,
+    pub rule_action: String,
     #[doc="<p>The rule number for the entry (for example, 100). ACL entries are processed in ascending order by rule number.</p> <p>Constraints: Positive integer from 1 to 32766. The range 32767 to 65535 is reserved for internal use.</p>"]
-    pub rule_number: Integer,
+    pub rule_number: i64,
 }
 
 
@@ -5410,7 +5372,7 @@ impl CreateNetworkAclEntryRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateNetworkAclRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the VPC.</p>"]
     pub vpc_id: String,
 }
@@ -5489,19 +5451,19 @@ pub struct CreateNetworkInterfaceRequest {
     #[doc="<p>A description for the network interface.</p>"]
     pub description: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The IDs of one or more security groups.</p>"]
-    pub groups: Option<SecurityGroupIdStringList>,
+    pub groups: Option<Vec<String>>,
     #[doc="<p>The number of IPv6 addresses to assign to a network interface. Amazon EC2 automatically selects the IPv6 addresses from the subnet range. You can't use this option if specifying specific IPv6 addresses. If your subnet has the <code>AssignIpv6AddressOnCreation</code> attribute set to <code>true</code>, you can specify <code>0</code> to override this setting.</p>"]
-    pub ipv_6_address_count: Option<Integer>,
+    pub ipv_6_address_count: Option<i64>,
     #[doc="<p>One or more specific IPv6 addresses from the IPv6 CIDR block range of your subnet. You can't use this option if you're specifying a number of IPv6 addresses.</p>"]
-    pub ipv_6_addresses: Option<InstanceIpv6AddressList>,
+    pub ipv_6_addresses: Option<Vec<InstanceIpv6Address>>,
     #[doc="<p>The primary private IPv4 address of the network interface. If you don't specify an IPv4 address, Amazon EC2 selects one for you from the subnet's IPv4 CIDR range. If you specify an IP address, you cannot indicate any IP addresses specified in <code>privateIpAddresses</code> as primary (only one IP address can be designated as primary).</p>"]
     pub private_ip_address: Option<String>,
     #[doc="<p>One or more private IPv4 addresses.</p>"]
-    pub private_ip_addresses: Option<PrivateIpAddressSpecificationList>,
+    pub private_ip_addresses: Option<Vec<PrivateIpAddressSpecification>>,
     #[doc="<p>The number of secondary private IPv4 addresses to assign to a network interface. When you specify a number of secondary IPv4 addresses, Amazon EC2 selects these IP addresses within the subnet's IPv4 CIDR range. You can't specify this option and specify more than one private IP address using <code>privateIpAddresses</code>.</p> <p>The number of IP addresses you can assign to a network interface varies by instance type. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-eni.html#AvailableIpPerENI\">IP Addresses Per ENI Per Instance Type</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-    pub secondary_private_ip_address_count: Option<Integer>,
+    pub secondary_private_ip_address_count: Option<i64>,
     #[doc="<p>The ID of the subnet to associate with the network interface.</p>"]
     pub subnet_id: String,
 }
@@ -5611,11 +5573,11 @@ impl CreateNetworkInterfaceResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreatePlacementGroupRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>A name for the placement group.</p> <p>Constraints: Up to 255 ASCII characters</p>"]
     pub group_name: String,
     #[doc="<p>The placement strategy.</p>"]
-    pub strategy: PlacementStrategy,
+    pub strategy: String,
 }
 
 
@@ -5643,9 +5605,9 @@ pub struct CreateReservedInstancesListingRequest {
     #[doc="<p>Unique, case-sensitive identifier you provide to ensure idempotency of your listings. This helps avoid duplicate listings. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html\">Ensuring Idempotency</a>.</p>"]
     pub client_token: String,
     #[doc="<p>The number of instances that are a part of a Reserved Instance account to be listed in the Reserved Instance Marketplace. This number should be less than or equal to the instance count associated with the Reserved Instance ID specified in this call.</p>"]
-    pub instance_count: Integer,
+    pub instance_count: i64,
     #[doc="<p>A list specifying the price of the Standard Reserved Instance for each month remaining in the Reserved Instance term.</p>"]
-    pub price_schedules: PriceScheduleSpecificationList,
+    pub price_schedules: Vec<PriceScheduleSpecification>,
     #[doc="<p>The ID of the active Standard Reserved Instance.</p>"]
     pub reserved_instances_id: String,
 }
@@ -5678,7 +5640,7 @@ impl CreateReservedInstancesListingRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateReservedInstancesListingResult {
     #[doc="<p>Information about the Standard Reserved Instance listing.</p>"]
-    pub reserved_instances_listings: Option<ReservedInstancesListingList>,
+    pub reserved_instances_listings: Option<Vec<ReservedInstancesListing>>,
 }
 
 struct CreateReservedInstancesListingResultDeserializer;
@@ -5731,7 +5693,7 @@ pub struct CreateRouteRequest {
     #[doc="<p>The IPv6 CIDR block used for the destination match. Routing decisions are based on the most specific match.</p>"]
     pub destination_ipv_6_cidr_block: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>[IPv6 traffic only] The ID of an egress-only Internet gateway.</p>"]
     pub egress_only_internet_gateway_id: Option<String>,
     #[doc="<p>The ID of an Internet gateway or virtual private gateway attached to your VPC.</p>"]
@@ -5799,7 +5761,7 @@ impl CreateRouteRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateRouteResult {
     #[doc="<p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>"]
-    pub return_: Option<Boolean>,
+    pub return_: Option<bool>,
 }
 
 struct CreateRouteResultDeserializer;
@@ -5848,7 +5810,7 @@ impl CreateRouteResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateRouteTableRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the VPC.</p>"]
     pub vpc_id: String,
 }
@@ -5927,7 +5889,7 @@ pub struct CreateSecurityGroupRequest {
     #[doc="<p>A description for the security group. This is informational only.</p> <p>Constraints: Up to 255 characters in length</p> <p>Constraints for EC2-Classic: ASCII characters</p> <p>Constraints for EC2-VPC: a-z, A-Z, 0-9, spaces, and ._-:/()#,@[]+=&amp;;{}!$*</p>"]
     pub description: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The name of the security group.</p> <p>Constraints: Up to 255 characters in length</p> <p>Constraints for EC2-Classic: ASCII characters</p> <p>Constraints for EC2-VPC: a-z, A-Z, 0-9, spaces, and ._-:/()#,@[]+=&amp;;{}!$*</p>"]
     pub group_name: String,
     #[doc="<p>[EC2-VPC] The ID of the VPC. Required for EC2-VPC.</p>"]
@@ -6012,7 +5974,7 @@ pub struct CreateSnapshotRequest {
     #[doc="<p>A description for the snapshot.</p>"]
     pub description: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the EBS volume.</p>"]
     pub volume_id: String,
 }
@@ -6044,7 +6006,7 @@ pub struct CreateSpotDatafeedSubscriptionRequest {
     #[doc="<p>The Amazon S3 bucket in which to store the Spot instance data feed.</p>"]
     pub bucket: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>A prefix for the data feed file names.</p>"]
     pub prefix: Option<String>,
 }
@@ -6127,7 +6089,7 @@ pub struct CreateSubnetRequest {
     #[doc="<p>The IPv4 network range for the subnet, in CIDR notation. For example, <code>10.0.0.0/24</code>.</p>"]
     pub cidr_block: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The IPv6 network range for the subnet, in CIDR notation. The subnet size must use a /64 prefix length.</p>"]
     pub ipv_6_cidr_block: Option<String>,
     #[doc="<p>The ID of the VPC.</p>"]
@@ -6212,11 +6174,11 @@ impl CreateSubnetResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateTagsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The IDs of one or more resources to tag. For example, ami-1a2b3c4d.</p>"]
-    pub resources: ResourceIdList,
+    pub resources: Vec<String>,
     #[doc="<p>One or more tags. The <code>value</code> parameter is required, but if you don't want the tag to have a value, specify the parameter with no value, and we set the value to an empty string. </p>"]
-    pub tags: TagList,
+    pub tags: Vec<Tag>,
 }
 
 
@@ -6244,7 +6206,7 @@ impl CreateTagsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateVolumePermission {
     #[doc="<p>The specific group that is to be added or removed from a volume's list of create volume permissions.</p>"]
-    pub group: Option<PermissionGroup>,
+    pub group: Option<String>,
     #[doc="<p>The specific AWS account ID that is to be added or removed from a volume's list of create volume permissions.</p>"]
     pub user_id: Option<String>,
 }
@@ -6315,13 +6277,12 @@ impl CreateVolumePermissionSerializer {
     }
 }
 
-pub type CreateVolumePermissionList = Vec<CreateVolumePermission>;
 struct CreateVolumePermissionListDeserializer;
 impl CreateVolumePermissionListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CreateVolumePermissionList, XmlParseError> {
+                                       -> Result<Vec<CreateVolumePermission>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -6362,7 +6323,7 @@ impl CreateVolumePermissionListDeserializer {
 /// Serialize `CreateVolumePermissionList` contents to a `SignedRequest`.
 struct CreateVolumePermissionListSerializer;
 impl CreateVolumePermissionListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateVolumePermissionList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<CreateVolumePermission>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             CreateVolumePermissionSerializer::serialize(params, &key, obj);
@@ -6374,9 +6335,9 @@ impl CreateVolumePermissionListSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateVolumePermissionModifications {
     #[doc="<p>Adds a specific AWS account ID or group to a volume's list of create volume permissions.</p>"]
-    pub add: Option<CreateVolumePermissionList>,
+    pub add: Option<Vec<CreateVolumePermission>>,
     #[doc="<p>Removes a specific AWS account ID or group from a volume's list of create volume permissions.</p>"]
-    pub remove: Option<CreateVolumePermissionList>,
+    pub remove: Option<Vec<CreateVolumePermission>>,
 }
 
 
@@ -6409,21 +6370,21 @@ pub struct CreateVolumeRequest {
     #[doc="<p>The Availability Zone in which to create the volume. Use <a>DescribeAvailabilityZones</a> to list the Availability Zones that are currently available to you.</p>"]
     pub availability_zone: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>Specifies whether the volume should be encrypted. Encrypted Amazon EBS volumes may only be attached to instances that support Amazon EBS encryption. Volumes that are created from encrypted snapshots are automatically encrypted. There is no way to create an encrypted volume from an unencrypted snapshot or vice versa. If your AMI uses encrypted volumes, you can only launch it on supported instance types. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html\">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-    pub encrypted: Option<Boolean>,
+    pub encrypted: Option<bool>,
     #[doc="<p>Only valid for Provisioned IOPS SSD volumes. The number of I/O operations per second (IOPS) to provision for the volume, with a maximum ratio of 50 IOPS/GiB.</p> <p>Constraint: Range is 100 to 20000 for Provisioned IOPS SSD volumes </p>"]
-    pub iops: Option<Integer>,
+    pub iops: Option<i64>,
     #[doc="<p>The full ARN of the AWS Key Management Service (AWS KMS) customer master key (CMK) to use when creating the encrypted volume. This parameter is only required if you want to use a non-default CMK; if this parameter is not specified, the default CMK for EBS is used. The ARN contains the <code>arn:aws:kms</code> namespace, followed by the region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set.</p>"]
     pub kms_key_id: Option<String>,
     #[doc="<p>The size of the volume, in GiBs.</p> <p>Constraints: 1-16384 for <code>gp2</code>, 4-16384 for <code>io1</code>, 500-16384 for <code>st1</code>, 500-16384 for <code>sc1</code>, and 1-1024 for <code>standard</code>. If you specify a snapshot, the volume size must be equal to or larger than the snapshot size.</p> <p>Default: If you're creating the volume from a snapshot and don't specify a volume size, the default is the snapshot size.</p>"]
-    pub size: Option<Integer>,
+    pub size: Option<i64>,
     #[doc="<p>The snapshot from which to create the volume.</p>"]
     pub snapshot_id: Option<String>,
     #[doc="<p>The tags to apply to the volume during creation.</p>"]
-    pub tag_specifications: Option<TagSpecificationList>,
+    pub tag_specifications: Option<Vec<TagSpecification>>,
     #[doc="<p>The volume type. This can be <code>gp2</code> for General Purpose SSD, <code>io1</code> for Provisioned IOPS SSD, <code>st1</code> for Throughput Optimized HDD, <code>sc1</code> for Cold HDD, or <code>standard</code> for Magnetic volumes.</p> <p>Default: <code>standard</code> </p>"]
-    pub volume_type: Option<VolumeType>,
+    pub volume_type: Option<String>,
 }
 
 
@@ -6475,11 +6436,11 @@ pub struct CreateVpcEndpointRequest {
     #[doc="<p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html\">How to Ensure Idempotency</a>.</p>"]
     pub client_token: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>A policy to attach to the endpoint that controls access to the service. The policy must be in valid JSON format. If this parameter is not specified, we attach a default policy that allows full access to the service.</p>"]
     pub policy_document: Option<String>,
     #[doc="<p>One or more route table IDs.</p>"]
-    pub route_table_ids: Option<ValueStringList>,
+    pub route_table_ids: Option<Vec<String>>,
     #[doc="<p>The AWS service name, in the form <code>com.amazonaws.<i>region</i>.<i>service</i> </code>. To get a list of available services, use the <a>DescribeVpcEndpointServices</a> request.</p>"]
     pub service_name: String,
     #[doc="<p>The ID of the VPC in which the endpoint will be used.</p>"]
@@ -6576,7 +6537,7 @@ impl CreateVpcEndpointResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateVpcPeeringConnectionRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The AWS account ID of the owner of the peer VPC.</p> <p>Default: Your AWS account ID</p>"]
     pub peer_owner_id: Option<String>,
     #[doc="<p>The ID of the VPC with which you are creating the VPC peering connection.</p>"]
@@ -6666,13 +6627,13 @@ impl CreateVpcPeeringConnectionResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateVpcRequest {
     #[doc="<p>Requests an Amazon-provided IPv6 CIDR block with a /56 prefix length for the VPC. You cannot specify the range of IP addresses, or the size of the CIDR block.</p>"]
-    pub amazon_provided_ipv_6_cidr_block: Option<Boolean>,
+    pub amazon_provided_ipv_6_cidr_block: Option<bool>,
     #[doc="<p>The IPv4 network range for the VPC, in CIDR notation. For example, <code>10.0.0.0/16</code>.</p>"]
     pub cidr_block: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The tenancy options for instances launched into the VPC. For <code>default</code>, instances are launched with shared tenancy by default. You can launch instances with any tenancy into a shared tenancy VPC. For <code>dedicated</code>, instances are launched as dedicated tenancy instances by default. You can only launch instances with a tenancy of <code>dedicated</code> or <code>host</code> into a dedicated tenancy VPC. </p> <p> <b>Important:</b> The <code>host</code> value cannot be used with this parameter. Use the <code>default</code> or <code>dedicated</code> values only.</p> <p>Default: <code>default</code> </p>"]
-    pub instance_tenancy: Option<Tenancy>,
+    pub instance_tenancy: Option<String>,
 }
 
 
@@ -6754,7 +6715,7 @@ pub struct CreateVpnConnectionRequest {
     #[doc="<p>The ID of the customer gateway.</p>"]
     pub customer_gateway_id: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>Indicates whether the VPN connection requires static routes. If you are creating a VPN connection for a device that does not support BGP, you must specify <code>true</code>.</p> <p>Default: <code>false</code> </p>"]
     pub options: Option<VpnConnectionOptionsSpecification>,
     #[doc="<p>The type of VPN connection (<code>ipsec.1</code>).</p>"]
@@ -6875,9 +6836,9 @@ pub struct CreateVpnGatewayRequest {
     #[doc="<p>The Availability Zone for the virtual private gateway.</p>"]
     pub availability_zone: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The type of VPN connection this virtual private gateway supports.</p>"]
-    pub type_: GatewayType,
+    pub type_: String,
 }
 
 
@@ -6951,13 +6912,12 @@ impl CreateVpnGatewayResultDeserializer {
 
     }
 }
-pub type CurrencyCodeValues = String;
 struct CurrencyCodeValuesDeserializer;
 impl CurrencyCodeValuesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CurrencyCodeValues, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -6978,7 +6938,7 @@ pub struct CustomerGateway {
     #[doc="<p>The current state of the customer gateway (<code>pending | available | deleting | deleted</code>).</p>"]
     pub state: Option<String>,
     #[doc="<p>Any tags assigned to the customer gateway.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>The type of VPN connection the customer gateway supports (<code>ipsec.1</code>).</p>"]
     pub type_: Option<String>,
 }
@@ -7044,12 +7004,11 @@ impl CustomerGatewayDeserializer {
 
     }
 }
-pub type CustomerGatewayIdStringList = Vec<String>;
 
 /// Serialize `CustomerGatewayIdStringList` contents to a `SignedRequest`.
 struct CustomerGatewayIdStringListSerializer;
 impl CustomerGatewayIdStringListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CustomerGatewayIdStringList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -7057,13 +7016,12 @@ impl CustomerGatewayIdStringListSerializer {
     }
 }
 
-pub type CustomerGatewayList = Vec<CustomerGateway>;
 struct CustomerGatewayListDeserializer;
 impl CustomerGatewayListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CustomerGatewayList, XmlParseError> {
+                                       -> Result<Vec<CustomerGateway>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -7099,13 +7057,12 @@ impl CustomerGatewayListDeserializer {
 
     }
 }
-pub type DatafeedSubscriptionState = String;
 struct DatafeedSubscriptionStateDeserializer;
 impl DatafeedSubscriptionStateDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DatafeedSubscriptionState, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7114,13 +7071,12 @@ impl DatafeedSubscriptionStateDeserializer {
 
     }
 }
-pub type DateTime = String;
 struct DateTimeDeserializer;
 impl DateTimeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DateTime, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -7135,7 +7091,7 @@ pub struct DeleteCustomerGatewayRequest {
     #[doc="<p>The ID of the customer gateway.</p>"]
     pub customer_gateway_id: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
 }
 
 
@@ -7163,7 +7119,7 @@ pub struct DeleteDhcpOptionsRequest {
     #[doc="<p>The ID of the DHCP options set.</p>"]
     pub dhcp_options_id: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
 }
 
 
@@ -7188,9 +7144,9 @@ impl DeleteDhcpOptionsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteEgressOnlyInternetGatewayRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the egress-only Internet gateway.</p>"]
-    pub egress_only_internet_gateway_id: EgressOnlyInternetGatewayId,
+    pub egress_only_internet_gateway_id: String,
 }
 
 
@@ -7215,7 +7171,7 @@ impl DeleteEgressOnlyInternetGatewayRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteEgressOnlyInternetGatewayResult {
     #[doc="<p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>"]
-    pub return_code: Option<Boolean>,
+    pub return_code: Option<bool>,
 }
 
 struct DeleteEgressOnlyInternetGatewayResultDeserializer;
@@ -7265,7 +7221,7 @@ impl DeleteEgressOnlyInternetGatewayResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteFlowLogsRequest {
     #[doc="<p>One or more flow log IDs.</p>"]
-    pub flow_log_ids: ValueStringList,
+    pub flow_log_ids: Vec<String>,
 }
 
 
@@ -7289,7 +7245,7 @@ impl DeleteFlowLogsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteFlowLogsResult {
     #[doc="<p>Information about the flow logs that could not be deleted successfully.</p>"]
-    pub unsuccessful: Option<UnsuccessfulItemSet>,
+    pub unsuccessful: Option<Vec<UnsuccessfulItem>>,
 }
 
 struct DeleteFlowLogsResultDeserializer;
@@ -7339,7 +7295,7 @@ impl DeleteFlowLogsResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteInternetGatewayRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the Internet gateway.</p>"]
     pub internet_gateway_id: String,
 }
@@ -7367,7 +7323,7 @@ impl DeleteInternetGatewayRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteKeyPairRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The name of the key pair.</p>"]
     pub key_name: String,
 }
@@ -7466,13 +7422,13 @@ impl DeleteNatGatewayResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteNetworkAclEntryRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>Indicates whether the rule is an egress rule.</p>"]
-    pub egress: Boolean,
+    pub egress: bool,
     #[doc="<p>The ID of the network ACL.</p>"]
     pub network_acl_id: String,
     #[doc="<p>The rule number of the entry to delete.</p>"]
-    pub rule_number: Integer,
+    pub rule_number: i64,
 }
 
 
@@ -7501,7 +7457,7 @@ impl DeleteNetworkAclEntryRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteNetworkAclRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the network ACL.</p>"]
     pub network_acl_id: String,
 }
@@ -7529,7 +7485,7 @@ impl DeleteNetworkAclRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteNetworkInterfaceRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the network interface.</p>"]
     pub network_interface_id: String,
 }
@@ -7557,7 +7513,7 @@ impl DeleteNetworkInterfaceRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeletePlacementGroupRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The name of the placement group.</p>"]
     pub group_name: String,
 }
@@ -7588,7 +7544,7 @@ pub struct DeleteRouteRequest {
     #[doc="<p>The IPv6 CIDR range for the route. The value you specify must match the CIDR for the route exactly.</p>"]
     pub destination_ipv_6_cidr_block: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the route table.</p>"]
     pub route_table_id: String,
 }
@@ -7624,7 +7580,7 @@ impl DeleteRouteRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteRouteTableRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the route table.</p>"]
     pub route_table_id: String,
 }
@@ -7652,7 +7608,7 @@ impl DeleteRouteTableRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteSecurityGroupRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the security group. Required for a nondefault VPC.</p>"]
     pub group_id: Option<String>,
     #[doc="<p>[EC2-Classic, default VPC] The name of the security group. You can specify either the security group name or the security group ID.</p>"]
@@ -7686,7 +7642,7 @@ impl DeleteSecurityGroupRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteSnapshotRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the EBS snapshot.</p>"]
     pub snapshot_id: String,
 }
@@ -7713,7 +7669,7 @@ impl DeleteSnapshotRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteSpotDatafeedSubscriptionRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
 }
 
 
@@ -7737,7 +7693,7 @@ impl DeleteSpotDatafeedSubscriptionRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteSubnetRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the subnet.</p>"]
     pub subnet_id: String,
 }
@@ -7764,11 +7720,11 @@ impl DeleteSubnetRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteTagsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the resource. For example, ami-1a2b3c4d. You can specify more than one resource ID.</p>"]
-    pub resources: ResourceIdList,
+    pub resources: Vec<String>,
     #[doc="<p>One or more tags to delete. If you omit the <code>value</code> parameter, we delete the tag regardless of its value. If you specify this parameter with an empty string as the value, we delete the key only if its value is an empty string.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 
@@ -7798,7 +7754,7 @@ impl DeleteTagsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteVolumeRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the volume.</p>"]
     pub volume_id: String,
 }
@@ -7825,9 +7781,9 @@ impl DeleteVolumeRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteVpcEndpointsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more endpoint IDs.</p>"]
-    pub vpc_endpoint_ids: ValueStringList,
+    pub vpc_endpoint_ids: Vec<String>,
 }
 
 
@@ -7854,7 +7810,7 @@ impl DeleteVpcEndpointsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteVpcEndpointsResult {
     #[doc="<p>Information about the endpoints that were not successfully deleted.</p>"]
-    pub unsuccessful: Option<UnsuccessfulItemSet>,
+    pub unsuccessful: Option<Vec<UnsuccessfulItem>>,
 }
 
 struct DeleteVpcEndpointsResultDeserializer;
@@ -7904,7 +7860,7 @@ impl DeleteVpcEndpointsResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteVpcPeeringConnectionRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the VPC peering connection.</p>"]
     pub vpc_peering_connection_id: String,
 }
@@ -7932,7 +7888,7 @@ impl DeleteVpcPeeringConnectionRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteVpcPeeringConnectionResult {
     #[doc="<p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>"]
-    pub return_: Option<Boolean>,
+    pub return_: Option<bool>,
 }
 
 struct DeleteVpcPeeringConnectionResultDeserializer;
@@ -7982,7 +7938,7 @@ impl DeleteVpcPeeringConnectionResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteVpcRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the VPC.</p>"]
     pub vpc_id: String,
 }
@@ -8009,7 +7965,7 @@ impl DeleteVpcRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteVpnConnectionRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the VPN connection.</p>"]
     pub vpn_connection_id: String,
 }
@@ -8064,7 +8020,7 @@ impl DeleteVpnConnectionRouteRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteVpnGatewayRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the virtual private gateway.</p>"]
     pub vpn_gateway_id: String,
 }
@@ -8092,7 +8048,7 @@ impl DeleteVpnGatewayRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeregisterImageRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the AMI.</p>"]
     pub image_id: String,
 }
@@ -8119,9 +8075,9 @@ impl DeregisterImageRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeAccountAttributesRequest {
     #[doc="<p>One or more account attribute names.</p>"]
-    pub attribute_names: Option<AccountAttributeNameStringList>,
+    pub attribute_names: Option<Vec<String>>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
 }
 
 
@@ -8152,7 +8108,7 @@ impl DescribeAccountAttributesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeAccountAttributesResult {
     #[doc="<p>Information about one or more account attributes.</p>"]
-    pub account_attributes: Option<AccountAttributeList>,
+    pub account_attributes: Option<Vec<AccountAttribute>>,
 }
 
 struct DescribeAccountAttributesResultDeserializer;
@@ -8203,13 +8159,13 @@ impl DescribeAccountAttributesResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeAddressesRequest {
     #[doc="<p>[EC2-VPC] One or more allocation IDs.</p> <p>Default: Describes all your Elastic IP addresses.</p>"]
-    pub allocation_ids: Option<AllocationIdList>,
+    pub allocation_ids: Option<Vec<String>>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters. Filter names and values are case-sensitive.</p> <ul> <li> <p> <code>allocation-id</code> - [EC2-VPC] The allocation ID for the address.</p> </li> <li> <p> <code>association-id</code> - [EC2-VPC] The association ID for the address.</p> </li> <li> <p> <code>domain</code> - Indicates whether the address is for use in EC2-Classic (<code>standard</code>) or in a VPC (<code>vpc</code>).</p> </li> <li> <p> <code>instance-id</code> - The ID of the instance the address is associated with, if any.</p> </li> <li> <p> <code>network-interface-id</code> - [EC2-VPC] The ID of the network interface that the address is associated with, if any.</p> </li> <li> <p> <code>network-interface-owner-id</code> - The AWS account ID of the owner.</p> </li> <li> <p> <code>private-ip-address</code> - [EC2-VPC] The private IP address associated with the Elastic IP address.</p> </li> <li> <p> <code>public-ip</code> - The Elastic IP address.</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>[EC2-Classic] One or more Elastic IP addresses.</p> <p>Default: Describes all your Elastic IP addresses.</p>"]
-    pub public_ips: Option<PublicIpStringList>,
+    pub public_ips: Option<Vec<String>>,
 }
 
 
@@ -8248,7 +8204,7 @@ impl DescribeAddressesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeAddressesResult {
     #[doc="<p>Information about one or more Elastic IP addresses.</p>"]
-    pub addresses: Option<AddressList>,
+    pub addresses: Option<Vec<Address>>,
 }
 
 struct DescribeAddressesResultDeserializer;
@@ -8297,11 +8253,11 @@ impl DescribeAddressesResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeAvailabilityZonesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>message</code> - Information about the Availability Zone.</p> </li> <li> <p> <code>region-name</code> - The name of the region for the Availability Zone (for example, <code>us-east-1</code>).</p> </li> <li> <p> <code>state</code> - The state of the Availability Zone (<code>available</code> | <code>information</code> | <code>impaired</code> | <code>unavailable</code>).</p> </li> <li> <p> <code>zone-name</code> - The name of the Availability Zone (for example, <code>us-east-1a</code>).</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>The names of one or more Availability Zones.</p>"]
-    pub zone_names: Option<ZoneNameStringList>,
+    pub zone_names: Option<Vec<String>>,
 }
 
 
@@ -8335,7 +8291,7 @@ impl DescribeAvailabilityZonesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeAvailabilityZonesResult {
     #[doc="<p>Information about one or more Availability Zones.</p>"]
-    pub availability_zones: Option<AvailabilityZoneList>,
+    pub availability_zones: Option<Vec<AvailabilityZone>>,
 }
 
 struct DescribeAvailabilityZonesResultDeserializer;
@@ -8386,11 +8342,11 @@ impl DescribeAvailabilityZonesResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeBundleTasksRequest {
     #[doc="<p>One or more bundle task IDs.</p> <p>Default: Describes all your bundle tasks.</p>"]
-    pub bundle_ids: Option<BundleIdStringList>,
+    pub bundle_ids: Option<Vec<String>>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>bundle-id</code> - The ID of the bundle task.</p> </li> <li> <p> <code>error-code</code> - If the task failed, the error code returned.</p> </li> <li> <p> <code>error-message</code> - If the task failed, the error message returned.</p> </li> <li> <p> <code>instance-id</code> - The ID of the instance.</p> </li> <li> <p> <code>progress</code> - The level of task completion, as a percentage (for example, 20%).</p> </li> <li> <p> <code>s3-bucket</code> - The Amazon S3 bucket to store the AMI.</p> </li> <li> <p> <code>s3-prefix</code> - The beginning of the AMI name.</p> </li> <li> <p> <code>start-time</code> - The time the task started (for example, 2013-09-15T17:15:20.000Z).</p> </li> <li> <p> <code>state</code> - The state of the task (<code>pending</code> | <code>waiting-for-shutdown</code> | <code>bundling</code> | <code>storing</code> | <code>cancelling</code> | <code>complete</code> | <code>failed</code>).</p> </li> <li> <p> <code>update-time</code> - The time of the most recent update for the task.</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
 }
 
 
@@ -8424,7 +8380,7 @@ impl DescribeBundleTasksRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeBundleTasksResult {
     #[doc="<p>Information about one or more bundle tasks.</p>"]
-    pub bundle_tasks: Option<BundleTaskList>,
+    pub bundle_tasks: Option<Vec<BundleTask>>,
 }
 
 struct DescribeBundleTasksResultDeserializer;
@@ -8474,13 +8430,13 @@ impl DescribeBundleTasksResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeClassicLinkInstancesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>group-id</code> - The ID of a VPC security group that's associated with the instance.</p> </li> <li> <p> <code>instance-id</code> - The ID of the instance.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC that the instance is linked to.</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more instance IDs. Must be instances linked to a VPC through ClassicLink.</p>"]
-    pub instance_ids: Option<InstanceIdStringList>,
+    pub instance_ids: Option<Vec<String>>,
     #[doc="<p>The maximum number of results to return for the request in a single page. The remaining results of the initial request can be seen by sending another request with the returned <code>NextToken</code> value. This value can be between 5 and 1000; if <code>MaxResults</code> is given a value larger than 1000, only 1000 results are returned. You cannot specify this parameter and the instance IDs parameter in the same request.</p> <p>Constraint: If the value is greater than 1000, we return only 1000 items.</p>"]
-    pub max_results: Option<Integer>,
+    pub max_results: Option<i64>,
     #[doc="<p>The token to retrieve the next page of results.</p>"]
     pub next_token: Option<String>,
 }
@@ -8523,7 +8479,7 @@ impl DescribeClassicLinkInstancesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeClassicLinkInstancesResult {
     #[doc="<p>Information about one or more linked EC2-Classic instances.</p>"]
-    pub instances: Option<ClassicLinkInstanceList>,
+    pub instances: Option<Vec<ClassicLinkInstance>>,
     #[doc="<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
     pub next_token: Option<String>,
 }
@@ -8576,13 +8532,12 @@ impl DescribeClassicLinkInstancesResultDeserializer {
 
     }
 }
-pub type DescribeConversionTaskList = Vec<ConversionTask>;
 struct DescribeConversionTaskListDeserializer;
 impl DescribeConversionTaskListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DescribeConversionTaskList, XmlParseError> {
+                                       -> Result<Vec<ConversionTask>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -8622,9 +8577,9 @@ impl DescribeConversionTaskListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeConversionTasksRequest {
     #[doc="<p>One or more conversion task IDs.</p>"]
-    pub conversion_task_ids: Option<ConversionIdStringList>,
+    pub conversion_task_ids: Option<Vec<String>>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
 }
 
 
@@ -8655,7 +8610,7 @@ impl DescribeConversionTasksRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeConversionTasksResult {
     #[doc="<p>Information about the conversion tasks.</p>"]
-    pub conversion_tasks: Option<DescribeConversionTaskList>,
+    pub conversion_tasks: Option<Vec<ConversionTask>>,
 }
 
 struct DescribeConversionTasksResultDeserializer;
@@ -8703,11 +8658,11 @@ impl DescribeConversionTasksResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeCustomerGatewaysRequest {
     #[doc="<p>One or more customer gateway IDs.</p> <p>Default: Describes all your customer gateways.</p>"]
-    pub customer_gateway_ids: Option<CustomerGatewayIdStringList>,
+    pub customer_gateway_ids: Option<Vec<String>>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>bgp-asn</code> - The customer gateway's Border Gateway Protocol (BGP) Autonomous System Number (ASN).</p> </li> <li> <p> <code>customer-gateway-id</code> - The ID of the customer gateway.</p> </li> <li> <p> <code>ip-address</code> - The IP address of the customer gateway's Internet-routable external interface.</p> </li> <li> <p> <code>state</code> - The state of the customer gateway (<code>pending</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>).</p> </li> <li> <p> <code>type</code> - The type of customer gateway. Currently, the only supported type is <code>ipsec.1</code>.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
 }
 
 
@@ -8743,7 +8698,7 @@ impl DescribeCustomerGatewaysRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeCustomerGatewaysResult {
     #[doc="<p>Information about one or more customer gateways.</p>"]
-    pub customer_gateways: Option<CustomerGatewayList>,
+    pub customer_gateways: Option<Vec<CustomerGateway>>,
 }
 
 struct DescribeCustomerGatewaysResultDeserializer;
@@ -8793,11 +8748,11 @@ impl DescribeCustomerGatewaysResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeDhcpOptionsRequest {
     #[doc="<p>The IDs of one or more DHCP options sets.</p> <p>Default: Describes all your DHCP options sets.</p>"]
-    pub dhcp_options_ids: Option<DhcpOptionsIdStringList>,
+    pub dhcp_options_ids: Option<Vec<String>>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>dhcp-options-id</code> - The ID of a set of DHCP options.</p> </li> <li> <p> <code>key</code> - The key for one of the options (for example, <code>domain-name</code>).</p> </li> <li> <p> <code>value</code> - The value for one of the options.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
 }
 
 
@@ -8831,7 +8786,7 @@ impl DescribeDhcpOptionsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeDhcpOptionsResult {
     #[doc="<p>Information about one or more DHCP options sets.</p>"]
-    pub dhcp_options: Option<DhcpOptionsList>,
+    pub dhcp_options: Option<Vec<DhcpOptions>>,
 }
 
 struct DescribeDhcpOptionsResultDeserializer;
@@ -8880,11 +8835,11 @@ impl DescribeDhcpOptionsResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeEgressOnlyInternetGatewaysRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more egress-only Internet gateway IDs.</p>"]
-    pub egress_only_internet_gateway_ids: Option<EgressOnlyInternetGatewayIdList>,
+    pub egress_only_internet_gateway_ids: Option<Vec<String>>,
     #[doc="<p>The maximum number of results to return for the request in a single page. The remaining results can be seen by sending another request with the returned <code>NextToken</code> value. This value can be between 5 and 1000; if <code>MaxResults</code> is given a value larger than 1000, only 1000 results are returned.</p>"]
-    pub max_results: Option<Integer>,
+    pub max_results: Option<i64>,
     #[doc="<p>The token to retrieve the next page of results.</p>"]
     pub next_token: Option<String>,
 }
@@ -8925,7 +8880,7 @@ impl DescribeEgressOnlyInternetGatewaysRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeEgressOnlyInternetGatewaysResult {
     #[doc="<p>Information about the egress-only Internet gateways.</p>"]
-    pub egress_only_internet_gateways: Option<EgressOnlyInternetGatewayList>,
+    pub egress_only_internet_gateways: Option<Vec<EgressOnlyInternetGateway>>,
     #[doc="<p>The token to use to retrieve the next page of results.</p>"]
     pub next_token: Option<String>,
 }
@@ -8980,7 +8935,7 @@ impl DescribeEgressOnlyInternetGatewaysResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeExportTasksRequest {
     #[doc="<p>One or more export task IDs.</p>"]
-    pub export_task_ids: Option<ExportTaskIdStringList>,
+    pub export_task_ids: Option<Vec<String>>,
 }
 
 
@@ -9006,7 +8961,7 @@ impl DescribeExportTasksRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeExportTasksResult {
     #[doc="<p>Information about the export tasks.</p>"]
-    pub export_tasks: Option<ExportTaskList>,
+    pub export_tasks: Option<Vec<ExportTask>>,
 }
 
 struct DescribeExportTasksResultDeserializer;
@@ -9056,11 +9011,11 @@ impl DescribeExportTasksResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeFlowLogsRequest {
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>deliver-log-status</code> - The status of the logs delivery (<code>SUCCESS</code> | <code>FAILED</code>).</p> </li> <li> <p> <code>flow-log-id</code> - The ID of the flow log.</p> </li> <li> <p> <code>log-group-name</code> - The name of the log group.</p> </li> <li> <p> <code>resource-id</code> - The ID of the VPC, subnet, or network interface.</p> </li> <li> <p> <code>traffic-type</code> - The type of traffic (<code>ACCEPT</code> | <code>REJECT</code> | <code>ALL</code>)</p> </li> </ul>"]
-    pub filter: Option<FilterList>,
+    pub filter: Option<Vec<Filter>>,
     #[doc="<p>One or more flow log IDs.</p>"]
-    pub flow_log_ids: Option<ValueStringList>,
+    pub flow_log_ids: Option<Vec<String>>,
     #[doc="<p>The maximum number of results to return for the request in a single page. The remaining results can be seen by sending another request with the returned <code>NextToken</code> value. This value can be between 5 and 1000; if <code>MaxResults</code> is given a value larger than 1000, only 1000 results are returned. You cannot specify this parameter and the flow log IDs parameter in the same request.</p>"]
-    pub max_results: Option<Integer>,
+    pub max_results: Option<i64>,
     #[doc="<p>The token to retrieve the next page of results.</p>"]
     pub next_token: Option<String>,
 }
@@ -9100,7 +9055,7 @@ impl DescribeFlowLogsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeFlowLogsResult {
     #[doc="<p>Information about the flow logs.</p>"]
-    pub flow_logs: Option<FlowLogSet>,
+    pub flow_logs: Option<Vec<FlowLog>>,
     #[doc="<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
     pub next_token: Option<String>,
 }
@@ -9154,17 +9109,17 @@ impl DescribeFlowLogsResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeFpgaImagesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>create-time</code> - The creation time of the AFI.</p> </li> <li> <p> <code>fpga-image-id</code> - The FPGA image identifier (AFI ID).</p> </li> <li> <p> <code>fpga-image-global-id</code> - The global FPGA image identifier (AGFI ID).</p> </li> <li> <p> <code>name</code> - The name of the AFI.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the AFI owner.</p> </li> <li> <p> <code>product-code</code> - The product code.</p> </li> <li> <p> <code>shell-version</code> - The version of the AWS Shell that was used to create the bitstream.</p> </li> <li> <p> <code>state</code> - The state of the AFI (<code>pending</code> | <code>failed</code> | <code>available</code> | <code>unavailable</code>).</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>update-time</code> - The time of the most recent update.</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more AFI IDs.</p>"]
-    pub fpga_image_ids: Option<FpgaImageIdList>,
+    pub fpga_image_ids: Option<Vec<String>>,
     #[doc="<p>The maximum number of results to return in a single call.</p>"]
-    pub max_results: Option<MaxResults>,
+    pub max_results: Option<i64>,
     #[doc="<p>The token to retrieve the next page of results.</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
     #[doc="<p>Filters the AFI by owner. Specify an AWS account ID, <code>self</code> (owner is the sender of the request), or an AWS owner alias (valid values are <code>amazon</code> | <code>aws-marketplace</code>).</p>"]
-    pub owners: Option<OwnerStringList>,
+    pub owners: Option<Vec<String>>,
 }
 
 
@@ -9209,9 +9164,9 @@ impl DescribeFpgaImagesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeFpgaImagesResult {
     #[doc="<p>Information about one or more FPGA images.</p>"]
-    pub fpga_images: Option<FpgaImageList>,
+    pub fpga_images: Option<Vec<FpgaImage>>,
     #[doc="<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
 struct DescribeFpgaImagesResultDeserializer;
@@ -9264,13 +9219,13 @@ impl DescribeFpgaImagesResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeHostReservationOfferingsRequest {
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>instance-family</code> - The instance family of the offering (e.g., <code>m4</code>).</p> </li> <li> <p> <code>payment-option</code> - The payment option (<code>NoUpfront</code> | <code>PartialUpfront</code> | <code>AllUpfront</code>).</p> </li> </ul>"]
-    pub filter: Option<FilterList>,
+    pub filter: Option<Vec<Filter>>,
     #[doc="<p>This is the maximum duration of the reservation you'd like to purchase, specified in seconds. Reservations are available in one-year and three-year terms. The number of seconds specified must be the number of seconds in a year (365x24x60x60) times one of the supported durations (1 or 3). For example, specify 94608000 for three years.</p>"]
-    pub max_duration: Option<Integer>,
+    pub max_duration: Option<i64>,
     #[doc="<p>The maximum number of results to return for the request in a single page. The remaining results can be seen by sending another request with the returned <code>nextToken</code> value. This value can be between 5 and 500; if <code>maxResults</code> is given a larger value than 500, you will receive an error.</p>"]
-    pub max_results: Option<Integer>,
+    pub max_results: Option<i64>,
     #[doc="<p>This is the minimum duration of the reservation you'd like to purchase, specified in seconds. Reservations are available in one-year and three-year terms. The number of seconds specified must be the number of seconds in a year (365x24x60x60) times one of the supported durations (1 or 3). For example, specify 31536000 for one year.</p>"]
-    pub min_duration: Option<Integer>,
+    pub min_duration: Option<i64>,
     #[doc="<p>The token to use to retrieve the next page of results.</p>"]
     pub next_token: Option<String>,
     #[doc="<p>The ID of the reservation offering.</p>"]
@@ -9319,7 +9274,7 @@ pub struct DescribeHostReservationOfferingsResult {
     #[doc="<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
     pub next_token: Option<String>,
     #[doc="<p>Information about the offerings.</p>"]
-    pub offering_set: Option<HostOfferingSet>,
+    pub offering_set: Option<Vec<HostOffering>>,
 }
 
 struct DescribeHostReservationOfferingsResultDeserializer;
@@ -9373,11 +9328,11 @@ impl DescribeHostReservationOfferingsResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeHostReservationsRequest {
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>instance-family</code> - The instance family (e.g., <code>m4</code>).</p> </li> <li> <p> <code>payment-option</code> - The payment option (<code>NoUpfront</code> | <code>PartialUpfront</code> | <code>AllUpfront</code>).</p> </li> <li> <p> <code>state</code> - The state of the reservation (<code>payment-pending</code> | <code>payment-failed</code> | <code>active</code> | <code>retired</code>).</p> </li> </ul>"]
-    pub filter: Option<FilterList>,
+    pub filter: Option<Vec<Filter>>,
     #[doc="<p>One or more host reservation IDs.</p>"]
-    pub host_reservation_id_set: Option<HostReservationIdSet>,
+    pub host_reservation_id_set: Option<Vec<String>>,
     #[doc="<p>The maximum number of results to return for the request in a single page. The remaining results can be seen by sending another request with the returned <code>nextToken</code> value. This value can be between 5 and 500; if <code>maxResults</code> is given a larger value than 500, you will receive an error.</p>"]
-    pub max_results: Option<Integer>,
+    pub max_results: Option<i64>,
     #[doc="<p>The token to use to retrieve the next page of results.</p>"]
     pub next_token: Option<String>,
 }
@@ -9418,7 +9373,7 @@ impl DescribeHostReservationsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeHostReservationsResult {
     #[doc="<p>Details about the reservation's configuration.</p>"]
-    pub host_reservation_set: Option<HostReservationSet>,
+    pub host_reservation_set: Option<Vec<HostReservation>>,
     #[doc="<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
     pub next_token: Option<String>,
 }
@@ -9474,11 +9429,11 @@ impl DescribeHostReservationsResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeHostsRequest {
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>instance-type</code> - The instance type size that the Dedicated Host is configured to support.</p> </li> <li> <p> <code>auto-placement</code> - Whether auto-placement is enabled or disabled (<code>on</code> | <code>off</code>).</p> </li> <li> <p> <code>host-reservation-id</code> - The ID of the reservation assigned to this host.</p> </li> <li> <p> <code>client-token</code> - The idempotency token you provided when you launched the instance</p> </li> <li> <p> <code>state</code>- The allocation state of the Dedicated Host (<code>available</code> | <code>under-assessment</code> | <code>permanent-failure</code> | <code>released</code> | <code>released-permanent-failure</code>).</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone of the host.</p> </li> </ul>"]
-    pub filter: Option<FilterList>,
+    pub filter: Option<Vec<Filter>>,
     #[doc="<p>The IDs of the Dedicated Hosts. The IDs are used for targeted instance launches.</p>"]
-    pub host_ids: Option<RequestHostIdList>,
+    pub host_ids: Option<Vec<String>>,
     #[doc="<p>The maximum number of results to return for the request in a single page. The remaining results can be seen by sending another request with the returned <code>nextToken</code> value. This value can be between 5 and 500; if <code>maxResults</code> is given a larger value than 500, you will receive an error. You cannot specify this parameter and the host IDs parameter in the same request.</p>"]
-    pub max_results: Option<Integer>,
+    pub max_results: Option<i64>,
     #[doc="<p>The token to retrieve the next page of results.</p>"]
     pub next_token: Option<String>,
 }
@@ -9518,7 +9473,7 @@ impl DescribeHostsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeHostsResult {
     #[doc="<p>Information about the Dedicated Hosts.</p>"]
-    pub hosts: Option<HostList>,
+    pub hosts: Option<Vec<Host>>,
     #[doc="<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
     pub next_token: Option<String>,
 }
@@ -9572,13 +9527,13 @@ impl DescribeHostsResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeIamInstanceProfileAssociationsRequest {
     #[doc="<p>One or more IAM instance profile associations.</p>"]
-    pub association_ids: Option<AssociationIdList>,
+    pub association_ids: Option<Vec<String>>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>instance-id</code> - The ID of the instance.</p> </li> <li> <p> <code>state</code> - The state of the association (<code>associating</code> | <code>associated</code> | <code>disassociating</code> | <code>disassociated</code>).</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>"]
-    pub max_results: Option<MaxResults>,
+    pub max_results: Option<i64>,
     #[doc="<p>The token to request the next page of results.</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
 
@@ -9617,9 +9572,9 @@ impl DescribeIamInstanceProfileAssociationsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeIamInstanceProfileAssociationsResult {
     #[doc="<p>Information about one or more IAM instance profile associations.</p>"]
-    pub iam_instance_profile_associations: Option<IamInstanceProfileAssociationSet>,
+    pub iam_instance_profile_associations: Option<Vec<IamInstanceProfileAssociation>>,
     #[doc="<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
 }
 
 struct DescribeIamInstanceProfileAssociationsResultDeserializer;
@@ -9696,7 +9651,7 @@ impl DescribeIdFormatRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeIdFormatResult {
     #[doc="<p>Information about the ID format for the resource.</p>"]
-    pub statuses: Option<IdFormatList>,
+    pub statuses: Option<Vec<IdFormat>>,
 }
 
 struct DescribeIdFormatResultDeserializer;
@@ -9772,7 +9727,7 @@ impl DescribeIdentityIdFormatRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeIdentityIdFormatResult {
     #[doc="<p>Information about the ID format for the resources.</p>"]
-    pub statuses: Option<IdFormatList>,
+    pub statuses: Option<Vec<IdFormat>>,
 }
 
 struct DescribeIdentityIdFormatResultDeserializer;
@@ -9821,9 +9776,9 @@ impl DescribeIdentityIdFormatResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeImageAttributeRequest {
     #[doc="<p>The AMI attribute.</p> <p> <b>Note</b>: Depending on your account privileges, the <code>blockDeviceMapping</code> attribute may return a <code>Client.AuthFailure</code> error. If this happens, use <a>DescribeImages</a> to get information about the block device mapping for the AMI.</p>"]
-    pub attribute: ImageAttributeName,
+    pub attribute: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the AMI.</p>"]
     pub image_id: String,
 }
@@ -9851,15 +9806,15 @@ impl DescribeImageAttributeRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeImagesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>Scopes the images by users with explicit launch permissions. Specify an AWS account ID, <code>self</code> (the sender of the request), or <code>all</code> (public AMIs).</p>"]
-    pub executable_users: Option<ExecutableByStringList>,
+    pub executable_users: Option<Vec<String>>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>architecture</code> - The image architecture (<code>i386</code> | <code>x86_64</code>).</p> </li> <li> <p> <code>block-device-mapping.delete-on-termination</code> - A Boolean value that indicates whether the Amazon EBS volume is deleted on instance termination.</p> </li> <li> <p> <code>block-device-mapping.device-name</code> - The device name for the EBS volume (for example, <code>/dev/sdh</code>).</p> </li> <li> <p> <code>block-device-mapping.snapshot-id</code> - The ID of the snapshot used for the EBS volume.</p> </li> <li> <p> <code>block-device-mapping.volume-size</code> - The volume size of the EBS volume, in GiB.</p> </li> <li> <p> <code>block-device-mapping.volume-type</code> - The volume type of the EBS volume (<code>gp2</code> | <code>io1</code> | <code>st1 </code>| <code>sc1</code> | <code>standard</code>).</p> </li> <li> <p> <code>description</code> - The description of the image (provided during image creation).</p> </li> <li> <p> <code>ena-support</code> - A Boolean that indicates whether enhanced networking with ENA is enabled.</p> </li> <li> <p> <code>hypervisor</code> - The hypervisor type (<code>ovm</code> | <code>xen</code>).</p> </li> <li> <p> <code>image-id</code> - The ID of the image.</p> </li> <li> <p> <code>image-type</code> - The image type (<code>machine</code> | <code>kernel</code> | <code>ramdisk</code>).</p> </li> <li> <p> <code>is-public</code> - A Boolean that indicates whether the image is public.</p> </li> <li> <p> <code>kernel-id</code> - The kernel ID.</p> </li> <li> <p> <code>manifest-location</code> - The location of the image manifest.</p> </li> <li> <p> <code>name</code> - The name of the AMI (provided during image creation).</p> </li> <li> <p> <code>owner-alias</code> - String value from an Amazon-maintained list (<code>amazon</code> | <code>aws-marketplace</code> | <code>microsoft</code>) of snapshot owners. Not to be confused with the user-configured AWS account alias, which is set from the IAM console.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the image owner.</p> </li> <li> <p> <code>platform</code> - The platform. To only list Windows-based AMIs, use <code>windows</code>.</p> </li> <li> <p> <code>product-code</code> - The product code.</p> </li> <li> <p> <code>product-code.type</code> - The type of the product code (<code>devpay</code> | <code>marketplace</code>).</p> </li> <li> <p> <code>ramdisk-id</code> - The RAM disk ID.</p> </li> <li> <p> <code>root-device-name</code> - The name of the root device volume (for example, <code>/dev/sda1</code>).</p> </li> <li> <p> <code>root-device-type</code> - The type of the root device volume (<code>ebs</code> | <code>instance-store</code>).</p> </li> <li> <p> <code>state</code> - The state of the image (<code>available</code> | <code>pending</code> | <code>failed</code>).</p> </li> <li> <p> <code>state-reason-code</code> - The reason code for the state change.</p> </li> <li> <p> <code>state-reason-message</code> - The message for the state change.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the tag-value filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>virtualization-type</code> - The virtualization type (<code>paravirtual</code> | <code>hvm</code>).</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more image IDs.</p> <p>Default: Describes all images available to you.</p>"]
-    pub image_ids: Option<ImageIdStringList>,
+    pub image_ids: Option<Vec<String>>,
     #[doc="<p>Filters the images by the owner. Specify an AWS account ID, <code>self</code> (owner is the sender of the request), or an AWS owner alias (valid values are <code>amazon</code> | <code>aws-marketplace</code> | <code>microsoft</code>). Omitting this option returns all images for which you have launch permissions, regardless of ownership.</p>"]
-    pub owners: Option<OwnerStringList>,
+    pub owners: Option<Vec<String>>,
 }
 
 
@@ -9903,7 +9858,7 @@ impl DescribeImagesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeImagesResult {
     #[doc="<p>Information about one or more images.</p>"]
-    pub images: Option<ImageList>,
+    pub images: Option<Vec<Image>>,
 }
 
 struct DescribeImagesResultDeserializer;
@@ -9952,13 +9907,13 @@ impl DescribeImagesResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeImportImageTasksRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>Filter tasks using the <code>task-state</code> filter and one of the following values: active, completed, deleting, deleted.</p>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>A list of import image task IDs.</p>"]
-    pub import_task_ids: Option<ImportTaskIdList>,
+    pub import_task_ids: Option<Vec<String>>,
     #[doc="<p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>"]
-    pub max_results: Option<Integer>,
+    pub max_results: Option<i64>,
     #[doc="<p>A token that indicates the next page of results.</p>"]
     pub next_token: Option<String>,
 }
@@ -10001,7 +9956,7 @@ impl DescribeImportImageTasksRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeImportImageTasksResult {
     #[doc="<p>A list of zero or more import image tasks that are currently active or were completed or canceled in the previous 7 days.</p>"]
-    pub import_image_tasks: Option<ImportImageTaskList>,
+    pub import_image_tasks: Option<Vec<ImportImageTask>>,
     #[doc="<p>The token to use to get the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
     pub next_token: Option<String>,
 }
@@ -10057,13 +10012,13 @@ impl DescribeImportImageTasksResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeImportSnapshotTasksRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>A list of import snapshot task IDs.</p>"]
-    pub import_task_ids: Option<ImportTaskIdList>,
+    pub import_task_ids: Option<Vec<String>>,
     #[doc="<p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>"]
-    pub max_results: Option<Integer>,
+    pub max_results: Option<i64>,
     #[doc="<p>A token that indicates the next page of results.</p>"]
     pub next_token: Option<String>,
 }
@@ -10106,7 +10061,7 @@ impl DescribeImportSnapshotTasksRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeImportSnapshotTasksResult {
     #[doc="<p>A list of zero or more import snapshot tasks that are currently active or were completed or canceled in the previous 7 days.</p>"]
-    pub import_snapshot_tasks: Option<ImportSnapshotTaskList>,
+    pub import_snapshot_tasks: Option<Vec<ImportSnapshotTask>>,
     #[doc="<p>The token to use to get the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
     pub next_token: Option<String>,
 }
@@ -10163,9 +10118,9 @@ impl DescribeImportSnapshotTasksResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeInstanceAttributeRequest {
     #[doc="<p>The instance attribute.</p> <p>Note: The <code>enaSupport</code> attribute is not supported at this time.</p>"]
-    pub attribute: InstanceAttributeName,
+    pub attribute: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the instance.</p>"]
     pub instance_id: String,
 }
@@ -10193,15 +10148,15 @@ impl DescribeInstanceAttributeRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeInstanceStatusRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>availability-zone</code> - The Availability Zone of the instance.</p> </li> <li> <p> <code>event.code</code> - The code for the scheduled event (<code>instance-reboot</code> | <code>system-reboot</code> | <code>system-maintenance</code> | <code>instance-retirement</code> | <code>instance-stop</code>).</p> </li> <li> <p> <code>event.description</code> - A description of the event.</p> </li> <li> <p> <code>event.not-after</code> - The latest end time for the scheduled event (for example, <code>2014-09-15T17:15:20.000Z</code>).</p> </li> <li> <p> <code>event.not-before</code> - The earliest start time for the scheduled event (for example, <code>2014-09-15T17:15:20.000Z</code>).</p> </li> <li> <p> <code>instance-state-code</code> - The code for the instance state, as a 16-bit unsigned integer. The high byte is an opaque internal value and should be ignored. The low byte is set based on the state represented. The valid values are 0 (pending), 16 (running), 32 (shutting-down), 48 (terminated), 64 (stopping), and 80 (stopped).</p> </li> <li> <p> <code>instance-state-name</code> - The state of the instance (<code>pending</code> | <code>running</code> | <code>shutting-down</code> | <code>terminated</code> | <code>stopping</code> | <code>stopped</code>).</p> </li> <li> <p> <code>instance-status.reachability</code> - Filters on instance status where the name is <code>reachability</code> (<code>passed</code> | <code>failed</code> | <code>initializing</code> | <code>insufficient-data</code>).</p> </li> <li> <p> <code>instance-status.status</code> - The status of the instance (<code>ok</code> | <code>impaired</code> | <code>initializing</code> | <code>insufficient-data</code> | <code>not-applicable</code>).</p> </li> <li> <p> <code>system-status.reachability</code> - Filters on system status where the name is <code>reachability</code> (<code>passed</code> | <code>failed</code> | <code>initializing</code> | <code>insufficient-data</code>).</p> </li> <li> <p> <code>system-status.status</code> - The system status of the instance (<code>ok</code> | <code>impaired</code> | <code>initializing</code> | <code>insufficient-data</code> | <code>not-applicable</code>).</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>When <code>true</code>, includes the health status for all instances. When <code>false</code>, includes the health status for running instances only.</p> <p>Default: <code>false</code> </p>"]
-    pub include_all_instances: Option<Boolean>,
+    pub include_all_instances: Option<bool>,
     #[doc="<p>One or more instance IDs.</p> <p>Default: Describes all your instances.</p> <p>Constraints: Maximum 100 explicitly specified instance IDs.</p>"]
-    pub instance_ids: Option<InstanceIdStringList>,
+    pub instance_ids: Option<Vec<String>>,
     #[doc="<p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value. This value can be between 5 and 1000. You cannot specify this parameter and the instance IDs parameter in the same call.</p>"]
-    pub max_results: Option<Integer>,
+    pub max_results: Option<i64>,
     #[doc="<p>The token to retrieve the next page of results.</p>"]
     pub next_token: Option<String>,
 }
@@ -10248,7 +10203,7 @@ impl DescribeInstanceStatusRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeInstanceStatusResult {
     #[doc="<p>One or more instance status descriptions.</p>"]
-    pub instance_statuses: Option<InstanceStatusList>,
+    pub instance_statuses: Option<Vec<InstanceStatus>>,
     #[doc="<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
     pub next_token: Option<String>,
 }
@@ -10304,13 +10259,13 @@ impl DescribeInstanceStatusResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeInstancesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>affinity</code> - The affinity setting for an instance running on a Dedicated Host (<code>default</code> | <code>host</code>).</p> </li> <li> <p> <code>architecture</code> - The instance architecture (<code>i386</code> | <code>x86_64</code>).</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone of the instance.</p> </li> <li> <p> <code>block-device-mapping.attach-time</code> - The attach time for an EBS volume mapped to the instance, for example, <code>2010-09-15T17:15:20.000Z</code>.</p> </li> <li> <p> <code>block-device-mapping.delete-on-termination</code> - A Boolean that indicates whether the EBS volume is deleted on instance termination.</p> </li> <li> <p> <code>block-device-mapping.device-name</code> - The device name for the EBS volume (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p> </li> <li> <p> <code>block-device-mapping.status</code> - The status for the EBS volume (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>block-device-mapping.volume-id</code> - The volume ID of the EBS volume.</p> </li> <li> <p> <code>client-token</code> - The idempotency token you provided when you launched the instance.</p> </li> <li> <p> <code>dns-name</code> - The public DNS name of the instance.</p> </li> <li> <p> <code>group-id</code> - The ID of the security group for the instance. EC2-Classic only.</p> </li> <li> <p> <code>group-name</code> - The name of the security group for the instance. EC2-Classic only.</p> </li> <li> <p> <code>host-id</code> - The ID of the Dedicated Host on which the instance is running, if applicable.</p> </li> <li> <p> <code>hypervisor</code> - The hypervisor type of the instance (<code>ovm</code> | <code>xen</code>).</p> </li> <li> <p> <code>iam-instance-profile.arn</code> - The instance profile associated with the instance. Specified as an ARN.</p> </li> <li> <p> <code>image-id</code> - The ID of the image used to launch the instance.</p> </li> <li> <p> <code>instance-id</code> - The ID of the instance.</p> </li> <li> <p> <code>instance-lifecycle</code> - Indicates whether this is a Spot Instance or a Scheduled Instance (<code>spot</code> | <code>scheduled</code>).</p> </li> <li> <p> <code>instance-state-code</code> - The state of the instance, as a 16-bit unsigned integer. The high byte is an opaque internal value and should be ignored. The low byte is set based on the state represented. The valid values are: 0 (pending), 16 (running), 32 (shutting-down), 48 (terminated), 64 (stopping), and 80 (stopped).</p> </li> <li> <p> <code>instance-state-name</code> - The state of the instance (<code>pending</code> | <code>running</code> | <code>shutting-down</code> | <code>terminated</code> | <code>stopping</code> | <code>stopped</code>).</p> </li> <li> <p> <code>instance-type</code> - The type of instance (for example, <code>t2.micro</code>).</p> </li> <li> <p> <code>instance.group-id</code> - The ID of the security group for the instance. </p> </li> <li> <p> <code>instance.group-name</code> - The name of the security group for the instance. </p> </li> <li> <p> <code>ip-address</code> - The public IPv4 address of the instance.</p> </li> <li> <p> <code>kernel-id</code> - The kernel ID.</p> </li> <li> <p> <code>key-name</code> - The name of the key pair used when the instance was launched.</p> </li> <li> <p> <code>launch-index</code> - When launching multiple instances, this is the index for the instance in the launch group (for example, 0, 1, 2, and so on). </p> </li> <li> <p> <code>launch-time</code> - The time when the instance was launched.</p> </li> <li> <p> <code>monitoring-state</code> - Indicates whether detailed monitoring is enabled (<code>disabled</code> | <code>enabled</code>).</p> </li> <li> <p> <code>network-interface.addresses.private-ip-address</code> - The private IPv4 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.addresses.primary</code> - Specifies whether the IPv4 address of the network interface is the primary private IPv4 address.</p> </li> <li> <p> <code>network-interface.addresses.association.public-ip</code> - The ID of the association of an Elastic IP address (IPv4) with a network interface.</p> </li> <li> <p> <code>network-interface.addresses.association.ip-owner-id</code> - The owner ID of the private IPv4 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.association.public-ip</code> - The address of the Elastic IP address (IPv4) bound to the network interface.</p> </li> <li> <p> <code>network-interface.association.ip-owner-id</code> - The owner of the Elastic IP address (IPv4) associated with the network interface.</p> </li> <li> <p> <code>network-interface.association.allocation-id</code> - The allocation ID returned when you allocated the Elastic IP address (IPv4) for your network interface.</p> </li> <li> <p> <code>network-interface.association.association-id</code> - The association ID returned when the network interface was associated with an IPv4 address.</p> </li> <li> <p> <code>network-interface.attachment.attachment-id</code> - The ID of the interface attachment.</p> </li> <li> <p> <code>network-interface.attachment.instance-id</code> - The ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.instance-owner-id</code> - The owner ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.device-index</code> - The device index to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.status</code> - The status of the attachment (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>network-interface.attachment.attach-time</code> - The time that the network interface was attached to an instance.</p> </li> <li> <p> <code>network-interface.attachment.delete-on-termination</code> - Specifies whether the attachment is deleted when an instance is terminated.</p> </li> <li> <p> <code>network-interface.availability-zone</code> - The Availability Zone for the network interface.</p> </li> <li> <p> <code>network-interface.description</code> - The description of the network interface.</p> </li> <li> <p> <code>network-interface.group-id</code> - The ID of a security group associated with the network interface.</p> </li> <li> <p> <code>network-interface.group-name</code> - The name of a security group associated with the network interface.</p> </li> <li> <p> <code>network-interface.ipv6-addresses.ipv6-address</code> - The IPv6 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.mac-address</code> - The MAC address of the network interface.</p> </li> <li> <p> <code>network-interface.network-interface-id</code> - The ID of the network interface.</p> </li> <li> <p> <code>network-interface.owner-id</code> - The ID of the owner of the network interface.</p> </li> <li> <p> <code>network-interface.private-dns-name</code> - The private DNS name of the network interface.</p> </li> <li> <p> <code>network-interface.requester-id</code> - The requester ID for the network interface.</p> </li> <li> <p> <code>network-interface.requester-managed</code> - Indicates whether the network interface is being managed by AWS.</p> </li> <li> <p> <code>network-interface.status</code> - The status of the network interface (<code>available</code>) | <code>in-use</code>).</p> </li> <li> <p> <code>network-interface.source-dest-check</code> - Whether the network interface performs source/destination checking. A value of <code>true</code> means checking is enabled, and <code>false</code> means checking is disabled. The value must be <code>false</code> for the network interface to perform network address translation (NAT) in your VPC.</p> </li> <li> <p> <code>network-interface.subnet-id</code> - The ID of the subnet for the network interface.</p> </li> <li> <p> <code>network-interface.vpc-id</code> - The ID of the VPC for the network interface.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the instance owner.</p> </li> <li> <p> <code>placement-group-name</code> - The name of the placement group for the instance.</p> </li> <li> <p> <code>platform</code> - The platform. Use <code>windows</code> if you have Windows instances; otherwise, leave blank.</p> </li> <li> <p> <code>private-dns-name</code> - The private IPv4 DNS name of the instance.</p> </li> <li> <p> <code>private-ip-address</code> - The private IPv4 address of the instance.</p> </li> <li> <p> <code>product-code</code> - The product code associated with the AMI used to launch the instance.</p> </li> <li> <p> <code>product-code.type</code> - The type of product code (<code>devpay</code> | <code>marketplace</code>).</p> </li> <li> <p> <code>ramdisk-id</code> - The RAM disk ID.</p> </li> <li> <p> <code>reason</code> - The reason for the current state of the instance (for example, shows \"User Initiated [date]\" when you stop or terminate the instance). Similar to the state-reason-code filter.</p> </li> <li> <p> <code>requester-id</code> - The ID of the entity that launched the instance on your behalf (for example, AWS Management Console, Auto Scaling, and so on).</p> </li> <li> <p> <code>reservation-id</code> - The ID of the instance's reservation. A reservation ID is created any time you launch an instance. A reservation ID has a one-to-one relationship with an instance launch request, but can be associated with more than one instance if you launch multiple instances using the same launch request. For example, if you launch one instance, you'll get one reservation ID. If you launch ten instances using the same launch request, you'll also get one reservation ID.</p> </li> <li> <p> <code>root-device-name</code> - The name of the root device for the instance (for example, <code>/dev/sda1</code> or <code>/dev/xvda</code>).</p> </li> <li> <p> <code>root-device-type</code> - The type of root device that the instance uses (<code>ebs</code> | <code>instance-store</code>).</p> </li> <li> <p> <code>source-dest-check</code> - Indicates whether the instance performs source/destination checking. A value of <code>true</code> means that checking is enabled, and <code>false</code> means checking is disabled. The value must be <code>false</code> for the instance to perform network address translation (NAT) in your VPC. </p> </li> <li> <p> <code>spot-instance-request-id</code> - The ID of the Spot instance request.</p> </li> <li> <p> <code>state-reason-code</code> - The reason code for the state change.</p> </li> <li> <p> <code>state-reason-message</code> - A message that describes the state change.</p> </li> <li> <p> <code>subnet-id</code> - The ID of the subnet for the instance.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>tenancy</code> - The tenancy of an instance (<code>dedicated</code> | <code>default</code> | <code>host</code>).</p> </li> <li> <p> <code>virtualization-type</code> - The virtualization type of the instance (<code>paravirtual</code> | <code>hvm</code>).</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC that the instance is running in.</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more instance IDs.</p> <p>Default: Describes all your instances.</p>"]
-    pub instance_ids: Option<InstanceIdStringList>,
+    pub instance_ids: Option<Vec<String>>,
     #[doc="<p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value. This value can be between 5 and 1000. You cannot specify this parameter and the instance IDs parameter or tag filters in the same call.</p>"]
-    pub max_results: Option<Integer>,
+    pub max_results: Option<i64>,
     #[doc="<p>The token to request the next page of results.</p>"]
     pub next_token: Option<String>,
 }
@@ -10355,7 +10310,7 @@ pub struct DescribeInstancesResult {
     #[doc="<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
     pub next_token: Option<String>,
     #[doc="<p>Zero or more reservations.</p>"]
-    pub reservations: Option<ReservationList>,
+    pub reservations: Option<Vec<Reservation>>,
 }
 
 struct DescribeInstancesResultDeserializer;
@@ -10409,11 +10364,11 @@ impl DescribeInstancesResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeInternetGatewaysRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>attachment.state</code> - The current state of the attachment between the gateway and the VPC (<code>available</code>). Present only if a VPC is attached.</p> </li> <li> <p> <code>attachment.vpc-id</code> - The ID of an attached VPC.</p> </li> <li> <p> <code>internet-gateway-id</code> - The ID of the Internet gateway.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more Internet gateway IDs.</p> <p>Default: Describes all your Internet gateways.</p>"]
-    pub internet_gateway_ids: Option<ValueStringList>,
+    pub internet_gateway_ids: Option<Vec<String>>,
 }
 
 
@@ -10447,7 +10402,7 @@ impl DescribeInternetGatewaysRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeInternetGatewaysResult {
     #[doc="<p>Information about one or more Internet gateways.</p>"]
-    pub internet_gateways: Option<InternetGatewayList>,
+    pub internet_gateways: Option<Vec<InternetGateway>>,
 }
 
 struct DescribeInternetGatewaysResultDeserializer;
@@ -10497,11 +10452,11 @@ impl DescribeInternetGatewaysResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeKeyPairsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>fingerprint</code> - The fingerprint of the key pair.</p> </li> <li> <p> <code>key-name</code> - The name of the key pair.</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more key pair names.</p> <p>Default: Describes all your key pairs.</p>"]
-    pub key_names: Option<KeyNameStringList>,
+    pub key_names: Option<Vec<String>>,
 }
 
 
@@ -10535,7 +10490,7 @@ impl DescribeKeyPairsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeKeyPairsResult {
     #[doc="<p>Information about one or more key pairs.</p>"]
-    pub key_pairs: Option<KeyPairList>,
+    pub key_pairs: Option<Vec<KeyPairInfo>>,
 }
 
 struct DescribeKeyPairsResultDeserializer;
@@ -10584,15 +10539,15 @@ impl DescribeKeyPairsResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeMovingAddressesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>moving-status</code> - The status of the Elastic IP address (<code>MovingToVpc</code> | <code>RestoringToClassic</code>).</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>The maximum number of results to return for the request in a single page. The remaining results of the initial request can be seen by sending another request with the returned <code>NextToken</code> value. This value can be between 5 and 1000; if <code>MaxResults</code> is given a value outside of this range, an error is returned.</p> <p>Default: If no value is provided, the default is 1000.</p>"]
-    pub max_results: Option<Integer>,
+    pub max_results: Option<i64>,
     #[doc="<p>The token to use to retrieve the next page of results.</p>"]
     pub next_token: Option<String>,
     #[doc="<p>One or more Elastic IP addresses.</p>"]
-    pub public_ips: Option<ValueStringList>,
+    pub public_ips: Option<Vec<String>>,
 }
 
 
@@ -10633,7 +10588,7 @@ impl DescribeMovingAddressesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeMovingAddressesResult {
     #[doc="<p>The status for each Elastic IP address.</p>"]
-    pub moving_address_statuses: Option<MovingAddressStatusSet>,
+    pub moving_address_statuses: Option<Vec<MovingAddressStatus>>,
     #[doc="<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
     pub next_token: Option<String>,
 }
@@ -10689,11 +10644,11 @@ impl DescribeMovingAddressesResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeNatGatewaysRequest {
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>nat-gateway-id</code> - The ID of the NAT gateway.</p> </li> <li> <p> <code>state</code> - The state of the NAT gateway (<code>pending</code> | <code>failed</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>).</p> </li> <li> <p> <code>subnet-id</code> - The ID of the subnet in which the NAT gateway resides.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC in which the NAT gateway resides.</p> </li> </ul>"]
-    pub filter: Option<FilterList>,
+    pub filter: Option<Vec<Filter>>,
     #[doc="<p>The maximum number of items to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results.</p> <p>Constraint: If the value specified is greater than 1000, we return only 1000 items.</p>"]
-    pub max_results: Option<Integer>,
+    pub max_results: Option<i64>,
     #[doc="<p>One or more NAT gateway IDs.</p>"]
-    pub nat_gateway_ids: Option<ValueStringList>,
+    pub nat_gateway_ids: Option<Vec<String>>,
     #[doc="<p>The token to retrieve the next page of results.</p>"]
     pub next_token: Option<String>,
 }
@@ -10733,7 +10688,7 @@ impl DescribeNatGatewaysRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeNatGatewaysResult {
     #[doc="<p>Information about the NAT gateways.</p>"]
-    pub nat_gateways: Option<NatGatewayList>,
+    pub nat_gateways: Option<Vec<NatGateway>>,
     #[doc="<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
     pub next_token: Option<String>,
 }
@@ -10789,11 +10744,11 @@ impl DescribeNatGatewaysResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeNetworkAclsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>association.association-id</code> - The ID of an association ID for the ACL.</p> </li> <li> <p> <code>association.network-acl-id</code> - The ID of the network ACL involved in the association.</p> </li> <li> <p> <code>association.subnet-id</code> - The ID of the subnet involved in the association.</p> </li> <li> <p> <code>default</code> - Indicates whether the ACL is the default network ACL for the VPC.</p> </li> <li> <p> <code>entry.cidr</code> - The IPv4 CIDR range specified in the entry.</p> </li> <li> <p> <code>entry.egress</code> - Indicates whether the entry applies to egress traffic.</p> </li> <li> <p> <code>entry.icmp.code</code> - The ICMP code specified in the entry, if any.</p> </li> <li> <p> <code>entry.icmp.type</code> - The ICMP type specified in the entry, if any.</p> </li> <li> <p> <code>entry.ipv6-cidr</code> - The IPv6 CIDR range specified in the entry.</p> </li> <li> <p> <code>entry.port-range.from</code> - The start of the port range specified in the entry. </p> </li> <li> <p> <code>entry.port-range.to</code> - The end of the port range specified in the entry. </p> </li> <li> <p> <code>entry.protocol</code> - The protocol specified in the entry (<code>tcp</code> | <code>udp</code> | <code>icmp</code> or a protocol number).</p> </li> <li> <p> <code>entry.rule-action</code> - Allows or denies the matching traffic (<code>allow</code> | <code>deny</code>).</p> </li> <li> <p> <code>entry.rule-number</code> - The number of an entry (in other words, rule) in the ACL's set of entries.</p> </li> <li> <p> <code>network-acl-id</code> - The ID of the network ACL.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC for the network ACL.</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more network ACL IDs.</p> <p>Default: Describes all your network ACLs.</p>"]
-    pub network_acl_ids: Option<ValueStringList>,
+    pub network_acl_ids: Option<Vec<String>>,
 }
 
 
@@ -10827,7 +10782,7 @@ impl DescribeNetworkAclsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeNetworkAclsResult {
     #[doc="<p>Information about one or more network ACLs.</p>"]
-    pub network_acls: Option<NetworkAclList>,
+    pub network_acls: Option<Vec<NetworkAcl>>,
 }
 
 struct DescribeNetworkAclsResultDeserializer;
@@ -10877,9 +10832,9 @@ impl DescribeNetworkAclsResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeNetworkInterfaceAttributeRequest {
     #[doc="<p>The attribute of the network interface. This parameter is required.</p>"]
-    pub attribute: Option<NetworkInterfaceAttribute>,
+    pub attribute: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the network interface.</p>"]
     pub network_interface_id: String,
 }
@@ -10914,7 +10869,7 @@ pub struct DescribeNetworkInterfaceAttributeResult {
     #[doc="<p>The description of the network interface.</p>"]
     pub description: Option<AttributeValue>,
     #[doc="<p>The security groups associated with the network interface.</p>"]
-    pub groups: Option<GroupIdentifierList>,
+    pub groups: Option<Vec<GroupIdentifier>>,
     #[doc="<p>The ID of the network interface.</p>"]
     pub network_interface_id: Option<String>,
     #[doc="<p>Indicates whether source/destination checking is enabled.</p>"]
@@ -10987,11 +10942,11 @@ impl DescribeNetworkInterfaceAttributeResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeNetworkInterfacesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>addresses.private-ip-address</code> - The private IPv4 addresses associated with the network interface.</p> </li> <li> <p> <code>addresses.primary</code> - Whether the private IPv4 address is the primary IP address associated with the network interface. </p> </li> <li> <p> <code>addresses.association.public-ip</code> - The association ID returned when the network interface was associated with the Elastic IP address (IPv4).</p> </li> <li> <p> <code>addresses.association.owner-id</code> - The owner ID of the addresses associated with the network interface.</p> </li> <li> <p> <code>association.association-id</code> - The association ID returned when the network interface was associated with an IPv4 address.</p> </li> <li> <p> <code>association.allocation-id</code> - The allocation ID returned when you allocated the Elastic IP address (IPv4) for your network interface.</p> </li> <li> <p> <code>association.ip-owner-id</code> - The owner of the Elastic IP address (IPv4) associated with the network interface.</p> </li> <li> <p> <code>association.public-ip</code> - The address of the Elastic IP address (IPv4) bound to the network interface.</p> </li> <li> <p> <code>association.public-dns-name</code> - The public DNS name for the network interface (IPv4).</p> </li> <li> <p> <code>attachment.attachment-id</code> - The ID of the interface attachment.</p> </li> <li> <p> <code>attachment.attach.time</code> - The time that the network interface was attached to an instance.</p> </li> <li> <p> <code>attachment.delete-on-termination</code> - Indicates whether the attachment is deleted when an instance is terminated.</p> </li> <li> <p> <code>attachment.device-index</code> - The device index to which the network interface is attached.</p> </li> <li> <p> <code>attachment.instance-id</code> - The ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>attachment.instance-owner-id</code> - The owner ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>attachment.nat-gateway-id</code> - The ID of the NAT gateway to which the network interface is attached.</p> </li> <li> <p> <code>attachment.status</code> - The status of the attachment (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone of the network interface.</p> </li> <li> <p> <code>description</code> - The description of the network interface.</p> </li> <li> <p> <code>group-id</code> - The ID of a security group associated with the network interface.</p> </li> <li> <p> <code>group-name</code> - The name of a security group associated with the network interface.</p> </li> <li> <p> <code>ipv6-addresses.ipv6-address</code> - An IPv6 address associated with the network interface.</p> </li> <li> <p> <code>mac-address</code> - The MAC address of the network interface.</p> </li> <li> <p> <code>network-interface-id</code> - The ID of the network interface.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the network interface owner.</p> </li> <li> <p> <code>private-ip-address</code> - The private IPv4 address or addresses of the network interface.</p> </li> <li> <p> <code>private-dns-name</code> - The private DNS name of the network interface (IPv4).</p> </li> <li> <p> <code>requester-id</code> - The ID of the entity that launched the instance on your behalf (for example, AWS Management Console, Auto Scaling, and so on).</p> </li> <li> <p> <code>requester-managed</code> - Indicates whether the network interface is being managed by an AWS service (for example, AWS Management Console, Auto Scaling, and so on).</p> </li> <li> <p> <code>source-desk-check</code> - Indicates whether the network interface performs source/destination checking. A value of <code>true</code> means checking is enabled, and <code>false</code> means checking is disabled. The value must be <code>false</code> for the network interface to perform network address translation (NAT) in your VPC. </p> </li> <li> <p> <code>status</code> - The status of the network interface. If the network interface is not attached to an instance, the status is <code>available</code>; if a network interface is attached to an instance the status is <code>in-use</code>.</p> </li> <li> <p> <code>subnet-id</code> - The ID of the subnet for the network interface.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC for the network interface.</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more network interface IDs.</p> <p>Default: Describes all your network interfaces.</p>"]
-    pub network_interface_ids: Option<NetworkInterfaceIdList>,
+    pub network_interface_ids: Option<Vec<String>>,
 }
 
 
@@ -11027,7 +10982,7 @@ impl DescribeNetworkInterfacesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeNetworkInterfacesResult {
     #[doc="<p>Information about one or more network interfaces.</p>"]
-    pub network_interfaces: Option<NetworkInterfaceList>,
+    pub network_interfaces: Option<Vec<NetworkInterface>>,
 }
 
 struct DescribeNetworkInterfacesResultDeserializer;
@@ -11078,11 +11033,11 @@ impl DescribeNetworkInterfacesResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribePlacementGroupsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>group-name</code> - The name of the placement group.</p> </li> <li> <p> <code>state</code> - The state of the placement group (<code>pending</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>).</p> </li> <li> <p> <code>strategy</code> - The strategy of the placement group (<code>cluster</code>).</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more placement group names.</p> <p>Default: Describes all your placement groups, or only those otherwise specified.</p>"]
-    pub group_names: Option<PlacementGroupStringList>,
+    pub group_names: Option<Vec<String>>,
 }
 
 
@@ -11116,7 +11071,7 @@ impl DescribePlacementGroupsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribePlacementGroupsResult {
     #[doc="<p>One or more placement groups.</p>"]
-    pub placement_groups: Option<PlacementGroupList>,
+    pub placement_groups: Option<Vec<PlacementGroup>>,
 }
 
 struct DescribePlacementGroupsResultDeserializer;
@@ -11166,15 +11121,15 @@ impl DescribePlacementGroupsResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribePrefixListsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>prefix-list-id</code>: The ID of a prefix list.</p> </li> <li> <p> <code>prefix-list-name</code>: The name of a prefix list.</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>The maximum number of items to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results.</p> <p>Constraint: If the value specified is greater than 1000, we return only 1000 items.</p>"]
-    pub max_results: Option<Integer>,
+    pub max_results: Option<i64>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a prior call.)</p>"]
     pub next_token: Option<String>,
     #[doc="<p>One or more prefix list IDs.</p>"]
-    pub prefix_list_ids: Option<ValueStringList>,
+    pub prefix_list_ids: Option<Vec<String>>,
 }
 
 
@@ -11217,7 +11172,7 @@ pub struct DescribePrefixListsResult {
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
     pub next_token: Option<String>,
     #[doc="<p>All available prefix lists.</p>"]
-    pub prefix_lists: Option<PrefixListSet>,
+    pub prefix_lists: Option<Vec<PrefixList>>,
 }
 
 struct DescribePrefixListsResultDeserializer;
@@ -11271,11 +11226,11 @@ impl DescribePrefixListsResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeRegionsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>endpoint</code> - The endpoint of the region (for example, <code>ec2.us-east-1.amazonaws.com</code>).</p> </li> <li> <p> <code>region-name</code> - The name of the region (for example, <code>us-east-1</code>).</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>The names of one or more regions.</p>"]
-    pub region_names: Option<RegionNameStringList>,
+    pub region_names: Option<Vec<String>>,
 }
 
 
@@ -11309,7 +11264,7 @@ impl DescribeRegionsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeRegionsResult {
     #[doc="<p>Information about one or more regions.</p>"]
-    pub regions: Option<RegionList>,
+    pub regions: Option<Vec<Region>>,
 }
 
 struct DescribeRegionsResultDeserializer;
@@ -11358,7 +11313,7 @@ impl DescribeRegionsResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeReservedInstancesListingsRequest {
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>reserved-instances-id</code> - The ID of the Reserved Instances.</p> </li> <li> <p> <code>reserved-instances-listing-id</code> - The ID of the Reserved Instances listing.</p> </li> <li> <p> <code>status</code> - The status of the Reserved Instance listing (<code>pending</code> | <code>active</code> | <code>cancelled</code> | <code>closed</code>).</p> </li> <li> <p> <code>status-message</code> - The reason for the status.</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more Reserved Instance IDs.</p>"]
     pub reserved_instances_id: Option<String>,
     #[doc="<p>One or more Reserved Instance listing IDs.</p>"]
@@ -11396,7 +11351,7 @@ impl DescribeReservedInstancesListingsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeReservedInstancesListingsResult {
     #[doc="<p>Information about the Reserved Instance listing.</p>"]
-    pub reserved_instances_listings: Option<ReservedInstancesListingList>,
+    pub reserved_instances_listings: Option<Vec<ReservedInstancesListing>>,
 }
 
 struct DescribeReservedInstancesListingsResultDeserializer;
@@ -11445,11 +11400,11 @@ impl DescribeReservedInstancesListingsResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeReservedInstancesModificationsRequest {
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>client-token</code> - The idempotency token for the modification request.</p> </li> <li> <p> <code>create-date</code> - The time when the modification request was created.</p> </li> <li> <p> <code>effective-date</code> - The time when the modification becomes effective.</p> </li> <li> <p> <code>modification-result.reserved-instances-id</code> - The ID for the Reserved Instances created as part of the modification request. This ID is only available when the status of the modification is <code>fulfilled</code>.</p> </li> <li> <p> <code>modification-result.target-configuration.availability-zone</code> - The Availability Zone for the new Reserved Instances.</p> </li> <li> <p> <code>modification-result.target-configuration.instance-count </code> - The number of new Reserved Instances.</p> </li> <li> <p> <code>modification-result.target-configuration.instance-type</code> - The instance type of the new Reserved Instances.</p> </li> <li> <p> <code>modification-result.target-configuration.platform</code> - The network platform of the new Reserved Instances (<code>EC2-Classic</code> | <code>EC2-VPC</code>).</p> </li> <li> <p> <code>reserved-instances-id</code> - The ID of the Reserved Instances modified.</p> </li> <li> <p> <code>reserved-instances-modification-id</code> - The ID of the modification request.</p> </li> <li> <p> <code>status</code> - The status of the Reserved Instances modification request (<code>processing</code> | <code>fulfilled</code> | <code>failed</code>).</p> </li> <li> <p> <code>status-message</code> - The reason for the status.</p> </li> <li> <p> <code>update-date</code> - The time when the modification request was last updated.</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>The token to retrieve the next page of results.</p>"]
     pub next_token: Option<String>,
     #[doc="<p>IDs for the submitted modification request.</p>"]
-    pub reserved_instances_modification_ids: Option<ReservedInstancesModificationIdStringList>,
+    pub reserved_instances_modification_ids: Option<Vec<String>>,
 }
 
 
@@ -11489,7 +11444,7 @@ pub struct DescribeReservedInstancesModificationsResult {
     #[doc="<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
     pub next_token: Option<String>,
     #[doc="<p>The Reserved Instance modification information.</p>"]
-    pub reserved_instances_modifications: Option<ReservedInstancesModificationList>,
+    pub reserved_instances_modifications: Option<Vec<ReservedInstancesModification>>,
 }
 
 struct DescribeReservedInstancesModificationsResultDeserializer;
@@ -11544,33 +11499,33 @@ pub struct DescribeReservedInstancesOfferingsRequest {
     #[doc="<p>The Availability Zone in which the Reserved Instance can be used.</p>"]
     pub availability_zone: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>availability-zone</code> - The Availability Zone where the Reserved Instance can be used.</p> </li> <li> <p> <code>duration</code> - The duration of the Reserved Instance (for example, one year or three years), in seconds (<code>31536000</code> | <code>94608000</code>).</p> </li> <li> <p> <code>fixed-price</code> - The purchase price of the Reserved Instance (for example, 9800.0).</p> </li> <li> <p> <code>instance-type</code> - The instance type that is covered by the reservation.</p> </li> <li> <p> <code>marketplace</code> - Set to <code>true</code> to show only Reserved Instance Marketplace offerings. When this filter is not used, which is the default behavior, all offerings from both AWS and the Reserved Instance Marketplace are listed.</p> </li> <li> <p> <code>product-description</code> - The Reserved Instance product platform description. Instances that include <code>(Amazon VPC)</code> in the product platform description will only be displayed to EC2-Classic account holders and are for use with Amazon VPC. (<code>Linux/UNIX</code> | <code>Linux/UNIX (Amazon VPC)</code> | <code>SUSE Linux</code> | <code>SUSE Linux (Amazon VPC)</code> | <code>Red Hat Enterprise Linux</code> | <code>Red Hat Enterprise Linux (Amazon VPC)</code> | <code>Windows</code> | <code>Windows (Amazon VPC)</code> | <code>Windows with SQL Server Standard</code> | <code>Windows with SQL Server Standard (Amazon VPC)</code> | <code>Windows with SQL Server Web</code> | <code> Windows with SQL Server Web (Amazon VPC)</code> | <code>Windows with SQL Server Enterprise</code> | <code>Windows with SQL Server Enterprise (Amazon VPC)</code>) </p> </li> <li> <p> <code>reserved-instances-offering-id</code> - The Reserved Instances offering ID.</p> </li> <li> <p> <code>scope</code> - The scope of the Reserved Instance (<code>Availability Zone</code> or <code>Region</code>).</p> </li> <li> <p> <code>usage-price</code> - The usage price of the Reserved Instance, per hour (for example, 0.84).</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>Include Reserved Instance Marketplace offerings in the response.</p>"]
-    pub include_marketplace: Option<Boolean>,
+    pub include_marketplace: Option<bool>,
     #[doc="<p>The tenancy of the instances covered by the reservation. A Reserved Instance with a tenancy of <code>dedicated</code> is applied to instances that run in a VPC on single-tenant hardware (i.e., Dedicated Instances).</p> <p> <b>Important:</b> The <code>host</code> value cannot be used with this parameter. Use the <code>default</code> or <code>dedicated</code> values only.</p> <p>Default: <code>default</code> </p>"]
-    pub instance_tenancy: Option<Tenancy>,
+    pub instance_tenancy: Option<String>,
     #[doc="<p>The instance type that the reservation will cover (for example, <code>m1.small</code>). For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html\">Instance Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-    pub instance_type: Option<InstanceType>,
+    pub instance_type: Option<String>,
     #[doc="<p>The maximum duration (in seconds) to filter when searching for offerings.</p> <p>Default: 94608000 (3 years)</p>"]
-    pub max_duration: Option<Long>,
+    pub max_duration: Option<i64>,
     #[doc="<p>The maximum number of instances to filter when searching for offerings.</p> <p>Default: 20</p>"]
-    pub max_instance_count: Option<Integer>,
+    pub max_instance_count: Option<i64>,
     #[doc="<p>The maximum number of results to return for the request in a single page. The remaining results of the initial request can be seen by sending another request with the returned <code>NextToken</code> value. The maximum is 100.</p> <p>Default: 100</p>"]
-    pub max_results: Option<Integer>,
+    pub max_results: Option<i64>,
     #[doc="<p>The minimum duration (in seconds) to filter when searching for offerings.</p> <p>Default: 2592000 (1 month)</p>"]
-    pub min_duration: Option<Long>,
+    pub min_duration: Option<i64>,
     #[doc="<p>The token to retrieve the next page of results.</p>"]
     pub next_token: Option<String>,
     #[doc="<p>The offering class of the Reserved Instance. Can be <code>standard</code> or <code>convertible</code>.</p>"]
-    pub offering_class: Option<OfferingClassType>,
+    pub offering_class: Option<String>,
     #[doc="<p>The Reserved Instance offering type. If you are using tools that predate the 2011-11-01 API version, you only have access to the <code>Medium Utilization</code> Reserved Instance offering type. </p>"]
-    pub offering_type: Option<OfferingTypeValues>,
+    pub offering_type: Option<String>,
     #[doc="<p>The Reserved Instance product platform description. Instances that include <code>(Amazon VPC)</code> in the description are for use with Amazon VPC.</p>"]
-    pub product_description: Option<RIProductDescription>,
+    pub product_description: Option<String>,
     #[doc="<p>One or more Reserved Instances offering IDs.</p>"]
-    pub reserved_instances_offering_ids: Option<ReservedInstancesOfferingIdStringList>,
+    pub reserved_instances_offering_ids: Option<Vec<String>>,
 }
 
 
@@ -11651,7 +11606,7 @@ pub struct DescribeReservedInstancesOfferingsResult {
     #[doc="<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
     pub next_token: Option<String>,
     #[doc="<p>A list of Reserved Instances offerings.</p>"]
-    pub reserved_instances_offerings: Option<ReservedInstancesOfferingList>,
+    pub reserved_instances_offerings: Option<Vec<ReservedInstancesOffering>>,
 }
 
 struct DescribeReservedInstancesOfferingsResultDeserializer;
@@ -11704,15 +11659,15 @@ impl DescribeReservedInstancesOfferingsResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeReservedInstancesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>availability-zone</code> - The Availability Zone where the Reserved Instance can be used.</p> </li> <li> <p> <code>duration</code> - The duration of the Reserved Instance (one year or three years), in seconds (<code>31536000</code> | <code>94608000</code>).</p> </li> <li> <p> <code>end</code> - The time when the Reserved Instance expires (for example, 2015-08-07T11:54:42.000Z).</p> </li> <li> <p> <code>fixed-price</code> - The purchase price of the Reserved Instance (for example, 9800.0).</p> </li> <li> <p> <code>instance-type</code> - The instance type that is covered by the reservation.</p> </li> <li> <p> <code>scope</code> - The scope of the Reserved Instance (<code>Region</code> or <code>Availability Zone</code>).</p> </li> <li> <p> <code>product-description</code> - The Reserved Instance product platform description. Instances that include <code>(Amazon VPC)</code> in the product platform description will only be displayed to EC2-Classic account holders and are for use with Amazon VPC (<code>Linux/UNIX</code> | <code>Linux/UNIX (Amazon VPC)</code> | <code>SUSE Linux</code> | <code>SUSE Linux (Amazon VPC)</code> | <code>Red Hat Enterprise Linux</code> | <code>Red Hat Enterprise Linux (Amazon VPC)</code> | <code>Windows</code> | <code>Windows (Amazon VPC)</code> | <code>Windows with SQL Server Standard</code> | <code>Windows with SQL Server Standard (Amazon VPC)</code> | <code>Windows with SQL Server Web</code> | <code>Windows with SQL Server Web (Amazon VPC)</code> | <code>Windows with SQL Server Enterprise</code> | <code>Windows with SQL Server Enterprise (Amazon VPC)</code>).</p> </li> <li> <p> <code>reserved-instances-id</code> - The ID of the Reserved Instance.</p> </li> <li> <p> <code>start</code> - The time at which the Reserved Instance purchase request was placed (for example, 2014-08-07T11:54:42.000Z).</p> </li> <li> <p> <code>state</code> - The state of the Reserved Instance (<code>payment-pending</code> | <code>active</code> | <code>payment-failed</code> | <code>retired</code>).</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>usage-price</code> - The usage price of the Reserved Instance, per hour (for example, 0.84).</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>Describes whether the Reserved Instance is Standard or Convertible.</p>"]
-    pub offering_class: Option<OfferingClassType>,
+    pub offering_class: Option<String>,
     #[doc="<p>The Reserved Instance offering type. If you are using tools that predate the 2011-11-01 API version, you only have access to the <code>Medium Utilization</code> Reserved Instance offering type.</p>"]
-    pub offering_type: Option<OfferingTypeValues>,
+    pub offering_type: Option<String>,
     #[doc="<p>One or more Reserved Instance IDs.</p> <p>Default: Describes all your Reserved Instances, or only those otherwise specified.</p>"]
-    pub reserved_instances_ids: Option<ReservedInstancesIdStringList>,
+    pub reserved_instances_ids: Option<Vec<String>>,
 }
 
 
@@ -11754,7 +11709,7 @@ impl DescribeReservedInstancesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeReservedInstancesResult {
     #[doc="<p>A list of Reserved Instances.</p>"]
-    pub reserved_instances: Option<ReservedInstancesList>,
+    pub reserved_instances: Option<Vec<ReservedInstances>>,
 }
 
 struct DescribeReservedInstancesResultDeserializer;
@@ -11805,11 +11760,11 @@ impl DescribeReservedInstancesResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeRouteTablesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>association.route-table-association-id</code> - The ID of an association ID for the route table.</p> </li> <li> <p> <code>association.route-table-id</code> - The ID of the route table involved in the association.</p> </li> <li> <p> <code>association.subnet-id</code> - The ID of the subnet involved in the association.</p> </li> <li> <p> <code>association.main</code> - Indicates whether the route table is the main route table for the VPC (<code>true</code> | <code>false</code>). Route tables that do not have an association ID are not returned in the response.</p> </li> <li> <p> <code>route-table-id</code> - The ID of the route table.</p> </li> <li> <p> <code>route.destination-cidr-block</code> - The IPv4 CIDR range specified in a route in the table.</p> </li> <li> <p> <code>route.destination-ipv6-cidr-block</code> - The IPv6 CIDR range specified in a route in the route table.</p> </li> <li> <p> <code>route.destination-prefix-list-id</code> - The ID (prefix) of the AWS service specified in a route in the table.</p> </li> <li> <p> <code>route.egress-only-internet-gateway-id</code> - The ID of an egress-only Internet gateway specified in a route in the route table.</p> </li> <li> <p> <code>route.gateway-id</code> - The ID of a gateway specified in a route in the table.</p> </li> <li> <p> <code>route.instance-id</code> - The ID of an instance specified in a route in the table.</p> </li> <li> <p> <code>route.nat-gateway-id</code> - The ID of a NAT gateway.</p> </li> <li> <p> <code>route.origin</code> - Describes how the route was created. <code>CreateRouteTable</code> indicates that the route was automatically created when the route table was created; <code>CreateRoute</code> indicates that the route was manually added to the route table; <code>EnableVgwRoutePropagation</code> indicates that the route was propagated by route propagation.</p> </li> <li> <p> <code>route.state</code> - The state of a route in the route table (<code>active</code> | <code>blackhole</code>). The blackhole state indicates that the route's target isn't available (for example, the specified gateway isn't attached to the VPC, the specified NAT instance has been terminated, and so on).</p> </li> <li> <p> <code>route.vpc-peering-connection-id</code> - The ID of a VPC peering connection specified in a route in the table.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC for the route table.</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more route table IDs.</p> <p>Default: Describes all your route tables.</p>"]
-    pub route_table_ids: Option<ValueStringList>,
+    pub route_table_ids: Option<Vec<String>>,
 }
 
 
@@ -11843,7 +11798,7 @@ impl DescribeRouteTablesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeRouteTablesResult {
     #[doc="<p>Information about one or more route tables.</p>"]
-    pub route_tables: Option<RouteTableList>,
+    pub route_tables: Option<Vec<RouteTable>>,
 }
 
 struct DescribeRouteTablesResultDeserializer;
@@ -11893,17 +11848,17 @@ impl DescribeRouteTablesResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeScheduledInstanceAvailabilityRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>availability-zone</code> - The Availability Zone (for example, <code>us-west-2a</code>).</p> </li> <li> <p> <code>instance-type</code> - The instance type (for example, <code>c4.large</code>).</p> </li> <li> <p> <code>network-platform</code> - The network platform (<code>EC2-Classic</code> or <code>EC2-VPC</code>).</p> </li> <li> <p> <code>platform</code> - The platform (<code>Linux/UNIX</code> or <code>Windows</code>).</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>The time period for the first schedule to start.</p>"]
     pub first_slot_start_time_range: SlotDateTimeRangeRequest,
     #[doc="<p>The maximum number of results to return in a single call. This value can be between 5 and 300. The default value is 300. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>"]
-    pub max_results: Option<Integer>,
+    pub max_results: Option<i64>,
     #[doc="<p>The maximum available duration, in hours. This value must be greater than <code>MinSlotDurationInHours</code> and less than 1,720.</p>"]
-    pub max_slot_duration_in_hours: Option<Integer>,
+    pub max_slot_duration_in_hours: Option<i64>,
     #[doc="<p>The minimum available duration, in hours. The minimum required duration is 1,200 hours per year. For example, the minimum daily schedule is 4 hours, the minimum weekly schedule is 24 hours, and the minimum monthly schedule is 100 hours.</p>"]
-    pub min_slot_duration_in_hours: Option<Integer>,
+    pub min_slot_duration_in_hours: Option<i64>,
     #[doc="<p>The token for the next set of results.</p>"]
     pub next_token: Option<String>,
     #[doc="<p>The schedule recurrence.</p>"]
@@ -11965,7 +11920,7 @@ pub struct DescribeScheduledInstanceAvailabilityResult {
     #[doc="<p>The token required to retrieve the next set of results. This value is <code>null</code> when there are no more results to return.</p>"]
     pub next_token: Option<String>,
     #[doc="<p>Information about the available Scheduled Instances.</p>"]
-    pub scheduled_instance_availability_set: Option<ScheduledInstanceAvailabilitySet>,
+    pub scheduled_instance_availability_set: Option<Vec<ScheduledInstanceAvailability>>,
 }
 
 struct DescribeScheduledInstanceAvailabilityResultDeserializer;
@@ -12018,15 +11973,15 @@ impl DescribeScheduledInstanceAvailabilityResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeScheduledInstancesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>availability-zone</code> - The Availability Zone (for example, <code>us-west-2a</code>).</p> </li> <li> <p> <code>instance-type</code> - The instance type (for example, <code>c4.large</code>).</p> </li> <li> <p> <code>network-platform</code> - The network platform (<code>EC2-Classic</code> or <code>EC2-VPC</code>).</p> </li> <li> <p> <code>platform</code> - The platform (<code>Linux/UNIX</code> or <code>Windows</code>).</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>The maximum number of results to return in a single call. This value can be between 5 and 300. The default value is 100. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>"]
-    pub max_results: Option<Integer>,
+    pub max_results: Option<i64>,
     #[doc="<p>The token for the next set of results.</p>"]
     pub next_token: Option<String>,
     #[doc="<p>One or more Scheduled Instance IDs.</p>"]
-    pub scheduled_instance_ids: Option<ScheduledInstanceIdRequestSet>,
+    pub scheduled_instance_ids: Option<Vec<String>>,
     #[doc="<p>The time period for the first schedule to start.</p>"]
     pub slot_start_time_range: Option<SlotStartTimeRangeRequest>,
 }
@@ -12080,7 +12035,7 @@ pub struct DescribeScheduledInstancesResult {
     #[doc="<p>The token required to retrieve the next set of results. This value is <code>null</code> when there are no more results to return.</p>"]
     pub next_token: Option<String>,
     #[doc="<p>Information about the Scheduled Instances.</p>"]
-    pub scheduled_instance_set: Option<ScheduledInstanceSet>,
+    pub scheduled_instance_set: Option<Vec<ScheduledInstance>>,
 }
 
 struct DescribeScheduledInstancesResultDeserializer;
@@ -12134,9 +12089,9 @@ impl DescribeScheduledInstancesResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeSecurityGroupReferencesRequest {
     #[doc="<p>Checks whether you have the required permissions for the operation, without actually making the request, and provides an error response. If you have the required permissions, the error response is DryRunOperation. Otherwise, it is UnauthorizedOperation.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more security group IDs in your account.</p>"]
-    pub group_id: GroupIds,
+    pub group_id: Vec<String>,
 }
 
 
@@ -12160,7 +12115,7 @@ impl DescribeSecurityGroupReferencesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeSecurityGroupReferencesResult {
     #[doc="<p>Information about the VPCs with the referencing security groups.</p>"]
-    pub security_group_reference_set: Option<SecurityGroupReferences>,
+    pub security_group_reference_set: Option<Vec<SecurityGroupReference>>,
 }
 
 struct DescribeSecurityGroupReferencesResultDeserializer;
@@ -12211,13 +12166,13 @@ impl DescribeSecurityGroupReferencesResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeSecurityGroupsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters. If using multiple filters for rules, the results include security groups for which any combination of rules - not necessarily a single rule - match all filters.</p> <ul> <li> <p> <code>description</code> - The description of the security group.</p> </li> <li> <p> <code>egress.ip-permission.prefix-list-id</code> - The ID (prefix) of the AWS service to which the security group allows access.</p> </li> <li> <p> <code>group-id</code> - The ID of the security group. </p> </li> <li> <p> <code>group-name</code> - The name of the security group.</p> </li> <li> <p> <code>ip-permission.cidr</code> - An IPv4 CIDR range that has been granted permission in a security group rule.</p> </li> <li> <p> <code>ip-permission.from-port</code> - The start of port range for the TCP and UDP protocols, or an ICMP type number.</p> </li> <li> <p> <code>ip-permission.group-id</code> - The ID of a security group that has been granted permission.</p> </li> <li> <p> <code>ip-permission.group-name</code> - The name of a security group that has been granted permission.</p> </li> <li> <p> <code>ip-permission.ipv6-cidr</code> - An IPv6 CIDR range that has been granted permission in a security group rule.</p> </li> <li> <p> <code>ip-permission.protocol</code> - The IP protocol for the permission (<code>tcp</code> | <code>udp</code> | <code>icmp</code> or a protocol number).</p> </li> <li> <p> <code>ip-permission.to-port</code> - The end of port range for the TCP and UDP protocols, or an ICMP code.</p> </li> <li> <p> <code>ip-permission.user-id</code> - The ID of an AWS account that has been granted permission.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the owner of the security group.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the security group.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the security group.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC specified when the security group was created.</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more security group IDs. Required for security groups in a nondefault VPC.</p> <p>Default: Describes all your security groups.</p>"]
-    pub group_ids: Option<GroupIdStringList>,
+    pub group_ids: Option<Vec<String>>,
     #[doc="<p>[EC2-Classic and default VPC only] One or more security group names. You can specify either the security group name or the security group ID. For security groups in a nondefault VPC, use the <code>group-name</code> filter to describe security groups by name.</p> <p>Default: Describes all your security groups.</p>"]
-    pub group_names: Option<GroupNameStringList>,
+    pub group_names: Option<Vec<String>>,
 }
 
 
@@ -12256,7 +12211,7 @@ impl DescribeSecurityGroupsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeSecurityGroupsResult {
     #[doc="<p>Information about one or more security groups.</p>"]
-    pub security_groups: Option<SecurityGroupList>,
+    pub security_groups: Option<Vec<SecurityGroup>>,
 }
 
 struct DescribeSecurityGroupsResultDeserializer;
@@ -12306,9 +12261,9 @@ impl DescribeSecurityGroupsResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeSnapshotAttributeRequest {
     #[doc="<p>The snapshot attribute you would like to view.</p>"]
-    pub attribute: SnapshotAttributeName,
+    pub attribute: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the EBS snapshot.</p>"]
     pub snapshot_id: String,
 }
@@ -12336,9 +12291,9 @@ impl DescribeSnapshotAttributeRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeSnapshotAttributeResult {
     #[doc="<p>A list of permissions for creating volumes from the snapshot.</p>"]
-    pub create_volume_permissions: Option<CreateVolumePermissionList>,
+    pub create_volume_permissions: Option<Vec<CreateVolumePermission>>,
     #[doc="<p>A list of product codes.</p>"]
-    pub product_codes: Option<ProductCodeList>,
+    pub product_codes: Option<Vec<ProductCode>>,
     #[doc="<p>The ID of the EBS snapshot.</p>"]
     pub snapshot_id: Option<String>,
 }
@@ -12398,19 +12353,19 @@ impl DescribeSnapshotAttributeResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeSnapshotsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>description</code> - A description of the snapshot.</p> </li> <li> <p> <code>owner-alias</code> - Value from an Amazon-maintained list (<code>amazon</code> | <code>aws-marketplace</code> | <code>microsoft</code>) of snapshot owners. Not to be confused with the user-configured AWS account alias, which is set from the IAM consolew.</p> </li> <li> <p> <code>owner-id</code> - The ID of the AWS account that owns the snapshot.</p> </li> <li> <p> <code>progress</code> - The progress of the snapshot, as a percentage (for example, 80%).</p> </li> <li> <p> <code>snapshot-id</code> - The snapshot ID.</p> </li> <li> <p> <code>start-time</code> - The time stamp when the snapshot was initiated.</p> </li> <li> <p> <code>status</code> - The status of the snapshot (<code>pending</code> | <code>completed</code> | <code>error</code>).</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>volume-id</code> - The ID of the volume the snapshot is for.</p> </li> <li> <p> <code>volume-size</code> - The size of the volume, in GiB.</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>The maximum number of snapshot results returned by <code>DescribeSnapshots</code> in paginated output. When this parameter is used, <code>DescribeSnapshots</code> only returns <code>MaxResults</code> results in a single page along with a <code>NextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeSnapshots</code> request with the returned <code>NextToken</code> value. This value can be between 5 and 1000; if <code>MaxResults</code> is given a value larger than 1000, only 1000 results are returned. If this parameter is not used, then <code>DescribeSnapshots</code> returns all results. You cannot specify this parameter and the snapshot IDs parameter in the same request.</p>"]
-    pub max_results: Option<Integer>,
+    pub max_results: Option<i64>,
     #[doc="<p>The <code>NextToken</code> value returned from a previous paginated <code>DescribeSnapshots</code> request where <code>MaxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>NextToken</code> value. This value is <code>null</code> when there are no more results to return.</p>"]
     pub next_token: Option<String>,
     #[doc="<p>Returns the snapshots owned by the specified owner. Multiple owners can be specified.</p>"]
-    pub owner_ids: Option<OwnerStringList>,
+    pub owner_ids: Option<Vec<String>>,
     #[doc="<p>One or more AWS accounts IDs that can create volumes from the snapshot.</p>"]
-    pub restorable_by_user_ids: Option<RestorableByStringList>,
+    pub restorable_by_user_ids: Option<Vec<String>>,
     #[doc="<p>One or more snapshot IDs.</p> <p>Default: Describes snapshots for which you have launch permissions.</p>"]
-    pub snapshot_ids: Option<SnapshotIdStringList>,
+    pub snapshot_ids: Option<Vec<String>>,
 }
 
 
@@ -12463,7 +12418,7 @@ pub struct DescribeSnapshotsResult {
     #[doc="<p>The <code>NextToken</code> value to include in a future <code>DescribeSnapshots</code> request. When the results of a <code>DescribeSnapshots</code> request exceed <code>MaxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
     pub next_token: Option<String>,
     #[doc="<p>Information about the snapshots.</p>"]
-    pub snapshots: Option<SnapshotList>,
+    pub snapshots: Option<Vec<Snapshot>>,
 }
 
 struct DescribeSnapshotsResultDeserializer;
@@ -12517,7 +12472,7 @@ impl DescribeSnapshotsResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeSpotDatafeedSubscriptionRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
 }
 
 
@@ -12590,9 +12545,9 @@ impl DescribeSpotDatafeedSubscriptionResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeSpotFleetInstancesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The maximum number of results to return in a single call. Specify a value between 1 and 1000. The default value is 1000. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>"]
-    pub max_results: Option<Integer>,
+    pub max_results: Option<i64>,
     #[doc="<p>The token for the next set of results.</p>"]
     pub next_token: Option<String>,
     #[doc="<p>The ID of the Spot fleet request.</p>"]
@@ -12629,7 +12584,7 @@ impl DescribeSpotFleetInstancesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeSpotFleetInstancesResponse {
     #[doc="<p>The running instances. Note that this list is refreshed periodically and might be out of date.</p>"]
-    pub active_instances: ActiveInstanceSet,
+    pub active_instances: Vec<ActiveInstance>,
     #[doc="<p>The token required to retrieve the next set of results. This value is <code>null</code> when there are no more results to return.</p>"]
     pub next_token: Option<String>,
     #[doc="<p>The ID of the Spot fleet request.</p>"]
@@ -12692,17 +12647,17 @@ impl DescribeSpotFleetInstancesResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeSpotFleetRequestHistoryRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The type of events to describe. By default, all events are described.</p>"]
-    pub event_type: Option<EventType>,
+    pub event_type: Option<String>,
     #[doc="<p>The maximum number of results to return in a single call. Specify a value between 1 and 1000. The default value is 1000. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>"]
-    pub max_results: Option<Integer>,
+    pub max_results: Option<i64>,
     #[doc="<p>The token for the next set of results.</p>"]
     pub next_token: Option<String>,
     #[doc="<p>The ID of the Spot fleet request.</p>"]
     pub spot_fleet_request_id: String,
     #[doc="<p>The starting date and time for the events, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z).</p>"]
-    pub start_time: DateTime,
+    pub start_time: String,
 }
 
 
@@ -12739,15 +12694,15 @@ impl DescribeSpotFleetRequestHistoryRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeSpotFleetRequestHistoryResponse {
     #[doc="<p>Information about the events in the history of the Spot fleet request.</p>"]
-    pub history_records: HistoryRecords,
+    pub history_records: Vec<HistoryRecord>,
     #[doc="<p>The last date and time for the events, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z). All records up to this time were retrieved.</p> <p>If <code>nextToken</code> indicates that there are more results, this value is not present.</p>"]
-    pub last_evaluated_time: DateTime,
+    pub last_evaluated_time: String,
     #[doc="<p>The token required to retrieve the next set of results. This value is <code>null</code> when there are no more results to return.</p>"]
     pub next_token: Option<String>,
     #[doc="<p>The ID of the Spot fleet request.</p>"]
     pub spot_fleet_request_id: String,
     #[doc="<p>The starting date and time for the events, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z).</p>"]
-    pub start_time: DateTime,
+    pub start_time: String,
 }
 
 struct DescribeSpotFleetRequestHistoryResponseDeserializer;
@@ -12814,13 +12769,13 @@ impl DescribeSpotFleetRequestHistoryResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeSpotFleetRequestsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The maximum number of results to return in a single call. Specify a value between 1 and 1000. The default value is 1000. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>"]
-    pub max_results: Option<Integer>,
+    pub max_results: Option<i64>,
     #[doc="<p>The token for the next set of results.</p>"]
     pub next_token: Option<String>,
     #[doc="<p>The IDs of the Spot fleet requests.</p>"]
-    pub spot_fleet_request_ids: Option<ValueStringList>,
+    pub spot_fleet_request_ids: Option<Vec<String>>,
 }
 
 
@@ -12858,7 +12813,7 @@ pub struct DescribeSpotFleetRequestsResponse {
     #[doc="<p>The token required to retrieve the next set of results. This value is <code>null</code> when there are no more results to return.</p>"]
     pub next_token: Option<String>,
     #[doc="<p>Information about the configuration of your Spot fleet.</p>"]
-    pub spot_fleet_request_configs: SpotFleetRequestConfigSet,
+    pub spot_fleet_request_configs: Vec<SpotFleetRequestConfig>,
 }
 
 struct DescribeSpotFleetRequestsResponseDeserializer;
@@ -12913,11 +12868,11 @@ impl DescribeSpotFleetRequestsResponseDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeSpotInstanceRequestsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>availability-zone-group</code> - The Availability Zone group.</p> </li> <li> <p> <code>create-time</code> - The time stamp when the Spot instance request was created.</p> </li> <li> <p> <code>fault-code</code> - The fault code related to the request.</p> </li> <li> <p> <code>fault-message</code> - The fault message related to the request.</p> </li> <li> <p> <code>instance-id</code> - The ID of the instance that fulfilled the request.</p> </li> <li> <p> <code>launch-group</code> - The Spot instance launch group.</p> </li> <li> <p> <code>launch.block-device-mapping.delete-on-termination</code> - Indicates whether the Amazon EBS volume is deleted on instance termination.</p> </li> <li> <p> <code>launch.block-device-mapping.device-name</code> - The device name for the Amazon EBS volume (for example, <code>/dev/sdh</code>).</p> </li> <li> <p> <code>launch.block-device-mapping.snapshot-id</code> - The ID of the snapshot used for the Amazon EBS volume.</p> </li> <li> <p> <code>launch.block-device-mapping.volume-size</code> - The size of the Amazon EBS volume, in GiB.</p> </li> <li> <p> <code>launch.block-device-mapping.volume-type</code> - The type of the Amazon EBS volume: <code>gp2</code> for General Purpose SSD, <code>io1</code> for Provisioned IOPS SSD, <code>st1</code> for Throughput Optimized HDD, <code>sc1</code>for Cold HDD, or <code>standard</code> for Magnetic.</p> </li> <li> <p> <code>launch.group-id</code> - The security group for the instance.</p> </li> <li> <p> <code>launch.image-id</code> - The ID of the AMI.</p> </li> <li> <p> <code>launch.instance-type</code> - The type of instance (for example, <code>m3.medium</code>).</p> </li> <li> <p> <code>launch.kernel-id</code> - The kernel ID.</p> </li> <li> <p> <code>launch.key-name</code> - The name of the key pair the instance launched with.</p> </li> <li> <p> <code>launch.monitoring-enabled</code> - Whether monitoring is enabled for the Spot instance.</p> </li> <li> <p> <code>launch.ramdisk-id</code> - The RAM disk ID.</p> </li> <li> <p> <code>network-interface.network-interface-id</code> - The ID of the network interface.</p> </li> <li> <p> <code>network-interface.device-index</code> - The index of the device for the network interface attachment on the instance.</p> </li> <li> <p> <code>network-interface.subnet-id</code> - The ID of the subnet for the instance.</p> </li> <li> <p> <code>network-interface.description</code> - A description of the network interface.</p> </li> <li> <p> <code>network-interface.private-ip-address</code> - The primary private IP address of the network interface.</p> </li> <li> <p> <code>network-interface.delete-on-termination</code> - Indicates whether the network interface is deleted when the instance is terminated.</p> </li> <li> <p> <code>network-interface.group-id</code> - The ID of the security group associated with the network interface.</p> </li> <li> <p> <code>network-interface.group-name</code> - The name of the security group associated with the network interface.</p> </li> <li> <p> <code>network-interface.addresses.primary</code> - Indicates whether the IP address is the primary private IP address.</p> </li> <li> <p> <code>product-description</code> - The product description associated with the instance (<code>Linux/UNIX</code> | <code>Windows</code>).</p> </li> <li> <p> <code>spot-instance-request-id</code> - The Spot instance request ID.</p> </li> <li> <p> <code>spot-price</code> - The maximum hourly price for any Spot instance launched to fulfill the request.</p> </li> <li> <p> <code>state</code> - The state of the Spot instance request (<code>open</code> | <code>active</code> | <code>closed</code> | <code>cancelled</code> | <code>failed</code>). Spot bid status information can help you track your Amazon EC2 Spot instance requests. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-bid-status.html\">Spot Bid Status</a> in the Amazon Elastic Compute Cloud User Guide.</p> </li> <li> <p> <code>status-code</code> - The short code describing the most recent evaluation of your Spot instance request.</p> </li> <li> <p> <code>status-message</code> - The message explaining the status of the Spot instance request.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>type</code> - The type of Spot instance request (<code>one-time</code> | <code>persistent</code>).</p> </li> <li> <p> <code>launched-availability-zone</code> - The Availability Zone in which the bid is launched.</p> </li> <li> <p> <code>valid-from</code> - The start date of the request.</p> </li> <li> <p> <code>valid-until</code> - The end date of the request.</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more Spot instance request IDs.</p>"]
-    pub spot_instance_request_ids: Option<SpotInstanceRequestIdList>,
+    pub spot_instance_request_ids: Option<Vec<String>>,
 }
 
 
@@ -12953,7 +12908,7 @@ impl DescribeSpotInstanceRequestsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeSpotInstanceRequestsResult {
     #[doc="<p>One or more Spot instance requests.</p>"]
-    pub spot_instance_requests: Option<SpotInstanceRequestList>,
+    pub spot_instance_requests: Option<Vec<SpotInstanceRequest>>,
 }
 
 struct DescribeSpotInstanceRequestsResultDeserializer;
@@ -13006,21 +12961,21 @@ pub struct DescribeSpotPriceHistoryRequest {
     #[doc="<p>Filters the results by the specified Availability Zone.</p>"]
     pub availability_zone: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The date and time, up to the current date, from which to stop retrieving the price history data, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z).</p>"]
-    pub end_time: Option<DateTime>,
+    pub end_time: Option<String>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>availability-zone</code> - The Availability Zone for which prices should be returned.</p> </li> <li> <p> <code>instance-type</code> - The type of instance (for example, <code>m3.medium</code>).</p> </li> <li> <p> <code>product-description</code> - The product description for the Spot price (<code>Linux/UNIX</code> | <code>SUSE Linux</code> | <code>Windows</code> | <code>Linux/UNIX (Amazon VPC)</code> | <code>SUSE Linux (Amazon VPC)</code> | <code>Windows (Amazon VPC)</code>).</p> </li> <li> <p> <code>spot-price</code> - The Spot price. The value must match exactly (or use wildcards; greater than or less than comparison is not supported).</p> </li> <li> <p> <code>timestamp</code> - The timestamp of the Spot price history, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z). You can use wildcards (* and ?). Greater than or less than comparison is not supported.</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>Filters the results by the specified instance types. Note that T2 and HS1 instance types are not supported.</p>"]
-    pub instance_types: Option<InstanceTypeList>,
+    pub instance_types: Option<Vec<String>>,
     #[doc="<p>The maximum number of results to return in a single call. Specify a value between 1 and 1000. The default value is 1000. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>"]
-    pub max_results: Option<Integer>,
+    pub max_results: Option<i64>,
     #[doc="<p>The token for the next set of results.</p>"]
     pub next_token: Option<String>,
     #[doc="<p>Filters the results by the specified basic product descriptions.</p>"]
-    pub product_descriptions: Option<ProductDescriptionList>,
+    pub product_descriptions: Option<Vec<String>>,
     #[doc="<p>The date and time, up to the past 90 days, from which to start retrieving the price history data, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z).</p>"]
-    pub start_time: Option<DateTime>,
+    pub start_time: Option<String>,
 }
 
 
@@ -13079,7 +13034,7 @@ pub struct DescribeSpotPriceHistoryResult {
     #[doc="<p>The token required to retrieve the next set of results. This value is <code>null</code> when there are no more results to return.</p>"]
     pub next_token: Option<String>,
     #[doc="<p>The historical Spot prices.</p>"]
-    pub spot_price_history: Option<SpotPriceHistoryList>,
+    pub spot_price_history: Option<Vec<SpotPrice>>,
 }
 
 struct DescribeSpotPriceHistoryResultDeserializer;
@@ -13132,11 +13087,11 @@ impl DescribeSpotPriceHistoryResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeStaleSecurityGroupsRequest {
     #[doc="<p>Checks whether you have the required permissions for the operation, without actually making the request, and provides an error response. If you have the required permissions, the error response is DryRunOperation. Otherwise, it is UnauthorizedOperation.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The maximum number of items to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
-    pub max_results: Option<MaxResults>,
+    pub max_results: Option<i64>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a prior call.)</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
     #[doc="<p>The ID of the VPC.</p>"]
     pub vpc_id: String,
 }
@@ -13171,7 +13126,7 @@ pub struct DescribeStaleSecurityGroupsResult {
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
     pub next_token: Option<String>,
     #[doc="<p>Information about the stale security groups.</p>"]
-    pub stale_security_group_set: Option<StaleSecurityGroupSet>,
+    pub stale_security_group_set: Option<Vec<StaleSecurityGroup>>,
 }
 
 struct DescribeStaleSecurityGroupsResultDeserializer;
@@ -13226,11 +13181,11 @@ impl DescribeStaleSecurityGroupsResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeSubnetsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>availabilityZone</code> - The Availability Zone for the subnet. You can also use <code>availability-zone</code> as the filter name.</p> </li> <li> <p> <code>available-ip-address-count</code> - The number of IPv4 addresses in the subnet that are available.</p> </li> <li> <p> <code>cidrBlock</code> - The IPv4 CIDR block of the subnet. The CIDR block you specify must exactly match the subnet's CIDR block for information to be returned for the subnet. You can also use <code>cidr</code> or <code>cidr-block</code> as the filter names.</p> </li> <li> <p> <code>defaultForAz</code> - Indicates whether this is the default subnet for the Availability Zone. You can also use <code>default-for-az</code> as the filter name.</p> </li> <li> <p> <code>ipv6-cidr-block-association.ipv6-cidr-block</code> - An IPv6 CIDR block associated with the subnet.</p> </li> <li> <p> <code>ipv6-cidr-block-association.association-id</code> - An association ID for an IPv6 CIDR block associated with the subnet.</p> </li> <li> <p> <code>ipv6-cidr-block-association.state</code> - The state of an IPv6 CIDR block associated with the subnet.</p> </li> <li> <p> <code>state</code> - The state of the subnet (<code>pending</code> | <code>available</code>).</p> </li> <li> <p> <code>subnet-id</code> - The ID of the subnet.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC for the subnet.</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more subnet IDs.</p> <p>Default: Describes all your subnets.</p>"]
-    pub subnet_ids: Option<SubnetIdStringList>,
+    pub subnet_ids: Option<Vec<String>>,
 }
 
 
@@ -13264,7 +13219,7 @@ impl DescribeSubnetsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeSubnetsResult {
     #[doc="<p>Information about one or more subnets.</p>"]
-    pub subnets: Option<SubnetList>,
+    pub subnets: Option<Vec<Subnet>>,
 }
 
 struct DescribeSubnetsResultDeserializer;
@@ -13313,11 +13268,11 @@ impl DescribeSubnetsResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeTagsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>key</code> - The tag key.</p> </li> <li> <p> <code>resource-id</code> - The resource ID.</p> </li> <li> <p> <code>resource-type</code> - The resource type (<code>customer-gateway</code> | <code>dhcp-options</code> | <code>image</code> | <code>instance</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-interface</code> | <code>reserved-instances</code> | <code>route-table</code> | <code>security-group</code> | <code>snapshot</code> | <code>spot-instances-request</code> | <code>subnet</code> | <code>volume</code> | <code>vpc</code> | <code>vpn-connection</code> | <code>vpn-gateway</code>).</p> </li> <li> <p> <code>value</code> - The tag value.</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>The maximum number of results to return in a single call. This value can be between 5 and 1000. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>"]
-    pub max_results: Option<Integer>,
+    pub max_results: Option<i64>,
     #[doc="<p>The token to retrieve the next page of results.</p>"]
     pub next_token: Option<String>,
 }
@@ -13357,7 +13312,7 @@ pub struct DescribeTagsResult {
     #[doc="<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return..</p>"]
     pub next_token: Option<String>,
     #[doc="<p>A list of tags.</p>"]
-    pub tags: Option<TagDescriptionList>,
+    pub tags: Option<Vec<TagDescription>>,
 }
 
 struct DescribeTagsResultDeserializer;
@@ -13411,9 +13366,9 @@ impl DescribeTagsResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeVolumeAttributeRequest {
     #[doc="<p>The attribute of the volume. This parameter is required.</p>"]
-    pub attribute: Option<VolumeAttributeName>,
+    pub attribute: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the volume.</p>"]
     pub volume_id: String,
 }
@@ -13445,7 +13400,7 @@ pub struct DescribeVolumeAttributeResult {
     #[doc="<p>The state of <code>autoEnableIO</code> attribute.</p>"]
     pub auto_enable_io: Option<AttributeBooleanValue>,
     #[doc="<p>A list of product codes.</p>"]
-    pub product_codes: Option<ProductCodeList>,
+    pub product_codes: Option<Vec<ProductCode>>,
     #[doc="<p>The ID of the volume.</p>"]
     pub volume_id: Option<String>,
 }
@@ -13506,15 +13461,15 @@ impl DescribeVolumeAttributeResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeVolumeStatusRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>action.code</code> - The action code for the event (for example, <code>enable-volume-io</code>).</p> </li> <li> <p> <code>action.description</code> - A description of the action.</p> </li> <li> <p> <code>action.event-id</code> - The event ID associated with the action.</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone of the instance.</p> </li> <li> <p> <code>event.description</code> - A description of the event.</p> </li> <li> <p> <code>event.event-id</code> - The event ID.</p> </li> <li> <p> <code>event.event-type</code> - The event type (for <code>io-enabled</code>: <code>passed</code> | <code>failed</code>; for <code>io-performance</code>: <code>io-performance:degraded</code> | <code>io-performance:severely-degraded</code> | <code>io-performance:stalled</code>).</p> </li> <li> <p> <code>event.not-after</code> - The latest end time for the event.</p> </li> <li> <p> <code>event.not-before</code> - The earliest start time for the event.</p> </li> <li> <p> <code>volume-status.details-name</code> - The cause for <code>volume-status.status</code> (<code>io-enabled</code> | <code>io-performance</code>).</p> </li> <li> <p> <code>volume-status.details-status</code> - The status of <code>volume-status.details-name</code> (for <code>io-enabled</code>: <code>passed</code> | <code>failed</code>; for <code>io-performance</code>: <code>normal</code> | <code>degraded</code> | <code>severely-degraded</code> | <code>stalled</code>).</p> </li> <li> <p> <code>volume-status.status</code> - The status of the volume (<code>ok</code> | <code>impaired</code> | <code>warning</code> | <code>insufficient-data</code>).</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>The maximum number of volume results returned by <code>DescribeVolumeStatus</code> in paginated output. When this parameter is used, the request only returns <code>MaxResults</code> results in a single page along with a <code>NextToken</code> response element. The remaining results of the initial request can be seen by sending another request with the returned <code>NextToken</code> value. This value can be between 5 and 1000; if <code>MaxResults</code> is given a value larger than 1000, only 1000 results are returned. If this parameter is not used, then <code>DescribeVolumeStatus</code> returns all results. You cannot specify this parameter and the volume IDs parameter in the same request.</p>"]
-    pub max_results: Option<Integer>,
+    pub max_results: Option<i64>,
     #[doc="<p>The <code>NextToken</code> value to include in a future <code>DescribeVolumeStatus</code> request. When the results of the request exceed <code>MaxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
     pub next_token: Option<String>,
     #[doc="<p>One or more volume IDs.</p> <p>Default: Describes all your volumes.</p>"]
-    pub volume_ids: Option<VolumeIdStringList>,
+    pub volume_ids: Option<Vec<String>>,
 }
 
 
@@ -13557,7 +13512,7 @@ pub struct DescribeVolumeStatusResult {
     #[doc="<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
     pub next_token: Option<String>,
     #[doc="<p>A list of volumes.</p>"]
-    pub volume_statuses: Option<VolumeStatusList>,
+    pub volume_statuses: Option<Vec<VolumeStatusItem>>,
 }
 
 struct DescribeVolumeStatusResultDeserializer;
@@ -13610,15 +13565,15 @@ impl DescribeVolumeStatusResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeVolumesModificationsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters. Supported filters: <code>volume-id</code>, <code>modification-state</code>, <code>target-size</code>, <code>target-iops</code>, <code>target-volume-type</code>, <code>original-size</code>, <code>original-iops</code>, <code>original-volume-type</code>, <code>start-time</code>. </p>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>The maximum number of results (up to a limit of 500) to be returned in a paginated request.</p>"]
-    pub max_results: Option<Integer>,
+    pub max_results: Option<i64>,
     #[doc="<p>The <code>nextToken</code> value returned by a previous paginated request.</p>"]
     pub next_token: Option<String>,
     #[doc="<p>One or more volume IDs for which in-progress modifications will be described.</p>"]
-    pub volume_ids: Option<VolumeIdStringList>,
+    pub volume_ids: Option<Vec<String>>,
 }
 
 
@@ -13660,7 +13615,7 @@ pub struct DescribeVolumesModificationsResult {
     #[doc="<p>Token for pagination, null if there are no more results </p>"]
     pub next_token: Option<String>,
     #[doc="<p>A list of returned <a>VolumeModification</a> objects.</p>"]
-    pub volumes_modifications: Option<VolumeModificationList>,
+    pub volumes_modifications: Option<Vec<VolumeModification>>,
 }
 
 struct DescribeVolumesModificationsResultDeserializer;
@@ -13715,15 +13670,15 @@ impl DescribeVolumesModificationsResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeVolumesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>attachment.attach-time</code> - The time stamp when the attachment initiated.</p> </li> <li> <p> <code>attachment.delete-on-termination</code> - Whether the volume is deleted on instance termination.</p> </li> <li> <p> <code>attachment.device</code> - The device name that is exposed to the instance (for example, <code>/dev/sda1</code>).</p> </li> <li> <p> <code>attachment.instance-id</code> - The ID of the instance the volume is attached to.</p> </li> <li> <p> <code>attachment.status</code> - The attachment state (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone in which the volume was created.</p> </li> <li> <p> <code>create-time</code> - The time stamp when the volume was created.</p> </li> <li> <p> <code>encrypted</code> - The encryption status of the volume.</p> </li> <li> <p> <code>size</code> - The size of the volume, in GiB.</p> </li> <li> <p> <code>snapshot-id</code> - The snapshot from which the volume was created.</p> </li> <li> <p> <code>status</code> - The status of the volume (<code>creating</code> | <code>available</code> | <code>in-use</code> | <code>deleting</code> | <code>deleted</code> | <code>error</code>).</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>volume-id</code> - The volume ID.</p> </li> <li> <p> <code>volume-type</code> - The Amazon EBS volume type. This can be <code>gp2</code> for General Purpose SSD, <code>io1</code> for Provisioned IOPS SSD, <code>st1</code> for Throughput Optimized HDD, <code>sc1</code> for Cold HDD, or <code>standard</code> for Magnetic volumes.</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>The maximum number of volume results returned by <code>DescribeVolumes</code> in paginated output. When this parameter is used, <code>DescribeVolumes</code> only returns <code>MaxResults</code> results in a single page along with a <code>NextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeVolumes</code> request with the returned <code>NextToken</code> value. This value can be between 5 and 500; if <code>MaxResults</code> is given a value larger than 500, only 500 results are returned. If this parameter is not used, then <code>DescribeVolumes</code> returns all results. You cannot specify this parameter and the volume IDs parameter in the same request.</p>"]
-    pub max_results: Option<Integer>,
+    pub max_results: Option<i64>,
     #[doc="<p>The <code>NextToken</code> value returned from a previous paginated <code>DescribeVolumes</code> request where <code>MaxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>NextToken</code> value. This value is <code>null</code> when there are no more results to return.</p>"]
     pub next_token: Option<String>,
     #[doc="<p>One or more volume IDs.</p>"]
-    pub volume_ids: Option<VolumeIdStringList>,
+    pub volume_ids: Option<Vec<String>>,
 }
 
 
@@ -13766,7 +13721,7 @@ pub struct DescribeVolumesResult {
     #[doc="<p>The <code>NextToken</code> value to include in a future <code>DescribeVolumes</code> request. When the results of a <code>DescribeVolumes</code> request exceed <code>MaxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>"]
     pub next_token: Option<String>,
     #[doc="<p>Information about the volumes.</p>"]
-    pub volumes: Option<VolumeList>,
+    pub volumes: Option<Vec<Volume>>,
 }
 
 struct DescribeVolumesResultDeserializer;
@@ -13819,9 +13774,9 @@ impl DescribeVolumesResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeVpcAttributeRequest {
     #[doc="<p>The VPC attribute.</p>"]
-    pub attribute: VpcAttributeName,
+    pub attribute: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the VPC.</p>"]
     pub vpc_id: String,
 }
@@ -13912,11 +13867,11 @@ impl DescribeVpcAttributeResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeVpcClassicLinkDnsSupportRequest {
     #[doc="<p>The maximum number of items to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results.</p>"]
-    pub max_results: Option<MaxResults>,
+    pub max_results: Option<i64>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a prior call.)</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
     #[doc="<p>One or more VPC IDs.</p>"]
-    pub vpc_ids: Option<VpcClassicLinkIdList>,
+    pub vpc_ids: Option<Vec<String>>,
 }
 
 
@@ -13949,9 +13904,9 @@ impl DescribeVpcClassicLinkDnsSupportRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeVpcClassicLinkDnsSupportResult {
     #[doc="<p>The token to use when requesting the next set of items.</p>"]
-    pub next_token: Option<NextToken>,
+    pub next_token: Option<String>,
     #[doc="<p>Information about the ClassicLink DNS support status of the VPCs.</p>"]
-    pub vpcs: Option<ClassicLinkDnsSupportList>,
+    pub vpcs: Option<Vec<ClassicLinkDnsSupport>>,
 }
 
 struct DescribeVpcClassicLinkDnsSupportResultDeserializer;
@@ -14004,11 +13959,11 @@ impl DescribeVpcClassicLinkDnsSupportResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeVpcClassicLinkRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>is-classic-link-enabled</code> - Whether the VPC is enabled for ClassicLink (<code>true</code> | <code>false</code>).</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more VPCs for which you want to describe the ClassicLink status.</p>"]
-    pub vpc_ids: Option<VpcClassicLinkIdList>,
+    pub vpc_ids: Option<Vec<String>>,
 }
 
 
@@ -14042,7 +13997,7 @@ impl DescribeVpcClassicLinkRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeVpcClassicLinkResult {
     #[doc="<p>The ClassicLink status of one or more VPCs.</p>"]
-    pub vpcs: Option<VpcClassicLinkList>,
+    pub vpcs: Option<Vec<VpcClassicLink>>,
 }
 
 struct DescribeVpcClassicLinkResultDeserializer;
@@ -14092,9 +14047,9 @@ impl DescribeVpcClassicLinkResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeVpcEndpointServicesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The maximum number of items to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results.</p> <p>Constraint: If the value is greater than 1000, we return only 1000 items.</p>"]
-    pub max_results: Option<Integer>,
+    pub max_results: Option<i64>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a prior call.)</p>"]
     pub next_token: Option<String>,
 }
@@ -14129,7 +14084,7 @@ pub struct DescribeVpcEndpointServicesResult {
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
     pub next_token: Option<String>,
     #[doc="<p>A list of supported AWS services.</p>"]
-    pub service_names: Option<ValueStringList>,
+    pub service_names: Option<Vec<String>>,
 }
 
 struct DescribeVpcEndpointServicesResultDeserializer;
@@ -14184,15 +14139,15 @@ impl DescribeVpcEndpointServicesResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeVpcEndpointsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>service-name</code>: The name of the AWS service.</p> </li> <li> <p> <code>vpc-id</code>: The ID of the VPC in which the endpoint resides.</p> </li> <li> <p> <code>vpc-endpoint-id</code>: The ID of the endpoint.</p> </li> <li> <p> <code>vpc-endpoint-state</code>: The state of the endpoint. (<code>pending</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>)</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>The maximum number of items to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results.</p> <p>Constraint: If the value is greater than 1000, we return only 1000 items.</p>"]
-    pub max_results: Option<Integer>,
+    pub max_results: Option<i64>,
     #[doc="<p>The token for the next set of items to return. (You received this token from a prior call.)</p>"]
     pub next_token: Option<String>,
     #[doc="<p>One or more endpoint IDs.</p>"]
-    pub vpc_endpoint_ids: Option<ValueStringList>,
+    pub vpc_endpoint_ids: Option<Vec<String>>,
 }
 
 
@@ -14235,7 +14190,7 @@ pub struct DescribeVpcEndpointsResult {
     #[doc="<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>"]
     pub next_token: Option<String>,
     #[doc="<p>Information about the endpoints.</p>"]
-    pub vpc_endpoints: Option<VpcEndpointSet>,
+    pub vpc_endpoints: Option<Vec<VpcEndpoint>>,
 }
 
 struct DescribeVpcEndpointsResultDeserializer;
@@ -14289,11 +14244,11 @@ impl DescribeVpcEndpointsResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeVpcPeeringConnectionsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>accepter-vpc-info.cidr-block</code> - The IPv4 CIDR block of the peer VPC.</p> </li> <li> <p> <code>accepter-vpc-info.owner-id</code> - The AWS account ID of the owner of the peer VPC.</p> </li> <li> <p> <code>accepter-vpc-info.vpc-id</code> - The ID of the peer VPC.</p> </li> <li> <p> <code>expiration-time</code> - The expiration date and time for the VPC peering connection.</p> </li> <li> <p> <code>requester-vpc-info.cidr-block</code> - The IPv4 CIDR block of the requester's VPC.</p> </li> <li> <p> <code>requester-vpc-info.owner-id</code> - The AWS account ID of the owner of the requester VPC.</p> </li> <li> <p> <code>requester-vpc-info.vpc-id</code> - The ID of the requester VPC.</p> </li> <li> <p> <code>status-code</code> - The status of the VPC peering connection (<code>pending-acceptance</code> | <code>failed</code> | <code>expired</code> | <code>provisioning</code> | <code>active</code> | <code>deleted</code> | <code>rejected</code>).</p> </li> <li> <p> <code>status-message</code> - A message that provides more information about the status of the VPC peering connection, if applicable.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>vpc-peering-connection-id</code> - The ID of the VPC peering connection.</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more VPC peering connection IDs.</p> <p>Default: Describes all your VPC peering connections.</p>"]
-    pub vpc_peering_connection_ids: Option<ValueStringList>,
+    pub vpc_peering_connection_ids: Option<Vec<String>>,
 }
 
 
@@ -14329,7 +14284,7 @@ impl DescribeVpcPeeringConnectionsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeVpcPeeringConnectionsResult {
     #[doc="<p>Information about the VPC peering connections.</p>"]
-    pub vpc_peering_connections: Option<VpcPeeringConnectionList>,
+    pub vpc_peering_connections: Option<Vec<VpcPeeringConnection>>,
 }
 
 struct DescribeVpcPeeringConnectionsResultDeserializer;
@@ -14378,11 +14333,11 @@ impl DescribeVpcPeeringConnectionsResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeVpcsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>cidr</code> - The IPv4 CIDR block of the VPC. The CIDR block you specify must exactly match the VPC's CIDR block for information to be returned for the VPC. Must contain the slash followed by one or two digits (for example, <code>/28</code>).</p> </li> <li> <p> <code>dhcp-options-id</code> - The ID of a set of DHCP options.</p> </li> <li> <p> <code>ipv6-cidr-block-association.ipv6-cidr-block</code> - An IPv6 CIDR block associated with the VPC.</p> </li> <li> <p> <code>ipv6-cidr-block-association.association-id</code> - The association ID for an IPv6 CIDR block associated with the VPC.</p> </li> <li> <p> <code>ipv6-cidr-block-association.state</code> - The state of an IPv6 CIDR block associated with the VPC.</p> </li> <li> <p> <code>isDefault</code> - Indicates whether the VPC is the default VPC.</p> </li> <li> <p> <code>state</code> - The state of the VPC (<code>pending</code> | <code>available</code>).</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC.</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more VPC IDs.</p> <p>Default: Describes all your VPCs.</p>"]
-    pub vpc_ids: Option<VpcIdStringList>,
+    pub vpc_ids: Option<Vec<String>>,
 }
 
 
@@ -14416,7 +14371,7 @@ impl DescribeVpcsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeVpcsResult {
     #[doc="<p>Information about one or more VPCs.</p>"]
-    pub vpcs: Option<VpcList>,
+    pub vpcs: Option<Vec<Vpc>>,
 }
 
 struct DescribeVpcsResultDeserializer;
@@ -14465,11 +14420,11 @@ impl DescribeVpcsResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeVpnConnectionsRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>customer-gateway-configuration</code> - The configuration information for the customer gateway.</p> </li> <li> <p> <code>customer-gateway-id</code> - The ID of a customer gateway associated with the VPN connection.</p> </li> <li> <p> <code>state</code> - The state of the VPN connection (<code>pending</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>).</p> </li> <li> <p> <code>option.static-routes-only</code> - Indicates whether the connection has static routes only. Used for devices that do not support Border Gateway Protocol (BGP).</p> </li> <li> <p> <code>route.destination-cidr-block</code> - The destination CIDR block. This corresponds to the subnet used in a customer data center.</p> </li> <li> <p> <code>bgp-asn</code> - The BGP Autonomous System Number (ASN) associated with a BGP device.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>type</code> - The type of VPN connection. Currently the only supported type is <code>ipsec.1</code>.</p> </li> <li> <p> <code>vpn-connection-id</code> - The ID of the VPN connection.</p> </li> <li> <p> <code>vpn-gateway-id</code> - The ID of a virtual private gateway associated with the VPN connection.</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more VPN connection IDs.</p> <p>Default: Describes your VPN connections.</p>"]
-    pub vpn_connection_ids: Option<VpnConnectionIdStringList>,
+    pub vpn_connection_ids: Option<Vec<String>>,
 }
 
 
@@ -14505,7 +14460,7 @@ impl DescribeVpnConnectionsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeVpnConnectionsResult {
     #[doc="<p>Information about one or more VPN connections.</p>"]
-    pub vpn_connections: Option<VpnConnectionList>,
+    pub vpn_connections: Option<Vec<VpnConnection>>,
 }
 
 struct DescribeVpnConnectionsResultDeserializer;
@@ -14555,11 +14510,11 @@ impl DescribeVpnConnectionsResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeVpnGatewaysRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more filters.</p> <ul> <li> <p> <code>attachment.state</code> - The current state of the attachment between the gateway and the VPC (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>attachment.vpc-id</code> - The ID of an attached VPC.</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone for the virtual private gateway (if applicable).</p> </li> <li> <p> <code>state</code> - The state of the virtual private gateway (<code>pending</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>).</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter \"tag-key=Purpose\" and the filter \"tag-value=X\", you get any resources assigned both the tag key Purpose (regardless of what the tag's value is), and the tag value X (regardless of what the tag's key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>type</code> - The type of virtual private gateway. Currently the only supported type is <code>ipsec.1</code>.</p> </li> <li> <p> <code>vpn-gateway-id</code> - The ID of the virtual private gateway.</p> </li> </ul>"]
-    pub filters: Option<FilterList>,
+    pub filters: Option<Vec<Filter>>,
     #[doc="<p>One or more virtual private gateway IDs.</p> <p>Default: Describes all your virtual private gateways.</p>"]
-    pub vpn_gateway_ids: Option<VpnGatewayIdStringList>,
+    pub vpn_gateway_ids: Option<Vec<String>>,
 }
 
 
@@ -14593,7 +14548,7 @@ impl DescribeVpnGatewaysRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeVpnGatewaysResult {
     #[doc="<p>Information about one or more virtual private gateways.</p>"]
-    pub vpn_gateways: Option<VpnGatewayList>,
+    pub vpn_gateways: Option<Vec<VpnGateway>>,
 }
 
 struct DescribeVpnGatewaysResultDeserializer;
@@ -14643,7 +14598,7 @@ impl DescribeVpnGatewaysResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DetachClassicLinkVpcRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the instance to unlink from the VPC.</p>"]
     pub instance_id: String,
     #[doc="<p>The ID of the VPC to which the instance is linked.</p>"]
@@ -14673,7 +14628,7 @@ impl DetachClassicLinkVpcRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DetachClassicLinkVpcResult {
     #[doc="<p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>"]
-    pub return_: Option<Boolean>,
+    pub return_: Option<bool>,
 }
 
 struct DetachClassicLinkVpcResultDeserializer;
@@ -14722,7 +14677,7 @@ impl DetachClassicLinkVpcResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DetachInternetGatewayRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the Internet gateway.</p>"]
     pub internet_gateway_id: String,
     #[doc="<p>The ID of the VPC.</p>"]
@@ -14755,9 +14710,9 @@ pub struct DetachNetworkInterfaceRequest {
     #[doc="<p>The ID of the attachment.</p>"]
     pub attachment_id: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>Specifies whether to force a detachment.</p>"]
-    pub force: Option<Boolean>,
+    pub force: Option<bool>,
 }
 
 
@@ -14787,9 +14742,9 @@ pub struct DetachVolumeRequest {
     #[doc="<p>The device name.</p>"]
     pub device: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>Forces detachment if the previous detachment attempt did not occur cleanly (for example, logging into an instance, unmounting the volume, and detaching normally). This option can lead to data loss or a corrupted file system. Use this option only as a last resort to detach a volume from a failed instance. The instance won't have an opportunity to flush file system caches or file system metadata. If you use this option, you must perform file system check and repair procedures.</p>"]
-    pub force: Option<Boolean>,
+    pub force: Option<bool>,
     #[doc="<p>The ID of the instance.</p>"]
     pub instance_id: Option<String>,
     #[doc="<p>The ID of the volume.</p>"]
@@ -14827,7 +14782,7 @@ impl DetachVolumeRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DetachVpnGatewayRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the VPC.</p>"]
     pub vpc_id: String,
     #[doc="<p>The ID of the virtual private gateway.</p>"]
@@ -14854,13 +14809,12 @@ impl DetachVpnGatewayRequestSerializer {
     }
 }
 
-pub type DeviceType = String;
 struct DeviceTypeDeserializer;
 impl DeviceTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DeviceType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -14875,7 +14829,7 @@ pub struct DhcpConfiguration {
     #[doc="<p>The name of a DHCP option.</p>"]
     pub key: Option<String>,
     #[doc="<p>One or more values for the DHCP option.</p>"]
-    pub values: Option<DhcpConfigurationValueList>,
+    pub values: Option<Vec<AttributeValue>>,
 }
 
 struct DhcpConfigurationDeserializer;
@@ -14922,13 +14876,12 @@ impl DhcpConfigurationDeserializer {
 
     }
 }
-pub type DhcpConfigurationList = Vec<DhcpConfiguration>;
 struct DhcpConfigurationListDeserializer;
 impl DhcpConfigurationListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DhcpConfigurationList, XmlParseError> {
+                                       -> Result<Vec<DhcpConfiguration>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -14964,13 +14917,12 @@ impl DhcpConfigurationListDeserializer {
 
     }
 }
-pub type DhcpConfigurationValueList = Vec<AttributeValue>;
 struct DhcpConfigurationValueListDeserializer;
 impl DhcpConfigurationValueListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DhcpConfigurationValueList, XmlParseError> {
+                                       -> Result<Vec<AttributeValue>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -15010,11 +14962,11 @@ impl DhcpConfigurationValueListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DhcpOptions {
     #[doc="<p>One or more DHCP options in the set.</p>"]
-    pub dhcp_configurations: Option<DhcpConfigurationList>,
+    pub dhcp_configurations: Option<Vec<DhcpConfiguration>>,
     #[doc="<p>The ID of the set of DHCP options.</p>"]
     pub dhcp_options_id: Option<String>,
     #[doc="<p>Any tags assigned to the DHCP options set.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 struct DhcpOptionsDeserializer;
@@ -15068,12 +15020,11 @@ impl DhcpOptionsDeserializer {
 
     }
 }
-pub type DhcpOptionsIdStringList = Vec<String>;
 
 /// Serialize `DhcpOptionsIdStringList` contents to a `SignedRequest`.
 struct DhcpOptionsIdStringListSerializer;
 impl DhcpOptionsIdStringListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DhcpOptionsIdStringList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -15081,13 +15032,12 @@ impl DhcpOptionsIdStringListSerializer {
     }
 }
 
-pub type DhcpOptionsList = Vec<DhcpOptions>;
 struct DhcpOptionsListDeserializer;
 impl DhcpOptionsListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DhcpOptionsList, XmlParseError> {
+                                       -> Result<Vec<DhcpOptions>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -15177,7 +15127,7 @@ impl DisableVpcClassicLinkDnsSupportRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DisableVpcClassicLinkDnsSupportResult {
     #[doc="<p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>"]
-    pub return_: Option<Boolean>,
+    pub return_: Option<bool>,
 }
 
 struct DisableVpcClassicLinkDnsSupportResultDeserializer;
@@ -15227,7 +15177,7 @@ impl DisableVpcClassicLinkDnsSupportResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DisableVpcClassicLinkRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the VPC.</p>"]
     pub vpc_id: String,
 }
@@ -15254,7 +15204,7 @@ impl DisableVpcClassicLinkRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DisableVpcClassicLinkResult {
     #[doc="<p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>"]
-    pub return_: Option<Boolean>,
+    pub return_: Option<bool>,
 }
 
 struct DisableVpcClassicLinkResultDeserializer;
@@ -15305,7 +15255,7 @@ pub struct DisassociateAddressRequest {
     #[doc="<p>[EC2-VPC] The association ID. Required for EC2-VPC.</p>"]
     pub association_id: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>[EC2-Classic] The Elastic IP address. Required for EC2-Classic.</p>"]
     pub public_ip: Option<String>,
 }
@@ -15409,7 +15359,7 @@ pub struct DisassociateRouteTableRequest {
     #[doc="<p>The association ID representing the current association between the route table and subnet.</p>"]
     pub association_id: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
 }
 
 
@@ -15626,11 +15576,11 @@ pub struct DiskImageDescription {
     #[doc="<p>The checksum computed for the disk image.</p>"]
     pub checksum: Option<String>,
     #[doc="<p>The disk image format.</p>"]
-    pub format: DiskImageFormat,
+    pub format: String,
     #[doc="<p>A presigned URL for the import manifest stored in Amazon S3. For information about creating a presigned URL for an Amazon S3 object, read the \"Query String Request Authentication Alternative\" section of the <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/RESTAuthentication.html\">Authenticating REST Requests</a> topic in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>For information about the import manifest referenced by this API action, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/manifest.html\">VM Import Manifest</a>.</p>"]
     pub import_manifest_url: String,
     #[doc="<p>The size of the disk image, in GiB.</p>"]
-    pub size: Long,
+    pub size: i64,
 }
 
 struct DiskImageDescriptionDeserializer;
@@ -15690,9 +15640,9 @@ impl DiskImageDescriptionDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DiskImageDetail {
     #[doc="<p>The size of the disk image, in GiB.</p>"]
-    pub bytes: Long,
+    pub bytes: i64,
     #[doc="<p>The disk image format.</p>"]
-    pub format: DiskImageFormat,
+    pub format: String,
     #[doc="<p>A presigned URL for the import manifest stored in Amazon S3 and presented here as an Amazon S3 presigned URL. For information about creating a presigned URL for an Amazon S3 object, read the \"Query String Request Authentication Alternative\" section of the <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/RESTAuthentication.html\">Authenticating REST Requests</a> topic in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>For information about the import manifest referenced by this API action, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/manifest.html\">VM Import Manifest</a>.</p>"]
     pub import_manifest_url: String,
 }
@@ -15715,13 +15665,12 @@ impl DiskImageDetailSerializer {
     }
 }
 
-pub type DiskImageFormat = String;
 struct DiskImageFormatDeserializer;
 impl DiskImageFormatDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DiskImageFormat, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -15730,12 +15679,11 @@ impl DiskImageFormatDeserializer {
 
     }
 }
-pub type DiskImageList = Vec<DiskImage>;
 
 /// Serialize `DiskImageList` contents to a `SignedRequest`.
 struct DiskImageListSerializer;
 impl DiskImageListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DiskImageList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<DiskImage>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             DiskImageSerializer::serialize(params, &key, obj);
@@ -15749,7 +15697,7 @@ pub struct DiskImageVolumeDescription {
     #[doc="<p>The volume identifier.</p>"]
     pub id: String,
     #[doc="<p>The size of the volume, in GiB.</p>"]
-    pub size: Option<Long>,
+    pub size: Option<i64>,
 }
 
 struct DiskImageVolumeDescriptionDeserializer;
@@ -15796,13 +15744,12 @@ impl DiskImageVolumeDescriptionDeserializer {
 
     }
 }
-pub type DomainType = String;
 struct DomainTypeDeserializer;
 impl DomainTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DomainType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -15811,13 +15758,12 @@ impl DomainTypeDeserializer {
 
     }
 }
-pub type Double = f64;
 struct DoubleDeserializer;
 impl DoubleDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Double, XmlParseError> {
+                                       -> Result<f64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = f64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -15830,17 +15776,17 @@ impl DoubleDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct EbsBlockDevice {
     #[doc="<p>Indicates whether the EBS volume is deleted on instance termination.</p>"]
-    pub delete_on_termination: Option<Boolean>,
+    pub delete_on_termination: Option<bool>,
     #[doc="<p>Indicates whether the EBS volume is encrypted. Encrypted Amazon EBS volumes may only be attached to instances that support Amazon EBS encryption.</p>"]
-    pub encrypted: Option<Boolean>,
+    pub encrypted: Option<bool>,
     #[doc="<p>The number of I/O operations per second (IOPS) that the volume supports. For <code>io1</code>, this represents the number of IOPS that are provisioned for the volume. For <code>gp2</code>, this represents the baseline performance of the volume and the rate at which the volume accumulates I/O credits for bursting. For more information about General Purpose SSD baseline performance, I/O credits, and bursting, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html\">Amazon EBS Volume Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Constraint: Range is 100-20000 IOPS for <code>io1</code> volumes and 100-10000 IOPS for <code>gp2</code> volumes.</p> <p>Condition: This parameter is required for requests to create <code>io1</code> volumes; it is not used in requests to create <code>gp2</code>, <code>st1</code>, <code>sc1</code>, or <code>standard</code> volumes.</p>"]
-    pub iops: Option<Integer>,
+    pub iops: Option<i64>,
     #[doc="<p>The ID of the snapshot.</p>"]
     pub snapshot_id: Option<String>,
     #[doc="<p>The size of the volume, in GiB.</p> <p>Constraints: 1-16384 for General Purpose SSD (<code>gp2</code>), 4-16384 for Provisioned IOPS SSD (<code>io1</code>), 500-16384 for Throughput Optimized HDD (<code>st1</code>), 500-16384 for Cold HDD (<code>sc1</code>), and 1-1024 for Magnetic (<code>standard</code>) volumes. If you specify a snapshot, the volume size must be equal to or larger than the snapshot size.</p> <p>Default: If you're creating the volume from a snapshot and don't specify a volume size, the default is the snapshot size.</p>"]
-    pub volume_size: Option<Integer>,
+    pub volume_size: Option<i64>,
     #[doc="<p>The volume type: <code>gp2</code>, <code>io1</code>, <code>st1</code>, <code>sc1</code>, or <code>standard</code>.</p> <p>Default: <code>standard</code> </p>"]
-    pub volume_type: Option<VolumeType>,
+    pub volume_type: Option<String>,
 }
 
 struct EbsBlockDeviceDeserializer;
@@ -15945,11 +15891,11 @@ impl EbsBlockDeviceSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct EbsInstanceBlockDevice {
     #[doc="<p>The time stamp when the attachment initiated.</p>"]
-    pub attach_time: Option<DateTime>,
+    pub attach_time: Option<String>,
     #[doc="<p>Indicates whether the volume is deleted on instance termination.</p>"]
-    pub delete_on_termination: Option<Boolean>,
+    pub delete_on_termination: Option<bool>,
     #[doc="<p>The attachment state.</p>"]
-    pub status: Option<AttachmentStatus>,
+    pub status: Option<String>,
     #[doc="<p>The ID of the EBS volume.</p>"]
     pub volume_id: Option<String>,
 }
@@ -16014,7 +15960,7 @@ impl EbsInstanceBlockDeviceDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct EbsInstanceBlockDeviceSpecification {
     #[doc="<p>Indicates whether the volume is deleted on instance termination.</p>"]
-    pub delete_on_termination: Option<Boolean>,
+    pub delete_on_termination: Option<bool>,
     #[doc="<p>The ID of the EBS volume.</p>"]
     pub volume_id: Option<String>,
 }
@@ -16044,9 +15990,9 @@ impl EbsInstanceBlockDeviceSpecificationSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct EgressOnlyInternetGateway {
     #[doc="<p>Information about the attachment of the egress-only Internet gateway.</p>"]
-    pub attachments: Option<InternetGatewayAttachmentList>,
+    pub attachments: Option<Vec<InternetGatewayAttachment>>,
     #[doc="<p>The ID of the egress-only Internet gateway.</p>"]
-    pub egress_only_internet_gateway_id: Option<EgressOnlyInternetGatewayId>,
+    pub egress_only_internet_gateway_id: Option<String>,
 }
 
 struct EgressOnlyInternetGatewayDeserializer;
@@ -16093,13 +16039,12 @@ impl EgressOnlyInternetGatewayDeserializer {
 
     }
 }
-pub type EgressOnlyInternetGatewayId = String;
 struct EgressOnlyInternetGatewayIdDeserializer;
 impl EgressOnlyInternetGatewayIdDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EgressOnlyInternetGatewayId, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -16108,12 +16053,11 @@ impl EgressOnlyInternetGatewayIdDeserializer {
 
     }
 }
-pub type EgressOnlyInternetGatewayIdList = Vec<EgressOnlyInternetGatewayId>;
 
 /// Serialize `EgressOnlyInternetGatewayIdList` contents to a `SignedRequest`.
 struct EgressOnlyInternetGatewayIdListSerializer;
 impl EgressOnlyInternetGatewayIdListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &EgressOnlyInternetGatewayIdList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -16121,13 +16065,12 @@ impl EgressOnlyInternetGatewayIdListSerializer {
     }
 }
 
-pub type EgressOnlyInternetGatewayList = Vec<EgressOnlyInternetGateway>;
 struct EgressOnlyInternetGatewayListDeserializer;
 impl EgressOnlyInternetGatewayListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EgressOnlyInternetGatewayList, XmlParseError> {
+                                       -> Result<Vec<EgressOnlyInternetGateway>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -16194,7 +16137,7 @@ impl EnableVgwRoutePropagationRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct EnableVolumeIORequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the volume.</p>"]
     pub volume_id: String,
 }
@@ -16245,7 +16188,7 @@ impl EnableVpcClassicLinkDnsSupportRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct EnableVpcClassicLinkDnsSupportResult {
     #[doc="<p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>"]
-    pub return_: Option<Boolean>,
+    pub return_: Option<bool>,
 }
 
 struct EnableVpcClassicLinkDnsSupportResultDeserializer;
@@ -16295,7 +16238,7 @@ impl EnableVpcClassicLinkDnsSupportResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct EnableVpcClassicLinkRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the VPC.</p>"]
     pub vpc_id: String,
 }
@@ -16322,7 +16265,7 @@ impl EnableVpcClassicLinkRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct EnableVpcClassicLinkResult {
     #[doc="<p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>"]
-    pub return_: Option<Boolean>,
+    pub return_: Option<bool>,
 }
 
 struct EnableVpcClassicLinkResultDeserializer;
@@ -16367,13 +16310,12 @@ impl EnableVpcClassicLinkResultDeserializer {
 
     }
 }
-pub type EventCode = String;
 struct EventCodeDeserializer;
 impl EventCodeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EventCode, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -16444,13 +16386,12 @@ impl EventInformationDeserializer {
 
     }
 }
-pub type EventType = String;
 struct EventTypeDeserializer;
 impl EventTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<EventType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -16459,14 +16400,12 @@ impl EventTypeDeserializer {
 
     }
 }
-pub type ExcessCapacityTerminationPolicy = String;
 struct ExcessCapacityTerminationPolicyDeserializer;
 impl ExcessCapacityTerminationPolicyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<ExcessCapacityTerminationPolicy, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -16475,12 +16414,11 @@ impl ExcessCapacityTerminationPolicyDeserializer {
 
     }
 }
-pub type ExecutableByStringList = Vec<String>;
 
 /// Serialize `ExecutableByStringList` contents to a `SignedRequest`.
 struct ExecutableByStringListSerializer;
 impl ExecutableByStringListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ExecutableByStringList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -16488,13 +16426,12 @@ impl ExecutableByStringListSerializer {
     }
 }
 
-pub type ExportEnvironment = String;
 struct ExportEnvironmentDeserializer;
 impl ExportEnvironmentDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ExportEnvironment, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -16515,7 +16452,7 @@ pub struct ExportTask {
     #[doc="<p>Information about the instance to export.</p>"]
     pub instance_export_details: Option<InstanceExportDetails>,
     #[doc="<p>The state of the export task.</p>"]
-    pub state: Option<ExportTaskState>,
+    pub state: Option<String>,
     #[doc="<p>The status message related to the export task.</p>"]
     pub status_message: Option<String>,
 }
@@ -16584,12 +16521,11 @@ impl ExportTaskDeserializer {
 
     }
 }
-pub type ExportTaskIdStringList = Vec<String>;
 
 /// Serialize `ExportTaskIdStringList` contents to a `SignedRequest`.
 struct ExportTaskIdStringListSerializer;
 impl ExportTaskIdStringListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ExportTaskIdStringList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -16597,13 +16533,12 @@ impl ExportTaskIdStringListSerializer {
     }
 }
 
-pub type ExportTaskList = Vec<ExportTask>;
 struct ExportTaskListDeserializer;
 impl ExportTaskListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ExportTaskList, XmlParseError> {
+                                       -> Result<Vec<ExportTask>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -16639,13 +16574,12 @@ impl ExportTaskListDeserializer {
 
     }
 }
-pub type ExportTaskState = String;
 struct ExportTaskStateDeserializer;
 impl ExportTaskStateDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ExportTaskState, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -16658,9 +16592,9 @@ impl ExportTaskStateDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ExportToS3Task {
     #[doc="<p>The container format used to combine disk images with metadata (such as OVF). If absent, only the disk image is exported.</p>"]
-    pub container_format: Option<ContainerFormat>,
+    pub container_format: Option<String>,
     #[doc="<p>The format for the exported image.</p>"]
-    pub disk_image_format: Option<DiskImageFormat>,
+    pub disk_image_format: Option<String>,
     #[doc="<p>The S3 bucket for the destination image. The destination bucket must exist and grant WRITE and READ_ACP permissions to the AWS account <code>vm-import-export@amazon.com</code>.</p>"]
     pub s3_bucket: Option<String>,
     #[doc="<p>The encryption key for your S3 bucket.</p>"]
@@ -16727,9 +16661,9 @@ impl ExportToS3TaskDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ExportToS3TaskSpecification {
     #[doc="<p>The container format used to combine disk images with metadata (such as OVF). If absent, only the disk image is exported.</p>"]
-    pub container_format: Option<ContainerFormat>,
+    pub container_format: Option<String>,
     #[doc="<p>The format for the exported image.</p>"]
-    pub disk_image_format: Option<DiskImageFormat>,
+    pub disk_image_format: Option<String>,
     #[doc="<p>The S3 bucket for the destination image. The destination bucket must exist and grant WRITE and READ_ACP permissions to the AWS account <code>vm-import-export@amazon.com</code>.</p>"]
     pub s3_bucket: Option<String>,
     #[doc="<p>The image is written to a single object in the S3 bucket at the S3 key s3prefix + exportTaskId + '.' + diskImageFormat.</p>"]
@@ -16768,7 +16702,7 @@ pub struct Filter {
     #[doc="<p>The name of the filter. Filter names are case-sensitive.</p>"]
     pub name: Option<String>,
     #[doc="<p>One or more filter values. Filter values are case-sensitive.</p>"]
-    pub values: Option<ValueStringList>,
+    pub values: Option<Vec<String>>,
 }
 
 
@@ -16793,12 +16727,11 @@ impl FilterSerializer {
     }
 }
 
-pub type FilterList = Vec<Filter>;
 
 /// Serialize `FilterList` contents to a `SignedRequest`.
 struct FilterListSerializer;
 impl FilterListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &FilterList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<Filter>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             FilterSerializer::serialize(params, &key, obj);
@@ -16806,13 +16739,12 @@ impl FilterListSerializer {
     }
 }
 
-pub type FleetType = String;
 struct FleetTypeDeserializer;
 impl FleetTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<FleetType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -16821,13 +16753,12 @@ impl FleetTypeDeserializer {
 
     }
 }
-pub type Float = f32;
 struct FloatDeserializer;
 impl FloatDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Float, XmlParseError> {
+                                       -> Result<f32, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = f32::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -16840,7 +16771,7 @@ impl FloatDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct FlowLog {
     #[doc="<p>The date and time the flow log was created.</p>"]
-    pub creation_time: Option<DateTime>,
+    pub creation_time: Option<String>,
     #[doc="<p>Information about the error that occurred. <code>Rate limited</code> indicates that CloudWatch logs throttling has been applied for one or more network interfaces, or that you've reached the limit on the number of CloudWatch Logs log groups that you can create. <code>Access error</code> indicates that the IAM role associated with the flow log does not have sufficient permissions to publish to CloudWatch Logs. <code>Unknown error</code> indicates an internal error.</p>"]
     pub deliver_logs_error_message: Option<String>,
     #[doc="<p>The ARN of the IAM role that posts logs to CloudWatch Logs.</p>"]
@@ -16856,7 +16787,7 @@ pub struct FlowLog {
     #[doc="<p>The ID of the resource on which the flow log was created.</p>"]
     pub resource_id: Option<String>,
     #[doc="<p>The type of traffic captured for the flow log.</p>"]
-    pub traffic_type: Option<TrafficType>,
+    pub traffic_type: Option<String>,
 }
 
 struct FlowLogDeserializer;
@@ -16938,13 +16869,12 @@ impl FlowLogDeserializer {
 
     }
 }
-pub type FlowLogSet = Vec<FlowLog>;
 struct FlowLogSetDeserializer;
 impl FlowLogSetDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<FlowLogSet, XmlParseError> {
+                                       -> Result<Vec<FlowLog>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -16980,12 +16910,11 @@ impl FlowLogSetDeserializer {
 
     }
 }
-pub type FlowLogsResourceType = String;
 #[doc="<p>Describes an Amazon FPGA image (AFI).</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct FpgaImage {
     #[doc="<p>The date and time the AFI was created.</p>"]
-    pub create_time: Option<DateTime>,
+    pub create_time: Option<String>,
     #[doc="<p>The description of the AFI.</p>"]
     pub description: Option<String>,
     #[doc="<p>The global FPGA image identifier (AGFI ID).</p>"]
@@ -17001,15 +16930,15 @@ pub struct FpgaImage {
     #[doc="<p>Information about the PCI bus.</p>"]
     pub pci_id: Option<PciId>,
     #[doc="<p>The product codes for the AFI.</p>"]
-    pub product_codes: Option<ProductCodeList>,
+    pub product_codes: Option<Vec<ProductCode>>,
     #[doc="<p>The version of the AWS Shell that was used to create the bitstream.</p>"]
     pub shell_version: Option<String>,
     #[doc="<p>Information about the state of the AFI.</p>"]
     pub state: Option<FpgaImageState>,
     #[doc="<p>Any tags assigned to the AFI.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>The time of the most recent update to the AFI.</p>"]
-    pub update_time: Option<DateTime>,
+    pub update_time: Option<String>,
 }
 
 struct FpgaImageDeserializer;
@@ -17101,12 +17030,11 @@ impl FpgaImageDeserializer {
 
     }
 }
-pub type FpgaImageIdList = Vec<String>;
 
 /// Serialize `FpgaImageIdList` contents to a `SignedRequest`.
 struct FpgaImageIdListSerializer;
 impl FpgaImageIdListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &FpgaImageIdList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -17114,13 +17042,12 @@ impl FpgaImageIdListSerializer {
     }
 }
 
-pub type FpgaImageList = Vec<FpgaImage>;
 struct FpgaImageListDeserializer;
 impl FpgaImageListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<FpgaImageList, XmlParseError> {
+                                       -> Result<Vec<FpgaImage>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -17160,7 +17087,7 @@ impl FpgaImageListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct FpgaImageState {
     #[doc="<p>The state. The following are the possible values:</p> <ul> <li> <p> <code>pending</code> - AFI bitstream generation is in progress.</p> </li> <li> <p> <code>available</code> - The AFI is available for use.</p> </li> <li> <p> <code>failed</code> - AFI bitstream generation failed.</p> </li> <li> <p> <code>unavailable</code> - The AFI is no longer available for use.</p> </li> </ul>"]
-    pub code: Option<FpgaImageStateCode>,
+    pub code: Option<String>,
     #[doc="<p>If the state is <code>failed</code>, this is the error message.</p>"]
     pub message: Option<String>,
 }
@@ -17212,13 +17139,12 @@ impl FpgaImageStateDeserializer {
 
     }
 }
-pub type FpgaImageStateCode = String;
 struct FpgaImageStateCodeDeserializer;
 impl FpgaImageStateCodeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<FpgaImageStateCode, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -17227,13 +17153,12 @@ impl FpgaImageStateCodeDeserializer {
 
     }
 }
-pub type GatewayType = String;
 struct GatewayTypeDeserializer;
 impl GatewayTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<GatewayType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -17246,7 +17171,7 @@ impl GatewayTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetConsoleOutputRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the instance.</p>"]
     pub instance_id: String,
 }
@@ -17277,7 +17202,7 @@ pub struct GetConsoleOutputResult {
     #[doc="<p>The console output, Base64-encoded. If using a command line tool, the tool decodes the output for you.</p>"]
     pub output: Option<String>,
     #[doc="<p>The time the output was last updated.</p>"]
-    pub timestamp: Option<DateTime>,
+    pub timestamp: Option<String>,
 }
 
 struct GetConsoleOutputResultDeserializer;
@@ -17334,11 +17259,11 @@ impl GetConsoleOutputResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetConsoleScreenshotRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the instance.</p>"]
     pub instance_id: String,
     #[doc="<p>When set to <code>true</code>, acts as keystroke input and wakes up an instance that's in standby or \"sleep\" mode.</p>"]
-    pub wake_up: Option<Boolean>,
+    pub wake_up: Option<bool>,
 }
 
 
@@ -17420,7 +17345,7 @@ impl GetConsoleScreenshotResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetHostReservationPurchasePreviewRequest {
     #[doc="<p>The ID/s of the Dedicated Host/s that the reservation will be associated with.</p>"]
-    pub host_id_set: RequestHostIdSet,
+    pub host_id_set: Vec<String>,
     #[doc="<p>The offering ID of the reservation.</p>"]
     pub offering_id: String,
 }
@@ -17446,9 +17371,9 @@ impl GetHostReservationPurchasePreviewRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetHostReservationPurchasePreviewResult {
     #[doc="<p>The currency in which the <code>totalUpfrontPrice</code> and <code>totalHourlyPrice</code> amounts are specified. At this time, the only supported currency is <code>USD</code>.</p>"]
-    pub currency_code: Option<CurrencyCodeValues>,
+    pub currency_code: Option<String>,
     #[doc="<p>The purchase information of the Dedicated Host Reservation and the Dedicated Hosts associated with it.</p>"]
-    pub purchase: Option<PurchaseSet>,
+    pub purchase: Option<Vec<Purchase>>,
     #[doc="<p>The potential total hourly price of the reservation per hour.</p>"]
     pub total_hourly_price: Option<String>,
     #[doc="<p>The potential total upfront price. This is billed immediately.</p>"]
@@ -17517,7 +17442,7 @@ impl GetHostReservationPurchasePreviewResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetPasswordDataRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the Windows instance.</p>"]
     pub instance_id: String,
 }
@@ -17548,7 +17473,7 @@ pub struct GetPasswordDataResult {
     #[doc="<p>The password of the instance.</p>"]
     pub password_data: Option<String>,
     #[doc="<p>The time the data was last updated.</p>"]
-    pub timestamp: Option<DateTime>,
+    pub timestamp: Option<String>,
 }
 
 struct GetPasswordDataResultDeserializer;
@@ -17605,11 +17530,11 @@ impl GetPasswordDataResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct GetReservedInstancesExchangeQuoteRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The IDs of the Convertible Reserved Instances to exchange.</p>"]
-    pub reserved_instance_ids: ReservedInstanceIdSet,
+    pub reserved_instance_ids: Vec<String>,
     #[doc="<p>The configuration requirements of the Convertible Reserved Instances to exchange for your current Convertible Reserved Instances.</p>"]
-    pub target_configurations: Option<TargetConfigurationRequestSet>,
+    pub target_configurations: Option<Vec<TargetConfigurationRequest>>,
 }
 
 
@@ -17645,19 +17570,19 @@ pub struct GetReservedInstancesExchangeQuoteResult {
     #[doc="<p>The currency of the transaction.</p>"]
     pub currency_code: Option<String>,
     #[doc="<p>If <code>true</code>, the exchange is valid. If <code>false</code>, the exchange cannot be completed.</p>"]
-    pub is_valid_exchange: Option<Boolean>,
+    pub is_valid_exchange: Option<bool>,
     #[doc="<p>The new end date of the reservation term.</p>"]
-    pub output_reserved_instances_will_expire_at: Option<DateTime>,
+    pub output_reserved_instances_will_expire_at: Option<String>,
     #[doc="<p>The total true upfront charge for the exchange.</p>"]
     pub payment_due: Option<String>,
     #[doc="<p>The cost associated with the Reserved Instance.</p>"]
     pub reserved_instance_value_rollup: Option<ReservationValue>,
     #[doc="<p>The configuration of your Convertible Reserved Instances.</p>"]
-    pub reserved_instance_value_set: Option<ReservedInstanceReservationValueSet>,
+    pub reserved_instance_value_set: Option<Vec<ReservedInstanceReservationValue>>,
     #[doc="<p>The cost associated with the Reserved Instance.</p>"]
     pub target_configuration_value_rollup: Option<ReservationValue>,
     #[doc="<p>The values of the target Convertible Reserved Instances.</p>"]
-    pub target_configuration_value_set: Option<TargetReservationValueSet>,
+    pub target_configuration_value_set: Option<Vec<TargetReservationValue>>,
     #[doc="<p>Describes the reason why the exchange cannot be completed.</p>"]
     pub validation_failure_reason: Option<String>,
 }
@@ -17740,12 +17665,11 @@ impl GetReservedInstancesExchangeQuoteResultDeserializer {
 
     }
 }
-pub type GroupIdStringList = Vec<String>;
 
 /// Serialize `GroupIdStringList` contents to a `SignedRequest`.
 struct GroupIdStringListSerializer;
 impl GroupIdStringListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &GroupIdStringList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -17828,13 +17752,12 @@ impl GroupIdentifierSerializer {
     }
 }
 
-pub type GroupIdentifierList = Vec<GroupIdentifier>;
 struct GroupIdentifierListDeserializer;
 impl GroupIdentifierListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<GroupIdentifierList, XmlParseError> {
+                                       -> Result<Vec<GroupIdentifier>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -17874,7 +17797,7 @@ impl GroupIdentifierListDeserializer {
 /// Serialize `GroupIdentifierList` contents to a `SignedRequest`.
 struct GroupIdentifierListSerializer;
 impl GroupIdentifierListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &GroupIdentifierList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<GroupIdentifier>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             GroupIdentifierSerializer::serialize(params, &key, obj);
@@ -17882,12 +17805,11 @@ impl GroupIdentifierListSerializer {
     }
 }
 
-pub type GroupIds = Vec<String>;
 
 /// Serialize `GroupIds` contents to a `SignedRequest`.
 struct GroupIdsSerializer;
 impl GroupIdsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &GroupIds) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -17895,12 +17817,11 @@ impl GroupIdsSerializer {
     }
 }
 
-pub type GroupNameStringList = Vec<String>;
 
 /// Serialize `GroupNameStringList` contents to a `SignedRequest`.
 struct GroupNameStringListSerializer;
 impl GroupNameStringListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &GroupNameStringList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -17914,9 +17835,9 @@ pub struct HistoryRecord {
     #[doc="<p>Information about the event.</p>"]
     pub event_information: EventInformation,
     #[doc="<p>The event type.</p> <ul> <li> <p> <code>error</code> - Indicates an error with the Spot fleet request.</p> </li> <li> <p> <code>fleetRequestChange</code> - Indicates a change in the status or configuration of the Spot fleet request.</p> </li> <li> <p> <code>instanceChange</code> - Indicates that an instance was launched or terminated.</p> </li> </ul>"]
-    pub event_type: EventType,
+    pub event_type: String,
     #[doc="<p>The date and time of the event, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z).</p>"]
-    pub timestamp: DateTime,
+    pub timestamp: String,
 }
 
 struct HistoryRecordDeserializer;
@@ -17970,13 +17891,12 @@ impl HistoryRecordDeserializer {
 
     }
 }
-pub type HistoryRecords = Vec<HistoryRecord>;
 struct HistoryRecordsDeserializer;
 impl HistoryRecordsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<HistoryRecords, XmlParseError> {
+                                       -> Result<Vec<HistoryRecord>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -18016,7 +17936,7 @@ impl HistoryRecordsDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct Host {
     #[doc="<p>Whether auto-placement is on or off.</p>"]
-    pub auto_placement: Option<AutoPlacement>,
+    pub auto_placement: Option<String>,
     #[doc="<p>The Availability Zone of the Dedicated Host.</p>"]
     pub availability_zone: Option<String>,
     #[doc="<p>The number of new instances that can be launched onto the Dedicated Host.</p>"]
@@ -18030,9 +17950,9 @@ pub struct Host {
     #[doc="<p>The reservation ID of the Dedicated Host. This returns a <code>null</code> response if the Dedicated Host doesn't have an associated reservation.</p>"]
     pub host_reservation_id: Option<String>,
     #[doc="<p>The IDs and instance type that are currently running on the Dedicated Host.</p>"]
-    pub instances: Option<HostInstanceList>,
+    pub instances: Option<Vec<HostInstance>>,
     #[doc="<p>The Dedicated Host's state.</p>"]
-    pub state: Option<AllocationState>,
+    pub state: Option<String>,
 }
 
 struct HostDeserializer;
@@ -18170,13 +18090,12 @@ impl HostInstanceDeserializer {
 
     }
 }
-pub type HostInstanceList = Vec<HostInstance>;
 struct HostInstanceListDeserializer;
 impl HostInstanceListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<HostInstanceList, XmlParseError> {
+                                       -> Result<Vec<HostInstance>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -18212,13 +18131,12 @@ impl HostInstanceListDeserializer {
 
     }
 }
-pub type HostList = Vec<Host>;
 struct HostListDeserializer;
 impl HostListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<HostList, XmlParseError> {
+                                       -> Result<Vec<Host>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -18258,9 +18176,9 @@ impl HostListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct HostOffering {
     #[doc="<p>The currency of the offering.</p>"]
-    pub currency_code: Option<CurrencyCodeValues>,
+    pub currency_code: Option<String>,
     #[doc="<p>The duration of the offering (in seconds).</p>"]
-    pub duration: Option<Integer>,
+    pub duration: Option<i64>,
     #[doc="<p>The hourly price of the offering.</p>"]
     pub hourly_price: Option<String>,
     #[doc="<p>The instance family of the offering.</p>"]
@@ -18268,7 +18186,7 @@ pub struct HostOffering {
     #[doc="<p>The ID of the offering.</p>"]
     pub offering_id: Option<String>,
     #[doc="<p>The available payment option.</p>"]
-    pub payment_option: Option<PaymentOption>,
+    pub payment_option: Option<String>,
     #[doc="<p>The upfront price of the offering. Does not apply to No Upfront offerings.</p>"]
     pub upfront_price: Option<String>,
 }
@@ -18342,13 +18260,12 @@ impl HostOfferingDeserializer {
 
     }
 }
-pub type HostOfferingSet = Vec<HostOffering>;
 struct HostOfferingSetDeserializer;
 impl HostOfferingSetDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<HostOfferingSet, XmlParseError> {
+                                       -> Result<Vec<HostOffering>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -18388,13 +18305,13 @@ impl HostOfferingSetDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct HostProperties {
     #[doc="<p>The number of cores on the Dedicated Host.</p>"]
-    pub cores: Option<Integer>,
+    pub cores: Option<i64>,
     #[doc="<p>The instance type size that the Dedicated Host supports (for example, <code>m3.medium</code>).</p>"]
     pub instance_type: Option<String>,
     #[doc="<p>The number of sockets on the Dedicated Host.</p>"]
-    pub sockets: Option<Integer>,
+    pub sockets: Option<i64>,
     #[doc="<p>The number of vCPUs on the Dedicated Host.</p>"]
-    pub total_v_cpus: Option<Integer>,
+    pub total_v_cpus: Option<i64>,
 }
 
 struct HostPropertiesDeserializer;
@@ -18455,15 +18372,15 @@ impl HostPropertiesDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct HostReservation {
     #[doc="<p>The number of Dedicated Hosts the reservation is associated with.</p>"]
-    pub count: Option<Integer>,
+    pub count: Option<i64>,
     #[doc="<p>The currency in which the <code>upfrontPrice</code> and <code>hourlyPrice</code> amounts are specified. At this time, the only supported currency is <code>USD</code>.</p>"]
-    pub currency_code: Option<CurrencyCodeValues>,
+    pub currency_code: Option<String>,
     #[doc="<p>The length of the reservation's term, specified in seconds. Can be <code>31536000 (1 year)</code> | <code>94608000 (3 years)</code>.</p>"]
-    pub duration: Option<Integer>,
+    pub duration: Option<i64>,
     #[doc="<p>The date and time that the reservation ends.</p>"]
-    pub end: Option<DateTime>,
+    pub end: Option<String>,
     #[doc="<p>The IDs of the Dedicated Hosts associated with the reservation.</p>"]
-    pub host_id_set: Option<ResponseHostIdSet>,
+    pub host_id_set: Option<Vec<String>>,
     #[doc="<p>The ID of the reservation that specifies the associated Dedicated Hosts.</p>"]
     pub host_reservation_id: Option<String>,
     #[doc="<p>The hourly price of the reservation.</p>"]
@@ -18473,11 +18390,11 @@ pub struct HostReservation {
     #[doc="<p>The ID of the reservation. This remains the same regardless of which Dedicated Hosts are associated with it.</p>"]
     pub offering_id: Option<String>,
     #[doc="<p>The payment option selected for this reservation.</p>"]
-    pub payment_option: Option<PaymentOption>,
+    pub payment_option: Option<String>,
     #[doc="<p>The date and time that the reservation started.</p>"]
-    pub start: Option<DateTime>,
+    pub start: Option<String>,
     #[doc="<p>The state of the reservation.</p>"]
-    pub state: Option<ReservationState>,
+    pub state: Option<String>,
     #[doc="<p>The upfront price of the reservation.</p>"]
     pub upfront_price: Option<String>,
 }
@@ -18577,12 +18494,11 @@ impl HostReservationDeserializer {
 
     }
 }
-pub type HostReservationIdSet = Vec<String>;
 
 /// Serialize `HostReservationIdSet` contents to a `SignedRequest`.
 struct HostReservationIdSetSerializer;
 impl HostReservationIdSetSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &HostReservationIdSet) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -18590,13 +18506,12 @@ impl HostReservationIdSetSerializer {
     }
 }
 
-pub type HostReservationSet = Vec<HostReservation>;
 struct HostReservationSetDeserializer;
 impl HostReservationSetDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<HostReservationSet, XmlParseError> {
+                                       -> Result<Vec<HostReservation>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -18632,14 +18547,12 @@ impl HostReservationSetDeserializer {
 
     }
 }
-pub type HostTenancy = String;
-pub type HypervisorType = String;
 struct HypervisorTypeDeserializer;
 impl HypervisorTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<HypervisorType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -18711,9 +18624,9 @@ pub struct IamInstanceProfileAssociation {
     #[doc="<p>The ID of the instance.</p>"]
     pub instance_id: Option<String>,
     #[doc="<p>The state of the association.</p>"]
-    pub state: Option<IamInstanceProfileAssociationState>,
+    pub state: Option<String>,
     #[doc="<p>The time the IAM instance profile was associated with the instance.</p>"]
-    pub timestamp: Option<DateTime>,
+    pub timestamp: Option<String>,
 }
 
 struct IamInstanceProfileAssociationDeserializer;
@@ -18774,14 +18687,13 @@ impl IamInstanceProfileAssociationDeserializer {
 
     }
 }
-pub type IamInstanceProfileAssociationSet = Vec<IamInstanceProfileAssociation>;
 struct IamInstanceProfileAssociationSetDeserializer;
 impl IamInstanceProfileAssociationSetDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>
         (tag_name: &str,
          stack: &mut T)
-         -> Result<IamInstanceProfileAssociationSet, XmlParseError> {
+         -> Result<Vec<IamInstanceProfileAssociation>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -18817,14 +18729,12 @@ impl IamInstanceProfileAssociationSetDeserializer {
 
     }
 }
-pub type IamInstanceProfileAssociationState = String;
 struct IamInstanceProfileAssociationStateDeserializer;
 impl IamInstanceProfileAssociationStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<IamInstanceProfileAssociationState, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -18911,9 +18821,9 @@ impl IamInstanceProfileSpecificationSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct IcmpTypeCode {
     #[doc="<p>The ICMP code. A value of -1 means all codes for the specified ICMP type.</p>"]
-    pub code: Option<Integer>,
+    pub code: Option<i64>,
     #[doc="<p>The ICMP type. A value of -1 means all types.</p>"]
-    pub type_: Option<Integer>,
+    pub type_: Option<i64>,
 }
 
 struct IcmpTypeCodeDeserializer;
@@ -18984,11 +18894,11 @@ impl IcmpTypeCodeSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct IdFormat {
     #[doc="<p>The date in UTC at which you are permanently switched over to using longer IDs. If a deadline is not yet available for this resource type, this field is not returned.</p>"]
-    pub deadline: Option<DateTime>,
+    pub deadline: Option<String>,
     #[doc="<p>The type of resource.</p>"]
     pub resource: Option<String>,
     #[doc="<p>Indicates whether longer IDs (17-character IDs) are enabled for the resource.</p>"]
-    pub use_long_ids: Option<Boolean>,
+    pub use_long_ids: Option<bool>,
 }
 
 struct IdFormatDeserializer;
@@ -19041,13 +18951,12 @@ impl IdFormatDeserializer {
 
     }
 }
-pub type IdFormatList = Vec<IdFormat>;
 struct IdFormatListDeserializer;
 impl IdFormatListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<IdFormatList, XmlParseError> {
+                                       -> Result<Vec<IdFormat>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -19087,17 +18996,17 @@ impl IdFormatListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct Image {
     #[doc="<p>The architecture of the image.</p>"]
-    pub architecture: Option<ArchitectureValues>,
+    pub architecture: Option<String>,
     #[doc="<p>Any block device mapping entries.</p>"]
-    pub block_device_mappings: Option<BlockDeviceMappingList>,
+    pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
     #[doc="<p>The date and time the image was created.</p>"]
     pub creation_date: Option<String>,
     #[doc="<p>The description of the AMI that was provided during image creation.</p>"]
     pub description: Option<String>,
     #[doc="<p>Specifies whether enhanced networking with ENA is enabled.</p>"]
-    pub ena_support: Option<Boolean>,
+    pub ena_support: Option<bool>,
     #[doc="<p>The hypervisor type of the image.</p>"]
-    pub hypervisor: Option<HypervisorType>,
+    pub hypervisor: Option<String>,
     #[doc="<p>The ID of the AMI.</p>"]
     pub image_id: Option<String>,
     #[doc="<p>The location of the AMI.</p>"]
@@ -19105,7 +19014,7 @@ pub struct Image {
     #[doc="<p>The AWS account alias (for example, <code>amazon</code>, <code>self</code>) or the AWS account ID of the AMI owner.</p>"]
     pub image_owner_alias: Option<String>,
     #[doc="<p>The type of image.</p>"]
-    pub image_type: Option<ImageTypeValues>,
+    pub image_type: Option<String>,
     #[doc="<p>The kernel associated with the image, if any. Only applicable for machine images.</p>"]
     pub kernel_id: Option<String>,
     #[doc="<p>The name of the AMI that was provided during image creation.</p>"]
@@ -19113,27 +19022,27 @@ pub struct Image {
     #[doc="<p>The AWS account ID of the image owner.</p>"]
     pub owner_id: Option<String>,
     #[doc="<p>The value is <code>Windows</code> for Windows AMIs; otherwise blank.</p>"]
-    pub platform: Option<PlatformValues>,
+    pub platform: Option<String>,
     #[doc="<p>Any product codes associated with the AMI.</p>"]
-    pub product_codes: Option<ProductCodeList>,
+    pub product_codes: Option<Vec<ProductCode>>,
     #[doc="<p>Indicates whether the image has public launch permissions. The value is <code>true</code> if this image has public launch permissions or <code>false</code> if it has only implicit and explicit launch permissions.</p>"]
-    pub public: Option<Boolean>,
+    pub public: Option<bool>,
     #[doc="<p>The RAM disk associated with the image, if any. Only applicable for machine images.</p>"]
     pub ramdisk_id: Option<String>,
     #[doc="<p>The device name of the root device (for example, <code>/dev/sda1</code> or <code>/dev/xvda</code>).</p>"]
     pub root_device_name: Option<String>,
     #[doc="<p>The type of root device used by the AMI. The AMI can use an EBS volume or an instance store volume.</p>"]
-    pub root_device_type: Option<DeviceType>,
+    pub root_device_type: Option<String>,
     #[doc="<p>Specifies whether enhanced networking with the Intel 82599 Virtual Function interface is enabled.</p>"]
     pub sriov_net_support: Option<String>,
     #[doc="<p>The current state of the AMI. If the state is <code>available</code>, the image is successfully registered and can be used to launch an instance.</p>"]
-    pub state: Option<ImageState>,
+    pub state: Option<String>,
     #[doc="<p>The reason for the state change.</p>"]
     pub state_reason: Option<StateReason>,
     #[doc="<p>Any tags assigned to the image.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>The type of virtualization of the AMI.</p>"]
-    pub virtualization_type: Option<VirtualizationType>,
+    pub virtualization_type: Option<String>,
 }
 
 struct ImageDeserializer;
@@ -19285,7 +19194,7 @@ impl ImageDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ImageAttribute {
     #[doc="<p>One or more block device mapping entries.</p>"]
-    pub block_device_mappings: Option<BlockDeviceMappingList>,
+    pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
     #[doc="<p>A description for the AMI.</p>"]
     pub description: Option<AttributeValue>,
     #[doc="<p>The ID of the AMI.</p>"]
@@ -19293,9 +19202,9 @@ pub struct ImageAttribute {
     #[doc="<p>The kernel ID.</p>"]
     pub kernel_id: Option<AttributeValue>,
     #[doc="<p>One or more launch permissions.</p>"]
-    pub launch_permissions: Option<LaunchPermissionList>,
+    pub launch_permissions: Option<Vec<LaunchPermission>>,
     #[doc="<p>One or more product codes.</p>"]
-    pub product_codes: Option<ProductCodeList>,
+    pub product_codes: Option<Vec<ProductCode>>,
     #[doc="<p>The RAM disk ID.</p>"]
     pub ramdisk_id: Option<AttributeValue>,
     #[doc="<p>Indicates whether enhanced networking with the Intel 82599 Virtual Function interface is enabled.</p>"]
@@ -19379,7 +19288,6 @@ impl ImageAttributeDeserializer {
 
     }
 }
-pub type ImageAttributeName = String;
 #[doc="<p>Describes the disk container object for an import image task.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct ImageDiskContainer {
@@ -19431,12 +19339,11 @@ impl ImageDiskContainerSerializer {
     }
 }
 
-pub type ImageDiskContainerList = Vec<ImageDiskContainer>;
 
 /// Serialize `ImageDiskContainerList` contents to a `SignedRequest`.
 struct ImageDiskContainerListSerializer;
 impl ImageDiskContainerListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ImageDiskContainerList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<ImageDiskContainer>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             ImageDiskContainerSerializer::serialize(params, &key, obj);
@@ -19444,12 +19351,11 @@ impl ImageDiskContainerListSerializer {
     }
 }
 
-pub type ImageIdStringList = Vec<String>;
 
 /// Serialize `ImageIdStringList` contents to a `SignedRequest`.
 struct ImageIdStringListSerializer;
 impl ImageIdStringListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ImageIdStringList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -19457,13 +19363,12 @@ impl ImageIdStringListSerializer {
     }
 }
 
-pub type ImageList = Vec<Image>;
 struct ImageListDeserializer;
 impl ImageListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ImageList, XmlParseError> {
+                                       -> Result<Vec<Image>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -19499,13 +19404,12 @@ impl ImageListDeserializer {
 
     }
 }
-pub type ImageState = String;
 struct ImageStateDeserializer;
 impl ImageStateDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ImageState, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -19514,13 +19418,12 @@ impl ImageStateDeserializer {
 
     }
 }
-pub type ImageTypeValues = String;
 struct ImageTypeValuesDeserializer;
 impl ImageTypeValuesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ImageTypeValues, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -19541,9 +19444,9 @@ pub struct ImportImageRequest {
     #[doc="<p>A description string for the import image task.</p>"]
     pub description: Option<String>,
     #[doc="<p>Information about the disk containers.</p>"]
-    pub disk_containers: Option<ImageDiskContainerList>,
+    pub disk_containers: Option<Vec<ImageDiskContainer>>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The target hypervisor platform.</p> <p>Valid values: <code>xen</code> </p>"]
     pub hypervisor: Option<String>,
     #[doc="<p>The license type to be used for the Amazon Machine Image (AMI) after importing.</p> <p> <b>Note:</b> You may only use BYOL if you have existing licenses with rights to use these licenses in a third party cloud like AWS. For more information, see <a href=\"http://docs.aws.amazon.com/vm-import/latest/userguide/vmimport-image-import.html#prerequisites-image\">Prerequisites</a> in the VM Import/Export User Guide.</p> <p>Valid values: <code>AWS</code> | <code>BYOL</code> </p>"]
@@ -19622,7 +19525,7 @@ pub struct ImportImageResult {
     #[doc="<p>The progress of the task.</p>"]
     pub progress: Option<String>,
     #[doc="<p>Information about the snapshots.</p>"]
-    pub snapshot_details: Option<SnapshotDetailList>,
+    pub snapshot_details: Option<Vec<SnapshotDetail>>,
     #[doc="<p>A brief status of the task.</p>"]
     pub status: Option<String>,
     #[doc="<p>A detailed status message of the import task.</p>"]
@@ -19732,7 +19635,7 @@ pub struct ImportImageTask {
     #[doc="<p>The percentage of progress of the import image task.</p>"]
     pub progress: Option<String>,
     #[doc="<p>Information about the snapshots.</p>"]
-    pub snapshot_details: Option<SnapshotDetailList>,
+    pub snapshot_details: Option<Vec<SnapshotDetail>>,
     #[doc="<p>A brief status for the import image task.</p>"]
     pub status: Option<String>,
     #[doc="<p>A descriptive status message for the import image task.</p>"]
@@ -19822,13 +19725,12 @@ impl ImportImageTaskDeserializer {
 
     }
 }
-pub type ImportImageTaskList = Vec<ImportImageTask>;
 struct ImportImageTaskListDeserializer;
 impl ImportImageTaskListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ImportImageTaskList, XmlParseError> {
+                                       -> Result<Vec<ImportImageTask>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -19870,17 +19772,17 @@ pub struct ImportInstanceLaunchSpecification {
     #[doc="<p>Reserved.</p>"]
     pub additional_info: Option<String>,
     #[doc="<p>The architecture of the instance.</p>"]
-    pub architecture: Option<ArchitectureValues>,
+    pub architecture: Option<String>,
     #[doc="<p>One or more security group IDs.</p>"]
-    pub group_ids: Option<SecurityGroupIdStringList>,
+    pub group_ids: Option<Vec<String>>,
     #[doc="<p>One or more security group names.</p>"]
-    pub group_names: Option<SecurityGroupStringList>,
+    pub group_names: Option<Vec<String>>,
     #[doc="<p>Indicates whether an instance stops or terminates when you initiate shutdown from the instance (using the operating system command for system shutdown).</p>"]
-    pub instance_initiated_shutdown_behavior: Option<ShutdownBehavior>,
+    pub instance_initiated_shutdown_behavior: Option<String>,
     #[doc="<p>The instance type. For more information about the instance types that you can import, see <a href=\"http://docs.aws.amazon.com/vm-import/latest/userguide/vmimport-image-import.html#vmimport-instance-types\">Instance Types</a> in the VM Import/Export User Guide.</p>"]
-    pub instance_type: Option<InstanceType>,
+    pub instance_type: Option<String>,
     #[doc="<p>Indicates whether monitoring is enabled.</p>"]
-    pub monitoring: Option<Boolean>,
+    pub monitoring: Option<bool>,
     #[doc="<p>The placement information for the instance.</p>"]
     pub placement: Option<Placement>,
     #[doc="<p>[EC2-VPC] An available IP address from the IP address range of the subnet.</p>"]
@@ -19954,13 +19856,13 @@ pub struct ImportInstanceRequest {
     #[doc="<p>A description for the instance being imported.</p>"]
     pub description: Option<String>,
     #[doc="<p>The disk image.</p>"]
-    pub disk_images: Option<DiskImageList>,
+    pub disk_images: Option<Vec<DiskImage>>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The launch specification.</p>"]
     pub launch_specification: Option<ImportInstanceLaunchSpecification>,
     #[doc="<p>The instance operating system.</p>"]
-    pub platform: PlatformValues,
+    pub platform: String,
 }
 
 
@@ -20054,9 +19956,9 @@ pub struct ImportInstanceTaskDetails {
     #[doc="<p>The ID of the instance.</p>"]
     pub instance_id: Option<String>,
     #[doc="<p>The instance operating system.</p>"]
-    pub platform: Option<PlatformValues>,
+    pub platform: Option<String>,
     #[doc="<p>One or more volumes.</p>"]
-    pub volumes: ImportInstanceVolumeDetailSet,
+    pub volumes: Vec<ImportInstanceVolumeDetailItem>,
 }
 
 struct ImportInstanceTaskDetailsDeserializer;
@@ -20121,7 +20023,7 @@ pub struct ImportInstanceVolumeDetailItem {
     #[doc="<p>The Availability Zone where the resulting instance will reside.</p>"]
     pub availability_zone: String,
     #[doc="<p>The number of bytes converted so far.</p>"]
-    pub bytes_converted: Long,
+    pub bytes_converted: i64,
     #[doc="<p>A description of the task.</p>"]
     pub description: Option<String>,
     #[doc="<p>The image.</p>"]
@@ -20200,13 +20102,13 @@ impl ImportInstanceVolumeDetailItemDeserializer {
 
     }
 }
-pub type ImportInstanceVolumeDetailSet = Vec<ImportInstanceVolumeDetailItem>;
 struct ImportInstanceVolumeDetailSetDeserializer;
 impl ImportInstanceVolumeDetailSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<ImportInstanceVolumeDetailSet, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<Vec<ImportInstanceVolumeDetailItem>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -20246,11 +20148,11 @@ impl ImportInstanceVolumeDetailSetDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ImportKeyPairRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>A unique name for the key pair.</p>"]
     pub key_name: String,
     #[doc="<p>The public key. For API calls, the text must be base64-encoded. For command line tools, base64 encoding is performed for you.</p>"]
-    pub public_key_material: Blob,
+    pub public_key_material: Vec<u8>,
 }
 
 
@@ -20341,7 +20243,7 @@ pub struct ImportSnapshotRequest {
     #[doc="<p>Information about the disk container.</p>"]
     pub disk_container: Option<SnapshotDiskContainer>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The name of the role to use when not using the default role, 'vmimport'.</p>"]
     pub role_name: Option<String>,
 }
@@ -20506,13 +20408,12 @@ impl ImportSnapshotTaskDeserializer {
 
     }
 }
-pub type ImportSnapshotTaskList = Vec<ImportSnapshotTask>;
 struct ImportSnapshotTaskListDeserializer;
 impl ImportSnapshotTaskListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ImportSnapshotTaskList, XmlParseError> {
+                                       -> Result<Vec<ImportSnapshotTask>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -20548,12 +20449,11 @@ impl ImportSnapshotTaskListDeserializer {
 
     }
 }
-pub type ImportTaskIdList = Vec<String>;
 
 /// Serialize `ImportTaskIdList` contents to a `SignedRequest`.
 struct ImportTaskIdListSerializer;
 impl ImportTaskIdListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ImportTaskIdList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -20569,7 +20469,7 @@ pub struct ImportVolumeRequest {
     #[doc="<p>A description of the volume.</p>"]
     pub description: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The disk image.</p>"]
     pub image: DiskImageDetail,
     #[doc="<p>The volume size.</p>"]
@@ -20656,7 +20556,7 @@ pub struct ImportVolumeTaskDetails {
     #[doc="<p>The Availability Zone where the resulting volume will reside.</p>"]
     pub availability_zone: String,
     #[doc="<p>The number of bytes converted so far.</p>"]
-    pub bytes_converted: Long,
+    pub bytes_converted: i64,
     #[doc="<p>The description you provided when starting the import volume task.</p>"]
     pub description: Option<String>,
     #[doc="<p>The image.</p>"]
@@ -20728,19 +20628,19 @@ impl ImportVolumeTaskDetailsDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct Instance {
     #[doc="<p>The AMI launch index, which can be used to find this instance in the launch group.</p>"]
-    pub ami_launch_index: Option<Integer>,
+    pub ami_launch_index: Option<i64>,
     #[doc="<p>The architecture of the image.</p>"]
-    pub architecture: Option<ArchitectureValues>,
+    pub architecture: Option<String>,
     #[doc="<p>Any block device mapping entries for the instance.</p>"]
-    pub block_device_mappings: Option<InstanceBlockDeviceMappingList>,
+    pub block_device_mappings: Option<Vec<InstanceBlockDeviceMapping>>,
     #[doc="<p>The idempotency token you provided when you launched the instance, if applicable.</p>"]
     pub client_token: Option<String>,
     #[doc="<p>Indicates whether the instance is optimized for EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal I/O performance. This optimization isn't available with all instance types. Additional usage charges apply when using an EBS Optimized instance.</p>"]
-    pub ebs_optimized: Option<Boolean>,
+    pub ebs_optimized: Option<bool>,
     #[doc="<p>Specifies whether enhanced networking with ENA is enabled.</p>"]
-    pub ena_support: Option<Boolean>,
+    pub ena_support: Option<bool>,
     #[doc="<p>The hypervisor type of the instance.</p>"]
-    pub hypervisor: Option<HypervisorType>,
+    pub hypervisor: Option<String>,
     #[doc="<p>The IAM instance profile associated with the instance, if applicable.</p>"]
     pub iam_instance_profile: Option<IamInstanceProfile>,
     #[doc="<p>The ID of the AMI used to launch the instance.</p>"]
@@ -20748,29 +20648,29 @@ pub struct Instance {
     #[doc="<p>The ID of the instance.</p>"]
     pub instance_id: Option<String>,
     #[doc="<p>Indicates whether this is a Spot instance or a Scheduled Instance.</p>"]
-    pub instance_lifecycle: Option<InstanceLifecycleType>,
+    pub instance_lifecycle: Option<String>,
     #[doc="<p>The instance type.</p>"]
-    pub instance_type: Option<InstanceType>,
+    pub instance_type: Option<String>,
     #[doc="<p>The kernel associated with this instance, if applicable.</p>"]
     pub kernel_id: Option<String>,
     #[doc="<p>The name of the key pair, if this instance was launched with an associated key pair.</p>"]
     pub key_name: Option<String>,
     #[doc="<p>The time the instance was launched.</p>"]
-    pub launch_time: Option<DateTime>,
+    pub launch_time: Option<String>,
     #[doc="<p>The monitoring for the instance.</p>"]
     pub monitoring: Option<Monitoring>,
     #[doc="<p>[EC2-VPC] One or more network interfaces for the instance.</p>"]
-    pub network_interfaces: Option<InstanceNetworkInterfaceList>,
+    pub network_interfaces: Option<Vec<InstanceNetworkInterface>>,
     #[doc="<p>The location where the instance launched, if applicable.</p>"]
     pub placement: Option<Placement>,
     #[doc="<p>The value is <code>Windows</code> for Windows instances; otherwise blank.</p>"]
-    pub platform: Option<PlatformValues>,
+    pub platform: Option<String>,
     #[doc="<p>(IPv4 only) The private DNS hostname name assigned to the instance. This DNS hostname can only be used inside the Amazon EC2 network. This name is not available until the instance enters the <code>running</code> state. </p> <p>[EC2-VPC] The Amazon-provided DNS server will resolve Amazon-provided private DNS hostnames if you've enabled DNS resolution and DNS hostnames in your VPC. If you are not using the Amazon-provided DNS server in your VPC, your custom domain name servers must resolve the hostname as appropriate.</p>"]
     pub private_dns_name: Option<String>,
     #[doc="<p>The private IPv4 address assigned to the instance.</p>"]
     pub private_ip_address: Option<String>,
     #[doc="<p>The product codes attached to this instance, if applicable.</p>"]
-    pub product_codes: Option<ProductCodeList>,
+    pub product_codes: Option<Vec<ProductCode>>,
     #[doc="<p>(IPv4 only) The public DNS name assigned to the instance. This name is not available until the instance enters the <code>running</code> state. For EC2-VPC, this name is only available if you've enabled DNS hostnames for your VPC.</p>"]
     pub public_dns_name: Option<String>,
     #[doc="<p>The public IPv4 address assigned to the instance, if applicable.</p>"]
@@ -20780,11 +20680,11 @@ pub struct Instance {
     #[doc="<p>The root device name (for example, <code>/dev/sda1</code> or <code>/dev/xvda</code>).</p>"]
     pub root_device_name: Option<String>,
     #[doc="<p>The root device type used by the AMI. The AMI can use an EBS volume or an instance store volume.</p>"]
-    pub root_device_type: Option<DeviceType>,
+    pub root_device_type: Option<String>,
     #[doc="<p>One or more security groups for the instance.</p>"]
-    pub security_groups: Option<GroupIdentifierList>,
+    pub security_groups: Option<Vec<GroupIdentifier>>,
     #[doc="<p>Specifies whether to enable an instance launched in a VPC to perform NAT. This controls whether source/destination checking is enabled on the instance. A value of <code>true</code> means checking is enabled, and <code>false</code> means checking is disabled. The value must be <code>false</code> for the instance to perform NAT. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_NAT_Instance.html\">NAT Instances</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
-    pub source_dest_check: Option<Boolean>,
+    pub source_dest_check: Option<bool>,
     #[doc="<p>If the request is a Spot instance request, the ID of the request.</p>"]
     pub spot_instance_request_id: Option<String>,
     #[doc="<p>Specifies whether enhanced networking with the Intel 82599 Virtual Function interface is enabled.</p>"]
@@ -20798,9 +20698,9 @@ pub struct Instance {
     #[doc="<p>[EC2-VPC] The ID of the subnet in which the instance is running.</p>"]
     pub subnet_id: Option<String>,
     #[doc="<p>Any tags assigned to the instance.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>The virtualization type of the instance.</p>"]
-    pub virtualization_type: Option<VirtualizationType>,
+    pub virtualization_type: Option<String>,
     #[doc="<p>[EC2-VPC] The ID of the VPC in which the instance is running.</p>"]
     pub vpc_id: Option<String>,
 }
@@ -21015,7 +20915,7 @@ impl InstanceDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct InstanceAttribute {
     #[doc="<p>The block device mapping of the instance.</p>"]
-    pub block_device_mappings: Option<InstanceBlockDeviceMappingList>,
+    pub block_device_mappings: Option<Vec<InstanceBlockDeviceMapping>>,
     #[doc="<p>If the value is <code>true</code>, you can't terminate the instance through the Amazon EC2 console, CLI, or API; otherwise, you can.</p>"]
     pub disable_api_termination: Option<AttributeBooleanValue>,
     #[doc="<p>Indicates whether the instance is optimized for EBS I/O.</p>"]
@@ -21023,7 +20923,7 @@ pub struct InstanceAttribute {
     #[doc="<p>Indicates whether enhanced networking with ENA is enabled.</p>"]
     pub ena_support: Option<AttributeBooleanValue>,
     #[doc="<p>The security groups associated with the instance.</p>"]
-    pub groups: Option<GroupIdentifierList>,
+    pub groups: Option<Vec<GroupIdentifier>>,
     #[doc="<p>The ID of the instance.</p>"]
     pub instance_id: Option<String>,
     #[doc="<p>Indicates whether an instance stops or terminates when you initiate shutdown from the instance (using the operating system command for system shutdown).</p>"]
@@ -21033,7 +20933,7 @@ pub struct InstanceAttribute {
     #[doc="<p>The kernel ID.</p>"]
     pub kernel_id: Option<AttributeValue>,
     #[doc="<p>A list of product codes.</p>"]
-    pub product_codes: Option<ProductCodeList>,
+    pub product_codes: Option<Vec<ProductCode>>,
     #[doc="<p>The RAM disk ID.</p>"]
     pub ramdisk_id: Option<AttributeValue>,
     #[doc="<p>The name of the root device (for example, <code>/dev/sda1</code> or <code>/dev/xvda</code>).</p>"]
@@ -21156,7 +21056,6 @@ impl InstanceAttributeDeserializer {
 
     }
 }
-pub type InstanceAttributeName = String;
 #[doc="<p>Describes a block device mapping.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct InstanceBlockDeviceMapping {
@@ -21213,13 +21112,13 @@ impl InstanceBlockDeviceMappingDeserializer {
 
     }
 }
-pub type InstanceBlockDeviceMappingList = Vec<InstanceBlockDeviceMapping>;
 struct InstanceBlockDeviceMappingListDeserializer;
 impl InstanceBlockDeviceMappingListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<InstanceBlockDeviceMappingList, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<Vec<InstanceBlockDeviceMapping>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -21299,14 +21198,13 @@ impl InstanceBlockDeviceMappingSpecificationSerializer {
     }
 }
 
-pub type InstanceBlockDeviceMappingSpecificationList = Vec<InstanceBlockDeviceMappingSpecification>;
 
 /// Serialize `InstanceBlockDeviceMappingSpecificationList` contents to a `SignedRequest`.
 struct InstanceBlockDeviceMappingSpecificationListSerializer;
 impl InstanceBlockDeviceMappingSpecificationListSerializer {
     fn serialize(params: &mut Params,
                  name: &str,
-                 obj: &InstanceBlockDeviceMappingSpecificationList) {
+                 obj: &Vec<InstanceBlockDeviceMappingSpecification>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             InstanceBlockDeviceMappingSpecificationSerializer::serialize(params, &key, obj);
@@ -21318,11 +21216,11 @@ impl InstanceBlockDeviceMappingSpecificationListSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct InstanceCapacity {
     #[doc="<p>The number of instances that can still be launched onto the Dedicated Host.</p>"]
-    pub available_capacity: Option<Integer>,
+    pub available_capacity: Option<i64>,
     #[doc="<p>The instance type size supported by the Dedicated Host.</p>"]
     pub instance_type: Option<String>,
     #[doc="<p>The total number of instances that can be launched onto the Dedicated Host.</p>"]
-    pub total_capacity: Option<Integer>,
+    pub total_capacity: Option<i64>,
 }
 
 struct InstanceCapacityDeserializer;
@@ -21381,9 +21279,9 @@ impl InstanceCapacityDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct InstanceCount {
     #[doc="<p>The number of listed Reserved Instances in the state specified by the <code>state</code>.</p>"]
-    pub instance_count: Option<Integer>,
+    pub instance_count: Option<i64>,
     #[doc="<p>The states of the listed Reserved Instances.</p>"]
-    pub state: Option<ListingState>,
+    pub state: Option<String>,
 }
 
 struct InstanceCountDeserializer;
@@ -21433,13 +21331,12 @@ impl InstanceCountDeserializer {
 
     }
 }
-pub type InstanceCountList = Vec<InstanceCount>;
 struct InstanceCountListDeserializer;
 impl InstanceCountListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<InstanceCountList, XmlParseError> {
+                                       -> Result<Vec<InstanceCount>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -21481,7 +21378,7 @@ pub struct InstanceExportDetails {
     #[doc="<p>The ID of the resource being exported.</p>"]
     pub instance_id: Option<String>,
     #[doc="<p>The target virtualization environment.</p>"]
-    pub target_environment: Option<ExportEnvironment>,
+    pub target_environment: Option<String>,
 }
 
 struct InstanceExportDetailsDeserializer;
@@ -21531,13 +21428,12 @@ impl InstanceExportDetailsDeserializer {
 
     }
 }
-pub type InstanceHealthStatus = String;
 struct InstanceHealthStatusDeserializer;
 impl InstanceHealthStatusDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<InstanceHealthStatus, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -21546,13 +21442,12 @@ impl InstanceHealthStatusDeserializer {
 
     }
 }
-pub type InstanceIdSet = Vec<String>;
 struct InstanceIdSetDeserializer;
 impl InstanceIdSetDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<InstanceIdSet, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -21588,12 +21483,11 @@ impl InstanceIdSetDeserializer {
 
     }
 }
-pub type InstanceIdStringList = Vec<String>;
 
 /// Serialize `InstanceIdStringList` contents to a `SignedRequest`.
 struct InstanceIdStringListSerializer;
 impl InstanceIdStringListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &InstanceIdStringList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -21667,13 +21561,12 @@ impl InstanceIpv6AddressSerializer {
     }
 }
 
-pub type InstanceIpv6AddressList = Vec<InstanceIpv6Address>;
 struct InstanceIpv6AddressListDeserializer;
 impl InstanceIpv6AddressListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<InstanceIpv6AddressList, XmlParseError> {
+                                       -> Result<Vec<InstanceIpv6Address>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -21713,7 +21606,7 @@ impl InstanceIpv6AddressListDeserializer {
 /// Serialize `InstanceIpv6AddressList` contents to a `SignedRequest`.
 struct InstanceIpv6AddressListSerializer;
 impl InstanceIpv6AddressListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &InstanceIpv6AddressList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<InstanceIpv6Address>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             InstanceIpv6AddressSerializer::serialize(params, &key, obj);
@@ -21721,13 +21614,12 @@ impl InstanceIpv6AddressListSerializer {
     }
 }
 
-pub type InstanceLifecycleType = String;
 struct InstanceLifecycleTypeDeserializer;
 impl InstanceLifecycleTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<InstanceLifecycleType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -21736,13 +21628,12 @@ impl InstanceLifecycleTypeDeserializer {
 
     }
 }
-pub type InstanceList = Vec<Instance>;
 struct InstanceListDeserializer;
 impl InstanceListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<InstanceList, XmlParseError> {
+                                       -> Result<Vec<Instance>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -21833,13 +21724,12 @@ impl InstanceMonitoringDeserializer {
 
     }
 }
-pub type InstanceMonitoringList = Vec<InstanceMonitoring>;
 struct InstanceMonitoringListDeserializer;
 impl InstanceMonitoringListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<InstanceMonitoringList, XmlParseError> {
+                                       -> Result<Vec<InstanceMonitoring>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -21885,9 +21775,9 @@ pub struct InstanceNetworkInterface {
     #[doc="<p>The description.</p>"]
     pub description: Option<String>,
     #[doc="<p>One or more security groups.</p>"]
-    pub groups: Option<GroupIdentifierList>,
+    pub groups: Option<Vec<GroupIdentifier>>,
     #[doc="<p>One or more IPv6 addresses associated with the network interface.</p>"]
-    pub ipv_6_addresses: Option<InstanceIpv6AddressList>,
+    pub ipv_6_addresses: Option<Vec<InstanceIpv6Address>>,
     #[doc="<p>The MAC address.</p>"]
     pub mac_address: Option<String>,
     #[doc="<p>The ID of the network interface.</p>"]
@@ -21899,11 +21789,11 @@ pub struct InstanceNetworkInterface {
     #[doc="<p>The IPv4 address of the network interface within the subnet.</p>"]
     pub private_ip_address: Option<String>,
     #[doc="<p>One or more private IPv4 addresses associated with the network interface.</p>"]
-    pub private_ip_addresses: Option<InstancePrivateIpAddressList>,
+    pub private_ip_addresses: Option<Vec<InstancePrivateIpAddress>>,
     #[doc="<p>Indicates whether to validate network traffic to or from this network interface.</p>"]
-    pub source_dest_check: Option<Boolean>,
+    pub source_dest_check: Option<bool>,
     #[doc="<p>The status of the network interface.</p>"]
-    pub status: Option<NetworkInterfaceStatus>,
+    pub status: Option<String>,
     #[doc="<p>The ID of the subnet.</p>"]
     pub subnet_id: Option<String>,
     #[doc="<p>The ID of the VPC.</p>"]
@@ -22078,15 +21968,15 @@ impl InstanceNetworkInterfaceAssociationDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct InstanceNetworkInterfaceAttachment {
     #[doc="<p>The time stamp when the attachment initiated.</p>"]
-    pub attach_time: Option<DateTime>,
+    pub attach_time: Option<String>,
     #[doc="<p>The ID of the network interface attachment.</p>"]
     pub attachment_id: Option<String>,
     #[doc="<p>Indicates whether the network interface is deleted when the instance is terminated.</p>"]
-    pub delete_on_termination: Option<Boolean>,
+    pub delete_on_termination: Option<bool>,
     #[doc="<p>The index of the device on the instance for the network interface attachment.</p>"]
-    pub device_index: Option<Integer>,
+    pub device_index: Option<i64>,
     #[doc="<p>The attachment state.</p>"]
-    pub status: Option<AttachmentStatus>,
+    pub status: Option<String>,
 }
 
 struct InstanceNetworkInterfaceAttachmentDeserializer;
@@ -22150,13 +22040,12 @@ impl InstanceNetworkInterfaceAttachmentDeserializer {
 
     }
 }
-pub type InstanceNetworkInterfaceList = Vec<InstanceNetworkInterface>;
 struct InstanceNetworkInterfaceListDeserializer;
 impl InstanceNetworkInterfaceListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<InstanceNetworkInterfaceList, XmlParseError> {
+                                       -> Result<Vec<InstanceNetworkInterface>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -22197,27 +22086,27 @@ impl InstanceNetworkInterfaceListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct InstanceNetworkInterfaceSpecification {
     #[doc="<p>Indicates whether to assign a public IPv4 address to an instance you launch in a VPC. The public IP address can only be assigned to a network interface for eth0, and can only be assigned to a new network interface, not an existing one. You cannot specify more than one network interface in the request. If launching into a default subnet, the default value is <code>true</code>.</p>"]
-    pub associate_public_ip_address: Option<Boolean>,
+    pub associate_public_ip_address: Option<bool>,
     #[doc="<p>If set to <code>true</code>, the interface is deleted when the instance is terminated. You can specify <code>true</code> only if creating a new network interface when launching an instance.</p>"]
-    pub delete_on_termination: Option<Boolean>,
+    pub delete_on_termination: Option<bool>,
     #[doc="<p>The description of the network interface. Applies only if creating a network interface when launching an instance.</p>"]
     pub description: Option<String>,
     #[doc="<p>The index of the device on the instance for the network interface attachment. If you are specifying a network interface in a <a>RunInstances</a> request, you must provide the device index.</p>"]
-    pub device_index: Option<Integer>,
+    pub device_index: Option<i64>,
     #[doc="<p>The IDs of the security groups for the network interface. Applies only if creating a network interface when launching an instance.</p>"]
-    pub groups: Option<SecurityGroupIdStringList>,
+    pub groups: Option<Vec<String>>,
     #[doc="<p>A number of IPv6 addresses to assign to the network interface. Amazon EC2 chooses the IPv6 addresses from the range of the subnet. You cannot specify this option and the option to assign specific IPv6 addresses in the same request. You can specify this option if you've specified a minimum number of instances to launch.</p>"]
-    pub ipv_6_address_count: Option<Integer>,
+    pub ipv_6_address_count: Option<i64>,
     #[doc="<p>One or more IPv6 addresses to assign to the network interface. You cannot specify this option and the option to assign a number of IPv6 addresses in the same request. You cannot specify this option if you've specified a minimum number of instances to launch.</p>"]
-    pub ipv_6_addresses: Option<InstanceIpv6AddressList>,
+    pub ipv_6_addresses: Option<Vec<InstanceIpv6Address>>,
     #[doc="<p>The ID of the network interface.</p>"]
     pub network_interface_id: Option<String>,
     #[doc="<p>The private IPv4 address of the network interface. Applies only if creating a network interface when launching an instance. You cannot specify this option if you're launching more than one instance in a <a>RunInstances</a> request.</p>"]
     pub private_ip_address: Option<String>,
     #[doc="<p>One or more private IPv4 addresses to assign to the network interface. Only one private IPv4 address can be designated as primary. You cannot specify this option if you're launching more than one instance in a <a>RunInstances</a> request.</p>"]
-    pub private_ip_addresses: Option<PrivateIpAddressSpecificationList>,
+    pub private_ip_addresses: Option<Vec<PrivateIpAddressSpecification>>,
     #[doc="<p>The number of secondary private IPv4 addresses. You can't specify this option and specify more than one private IP address using the private IP addresses option. You cannot specify this option if you're launching more than one instance in a <a>RunInstances</a> request.</p>"]
-    pub secondary_private_ip_address_count: Option<Integer>,
+    pub secondary_private_ip_address_count: Option<i64>,
     #[doc="<p>The ID of the subnet associated with the network string. Applies only if creating a network interface when launching an instance.</p>"]
     pub subnet_id: Option<String>,
 }
@@ -22381,14 +22270,13 @@ impl InstanceNetworkInterfaceSpecificationSerializer {
     }
 }
 
-pub type InstanceNetworkInterfaceSpecificationList = Vec<InstanceNetworkInterfaceSpecification>;
 struct InstanceNetworkInterfaceSpecificationListDeserializer;
 impl InstanceNetworkInterfaceSpecificationListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>
         (tag_name: &str,
          stack: &mut T)
-         -> Result<InstanceNetworkInterfaceSpecificationList, XmlParseError> {
+         -> Result<Vec<InstanceNetworkInterfaceSpecification>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -22430,7 +22318,7 @@ struct InstanceNetworkInterfaceSpecificationListSerializer;
 impl InstanceNetworkInterfaceSpecificationListSerializer {
     fn serialize(params: &mut Params,
                  name: &str,
-                 obj: &InstanceNetworkInterfaceSpecificationList) {
+                 obj: &Vec<InstanceNetworkInterfaceSpecification>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             InstanceNetworkInterfaceSpecificationSerializer::serialize(params, &key, obj);
@@ -22444,7 +22332,7 @@ pub struct InstancePrivateIpAddress {
     #[doc="<p>The association information for an Elastic IP address for the network interface.</p>"]
     pub association: Option<InstanceNetworkInterfaceAssociation>,
     #[doc="<p>Indicates whether this IPv4 address is the primary private IP address of the network interface.</p>"]
-    pub primary: Option<Boolean>,
+    pub primary: Option<bool>,
     #[doc="<p>The private IPv4 DNS name.</p>"]
     pub private_dns_name: Option<String>,
     #[doc="<p>The private IPv4 address of the network interface.</p>"]
@@ -22506,13 +22394,12 @@ impl InstancePrivateIpAddressDeserializer {
 
     }
 }
-pub type InstancePrivateIpAddressList = Vec<InstancePrivateIpAddress>;
 struct InstancePrivateIpAddressListDeserializer;
 impl InstancePrivateIpAddressListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<InstancePrivateIpAddressList, XmlParseError> {
+                                       -> Result<Vec<InstancePrivateIpAddress>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -22553,9 +22440,9 @@ impl InstancePrivateIpAddressListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct InstanceState {
     #[doc="<p>The low byte represents the state. The high byte is an opaque internal value and should be ignored.</p> <ul> <li> <p> <code>0</code> : <code>pending</code> </p> </li> <li> <p> <code>16</code> : <code>running</code> </p> </li> <li> <p> <code>32</code> : <code>shutting-down</code> </p> </li> <li> <p> <code>48</code> : <code>terminated</code> </p> </li> <li> <p> <code>64</code> : <code>stopping</code> </p> </li> <li> <p> <code>80</code> : <code>stopped</code> </p> </li> </ul>"]
-    pub code: Option<Integer>,
+    pub code: Option<i64>,
     #[doc="<p>The current state of the instance.</p>"]
-    pub name: Option<InstanceStateName>,
+    pub name: Option<String>,
 }
 
 struct InstanceStateDeserializer;
@@ -22667,13 +22554,12 @@ impl InstanceStateChangeDeserializer {
 
     }
 }
-pub type InstanceStateChangeList = Vec<InstanceStateChange>;
 struct InstanceStateChangeListDeserializer;
 impl InstanceStateChangeListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<InstanceStateChangeList, XmlParseError> {
+                                       -> Result<Vec<InstanceStateChange>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -22709,13 +22595,12 @@ impl InstanceStateChangeListDeserializer {
 
     }
 }
-pub type InstanceStateName = String;
 struct InstanceStateNameDeserializer;
 impl InstanceStateNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<InstanceStateName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -22730,7 +22615,7 @@ pub struct InstanceStatus {
     #[doc="<p>The Availability Zone of the instance.</p>"]
     pub availability_zone: Option<String>,
     #[doc="<p>Any scheduled events associated with the instance.</p>"]
-    pub events: Option<InstanceStatusEventList>,
+    pub events: Option<Vec<InstanceStatusEvent>>,
     #[doc="<p>The ID of the instance.</p>"]
     pub instance_id: Option<String>,
     #[doc="<p>The intended state of the instance. <a>DescribeInstanceStatus</a> requires that an instance be in the <code>running</code> state.</p>"]
@@ -22812,11 +22697,11 @@ impl InstanceStatusDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct InstanceStatusDetails {
     #[doc="<p>The time when a status check failed. For an instance that was launched and impaired, this is the time when the instance was launched.</p>"]
-    pub impaired_since: Option<DateTime>,
+    pub impaired_since: Option<String>,
     #[doc="<p>The type of instance status.</p>"]
-    pub name: Option<StatusName>,
+    pub name: Option<String>,
     #[doc="<p>The status.</p>"]
-    pub status: Option<StatusType>,
+    pub status: Option<String>,
 }
 
 struct InstanceStatusDetailsDeserializer;
@@ -22870,13 +22755,12 @@ impl InstanceStatusDetailsDeserializer {
 
     }
 }
-pub type InstanceStatusDetailsList = Vec<InstanceStatusDetails>;
 struct InstanceStatusDetailsListDeserializer;
 impl InstanceStatusDetailsListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<InstanceStatusDetailsList, XmlParseError> {
+                                       -> Result<Vec<InstanceStatusDetails>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -22917,13 +22801,13 @@ impl InstanceStatusDetailsListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct InstanceStatusEvent {
     #[doc="<p>The event code.</p>"]
-    pub code: Option<EventCode>,
+    pub code: Option<String>,
     #[doc="<p>A description of the event.</p> <p>After a scheduled event is completed, it can still be described for up to a week. If the event has been completed, this description starts with the following text: [Completed].</p>"]
     pub description: Option<String>,
     #[doc="<p>The latest scheduled end time for the event.</p>"]
-    pub not_after: Option<DateTime>,
+    pub not_after: Option<String>,
     #[doc="<p>The earliest scheduled start time for the event.</p>"]
-    pub not_before: Option<DateTime>,
+    pub not_before: Option<String>,
 }
 
 struct InstanceStatusEventDeserializer;
@@ -22980,13 +22864,12 @@ impl InstanceStatusEventDeserializer {
 
     }
 }
-pub type InstanceStatusEventList = Vec<InstanceStatusEvent>;
 struct InstanceStatusEventListDeserializer;
 impl InstanceStatusEventListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<InstanceStatusEventList, XmlParseError> {
+                                       -> Result<Vec<InstanceStatusEvent>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -23022,13 +22905,12 @@ impl InstanceStatusEventListDeserializer {
 
     }
 }
-pub type InstanceStatusList = Vec<InstanceStatus>;
 struct InstanceStatusListDeserializer;
 impl InstanceStatusListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<InstanceStatusList, XmlParseError> {
+                                       -> Result<Vec<InstanceStatus>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -23068,9 +22950,9 @@ impl InstanceStatusListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct InstanceStatusSummary {
     #[doc="<p>The system instance health or application instance health.</p>"]
-    pub details: Option<InstanceStatusDetailsList>,
+    pub details: Option<Vec<InstanceStatusDetails>>,
     #[doc="<p>The status.</p>"]
-    pub status: Option<SummaryStatus>,
+    pub status: Option<String>,
 }
 
 struct InstanceStatusSummaryDeserializer;
@@ -23118,13 +23000,12 @@ impl InstanceStatusSummaryDeserializer {
 
     }
 }
-pub type InstanceType = String;
 struct InstanceTypeDeserializer;
 impl InstanceTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<InstanceType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -23133,12 +23014,11 @@ impl InstanceTypeDeserializer {
 
     }
 }
-pub type InstanceTypeList = Vec<InstanceType>;
 
 /// Serialize `InstanceTypeList` contents to a `SignedRequest`.
 struct InstanceTypeListSerializer;
 impl InstanceTypeListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &InstanceTypeList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -23146,13 +23026,12 @@ impl InstanceTypeListSerializer {
     }
 }
 
-pub type Integer = i64;
 struct IntegerDeserializer;
 impl IntegerDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Integer, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -23165,11 +23044,11 @@ impl IntegerDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct InternetGateway {
     #[doc="<p>Any VPCs attached to the Internet gateway.</p>"]
-    pub attachments: Option<InternetGatewayAttachmentList>,
+    pub attachments: Option<Vec<InternetGatewayAttachment>>,
     #[doc="<p>The ID of the Internet gateway.</p>"]
     pub internet_gateway_id: Option<String>,
     #[doc="<p>Any tags assigned to the Internet gateway.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 struct InternetGatewayDeserializer;
@@ -23226,7 +23105,7 @@ impl InternetGatewayDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct InternetGatewayAttachment {
     #[doc="<p>The current state of the attachment.</p>"]
-    pub state: Option<AttachmentStatus>,
+    pub state: Option<String>,
     #[doc="<p>The ID of the VPC.</p>"]
     pub vpc_id: Option<String>,
 }
@@ -23278,13 +23157,12 @@ impl InternetGatewayAttachmentDeserializer {
 
     }
 }
-pub type InternetGatewayAttachmentList = Vec<InternetGatewayAttachment>;
 struct InternetGatewayAttachmentListDeserializer;
 impl InternetGatewayAttachmentListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<InternetGatewayAttachmentList, XmlParseError> {
+                                       -> Result<Vec<InternetGatewayAttachment>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -23321,13 +23199,12 @@ impl InternetGatewayAttachmentListDeserializer {
 
     }
 }
-pub type InternetGatewayList = Vec<InternetGateway>;
 struct InternetGatewayListDeserializer;
 impl InternetGatewayListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<InternetGatewayList, XmlParseError> {
+                                       -> Result<Vec<InternetGateway>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -23367,19 +23244,19 @@ impl InternetGatewayListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct IpPermission {
     #[doc="<p>The start of port range for the TCP and UDP protocols, or an ICMP/ICMPv6 type number. A value of <code>-1</code> indicates all ICMP/ICMPv6 types.</p>"]
-    pub from_port: Option<Integer>,
+    pub from_port: Option<i64>,
     #[doc="<p>The IP protocol name (<code>tcp</code>, <code>udp</code>, <code>icmp</code>) or number (see <a href=\"http://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml\">Protocol Numbers</a>). </p> <p>[EC2-VPC only] Use <code>-1</code> to specify all protocols. When authorizing security group rules, specifying <code>-1</code> or a protocol number other than <code>tcp</code>, <code>udp</code>, <code>icmp</code>, or <code>58</code> (ICMPv6) allows traffic on all ports, regardless of any port range you specify. For <code>tcp</code>, <code>udp</code>, and <code>icmp</code>, you must specify a port range. For <code>58</code> (ICMPv6), you can optionally specify a port range; if you don't, traffic for all types and codes is allowed when authorizing rules. </p>"]
     pub ip_protocol: Option<String>,
     #[doc="<p>One or more IPv4 ranges.</p>"]
-    pub ip_ranges: Option<IpRangeList>,
+    pub ip_ranges: Option<Vec<IpRange>>,
     #[doc="<p>[EC2-VPC only] One or more IPv6 ranges.</p>"]
-    pub ipv_6_ranges: Option<Ipv6RangeList>,
+    pub ipv_6_ranges: Option<Vec<Ipv6Range>>,
     #[doc="<p>(Valid for <a>AuthorizeSecurityGroupEgress</a>, <a>RevokeSecurityGroupEgress</a> and <a>DescribeSecurityGroups</a> only) One or more prefix list IDs for an AWS service. In an <a>AuthorizeSecurityGroupEgress</a> request, this is the AWS service that you want to access through a VPC endpoint from instances associated with the security group.</p>"]
-    pub prefix_list_ids: Option<PrefixListIdList>,
+    pub prefix_list_ids: Option<Vec<PrefixListId>>,
     #[doc="<p>The end of port range for the TCP and UDP protocols, or an ICMP/ICMPv6 code. A value of <code>-1</code> indicates all ICMP/ICMPv6 codes for the specified ICMP type.</p>"]
-    pub to_port: Option<Integer>,
+    pub to_port: Option<i64>,
     #[doc="<p>One or more security group and AWS account ID pairs.</p>"]
-    pub user_id_group_pairs: Option<UserIdGroupPairList>,
+    pub user_id_group_pairs: Option<Vec<UserIdGroupPair>>,
 }
 
 struct IpPermissionDeserializer;
@@ -23495,13 +23372,12 @@ impl IpPermissionSerializer {
     }
 }
 
-pub type IpPermissionList = Vec<IpPermission>;
 struct IpPermissionListDeserializer;
 impl IpPermissionListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<IpPermissionList, XmlParseError> {
+                                       -> Result<Vec<IpPermission>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -23541,7 +23417,7 @@ impl IpPermissionListDeserializer {
 /// Serialize `IpPermissionList` contents to a `SignedRequest`.
 struct IpPermissionListSerializer;
 impl IpPermissionListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &IpPermissionList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<IpPermission>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             IpPermissionSerializer::serialize(params, &key, obj);
@@ -23615,13 +23491,12 @@ impl IpRangeSerializer {
     }
 }
 
-pub type IpRangeList = Vec<IpRange>;
 struct IpRangeListDeserializer;
 impl IpRangeListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<IpRangeList, XmlParseError> {
+                                       -> Result<Vec<IpRange>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -23661,7 +23536,7 @@ impl IpRangeListDeserializer {
 /// Serialize `IpRangeList` contents to a `SignedRequest`.
 struct IpRangeListSerializer;
 impl IpRangeListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &IpRangeList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<IpRange>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             IpRangeSerializer::serialize(params, &key, obj);
@@ -23669,13 +23544,12 @@ impl IpRangeListSerializer {
     }
 }
 
-pub type IpRanges = Vec<String>;
 struct IpRangesDeserializer;
 impl IpRangesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<IpRanges, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -23711,14 +23585,12 @@ impl IpRangesDeserializer {
 
     }
 }
-pub type Ipv6Address = String;
-pub type Ipv6AddressList = Vec<String>;
 struct Ipv6AddressListDeserializer;
 impl Ipv6AddressListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Ipv6AddressList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -23758,7 +23630,7 @@ impl Ipv6AddressListDeserializer {
 /// Serialize `Ipv6AddressList` contents to a `SignedRequest`.
 struct Ipv6AddressListSerializer;
 impl Ipv6AddressListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Ipv6AddressList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -23815,13 +23687,12 @@ impl Ipv6CidrBlockDeserializer {
 
     }
 }
-pub type Ipv6CidrBlockSet = Vec<Ipv6CidrBlock>;
 struct Ipv6CidrBlockSetDeserializer;
 impl Ipv6CidrBlockSetDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Ipv6CidrBlockSet, XmlParseError> {
+                                       -> Result<Vec<Ipv6CidrBlock>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -23923,13 +23794,12 @@ impl Ipv6RangeSerializer {
     }
 }
 
-pub type Ipv6RangeList = Vec<Ipv6Range>;
 struct Ipv6RangeListDeserializer;
 impl Ipv6RangeListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Ipv6RangeList, XmlParseError> {
+                                       -> Result<Vec<Ipv6Range>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -23969,7 +23839,7 @@ impl Ipv6RangeListDeserializer {
 /// Serialize `Ipv6RangeList` contents to a `SignedRequest`.
 struct Ipv6RangeListSerializer;
 impl Ipv6RangeListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Ipv6RangeList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<Ipv6Range>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             Ipv6RangeSerializer::serialize(params, &key, obj);
@@ -23977,12 +23847,11 @@ impl Ipv6RangeListSerializer {
     }
 }
 
-pub type KeyNameStringList = Vec<String>;
 
 /// Serialize `KeyNameStringList` contents to a `SignedRequest`.
 struct KeyNameStringListSerializer;
 impl KeyNameStringListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &KeyNameStringList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -24108,13 +23977,12 @@ impl KeyPairInfoDeserializer {
 
     }
 }
-pub type KeyPairList = Vec<KeyPairInfo>;
 struct KeyPairListDeserializer;
 impl KeyPairListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<KeyPairList, XmlParseError> {
+                                       -> Result<Vec<KeyPairInfo>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -24154,7 +24022,7 @@ impl KeyPairListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct LaunchPermission {
     #[doc="<p>The name of the group.</p>"]
-    pub group: Option<PermissionGroup>,
+    pub group: Option<String>,
     #[doc="<p>The AWS account ID.</p>"]
     pub user_id: Option<String>,
 }
@@ -24225,13 +24093,12 @@ impl LaunchPermissionSerializer {
     }
 }
 
-pub type LaunchPermissionList = Vec<LaunchPermission>;
 struct LaunchPermissionListDeserializer;
 impl LaunchPermissionListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LaunchPermissionList, XmlParseError> {
+                                       -> Result<Vec<LaunchPermission>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -24271,7 +24138,7 @@ impl LaunchPermissionListDeserializer {
 /// Serialize `LaunchPermissionList` contents to a `SignedRequest`.
 struct LaunchPermissionListSerializer;
 impl LaunchPermissionListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &LaunchPermissionList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<LaunchPermission>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             LaunchPermissionSerializer::serialize(params, &key, obj);
@@ -24283,9 +24150,9 @@ impl LaunchPermissionListSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct LaunchPermissionModifications {
     #[doc="<p>The AWS account ID to add to the list of launch permissions for the AMI.</p>"]
-    pub add: Option<LaunchPermissionList>,
+    pub add: Option<Vec<LaunchPermission>>,
     #[doc="<p>The AWS account ID to remove from the list of launch permissions for the AMI.</p>"]
-    pub remove: Option<LaunchPermissionList>,
+    pub remove: Option<Vec<LaunchPermission>>,
 }
 
 
@@ -24318,28 +24185,28 @@ pub struct LaunchSpecification {
     #[doc="<p>Deprecated.</p>"]
     pub addressing_type: Option<String>,
     #[doc="<p>One or more block device mapping entries.</p> <p>Although you can specify encrypted EBS volumes in this block device mapping for your Spot Instances, these volumes are not encrypted.</p>"]
-    pub block_device_mappings: Option<BlockDeviceMappingList>,
+    pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
     #[doc="<p>Indicates whether the instance is optimized for EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal EBS I/O performance. This optimization isn't available with all instance types. Additional usage charges apply when using an EBS Optimized instance.</p> <p>Default: <code>false</code> </p>"]
-    pub ebs_optimized: Option<Boolean>,
+    pub ebs_optimized: Option<bool>,
     #[doc="<p>The IAM instance profile.</p>"]
     pub iam_instance_profile: Option<IamInstanceProfileSpecification>,
     #[doc="<p>The ID of the AMI.</p>"]
     pub image_id: Option<String>,
     #[doc="<p>The instance type.</p>"]
-    pub instance_type: Option<InstanceType>,
+    pub instance_type: Option<String>,
     #[doc="<p>The ID of the kernel.</p>"]
     pub kernel_id: Option<String>,
     #[doc="<p>The name of the key pair.</p>"]
     pub key_name: Option<String>,
     pub monitoring: Option<RunInstancesMonitoringEnabled>,
     #[doc="<p>One or more network interfaces. If you specify a network interface, you must specify subnet IDs and security group IDs using the network interface.</p>"]
-    pub network_interfaces: Option<InstanceNetworkInterfaceSpecificationList>,
+    pub network_interfaces: Option<Vec<InstanceNetworkInterfaceSpecification>>,
     #[doc="<p>The placement information for the instance.</p>"]
     pub placement: Option<SpotPlacement>,
     #[doc="<p>The ID of the RAM disk.</p>"]
     pub ramdisk_id: Option<String>,
     #[doc="<p>One or more security groups. When requesting instances in a VPC, you must specify the IDs of the security groups. When requesting instances in EC2-Classic, you can specify the names or the IDs of the security groups.</p>"]
-    pub security_groups: Option<GroupIdentifierList>,
+    pub security_groups: Option<Vec<GroupIdentifier>>,
     #[doc="<p>The ID of the subnet in which to launch the instance.</p>"]
     pub subnet_id: Option<String>,
     #[doc="<p>The user data to make available to the instances. If you are using an AWS SDK or command line tool, Base64-encoding is performed for you, and you can load the text from a file. Otherwise, you must provide Base64-encoded text.</p>"]
@@ -24446,13 +24313,13 @@ impl LaunchSpecificationDeserializer {
 
     }
 }
-pub type LaunchSpecsList = Vec<SpotFleetLaunchSpecification>;
 struct LaunchSpecsListDeserializer;
 impl LaunchSpecsListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<LaunchSpecsList, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<Vec<SpotFleetLaunchSpecification>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -24492,7 +24359,7 @@ impl LaunchSpecsListDeserializer {
 /// Serialize `LaunchSpecsList` contents to a `SignedRequest`.
 struct LaunchSpecsListSerializer;
 impl LaunchSpecsListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &LaunchSpecsList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<SpotFleetLaunchSpecification>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             SpotFleetLaunchSpecificationSerializer::serialize(params, &key, obj);
@@ -24500,13 +24367,12 @@ impl LaunchSpecsListSerializer {
     }
 }
 
-pub type ListingState = String;
 struct ListingStateDeserializer;
 impl ListingStateDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ListingState, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -24515,13 +24381,12 @@ impl ListingStateDeserializer {
 
     }
 }
-pub type ListingStatus = String;
 struct ListingStatusDeserializer;
 impl ListingStatusDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ListingStatus, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -24530,13 +24395,12 @@ impl ListingStatusDeserializer {
 
     }
 }
-pub type Long = i64;
 struct LongDeserializer;
 impl LongDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Long, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -24545,14 +24409,13 @@ impl LongDeserializer {
 
     }
 }
-pub type MaxResults = i64;
 #[doc="<p>Contains the parameters for ModifyHosts.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct ModifyHostsRequest {
     #[doc="<p>Specify whether to enable or disable auto-placement.</p>"]
-    pub auto_placement: AutoPlacement,
+    pub auto_placement: String,
     #[doc="<p>The host IDs of the Dedicated Hosts you want to modify.</p>"]
-    pub host_ids: RequestHostIdList,
+    pub host_ids: Vec<String>,
 }
 
 
@@ -24578,9 +24441,9 @@ impl ModifyHostsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ModifyHostsResult {
     #[doc="<p>The IDs of the Dedicated Hosts that were successfully modified.</p>"]
-    pub successful: Option<ResponseHostIdList>,
+    pub successful: Option<Vec<String>>,
     #[doc="<p>The IDs of the Dedicated Hosts that could not be modified. Check whether the setting you requested can be used.</p>"]
-    pub unsuccessful: Option<UnsuccessfulItemList>,
+    pub unsuccessful: Option<Vec<UnsuccessfulItem>>,
 }
 
 struct ModifyHostsResultDeserializer;
@@ -24637,7 +24500,7 @@ pub struct ModifyIdFormatRequest {
     #[doc="<p>The type of resource: <code>instance</code> | <code>reservation</code> | <code>snapshot</code> | <code>volume</code> </p>"]
     pub resource: String,
     #[doc="<p>Indicate whether the resource should use longer IDs (17-character IDs).</p>"]
-    pub use_long_ids: Boolean,
+    pub use_long_ids: bool,
 }
 
 
@@ -24665,7 +24528,7 @@ pub struct ModifyIdentityIdFormatRequest {
     #[doc="<p>The type of resource: <code>instance</code> | <code>reservation</code> | <code>snapshot</code> | <code>volume</code> </p>"]
     pub resource: String,
     #[doc="<p>Indicates whether the resource should use longer IDs (17-character IDs)</p>"]
-    pub use_long_ids: Boolean,
+    pub use_long_ids: bool,
 }
 
 
@@ -24694,19 +24557,19 @@ pub struct ModifyImageAttributeRequest {
     #[doc="<p>A description for the AMI.</p>"]
     pub description: Option<AttributeValue>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the AMI.</p>"]
     pub image_id: String,
     #[doc="<p>A launch permission modification.</p>"]
     pub launch_permission: Option<LaunchPermissionModifications>,
     #[doc="<p>The operation type.</p>"]
-    pub operation_type: Option<OperationType>,
+    pub operation_type: Option<String>,
     #[doc="<p>One or more product codes. After you add a product code to an AMI, it can't be removed. This is only valid when modifying the <code>productCodes</code> attribute.</p>"]
-    pub product_codes: Option<ProductCodeStringList>,
+    pub product_codes: Option<Vec<String>>,
     #[doc="<p>One or more user groups. This is only valid when modifying the <code>launchPermission</code> attribute.</p>"]
-    pub user_groups: Option<UserGroupStringList>,
+    pub user_groups: Option<Vec<String>>,
     #[doc="<p>One or more AWS account IDs. This is only valid when modifying the <code>launchPermission</code> attribute.</p>"]
-    pub user_ids: Option<UserIdStringList>,
+    pub user_ids: Option<Vec<String>>,
     #[doc="<p>The value of the attribute being modified. This is only valid when modifying the <code>description</code> attribute.</p>"]
     pub value: Option<String>,
 }
@@ -24769,19 +24632,19 @@ impl ModifyImageAttributeRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ModifyInstanceAttributeRequest {
     #[doc="<p>The name of the attribute.</p>"]
-    pub attribute: Option<InstanceAttributeName>,
+    pub attribute: Option<String>,
     #[doc="<p>Modifies the <code>DeleteOnTermination</code> attribute for volumes that are currently attached. The volume must be owned by the caller. If no value is specified for <code>DeleteOnTermination</code>, the default is <code>true</code> and the volume is deleted when the instance is terminated.</p> <p>To add instance store volumes to an Amazon EBS-backed instance, you must add them when you launch the instance. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-device-mapping-concepts.html#Using_OverridingAMIBDM\">Updating the Block Device Mapping when Launching an Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-    pub block_device_mappings: Option<InstanceBlockDeviceMappingSpecificationList>,
+    pub block_device_mappings: Option<Vec<InstanceBlockDeviceMappingSpecification>>,
     #[doc="<p>If the value is <code>true</code>, you can't terminate the instance using the Amazon EC2 console, CLI, or API; otherwise, you can. You cannot use this paramater for Spot Instances.</p>"]
     pub disable_api_termination: Option<AttributeBooleanValue>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>Specifies whether the instance is optimized for EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal EBS I/O performance. This optimization isn't available with all instance types. Additional usage charges apply when using an EBS Optimized instance.</p>"]
     pub ebs_optimized: Option<AttributeBooleanValue>,
     #[doc="<p>Set to <code>true</code> to enable enhanced networking with ENA for the instance.</p> <p>This option is supported only for HVM instances. Specifying this option with a PV instance can make it unreachable.</p>"]
     pub ena_support: Option<AttributeBooleanValue>,
     #[doc="<p>[EC2-VPC] Changes the security groups of the instance. You must specify at least one security group, even if it's just the default security group for the VPC. You must specify the security group ID, not the security group name.</p>"]
-    pub groups: Option<GroupIdStringList>,
+    pub groups: Option<Vec<String>>,
     #[doc="<p>The ID of the instance.</p>"]
     pub instance_id: String,
     #[doc="<p>Specifies whether an instance stops or terminates when you initiate shutdown from the instance (using the operating system command for system shutdown).</p>"]
@@ -24896,13 +24759,13 @@ impl ModifyInstanceAttributeRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ModifyInstancePlacementRequest {
     #[doc="<p>The new affinity setting for the instance.</p>"]
-    pub affinity: Option<Affinity>,
+    pub affinity: Option<String>,
     #[doc="<p>The ID of the Dedicated Host that the instance will have affinity with.</p>"]
     pub host_id: Option<String>,
     #[doc="<p>The ID of the instance that you are modifying.</p>"]
     pub instance_id: String,
     #[doc="<p>The tenancy of the instance that you are modifying.</p>"]
-    pub tenancy: Option<HostTenancy>,
+    pub tenancy: Option<String>,
 }
 
 
@@ -24933,7 +24796,7 @@ impl ModifyInstancePlacementRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ModifyInstancePlacementResult {
     #[doc="<p>Is <code>true</code> if the request succeeds, and an error otherwise.</p>"]
-    pub return_: Option<Boolean>,
+    pub return_: Option<bool>,
 }
 
 struct ModifyInstancePlacementResultDeserializer;
@@ -24986,9 +24849,9 @@ pub struct ModifyNetworkInterfaceAttributeRequest {
     #[doc="<p>A description for the network interface.</p>"]
     pub description: Option<AttributeValue>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>Changes the security groups for the network interface. The new set of groups you specify replaces the current set. You must specify at least one group, even if it's just the default security group in the VPC. You must specify the ID of the security group, not the name.</p>"]
-    pub groups: Option<SecurityGroupIdStringList>,
+    pub groups: Option<Vec<String>>,
     #[doc="<p>The ID of the network interface.</p>"]
     pub network_interface_id: String,
     #[doc="<p>Indicates whether source/destination checking is enabled. A value of <code>true</code> means checking is enabled, and <code>false</code> means checking is disabled. This value must be <code>false</code> for a NAT instance to perform NAT. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_NAT_Instance.html\">NAT Instances</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>"]
@@ -25044,9 +24907,9 @@ pub struct ModifyReservedInstancesRequest {
     #[doc="<p>A unique, case-sensitive token you provide to ensure idempotency of your modification request. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html\">Ensuring Idempotency</a>.</p>"]
     pub client_token: Option<String>,
     #[doc="<p>The IDs of the Reserved Instances to modify.</p>"]
-    pub reserved_instances_ids: ReservedInstancesIdStringList,
+    pub reserved_instances_ids: Vec<String>,
     #[doc="<p>The configuration settings for the Reserved Instances to modify.</p>"]
-    pub target_configurations: ReservedInstancesConfigurationList,
+    pub target_configurations: Vec<ReservedInstancesConfiguration>,
 }
 
 
@@ -25130,19 +24993,19 @@ impl ModifyReservedInstancesResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ModifySnapshotAttributeRequest {
     #[doc="<p>The snapshot attribute to modify.</p> <note> <p>Only volume creation permissions may be modified at the customer level.</p> </note>"]
-    pub attribute: Option<SnapshotAttributeName>,
+    pub attribute: Option<String>,
     #[doc="<p>A JSON representation of the snapshot attribute modification.</p>"]
     pub create_volume_permission: Option<CreateVolumePermissionModifications>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The group to modify for the snapshot.</p>"]
-    pub group_names: Option<GroupNameStringList>,
+    pub group_names: Option<Vec<String>>,
     #[doc="<p>The type of operation to perform to the attribute.</p>"]
-    pub operation_type: Option<OperationType>,
+    pub operation_type: Option<String>,
     #[doc="<p>The ID of the snapshot.</p>"]
     pub snapshot_id: String,
     #[doc="<p>The account ID to modify for the snapshot.</p>"]
-    pub user_ids: Option<UserIdStringList>,
+    pub user_ids: Option<Vec<String>>,
 }
 
 
@@ -25190,11 +25053,11 @@ impl ModifySnapshotAttributeRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ModifySpotFleetRequestRequest {
     #[doc="<p>Indicates whether running Spot instances should be terminated if the target capacity of the Spot fleet request is decreased below the current size of the Spot fleet.</p>"]
-    pub excess_capacity_termination_policy: Option<ExcessCapacityTerminationPolicy>,
+    pub excess_capacity_termination_policy: Option<String>,
     #[doc="<p>The ID of the Spot fleet request.</p>"]
     pub spot_fleet_request_id: String,
     #[doc="<p>The size of the fleet.</p>"]
-    pub target_capacity: Option<Integer>,
+    pub target_capacity: Option<i64>,
 }
 
 
@@ -25225,7 +25088,7 @@ impl ModifySpotFleetRequestRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ModifySpotFleetRequestResponse {
     #[doc="<p>Is <code>true</code> if the request succeeds, and an error otherwise.</p>"]
-    pub return_: Option<Boolean>,
+    pub return_: Option<bool>,
 }
 
 struct ModifySpotFleetRequestResponseDeserializer;
@@ -25316,7 +25179,7 @@ pub struct ModifyVolumeAttributeRequest {
     #[doc="<p>Indicates whether the volume should be auto-enabled for I/O operations.</p>"]
     pub auto_enable_io: Option<AttributeBooleanValue>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the volume.</p>"]
     pub volume_id: String,
 }
@@ -25347,14 +25210,14 @@ impl ModifyVolumeAttributeRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ModifyVolumeRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>Target IOPS rate of the volume to be modified.</p> <p>Only valid for Provisioned IOPS SSD (<code>io1</code>) volumes. For more information about <code>io1</code> IOPS configuration, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html#EBSVolumeTypes_piops\">http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html#EBSVolumeTypes_piops</a>.</p> <p>Default: If no IOPS value is specified, the existing value is retained. </p>"]
-    pub iops: Option<Integer>,
+    pub iops: Option<i64>,
     #[doc="<p>Target size in GiB of the volume to be modified. Target volume size must be greater than or equal to than the existing size of the volume. For information about available EBS volume sizes, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html\">http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html</a>.</p> <p>Default: If no size is specified, the existing size is retained. </p>"]
-    pub size: Option<Integer>,
+    pub size: Option<i64>,
     pub volume_id: String,
     #[doc="<p>Target EBS volume type of the volume to be modified</p> <p> The API does not support modifications for volume type <code>standard</code>. You also cannot change the type of a volume to <code>standard</code>. </p> <p>Default: If no type is specified, the existing type is retained. </p>"]
-    pub volume_type: Option<VolumeType>,
+    pub volume_type: Option<String>,
 }
 
 
@@ -25477,15 +25340,15 @@ impl ModifyVpcAttributeRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ModifyVpcEndpointRequest {
     #[doc="<p>One or more route tables IDs to associate with the endpoint.</p>"]
-    pub add_route_table_ids: Option<ValueStringList>,
+    pub add_route_table_ids: Option<Vec<String>>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>A policy document to attach to the endpoint. The policy must be in valid JSON format.</p>"]
     pub policy_document: Option<String>,
     #[doc="<p>One or more route table IDs to disassociate from the endpoint.</p>"]
-    pub remove_route_table_ids: Option<ValueStringList>,
+    pub remove_route_table_ids: Option<Vec<String>>,
     #[doc="<p>Specify <code>true</code> to reset the policy document to the default policy. The default policy allows access to the service.</p>"]
-    pub reset_policy: Option<Boolean>,
+    pub reset_policy: Option<bool>,
     #[doc="<p>The ID of the endpoint.</p>"]
     pub vpc_endpoint_id: String,
 }
@@ -25530,7 +25393,7 @@ impl ModifyVpcEndpointRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ModifyVpcEndpointResult {
     #[doc="<p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>"]
-    pub return_: Option<Boolean>,
+    pub return_: Option<bool>,
 }
 
 struct ModifyVpcEndpointResultDeserializer;
@@ -25580,7 +25443,7 @@ pub struct ModifyVpcPeeringConnectionOptionsRequest {
     #[doc="<p>The VPC peering connection options for the accepter VPC.</p>"]
     pub accepter_peering_connection_options: Option<PeeringConnectionOptionsRequest>,
     #[doc="<p>Checks whether you have the required permissions for the operation, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The VPC peering connection options for the requester VPC.</p>"]
     pub requester_peering_connection_options: Option<PeeringConnectionOptionsRequest>,
     #[doc="<p>The ID of the VPC peering connection.</p>"]
@@ -25677,9 +25540,9 @@ impl ModifyVpcPeeringConnectionOptionsResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct MonitorInstancesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more instance IDs.</p>"]
-    pub instance_ids: InstanceIdStringList,
+    pub instance_ids: Vec<String>,
 }
 
 
@@ -25706,7 +25569,7 @@ impl MonitorInstancesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct MonitorInstancesResult {
     #[doc="<p>The monitoring information.</p>"]
-    pub instance_monitorings: Option<InstanceMonitoringList>,
+    pub instance_monitorings: Option<Vec<InstanceMonitoring>>,
 }
 
 struct MonitorInstancesResultDeserializer;
@@ -25756,7 +25619,7 @@ impl MonitorInstancesResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct Monitoring {
     #[doc="<p>Indicates whether detailed monitoring is enabled. Otherwise, basic monitoring is enabled.</p>"]
-    pub state: Option<MonitoringState>,
+    pub state: Option<String>,
 }
 
 struct MonitoringDeserializer;
@@ -25801,13 +25664,12 @@ impl MonitoringDeserializer {
 
     }
 }
-pub type MonitoringState = String;
 struct MonitoringStateDeserializer;
 impl MonitoringStateDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<MonitoringState, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -25820,7 +25682,7 @@ impl MonitoringStateDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct MoveAddressToVpcRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The Elastic IP address.</p>"]
     pub public_ip: String,
 }
@@ -25849,7 +25711,7 @@ pub struct MoveAddressToVpcResult {
     #[doc="<p>The allocation ID for the Elastic IP address.</p>"]
     pub allocation_id: Option<String>,
     #[doc="<p>The status of the move of the IP address.</p>"]
-    pub status: Option<Status>,
+    pub status: Option<String>,
 }
 
 struct MoveAddressToVpcResultDeserializer;
@@ -25898,13 +25760,12 @@ impl MoveAddressToVpcResultDeserializer {
 
     }
 }
-pub type MoveStatus = String;
 struct MoveStatusDeserializer;
 impl MoveStatusDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<MoveStatus, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -25917,7 +25778,7 @@ impl MoveStatusDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct MovingAddressStatus {
     #[doc="<p>The status of the Elastic IP address that's being moved to the EC2-VPC platform, or restored to the EC2-Classic platform.</p>"]
-    pub move_status: Option<MoveStatus>,
+    pub move_status: Option<String>,
     #[doc="<p>The Elastic IP address.</p>"]
     pub public_ip: Option<String>,
 }
@@ -25969,13 +25830,12 @@ impl MovingAddressStatusDeserializer {
 
     }
 }
-pub type MovingAddressStatusSet = Vec<MovingAddressStatus>;
 struct MovingAddressStatusSetDeserializer;
 impl MovingAddressStatusSetDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<MovingAddressStatusSet, XmlParseError> {
+                                       -> Result<Vec<MovingAddressStatus>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -26015,21 +25875,21 @@ impl MovingAddressStatusSetDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct NatGateway {
     #[doc="<p>The date and time the NAT gateway was created.</p>"]
-    pub create_time: Option<DateTime>,
+    pub create_time: Option<String>,
     #[doc="<p>The date and time the NAT gateway was deleted, if applicable.</p>"]
-    pub delete_time: Option<DateTime>,
+    pub delete_time: Option<String>,
     #[doc="<p>If the NAT gateway could not be created, specifies the error code for the failure. (<code>InsufficientFreeAddressesInSubnet</code> | <code>Gateway.NotAttached</code> | <code>InvalidAllocationID.NotFound</code> | <code>Resource.AlreadyAssociated</code> | <code>InternalError</code> | <code>InvalidSubnetID.NotFound</code>)</p>"]
     pub failure_code: Option<String>,
     #[doc="<p>If the NAT gateway could not be created, specifies the error message for the failure, that corresponds to the error code.</p> <ul> <li> <p>For InsufficientFreeAddressesInSubnet: \"Subnet has insufficient free addresses to create this NAT gateway\"</p> </li> <li> <p>For Gateway.NotAttached: \"Network vpc-xxxxxxxx has no Internet gateway attached\"</p> </li> <li> <p>For InvalidAllocationID.NotFound: \"Elastic IP address eipalloc-xxxxxxxx could not be associated with this NAT gateway\"</p> </li> <li> <p>For Resource.AlreadyAssociated: \"Elastic IP address eipalloc-xxxxxxxx is already associated\"</p> </li> <li> <p>For InternalError: \"Network interface eni-xxxxxxxx, created and used internally by this NAT gateway is in an invalid state. Please try again.\"</p> </li> <li> <p>For InvalidSubnetID.NotFound: \"The specified subnet subnet-xxxxxxxx does not exist or could not be found.\"</p> </li> </ul>"]
     pub failure_message: Option<String>,
     #[doc="<p>Information about the IP addresses and network interface associated with the NAT gateway.</p>"]
-    pub nat_gateway_addresses: Option<NatGatewayAddressList>,
+    pub nat_gateway_addresses: Option<Vec<NatGatewayAddress>>,
     #[doc="<p>The ID of the NAT gateway.</p>"]
     pub nat_gateway_id: Option<String>,
     #[doc="<p>Reserved. If you need to sustain traffic greater than the <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-nat-gateway.html\">documented limits</a>, contact us through the <a href=\"https://console.aws.amazon.com/support/home?\">Support Center</a>.</p>"]
     pub provisioned_bandwidth: Option<ProvisionedBandwidth>,
     #[doc="<p>The state of the NAT gateway.</p> <ul> <li> <p> <code>pending</code>: The NAT gateway is being created and is not ready to process traffic.</p> </li> <li> <p> <code>failed</code>: The NAT gateway could not be created. Check the <code>failureCode</code> and <code>failureMessage</code> fields for the reason.</p> </li> <li> <p> <code>available</code>: The NAT gateway is able to process traffic. This status remains until you delete the NAT gateway, and does not indicate the health of the NAT gateway.</p> </li> <li> <p> <code>deleting</code>: The NAT gateway is in the process of being terminated and may still be processing traffic.</p> </li> <li> <p> <code>deleted</code>: The NAT gateway has been terminated and is no longer processing traffic.</p> </li> </ul>"]
-    pub state: Option<NatGatewayState>,
+    pub state: Option<String>,
     #[doc="<p>The ID of the subnet in which the NAT gateway is located.</p>"]
     pub subnet_id: Option<String>,
     #[doc="<p>The ID of the VPC in which the NAT gateway is located.</p>"]
@@ -26185,13 +26045,12 @@ impl NatGatewayAddressDeserializer {
 
     }
 }
-pub type NatGatewayAddressList = Vec<NatGatewayAddress>;
 struct NatGatewayAddressListDeserializer;
 impl NatGatewayAddressListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NatGatewayAddressList, XmlParseError> {
+                                       -> Result<Vec<NatGatewayAddress>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -26227,13 +26086,12 @@ impl NatGatewayAddressListDeserializer {
 
     }
 }
-pub type NatGatewayList = Vec<NatGateway>;
 struct NatGatewayListDeserializer;
 impl NatGatewayListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NatGatewayList, XmlParseError> {
+                                       -> Result<Vec<NatGateway>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -26269,13 +26127,12 @@ impl NatGatewayListDeserializer {
 
     }
 }
-pub type NatGatewayState = String;
 struct NatGatewayStateDeserializer;
 impl NatGatewayStateDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NatGatewayState, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -26288,15 +26145,15 @@ impl NatGatewayStateDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct NetworkAcl {
     #[doc="<p>Any associations between the network ACL and one or more subnets</p>"]
-    pub associations: Option<NetworkAclAssociationList>,
+    pub associations: Option<Vec<NetworkAclAssociation>>,
     #[doc="<p>One or more entries (rules) in the network ACL.</p>"]
-    pub entries: Option<NetworkAclEntryList>,
+    pub entries: Option<Vec<NetworkAclEntry>>,
     #[doc="<p>Indicates whether this is the default network ACL for the VPC.</p>"]
-    pub is_default: Option<Boolean>,
+    pub is_default: Option<bool>,
     #[doc="<p>The ID of the network ACL.</p>"]
     pub network_acl_id: Option<String>,
     #[doc="<p>Any tags assigned to the network ACL.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>The ID of the VPC for the network ACL.</p>"]
     pub vpc_id: Option<String>,
 }
@@ -26425,13 +26282,12 @@ impl NetworkAclAssociationDeserializer {
 
     }
 }
-pub type NetworkAclAssociationList = Vec<NetworkAclAssociation>;
 struct NetworkAclAssociationListDeserializer;
 impl NetworkAclAssociationListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NetworkAclAssociationList, XmlParseError> {
+                                       -> Result<Vec<NetworkAclAssociation>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -26474,7 +26330,7 @@ pub struct NetworkAclEntry {
     #[doc="<p>The IPv4 network range to allow or deny, in CIDR notation.</p>"]
     pub cidr_block: Option<String>,
     #[doc="<p>Indicates whether the rule is an egress rule (applied to traffic leaving the subnet).</p>"]
-    pub egress: Option<Boolean>,
+    pub egress: Option<bool>,
     #[doc="<p>ICMP protocol: The ICMP type and code.</p>"]
     pub icmp_type_code: Option<IcmpTypeCode>,
     #[doc="<p>The IPv6 network range to allow or deny, in CIDR notation.</p>"]
@@ -26484,9 +26340,9 @@ pub struct NetworkAclEntry {
     #[doc="<p>The protocol. A value of <code>-1</code> means all protocols.</p>"]
     pub protocol: Option<String>,
     #[doc="<p>Indicates whether to allow or deny the traffic that matches the rule.</p>"]
-    pub rule_action: Option<RuleAction>,
+    pub rule_action: Option<String>,
     #[doc="<p>The rule number for the entry. ACL entries are processed in ascending order by rule number.</p>"]
-    pub rule_number: Option<Integer>,
+    pub rule_number: Option<i64>,
 }
 
 struct NetworkAclEntryDeserializer;
@@ -26561,13 +26417,12 @@ impl NetworkAclEntryDeserializer {
 
     }
 }
-pub type NetworkAclEntryList = Vec<NetworkAclEntry>;
 struct NetworkAclEntryListDeserializer;
 impl NetworkAclEntryListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NetworkAclEntryList, XmlParseError> {
+                                       -> Result<Vec<NetworkAclEntry>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -26603,13 +26458,12 @@ impl NetworkAclEntryListDeserializer {
 
     }
 }
-pub type NetworkAclList = Vec<NetworkAcl>;
 struct NetworkAclListDeserializer;
 impl NetworkAclListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NetworkAclList, XmlParseError> {
+                                       -> Result<Vec<NetworkAcl>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -26657,11 +26511,11 @@ pub struct NetworkInterface {
     #[doc="<p>A description.</p>"]
     pub description: Option<String>,
     #[doc="<p>Any security groups for the network interface.</p>"]
-    pub groups: Option<GroupIdentifierList>,
+    pub groups: Option<Vec<GroupIdentifier>>,
     #[doc="<p>The type of interface.</p>"]
-    pub interface_type: Option<NetworkInterfaceType>,
+    pub interface_type: Option<String>,
     #[doc="<p>The IPv6 addresses associated with the network interface.</p>"]
-    pub ipv_6_addresses: Option<NetworkInterfaceIpv6AddressesList>,
+    pub ipv_6_addresses: Option<Vec<NetworkInterfaceIpv6Address>>,
     #[doc="<p>The MAC address.</p>"]
     pub mac_address: Option<String>,
     #[doc="<p>The ID of the network interface.</p>"]
@@ -26673,19 +26527,19 @@ pub struct NetworkInterface {
     #[doc="<p>The IPv4 address of the network interface within the subnet.</p>"]
     pub private_ip_address: Option<String>,
     #[doc="<p>The private IPv4 addresses associated with the network interface.</p>"]
-    pub private_ip_addresses: Option<NetworkInterfacePrivateIpAddressList>,
+    pub private_ip_addresses: Option<Vec<NetworkInterfacePrivateIpAddress>>,
     #[doc="<p>The ID of the entity that launched the instance on your behalf (for example, AWS Management Console or Auto Scaling).</p>"]
     pub requester_id: Option<String>,
     #[doc="<p>Indicates whether the network interface is being managed by AWS.</p>"]
-    pub requester_managed: Option<Boolean>,
+    pub requester_managed: Option<bool>,
     #[doc="<p>Indicates whether traffic to or from the instance is validated.</p>"]
-    pub source_dest_check: Option<Boolean>,
+    pub source_dest_check: Option<bool>,
     #[doc="<p>The status of the network interface.</p>"]
-    pub status: Option<NetworkInterfaceStatus>,
+    pub status: Option<String>,
     #[doc="<p>The ID of the subnet.</p>"]
     pub subnet_id: Option<String>,
     #[doc="<p>Any tags assigned to the network interface.</p>"]
-    pub tag_set: Option<TagList>,
+    pub tag_set: Option<Vec<Tag>>,
     #[doc="<p>The ID of the VPC.</p>"]
     pub vpc_id: Option<String>,
 }
@@ -26890,19 +26744,19 @@ impl NetworkInterfaceAssociationDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct NetworkInterfaceAttachment {
     #[doc="<p>The timestamp indicating when the attachment initiated.</p>"]
-    pub attach_time: Option<DateTime>,
+    pub attach_time: Option<String>,
     #[doc="<p>The ID of the network interface attachment.</p>"]
     pub attachment_id: Option<String>,
     #[doc="<p>Indicates whether the network interface is deleted when the instance is terminated.</p>"]
-    pub delete_on_termination: Option<Boolean>,
+    pub delete_on_termination: Option<bool>,
     #[doc="<p>The device index of the network interface attachment on the instance.</p>"]
-    pub device_index: Option<Integer>,
+    pub device_index: Option<i64>,
     #[doc="<p>The ID of the instance.</p>"]
     pub instance_id: Option<String>,
     #[doc="<p>The AWS account ID of the owner of the instance.</p>"]
     pub instance_owner_id: Option<String>,
     #[doc="<p>The attachment state.</p>"]
-    pub status: Option<AttachmentStatus>,
+    pub status: Option<String>,
 }
 
 struct NetworkInterfaceAttachmentDeserializer;
@@ -26980,7 +26834,7 @@ pub struct NetworkInterfaceAttachmentChanges {
     #[doc="<p>The ID of the network interface attachment.</p>"]
     pub attachment_id: Option<String>,
     #[doc="<p>Indicates whether the network interface is deleted when the instance is terminated.</p>"]
-    pub delete_on_termination: Option<Boolean>,
+    pub delete_on_termination: Option<bool>,
 }
 
 
@@ -27004,13 +26858,11 @@ impl NetworkInterfaceAttachmentChangesSerializer {
     }
 }
 
-pub type NetworkInterfaceAttribute = String;
-pub type NetworkInterfaceIdList = Vec<String>;
 
 /// Serialize `NetworkInterfaceIdList` contents to a `SignedRequest`.
 struct NetworkInterfaceIdListSerializer;
 impl NetworkInterfaceIdListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &NetworkInterfaceIdList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -27067,14 +26919,13 @@ impl NetworkInterfaceIpv6AddressDeserializer {
 
     }
 }
-pub type NetworkInterfaceIpv6AddressesList = Vec<NetworkInterfaceIpv6Address>;
 struct NetworkInterfaceIpv6AddressesListDeserializer;
 impl NetworkInterfaceIpv6AddressesListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>
         (tag_name: &str,
          stack: &mut T)
-         -> Result<NetworkInterfaceIpv6AddressesList, XmlParseError> {
+         -> Result<Vec<NetworkInterfaceIpv6Address>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -27111,13 +26962,12 @@ impl NetworkInterfaceIpv6AddressesListDeserializer {
 
     }
 }
-pub type NetworkInterfaceList = Vec<NetworkInterface>;
 struct NetworkInterfaceListDeserializer;
 impl NetworkInterfaceListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NetworkInterfaceList, XmlParseError> {
+                                       -> Result<Vec<NetworkInterface>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -27159,7 +27009,7 @@ pub struct NetworkInterfacePrivateIpAddress {
     #[doc="<p>The association information for an Elastic IP address (IPv4) associated with the network interface.</p>"]
     pub association: Option<NetworkInterfaceAssociation>,
     #[doc="<p>Indicates whether this IPv4 address is the primary private IPv4 address of the network interface.</p>"]
-    pub primary: Option<Boolean>,
+    pub primary: Option<bool>,
     #[doc="<p>The private DNS name.</p>"]
     pub private_dns_name: Option<String>,
     #[doc="<p>The private IPv4 address.</p>"]
@@ -27222,14 +27072,13 @@ impl NetworkInterfacePrivateIpAddressDeserializer {
 
     }
 }
-pub type NetworkInterfacePrivateIpAddressList = Vec<NetworkInterfacePrivateIpAddress>;
 struct NetworkInterfacePrivateIpAddressListDeserializer;
 impl NetworkInterfacePrivateIpAddressListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>
         (tag_name: &str,
          stack: &mut T)
-         -> Result<NetworkInterfacePrivateIpAddressList, XmlParseError> {
+         -> Result<Vec<NetworkInterfacePrivateIpAddress>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -27265,13 +27114,12 @@ impl NetworkInterfacePrivateIpAddressListDeserializer {
 
     }
 }
-pub type NetworkInterfaceStatus = String;
 struct NetworkInterfaceStatusDeserializer;
 impl NetworkInterfaceStatusDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NetworkInterfaceStatus, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -27280,13 +27128,12 @@ impl NetworkInterfaceStatusDeserializer {
 
     }
 }
-pub type NetworkInterfaceType = String;
 struct NetworkInterfaceTypeDeserializer;
 impl NetworkInterfaceTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NetworkInterfaceType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -27298,7 +27145,7 @@ impl NetworkInterfaceTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct NewDhcpConfiguration {
     pub key: Option<String>,
-    pub values: Option<ValueStringList>,
+    pub values: Option<Vec<String>>,
 }
 
 
@@ -27323,12 +27170,11 @@ impl NewDhcpConfigurationSerializer {
     }
 }
 
-pub type NewDhcpConfigurationList = Vec<NewDhcpConfiguration>;
 
 /// Serialize `NewDhcpConfigurationList` contents to a `SignedRequest`.
 struct NewDhcpConfigurationListSerializer;
 impl NewDhcpConfigurationListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &NewDhcpConfigurationList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<NewDhcpConfiguration>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             NewDhcpConfigurationSerializer::serialize(params, &key, obj);
@@ -27336,13 +27182,12 @@ impl NewDhcpConfigurationListSerializer {
     }
 }
 
-pub type NextToken = String;
 struct NextTokenDeserializer;
 impl NextTokenDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<NextToken, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -27351,12 +27196,11 @@ impl NextTokenDeserializer {
 
     }
 }
-pub type OccurrenceDayRequestSet = Vec<Integer>;
 
 /// Serialize `OccurrenceDayRequestSet` contents to a `SignedRequest`.
 struct OccurrenceDayRequestSetSerializer;
 impl OccurrenceDayRequestSetSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &OccurrenceDayRequestSet) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<i64>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj.to_string());
@@ -27364,13 +27208,12 @@ impl OccurrenceDayRequestSetSerializer {
     }
 }
 
-pub type OccurrenceDaySet = Vec<Integer>;
 struct OccurrenceDaySetDeserializer;
 impl OccurrenceDaySetDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<OccurrenceDaySet, XmlParseError> {
+                                       -> Result<Vec<i64>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -27406,13 +27249,12 @@ impl OccurrenceDaySetDeserializer {
 
     }
 }
-pub type OfferingClassType = String;
 struct OfferingClassTypeDeserializer;
 impl OfferingClassTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<OfferingClassType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -27421,13 +27263,12 @@ impl OfferingClassTypeDeserializer {
 
     }
 }
-pub type OfferingTypeValues = String;
 struct OfferingTypeValuesDeserializer;
 impl OfferingTypeValuesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<OfferingTypeValues, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -27436,13 +27277,11 @@ impl OfferingTypeValuesDeserializer {
 
     }
 }
-pub type OperationType = String;
-pub type OwnerStringList = Vec<String>;
 
 /// Serialize `OwnerStringList` contents to a `SignedRequest`.
 struct OwnerStringListSerializer;
 impl OwnerStringListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &OwnerStringList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -27450,13 +27289,12 @@ impl OwnerStringListSerializer {
     }
 }
 
-pub type PaymentOption = String;
 struct PaymentOptionDeserializer;
 impl PaymentOptionDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PaymentOption, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -27537,11 +27375,11 @@ impl PciIdDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct PeeringConnectionOptions {
     #[doc="<p>If true, enables a local VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the peer VPC.</p>"]
-    pub allow_dns_resolution_from_remote_vpc: Option<Boolean>,
+    pub allow_dns_resolution_from_remote_vpc: Option<bool>,
     #[doc="<p>If true, enables outbound communication from an EC2-Classic instance that's linked to a local VPC via ClassicLink to instances in a peer VPC.</p>"]
-    pub allow_egress_from_local_classic_link_to_remote_vpc: Option<Boolean>,
+    pub allow_egress_from_local_classic_link_to_remote_vpc: Option<bool>,
     #[doc="<p>If true, enables outbound communication from instances in a local VPC to an EC2-Classic instance that's linked to a peer VPC via ClassicLink.</p>"]
-    pub allow_egress_from_local_vpc_to_remote_classic_link: Option<Boolean>,
+    pub allow_egress_from_local_vpc_to_remote_classic_link: Option<bool>,
 }
 
 struct PeeringConnectionOptionsDeserializer;
@@ -27601,11 +27439,11 @@ impl PeeringConnectionOptionsDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct PeeringConnectionOptionsRequest {
     #[doc="<p>If true, enables a local VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the peer VPC.</p>"]
-    pub allow_dns_resolution_from_remote_vpc: Option<Boolean>,
+    pub allow_dns_resolution_from_remote_vpc: Option<bool>,
     #[doc="<p>If true, enables outbound communication from an EC2-Classic instance that's linked to a local VPC via ClassicLink to instances in a peer VPC.</p>"]
-    pub allow_egress_from_local_classic_link_to_remote_vpc: Option<Boolean>,
+    pub allow_egress_from_local_classic_link_to_remote_vpc: Option<bool>,
     #[doc="<p>If true, enables outbound communication from instances in a local VPC to an EC2-Classic instance that's linked to a peer VPC via ClassicLink.</p>"]
-    pub allow_egress_from_local_vpc_to_remote_classic_link: Option<Boolean>,
+    pub allow_egress_from_local_vpc_to_remote_classic_link: Option<bool>,
 }
 
 
@@ -27634,13 +27472,12 @@ impl PeeringConnectionOptionsRequestSerializer {
     }
 }
 
-pub type PermissionGroup = String;
 struct PermissionGroupDeserializer;
 impl PermissionGroupDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PermissionGroup, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -27663,7 +27500,7 @@ pub struct Placement {
     #[doc="<p>Reserved for future use.</p>"]
     pub spread_domain: Option<String>,
     #[doc="<p>The tenancy of the instance (if the instance is running in a VPC). An instance with a tenancy of <code>dedicated</code> runs on single-tenant hardware. The <code>host</code> tenancy is not supported for the <a>ImportInstance</a> command.</p>"]
-    pub tenancy: Option<Tenancy>,
+    pub tenancy: Option<String>,
 }
 
 struct PlacementDeserializer;
@@ -27767,9 +27604,9 @@ pub struct PlacementGroup {
     #[doc="<p>The name of the placement group.</p>"]
     pub group_name: Option<String>,
     #[doc="<p>The state of the placement group.</p>"]
-    pub state: Option<PlacementGroupState>,
+    pub state: Option<String>,
     #[doc="<p>The placement strategy.</p>"]
-    pub strategy: Option<PlacementStrategy>,
+    pub strategy: Option<String>,
 }
 
 struct PlacementGroupDeserializer;
@@ -27824,13 +27661,12 @@ impl PlacementGroupDeserializer {
 
     }
 }
-pub type PlacementGroupList = Vec<PlacementGroup>;
 struct PlacementGroupListDeserializer;
 impl PlacementGroupListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PlacementGroupList, XmlParseError> {
+                                       -> Result<Vec<PlacementGroup>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -27866,13 +27702,12 @@ impl PlacementGroupListDeserializer {
 
     }
 }
-pub type PlacementGroupState = String;
 struct PlacementGroupStateDeserializer;
 impl PlacementGroupStateDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PlacementGroupState, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -27881,12 +27716,11 @@ impl PlacementGroupStateDeserializer {
 
     }
 }
-pub type PlacementGroupStringList = Vec<String>;
 
 /// Serialize `PlacementGroupStringList` contents to a `SignedRequest`.
 struct PlacementGroupStringListSerializer;
 impl PlacementGroupStringListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &PlacementGroupStringList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -27894,13 +27728,12 @@ impl PlacementGroupStringListSerializer {
     }
 }
 
-pub type PlacementStrategy = String;
 struct PlacementStrategyDeserializer;
 impl PlacementStrategyDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PlacementStrategy, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -27909,13 +27742,12 @@ impl PlacementStrategyDeserializer {
 
     }
 }
-pub type PlatformValues = String;
 struct PlatformValuesDeserializer;
 impl PlatformValuesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PlatformValues, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -27928,9 +27760,9 @@ impl PlatformValuesDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct PortRange {
     #[doc="<p>The first port in the range.</p>"]
-    pub from: Option<Integer>,
+    pub from: Option<i64>,
     #[doc="<p>The last port in the range.</p>"]
-    pub to: Option<Integer>,
+    pub to: Option<i64>,
 }
 
 struct PortRangeDeserializer;
@@ -28001,7 +27833,7 @@ impl PortRangeSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct PrefixList {
     #[doc="<p>The IP address range of the AWS service.</p>"]
-    pub cidrs: Option<ValueStringList>,
+    pub cidrs: Option<Vec<String>>,
     #[doc="<p>The ID of the prefix.</p>"]
     pub prefix_list_id: Option<String>,
     #[doc="<p>The name of the prefix.</p>"]
@@ -28125,13 +27957,12 @@ impl PrefixListIdSerializer {
     }
 }
 
-pub type PrefixListIdList = Vec<PrefixListId>;
 struct PrefixListIdListDeserializer;
 impl PrefixListIdListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PrefixListIdList, XmlParseError> {
+                                       -> Result<Vec<PrefixListId>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -28171,7 +28002,7 @@ impl PrefixListIdListDeserializer {
 /// Serialize `PrefixListIdList` contents to a `SignedRequest`.
 struct PrefixListIdListSerializer;
 impl PrefixListIdListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &PrefixListIdList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<PrefixListId>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             PrefixListIdSerializer::serialize(params, &key, obj);
@@ -28179,13 +28010,12 @@ impl PrefixListIdListSerializer {
     }
 }
 
-pub type PrefixListIdSet = Vec<String>;
 struct PrefixListIdSetDeserializer;
 impl PrefixListIdSetDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PrefixListIdSet, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -28221,13 +28051,12 @@ impl PrefixListIdSetDeserializer {
 
     }
 }
-pub type PrefixListSet = Vec<PrefixList>;
 struct PrefixListSetDeserializer;
 impl PrefixListSetDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PrefixListSet, XmlParseError> {
+                                       -> Result<Vec<PrefixList>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -28267,13 +28096,13 @@ impl PrefixListSetDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct PriceSchedule {
     #[doc="<p>The current price schedule, as determined by the term remaining for the Reserved Instance in the listing.</p> <p>A specific price schedule is always in effect, but only one price schedule can be active at any time. Take, for example, a Reserved Instance listing that has five months remaining in its term. When you specify price schedules for five months and two months, this means that schedule 1, covering the first three months of the remaining term, will be active during months 5, 4, and 3. Then schedule 2, covering the last two months of the term, will be active for months 2 and 1.</p>"]
-    pub active: Option<Boolean>,
+    pub active: Option<bool>,
     #[doc="<p>The currency for transacting the Reserved Instance resale. At this time, the only supported currency is <code>USD</code>.</p>"]
-    pub currency_code: Option<CurrencyCodeValues>,
+    pub currency_code: Option<String>,
     #[doc="<p>The fixed price for the term.</p>"]
-    pub price: Option<Double>,
+    pub price: Option<f64>,
     #[doc="<p>The number of months remaining in the reservation. For example, 2 is the second to the last month before the capacity reservation expires.</p>"]
-    pub term: Option<Long>,
+    pub term: Option<i64>,
 }
 
 struct PriceScheduleDeserializer;
@@ -28329,13 +28158,12 @@ impl PriceScheduleDeserializer {
 
     }
 }
-pub type PriceScheduleList = Vec<PriceSchedule>;
 struct PriceScheduleListDeserializer;
 impl PriceScheduleListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PriceScheduleList, XmlParseError> {
+                                       -> Result<Vec<PriceSchedule>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -28375,11 +28203,11 @@ impl PriceScheduleListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct PriceScheduleSpecification {
     #[doc="<p>The currency for transacting the Reserved Instance resale. At this time, the only supported currency is <code>USD</code>.</p>"]
-    pub currency_code: Option<CurrencyCodeValues>,
+    pub currency_code: Option<String>,
     #[doc="<p>The fixed price for the term.</p>"]
-    pub price: Option<Double>,
+    pub price: Option<f64>,
     #[doc="<p>The number of months remaining in the reservation. For example, 2 is the second to the last month before the capacity reservation expires.</p>"]
-    pub term: Option<Long>,
+    pub term: Option<i64>,
 }
 
 
@@ -28405,12 +28233,11 @@ impl PriceScheduleSpecificationSerializer {
     }
 }
 
-pub type PriceScheduleSpecificationList = Vec<PriceScheduleSpecification>;
 
 /// Serialize `PriceScheduleSpecificationList` contents to a `SignedRequest`.
 struct PriceScheduleSpecificationListSerializer;
 impl PriceScheduleSpecificationListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &PriceScheduleSpecificationList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<PriceScheduleSpecification>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             PriceScheduleSpecificationSerializer::serialize(params, &key, obj);
@@ -28422,9 +28249,9 @@ impl PriceScheduleSpecificationListSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct PricingDetail {
     #[doc="<p>The number of reservations available for the price.</p>"]
-    pub count: Option<Integer>,
+    pub count: Option<i64>,
     #[doc="<p>The price per instance.</p>"]
-    pub price: Option<Double>,
+    pub price: Option<f64>,
 }
 
 struct PricingDetailDeserializer;
@@ -28472,13 +28299,12 @@ impl PricingDetailDeserializer {
 
     }
 }
-pub type PricingDetailsList = Vec<PricingDetail>;
 struct PricingDetailsListDeserializer;
 impl PricingDetailsListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PricingDetailsList, XmlParseError> {
+                                       -> Result<Vec<PricingDetail>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -28514,12 +28340,13 @@ impl PricingDetailsListDeserializer {
 
     }
 }
-pub type PrivateIpAddressConfigSet = Vec<ScheduledInstancesPrivateIpAddressConfig>;
 
 /// Serialize `PrivateIpAddressConfigSet` contents to a `SignedRequest`.
 struct PrivateIpAddressConfigSetSerializer;
 impl PrivateIpAddressConfigSetSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &PrivateIpAddressConfigSet) {
+    fn serialize(params: &mut Params,
+                 name: &str,
+                 obj: &Vec<ScheduledInstancesPrivateIpAddressConfig>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             ScheduledInstancesPrivateIpAddressConfigSerializer::serialize(params, &key, obj);
@@ -28531,7 +28358,7 @@ impl PrivateIpAddressConfigSetSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct PrivateIpAddressSpecification {
     #[doc="<p>Indicates whether the private IPv4 address is the primary private IPv4 address. Only one IPv4 address can be designated as primary.</p>"]
-    pub primary: Option<Boolean>,
+    pub primary: Option<bool>,
     #[doc="<p>The private IPv4 addresses.</p>"]
     pub private_ip_address: String,
 }
@@ -28602,14 +28429,13 @@ impl PrivateIpAddressSpecificationSerializer {
     }
 }
 
-pub type PrivateIpAddressSpecificationList = Vec<PrivateIpAddressSpecification>;
 struct PrivateIpAddressSpecificationListDeserializer;
 impl PrivateIpAddressSpecificationListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>
         (tag_name: &str,
          stack: &mut T)
-         -> Result<PrivateIpAddressSpecificationList, XmlParseError> {
+         -> Result<Vec<PrivateIpAddressSpecification>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -28649,7 +28475,7 @@ impl PrivateIpAddressSpecificationListDeserializer {
 /// Serialize `PrivateIpAddressSpecificationList` contents to a `SignedRequest`.
 struct PrivateIpAddressSpecificationListSerializer;
 impl PrivateIpAddressSpecificationListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &PrivateIpAddressSpecificationList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<PrivateIpAddressSpecification>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             PrivateIpAddressSpecificationSerializer::serialize(params, &key, obj);
@@ -28657,12 +28483,11 @@ impl PrivateIpAddressSpecificationListSerializer {
     }
 }
 
-pub type PrivateIpAddressStringList = Vec<String>;
 
 /// Serialize `PrivateIpAddressStringList` contents to a `SignedRequest`.
 struct PrivateIpAddressStringListSerializer;
 impl PrivateIpAddressStringListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &PrivateIpAddressStringList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -28676,7 +28501,7 @@ pub struct ProductCode {
     #[doc="<p>The product code.</p>"]
     pub product_code_id: Option<String>,
     #[doc="<p>The type of product code.</p>"]
-    pub product_code_type: Option<ProductCodeValues>,
+    pub product_code_type: Option<String>,
 }
 
 struct ProductCodeDeserializer;
@@ -28726,13 +28551,12 @@ impl ProductCodeDeserializer {
 
     }
 }
-pub type ProductCodeList = Vec<ProductCode>;
 struct ProductCodeListDeserializer;
 impl ProductCodeListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ProductCodeList, XmlParseError> {
+                                       -> Result<Vec<ProductCode>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -28768,12 +28592,11 @@ impl ProductCodeListDeserializer {
 
     }
 }
-pub type ProductCodeStringList = Vec<String>;
 
 /// Serialize `ProductCodeStringList` contents to a `SignedRequest`.
 struct ProductCodeStringListSerializer;
 impl ProductCodeStringListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ProductCodeStringList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -28781,13 +28604,12 @@ impl ProductCodeStringListSerializer {
     }
 }
 
-pub type ProductCodeValues = String;
 struct ProductCodeValuesDeserializer;
 impl ProductCodeValuesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ProductCodeValues, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -28796,12 +28618,11 @@ impl ProductCodeValuesDeserializer {
 
     }
 }
-pub type ProductDescriptionList = Vec<String>;
 
 /// Serialize `ProductDescriptionList` contents to a `SignedRequest`.
 struct ProductDescriptionListSerializer;
 impl ProductDescriptionListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ProductDescriptionList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -28858,13 +28679,12 @@ impl PropagatingVgwDeserializer {
 
     }
 }
-pub type PropagatingVgwList = Vec<PropagatingVgw>;
 struct PropagatingVgwListDeserializer;
 impl PropagatingVgwListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PropagatingVgwList, XmlParseError> {
+                                       -> Result<Vec<PropagatingVgw>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -28904,11 +28724,11 @@ impl PropagatingVgwListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ProvisionedBandwidth {
     #[doc="<p>Reserved. If you need to sustain traffic greater than the <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-nat-gateway.html\">documented limits</a>, contact us through the <a href=\"https://console.aws.amazon.com/support/home?\">Support Center</a>.</p>"]
-    pub provision_time: Option<DateTime>,
+    pub provision_time: Option<String>,
     #[doc="<p>Reserved. If you need to sustain traffic greater than the <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-nat-gateway.html\">documented limits</a>, contact us through the <a href=\"https://console.aws.amazon.com/support/home?\">Support Center</a>.</p>"]
     pub provisioned: Option<String>,
     #[doc="<p>Reserved. If you need to sustain traffic greater than the <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-nat-gateway.html\">documented limits</a>, contact us through the <a href=\"https://console.aws.amazon.com/support/home?\">Support Center</a>.</p>"]
-    pub request_time: Option<DateTime>,
+    pub request_time: Option<String>,
     #[doc="<p>Reserved. If you need to sustain traffic greater than the <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-nat-gateway.html\">documented limits</a>, contact us through the <a href=\"https://console.aws.amazon.com/support/home?\">Support Center</a>.</p>"]
     pub requested: Option<String>,
     #[doc="<p>Reserved. If you need to sustain traffic greater than the <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-nat-gateway.html\">documented limits</a>, contact us through the <a href=\"https://console.aws.amazon.com/support/home?\">Support Center</a>.</p>"]
@@ -28974,12 +28794,11 @@ impl ProvisionedBandwidthDeserializer {
 
     }
 }
-pub type PublicIpStringList = Vec<String>;
 
 /// Serialize `PublicIpStringList` contents to a `SignedRequest`.
 struct PublicIpStringListSerializer;
 impl PublicIpStringListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &PublicIpStringList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -28991,11 +28810,11 @@ impl PublicIpStringListSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct Purchase {
     #[doc="<p>The currency in which the <code>UpfrontPrice</code> and <code>HourlyPrice</code> amounts are specified. At this time, the only supported currency is <code>USD</code>.</p>"]
-    pub currency_code: Option<CurrencyCodeValues>,
+    pub currency_code: Option<String>,
     #[doc="<p>The duration of the reservation's term in seconds.</p>"]
-    pub duration: Option<Integer>,
+    pub duration: Option<i64>,
     #[doc="<p>The IDs of the Dedicated Hosts associated with the reservation.</p>"]
-    pub host_id_set: Option<ResponseHostIdSet>,
+    pub host_id_set: Option<Vec<String>>,
     #[doc="<p>The ID of the reservation.</p>"]
     pub host_reservation_id: Option<String>,
     #[doc="<p>The hourly price of the reservation per hour.</p>"]
@@ -29003,7 +28822,7 @@ pub struct Purchase {
     #[doc="<p>The instance family on the Dedicated Host that the reservation can be associated with.</p>"]
     pub instance_family: Option<String>,
     #[doc="<p>The payment option for the reservation.</p>"]
-    pub payment_option: Option<PaymentOption>,
+    pub payment_option: Option<String>,
     #[doc="<p>The upfront price of the reservation.</p>"]
     pub upfront_price: Option<String>,
 }
@@ -29088,9 +28907,9 @@ pub struct PurchaseHostReservationRequest {
     #[doc="<p>Unique, case-sensitive identifier you provide to ensure idempotency of the request. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html\">How to Ensure Idempotency</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
     pub client_token: Option<String>,
     #[doc="<p>The currency in which the <code>totalUpfrontPrice</code>, <code>LimitPrice</code>, and <code>totalHourlyPrice</code> amounts are specified. At this time, the only supported currency is <code>USD</code>.</p>"]
-    pub currency_code: Option<CurrencyCodeValues>,
+    pub currency_code: Option<String>,
     #[doc="<p>The ID/s of the Dedicated Host/s that the reservation will be associated with.</p>"]
-    pub host_id_set: RequestHostIdSet,
+    pub host_id_set: Vec<String>,
     #[doc="<p>The specified limit is checked against the total upfront cost of the reservation (calculated as the offering's upfront cost multiplied by the host count). If the total upfront cost is greater than the specified price limit, the request will fail. This is used to ensure that the purchase does not exceed the expected upfront cost of the purchase. At this time, the only supported currency is <code>USD</code>. For example, to indicate a limit price of USD 100, specify 100.00.</p>"]
     pub limit_price: Option<String>,
     #[doc="<p>The ID of the offering.</p>"]
@@ -29129,9 +28948,9 @@ pub struct PurchaseHostReservationResult {
     #[doc="<p>Unique, case-sensitive identifier you provide to ensure idempotency of the request. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html\">How to Ensure Idempotency</a> in the <i>Amazon Elastic Compute Cloud User Guide</i> </p>"]
     pub client_token: Option<String>,
     #[doc="<p>The currency in which the <code>totalUpfrontPrice</code> and <code>totalHourlyPrice</code> amounts are specified. At this time, the only supported currency is <code>USD</code>.</p>"]
-    pub currency_code: Option<CurrencyCodeValues>,
+    pub currency_code: Option<String>,
     #[doc="<p>Describes the details of the purchase.</p>"]
-    pub purchase: Option<PurchaseSet>,
+    pub purchase: Option<Vec<Purchase>>,
     #[doc="<p>The total hourly price of the reservation calculated per hour.</p>"]
     pub total_hourly_price: Option<String>,
     #[doc="<p>The total amount that will be charged to your account when you purchase the reservation.</p>"]
@@ -29203,7 +29022,7 @@ impl PurchaseHostReservationResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct PurchaseRequest {
     #[doc="<p>The number of instances.</p>"]
-    pub instance_count: Integer,
+    pub instance_count: i64,
     #[doc="<p>The purchase token.</p>"]
     pub purchase_token: String,
 }
@@ -29226,12 +29045,11 @@ impl PurchaseRequestSerializer {
     }
 }
 
-pub type PurchaseRequestSet = Vec<PurchaseRequest>;
 
 /// Serialize `PurchaseRequestSet` contents to a `SignedRequest`.
 struct PurchaseRequestSetSerializer;
 impl PurchaseRequestSetSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &PurchaseRequestSet) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<PurchaseRequest>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             PurchaseRequestSerializer::serialize(params, &key, obj);
@@ -29243,9 +29061,9 @@ impl PurchaseRequestSetSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct PurchaseReservedInstancesOfferingRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The number of Reserved Instances to purchase.</p>"]
-    pub instance_count: Integer,
+    pub instance_count: i64,
     #[doc="<p>Specified for Reserved Instance Marketplace offerings to limit the total order and ensure that the Reserved Instances are not purchased at unexpected prices.</p>"]
     pub limit_price: Option<ReservedInstanceLimitPrice>,
     #[doc="<p>The ID of the Reserved Instance offering to purchase.</p>"]
@@ -29335,9 +29153,9 @@ pub struct PurchaseScheduledInstancesRequest {
     #[doc="<p>Unique, case-sensitive identifier that ensures the idempotency of the request. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html\">Ensuring Idempotency</a>.</p>"]
     pub client_token: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more purchase requests.</p>"]
-    pub purchase_requests: PurchaseRequestSet,
+    pub purchase_requests: Vec<PurchaseRequest>,
 }
 
 
@@ -29367,7 +29185,7 @@ impl PurchaseScheduledInstancesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct PurchaseScheduledInstancesResult {
     #[doc="<p>Information about the Scheduled Instances.</p>"]
-    pub scheduled_instance_set: Option<PurchasedScheduledInstanceSet>,
+    pub scheduled_instance_set: Option<Vec<ScheduledInstance>>,
 }
 
 struct PurchaseScheduledInstancesResultDeserializer;
@@ -29412,13 +29230,12 @@ impl PurchaseScheduledInstancesResultDeserializer {
 
     }
 }
-pub type PurchaseSet = Vec<Purchase>;
 struct PurchaseSetDeserializer;
 impl PurchaseSetDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PurchaseSet, XmlParseError> {
+                                       -> Result<Vec<Purchase>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -29454,13 +29271,12 @@ impl PurchaseSetDeserializer {
 
     }
 }
-pub type PurchasedScheduledInstanceSet = Vec<ScheduledInstance>;
 struct PurchasedScheduledInstanceSetDeserializer;
 impl PurchasedScheduledInstanceSetDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<PurchasedScheduledInstanceSet, XmlParseError> {
+                                       -> Result<Vec<ScheduledInstance>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -29496,13 +29312,12 @@ impl PurchasedScheduledInstanceSetDeserializer {
 
     }
 }
-pub type RIProductDescription = String;
 struct RIProductDescriptionDeserializer;
 impl RIProductDescriptionDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<RIProductDescription, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -29511,12 +29326,11 @@ impl RIProductDescriptionDeserializer {
 
     }
 }
-pub type ReasonCodesList = Vec<ReportInstanceReasonCodes>;
 
 /// Serialize `ReasonCodesList` contents to a `SignedRequest`.
 struct ReasonCodesListSerializer;
 impl ReasonCodesListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ReasonCodesList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -29528,9 +29342,9 @@ impl ReasonCodesListSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct RebootInstancesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more instance IDs.</p>"]
-    pub instance_ids: InstanceIdStringList,
+    pub instance_ids: Vec<String>,
 }
 
 
@@ -29557,9 +29371,9 @@ impl RebootInstancesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct RecurringCharge {
     #[doc="<p>The amount of the recurring charge.</p>"]
-    pub amount: Option<Double>,
+    pub amount: Option<f64>,
     #[doc="<p>The frequency of the recurring charge.</p>"]
-    pub frequency: Option<RecurringChargeFrequency>,
+    pub frequency: Option<String>,
 }
 
 struct RecurringChargeDeserializer;
@@ -29607,13 +29421,12 @@ impl RecurringChargeDeserializer {
 
     }
 }
-pub type RecurringChargeFrequency = String;
 struct RecurringChargeFrequencyDeserializer;
 impl RecurringChargeFrequencyDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<RecurringChargeFrequency, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -29622,13 +29435,12 @@ impl RecurringChargeFrequencyDeserializer {
 
     }
 }
-pub type RecurringChargesList = Vec<RecurringCharge>;
 struct RecurringChargesListDeserializer;
 impl RecurringChargesListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<RecurringChargesList, XmlParseError> {
+                                       -> Result<Vec<RecurringCharge>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -29719,13 +29531,12 @@ impl RegionDeserializer {
 
     }
 }
-pub type RegionList = Vec<Region>;
 struct RegionListDeserializer;
 impl RegionListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<RegionList, XmlParseError> {
+                                       -> Result<Vec<Region>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -29761,12 +29572,11 @@ impl RegionListDeserializer {
 
     }
 }
-pub type RegionNameStringList = Vec<String>;
 
 /// Serialize `RegionNameStringList` contents to a `SignedRequest`.
 struct RegionNameStringListSerializer;
 impl RegionNameStringListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RegionNameStringList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -29778,17 +29588,17 @@ impl RegionNameStringListSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct RegisterImageRequest {
     #[doc="<p>The architecture of the AMI.</p> <p>Default: For Amazon EBS-backed AMIs, <code>i386</code>. For instance store-backed AMIs, the architecture specified in the manifest file.</p>"]
-    pub architecture: Option<ArchitectureValues>,
+    pub architecture: Option<String>,
     #[doc="<p>The billing product codes. Your account must be authorized to specify billing product codes. Otherwise, you can use the AWS Marketplace to bill for the use of an AMI.</p>"]
-    pub billing_products: Option<BillingProductList>,
+    pub billing_products: Option<Vec<String>>,
     #[doc="<p>One or more block device mapping entries.</p>"]
-    pub block_device_mappings: Option<BlockDeviceMappingRequestList>,
+    pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
     #[doc="<p>A description for your AMI.</p>"]
     pub description: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>Set to <code>true</code> to enable enhanced networking with ENA for the AMI and any instances that you launch from the AMI.</p> <p>This option is supported only for HVM AMIs. Specifying this option with a PV AMI can make instances launched from the AMI unreachable.</p>"]
-    pub ena_support: Option<Boolean>,
+    pub ena_support: Option<bool>,
     #[doc="<p>The full path to your AMI manifest in Amazon S3 storage.</p>"]
     pub image_location: Option<String>,
     #[doc="<p>The ID of the kernel.</p>"]
@@ -29916,7 +29726,7 @@ impl RegisterImageResultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct RejectVpcPeeringConnectionRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the VPC peering connection.</p>"]
     pub vpc_peering_connection_id: String,
 }
@@ -29944,7 +29754,7 @@ impl RejectVpcPeeringConnectionRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct RejectVpcPeeringConnectionResult {
     #[doc="<p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>"]
-    pub return_: Option<Boolean>,
+    pub return_: Option<bool>,
 }
 
 struct RejectVpcPeeringConnectionResultDeserializer;
@@ -29996,7 +29806,7 @@ pub struct ReleaseAddressRequest {
     #[doc="<p>[EC2-VPC] The allocation ID. Required for EC2-VPC.</p>"]
     pub allocation_id: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>[EC2-Classic] The Elastic IP address. Required for EC2-Classic.</p>"]
     pub public_ip: Option<String>,
 }
@@ -30028,7 +29838,7 @@ impl ReleaseAddressRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ReleaseHostsRequest {
     #[doc="<p>The IDs of the Dedicated Hosts you want to release.</p>"]
-    pub host_ids: RequestHostIdList,
+    pub host_ids: Vec<String>,
 }
 
 
@@ -30052,9 +29862,9 @@ impl ReleaseHostsRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ReleaseHostsResult {
     #[doc="<p>The IDs of the Dedicated Hosts that were successfully released.</p>"]
-    pub successful: Option<ResponseHostIdList>,
+    pub successful: Option<Vec<String>>,
     #[doc="<p>The IDs of the Dedicated Hosts that could not be released, including an error message.</p>"]
-    pub unsuccessful: Option<UnsuccessfulItemList>,
+    pub unsuccessful: Option<Vec<UnsuccessfulItem>>,
 }
 
 struct ReleaseHostsResultDeserializer;
@@ -30190,7 +30000,7 @@ pub struct ReplaceNetworkAclAssociationRequest {
     #[doc="<p>The ID of the current association between the original network ACL and the subnet.</p>"]
     pub association_id: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the new network ACL to associate with the subnet.</p>"]
     pub network_acl_id: String,
 }
@@ -30273,9 +30083,9 @@ pub struct ReplaceNetworkAclEntryRequest {
     #[doc="<p>The IPv4 network range to allow or deny, in CIDR notation (for example <code>172.16.0.0/24</code>).</p>"]
     pub cidr_block: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>Indicates whether to replace the egress rule.</p> <p>Default: If no value is specified, we replace the ingress rule.</p>"]
-    pub egress: Boolean,
+    pub egress: bool,
     #[doc="<p>ICMP protocol: The ICMP or ICMPv6 type and code. Required if specifying the ICMP (1) protocol, or protocol 58 (ICMPv6) with an IPv6 CIDR block.</p>"]
     pub icmp_type_code: Option<IcmpTypeCode>,
     #[doc="<p>The IPv6 network range to allow or deny, in CIDR notation (for example <code>2001:bd8:1234:1a00::/64</code>).</p>"]
@@ -30287,9 +30097,9 @@ pub struct ReplaceNetworkAclEntryRequest {
     #[doc="<p>The IP protocol. You can specify <code>all</code> or <code>-1</code> to mean all protocols. If you specify <code>all</code>, <code>-1</code>, or a protocol number other than <code>tcp</code>, <code>udp</code>, or <code>icmp</code>, traffic on all ports is allowed, regardless of any ports or ICMP types or codes you specify. If you specify protocol <code>58</code> (ICMPv6) and specify an IPv4 CIDR block, traffic for all ICMP types and codes allowed, regardless of any that you specify. If you specify protocol <code>58</code> (ICMPv6) and specify an IPv6 CIDR block, you must specify an ICMP type and code.</p>"]
     pub protocol: String,
     #[doc="<p>Indicates whether to allow or deny the traffic that matches the rule.</p>"]
-    pub rule_action: RuleAction,
+    pub rule_action: String,
     #[doc="<p>The rule number of the entry to replace.</p>"]
-    pub rule_number: Integer,
+    pub rule_number: i64,
 }
 
 
@@ -30340,7 +30150,7 @@ pub struct ReplaceRouteRequest {
     #[doc="<p>The IPv6 CIDR address block used for the destination match. The value you provide must match the CIDR of an existing route in the table.</p>"]
     pub destination_ipv_6_cidr_block: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>[IPv6 traffic only] The ID of an egress-only Internet gateway.</p>"]
     pub egress_only_internet_gateway_id: Option<String>,
     #[doc="<p>The ID of an Internet gateway or virtual private gateway.</p>"]
@@ -30410,7 +30220,7 @@ pub struct ReplaceRouteTableAssociationRequest {
     #[doc="<p>The association ID.</p>"]
     pub association_id: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the new route table to associate with the subnet.</p>"]
     pub route_table_id: String,
 }
@@ -30487,24 +30297,23 @@ impl ReplaceRouteTableAssociationResultDeserializer {
 
     }
 }
-pub type ReportInstanceReasonCodes = String;
 #[doc="<p>Contains the parameters for ReportInstanceStatus.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct ReportInstanceStatusRequest {
     #[doc="<p>Descriptive text about the health state of your instance.</p>"]
     pub description: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The time at which the reported instance health state ended.</p>"]
-    pub end_time: Option<DateTime>,
+    pub end_time: Option<String>,
     #[doc="<p>One or more instances.</p>"]
-    pub instances: InstanceIdStringList,
+    pub instances: Vec<String>,
     #[doc="<p>One or more reason codes that describes the health state of your instance.</p> <ul> <li> <p> <code>instance-stuck-in-state</code>: My instance is stuck in a state.</p> </li> <li> <p> <code>unresponsive</code>: My instance is unresponsive.</p> </li> <li> <p> <code>not-accepting-credentials</code>: My instance is not accepting my credentials.</p> </li> <li> <p> <code>password-not-available</code>: A password is not available for my instance.</p> </li> <li> <p> <code>performance-network</code>: My instance is experiencing performance problems which I believe are network related.</p> </li> <li> <p> <code>performance-instance-store</code>: My instance is experiencing performance problems which I believe are related to the instance stores.</p> </li> <li> <p> <code>performance-ebs-volume</code>: My instance is experiencing performance problems which I believe are related to an EBS volume.</p> </li> <li> <p> <code>performance-other</code>: My instance is experiencing performance problems.</p> </li> <li> <p> <code>other</code>: [explain using the description parameter]</p> </li> </ul>"]
-    pub reason_codes: ReasonCodesList,
+    pub reason_codes: Vec<String>,
     #[doc="<p>The time at which the reported instance health state began.</p>"]
-    pub start_time: Option<DateTime>,
+    pub start_time: Option<String>,
     #[doc="<p>The status of all instances listed.</p>"]
-    pub status: ReportStatusType,
+    pub status: String,
 }
 
 
@@ -30540,13 +30349,11 @@ impl ReportInstanceStatusRequestSerializer {
     }
 }
 
-pub type ReportStatusType = String;
-pub type RequestHostIdList = Vec<String>;
 
 /// Serialize `RequestHostIdList` contents to a `SignedRequest`.
 struct RequestHostIdListSerializer;
 impl RequestHostIdListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RequestHostIdList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -30554,12 +30361,11 @@ impl RequestHostIdListSerializer {
     }
 }
 
-pub type RequestHostIdSet = Vec<String>;
 
 /// Serialize `RequestHostIdSet` contents to a `SignedRequest`.
 struct RequestHostIdSetSerializer;
 impl RequestHostIdSetSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RequestHostIdSet) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -30571,7 +30377,7 @@ impl RequestHostIdSetSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct RequestSpotFleetRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The configuration for the Spot fleet request.</p>"]
     pub spot_fleet_request_config: SpotFleetRequestConfigData,
 }
@@ -30653,13 +30459,13 @@ pub struct RequestSpotInstancesRequest {
     #[doc="<p>The user-specified name for a logical grouping of bids.</p> <p>When you specify an Availability Zone group in a Spot Instance request, all Spot instances in the request are launched in the same Availability Zone. Instance proximity is maintained with this parameter, but the choice of Availability Zone is not. The group applies only to bids for Spot Instances of the same instance type. Any additional Spot instance requests that are specified with the same Availability Zone group name are launched in that same Availability Zone, as long as at least one instance from the group is still active.</p> <p>If there is no active instance running in the Availability Zone group that you specify for a new Spot instance request (all instances are terminated, the bid is expired, or the bid falls below current market), then Amazon EC2 launches the instance in any Availability Zone where the constraint can be met. Consequently, the subsequent set of Spot instances could be placed in a different zone from the original request, even if you specified the same Availability Zone group.</p> <p>Default: Instances are launched in any available Availability Zone.</p>"]
     pub availability_zone_group: Option<String>,
     #[doc="<p>The required duration for the Spot instances (also known as Spot blocks), in minutes. This value must be a multiple of 60 (60, 120, 180, 240, 300, or 360).</p> <p>The duration period starts as soon as your Spot instance receives its instance ID. At the end of the duration period, Amazon EC2 marks the Spot instance for termination and provides a Spot instance termination notice, which gives the instance a two-minute warning before it terminates.</p> <p>Note that you can't specify an Availability Zone group or a launch group if you specify a duration.</p>"]
-    pub block_duration_minutes: Option<Integer>,
+    pub block_duration_minutes: Option<i64>,
     #[doc="<p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html\">How to Ensure Idempotency</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
     pub client_token: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The maximum number of Spot instances to launch.</p> <p>Default: 1</p>"]
-    pub instance_count: Option<Integer>,
+    pub instance_count: Option<i64>,
     #[doc="<p>The instance launch group. Launch groups are Spot instances that launch together and terminate together.</p> <p>Default: Instances are launched and terminated individually</p>"]
     pub launch_group: Option<String>,
     #[doc="<p>The launch specification.</p>"]
@@ -30667,11 +30473,11 @@ pub struct RequestSpotInstancesRequest {
     #[doc="<p>The maximum hourly price (bid) for any Spot instance launched to fulfill the request.</p>"]
     pub spot_price: String,
     #[doc="<p>The Spot instance request type.</p> <p>Default: <code>one-time</code> </p>"]
-    pub type_: Option<SpotInstanceType>,
+    pub type_: Option<String>,
     #[doc="<p>The start date of the request. If this is a one-time request, the request becomes active at this date and time and remains active until all instances launch, the request expires, or the request is canceled. If the request is persistent, the request becomes active at this date and time and remains active until it expires or is canceled.</p> <p>Default: The request is effective indefinitely.</p>"]
-    pub valid_from: Option<DateTime>,
+    pub valid_from: Option<String>,
     #[doc="<p>The end date of the request. If this is a one-time request, the request remains active until all instances launch, the request is canceled, or this date is reached. If the request is persistent, it remains active until it is canceled or this date and time is reached.</p> <p>Default: The request is effective indefinitely.</p>"]
-    pub valid_until: Option<DateTime>,
+    pub valid_until: Option<String>,
 }
 
 
@@ -30730,7 +30536,7 @@ impl RequestSpotInstancesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct RequestSpotInstancesResult {
     #[doc="<p>One or more Spot instance requests.</p>"]
-    pub spot_instance_requests: Option<SpotInstanceRequestList>,
+    pub spot_instance_requests: Option<Vec<SpotInstanceRequest>>,
 }
 
 struct RequestSpotInstancesResultDeserializer;
@@ -30782,15 +30588,15 @@ pub struct RequestSpotLaunchSpecification {
     #[doc="<p>Deprecated.</p>"]
     pub addressing_type: Option<String>,
     #[doc="<p>One or more block device mapping entries.</p> <p>Although you can specify encrypted EBS volumes in this block device mapping for your Spot Instances, these volumes are not encrypted.</p>"]
-    pub block_device_mappings: Option<BlockDeviceMappingList>,
+    pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
     #[doc="<p>Indicates whether the instance is optimized for EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal EBS I/O performance. This optimization isn't available with all instance types. Additional usage charges apply when using an EBS Optimized instance.</p> <p>Default: <code>false</code> </p>"]
-    pub ebs_optimized: Option<Boolean>,
+    pub ebs_optimized: Option<bool>,
     #[doc="<p>The IAM instance profile.</p>"]
     pub iam_instance_profile: Option<IamInstanceProfileSpecification>,
     #[doc="<p>The ID of the AMI.</p>"]
     pub image_id: Option<String>,
     #[doc="<p>The instance type.</p>"]
-    pub instance_type: Option<InstanceType>,
+    pub instance_type: Option<String>,
     #[doc="<p>The ID of the kernel.</p>"]
     pub kernel_id: Option<String>,
     #[doc="<p>The name of the key pair.</p>"]
@@ -30798,15 +30604,15 @@ pub struct RequestSpotLaunchSpecification {
     #[doc="<p>Indicates whether basic or detailed monitoring is enabled for the instance.</p> <p>Default: Disabled</p>"]
     pub monitoring: Option<RunInstancesMonitoringEnabled>,
     #[doc="<p>One or more network interfaces. If you specify a network interface, you must specify subnet IDs and security group IDs using the network interface.</p>"]
-    pub network_interfaces: Option<InstanceNetworkInterfaceSpecificationList>,
+    pub network_interfaces: Option<Vec<InstanceNetworkInterfaceSpecification>>,
     #[doc="<p>The placement information for the instance.</p>"]
     pub placement: Option<SpotPlacement>,
     #[doc="<p>The ID of the RAM disk.</p>"]
     pub ramdisk_id: Option<String>,
     #[doc="<p>One or more security group IDs.</p>"]
-    pub security_group_ids: Option<ValueStringList>,
+    pub security_group_ids: Option<Vec<String>>,
     #[doc="<p>One or more security groups. When requesting instances in a VPC, you must specify the IDs of the security groups. When requesting instances in EC2-Classic, you can specify the names or the IDs of the security groups.</p>"]
-    pub security_groups: Option<ValueStringList>,
+    pub security_groups: Option<Vec<String>>,
     #[doc="<p>The ID of the subnet in which to launch the instance.</p>"]
     pub subnet_id: Option<String>,
     #[doc="<p>The user data to make available to the instances. If you are using an AWS SDK or command line tool, Base64-encoding is performed for you, and you can load the text from a file. Otherwise, you must provide Base64-encoded text.</p>"]
@@ -30902,9 +30708,9 @@ impl RequestSpotLaunchSpecificationSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct Reservation {
     #[doc="<p>[EC2-Classic only] One or more security groups.</p>"]
-    pub groups: Option<GroupIdentifierList>,
+    pub groups: Option<Vec<GroupIdentifier>>,
     #[doc="<p>One or more instances.</p>"]
-    pub instances: Option<InstanceList>,
+    pub instances: Option<Vec<Instance>>,
     #[doc="<p>The ID of the AWS account that owns the reservation.</p>"]
     pub owner_id: Option<String>,
     #[doc="<p>The ID of the requester that launched the instances on your behalf (for example, AWS Management Console or Auto Scaling).</p>"]
@@ -30973,13 +30779,12 @@ impl ReservationDeserializer {
 
     }
 }
-pub type ReservationList = Vec<Reservation>;
 struct ReservationListDeserializer;
 impl ReservationListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ReservationList, XmlParseError> {
+                                       -> Result<Vec<Reservation>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -31015,13 +30820,12 @@ impl ReservationListDeserializer {
 
     }
 }
-pub type ReservationState = String;
 struct ReservationStateDeserializer;
 impl ReservationStateDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ReservationState, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -31093,12 +30897,11 @@ impl ReservationValueDeserializer {
 
     }
 }
-pub type ReservedInstanceIdSet = Vec<String>;
 
 /// Serialize `ReservedInstanceIdSet` contents to a `SignedRequest`.
 struct ReservedInstanceIdSetSerializer;
 impl ReservedInstanceIdSetSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ReservedInstanceIdSet) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -31110,9 +30913,9 @@ impl ReservedInstanceIdSetSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ReservedInstanceLimitPrice {
     #[doc="<p>Used for Reserved Instance Marketplace offerings. Specifies the limit price on the total order (instanceCount * price).</p>"]
-    pub amount: Option<Double>,
+    pub amount: Option<f64>,
     #[doc="<p>The currency in which the <code>limitPrice</code> amount is specified. At this time, the only supported currency is <code>USD</code>.</p>"]
-    pub currency_code: Option<CurrencyCodeValues>,
+    pub currency_code: Option<String>,
 }
 
 
@@ -31193,14 +30996,13 @@ impl ReservedInstanceReservationValueDeserializer {
 
     }
 }
-pub type ReservedInstanceReservationValueSet = Vec<ReservedInstanceReservationValue>;
 struct ReservedInstanceReservationValueSetDeserializer;
 impl ReservedInstanceReservationValueSetDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>
         (tag_name: &str,
          stack: &mut T)
-         -> Result<ReservedInstanceReservationValueSet, XmlParseError> {
+         -> Result<Vec<ReservedInstanceReservationValue>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -31236,13 +31038,12 @@ impl ReservedInstanceReservationValueSetDeserializer {
 
     }
 }
-pub type ReservedInstanceState = String;
 struct ReservedInstanceStateDeserializer;
 impl ReservedInstanceStateDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ReservedInstanceState, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -31257,39 +31058,39 @@ pub struct ReservedInstances {
     #[doc="<p>The Availability Zone in which the Reserved Instance can be used.</p>"]
     pub availability_zone: Option<String>,
     #[doc="<p>The currency of the Reserved Instance. It's specified using ISO 4217 standard currency codes. At this time, the only supported currency is <code>USD</code>.</p>"]
-    pub currency_code: Option<CurrencyCodeValues>,
+    pub currency_code: Option<String>,
     #[doc="<p>The duration of the Reserved Instance, in seconds.</p>"]
-    pub duration: Option<Long>,
+    pub duration: Option<i64>,
     #[doc="<p>The time when the Reserved Instance expires.</p>"]
-    pub end: Option<DateTime>,
+    pub end: Option<String>,
     #[doc="<p>The purchase price of the Reserved Instance.</p>"]
-    pub fixed_price: Option<Float>,
+    pub fixed_price: Option<f32>,
     #[doc="<p>The number of reservations purchased.</p>"]
-    pub instance_count: Option<Integer>,
+    pub instance_count: Option<i64>,
     #[doc="<p>The tenancy of the instance.</p>"]
-    pub instance_tenancy: Option<Tenancy>,
+    pub instance_tenancy: Option<String>,
     #[doc="<p>The instance type on which the Reserved Instance can be used.</p>"]
-    pub instance_type: Option<InstanceType>,
+    pub instance_type: Option<String>,
     #[doc="<p>The offering class of the Reserved Instance.</p>"]
-    pub offering_class: Option<OfferingClassType>,
+    pub offering_class: Option<String>,
     #[doc="<p>The Reserved Instance offering type.</p>"]
-    pub offering_type: Option<OfferingTypeValues>,
+    pub offering_type: Option<String>,
     #[doc="<p>The Reserved Instance product platform description.</p>"]
-    pub product_description: Option<RIProductDescription>,
+    pub product_description: Option<String>,
     #[doc="<p>The recurring charge tag assigned to the resource.</p>"]
-    pub recurring_charges: Option<RecurringChargesList>,
+    pub recurring_charges: Option<Vec<RecurringCharge>>,
     #[doc="<p>The ID of the Reserved Instance.</p>"]
     pub reserved_instances_id: Option<String>,
     #[doc="<p>The scope of the Reserved Instance.</p>"]
-    pub scope: Option<Scope>,
+    pub scope: Option<String>,
     #[doc="<p>The date and time the Reserved Instance started.</p>"]
-    pub start: Option<DateTime>,
+    pub start: Option<String>,
     #[doc="<p>The state of the Reserved Instance purchase.</p>"]
-    pub state: Option<ReservedInstanceState>,
+    pub state: Option<String>,
     #[doc="<p>Any tags assigned to the resource.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>The usage price of the Reserved Instance, per hour.</p>"]
-    pub usage_price: Option<Float>,
+    pub usage_price: Option<f32>,
 }
 
 struct ReservedInstancesDeserializer;
@@ -31417,13 +31218,13 @@ pub struct ReservedInstancesConfiguration {
     #[doc="<p>The Availability Zone for the modified Reserved Instances.</p>"]
     pub availability_zone: Option<String>,
     #[doc="<p>The number of modified Reserved Instances.</p>"]
-    pub instance_count: Option<Integer>,
+    pub instance_count: Option<i64>,
     #[doc="<p>The instance type for the modified Reserved Instances.</p>"]
-    pub instance_type: Option<InstanceType>,
+    pub instance_type: Option<String>,
     #[doc="<p>The network platform of the modified Reserved Instances, which is either EC2-Classic or EC2-VPC.</p>"]
     pub platform: Option<String>,
     #[doc="<p>Whether the Reserved Instance is applied to instances in a region or instances in a specific Availability Zone.</p>"]
-    pub scope: Option<Scope>,
+    pub scope: Option<String>,
 }
 
 struct ReservedInstancesConfigurationDeserializer;
@@ -31516,12 +31317,11 @@ impl ReservedInstancesConfigurationSerializer {
     }
 }
 
-pub type ReservedInstancesConfigurationList = Vec<ReservedInstancesConfiguration>;
 
 /// Serialize `ReservedInstancesConfigurationList` contents to a `SignedRequest`.
 struct ReservedInstancesConfigurationListSerializer;
 impl ReservedInstancesConfigurationListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ReservedInstancesConfigurationList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<ReservedInstancesConfiguration>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             ReservedInstancesConfigurationSerializer::serialize(params, &key, obj);
@@ -31579,12 +31379,11 @@ impl ReservedInstancesIdDeserializer {
 
     }
 }
-pub type ReservedInstancesIdStringList = Vec<String>;
 
 /// Serialize `ReservedInstancesIdStringList` contents to a `SignedRequest`.
 struct ReservedInstancesIdStringListSerializer;
 impl ReservedInstancesIdStringListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ReservedInstancesIdStringList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -31592,13 +31391,12 @@ impl ReservedInstancesIdStringListSerializer {
     }
 }
 
-pub type ReservedInstancesList = Vec<ReservedInstances>;
 struct ReservedInstancesListDeserializer;
 impl ReservedInstancesListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ReservedInstancesList, XmlParseError> {
+                                       -> Result<Vec<ReservedInstances>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -31640,23 +31438,23 @@ pub struct ReservedInstancesListing {
     #[doc="<p>A unique, case-sensitive key supplied by the client to ensure that the request is idempotent. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html\">Ensuring Idempotency</a>.</p>"]
     pub client_token: Option<String>,
     #[doc="<p>The time the listing was created.</p>"]
-    pub create_date: Option<DateTime>,
+    pub create_date: Option<String>,
     #[doc="<p>The number of instances in this state.</p>"]
-    pub instance_counts: Option<InstanceCountList>,
+    pub instance_counts: Option<Vec<InstanceCount>>,
     #[doc="<p>The price of the Reserved Instance listing.</p>"]
-    pub price_schedules: Option<PriceScheduleList>,
+    pub price_schedules: Option<Vec<PriceSchedule>>,
     #[doc="<p>The ID of the Reserved Instance.</p>"]
     pub reserved_instances_id: Option<String>,
     #[doc="<p>The ID of the Reserved Instance listing.</p>"]
     pub reserved_instances_listing_id: Option<String>,
     #[doc="<p>The status of the Reserved Instance listing.</p>"]
-    pub status: Option<ListingStatus>,
+    pub status: Option<String>,
     #[doc="<p>The reason for the current status of the Reserved Instance listing. The response can be blank.</p>"]
     pub status_message: Option<String>,
     #[doc="<p>Any tags assigned to the resource.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>The last modified timestamp of the listing.</p>"]
-    pub update_date: Option<DateTime>,
+    pub update_date: Option<String>,
 }
 
 struct ReservedInstancesListingDeserializer;
@@ -31741,13 +31539,12 @@ impl ReservedInstancesListingDeserializer {
 
     }
 }
-pub type ReservedInstancesListingList = Vec<ReservedInstancesListing>;
 struct ReservedInstancesListingListDeserializer;
 impl ReservedInstancesListingListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ReservedInstancesListingList, XmlParseError> {
+                                       -> Result<Vec<ReservedInstancesListing>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -31790,13 +31587,13 @@ pub struct ReservedInstancesModification {
     #[doc="<p>A unique, case-sensitive key supplied by the client to ensure that the request is idempotent. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html\">Ensuring Idempotency</a>.</p>"]
     pub client_token: Option<String>,
     #[doc="<p>The time when the modification request was created.</p>"]
-    pub create_date: Option<DateTime>,
+    pub create_date: Option<String>,
     #[doc="<p>The time for the modification to become effective.</p>"]
-    pub effective_date: Option<DateTime>,
+    pub effective_date: Option<String>,
     #[doc="<p>Contains target configurations along with their corresponding new Reserved Instance IDs.</p>"]
-    pub modification_results: Option<ReservedInstancesModificationResultList>,
+    pub modification_results: Option<Vec<ReservedInstancesModificationResult>>,
     #[doc="<p>The IDs of one or more Reserved Instances.</p>"]
-    pub reserved_instances_ids: Option<ReservedIntancesIds>,
+    pub reserved_instances_ids: Option<Vec<ReservedInstancesId>>,
     #[doc="<p>A unique ID for the Reserved Instance modification.</p>"]
     pub reserved_instances_modification_id: Option<String>,
     #[doc="<p>The status of the Reserved Instances modification request.</p>"]
@@ -31804,7 +31601,7 @@ pub struct ReservedInstancesModification {
     #[doc="<p>The reason for the status.</p>"]
     pub status_message: Option<String>,
     #[doc="<p>The time when the modification request was last updated.</p>"]
-    pub update_date: Option<DateTime>,
+    pub update_date: Option<String>,
 }
 
 struct ReservedInstancesModificationDeserializer;
@@ -31883,14 +31680,11 @@ impl ReservedInstancesModificationDeserializer {
 
     }
 }
-pub type ReservedInstancesModificationIdStringList = Vec<String>;
 
 /// Serialize `ReservedInstancesModificationIdStringList` contents to a `SignedRequest`.
 struct ReservedInstancesModificationIdStringListSerializer;
 impl ReservedInstancesModificationIdStringListSerializer {
-    fn serialize(params: &mut Params,
-                 name: &str,
-                 obj: &ReservedInstancesModificationIdStringList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -31898,14 +31692,13 @@ impl ReservedInstancesModificationIdStringListSerializer {
     }
 }
 
-pub type ReservedInstancesModificationList = Vec<ReservedInstancesModification>;
 struct ReservedInstancesModificationListDeserializer;
 impl ReservedInstancesModificationListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>
         (tag_name: &str,
          stack: &mut T)
-         -> Result<ReservedInstancesModificationList, XmlParseError> {
+         -> Result<Vec<ReservedInstancesModification>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -31997,14 +31790,13 @@ impl ReservedInstancesModificationResultDeserializer {
 
     }
 }
-pub type ReservedInstancesModificationResultList = Vec<ReservedInstancesModificationResult>;
 struct ReservedInstancesModificationResultListDeserializer;
 impl ReservedInstancesModificationResultListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>
         (tag_name: &str,
          stack: &mut T)
-         -> Result<ReservedInstancesModificationResultList, XmlParseError> {
+         -> Result<Vec<ReservedInstancesModificationResult>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -32046,33 +31838,33 @@ pub struct ReservedInstancesOffering {
     #[doc="<p>The Availability Zone in which the Reserved Instance can be used.</p>"]
     pub availability_zone: Option<String>,
     #[doc="<p>The currency of the Reserved Instance offering you are purchasing. It's specified using ISO 4217 standard currency codes. At this time, the only supported currency is <code>USD</code>.</p>"]
-    pub currency_code: Option<CurrencyCodeValues>,
+    pub currency_code: Option<String>,
     #[doc="<p>The duration of the Reserved Instance, in seconds.</p>"]
-    pub duration: Option<Long>,
+    pub duration: Option<i64>,
     #[doc="<p>The purchase price of the Reserved Instance.</p>"]
-    pub fixed_price: Option<Float>,
+    pub fixed_price: Option<f32>,
     #[doc="<p>The tenancy of the instance.</p>"]
-    pub instance_tenancy: Option<Tenancy>,
+    pub instance_tenancy: Option<String>,
     #[doc="<p>The instance type on which the Reserved Instance can be used.</p>"]
-    pub instance_type: Option<InstanceType>,
+    pub instance_type: Option<String>,
     #[doc="<p>Indicates whether the offering is available through the Reserved Instance Marketplace (resale) or AWS. If it's a Reserved Instance Marketplace offering, this is <code>true</code>.</p>"]
-    pub marketplace: Option<Boolean>,
+    pub marketplace: Option<bool>,
     #[doc="<p>If <code>convertible</code> it can be exchanged for Reserved Instances of the same or higher monetary value, with different configurations. If <code>standard</code>, it is not possible to perform an exchange.</p>"]
-    pub offering_class: Option<OfferingClassType>,
+    pub offering_class: Option<String>,
     #[doc="<p>The Reserved Instance offering type.</p>"]
-    pub offering_type: Option<OfferingTypeValues>,
+    pub offering_type: Option<String>,
     #[doc="<p>The pricing details of the Reserved Instance offering.</p>"]
-    pub pricing_details: Option<PricingDetailsList>,
+    pub pricing_details: Option<Vec<PricingDetail>>,
     #[doc="<p>The Reserved Instance product platform description.</p>"]
-    pub product_description: Option<RIProductDescription>,
+    pub product_description: Option<String>,
     #[doc="<p>The recurring charge tag assigned to the resource.</p>"]
-    pub recurring_charges: Option<RecurringChargesList>,
+    pub recurring_charges: Option<Vec<RecurringCharge>>,
     #[doc="<p>The ID of the Reserved Instance offering. This is the offering ID used in <a>GetReservedInstancesExchangeQuote</a> to confirm that an exchange can be made.</p>"]
     pub reserved_instances_offering_id: Option<String>,
     #[doc="<p>Whether the Reserved Instance is applied to instances in a region or an Availability Zone.</p>"]
-    pub scope: Option<Scope>,
+    pub scope: Option<String>,
     #[doc="<p>The usage price of the Reserved Instance, per hour.</p>"]
-    pub usage_price: Option<Float>,
+    pub usage_price: Option<f32>,
 }
 
 struct ReservedInstancesOfferingDeserializer;
@@ -32182,12 +31974,11 @@ impl ReservedInstancesOfferingDeserializer {
 
     }
 }
-pub type ReservedInstancesOfferingIdStringList = Vec<String>;
 
 /// Serialize `ReservedInstancesOfferingIdStringList` contents to a `SignedRequest`.
 struct ReservedInstancesOfferingIdStringListSerializer;
 impl ReservedInstancesOfferingIdStringListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ReservedInstancesOfferingIdStringList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -32195,13 +31986,12 @@ impl ReservedInstancesOfferingIdStringListSerializer {
     }
 }
 
-pub type ReservedInstancesOfferingList = Vec<ReservedInstancesOffering>;
 struct ReservedInstancesOfferingListDeserializer;
 impl ReservedInstancesOfferingListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ReservedInstancesOfferingList, XmlParseError> {
+                                       -> Result<Vec<ReservedInstancesOffering>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -32238,13 +32028,12 @@ impl ReservedInstancesOfferingListDeserializer {
 
     }
 }
-pub type ReservedIntancesIds = Vec<ReservedInstancesId>;
 struct ReservedIntancesIdsDeserializer;
 impl ReservedIntancesIdsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ReservedIntancesIds, XmlParseError> {
+                                       -> Result<Vec<ReservedInstancesId>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -32280,14 +32069,13 @@ impl ReservedIntancesIdsDeserializer {
 
     }
 }
-pub type ResetImageAttributeName = String;
 #[doc="<p>Contains the parameters for ResetImageAttribute.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct ResetImageAttributeRequest {
     #[doc="<p>The attribute to reset (currently you can only reset the launch permission attribute).</p>"]
-    pub attribute: ResetImageAttributeName,
+    pub attribute: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the AMI.</p>"]
     pub image_id: String,
 }
@@ -32315,9 +32103,9 @@ impl ResetImageAttributeRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ResetInstanceAttributeRequest {
     #[doc="<p>The attribute to reset.</p> <important> <p>You can only reset the following attributes: <code>kernel</code> | <code>ramdisk</code> | <code>sourceDestCheck</code>. To change an instance attribute, use <a>ModifyInstanceAttribute</a>.</p> </important>"]
-    pub attribute: InstanceAttributeName,
+    pub attribute: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the instance.</p>"]
     pub instance_id: String,
 }
@@ -32345,7 +32133,7 @@ impl ResetInstanceAttributeRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ResetNetworkInterfaceAttributeRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the network interface.</p>"]
     pub network_interface_id: String,
     #[doc="<p>The source/destination checking attribute. Resets the value to <code>true</code>.</p>"]
@@ -32378,9 +32166,9 @@ impl ResetNetworkInterfaceAttributeRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ResetSnapshotAttributeRequest {
     #[doc="<p>The attribute to reset. Currently, only the attribute for permission to create volumes can be reset.</p>"]
-    pub attribute: SnapshotAttributeName,
+    pub attribute: String,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The ID of the snapshot.</p>"]
     pub snapshot_id: String,
 }
@@ -32404,12 +32192,11 @@ impl ResetSnapshotAttributeRequestSerializer {
     }
 }
 
-pub type ResourceIdList = Vec<String>;
 
 /// Serialize `ResourceIdList` contents to a `SignedRequest`.
 struct ResourceIdListSerializer;
 impl ResourceIdListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ResourceIdList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -32417,13 +32204,12 @@ impl ResourceIdListSerializer {
     }
 }
 
-pub type ResourceType = String;
 struct ResourceTypeDeserializer;
 impl ResourceTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ResourceType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -32432,13 +32218,12 @@ impl ResourceTypeDeserializer {
 
     }
 }
-pub type ResponseHostIdList = Vec<String>;
 struct ResponseHostIdListDeserializer;
 impl ResponseHostIdListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ResponseHostIdList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -32474,13 +32259,12 @@ impl ResponseHostIdListDeserializer {
 
     }
 }
-pub type ResponseHostIdSet = Vec<String>;
 struct ResponseHostIdSetDeserializer;
 impl ResponseHostIdSetDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ResponseHostIdSet, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -32516,12 +32300,11 @@ impl ResponseHostIdSetDeserializer {
 
     }
 }
-pub type RestorableByStringList = Vec<String>;
 
 /// Serialize `RestorableByStringList` contents to a `SignedRequest`.
 struct RestorableByStringListSerializer;
 impl RestorableByStringListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RestorableByStringList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -32533,7 +32316,7 @@ impl RestorableByStringListSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct RestoreAddressToClassicRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The Elastic IP address.</p>"]
     pub public_ip: String,
 }
@@ -32562,7 +32345,7 @@ pub struct RestoreAddressToClassicResult {
     #[doc="<p>The Elastic IP address.</p>"]
     pub public_ip: Option<String>,
     #[doc="<p>The move status for the IP address.</p>"]
-    pub status: Option<Status>,
+    pub status: Option<String>,
 }
 
 struct RestoreAddressToClassicResultDeserializer;
@@ -32617,13 +32400,13 @@ pub struct RevokeSecurityGroupEgressRequest {
     #[doc="<p>The CIDR IP address range. We recommend that you specify the CIDR range in a set of IP permissions instead.</p>"]
     pub cidr_ip: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The start of port range for the TCP and UDP protocols, or an ICMP type number. We recommend that you specify the port range in a set of IP permissions instead.</p>"]
-    pub from_port: Option<Integer>,
+    pub from_port: Option<i64>,
     #[doc="<p>The ID of the security group.</p>"]
     pub group_id: String,
     #[doc="<p>A set of IP permissions. You can't specify a destination security group and a CIDR IP address range.</p>"]
-    pub ip_permissions: Option<IpPermissionList>,
+    pub ip_permissions: Option<Vec<IpPermission>>,
     #[doc="<p>The IP protocol name or number. We recommend that you specify the protocol in a set of IP permissions instead.</p>"]
     pub ip_protocol: Option<String>,
     #[doc="<p>The name of a destination security group. To revoke outbound access to a destination security group, we recommend that you use a set of IP permissions instead.</p>"]
@@ -32631,7 +32414,7 @@ pub struct RevokeSecurityGroupEgressRequest {
     #[doc="<p>The AWS account number for a destination security group. To revoke outbound access to a destination security group, we recommend that you use a set of IP permissions instead.</p>"]
     pub source_security_group_owner_id: Option<String>,
     #[doc="<p>The end of port range for the TCP and UDP protocols, or an ICMP type number. We recommend that you specify the port range in a set of IP permissions instead.</p>"]
-    pub to_port: Option<Integer>,
+    pub to_port: Option<i64>,
 }
 
 
@@ -32684,15 +32467,15 @@ pub struct RevokeSecurityGroupIngressRequest {
     #[doc="<p>The CIDR IP address range. You can't specify this parameter when specifying a source security group.</p>"]
     pub cidr_ip: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The start of port range for the TCP and UDP protocols, or an ICMP type number. For the ICMP type number, use <code>-1</code> to specify all ICMP types.</p>"]
-    pub from_port: Option<Integer>,
+    pub from_port: Option<i64>,
     #[doc="<p>The ID of the security group. Required for a security group in a nondefault VPC.</p>"]
     pub group_id: Option<String>,
     #[doc="<p>[EC2-Classic, default VPC] The name of the security group.</p>"]
     pub group_name: Option<String>,
     #[doc="<p>A set of IP permissions. You can't specify a source security group and a CIDR IP address range.</p>"]
-    pub ip_permissions: Option<IpPermissionList>,
+    pub ip_permissions: Option<Vec<IpPermission>>,
     #[doc="<p>The IP protocol name (<code>tcp</code>, <code>udp</code>, <code>icmp</code>) or number (see <a href=\"http://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml\">Protocol Numbers</a>). Use <code>-1</code> to specify all.</p>"]
     pub ip_protocol: Option<String>,
     #[doc="<p>[EC2-Classic, default VPC] The name of the source security group. You can't specify this parameter in combination with the following parameters: the CIDR IP address range, the start of the port range, the IP protocol, and the end of the port range. For EC2-VPC, the source security group must be in the same VPC. To revoke a specific rule for an IP protocol and port range, use a set of IP permissions instead.</p>"]
@@ -32700,7 +32483,7 @@ pub struct RevokeSecurityGroupIngressRequest {
     #[doc="<p>[EC2-Classic] The AWS account ID of the source security group, if the source security group is in a different account. You can't specify this parameter in combination with the following parameters: the CIDR IP address range, the IP protocol, the start of the port range, and the end of the port range. To revoke a specific rule for an IP protocol and port range, use a set of IP permissions instead.</p>"]
     pub source_security_group_owner_id: Option<String>,
     #[doc="<p>The end of port range for the TCP and UDP protocols, or an ICMP code number. For the ICMP code number, use <code>-1</code> to specify all ICMP codes for the ICMP type.</p>"]
-    pub to_port: Option<Integer>,
+    pub to_port: Option<i64>,
 }
 
 
@@ -32774,9 +32557,9 @@ pub struct Route {
     #[doc="<p>The ID of the network interface.</p>"]
     pub network_interface_id: Option<String>,
     #[doc="<p>Describes how the route was created.</p> <ul> <li> <p> <code>CreateRouteTable</code> - The route was automatically created when the route table was created.</p> </li> <li> <p> <code>CreateRoute</code> - The route was manually added to the route table.</p> </li> <li> <p> <code>EnableVgwRoutePropagation</code> - The route was propagated by route propagation.</p> </li> </ul>"]
-    pub origin: Option<RouteOrigin>,
+    pub origin: Option<String>,
     #[doc="<p>The state of the route. The <code>blackhole</code> state indicates that the route's target isn't available (for example, the specified gateway isn't attached to the VPC, or the specified NAT instance has been terminated).</p>"]
-    pub state: Option<RouteState>,
+    pub state: Option<String>,
     #[doc="<p>The ID of the VPC peering connection.</p>"]
     pub vpc_peering_connection_id: Option<String>,
 }
@@ -32874,13 +32657,12 @@ impl RouteDeserializer {
 
     }
 }
-pub type RouteList = Vec<Route>;
 struct RouteListDeserializer;
 impl RouteListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<RouteList, XmlParseError> {
+                                       -> Result<Vec<Route>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -32916,13 +32698,12 @@ impl RouteListDeserializer {
 
     }
 }
-pub type RouteOrigin = String;
 struct RouteOriginDeserializer;
 impl RouteOriginDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<RouteOrigin, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -32931,13 +32712,12 @@ impl RouteOriginDeserializer {
 
     }
 }
-pub type RouteState = String;
 struct RouteStateDeserializer;
 impl RouteStateDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<RouteState, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -32950,15 +32730,15 @@ impl RouteStateDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct RouteTable {
     #[doc="<p>The associations between the route table and one or more subnets.</p>"]
-    pub associations: Option<RouteTableAssociationList>,
+    pub associations: Option<Vec<RouteTableAssociation>>,
     #[doc="<p>Any virtual private gateway (VGW) propagating routes.</p>"]
-    pub propagating_vgws: Option<PropagatingVgwList>,
+    pub propagating_vgws: Option<Vec<PropagatingVgw>>,
     #[doc="<p>The ID of the route table.</p>"]
     pub route_table_id: Option<String>,
     #[doc="<p>The routes in the route table.</p>"]
-    pub routes: Option<RouteList>,
+    pub routes: Option<Vec<Route>>,
     #[doc="<p>Any tags assigned to the route table.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>The ID of the VPC.</p>"]
     pub vpc_id: Option<String>,
 }
@@ -33029,7 +32809,7 @@ impl RouteTableDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct RouteTableAssociation {
     #[doc="<p>Indicates whether this is the main route table.</p>"]
-    pub main: Option<Boolean>,
+    pub main: Option<bool>,
     #[doc="<p>The ID of the association between a route table and a subnet.</p>"]
     pub route_table_association_id: Option<String>,
     #[doc="<p>The ID of the route table.</p>"]
@@ -33092,13 +32872,12 @@ impl RouteTableAssociationDeserializer {
 
     }
 }
-pub type RouteTableAssociationList = Vec<RouteTableAssociation>;
 struct RouteTableAssociationListDeserializer;
 impl RouteTableAssociationListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<RouteTableAssociationList, XmlParseError> {
+                                       -> Result<Vec<RouteTableAssociation>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -33135,13 +32914,12 @@ impl RouteTableAssociationListDeserializer {
 
     }
 }
-pub type RouteTableList = Vec<RouteTable>;
 struct RouteTableListDeserializer;
 impl RouteTableListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<RouteTableList, XmlParseError> {
+                                       -> Result<Vec<RouteTable>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -33177,13 +32955,12 @@ impl RouteTableListDeserializer {
 
     }
 }
-pub type RuleAction = String;
 struct RuleActionDeserializer;
 impl RuleActionDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<RuleAction, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -33196,7 +32973,7 @@ impl RuleActionDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct RunInstancesMonitoringEnabled {
     #[doc="<p>Indicates whether detailed monitoring is enabled. Otherwise, basic monitoring is enabled.</p>"]
-    pub enabled: Boolean,
+    pub enabled: bool,
 }
 
 struct RunInstancesMonitoringEnabledDeserializer;
@@ -33262,39 +33039,39 @@ pub struct RunInstancesRequest {
     #[doc="<p>Reserved.</p>"]
     pub additional_info: Option<String>,
     #[doc="<p>The block device mapping.</p> <important> <p>Supplying both a snapshot ID and an encryption value as arguments for block-device mapping results in an error. This is because only blank volumes can be encrypted on start, and these are not created from a snapshot. If a snapshot is the basis for the volume, it contains data by definition and its encryption status cannot be changed using this action.</p> </important>"]
-    pub block_device_mappings: Option<BlockDeviceMappingRequestList>,
+    pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
     #[doc="<p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html\">Ensuring Idempotency</a>.</p> <p>Constraints: Maximum 64 ASCII characters</p>"]
     pub client_token: Option<String>,
     #[doc="<p>If you set this parameter to <code>true</code>, you can't terminate the instance using the Amazon EC2 console, CLI, or API; otherwise, you can. To change this attribute to <code>false</code> after launch, use <a>ModifyInstanceAttribute</a>. Alternatively, if you set <code>InstanceInitiatedShutdownBehavior</code> to <code>terminate</code>, you can terminate the instance by running the shutdown command from the instance.</p> <p>Default: <code>false</code> </p>"]
-    pub disable_api_termination: Option<Boolean>,
+    pub disable_api_termination: Option<bool>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>Indicates whether the instance is optimized for EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal EBS I/O performance. This optimization isn't available with all instance types. Additional usage charges apply when using an EBS-optimized instance.</p> <p>Default: <code>false</code> </p>"]
-    pub ebs_optimized: Option<Boolean>,
+    pub ebs_optimized: Option<bool>,
     #[doc="<p>The IAM instance profile.</p>"]
     pub iam_instance_profile: Option<IamInstanceProfileSpecification>,
     #[doc="<p>The ID of the AMI, which you can get by calling <a>DescribeImages</a>.</p>"]
     pub image_id: String,
     #[doc="<p>Indicates whether an instance stops or terminates when you initiate shutdown from the instance (using the operating system command for system shutdown).</p> <p>Default: <code>stop</code> </p>"]
-    pub instance_initiated_shutdown_behavior: Option<ShutdownBehavior>,
+    pub instance_initiated_shutdown_behavior: Option<String>,
     #[doc="<p>The instance type. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html\">Instance Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Default: <code>m1.small</code> </p>"]
-    pub instance_type: Option<InstanceType>,
+    pub instance_type: Option<String>,
     #[doc="<p>[EC2-VPC] A number of IPv6 addresses to associate with the primary network interface. Amazon EC2 chooses the IPv6 addresses from the range of your subnet. You cannot specify this option and the option to assign specific IPv6 addresses in the same request. You can specify this option if you've specified a minimum number of instances to launch.</p>"]
-    pub ipv_6_address_count: Option<Integer>,
+    pub ipv_6_address_count: Option<i64>,
     #[doc="<p>[EC2-VPC] Specify one or more IPv6 addresses from the range of the subnet to associate with the primary network interface. You cannot specify this option and the option to assign a number of IPv6 addresses in the same request. You cannot specify this option if you've specified a minimum number of instances to launch.</p>"]
-    pub ipv_6_addresses: Option<InstanceIpv6AddressList>,
+    pub ipv_6_addresses: Option<Vec<InstanceIpv6Address>>,
     #[doc="<p>The ID of the kernel.</p> <important> <p>We recommend that you use PV-GRUB instead of kernels and RAM disks. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/UserProvidedkernels.html\"> PV-GRUB</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </important>"]
     pub kernel_id: Option<String>,
     #[doc="<p>The name of the key pair. You can create a key pair using <a>CreateKeyPair</a> or <a>ImportKeyPair</a>.</p> <important> <p>If you do not specify a key pair, you can't connect to the instance unless you choose an AMI that is configured to allow users another way to log in.</p> </important>"]
     pub key_name: Option<String>,
     #[doc="<p>The maximum number of instances to launch. If you specify more instances than Amazon EC2 can launch in the target Availability Zone, Amazon EC2 launches the largest possible number of instances above <code>MinCount</code>.</p> <p>Constraints: Between 1 and the maximum number you're allowed for the specified instance type. For more information about the default limits, and how to request an increase, see <a href=\"http://aws.amazon.com/ec2/faqs/#How_many_instances_can_I_run_in_Amazon_EC2\">How many instances can I run in Amazon EC2</a> in the Amazon EC2 FAQ.</p>"]
-    pub max_count: Integer,
+    pub max_count: i64,
     #[doc="<p>The minimum number of instances to launch. If you specify a minimum that is more instances than Amazon EC2 can launch in the target Availability Zone, Amazon EC2 launches no instances.</p> <p>Constraints: Between 1 and the maximum number you're allowed for the specified instance type. For more information about the default limits, and how to request an increase, see <a href=\"http://aws.amazon.com/ec2/faqs/#How_many_instances_can_I_run_in_Amazon_EC2\">How many instances can I run in Amazon EC2</a> in the Amazon EC2 General FAQ.</p>"]
-    pub min_count: Integer,
+    pub min_count: i64,
     #[doc="<p>The monitoring for the instance.</p>"]
     pub monitoring: Option<RunInstancesMonitoringEnabled>,
     #[doc="<p>One or more network interfaces.</p>"]
-    pub network_interfaces: Option<InstanceNetworkInterfaceSpecificationList>,
+    pub network_interfaces: Option<Vec<InstanceNetworkInterfaceSpecification>>,
     #[doc="<p>The placement for the instance.</p>"]
     pub placement: Option<Placement>,
     #[doc="<p>[EC2-VPC] The primary IPv4 address. You must specify a value from the IPv4 address range of the subnet.</p> <p>Only one private IP address can be designated as primary. You can't specify this option if you've specified the option to designate a private IP address as the primary IP address in a network interface specification. You cannot specify this option if you're launching more than one instance in the request.</p>"]
@@ -33302,13 +33079,13 @@ pub struct RunInstancesRequest {
     #[doc="<p>The ID of the RAM disk.</p> <important> <p>We recommend that you use PV-GRUB instead of kernels and RAM disks. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/UserProvidedkernels.html\"> PV-GRUB</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </important>"]
     pub ramdisk_id: Option<String>,
     #[doc="<p>One or more security group IDs. You can create a security group using <a>CreateSecurityGroup</a>.</p> <p>Default: Amazon EC2 uses the default security group.</p>"]
-    pub security_group_ids: Option<SecurityGroupIdStringList>,
+    pub security_group_ids: Option<Vec<String>>,
     #[doc="<p>[EC2-Classic, default VPC] One or more security group names. For a nondefault VPC, you must use security group IDs instead.</p> <p>Default: Amazon EC2 uses the default security group.</p>"]
-    pub security_groups: Option<SecurityGroupStringList>,
+    pub security_groups: Option<Vec<String>>,
     #[doc="<p>[EC2-VPC] The ID of the subnet to launch the instance into.</p>"]
     pub subnet_id: Option<String>,
     #[doc="<p>The tags to apply to the resources during launch. You can tag instances and volumes. The specified tags are applied to all instances or volumes that are created during launch.</p>"]
-    pub tag_specifications: Option<TagSpecificationList>,
+    pub tag_specifications: Option<Vec<TagSpecification>>,
     #[doc="<p>The user data to make available to the instance. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html\">Running Commands on Your Linux Instance at Launch</a> (Linux) and <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ec2-instance-metadata.html#instancedata-add-user-data\">Adding User Data</a> (Windows). If you are using an AWS SDK or command line tool, Base64-encoding is performed for you, and you can load the text from a file. Otherwise, you must provide Base64-encoded text.</p>"]
     pub user_data: Option<String>,
 }
@@ -33439,9 +33216,9 @@ pub struct RunScheduledInstancesRequest {
     #[doc="<p>Unique, case-sensitive identifier that ensures the idempotency of the request. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html\">Ensuring Idempotency</a>.</p>"]
     pub client_token: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>The number of instances.</p> <p>Default: 1</p>"]
-    pub instance_count: Option<Integer>,
+    pub instance_count: Option<i64>,
     #[doc="<p>The launch specification. You must match the instance type, Availability Zone, network, and platform of the schedule that you purchased.</p>"]
     pub launch_specification: ScheduledInstancesLaunchSpecification,
     #[doc="<p>The Scheduled Instance ID.</p>"]
@@ -33483,7 +33260,7 @@ impl RunScheduledInstancesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct RunScheduledInstancesResult {
     #[doc="<p>The IDs of the newly launched instances.</p>"]
-    pub instance_id_set: Option<InstanceIdSet>,
+    pub instance_id_set: Option<Vec<String>>,
 }
 
 struct RunScheduledInstancesResultDeserializer;
@@ -33539,7 +33316,7 @@ pub struct S3Storage {
     #[doc="<p>The beginning of the file name of the AMI.</p>"]
     pub prefix: Option<String>,
     #[doc="<p>An Amazon S3 upload policy that gives Amazon EC2 permission to upload items into Amazon S3 on your behalf.</p>"]
-    pub upload_policy: Option<Blob>,
+    pub upload_policy: Option<Vec<u8>>,
     #[doc="<p>The signature of the JSON document.</p>"]
     pub upload_policy_signature: Option<String>,
 }
@@ -33641,33 +33418,33 @@ pub struct ScheduledInstance {
     #[doc="<p>The Availability Zone.</p>"]
     pub availability_zone: Option<String>,
     #[doc="<p>The date when the Scheduled Instance was purchased.</p>"]
-    pub create_date: Option<DateTime>,
+    pub create_date: Option<String>,
     #[doc="<p>The hourly price for a single instance.</p>"]
     pub hourly_price: Option<String>,
     #[doc="<p>The number of instances.</p>"]
-    pub instance_count: Option<Integer>,
+    pub instance_count: Option<i64>,
     #[doc="<p>The instance type.</p>"]
     pub instance_type: Option<String>,
     #[doc="<p>The network platform (<code>EC2-Classic</code> or <code>EC2-VPC</code>).</p>"]
     pub network_platform: Option<String>,
     #[doc="<p>The time for the next schedule to start.</p>"]
-    pub next_slot_start_time: Option<DateTime>,
+    pub next_slot_start_time: Option<String>,
     #[doc="<p>The platform (<code>Linux/UNIX</code> or <code>Windows</code>).</p>"]
     pub platform: Option<String>,
     #[doc="<p>The time that the previous schedule ended or will end.</p>"]
-    pub previous_slot_end_time: Option<DateTime>,
+    pub previous_slot_end_time: Option<String>,
     #[doc="<p>The schedule recurrence.</p>"]
     pub recurrence: Option<ScheduledInstanceRecurrence>,
     #[doc="<p>The Scheduled Instance ID.</p>"]
     pub scheduled_instance_id: Option<String>,
     #[doc="<p>The number of hours in the schedule.</p>"]
-    pub slot_duration_in_hours: Option<Integer>,
+    pub slot_duration_in_hours: Option<i64>,
     #[doc="<p>The end date for the Scheduled Instance.</p>"]
-    pub term_end_date: Option<DateTime>,
+    pub term_end_date: Option<String>,
     #[doc="<p>The start date for the Scheduled Instance.</p>"]
-    pub term_start_date: Option<DateTime>,
+    pub term_start_date: Option<String>,
     #[doc="<p>The total number of hours for a single instance for the entire term.</p>"]
-    pub total_scheduled_instance_hours: Option<Integer>,
+    pub total_scheduled_instance_hours: Option<i64>,
 }
 
 struct ScheduledInstanceDeserializer;
@@ -33782,17 +33559,17 @@ pub struct ScheduledInstanceAvailability {
     #[doc="<p>The Availability Zone.</p>"]
     pub availability_zone: Option<String>,
     #[doc="<p>The number of available instances.</p>"]
-    pub available_instance_count: Option<Integer>,
+    pub available_instance_count: Option<i64>,
     #[doc="<p>The time period for the first schedule to start.</p>"]
-    pub first_slot_start_time: Option<DateTime>,
+    pub first_slot_start_time: Option<String>,
     #[doc="<p>The hourly price for a single instance.</p>"]
     pub hourly_price: Option<String>,
     #[doc="<p>The instance type. You can specify one of the C3, C4, M4, or R3 instance types.</p>"]
     pub instance_type: Option<String>,
     #[doc="<p>The maximum term. The only possible value is 365 days.</p>"]
-    pub max_term_duration_in_days: Option<Integer>,
+    pub max_term_duration_in_days: Option<i64>,
     #[doc="<p>The minimum term. The only possible value is 365 days.</p>"]
-    pub min_term_duration_in_days: Option<Integer>,
+    pub min_term_duration_in_days: Option<i64>,
     #[doc="<p>The network platform (<code>EC2-Classic</code> or <code>EC2-VPC</code>).</p>"]
     pub network_platform: Option<String>,
     #[doc="<p>The platform (<code>Linux/UNIX</code> or <code>Windows</code>).</p>"]
@@ -33802,9 +33579,9 @@ pub struct ScheduledInstanceAvailability {
     #[doc="<p>The schedule recurrence.</p>"]
     pub recurrence: Option<ScheduledInstanceRecurrence>,
     #[doc="<p>The number of hours in the schedule.</p>"]
-    pub slot_duration_in_hours: Option<Integer>,
+    pub slot_duration_in_hours: Option<i64>,
     #[doc="<p>The total number of hours for a single instance for the entire term.</p>"]
-    pub total_scheduled_instance_hours: Option<Integer>,
+    pub total_scheduled_instance_hours: Option<i64>,
 }
 
 struct ScheduledInstanceAvailabilityDeserializer;
@@ -33904,14 +33681,13 @@ impl ScheduledInstanceAvailabilityDeserializer {
 
     }
 }
-pub type ScheduledInstanceAvailabilitySet = Vec<ScheduledInstanceAvailability>;
 struct ScheduledInstanceAvailabilitySetDeserializer;
 impl ScheduledInstanceAvailabilitySetDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>
         (tag_name: &str,
          stack: &mut T)
-         -> Result<ScheduledInstanceAvailabilitySet, XmlParseError> {
+         -> Result<Vec<ScheduledInstanceAvailability>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -33947,12 +33723,11 @@ impl ScheduledInstanceAvailabilitySetDeserializer {
 
     }
 }
-pub type ScheduledInstanceIdRequestSet = Vec<String>;
 
 /// Serialize `ScheduledInstanceIdRequestSet` contents to a `SignedRequest`.
 struct ScheduledInstanceIdRequestSetSerializer;
 impl ScheduledInstanceIdRequestSetSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ScheduledInstanceIdRequestSet) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -33966,11 +33741,11 @@ pub struct ScheduledInstanceRecurrence {
     #[doc="<p>The frequency (<code>Daily</code>, <code>Weekly</code>, or <code>Monthly</code>).</p>"]
     pub frequency: Option<String>,
     #[doc="<p>The interval quantity. The interval unit depends on the value of <code>frequency</code>. For example, every 2 weeks or every 2 months.</p>"]
-    pub interval: Option<Integer>,
+    pub interval: Option<i64>,
     #[doc="<p>The days. For a monthly schedule, this is one or more days of the month (1-31). For a weekly schedule, this is one or more days of the week (1-7, where 1 is Sunday).</p>"]
-    pub occurrence_day_set: Option<OccurrenceDaySet>,
+    pub occurrence_day_set: Option<Vec<i64>>,
     #[doc="<p>Indicates whether the occurrence is relative to the end of the specified week or month.</p>"]
-    pub occurrence_relative_to_end: Option<Boolean>,
+    pub occurrence_relative_to_end: Option<bool>,
     #[doc="<p>The unit for <code>occurrenceDaySet</code> (<code>DayOfWeek</code> or <code>DayOfMonth</code>).</p>"]
     pub occurrence_unit: Option<String>,
 }
@@ -34042,11 +33817,11 @@ pub struct ScheduledInstanceRecurrenceRequest {
     #[doc="<p>The frequency (<code>Daily</code>, <code>Weekly</code>, or <code>Monthly</code>).</p>"]
     pub frequency: Option<String>,
     #[doc="<p>The interval quantity. The interval unit depends on the value of <code>Frequency</code>. For example, every 2 weeks or every 2 months.</p>"]
-    pub interval: Option<Integer>,
+    pub interval: Option<i64>,
     #[doc="<p>The days. For a monthly schedule, this is one or more days of the month (1-31). For a weekly schedule, this is one or more days of the week (1-7, where 1 is Sunday). You can't specify this value with a daily schedule. If the occurrence is relative to the end of the month, you can specify only a single day.</p>"]
-    pub occurrence_days: Option<OccurrenceDayRequestSet>,
+    pub occurrence_days: Option<Vec<i64>>,
     #[doc="<p>Indicates whether the occurrence is relative to the end of the specified week or month. You can't specify this value with a daily schedule.</p>"]
-    pub occurrence_relative_to_end: Option<Boolean>,
+    pub occurrence_relative_to_end: Option<bool>,
     #[doc="<p>The unit for <code>OccurrenceDays</code> (<code>DayOfWeek</code> or <code>DayOfMonth</code>). This value is required for a monthly schedule. You can't specify <code>DayOfWeek</code> with a weekly schedule. You can't specify this value with a daily schedule.</p>"]
     pub occurrence_unit: Option<String>,
 }
@@ -34084,13 +33859,12 @@ impl ScheduledInstanceRecurrenceRequestSerializer {
     }
 }
 
-pub type ScheduledInstanceSet = Vec<ScheduledInstance>;
 struct ScheduledInstanceSetDeserializer;
 impl ScheduledInstanceSetDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ScheduledInstanceSet, XmlParseError> {
+                                       -> Result<Vec<ScheduledInstance>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -34167,12 +33941,13 @@ impl ScheduledInstancesBlockDeviceMappingSerializer {
     }
 }
 
-pub type ScheduledInstancesBlockDeviceMappingSet = Vec<ScheduledInstancesBlockDeviceMapping>;
 
 /// Serialize `ScheduledInstancesBlockDeviceMappingSet` contents to a `SignedRequest`.
 struct ScheduledInstancesBlockDeviceMappingSetSerializer;
 impl ScheduledInstancesBlockDeviceMappingSetSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ScheduledInstancesBlockDeviceMappingSet) {
+    fn serialize(params: &mut Params,
+                 name: &str,
+                 obj: &Vec<ScheduledInstancesBlockDeviceMapping>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             ScheduledInstancesBlockDeviceMappingSerializer::serialize(params, &key, obj);
@@ -34184,15 +33959,15 @@ impl ScheduledInstancesBlockDeviceMappingSetSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ScheduledInstancesEbs {
     #[doc="<p>Indicates whether the volume is deleted on instance termination.</p>"]
-    pub delete_on_termination: Option<Boolean>,
+    pub delete_on_termination: Option<bool>,
     #[doc="<p>Indicates whether the volume is encrypted. You can attached encrypted volumes only to instances that support them.</p>"]
-    pub encrypted: Option<Boolean>,
+    pub encrypted: Option<bool>,
     #[doc="<p>The number of I/O operations per second (IOPS) that the volume supports. For io1 volumes, this represents the number of IOPS that are provisioned for the volume. For <code>gp2</code> volumes, this represents the baseline performance of the volume and the rate at which the volume accumulates I/O credits for bursting. For more information about <code>gp2</code> baseline performance, I/O credits, and bursting, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html\">Amazon EBS Volume Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Constraint: Range is 100-20000 IOPS for <code>io1</code> volumes and 100-10000 IOPS for <code>gp2</code> volumes.</p> <p>Condition: This parameter is required for requests to create <code>io1</code>volumes; it is not used in requests to create <code>gp2</code>, <code>st1</code>, <code>sc1</code>, or <code>standard</code> volumes.</p>"]
-    pub iops: Option<Integer>,
+    pub iops: Option<i64>,
     #[doc="<p>The ID of the snapshot.</p>"]
     pub snapshot_id: Option<String>,
     #[doc="<p>The size of the volume, in GiB.</p> <p>Default: If you're creating the volume from a snapshot and don't specify a volume size, the default is the snapshot size.</p>"]
-    pub volume_size: Option<Integer>,
+    pub volume_size: Option<i64>,
     #[doc="<p>The volume type. <code>gp2</code> for General Purpose SSD, <code>io1</code> for Provisioned IOPS SSD, Throughput Optimized HDD for <code>st1</code>, Cold HDD for <code>sc1</code>, or <code>standard</code> for Magnetic.</p> <p>Default: <code>standard</code> </p>"]
     pub volume_type: Option<String>,
 }
@@ -34265,7 +34040,7 @@ impl ScheduledInstancesIamInstanceProfileSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ScheduledInstancesIpv6Address {
     #[doc="<p>The IPv6 address.</p>"]
-    pub ipv_6_address: Option<Ipv6Address>,
+    pub ipv_6_address: Option<String>,
 }
 
 
@@ -34285,12 +34060,11 @@ impl ScheduledInstancesIpv6AddressSerializer {
     }
 }
 
-pub type ScheduledInstancesIpv6AddressList = Vec<ScheduledInstancesIpv6Address>;
 
 /// Serialize `ScheduledInstancesIpv6AddressList` contents to a `SignedRequest`.
 struct ScheduledInstancesIpv6AddressListSerializer;
 impl ScheduledInstancesIpv6AddressListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ScheduledInstancesIpv6AddressList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<ScheduledInstancesIpv6Address>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             ScheduledInstancesIpv6AddressSerializer::serialize(params, &key, obj);
@@ -34302,9 +34076,9 @@ impl ScheduledInstancesIpv6AddressListSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ScheduledInstancesLaunchSpecification {
     #[doc="<p>One or more block device mapping entries.</p>"]
-    pub block_device_mappings: Option<ScheduledInstancesBlockDeviceMappingSet>,
+    pub block_device_mappings: Option<Vec<ScheduledInstancesBlockDeviceMapping>>,
     #[doc="<p>Indicates whether the instances are optimized for EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal EBS I/O performance. This optimization isn't available with all instance types. Additional usage charges apply when using an EBS-optimized instance.</p> <p>Default: <code>false</code> </p>"]
-    pub ebs_optimized: Option<Boolean>,
+    pub ebs_optimized: Option<bool>,
     #[doc="<p>The IAM instance profile.</p>"]
     pub iam_instance_profile: Option<ScheduledInstancesIamInstanceProfile>,
     #[doc="<p>The ID of the Amazon Machine Image (AMI).</p>"]
@@ -34318,13 +34092,13 @@ pub struct ScheduledInstancesLaunchSpecification {
     #[doc="<p>Enable or disable monitoring for the instances.</p>"]
     pub monitoring: Option<ScheduledInstancesMonitoring>,
     #[doc="<p>One or more network interfaces.</p>"]
-    pub network_interfaces: Option<ScheduledInstancesNetworkInterfaceSet>,
+    pub network_interfaces: Option<Vec<ScheduledInstancesNetworkInterface>>,
     #[doc="<p>The placement information.</p>"]
     pub placement: Option<ScheduledInstancesPlacement>,
     #[doc="<p>The ID of the RAM disk.</p>"]
     pub ramdisk_id: Option<String>,
     #[doc="<p>The IDs of one or more security groups.</p>"]
-    pub security_group_ids: Option<ScheduledInstancesSecurityGroupIdSet>,
+    pub security_group_ids: Option<Vec<String>>,
     #[doc="<p>The ID of the subnet in which to launch the instances.</p>"]
     pub subnet_id: Option<String>,
     #[doc="<p>The base64-encoded MIME user data.</p>"]
@@ -34412,7 +34186,7 @@ impl ScheduledInstancesLaunchSpecificationSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ScheduledInstancesMonitoring {
     #[doc="<p>Indicates whether monitoring is enabled.</p>"]
-    pub enabled: Option<Boolean>,
+    pub enabled: Option<bool>,
 }
 
 
@@ -34437,27 +34211,27 @@ impl ScheduledInstancesMonitoringSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ScheduledInstancesNetworkInterface {
     #[doc="<p>Indicates whether to assign a public IPv4 address to instances launched in a VPC. The public IPv4 address can only be assigned to a network interface for eth0, and can only be assigned to a new network interface, not an existing one. You cannot specify more than one network interface in the request. If launching into a default subnet, the default value is <code>true</code>.</p>"]
-    pub associate_public_ip_address: Option<Boolean>,
+    pub associate_public_ip_address: Option<bool>,
     #[doc="<p>Indicates whether to delete the interface when the instance is terminated.</p>"]
-    pub delete_on_termination: Option<Boolean>,
+    pub delete_on_termination: Option<bool>,
     #[doc="<p>The description.</p>"]
     pub description: Option<String>,
     #[doc="<p>The index of the device for the network interface attachment.</p>"]
-    pub device_index: Option<Integer>,
+    pub device_index: Option<i64>,
     #[doc="<p>The IDs of one or more security groups.</p>"]
-    pub groups: Option<ScheduledInstancesSecurityGroupIdSet>,
+    pub groups: Option<Vec<String>>,
     #[doc="<p>The number of IPv6 addresses to assign to the network interface. The IPv6 addresses are automatically selected from the subnet range.</p>"]
-    pub ipv_6_address_count: Option<Integer>,
+    pub ipv_6_address_count: Option<i64>,
     #[doc="<p>One or more specific IPv6 addresses from the subnet range.</p>"]
-    pub ipv_6_addresses: Option<ScheduledInstancesIpv6AddressList>,
+    pub ipv_6_addresses: Option<Vec<ScheduledInstancesIpv6Address>>,
     #[doc="<p>The ID of the network interface.</p>"]
     pub network_interface_id: Option<String>,
     #[doc="<p>The IPv4 address of the network interface within the subnet.</p>"]
     pub private_ip_address: Option<String>,
     #[doc="<p>The private IPv4 addresses.</p>"]
-    pub private_ip_address_configs: Option<PrivateIpAddressConfigSet>,
+    pub private_ip_address_configs: Option<Vec<ScheduledInstancesPrivateIpAddressConfig>>,
     #[doc="<p>The number of secondary private IPv4 addresses.</p>"]
-    pub secondary_private_ip_address_count: Option<Integer>,
+    pub secondary_private_ip_address_count: Option<i64>,
     #[doc="<p>The ID of the subnet.</p>"]
     pub subnet_id: Option<String>,
 }
@@ -34529,12 +34303,11 @@ impl ScheduledInstancesNetworkInterfaceSerializer {
     }
 }
 
-pub type ScheduledInstancesNetworkInterfaceSet = Vec<ScheduledInstancesNetworkInterface>;
 
 /// Serialize `ScheduledInstancesNetworkInterfaceSet` contents to a `SignedRequest`.
 struct ScheduledInstancesNetworkInterfaceSetSerializer;
 impl ScheduledInstancesNetworkInterfaceSetSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ScheduledInstancesNetworkInterfaceSet) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<ScheduledInstancesNetworkInterface>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             ScheduledInstancesNetworkInterfaceSerializer::serialize(params, &key, obj);
@@ -34575,7 +34348,7 @@ impl ScheduledInstancesPlacementSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ScheduledInstancesPrivateIpAddressConfig {
     #[doc="<p>Indicates whether this is a primary IPv4 address. Otherwise, this is a secondary IPv4 address.</p>"]
-    pub primary: Option<Boolean>,
+    pub primary: Option<bool>,
     #[doc="<p>The IPv4 address.</p>"]
     pub private_ip_address: Option<String>,
 }
@@ -34601,12 +34374,11 @@ impl ScheduledInstancesPrivateIpAddressConfigSerializer {
     }
 }
 
-pub type ScheduledInstancesSecurityGroupIdSet = Vec<String>;
 
 /// Serialize `ScheduledInstancesSecurityGroupIdSet` contents to a `SignedRequest`.
 struct ScheduledInstancesSecurityGroupIdSetSerializer;
 impl ScheduledInstancesSecurityGroupIdSetSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ScheduledInstancesSecurityGroupIdSet) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -34614,13 +34386,12 @@ impl ScheduledInstancesSecurityGroupIdSetSerializer {
     }
 }
 
-pub type Scope = String;
 struct ScopeDeserializer;
 impl ScopeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Scope, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -34639,13 +34410,13 @@ pub struct SecurityGroup {
     #[doc="<p>The name of the security group.</p>"]
     pub group_name: Option<String>,
     #[doc="<p>One or more inbound rules associated with the security group.</p>"]
-    pub ip_permissions: Option<IpPermissionList>,
+    pub ip_permissions: Option<Vec<IpPermission>>,
     #[doc="<p>[EC2-VPC] One or more outbound rules associated with the security group.</p>"]
-    pub ip_permissions_egress: Option<IpPermissionList>,
+    pub ip_permissions_egress: Option<Vec<IpPermission>>,
     #[doc="<p>The AWS account ID of the owner of the security group.</p>"]
     pub owner_id: Option<String>,
     #[doc="<p>Any tags assigned to the security group.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>[EC2-VPC] The ID of the VPC for the security group.</p>"]
     pub vpc_id: Option<String>,
 }
@@ -34722,13 +34493,12 @@ impl SecurityGroupDeserializer {
 
     }
 }
-pub type SecurityGroupIdStringList = Vec<String>;
 struct SecurityGroupIdStringListDeserializer;
 impl SecurityGroupIdStringListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SecurityGroupIdStringList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -34768,7 +34538,7 @@ impl SecurityGroupIdStringListDeserializer {
 /// Serialize `SecurityGroupIdStringList` contents to a `SignedRequest`.
 struct SecurityGroupIdStringListSerializer;
 impl SecurityGroupIdStringListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SecurityGroupIdStringList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -34776,13 +34546,12 @@ impl SecurityGroupIdStringListSerializer {
     }
 }
 
-pub type SecurityGroupList = Vec<SecurityGroup>;
 struct SecurityGroupListDeserializer;
 impl SecurityGroupListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SecurityGroupList, XmlParseError> {
+                                       -> Result<Vec<SecurityGroup>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -34879,13 +34648,12 @@ impl SecurityGroupReferenceDeserializer {
 
     }
 }
-pub type SecurityGroupReferences = Vec<SecurityGroupReference>;
 struct SecurityGroupReferencesDeserializer;
 impl SecurityGroupReferencesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SecurityGroupReferences, XmlParseError> {
+                                       -> Result<Vec<SecurityGroupReference>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -34922,12 +34690,11 @@ impl SecurityGroupReferencesDeserializer {
 
     }
 }
-pub type SecurityGroupStringList = Vec<String>;
 
 /// Serialize `SecurityGroupStringList` contents to a `SignedRequest`.
 struct SecurityGroupStringListSerializer;
 impl SecurityGroupStringListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SecurityGroupStringList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -34935,14 +34702,13 @@ impl SecurityGroupStringListSerializer {
     }
 }
 
-pub type ShutdownBehavior = String;
 #[doc="<p>Describes the time period for a Scheduled Instance to start its first schedule. The time period must span less than one day.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct SlotDateTimeRangeRequest {
     #[doc="<p>The earliest date and time, in UTC, for the Scheduled Instance to start.</p>"]
-    pub earliest_time: DateTime,
+    pub earliest_time: String,
     #[doc="<p>The latest date and time, in UTC, for the Scheduled Instance to start. This value must be later than or equal to the earliest date and at most three months in the future.</p>"]
-    pub latest_time: DateTime,
+    pub latest_time: String,
 }
 
 
@@ -34965,9 +34731,9 @@ impl SlotDateTimeRangeRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct SlotStartTimeRangeRequest {
     #[doc="<p>The earliest date and time, in UTC, for the Scheduled Instance to start.</p>"]
-    pub earliest_time: Option<DateTime>,
+    pub earliest_time: Option<String>,
     #[doc="<p>The latest date and time, in UTC, for the Scheduled Instance to start.</p>"]
-    pub latest_time: Option<DateTime>,
+    pub latest_time: Option<String>,
 }
 
 
@@ -34998,7 +34764,7 @@ pub struct Snapshot {
     #[doc="<p>The description for the snapshot.</p>"]
     pub description: Option<String>,
     #[doc="<p>Indicates whether the snapshot is encrypted.</p>"]
-    pub encrypted: Option<Boolean>,
+    pub encrypted: Option<bool>,
     #[doc="<p>The full ARN of the AWS Key Management Service (AWS KMS) customer master key (CMK) that was used to protect the volume encryption key for the parent volume.</p>"]
     pub kms_key_id: Option<String>,
     #[doc="<p> Value from an Amazon-maintained list (<code>amazon</code> | <code>aws-marketplace</code> | <code>microsoft</code>) of snapshot owners. Not to be confused with the user-configured AWS account alias, which is set from the IAM console. </p>"]
@@ -35010,17 +34776,17 @@ pub struct Snapshot {
     #[doc="<p>The ID of the snapshot. Each snapshot receives a unique identifier when it is created.</p>"]
     pub snapshot_id: Option<String>,
     #[doc="<p>The time stamp when the snapshot was initiated.</p>"]
-    pub start_time: Option<DateTime>,
+    pub start_time: Option<String>,
     #[doc="<p>The snapshot state.</p>"]
-    pub state: Option<SnapshotState>,
+    pub state: Option<String>,
     #[doc="<p>Encrypted Amazon EBS snapshots are copied asynchronously. If a snapshot copy operation fails (for example, if the proper AWS Key Management Service (AWS KMS) permissions are not obtained) this field displays error state details to help you diagnose why the error occurred. This parameter is only returned by the <a>DescribeSnapshots</a> API operation.</p>"]
     pub state_message: Option<String>,
     #[doc="<p>Any tags assigned to the snapshot.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>The ID of the volume that was used to create the snapshot. Snapshots created by the <a>CopySnapshot</a> action have an arbitrary volume ID that should not be used for any purpose.</p>"]
     pub volume_id: Option<String>,
     #[doc="<p>The size of the volume, in GiB.</p>"]
-    pub volume_size: Option<Integer>,
+    pub volume_size: Option<i64>,
 }
 
 struct SnapshotDeserializer;
@@ -35118,7 +34884,6 @@ impl SnapshotDeserializer {
 
     }
 }
-pub type SnapshotAttributeName = String;
 #[doc="<p>Describes the snapshot created from the imported disk.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct SnapshotDetail {
@@ -35127,7 +34892,7 @@ pub struct SnapshotDetail {
     #[doc="<p>The block device mapping for the snapshot.</p>"]
     pub device_name: Option<String>,
     #[doc="<p>The size of the disk in the snapshot, in GiB.</p>"]
-    pub disk_image_size: Option<Double>,
+    pub disk_image_size: Option<f64>,
     #[doc="<p>The format of the disk image from which the snapshot is created.</p>"]
     pub format: Option<String>,
     #[doc="<p>The percentage of progress for the task.</p>"]
@@ -35222,13 +34987,12 @@ impl SnapshotDetailDeserializer {
 
     }
 }
-pub type SnapshotDetailList = Vec<SnapshotDetail>;
 struct SnapshotDetailListDeserializer;
 impl SnapshotDetailListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SnapshotDetailList, XmlParseError> {
+                                       -> Result<Vec<SnapshotDetail>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -35305,12 +35069,11 @@ impl SnapshotDiskContainerSerializer {
     }
 }
 
-pub type SnapshotIdStringList = Vec<String>;
 
 /// Serialize `SnapshotIdStringList` contents to a `SignedRequest`.
 struct SnapshotIdStringListSerializer;
 impl SnapshotIdStringListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SnapshotIdStringList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -35318,13 +35081,12 @@ impl SnapshotIdStringListSerializer {
     }
 }
 
-pub type SnapshotList = Vec<Snapshot>;
 struct SnapshotListDeserializer;
 impl SnapshotListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SnapshotList, XmlParseError> {
+                                       -> Result<Vec<Snapshot>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -35360,13 +35122,12 @@ impl SnapshotListDeserializer {
 
     }
 }
-pub type SnapshotState = String;
 struct SnapshotStateDeserializer;
 impl SnapshotStateDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SnapshotState, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -35381,7 +35142,7 @@ pub struct SnapshotTaskDetail {
     #[doc="<p>The description of the snapshot.</p>"]
     pub description: Option<String>,
     #[doc="<p>The size of the disk in the snapshot, in GiB.</p>"]
-    pub disk_image_size: Option<Double>,
+    pub disk_image_size: Option<f64>,
     #[doc="<p>The format of the disk image from which the snapshot is created.</p>"]
     pub format: Option<String>,
     #[doc="<p>The percentage of completion for the import snapshot task.</p>"]
@@ -35484,7 +35245,7 @@ pub struct SpotDatafeedSubscription {
     #[doc="<p>The prefix that is prepended to data feed files.</p>"]
     pub prefix: Option<String>,
     #[doc="<p>The state of the Spot instance data feed subscription.</p>"]
-    pub state: Option<DatafeedSubscriptionState>,
+    pub state: Option<String>,
 }
 
 struct SpotDatafeedSubscriptionDeserializer;
@@ -35551,15 +35312,15 @@ pub struct SpotFleetLaunchSpecification {
     #[doc="<p>Deprecated.</p>"]
     pub addressing_type: Option<String>,
     #[doc="<p>One or more block device mapping entries.</p>"]
-    pub block_device_mappings: Option<BlockDeviceMappingList>,
+    pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
     #[doc="<p>Indicates whether the instances are optimized for EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal EBS I/O performance. This optimization isn't available with all instance types. Additional usage charges apply when using an EBS Optimized instance.</p> <p>Default: <code>false</code> </p>"]
-    pub ebs_optimized: Option<Boolean>,
+    pub ebs_optimized: Option<bool>,
     #[doc="<p>The IAM instance profile.</p>"]
     pub iam_instance_profile: Option<IamInstanceProfileSpecification>,
     #[doc="<p>The ID of the AMI.</p>"]
     pub image_id: Option<String>,
     #[doc="<p>The instance type. Note that T2 and HS1 instance types are not supported.</p>"]
-    pub instance_type: Option<InstanceType>,
+    pub instance_type: Option<String>,
     #[doc="<p>The ID of the kernel.</p>"]
     pub kernel_id: Option<String>,
     #[doc="<p>The name of the key pair.</p>"]
@@ -35567,13 +35328,13 @@ pub struct SpotFleetLaunchSpecification {
     #[doc="<p>Enable or disable monitoring for the instances.</p>"]
     pub monitoring: Option<SpotFleetMonitoring>,
     #[doc="<p>One or more network interfaces. If you specify a network interface, you must specify subnet IDs and security group IDs using the network interface.</p>"]
-    pub network_interfaces: Option<InstanceNetworkInterfaceSpecificationList>,
+    pub network_interfaces: Option<Vec<InstanceNetworkInterfaceSpecification>>,
     #[doc="<p>The placement information.</p>"]
     pub placement: Option<SpotPlacement>,
     #[doc="<p>The ID of the RAM disk.</p>"]
     pub ramdisk_id: Option<String>,
     #[doc="<p>One or more security groups. When requesting instances in a VPC, you must specify the IDs of the security groups. When requesting instances in EC2-Classic, you can specify the names or the IDs of the security groups.</p>"]
-    pub security_groups: Option<GroupIdentifierList>,
+    pub security_groups: Option<Vec<GroupIdentifier>>,
     #[doc="<p>The bid price per unit hour for the specified instance type. If this value is not specified, the default is the Spot bid price specified for the fleet. To determine the bid price per unit hour, divide the Spot bid price by the value of <code>WeightedCapacity</code>.</p>"]
     pub spot_price: Option<String>,
     #[doc="<p>The ID of the subnet in which to launch the instances. To specify multiple subnets, separate them using commas; for example, \"subnet-a61dafcf, subnet-65ea5f08\".</p>"]
@@ -35581,7 +35342,7 @@ pub struct SpotFleetLaunchSpecification {
     #[doc="<p>The user data to make available to the instances. If you are using an AWS SDK or command line tool, Base64-encoding is performed for you, and you can load the text from a file. Otherwise, you must provide Base64-encoded text.</p>"]
     pub user_data: Option<String>,
     #[doc="<p>The number of units provided by the specified instance type. These are the same units that you chose to set the target capacity in terms (instances or a performance characteristic such as vCPUs, memory, or I/O).</p> <p>If the target capacity divided by this value is not a whole number, we round the number of instances to the next whole number. If this value is not specified, the default is 1.</p>"]
-    pub weighted_capacity: Option<Double>,
+    pub weighted_capacity: Option<f64>,
 }
 
 struct SpotFleetLaunchSpecificationDeserializer;
@@ -35784,7 +35545,7 @@ impl SpotFleetLaunchSpecificationSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct SpotFleetMonitoring {
     #[doc="<p>Enables monitoring for the instance.</p> <p>Default: <code>false</code> </p>"]
-    pub enabled: Option<Boolean>,
+    pub enabled: Option<bool>,
 }
 
 struct SpotFleetMonitoringDeserializer;
@@ -35851,15 +35612,15 @@ impl SpotFleetMonitoringSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct SpotFleetRequestConfig {
     #[doc="<p>The progress of the Spot fleet request. If there is an error, the status is <code>error</code>. After all bids are placed, the status is <code>pending_fulfillment</code>. If the size of the fleet is equal to or greater than its target capacity, the status is <code>fulfilled</code>. If the size of the fleet is decreased, the status is <code>pending_termination</code> while Spot instances are terminating.</p>"]
-    pub activity_status: Option<ActivityStatus>,
+    pub activity_status: Option<String>,
     #[doc="<p>The creation date and time of the request.</p>"]
-    pub create_time: DateTime,
+    pub create_time: String,
     #[doc="<p>Information about the configuration of the Spot fleet request.</p>"]
     pub spot_fleet_request_config: SpotFleetRequestConfigData,
     #[doc="<p>The ID of the Spot fleet request.</p>"]
     pub spot_fleet_request_id: String,
     #[doc="<p>The state of the Spot fleet request.</p>"]
-    pub spot_fleet_request_state: BatchState,
+    pub spot_fleet_request_state: String,
 }
 
 struct SpotFleetRequestConfigDeserializer;
@@ -35927,31 +35688,31 @@ impl SpotFleetRequestConfigDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct SpotFleetRequestConfigData {
     #[doc="<p>Indicates how to allocate the target capacity across the Spot pools specified by the Spot fleet request. The default is <code>lowestPrice</code>.</p>"]
-    pub allocation_strategy: Option<AllocationStrategy>,
+    pub allocation_strategy: Option<String>,
     #[doc="<p>A unique, case-sensitive identifier you provide to ensure idempotency of your listings. This helps avoid duplicate listings. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html\">Ensuring Idempotency</a>.</p>"]
     pub client_token: Option<String>,
     #[doc="<p>Indicates whether running Spot instances should be terminated if the target capacity of the Spot fleet request is decreased below the current size of the Spot fleet.</p>"]
-    pub excess_capacity_termination_policy: Option<ExcessCapacityTerminationPolicy>,
+    pub excess_capacity_termination_policy: Option<String>,
     #[doc="<p>The number of units fulfilled by this request compared to the set target capacity.</p>"]
-    pub fulfilled_capacity: Option<Double>,
+    pub fulfilled_capacity: Option<f64>,
     #[doc="<p>Grants the Spot fleet permission to terminate Spot instances on your behalf when you cancel its Spot fleet request using <a>CancelSpotFleetRequests</a> or when the Spot fleet request expires, if you set <code>terminateInstancesWithExpiration</code>.</p>"]
     pub iam_fleet_role: String,
     #[doc="<p>Information about the launch specifications for the Spot fleet request.</p>"]
-    pub launch_specifications: LaunchSpecsList,
+    pub launch_specifications: Vec<SpotFleetLaunchSpecification>,
     #[doc="<p>Indicates whether Spot fleet should replace unhealthy instances.</p>"]
-    pub replace_unhealthy_instances: Option<Boolean>,
+    pub replace_unhealthy_instances: Option<bool>,
     #[doc="<p>The bid price per unit hour.</p>"]
     pub spot_price: String,
     #[doc="<p>The number of units to request. You can choose to set the target capacity in terms of instances or a performance characteristic that is important to your application workload, such as vCPUs, memory, or I/O.</p>"]
-    pub target_capacity: Integer,
+    pub target_capacity: i64,
     #[doc="<p>Indicates whether running Spot instances should be terminated when the Spot fleet request expires.</p>"]
-    pub terminate_instances_with_expiration: Option<Boolean>,
+    pub terminate_instances_with_expiration: Option<bool>,
     #[doc="<p>The type of request. Indicates whether the fleet will only <code>request</code> the target capacity or also attempt to <code>maintain</code> it. When you <code>request</code> a certain target capacity, the fleet will only place the required bids. It will not attempt to replenish Spot instances if capacity is diminished, nor will it submit bids in alternative Spot pools if capacity is not available. When you want to <code>maintain</code> a certain target capacity, fleet will place the required bids to meet this target capacity. It will also automatically replenish any interrupted instances. Default: <code>maintain</code>.</p>"]
-    pub type_: Option<FleetType>,
+    pub type_: Option<String>,
     #[doc="<p>The start date and time of the request, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z). The default is to start fulfilling the request immediately.</p>"]
-    pub valid_from: Option<DateTime>,
+    pub valid_from: Option<String>,
     #[doc="<p>The end date and time of the request, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z). At this point, no new Spot instance requests are placed or enabled to fulfill the request.</p>"]
-    pub valid_until: Option<DateTime>,
+    pub valid_until: Option<String>,
 }
 
 struct SpotFleetRequestConfigDataDeserializer;
@@ -36101,13 +35862,12 @@ impl SpotFleetRequestConfigDataSerializer {
     }
 }
 
-pub type SpotFleetRequestConfigSet = Vec<SpotFleetRequestConfig>;
 struct SpotFleetRequestConfigSetDeserializer;
 impl SpotFleetRequestConfigSetDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SpotFleetRequestConfigSet, XmlParseError> {
+                                       -> Result<Vec<SpotFleetRequestConfig>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -36152,9 +35912,9 @@ pub struct SpotInstanceRequest {
     #[doc="<p>The Availability Zone group. If you specify the same Availability Zone group for all Spot instance requests, all Spot instances are launched in the same Availability Zone.</p>"]
     pub availability_zone_group: Option<String>,
     #[doc="<p>The duration for the Spot instance, in minutes.</p>"]
-    pub block_duration_minutes: Option<Integer>,
+    pub block_duration_minutes: Option<i64>,
     #[doc="<p>The date and time when the Spot instance request was created, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z).</p>"]
-    pub create_time: Option<DateTime>,
+    pub create_time: Option<String>,
     #[doc="<p>The fault codes for the Spot instance request, if any.</p>"]
     pub fault: Option<SpotInstanceStateFault>,
     #[doc="<p>The instance ID, if an instance has been launched to fulfill the Spot instance request.</p>"]
@@ -36166,23 +35926,23 @@ pub struct SpotInstanceRequest {
     #[doc="<p>The Availability Zone in which the bid is launched.</p>"]
     pub launched_availability_zone: Option<String>,
     #[doc="<p>The product description associated with the Spot instance.</p>"]
-    pub product_description: Option<RIProductDescription>,
+    pub product_description: Option<String>,
     #[doc="<p>The ID of the Spot instance request.</p>"]
     pub spot_instance_request_id: Option<String>,
     #[doc="<p>The maximum hourly price (bid) for the Spot instance launched to fulfill the request.</p>"]
     pub spot_price: Option<String>,
     #[doc="<p>The state of the Spot instance request. Spot bid status information can help you track your Spot instance requests. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-bid-status.html\">Spot Bid Status</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>"]
-    pub state: Option<SpotInstanceState>,
+    pub state: Option<String>,
     #[doc="<p>The status code and status message describing the Spot instance request.</p>"]
     pub status: Option<SpotInstanceStatus>,
     #[doc="<p>Any tags assigned to the resource.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>The Spot instance request type.</p>"]
-    pub type_: Option<SpotInstanceType>,
+    pub type_: Option<String>,
     #[doc="<p>The start date of the request, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z). The request becomes active at this date and time.</p>"]
-    pub valid_from: Option<DateTime>,
+    pub valid_from: Option<String>,
     #[doc="<p>The end date of the request, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z). If this is a one-time request, it remains active until all instances launch, the request is canceled, or this date is reached. If the request is persistent, it remains active until it is canceled or this date is reached.</p>"]
-    pub valid_until: Option<DateTime>,
+    pub valid_until: Option<String>,
 }
 
 struct SpotInstanceRequestDeserializer;
@@ -36306,12 +36066,11 @@ impl SpotInstanceRequestDeserializer {
 
     }
 }
-pub type SpotInstanceRequestIdList = Vec<String>;
 
 /// Serialize `SpotInstanceRequestIdList` contents to a `SignedRequest`.
 struct SpotInstanceRequestIdListSerializer;
 impl SpotInstanceRequestIdListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SpotInstanceRequestIdList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -36319,13 +36078,12 @@ impl SpotInstanceRequestIdListSerializer {
     }
 }
 
-pub type SpotInstanceRequestList = Vec<SpotInstanceRequest>;
 struct SpotInstanceRequestListDeserializer;
 impl SpotInstanceRequestListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SpotInstanceRequestList, XmlParseError> {
+                                       -> Result<Vec<SpotInstanceRequest>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -36361,13 +36119,12 @@ impl SpotInstanceRequestListDeserializer {
 
     }
 }
-pub type SpotInstanceState = String;
 struct SpotInstanceStateDeserializer;
 impl SpotInstanceStateDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SpotInstanceState, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -36438,7 +36195,7 @@ pub struct SpotInstanceStatus {
     #[doc="<p>The description for the status code.</p>"]
     pub message: Option<String>,
     #[doc="<p>The date and time of the most recent status update, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z).</p>"]
-    pub update_time: Option<DateTime>,
+    pub update_time: Option<String>,
 }
 
 struct SpotInstanceStatusDeserializer;
@@ -36490,13 +36247,12 @@ impl SpotInstanceStatusDeserializer {
 
     }
 }
-pub type SpotInstanceType = String;
 struct SpotInstanceTypeDeserializer;
 impl SpotInstanceTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SpotInstanceType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -36513,7 +36269,7 @@ pub struct SpotPlacement {
     #[doc="<p>The name of the placement group (for cluster instances).</p>"]
     pub group_name: Option<String>,
     #[doc="<p>The tenancy of the instance (if the instance is running in a VPC). An instance with a tenancy of <code>dedicated</code> runs on single-tenant hardware. The <code>host</code> tenancy is not supported for Spot instances.</p>"]
-    pub tenancy: Option<Tenancy>,
+    pub tenancy: Option<String>,
 }
 
 struct SpotPlacementDeserializer;
@@ -36596,13 +36352,13 @@ pub struct SpotPrice {
     #[doc="<p>The Availability Zone.</p>"]
     pub availability_zone: Option<String>,
     #[doc="<p>The instance type. Note that T2 and HS1 instance types are not supported.</p>"]
-    pub instance_type: Option<InstanceType>,
+    pub instance_type: Option<String>,
     #[doc="<p>A general description of the AMI.</p>"]
-    pub product_description: Option<RIProductDescription>,
+    pub product_description: Option<String>,
     #[doc="<p>The maximum price (bid) that you are willing to pay for a Spot instance.</p>"]
     pub spot_price: Option<String>,
     #[doc="<p>The date and time the request was created, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z).</p>"]
-    pub timestamp: Option<DateTime>,
+    pub timestamp: Option<String>,
 }
 
 struct SpotPriceDeserializer;
@@ -36666,13 +36422,12 @@ impl SpotPriceDeserializer {
 
     }
 }
-pub type SpotPriceHistoryList = Vec<SpotPrice>;
 struct SpotPriceHistoryListDeserializer;
 impl SpotPriceHistoryListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SpotPriceHistoryList, XmlParseError> {
+                                       -> Result<Vec<SpotPrice>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -36712,17 +36467,17 @@ impl SpotPriceHistoryListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct StaleIpPermission {
     #[doc="<p>The start of the port range for the TCP and UDP protocols, or an ICMP type number. A value of <code>-1</code> indicates all ICMP types. </p>"]
-    pub from_port: Option<Integer>,
+    pub from_port: Option<i64>,
     #[doc="<p>The IP protocol name (for <code>tcp</code>, <code>udp</code>, and <code>icmp</code>) or number (see <a href=\"http://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml\">Protocol Numbers)</a>.</p>"]
     pub ip_protocol: Option<String>,
     #[doc="<p>One or more IP ranges. Not applicable for stale security group rules.</p>"]
-    pub ip_ranges: Option<IpRanges>,
+    pub ip_ranges: Option<Vec<String>>,
     #[doc="<p>One or more prefix list IDs for an AWS service. Not applicable for stale security group rules.</p>"]
-    pub prefix_list_ids: Option<PrefixListIdSet>,
+    pub prefix_list_ids: Option<Vec<String>>,
     #[doc="<p>The end of the port range for the TCP and UDP protocols, or an ICMP type number. A value of <code>-1</code> indicates all ICMP types. </p>"]
-    pub to_port: Option<Integer>,
+    pub to_port: Option<i64>,
     #[doc="<p>One or more security group pairs. Returns the ID of the referenced security group and VPC, and the ID and status of the VPC peering connection.</p>"]
-    pub user_id_group_pairs: Option<UserIdGroupPairSet>,
+    pub user_id_group_pairs: Option<Vec<UserIdGroupPair>>,
 }
 
 struct StaleIpPermissionDeserializer;
@@ -36789,13 +36544,12 @@ impl StaleIpPermissionDeserializer {
 
     }
 }
-pub type StaleIpPermissionSet = Vec<StaleIpPermission>;
 struct StaleIpPermissionSetDeserializer;
 impl StaleIpPermissionSetDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<StaleIpPermissionSet, XmlParseError> {
+                                       -> Result<Vec<StaleIpPermission>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -36841,9 +36595,9 @@ pub struct StaleSecurityGroup {
     #[doc="<p>The name of the security group.</p>"]
     pub group_name: Option<String>,
     #[doc="<p>Information about the stale inbound rules in the security group.</p>"]
-    pub stale_ip_permissions: Option<StaleIpPermissionSet>,
+    pub stale_ip_permissions: Option<Vec<StaleIpPermission>>,
     #[doc="<p>Information about the stale outbound rules in the security group.</p>"]
-    pub stale_ip_permissions_egress: Option<StaleIpPermissionSet>,
+    pub stale_ip_permissions_egress: Option<Vec<StaleIpPermission>>,
     #[doc="<p>The ID of the VPC for the security group.</p>"]
     pub vpc_id: Option<String>,
 }
@@ -36911,13 +36665,12 @@ impl StaleSecurityGroupDeserializer {
 
     }
 }
-pub type StaleSecurityGroupSet = Vec<StaleSecurityGroup>;
 struct StaleSecurityGroupSetDeserializer;
 impl StaleSecurityGroupSetDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<StaleSecurityGroupSet, XmlParseError> {
+                                       -> Result<Vec<StaleSecurityGroup>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -36959,9 +36712,9 @@ pub struct StartInstancesRequest {
     #[doc="<p>Reserved.</p>"]
     pub additional_info: Option<String>,
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more instance IDs.</p>"]
-    pub instance_ids: InstanceIdStringList,
+    pub instance_ids: Vec<String>,
 }
 
 
@@ -36991,7 +36744,7 @@ impl StartInstancesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct StartInstancesResult {
     #[doc="<p>Information about one or more started instances.</p>"]
-    pub starting_instances: Option<InstanceStateChangeList>,
+    pub starting_instances: Option<Vec<InstanceStateChange>>,
 }
 
 struct StartInstancesResultDeserializer;
@@ -37037,13 +36790,12 @@ impl StartInstancesResultDeserializer {
 
     }
 }
-pub type State = String;
 struct StateDeserializer;
 impl StateDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<State, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -37106,13 +36858,12 @@ impl StateReasonDeserializer {
 
     }
 }
-pub type Status = String;
 struct StatusDeserializer;
 impl StatusDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Status, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -37121,13 +36872,12 @@ impl StatusDeserializer {
 
     }
 }
-pub type StatusName = String;
 struct StatusNameDeserializer;
 impl StatusNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<StatusName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -37136,13 +36886,12 @@ impl StatusNameDeserializer {
 
     }
 }
-pub type StatusType = String;
 struct StatusTypeDeserializer;
 impl StatusTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<StatusType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -37155,11 +36904,11 @@ impl StatusTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct StopInstancesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>Forces the instances to stop. The instances do not have an opportunity to flush file system caches or file system metadata. If you use this option, you must perform file system check and repair procedures. This option is not recommended for Windows instances.</p> <p>Default: <code>false</code> </p>"]
-    pub force: Option<Boolean>,
+    pub force: Option<bool>,
     #[doc="<p>One or more instance IDs.</p>"]
-    pub instance_ids: InstanceIdStringList,
+    pub instance_ids: Vec<String>,
 }
 
 
@@ -37189,7 +36938,7 @@ impl StopInstancesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct StopInstancesResult {
     #[doc="<p>Information about one or more stopped instances.</p>"]
-    pub stopping_instances: Option<InstanceStateChangeList>,
+    pub stopping_instances: Option<Vec<InstanceStateChange>>,
 }
 
 struct StopInstancesResultDeserializer;
@@ -37347,25 +37096,25 @@ impl StringDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct Subnet {
     #[doc="<p>Indicates whether a network interface created in this subnet (including a network interface created by <a>RunInstances</a>) receives an IPv6 address.</p>"]
-    pub assign_ipv_6_address_on_creation: Option<Boolean>,
+    pub assign_ipv_6_address_on_creation: Option<bool>,
     #[doc="<p>The Availability Zone of the subnet.</p>"]
     pub availability_zone: Option<String>,
     #[doc="<p>The number of unused private IPv4 addresses in the subnet. Note that the IPv4 addresses for any stopped instances are considered unavailable.</p>"]
-    pub available_ip_address_count: Option<Integer>,
+    pub available_ip_address_count: Option<i64>,
     #[doc="<p>The IPv4 CIDR block assigned to the subnet.</p>"]
     pub cidr_block: Option<String>,
     #[doc="<p>Indicates whether this is the default subnet for the Availability Zone.</p>"]
-    pub default_for_az: Option<Boolean>,
+    pub default_for_az: Option<bool>,
     #[doc="<p>Information about the IPv6 CIDR blocks associated with the subnet.</p>"]
-    pub ipv_6_cidr_block_association_set: Option<SubnetIpv6CidrBlockAssociationSet>,
+    pub ipv_6_cidr_block_association_set: Option<Vec<SubnetIpv6CidrBlockAssociation>>,
     #[doc="<p>Indicates whether instances launched in this subnet receive a public IPv4 address.</p>"]
-    pub map_public_ip_on_launch: Option<Boolean>,
+    pub map_public_ip_on_launch: Option<bool>,
     #[doc="<p>The current state of the subnet.</p>"]
-    pub state: Option<SubnetState>,
+    pub state: Option<String>,
     #[doc="<p>The ID of the subnet.</p>"]
     pub subnet_id: Option<String>,
     #[doc="<p>Any tags assigned to the subnet.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>The ID of the VPC the subnet is in.</p>"]
     pub vpc_id: Option<String>,
 }
@@ -37459,7 +37208,7 @@ impl SubnetDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct SubnetCidrBlockState {
     #[doc="<p>The state of a CIDR block.</p>"]
-    pub state: Option<SubnetCidrBlockStateCode>,
+    pub state: Option<String>,
     #[doc="<p>A message about the status of the CIDR block, if applicable.</p>"]
     pub status_message: Option<String>,
 }
@@ -37509,13 +37258,12 @@ impl SubnetCidrBlockStateDeserializer {
 
     }
 }
-pub type SubnetCidrBlockStateCode = String;
 struct SubnetCidrBlockStateCodeDeserializer;
 impl SubnetCidrBlockStateCodeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SubnetCidrBlockStateCode, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -37524,12 +37272,11 @@ impl SubnetCidrBlockStateCodeDeserializer {
 
     }
 }
-pub type SubnetIdStringList = Vec<String>;
 
 /// Serialize `SubnetIdStringList` contents to a `SignedRequest`.
 struct SubnetIdStringListSerializer;
 impl SubnetIdStringListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SubnetIdStringList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -37599,14 +37346,13 @@ impl SubnetIpv6CidrBlockAssociationDeserializer {
 
     }
 }
-pub type SubnetIpv6CidrBlockAssociationSet = Vec<SubnetIpv6CidrBlockAssociation>;
 struct SubnetIpv6CidrBlockAssociationSetDeserializer;
 impl SubnetIpv6CidrBlockAssociationSetDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>
         (tag_name: &str,
          stack: &mut T)
-         -> Result<SubnetIpv6CidrBlockAssociationSet, XmlParseError> {
+         -> Result<Vec<SubnetIpv6CidrBlockAssociation>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -37642,13 +37388,12 @@ impl SubnetIpv6CidrBlockAssociationSetDeserializer {
 
     }
 }
-pub type SubnetList = Vec<Subnet>;
 struct SubnetListDeserializer;
 impl SubnetListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SubnetList, XmlParseError> {
+                                       -> Result<Vec<Subnet>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -37684,13 +37429,12 @@ impl SubnetListDeserializer {
 
     }
 }
-pub type SubnetState = String;
 struct SubnetStateDeserializer;
 impl SubnetStateDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SubnetState, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -37699,13 +37443,12 @@ impl SubnetStateDeserializer {
 
     }
 }
-pub type SummaryStatus = String;
 struct SummaryStatusDeserializer;
 impl SummaryStatusDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SummaryStatus, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -37795,7 +37538,7 @@ pub struct TagDescription {
     #[doc="<p>The ID of the resource. For example, <code>ami-1a2b3c4d</code>.</p>"]
     pub resource_id: Option<String>,
     #[doc="<p>The resource type.</p>"]
-    pub resource_type: Option<ResourceType>,
+    pub resource_type: Option<String>,
     #[doc="<p>The tag value.</p>"]
     pub value: Option<String>,
 }
@@ -37853,13 +37596,12 @@ impl TagDescriptionDeserializer {
 
     }
 }
-pub type TagDescriptionList = Vec<TagDescription>;
 struct TagDescriptionListDeserializer;
 impl TagDescriptionListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TagDescriptionList, XmlParseError> {
+                                       -> Result<Vec<TagDescription>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -37895,13 +37637,12 @@ impl TagDescriptionListDeserializer {
 
     }
 }
-pub type TagList = Vec<Tag>;
 struct TagListDeserializer;
 impl TagListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TagList, XmlParseError> {
+                                       -> Result<Vec<Tag>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -37941,7 +37682,7 @@ impl TagListDeserializer {
 /// Serialize `TagList` contents to a `SignedRequest`.
 struct TagListSerializer;
 impl TagListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &TagList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<Tag>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             TagSerializer::serialize(params, &key, obj);
@@ -37953,9 +37694,9 @@ impl TagListSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct TagSpecification {
     #[doc="<p>The type of resource to tag. Currently, the resource types that support tagging on creation are <code>instance</code> and <code>volume</code>. </p>"]
-    pub resource_type: Option<ResourceType>,
+    pub resource_type: Option<String>,
     #[doc="<p>The tags to apply to the resource.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 
@@ -37978,12 +37719,11 @@ impl TagSpecificationSerializer {
     }
 }
 
-pub type TagSpecificationList = Vec<TagSpecification>;
 
 /// Serialize `TagSpecificationList` contents to a `SignedRequest`.
 struct TagSpecificationListSerializer;
 impl TagSpecificationListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &TagSpecificationList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<TagSpecification>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             TagSpecificationSerializer::serialize(params, &key, obj);
@@ -37995,7 +37735,7 @@ impl TagSpecificationListSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct TargetConfiguration {
     #[doc="<p>The number of instances the Convertible Reserved Instance offering can be applied to. This parameter is reserved and cannot be specified in a request</p>"]
-    pub instance_count: Option<Integer>,
+    pub instance_count: Option<i64>,
     #[doc="<p>The ID of the Convertible Reserved Instance offering.</p>"]
     pub offering_id: Option<String>,
 }
@@ -38051,7 +37791,7 @@ impl TargetConfigurationDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct TargetConfigurationRequest {
     #[doc="<p>The number of instances the Covertible Reserved Instance offering can be applied to. This parameter is reserved and cannot be specified in a request</p>"]
-    pub instance_count: Option<Integer>,
+    pub instance_count: Option<i64>,
     #[doc="<p>The Convertible Reserved Instance offering ID.</p>"]
     pub offering_id: String,
 }
@@ -38075,12 +37815,11 @@ impl TargetConfigurationRequestSerializer {
     }
 }
 
-pub type TargetConfigurationRequestSet = Vec<TargetConfigurationRequest>;
 
 /// Serialize `TargetConfigurationRequestSet` contents to a `SignedRequest`.
 struct TargetConfigurationRequestSetSerializer;
 impl TargetConfigurationRequestSetSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &TargetConfigurationRequestSet) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<TargetConfigurationRequest>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             TargetConfigurationRequestSerializer::serialize(params, &key, obj);
@@ -38145,13 +37884,12 @@ impl TargetReservationValueDeserializer {
 
     }
 }
-pub type TargetReservationValueSet = Vec<TargetReservationValue>;
 struct TargetReservationValueSetDeserializer;
 impl TargetReservationValueSetDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TargetReservationValueSet, XmlParseError> {
+                                       -> Result<Vec<TargetReservationValue>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -38188,13 +37926,12 @@ impl TargetReservationValueSetDeserializer {
 
     }
 }
-pub type TelemetryStatus = String;
 struct TelemetryStatusDeserializer;
 impl TelemetryStatusDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TelemetryStatus, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -38203,13 +37940,12 @@ impl TelemetryStatusDeserializer {
 
     }
 }
-pub type Tenancy = String;
 struct TenancyDeserializer;
 impl TenancyDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Tenancy, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -38222,9 +37958,9 @@ impl TenancyDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct TerminateInstancesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more instance IDs.</p> <p>Constraints: Up to 1000 instance IDs. We recommend breaking up this request into smaller batches.</p>"]
-    pub instance_ids: InstanceIdStringList,
+    pub instance_ids: Vec<String>,
 }
 
 
@@ -38251,7 +37987,7 @@ impl TerminateInstancesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct TerminateInstancesResult {
     #[doc="<p>Information about one or more terminated instances.</p>"]
-    pub terminating_instances: Option<InstanceStateChangeList>,
+    pub terminating_instances: Option<Vec<InstanceStateChange>>,
 }
 
 struct TerminateInstancesResultDeserializer;
@@ -38297,13 +38033,12 @@ impl TerminateInstancesResultDeserializer {
 
     }
 }
-pub type TrafficType = String;
 struct TrafficTypeDeserializer;
 impl TrafficTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TrafficType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -38315,7 +38050,7 @@ impl TrafficTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct UnassignIpv6AddressesRequest {
     #[doc="<p>The IPv6 addresses to unassign from the network interface.</p>"]
-    pub ipv_6_addresses: Ipv6AddressList,
+    pub ipv_6_addresses: Vec<String>,
     #[doc="<p>The ID of the network interface.</p>"]
     pub network_interface_id: String,
 }
@@ -38344,7 +38079,7 @@ pub struct UnassignIpv6AddressesResult {
     #[doc="<p>The ID of the network interface.</p>"]
     pub network_interface_id: Option<String>,
     #[doc="<p>The IPv6 addresses that have been unassigned from the network interface.</p>"]
-    pub unassigned_ipv_6_addresses: Option<Ipv6AddressList>,
+    pub unassigned_ipv_6_addresses: Option<Vec<String>>,
 }
 
 struct UnassignIpv6AddressesResultDeserializer;
@@ -38401,7 +38136,7 @@ pub struct UnassignPrivateIpAddressesRequest {
     #[doc="<p>The ID of the network interface.</p>"]
     pub network_interface_id: String,
     #[doc="<p>The secondary private IP addresses to unassign from the network interface. You can specify this option multiple times to unassign more than one IP address.</p>"]
-    pub private_ip_addresses: PrivateIpAddressStringList,
+    pub private_ip_addresses: Vec<String>,
 }
 
 
@@ -38429,9 +38164,9 @@ impl UnassignPrivateIpAddressesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct UnmonitorInstancesRequest {
     #[doc="<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>"]
-    pub dry_run: Option<Boolean>,
+    pub dry_run: Option<bool>,
     #[doc="<p>One or more instance IDs.</p>"]
-    pub instance_ids: InstanceIdStringList,
+    pub instance_ids: Vec<String>,
 }
 
 
@@ -38458,7 +38193,7 @@ impl UnmonitorInstancesRequestSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct UnmonitorInstancesResult {
     #[doc="<p>The monitoring information.</p>"]
-    pub instance_monitorings: Option<InstanceMonitoringList>,
+    pub instance_monitorings: Option<Vec<InstanceMonitoring>>,
 }
 
 struct UnmonitorInstancesResultDeserializer;
@@ -38612,13 +38347,12 @@ impl UnsuccessfulItemErrorDeserializer {
 
     }
 }
-pub type UnsuccessfulItemList = Vec<UnsuccessfulItem>;
 struct UnsuccessfulItemListDeserializer;
 impl UnsuccessfulItemListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<UnsuccessfulItemList, XmlParseError> {
+                                       -> Result<Vec<UnsuccessfulItem>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -38654,13 +38388,12 @@ impl UnsuccessfulItemListDeserializer {
 
     }
 }
-pub type UnsuccessfulItemSet = Vec<UnsuccessfulItem>;
 struct UnsuccessfulItemSetDeserializer;
 impl UnsuccessfulItemSetDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<UnsuccessfulItemSet, XmlParseError> {
+                                       -> Result<Vec<UnsuccessfulItem>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -38804,12 +38537,11 @@ impl UserDataSerializer {
     }
 }
 
-pub type UserGroupStringList = Vec<String>;
 
 /// Serialize `UserGroupStringList` contents to a `SignedRequest`.
 struct UserGroupStringListSerializer;
 impl UserGroupStringListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &UserGroupStringList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -38930,13 +38662,12 @@ impl UserIdGroupPairSerializer {
     }
 }
 
-pub type UserIdGroupPairList = Vec<UserIdGroupPair>;
 struct UserIdGroupPairListDeserializer;
 impl UserIdGroupPairListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<UserIdGroupPairList, XmlParseError> {
+                                       -> Result<Vec<UserIdGroupPair>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -38976,7 +38707,7 @@ impl UserIdGroupPairListDeserializer {
 /// Serialize `UserIdGroupPairList` contents to a `SignedRequest`.
 struct UserIdGroupPairListSerializer;
 impl UserIdGroupPairListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &UserIdGroupPairList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<UserIdGroupPair>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             UserIdGroupPairSerializer::serialize(params, &key, obj);
@@ -38984,13 +38715,12 @@ impl UserIdGroupPairListSerializer {
     }
 }
 
-pub type UserIdGroupPairSet = Vec<UserIdGroupPair>;
 struct UserIdGroupPairSetDeserializer;
 impl UserIdGroupPairSetDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<UserIdGroupPairSet, XmlParseError> {
+                                       -> Result<Vec<UserIdGroupPair>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -39026,12 +38756,11 @@ impl UserIdGroupPairSetDeserializer {
 
     }
 }
-pub type UserIdStringList = Vec<String>;
 
 /// Serialize `UserIdStringList` contents to a `SignedRequest`.
 struct UserIdStringListSerializer;
 impl UserIdStringListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &UserIdStringList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -39039,13 +38768,12 @@ impl UserIdStringListSerializer {
     }
 }
 
-pub type ValueStringList = Vec<String>;
 struct ValueStringListDeserializer;
 impl ValueStringListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ValueStringList, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -39085,7 +38813,7 @@ impl ValueStringListDeserializer {
 /// Serialize `ValueStringList` contents to a `SignedRequest`.
 struct ValueStringListSerializer;
 impl ValueStringListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ValueStringList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -39097,13 +38825,13 @@ impl ValueStringListSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct VgwTelemetry {
     #[doc="<p>The number of accepted routes.</p>"]
-    pub accepted_route_count: Option<Integer>,
+    pub accepted_route_count: Option<i64>,
     #[doc="<p>The date and time of the last change in status.</p>"]
-    pub last_status_change: Option<DateTime>,
+    pub last_status_change: Option<String>,
     #[doc="<p>The Internet-routable IP address of the virtual private gateway's outside interface.</p>"]
     pub outside_ip_address: Option<String>,
     #[doc="<p>The status of the VPN tunnel.</p>"]
-    pub status: Option<TelemetryStatus>,
+    pub status: Option<String>,
     #[doc="<p>If an error occurs, a description of the error.</p>"]
     pub status_message: Option<String>,
 }
@@ -39170,13 +38898,12 @@ impl VgwTelemetryDeserializer {
 
     }
 }
-pub type VgwTelemetryList = Vec<VgwTelemetry>;
 struct VgwTelemetryListDeserializer;
 impl VgwTelemetryListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VgwTelemetryList, XmlParseError> {
+                                       -> Result<Vec<VgwTelemetry>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -39212,13 +38939,12 @@ impl VgwTelemetryListDeserializer {
 
     }
 }
-pub type VirtualizationType = String;
 struct VirtualizationTypeDeserializer;
 impl VirtualizationTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VirtualizationType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -39231,29 +38957,29 @@ impl VirtualizationTypeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct Volume {
     #[doc="<p>Information about the volume attachments.</p>"]
-    pub attachments: Option<VolumeAttachmentList>,
+    pub attachments: Option<Vec<VolumeAttachment>>,
     #[doc="<p>The Availability Zone for the volume.</p>"]
     pub availability_zone: Option<String>,
     #[doc="<p>The time stamp when volume creation was initiated.</p>"]
-    pub create_time: Option<DateTime>,
+    pub create_time: Option<String>,
     #[doc="<p>Indicates whether the volume will be encrypted.</p>"]
-    pub encrypted: Option<Boolean>,
+    pub encrypted: Option<bool>,
     #[doc="<p>The number of I/O operations per second (IOPS) that the volume supports. For Provisioned IOPS SSD volumes, this represents the number of IOPS that are provisioned for the volume. For General Purpose SSD volumes, this represents the baseline performance of the volume and the rate at which the volume accumulates I/O credits for bursting. For more information on General Purpose SSD baseline performance, I/O credits, and bursting, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html\">Amazon EBS Volume Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Constraint: Range is 100-20000 IOPS for io1 volumes and 100-10000 IOPS for <code>gp2</code> volumes.</p> <p>Condition: This parameter is required for requests to create <code>io1</code> volumes; it is not used in requests to create <code>gp2</code>, <code>st1</code>, <code>sc1</code>, or <code>standard</code> volumes.</p>"]
-    pub iops: Option<Integer>,
+    pub iops: Option<i64>,
     #[doc="<p>The full ARN of the AWS Key Management Service (AWS KMS) customer master key (CMK) that was used to protect the volume encryption key for the volume.</p>"]
     pub kms_key_id: Option<String>,
     #[doc="<p>The size of the volume, in GiBs.</p>"]
-    pub size: Option<Integer>,
+    pub size: Option<i64>,
     #[doc="<p>The snapshot from which the volume was created, if applicable.</p>"]
     pub snapshot_id: Option<String>,
     #[doc="<p>The volume state.</p>"]
-    pub state: Option<VolumeState>,
+    pub state: Option<String>,
     #[doc="<p>Any tags assigned to the volume.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>The ID of the volume.</p>"]
     pub volume_id: Option<String>,
     #[doc="<p>The volume type. This can be <code>gp2</code> for General Purpose SSD, <code>io1</code> for Provisioned IOPS SSD, <code>st1</code> for Throughput Optimized HDD, <code>sc1</code> for Cold HDD, or <code>standard</code> for Magnetic volumes.</p>"]
-    pub volume_type: Option<VolumeType>,
+    pub volume_type: Option<String>,
 }
 
 struct VolumeDeserializer;
@@ -39347,15 +39073,15 @@ impl VolumeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct VolumeAttachment {
     #[doc="<p>The time stamp when the attachment initiated.</p>"]
-    pub attach_time: Option<DateTime>,
+    pub attach_time: Option<String>,
     #[doc="<p>Indicates whether the EBS volume is deleted on instance termination.</p>"]
-    pub delete_on_termination: Option<Boolean>,
+    pub delete_on_termination: Option<bool>,
     #[doc="<p>The device name.</p>"]
     pub device: Option<String>,
     #[doc="<p>The ID of the instance.</p>"]
     pub instance_id: Option<String>,
     #[doc="<p>The attachment state of the volume.</p>"]
-    pub state: Option<VolumeAttachmentState>,
+    pub state: Option<String>,
     #[doc="<p>The ID of the volume.</p>"]
     pub volume_id: Option<String>,
 }
@@ -39424,13 +39150,12 @@ impl VolumeAttachmentDeserializer {
 
     }
 }
-pub type VolumeAttachmentList = Vec<VolumeAttachment>;
 struct VolumeAttachmentListDeserializer;
 impl VolumeAttachmentListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VolumeAttachmentList, XmlParseError> {
+                                       -> Result<Vec<VolumeAttachment>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -39466,13 +39191,12 @@ impl VolumeAttachmentListDeserializer {
 
     }
 }
-pub type VolumeAttachmentState = String;
 struct VolumeAttachmentStateDeserializer;
 impl VolumeAttachmentStateDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VolumeAttachmentState, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -39481,12 +39205,11 @@ impl VolumeAttachmentStateDeserializer {
 
     }
 }
-pub type VolumeAttributeName = String;
 #[doc="<p>Describes an EBS volume.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct VolumeDetail {
     #[doc="<p>The size of the volume, in GiB.</p>"]
-    pub size: Long,
+    pub size: i64,
 }
 
 
@@ -39504,12 +39227,11 @@ impl VolumeDetailSerializer {
     }
 }
 
-pub type VolumeIdStringList = Vec<String>;
 
 /// Serialize `VolumeIdStringList` contents to a `SignedRequest`.
 struct VolumeIdStringListSerializer;
 impl VolumeIdStringListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &VolumeIdStringList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -39517,13 +39239,12 @@ impl VolumeIdStringListSerializer {
     }
 }
 
-pub type VolumeList = Vec<Volume>;
 struct VolumeListDeserializer;
 impl VolumeListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VolumeList, XmlParseError> {
+                                       -> Result<Vec<Volume>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -39563,27 +39284,27 @@ impl VolumeListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct VolumeModification {
     #[doc="<p>Modification completion or failure time.</p>"]
-    pub end_time: Option<DateTime>,
+    pub end_time: Option<String>,
     #[doc="<p>Current state of modification. Modification state is null for unmodified volumes. </p>"]
-    pub modification_state: Option<VolumeModificationState>,
+    pub modification_state: Option<String>,
     #[doc="<p>Original IOPS rate of the volume being modified.</p>"]
-    pub original_iops: Option<Integer>,
+    pub original_iops: Option<i64>,
     #[doc="<p>Original size of the volume being modified.</p>"]
-    pub original_size: Option<Integer>,
+    pub original_size: Option<i64>,
     #[doc="<p>Original EBS volume type of the volume being modified.</p>"]
-    pub original_volume_type: Option<VolumeType>,
+    pub original_volume_type: Option<String>,
     #[doc="<p>Modification progress from 0 to 100%.</p>"]
-    pub progress: Option<Long>,
+    pub progress: Option<i64>,
     #[doc="<p>Modification start time </p>"]
-    pub start_time: Option<DateTime>,
+    pub start_time: Option<String>,
     #[doc="<p>Generic status message on modification progress or failure.</p>"]
     pub status_message: Option<String>,
     #[doc="<p>Target IOPS rate of the volume being modified.</p>"]
-    pub target_iops: Option<Integer>,
+    pub target_iops: Option<i64>,
     #[doc="<p>Target size of the volume being modified.</p>"]
-    pub target_size: Option<Integer>,
+    pub target_size: Option<i64>,
     #[doc="<p>Target EBS volume type of the volume being modified.</p>"]
-    pub target_volume_type: Option<VolumeType>,
+    pub target_volume_type: Option<String>,
     #[doc="<p>ID of the volume being modified.</p>"]
     pub volume_id: Option<String>,
 }
@@ -39677,13 +39398,12 @@ impl VolumeModificationDeserializer {
 
     }
 }
-pub type VolumeModificationList = Vec<VolumeModification>;
 struct VolumeModificationListDeserializer;
 impl VolumeModificationListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VolumeModificationList, XmlParseError> {
+                                       -> Result<Vec<VolumeModification>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -39719,13 +39439,12 @@ impl VolumeModificationListDeserializer {
 
     }
 }
-pub type VolumeModificationState = String;
 struct VolumeModificationStateDeserializer;
 impl VolumeModificationStateDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VolumeModificationState, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -39734,13 +39453,12 @@ impl VolumeModificationStateDeserializer {
 
     }
 }
-pub type VolumeState = String;
 struct VolumeStateDeserializer;
 impl VolumeStateDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VolumeState, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -39815,13 +39533,12 @@ impl VolumeStatusActionDeserializer {
 
     }
 }
-pub type VolumeStatusActionsList = Vec<VolumeStatusAction>;
 struct VolumeStatusActionsListDeserializer;
 impl VolumeStatusActionsListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VolumeStatusActionsList, XmlParseError> {
+                                       -> Result<Vec<VolumeStatusAction>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -39861,7 +39578,7 @@ impl VolumeStatusActionsListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct VolumeStatusDetails {
     #[doc="<p>The name of the volume status.</p>"]
-    pub name: Option<VolumeStatusName>,
+    pub name: Option<String>,
     #[doc="<p>The intended status of the volume status.</p>"]
     pub status: Option<String>,
 }
@@ -39912,13 +39629,12 @@ impl VolumeStatusDetailsDeserializer {
 
     }
 }
-pub type VolumeStatusDetailsList = Vec<VolumeStatusDetails>;
 struct VolumeStatusDetailsListDeserializer;
 impl VolumeStatusDetailsListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VolumeStatusDetailsList, XmlParseError> {
+                                       -> Result<Vec<VolumeStatusDetails>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -39964,9 +39680,9 @@ pub struct VolumeStatusEvent {
     #[doc="<p>The type of this event.</p>"]
     pub event_type: Option<String>,
     #[doc="<p>The latest end time of the event.</p>"]
-    pub not_after: Option<DateTime>,
+    pub not_after: Option<String>,
     #[doc="<p>The earliest start time of the event.</p>"]
-    pub not_before: Option<DateTime>,
+    pub not_before: Option<String>,
 }
 
 struct VolumeStatusEventDeserializer;
@@ -40027,13 +39743,12 @@ impl VolumeStatusEventDeserializer {
 
     }
 }
-pub type VolumeStatusEventsList = Vec<VolumeStatusEvent>;
 struct VolumeStatusEventsListDeserializer;
 impl VolumeStatusEventsListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VolumeStatusEventsList, XmlParseError> {
+                                       -> Result<Vec<VolumeStatusEvent>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -40073,9 +39788,9 @@ impl VolumeStatusEventsListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct VolumeStatusInfo {
     #[doc="<p>The details of the volume status.</p>"]
-    pub details: Option<VolumeStatusDetailsList>,
+    pub details: Option<Vec<VolumeStatusDetails>>,
     #[doc="<p>The status of the volume.</p>"]
-    pub status: Option<VolumeStatusInfoStatus>,
+    pub status: Option<String>,
 }
 
 struct VolumeStatusInfoDeserializer;
@@ -40126,13 +39841,12 @@ impl VolumeStatusInfoDeserializer {
 
     }
 }
-pub type VolumeStatusInfoStatus = String;
 struct VolumeStatusInfoStatusDeserializer;
 impl VolumeStatusInfoStatusDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VolumeStatusInfoStatus, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -40145,11 +39859,11 @@ impl VolumeStatusInfoStatusDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct VolumeStatusItem {
     #[doc="<p>The details of the operation.</p>"]
-    pub actions: Option<VolumeStatusActionsList>,
+    pub actions: Option<Vec<VolumeStatusAction>>,
     #[doc="<p>The Availability Zone of the volume.</p>"]
     pub availability_zone: Option<String>,
     #[doc="<p>A list of events associated with the volume.</p>"]
-    pub events: Option<VolumeStatusEventsList>,
+    pub events: Option<Vec<VolumeStatusEvent>>,
     #[doc="<p>The volume ID.</p>"]
     pub volume_id: Option<String>,
     #[doc="<p>The volume status.</p>"]
@@ -40218,13 +39932,12 @@ impl VolumeStatusItemDeserializer {
 
     }
 }
-pub type VolumeStatusList = Vec<VolumeStatusItem>;
 struct VolumeStatusListDeserializer;
 impl VolumeStatusListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VolumeStatusList, XmlParseError> {
+                                       -> Result<Vec<VolumeStatusItem>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -40260,13 +39973,12 @@ impl VolumeStatusListDeserializer {
 
     }
 }
-pub type VolumeStatusName = String;
 struct VolumeStatusNameDeserializer;
 impl VolumeStatusNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VolumeStatusName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -40275,13 +39987,12 @@ impl VolumeStatusNameDeserializer {
 
     }
 }
-pub type VolumeType = String;
 struct VolumeTypeDeserializer;
 impl VolumeTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VolumeType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -40298,15 +40009,15 @@ pub struct Vpc {
     #[doc="<p>The ID of the set of DHCP options you've associated with the VPC (or <code>default</code> if the default options are associated with the VPC).</p>"]
     pub dhcp_options_id: Option<String>,
     #[doc="<p>The allowed tenancy of instances launched into the VPC.</p>"]
-    pub instance_tenancy: Option<Tenancy>,
+    pub instance_tenancy: Option<String>,
     #[doc="<p>Information about the IPv6 CIDR blocks associated with the VPC.</p>"]
-    pub ipv_6_cidr_block_association_set: Option<VpcIpv6CidrBlockAssociationSet>,
+    pub ipv_6_cidr_block_association_set: Option<Vec<VpcIpv6CidrBlockAssociation>>,
     #[doc="<p>Indicates whether the VPC is the default VPC.</p>"]
-    pub is_default: Option<Boolean>,
+    pub is_default: Option<bool>,
     #[doc="<p>The current state of the VPC.</p>"]
-    pub state: Option<VpcState>,
+    pub state: Option<String>,
     #[doc="<p>Any tags assigned to the VPC.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>The ID of the VPC.</p>"]
     pub vpc_id: Option<String>,
 }
@@ -40385,7 +40096,7 @@ impl VpcDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct VpcAttachment {
     #[doc="<p>The current state of the attachment.</p>"]
-    pub state: Option<AttachmentStatus>,
+    pub state: Option<String>,
     #[doc="<p>The ID of the VPC.</p>"]
     pub vpc_id: Option<String>,
 }
@@ -40437,13 +40148,12 @@ impl VpcAttachmentDeserializer {
 
     }
 }
-pub type VpcAttachmentList = Vec<VpcAttachment>;
 struct VpcAttachmentListDeserializer;
 impl VpcAttachmentListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VpcAttachmentList, XmlParseError> {
+                                       -> Result<Vec<VpcAttachment>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -40479,12 +40189,11 @@ impl VpcAttachmentListDeserializer {
 
     }
 }
-pub type VpcAttributeName = String;
 #[doc="<p>Describes the state of a CIDR block.</p>"]
 #[derive(Default,Debug,Clone)]
 pub struct VpcCidrBlockState {
     #[doc="<p>The state of the CIDR block.</p>"]
-    pub state: Option<VpcCidrBlockStateCode>,
+    pub state: Option<String>,
     #[doc="<p>A message about the status of the CIDR block, if applicable.</p>"]
     pub status_message: Option<String>,
 }
@@ -40536,13 +40245,12 @@ impl VpcCidrBlockStateDeserializer {
 
     }
 }
-pub type VpcCidrBlockStateCode = String;
 struct VpcCidrBlockStateCodeDeserializer;
 impl VpcCidrBlockStateCodeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VpcCidrBlockStateCode, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -40555,9 +40263,9 @@ impl VpcCidrBlockStateCodeDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct VpcClassicLink {
     #[doc="<p>Indicates whether the VPC is enabled for ClassicLink.</p>"]
-    pub classic_link_enabled: Option<Boolean>,
+    pub classic_link_enabled: Option<bool>,
     #[doc="<p>Any tags assigned to the VPC.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>The ID of the VPC.</p>"]
     pub vpc_id: Option<String>,
 }
@@ -40613,12 +40321,11 @@ impl VpcClassicLinkDeserializer {
 
     }
 }
-pub type VpcClassicLinkIdList = Vec<String>;
 
 /// Serialize `VpcClassicLinkIdList` contents to a `SignedRequest`.
 struct VpcClassicLinkIdListSerializer;
 impl VpcClassicLinkIdListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &VpcClassicLinkIdList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -40626,13 +40333,12 @@ impl VpcClassicLinkIdListSerializer {
     }
 }
 
-pub type VpcClassicLinkList = Vec<VpcClassicLink>;
 struct VpcClassicLinkListDeserializer;
 impl VpcClassicLinkListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VpcClassicLinkList, XmlParseError> {
+                                       -> Result<Vec<VpcClassicLink>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -40672,15 +40378,15 @@ impl VpcClassicLinkListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct VpcEndpoint {
     #[doc="<p>The date and time the VPC endpoint was created.</p>"]
-    pub creation_timestamp: Option<DateTime>,
+    pub creation_timestamp: Option<String>,
     #[doc="<p>The policy document associated with the endpoint.</p>"]
     pub policy_document: Option<String>,
     #[doc="<p>One or more route tables associated with the endpoint.</p>"]
-    pub route_table_ids: Option<ValueStringList>,
+    pub route_table_ids: Option<Vec<String>>,
     #[doc="<p>The name of the AWS service to which the endpoint is associated.</p>"]
     pub service_name: Option<String>,
     #[doc="<p>The state of the VPC endpoint.</p>"]
-    pub state: Option<State>,
+    pub state: Option<String>,
     #[doc="<p>The ID of the VPC endpoint.</p>"]
     pub vpc_endpoint_id: Option<String>,
     #[doc="<p>The ID of the VPC to which the endpoint is associated.</p>"]
@@ -40755,13 +40461,12 @@ impl VpcEndpointDeserializer {
 
     }
 }
-pub type VpcEndpointSet = Vec<VpcEndpoint>;
 struct VpcEndpointSetDeserializer;
 impl VpcEndpointSetDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VpcEndpointSet, XmlParseError> {
+                                       -> Result<Vec<VpcEndpoint>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -40797,12 +40502,11 @@ impl VpcEndpointSetDeserializer {
 
     }
 }
-pub type VpcIdStringList = Vec<String>;
 
 /// Serialize `VpcIdStringList` contents to a `SignedRequest`.
 struct VpcIdStringListSerializer;
 impl VpcIdStringListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &VpcIdStringList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -40872,13 +40576,13 @@ impl VpcIpv6CidrBlockAssociationDeserializer {
 
     }
 }
-pub type VpcIpv6CidrBlockAssociationSet = Vec<VpcIpv6CidrBlockAssociation>;
 struct VpcIpv6CidrBlockAssociationSetDeserializer;
 impl VpcIpv6CidrBlockAssociationSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<VpcIpv6CidrBlockAssociationSet, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>
+        (tag_name: &str,
+         stack: &mut T)
+         -> Result<Vec<VpcIpv6CidrBlockAssociation>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -40915,13 +40619,12 @@ impl VpcIpv6CidrBlockAssociationSetDeserializer {
 
     }
 }
-pub type VpcList = Vec<Vpc>;
 struct VpcListDeserializer;
 impl VpcListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VpcList, XmlParseError> {
+                                       -> Result<Vec<Vpc>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -40963,13 +40666,13 @@ pub struct VpcPeeringConnection {
     #[doc="<p>Information about the accepter VPC. CIDR block information is only returned when describing an active VPC peering connection.</p>"]
     pub accepter_vpc_info: Option<VpcPeeringConnectionVpcInfo>,
     #[doc="<p>The time that an unaccepted VPC peering connection will expire.</p>"]
-    pub expiration_time: Option<DateTime>,
+    pub expiration_time: Option<String>,
     #[doc="<p>Information about the requester VPC. CIDR block information is only returned when describing an active VPC peering connection.</p>"]
     pub requester_vpc_info: Option<VpcPeeringConnectionVpcInfo>,
     #[doc="<p>The status of the VPC peering connection.</p>"]
     pub status: Option<VpcPeeringConnectionStateReason>,
     #[doc="<p>Any tags assigned to the resource.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>The ID of the VPC peering connection.</p>"]
     pub vpc_peering_connection_id: Option<String>,
 }
@@ -41035,13 +40738,12 @@ impl VpcPeeringConnectionDeserializer {
 
     }
 }
-pub type VpcPeeringConnectionList = Vec<VpcPeeringConnection>;
 struct VpcPeeringConnectionListDeserializer;
 impl VpcPeeringConnectionListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VpcPeeringConnectionList, XmlParseError> {
+                                       -> Result<Vec<VpcPeeringConnection>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -41082,11 +40784,11 @@ impl VpcPeeringConnectionListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct VpcPeeringConnectionOptionsDescription {
     #[doc="<p>Indicates whether a local VPC can resolve public DNS hostnames to private IP addresses when queried from instances in a peer VPC.</p>"]
-    pub allow_dns_resolution_from_remote_vpc: Option<Boolean>,
+    pub allow_dns_resolution_from_remote_vpc: Option<bool>,
     #[doc="<p>Indicates whether a local ClassicLink connection can communicate with the peer VPC over the VPC peering connection.</p>"]
-    pub allow_egress_from_local_classic_link_to_remote_vpc: Option<Boolean>,
+    pub allow_egress_from_local_classic_link_to_remote_vpc: Option<bool>,
     #[doc="<p>Indicates whether a local VPC can communicate with a ClassicLink connection in the peer VPC over the VPC peering connection.</p>"]
-    pub allow_egress_from_local_vpc_to_remote_classic_link: Option<Boolean>,
+    pub allow_egress_from_local_vpc_to_remote_classic_link: Option<bool>,
 }
 
 struct VpcPeeringConnectionOptionsDescriptionDeserializer;
@@ -41147,7 +40849,7 @@ impl VpcPeeringConnectionOptionsDescriptionDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct VpcPeeringConnectionStateReason {
     #[doc="<p>The status of the VPC peering connection.</p>"]
-    pub code: Option<VpcPeeringConnectionStateReasonCode>,
+    pub code: Option<String>,
     #[doc="<p>A message that provides more information about the status, if applicable.</p>"]
     pub message: Option<String>,
 }
@@ -41198,14 +40900,12 @@ impl VpcPeeringConnectionStateReasonDeserializer {
 
     }
 }
-pub type VpcPeeringConnectionStateReasonCode = String;
 struct VpcPeeringConnectionStateReasonCodeDeserializer;
 impl VpcPeeringConnectionStateReasonCodeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>
-        (tag_name: &str,
-         stack: &mut T)
-         -> Result<VpcPeeringConnectionStateReasonCode, XmlParseError> {
+    fn deserialize<'a, T: Peek + Next>(tag_name: &str,
+                                       stack: &mut T)
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -41220,7 +40920,7 @@ pub struct VpcPeeringConnectionVpcInfo {
     #[doc="<p>The IPv4 CIDR block for the VPC.</p>"]
     pub cidr_block: Option<String>,
     #[doc="<p>The IPv6 CIDR block for the VPC.</p>"]
-    pub ipv_6_cidr_block_set: Option<Ipv6CidrBlockSet>,
+    pub ipv_6_cidr_block_set: Option<Vec<Ipv6CidrBlock>>,
     #[doc="<p>The AWS account ID of the VPC owner.</p>"]
     pub owner_id: Option<String>,
     #[doc="<p>Information about the VPC peering connection options for the accepter or requester VPC.</p>"]
@@ -41287,13 +40987,12 @@ impl VpcPeeringConnectionVpcInfoDeserializer {
 
     }
 }
-pub type VpcState = String;
 struct VpcStateDeserializer;
 impl VpcStateDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VpcState, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -41312,15 +41011,15 @@ pub struct VpnConnection {
     #[doc="<p>The VPN connection options.</p>"]
     pub options: Option<VpnConnectionOptions>,
     #[doc="<p>The static routes associated with the VPN connection.</p>"]
-    pub routes: Option<VpnStaticRouteList>,
+    pub routes: Option<Vec<VpnStaticRoute>>,
     #[doc="<p>The current state of the VPN connection.</p>"]
-    pub state: Option<VpnState>,
+    pub state: Option<String>,
     #[doc="<p>Any tags assigned to the VPN connection.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>The type of VPN connection.</p>"]
-    pub type_: Option<GatewayType>,
+    pub type_: Option<String>,
     #[doc="<p>Information about the VPN tunnel.</p>"]
-    pub vgw_telemetry: Option<VgwTelemetryList>,
+    pub vgw_telemetry: Option<Vec<VgwTelemetry>>,
     #[doc="<p>The ID of the VPN connection.</p>"]
     pub vpn_connection_id: Option<String>,
     #[doc="<p>The ID of the virtual private gateway at the AWS side of the VPN connection.</p>"]
@@ -41411,12 +41110,11 @@ impl VpnConnectionDeserializer {
 
     }
 }
-pub type VpnConnectionIdStringList = Vec<String>;
 
 /// Serialize `VpnConnectionIdStringList` contents to a `SignedRequest`.
 struct VpnConnectionIdStringListSerializer;
 impl VpnConnectionIdStringListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &VpnConnectionIdStringList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -41424,13 +41122,12 @@ impl VpnConnectionIdStringListSerializer {
     }
 }
 
-pub type VpnConnectionList = Vec<VpnConnection>;
 struct VpnConnectionListDeserializer;
 impl VpnConnectionListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VpnConnectionList, XmlParseError> {
+                                       -> Result<Vec<VpnConnection>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -41470,7 +41167,7 @@ impl VpnConnectionListDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct VpnConnectionOptions {
     #[doc="<p>Indicates whether the VPN connection uses static routes only. Static routes must be used for devices that don't support BGP.</p>"]
-    pub static_routes_only: Option<Boolean>,
+    pub static_routes_only: Option<bool>,
 }
 
 struct VpnConnectionOptionsDeserializer;
@@ -41520,7 +41217,7 @@ impl VpnConnectionOptionsDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct VpnConnectionOptionsSpecification {
     #[doc="<p>Indicates whether the VPN connection uses static routes only. Static routes must be used for devices that don't support BGP.</p>"]
-    pub static_routes_only: Option<Boolean>,
+    pub static_routes_only: Option<bool>,
 }
 
 
@@ -41547,13 +41244,13 @@ pub struct VpnGateway {
     #[doc="<p>The Availability Zone where the virtual private gateway was created, if applicable. This field may be empty or not returned.</p>"]
     pub availability_zone: Option<String>,
     #[doc="<p>The current state of the virtual private gateway.</p>"]
-    pub state: Option<VpnState>,
+    pub state: Option<String>,
     #[doc="<p>Any tags assigned to the virtual private gateway.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
     #[doc="<p>The type of VPN connection the virtual private gateway supports.</p>"]
-    pub type_: Option<GatewayType>,
+    pub type_: Option<String>,
     #[doc="<p>Any VPCs attached to the virtual private gateway.</p>"]
-    pub vpc_attachments: Option<VpcAttachmentList>,
+    pub vpc_attachments: Option<Vec<VpcAttachment>>,
     #[doc="<p>The ID of the virtual private gateway.</p>"]
     pub vpn_gateway_id: Option<String>,
 }
@@ -41622,12 +41319,11 @@ impl VpnGatewayDeserializer {
 
     }
 }
-pub type VpnGatewayIdStringList = Vec<String>;
 
 /// Serialize `VpnGatewayIdStringList` contents to a `SignedRequest`.
 struct VpnGatewayIdStringListSerializer;
 impl VpnGatewayIdStringListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &VpnGatewayIdStringList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);
@@ -41635,13 +41331,12 @@ impl VpnGatewayIdStringListSerializer {
     }
 }
 
-pub type VpnGatewayList = Vec<VpnGateway>;
 struct VpnGatewayListDeserializer;
 impl VpnGatewayListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VpnGatewayList, XmlParseError> {
+                                       -> Result<Vec<VpnGateway>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -41677,13 +41372,12 @@ impl VpnGatewayListDeserializer {
 
     }
 }
-pub type VpnState = String;
 struct VpnStateDeserializer;
 impl VpnStateDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VpnState, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -41698,9 +41392,9 @@ pub struct VpnStaticRoute {
     #[doc="<p>The CIDR block associated with the local subnet of the customer data center.</p>"]
     pub destination_cidr_block: Option<String>,
     #[doc="<p>Indicates how the routes were provided.</p>"]
-    pub source: Option<VpnStaticRouteSource>,
+    pub source: Option<String>,
     #[doc="<p>The current state of the static route.</p>"]
-    pub state: Option<VpnState>,
+    pub state: Option<String>,
 }
 
 struct VpnStaticRouteDeserializer;
@@ -41755,13 +41449,12 @@ impl VpnStaticRouteDeserializer {
 
     }
 }
-pub type VpnStaticRouteList = Vec<VpnStaticRoute>;
 struct VpnStaticRouteListDeserializer;
 impl VpnStaticRouteListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VpnStaticRouteList, XmlParseError> {
+                                       -> Result<Vec<VpnStaticRoute>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -41797,13 +41490,12 @@ impl VpnStaticRouteListDeserializer {
 
     }
 }
-pub type VpnStaticRouteSource = String;
 struct VpnStaticRouteSourceDeserializer;
 impl VpnStaticRouteSourceDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VpnStaticRouteSource, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -41812,12 +41504,11 @@ impl VpnStaticRouteSourceDeserializer {
 
     }
 }
-pub type ZoneNameStringList = Vec<String>;
 
 /// Serialize `ZoneNameStringList` contents to a `SignedRequest`.
 struct ZoneNameStringListSerializer;
 impl ZoneNameStringListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ZoneNameStringList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
             params.put(&key, &obj);

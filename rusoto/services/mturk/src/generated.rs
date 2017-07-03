@@ -31,7 +31,7 @@ pub struct AcceptQualificationRequestRequest {
     #[doc="<p> The value of the Qualification. You can omit this value if you are using the presence or absence of the Qualification as the basis for a HIT requirement. </p>"]
     #[serde(rename="IntegerValue")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub integer_value: Option<Integer>,
+    pub integer_value: Option<i64>,
     #[doc="<p>The ID of the Qualification request, as returned by the <code>GetQualificationRequests</code> operation.</p>"]
     #[serde(rename="QualificationRequestId")]
     pub qualification_request_id: String,
@@ -44,11 +44,11 @@ pub struct AcceptQualificationRequestResponse;
 pub struct ApproveAssignmentRequest {
     #[doc="<p> The ID of the assignment. The assignment must correspond to a HIT created by the Requester. </p>"]
     #[serde(rename="AssignmentId")]
-    pub assignment_id: EntityId,
+    pub assignment_id: String,
     #[doc="<p> A flag indicating that an assignment should be approved even if it was previously rejected. Defaults to <code>False</code>. </p>"]
     #[serde(rename="OverrideRejection")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub override_rejection: Option<Boolean>,
+    pub override_rejection: Option<bool>,
     #[doc="<p> A message for the Worker, which the Worker can see in the Status section of the web site. </p>"]
     #[serde(rename="RequesterFeedback")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -64,7 +64,7 @@ pub struct Assignment {
     #[doc="<p> The date and time the Worker accepted the assignment.</p>"]
     #[serde(rename="AcceptTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub accept_time: Option<Timestamp>,
+    pub accept_time: Option<f64>,
     #[doc="<p> The Worker's answers submitted for the HIT contained in a QuestionFormAnswers document, if the Worker provides an answer. If the Worker does not provide any answers, Answer may contain a QuestionFormAnswers document, or Answer may be empty.</p>"]
     #[serde(rename="Answer")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -72,31 +72,31 @@ pub struct Assignment {
     #[doc="<p> If the Worker has submitted results and the Requester has approved the results, ApprovalTime is the date and time the Requester approved the results. This value is omitted from the assignment if the Requester has not yet approved the results.</p>"]
     #[serde(rename="ApprovalTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub approval_time: Option<Timestamp>,
+    pub approval_time: Option<f64>,
     #[doc="<p> A unique identifier for the assignment.</p>"]
     #[serde(rename="AssignmentId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub assignment_id: Option<EntityId>,
+    pub assignment_id: Option<String>,
     #[doc="<p> The status of the assignment.</p>"]
     #[serde(rename="AssignmentStatus")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub assignment_status: Option<AssignmentStatus>,
+    pub assignment_status: Option<String>,
     #[doc="<p> If results have been submitted, AutoApprovalTime is the date and time the results of the assignment results are considered Approved automatically if they have not already been explicitly approved or rejected by the Requester. This value is derived from the auto-approval delay specified by the Requester in the HIT. This value is omitted from the assignment if the Worker has not yet submitted results.</p>"]
     #[serde(rename="AutoApprovalTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub auto_approval_time: Option<Timestamp>,
+    pub auto_approval_time: Option<f64>,
     #[doc="<p> The date and time of the deadline for the assignment. This value is derived from the deadline specification for the HIT and the date and time the Worker accepted the HIT.</p>"]
     #[serde(rename="Deadline")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub deadline: Option<Timestamp>,
+    pub deadline: Option<f64>,
     #[doc="<p> The ID of the HIT.</p>"]
     #[serde(rename="HITId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub hit_id: Option<EntityId>,
+    pub hit_id: Option<String>,
     #[doc="<p> If the Worker has submitted results and the Requester has rejected the results, RejectionTime is the date and time the Requester rejected the results.</p>"]
     #[serde(rename="RejectionTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub rejection_time: Option<Timestamp>,
+    pub rejection_time: Option<f64>,
     #[doc="<p> The feedback string included with the call to the ApproveAssignment operation or the RejectAssignment operation, if the Requester approved or rejected the assignment and specified feedback.</p>"]
     #[serde(rename="RequesterFeedback")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -104,32 +104,29 @@ pub struct Assignment {
     #[doc="<p> If the Worker has submitted results, SubmitTime is the date and time the assignment was submitted. This value is omitted from the assignment if the Worker has not yet submitted results.</p>"]
     #[serde(rename="SubmitTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub submit_time: Option<Timestamp>,
+    pub submit_time: Option<f64>,
     #[doc="<p> The ID of the Worker who accepted the HIT.</p>"]
     #[serde(rename="WorkerId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub worker_id: Option<CustomerId>,
+    pub worker_id: Option<String>,
 }
 
-pub type AssignmentList = Vec<Assignment>;
-pub type AssignmentStatus = String;
-pub type AssignmentStatusList = Vec<AssignmentStatus>;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct AssociateQualificationWithWorkerRequest {
     #[doc="<p>The value of the Qualification to assign.</p>"]
     #[serde(rename="IntegerValue")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub integer_value: Option<Integer>,
+    pub integer_value: Option<i64>,
     #[doc="<p>The ID of the Qualification type to use for the assigned Qualification.</p>"]
     #[serde(rename="QualificationTypeId")]
-    pub qualification_type_id: EntityId,
+    pub qualification_type_id: String,
     #[doc="<p> Specifies whether to send a notification email message to the Worker saying that the qualification was assigned to the Worker. Note: this is true by default. </p>"]
     #[serde(rename="SendNotification")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub send_notification: Option<Boolean>,
+    pub send_notification: Option<bool>,
     #[doc="<p> The ID of the Worker to whom the Qualification is being assigned. Worker IDs are included with submitted HIT assignments and Qualification requests. </p>"]
     #[serde(rename="WorkerId")]
-    pub worker_id: CustomerId,
+    pub worker_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -141,14 +138,14 @@ pub struct BonusPayment {
     #[doc="<p>The ID of the assignment associated with this bonus payment.</p>"]
     #[serde(rename="AssignmentId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub assignment_id: Option<EntityId>,
+    pub assignment_id: Option<String>,
     #[serde(rename="BonusAmount")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub bonus_amount: Option<NumericValue>,
+    pub bonus_amount: Option<String>,
     #[doc="<p>The date and time of when the bonus was granted.</p>"]
     #[serde(rename="GrantTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub grant_time: Option<Timestamp>,
+    pub grant_time: Option<f64>,
     #[doc="<p>The Reason text given when the bonus was granted, if any.</p>"]
     #[serde(rename="Reason")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -156,26 +153,22 @@ pub struct BonusPayment {
     #[doc="<p>The ID of the Worker to whom the bonus was paid.</p>"]
     #[serde(rename="WorkerId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub worker_id: Option<CustomerId>,
+    pub worker_id: Option<String>,
 }
 
-pub type BonusPaymentList = Vec<BonusPayment>;
-pub type Boolean = bool;
-pub type Comparator = String;
-pub type CountryParameters = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct CreateAdditionalAssignmentsForHITRequest {
     #[doc="<p>The ID of the HIT to extend.</p>"]
     #[serde(rename="HITId")]
-    pub hit_id: EntityId,
+    pub hit_id: String,
     #[doc="<p>The number of additional assignments to request for this HIT.</p>"]
     #[serde(rename="NumberOfAdditionalAssignments")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub number_of_additional_assignments: Option<Integer>,
+    pub number_of_additional_assignments: Option<i64>,
     #[doc="<p> A unique identifier for this request, which allows you to retry the call on error without extending the HIT multiple times. This is useful in cases such as network timeouts where it is unclear whether or not the call succeeded on the server. If the extend HIT already exists in the system from a previous call using the same <code>UniqueRequestToken</code>, subsequent calls will return an error with a message containing the request ID. </p>"]
     #[serde(rename="UniqueRequestToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub unique_request_token: Option<IdempotencyToken>,
+    pub unique_request_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -185,7 +178,7 @@ pub struct CreateAdditionalAssignmentsForHITResponse;
 pub struct CreateHITRequest {
     #[doc="<p> The amount of time, in seconds, that a Worker has to complete the HIT after accepting it. If a Worker does not complete the assignment within the specified duration, the assignment is considered abandoned. If the HIT is still active (that is, its lifetime has not elapsed), the assignment becomes available for other users to find and accept. </p>"]
     #[serde(rename="AssignmentDurationInSeconds")]
-    pub assignment_duration_in_seconds: Long,
+    pub assignment_duration_in_seconds: i64,
     #[doc="<p> The Assignment-level Review Policy applies to the assignments under the HIT. You can specify for Mechanical Turk to take various actions based on the policy. </p>"]
     #[serde(rename="AssignmentReviewPolicy")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -193,18 +186,18 @@ pub struct CreateHITRequest {
     #[doc="<p> The number of seconds after an assignment for the HIT has been submitted, after which the assignment is considered Approved automatically unless the Requester explicitly rejects it. </p>"]
     #[serde(rename="AutoApprovalDelayInSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub auto_approval_delay_in_seconds: Option<Long>,
+    pub auto_approval_delay_in_seconds: Option<i64>,
     #[doc="<p> A general description of the HIT. A description includes detailed information about the kind of task the HIT contains. On the Amazon Mechanical Turk web site, the HIT description appears in the expanded view of search results, and in the HIT and assignment screens. A good description gives the user enough information to evaluate the HIT before accepting it. </p>"]
     #[serde(rename="Description")]
     pub description: String,
     #[doc="<p> The HITLayoutId allows you to use a pre-existing HIT design with placeholder values and create an additional HIT by providing those values as HITLayoutParameters. </p> <p> Constraints: Either a Question parameter or a HITLayoutId parameter must be provided. </p>"]
     #[serde(rename="HITLayoutId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub hit_layout_id: Option<EntityId>,
+    pub hit_layout_id: Option<String>,
     #[doc="<p> If the HITLayoutId is provided, any placeholder values must be filled in with values using the HITLayoutParameter structure. For more information, see HITLayout. </p>"]
     #[serde(rename="HITLayoutParameters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub hit_layout_parameters: Option<HITLayoutParameterList>,
+    pub hit_layout_parameters: Option<Vec<HITLayoutParameter>>,
     #[doc="<p> The HIT-level Review Policy applies to the HIT. You can specify for Mechanical Turk to take various actions based on the policy. </p>"]
     #[serde(rename="HITReviewPolicy")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -215,15 +208,15 @@ pub struct CreateHITRequest {
     pub keywords: Option<String>,
     #[doc="<p> An amount of time, in seconds, after which the HIT is no longer available for users to accept. After the lifetime of the HIT elapses, the HIT no longer appears in HIT searches, even if not all of the assignments for the HIT have been accepted. </p>"]
     #[serde(rename="LifetimeInSeconds")]
-    pub lifetime_in_seconds: Long,
+    pub lifetime_in_seconds: i64,
     #[doc="<p> The number of times the HIT can be accepted and completed before the HIT becomes unavailable. </p>"]
     #[serde(rename="MaxAssignments")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_assignments: Option<Integer>,
+    pub max_assignments: Option<i64>,
     #[doc="<p> A condition that a Worker's Qualifications must meet before the Worker is allowed to accept and complete the HIT. </p>"]
     #[serde(rename="QualificationRequirements")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub qualification_requirements: Option<QualificationRequirementList>,
+    pub qualification_requirements: Option<Vec<QualificationRequirement>>,
     #[doc="<p> The data the person completing the HIT uses to produce the results. </p> <p> Constraints: Must be a QuestionForm data structure, an ExternalQuestion data structure, or an HTMLQuestion data structure. The XML question data must not be larger than 64 kilobytes (65,535 bytes) in size, including whitespace. </p> <p>Either a Question parameter or a HITLayoutId parameter must be provided.</p>"]
     #[serde(rename="Question")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -234,14 +227,14 @@ pub struct CreateHITRequest {
     pub requester_annotation: Option<String>,
     #[doc="<p> The amount of money the Requester will pay a Worker for successfully completing the HIT. </p>"]
     #[serde(rename="Reward")]
-    pub reward: NumericValue,
+    pub reward: String,
     #[doc="<p> The title of the HIT. A title should be short and descriptive about the kind of task the HIT contains. On the Amazon Mechanical Turk web site, the HIT title appears in search results, and everywhere the HIT is mentioned. </p>"]
     #[serde(rename="Title")]
     pub title: String,
     #[doc="<p> A unique identifier for this request which allows you to retry the call on error without creating duplicate HITs. This is useful in cases such as network timeouts where it is unclear whether or not the call succeeded on the server. If the HIT already exists in the system from a previous call using the same UniqueRequestToken, subsequent calls will return a AWS.MechanicalTurk.HitAlreadyExists error with a message containing the HITId. </p> <note> <p> Note: It is your responsibility to ensure uniqueness of the token. The unique token expires after 24 hours. Subsequent calls using the same UniqueRequestToken made after the 24 hour limit could create duplicate HITs. </p> </note>"]
     #[serde(rename="UniqueRequestToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub unique_request_token: Option<IdempotencyToken>,
+    pub unique_request_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -256,11 +249,11 @@ pub struct CreateHITResponse {
 pub struct CreateHITTypeRequest {
     #[doc="<p> The amount of time, in seconds, that a Worker has to complete the HIT after accepting it. If a Worker does not complete the assignment within the specified duration, the assignment is considered abandoned. If the HIT is still active (that is, its lifetime has not elapsed), the assignment becomes available for other users to find and accept. </p>"]
     #[serde(rename="AssignmentDurationInSeconds")]
-    pub assignment_duration_in_seconds: Long,
+    pub assignment_duration_in_seconds: i64,
     #[doc="<p> The number of seconds after an assignment for the HIT has been submitted, after which the assignment is considered Approved automatically unless the Requester explicitly rejects it. </p>"]
     #[serde(rename="AutoApprovalDelayInSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub auto_approval_delay_in_seconds: Option<Long>,
+    pub auto_approval_delay_in_seconds: Option<i64>,
     #[doc="<p> A general description of the HIT. A description includes detailed information about the kind of task the HIT contains. On the Amazon Mechanical Turk web site, the HIT description appears in the expanded view of search results, and in the HIT and assignment screens. A good description gives the user enough information to evaluate the HIT before accepting it. </p>"]
     #[serde(rename="Description")]
     pub description: String,
@@ -271,10 +264,10 @@ pub struct CreateHITTypeRequest {
     #[doc="<p> A condition that a Worker's Qualifications must meet before the Worker is allowed to accept and complete the HIT. </p>"]
     #[serde(rename="QualificationRequirements")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub qualification_requirements: Option<QualificationRequirementList>,
+    pub qualification_requirements: Option<Vec<QualificationRequirement>>,
     #[doc="<p> The amount of money the Requester will pay a Worker for successfully completing the HIT. </p>"]
     #[serde(rename="Reward")]
-    pub reward: NumericValue,
+    pub reward: String,
     #[doc="<p> The title of the HIT. A title should be short and descriptive about the kind of task the HIT contains. On the Amazon Mechanical Turk web site, the HIT title appears in search results, and everywhere the HIT is mentioned. </p>"]
     #[serde(rename="Title")]
     pub title: String,
@@ -285,7 +278,7 @@ pub struct CreateHITTypeResponse {
     #[doc="<p> The ID of the newly registered HIT type.</p>"]
     #[serde(rename="HITTypeId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub hit_type_id: Option<EntityId>,
+    pub hit_type_id: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -297,25 +290,25 @@ pub struct CreateHITWithHITTypeRequest {
     #[doc="<p> The HITLayoutId allows you to use a pre-existing HIT design with placeholder values and create an additional HIT by providing those values as HITLayoutParameters. </p> <p> Constraints: Either a Question parameter or a HITLayoutId parameter must be provided. </p>"]
     #[serde(rename="HITLayoutId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub hit_layout_id: Option<EntityId>,
+    pub hit_layout_id: Option<String>,
     #[doc="<p> If the HITLayoutId is provided, any placeholder values must be filled in with values using the HITLayoutParameter structure. For more information, see HITLayout. </p>"]
     #[serde(rename="HITLayoutParameters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub hit_layout_parameters: Option<HITLayoutParameterList>,
+    pub hit_layout_parameters: Option<Vec<HITLayoutParameter>>,
     #[doc="<p> The HIT-level Review Policy applies to the HIT. You can specify for Mechanical Turk to take various actions based on the policy. </p>"]
     #[serde(rename="HITReviewPolicy")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub hit_review_policy: Option<ReviewPolicy>,
     #[doc="<p>The HIT type ID you want to create this HIT with.</p>"]
     #[serde(rename="HITTypeId")]
-    pub hit_type_id: EntityId,
+    pub hit_type_id: String,
     #[doc="<p> An amount of time, in seconds, after which the HIT is no longer available for users to accept. After the lifetime of the HIT elapses, the HIT no longer appears in HIT searches, even if not all of the assignments for the HIT have been accepted. </p>"]
     #[serde(rename="LifetimeInSeconds")]
-    pub lifetime_in_seconds: Long,
+    pub lifetime_in_seconds: i64,
     #[doc="<p> The number of times the HIT can be accepted and completed before the HIT becomes unavailable. </p>"]
     #[serde(rename="MaxAssignments")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_assignments: Option<Integer>,
+    pub max_assignments: Option<i64>,
     #[doc="<p> The data the person completing the HIT uses to produce the results. </p> <p> Constraints: Must be a QuestionForm data structure, an ExternalQuestion data structure, or an HTMLQuestion data structure. The XML question data must not be larger than 64 kilobytes (65,535 bytes) in size, including whitespace. </p> <p>Either a Question parameter or a HITLayoutId parameter must be provided.</p>"]
     #[serde(rename="Question")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -327,7 +320,7 @@ pub struct CreateHITWithHITTypeRequest {
     #[doc="<p> A unique identifier for this request which allows you to retry the call on error without creating duplicate HITs. This is useful in cases such as network timeouts where it is unclear whether or not the call succeeded on the server. If the HIT already exists in the system from a previous call using the same UniqueRequestToken, subsequent calls will return a AWS.MechanicalTurk.HitAlreadyExists error with a message containing the HITId. </p> <note> <p> Note: It is your responsibility to ensure uniqueness of the token. The unique token expires after 24 hours. Subsequent calls using the same UniqueRequestToken made after the 24 hour limit could create duplicate HITs. </p> </note>"]
     #[serde(rename="UniqueRequestToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub unique_request_token: Option<IdempotencyToken>,
+    pub unique_request_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -347,11 +340,11 @@ pub struct CreateQualificationTypeRequest {
     #[doc="<p>Specifies whether requests for the Qualification type are granted immediately, without prompting the Worker with a Qualification test.</p> <p>Constraints: If the Test parameter is specified, this parameter cannot be true.</p>"]
     #[serde(rename="AutoGranted")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub auto_granted: Option<Boolean>,
+    pub auto_granted: Option<bool>,
     #[doc="<p>The Qualification value to use for automatically granted Qualifications. This parameter is used only if the AutoGranted parameter is true.</p>"]
     #[serde(rename="AutoGrantedValue")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub auto_granted_value: Option<Integer>,
+    pub auto_granted_value: Option<i64>,
     #[doc="<p>A long description for the Qualification type. On the Amazon Mechanical Turk website, the long description is displayed when a Worker examines a Qualification type.</p>"]
     #[serde(rename="Description")]
     pub description: String,
@@ -364,11 +357,11 @@ pub struct CreateQualificationTypeRequest {
     pub name: String,
     #[doc="<p>The initial status of the Qualification type.</p> <p>Constraints: Valid values are: Active | Inactive</p>"]
     #[serde(rename="QualificationTypeStatus")]
-    pub qualification_type_status: QualificationTypeStatus,
+    pub qualification_type_status: String,
     #[doc="<p>The number of seconds that a Worker must wait after requesting a Qualification of the Qualification type before the worker can retry the Qualification request.</p> <p>Constraints: None. If not specified, retries are disabled and Workers can request a Qualification of this type only once, even if the Worker has not been granted the Qualification. It is not possible to disable retries for a Qualification type after it has been created with retries enabled. If you want to disable retries, you must delete existing retry-enabled Qualification type and then create a new Qualification type with retries disabled.</p>"]
     #[serde(rename="RetryDelayInSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub retry_delay_in_seconds: Option<Long>,
+    pub retry_delay_in_seconds: Option<i64>,
     #[doc="<p> The questions for the Qualification test a Worker must answer correctly to obtain a Qualification of this type. If this parameter is specified, <code>TestDurationInSeconds</code> must also be specified. </p> <p>Constraints: Must not be longer than 65535 bytes. Must be a QuestionForm data structure. This parameter cannot be specified if AutoGranted is true.</p> <p>Constraints: None. If not specified, the Worker may request the Qualification without answering any questions.</p>"]
     #[serde(rename="Test")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -376,7 +369,7 @@ pub struct CreateQualificationTypeRequest {
     #[doc="<p>The number of seconds the Worker has to complete the Qualification test, starting from the time the Worker requests the Qualification.</p>"]
     #[serde(rename="TestDurationInSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub test_duration_in_seconds: Option<Long>,
+    pub test_duration_in_seconds: Option<i64>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -394,19 +387,17 @@ pub struct CreateWorkerBlockRequest {
     pub reason: String,
     #[doc="<p>The ID of the Worker to block.</p>"]
     #[serde(rename="WorkerId")]
-    pub worker_id: CustomerId,
+    pub worker_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct CreateWorkerBlockResponse;
 
-pub type CustomerId = String;
-pub type CustomerIdList = Vec<CustomerId>;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct DeleteHITRequest {
     #[doc="<p>The ID of the HIT to be deleted.</p>"]
     #[serde(rename="HITId")]
-    pub hit_id: EntityId,
+    pub hit_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -416,7 +407,7 @@ pub struct DeleteHITResponse;
 pub struct DeleteQualificationTypeRequest {
     #[doc="<p>The ID of the QualificationType to dispose.</p>"]
     #[serde(rename="QualificationTypeId")]
-    pub qualification_type_id: EntityId,
+    pub qualification_type_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -430,7 +421,7 @@ pub struct DeleteWorkerBlockRequest {
     pub reason: Option<String>,
     #[doc="<p>The ID of the Worker to unblock.</p>"]
     #[serde(rename="WorkerId")]
-    pub worker_id: CustomerId,
+    pub worker_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -440,23 +431,19 @@ pub struct DeleteWorkerBlockResponse;
 pub struct DisassociateQualificationFromWorkerRequest {
     #[doc="<p>The ID of the Qualification type of the Qualification to be revoked.</p>"]
     #[serde(rename="QualificationTypeId")]
-    pub qualification_type_id: EntityId,
+    pub qualification_type_id: String,
     #[doc="<p>A text message that explains why the Qualification was revoked. The user who had the Qualification sees this message.</p>"]
     #[serde(rename="Reason")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub reason: Option<String>,
     #[doc="<p>The ID of the Worker who possesses the Qualification to be revoked.</p>"]
     #[serde(rename="WorkerId")]
-    pub worker_id: CustomerId,
+    pub worker_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct DisassociateQualificationFromWorkerResponse;
 
-pub type EntityId = String;
-pub type EventType = String;
-pub type EventTypeList = Vec<EventType>;
-pub type ExceptionMessage = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetAccountBalanceRequest;
 
@@ -464,17 +451,17 @@ pub struct GetAccountBalanceRequest;
 pub struct GetAccountBalanceResponse {
     #[serde(rename="AvailableBalance")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub available_balance: Option<NumericValue>,
+    pub available_balance: Option<String>,
     #[serde(rename="OnHoldBalance")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub on_hold_balance: Option<NumericValue>,
+    pub on_hold_balance: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct GetAssignmentRequest {
     #[doc="<p>The ID of the Assignment to be retrieved.</p>"]
     #[serde(rename="AssignmentId")]
-    pub assignment_id: EntityId,
+    pub assignment_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -493,7 +480,7 @@ pub struct GetAssignmentResponse {
 pub struct GetFileUploadURLRequest {
     #[doc="<p>The ID of the assignment that contains the question with a FileUploadAnswer.</p>"]
     #[serde(rename="AssignmentId")]
-    pub assignment_id: EntityId,
+    pub assignment_id: String,
     #[doc="<p>The identifier of the question with a FileUploadAnswer, as specified in the QuestionForm of the HIT.</p>"]
     #[serde(rename="QuestionIdentifier")]
     pub question_identifier: String,
@@ -511,7 +498,7 @@ pub struct GetFileUploadURLResponse {
 pub struct GetHITRequest {
     #[doc="<p>The ID of the HIT to be retrieved.</p>"]
     #[serde(rename="HITId")]
-    pub hit_id: EntityId,
+    pub hit_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -526,10 +513,10 @@ pub struct GetHITResponse {
 pub struct GetQualificationScoreRequest {
     #[doc="<p>The ID of the QualificationType.</p>"]
     #[serde(rename="QualificationTypeId")]
-    pub qualification_type_id: EntityId,
+    pub qualification_type_id: String,
     #[doc="<p>The ID of the Worker whose Qualification is being updated.</p>"]
     #[serde(rename="WorkerId")]
-    pub worker_id: CustomerId,
+    pub worker_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -544,7 +531,7 @@ pub struct GetQualificationScoreResponse {
 pub struct GetQualificationTypeRequest {
     #[doc="<p>The ID of the QualificationType.</p>"]
     #[serde(rename="QualificationTypeId")]
-    pub qualification_type_id: EntityId,
+    pub qualification_type_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -561,15 +548,15 @@ pub struct HIT {
     #[doc="<p> The length of time, in seconds, that a Worker has to complete the HIT after accepting it.</p>"]
     #[serde(rename="AssignmentDurationInSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub assignment_duration_in_seconds: Option<Long>,
+    pub assignment_duration_in_seconds: Option<i64>,
     #[doc="<p>The amount of time, in seconds, after the Worker submits an assignment for the HIT that the results are automatically approved by Amazon Mechanical Turk. This is the amount of time the Requester has to reject an assignment submitted by a Worker before the assignment is auto-approved and the Worker is paid. </p>"]
     #[serde(rename="AutoApprovalDelayInSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub auto_approval_delay_in_seconds: Option<Long>,
+    pub auto_approval_delay_in_seconds: Option<i64>,
     #[doc="<p> The date and time the HIT was created.</p>"]
     #[serde(rename="CreationTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub creation_time: Option<Timestamp>,
+    pub creation_time: Option<f64>,
     #[doc="<p> A general description of the HIT.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -577,31 +564,31 @@ pub struct HIT {
     #[doc="<p>The date and time the HIT expires.</p>"]
     #[serde(rename="Expiration")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub expiration: Option<Timestamp>,
+    pub expiration: Option<f64>,
     #[doc="<p> The ID of the HIT Group of this HIT.</p>"]
     #[serde(rename="HITGroupId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub hit_group_id: Option<EntityId>,
+    pub hit_group_id: Option<String>,
     #[doc="<p> A unique identifier for the HIT.</p>"]
     #[serde(rename="HITId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub hit_id: Option<EntityId>,
+    pub hit_id: Option<String>,
     #[doc="<p> The ID of the HIT Layout of this HIT.</p>"]
     #[serde(rename="HITLayoutId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub hit_layout_id: Option<EntityId>,
+    pub hit_layout_id: Option<String>,
     #[doc="<p> Indicates the review status of the HIT. Valid Values are NotReviewed | MarkedForReview | ReviewedAppropriate | ReviewedInappropriate.</p>"]
     #[serde(rename="HITReviewStatus")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub hit_review_status: Option<HITReviewStatus>,
+    pub hit_review_status: Option<String>,
     #[doc="<p>The status of the HIT and its assignments. Valid Values are Assignable | Unassignable | Reviewable | Reviewing | Disposed. </p>"]
     #[serde(rename="HITStatus")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub hit_status: Option<HITStatus>,
+    pub hit_status: Option<String>,
     #[doc="<p>The ID of the HIT type of this HIT</p>"]
     #[serde(rename="HITTypeId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub hit_type_id: Option<EntityId>,
+    pub hit_type_id: Option<String>,
     #[doc="<p> One or more words or phrases that describe the HIT, separated by commas. Search terms similar to the keywords of a HIT are more likely to have the HIT in the search results.</p>"]
     #[serde(rename="Keywords")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -609,23 +596,23 @@ pub struct HIT {
     #[doc="<p>The number of times the HIT can be accepted and completed before the HIT becomes unavailable. </p>"]
     #[serde(rename="MaxAssignments")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_assignments: Option<Integer>,
+    pub max_assignments: Option<i64>,
     #[doc="<p> The number of assignments for this HIT that are available for Workers to accept.</p>"]
     #[serde(rename="NumberOfAssignmentsAvailable")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub number_of_assignments_available: Option<Integer>,
+    pub number_of_assignments_available: Option<i64>,
     #[doc="<p> The number of assignments for this HIT that have been approved or rejected.</p>"]
     #[serde(rename="NumberOfAssignmentsCompleted")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub number_of_assignments_completed: Option<Integer>,
+    pub number_of_assignments_completed: Option<i64>,
     #[doc="<p> The number of assignments for this HIT that are being previewed or have been accepted by Workers, but have not yet been submitted, returned, or abandoned.</p>"]
     #[serde(rename="NumberOfAssignmentsPending")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub number_of_assignments_pending: Option<Integer>,
+    pub number_of_assignments_pending: Option<i64>,
     #[doc="<p> A condition that a Worker's Qualifications must meet in order to accept the HIT. A HIT can have between zero and ten Qualification requirements. All requirements must be met by a Worker's Qualifications for the Worker to accept the HIT.</p>"]
     #[serde(rename="QualificationRequirements")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub qualification_requirements: Option<QualificationRequirementList>,
+    pub qualification_requirements: Option<Vec<QualificationRequirement>>,
     #[doc="<p> The data the Worker completing the HIT uses produce the results. This is either either a QuestionForm, HTMLQuestion or an ExternalQuestion data structure.</p>"]
     #[serde(rename="Question")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -636,7 +623,7 @@ pub struct HIT {
     pub requester_annotation: Option<String>,
     #[serde(rename="Reward")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub reward: Option<NumericValue>,
+    pub reward: Option<String>,
     #[doc="<p> The title of the HIT.</p>"]
     #[serde(rename="Title")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -656,29 +643,22 @@ pub struct HITLayoutParameter {
     pub value: Option<String>,
 }
 
-pub type HITLayoutParameterList = Vec<HITLayoutParameter>;
-pub type HITList = Vec<HIT>;
-pub type HITReviewStatus = String;
-pub type HITStatus = String;
-pub type IdempotencyToken = String;
-pub type Integer = i64;
-pub type IntegerList = Vec<Integer>;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListAssignmentsForHITRequest {
     #[doc="<p>The status of the assignments to return: Submitted | Approved | Rejected</p>"]
     #[serde(rename="AssignmentStatuses")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub assignment_statuses: Option<AssignmentStatusList>,
+    pub assignment_statuses: Option<Vec<String>>,
     #[doc="<p>The ID of the HIT.</p>"]
     #[serde(rename="HITId")]
-    pub hit_id: EntityId,
+    pub hit_id: String,
     #[serde(rename="MaxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<ResultSize>,
+    pub max_results: Option<i64>,
     #[doc="<p>Pagination token</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -686,14 +666,14 @@ pub struct ListAssignmentsForHITResponse {
     #[doc="<p> The collection of Assignment data structures returned by this call.</p>"]
     #[serde(rename="Assignments")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub assignments: Option<AssignmentList>,
+    pub assignments: Option<Vec<Assignment>>,
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
     #[doc="<p> The number of assignments on the page in the filtered results list, equivalent to the number of assignments returned by this call.</p>"]
     #[serde(rename="NumResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub num_results: Option<Integer>,
+    pub num_results: Option<i64>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -701,18 +681,18 @@ pub struct ListBonusPaymentsRequest {
     #[doc="<p>The ID of the assignment associated with the bonus payments to retrieve. If specified, only bonus payments for the given assignment are returned. Either the HITId parameter or the AssignmentId parameter must be specified</p>"]
     #[serde(rename="AssignmentId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub assignment_id: Option<EntityId>,
+    pub assignment_id: Option<String>,
     #[doc="<p>The ID of the HIT associated with the bonus payments to retrieve. If not specified, all bonus payments for all assignments for the given HIT are returned. Either the HITId parameter or the AssignmentId parameter must be specified</p>"]
     #[serde(rename="HITId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub hit_id: Option<EntityId>,
+    pub hit_id: Option<String>,
     #[serde(rename="MaxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<ResultSize>,
+    pub max_results: Option<i64>,
     #[doc="<p>Pagination token</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -720,14 +700,14 @@ pub struct ListBonusPaymentsResponse {
     #[doc="<p>A successful request to the ListBonusPayments operation returns a list of BonusPayment objects. </p>"]
     #[serde(rename="BonusPayments")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub bonus_payments: Option<BonusPaymentList>,
+    pub bonus_payments: Option<Vec<BonusPayment>>,
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
     #[doc="<p>The number of bonus payments on this page in the filtered results list, equivalent to the number of bonus payments being returned by this call. </p>"]
     #[serde(rename="NumResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub num_results: Option<Integer>,
+    pub num_results: Option<i64>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -735,14 +715,14 @@ pub struct ListHITsForQualificationTypeRequest {
     #[doc="<p> Limit the number of results returned. </p>"]
     #[serde(rename="MaxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<ResultSize>,
+    pub max_results: Option<i64>,
     #[doc="<p>Pagination Token</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
     #[doc="<p> The ID of the Qualification type to use when querying HITs. </p>"]
     #[serde(rename="QualificationTypeId")]
-    pub qualification_type_id: EntityId,
+    pub qualification_type_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -750,25 +730,25 @@ pub struct ListHITsForQualificationTypeResponse {
     #[doc="<p> The list of HIT elements returned by the query.</p>"]
     #[serde(rename="HITs")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub hi_ts: Option<HITList>,
+    pub hi_ts: Option<Vec<HIT>>,
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
     #[doc="<p> The number of HITs on this page in the filtered results list, equivalent to the number of HITs being returned by this call. </p>"]
     #[serde(rename="NumResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub num_results: Option<Integer>,
+    pub num_results: Option<i64>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListHITsRequest {
     #[serde(rename="MaxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<ResultSize>,
+    pub max_results: Option<i64>,
     #[doc="<p>Pagination token</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -776,14 +756,14 @@ pub struct ListHITsResponse {
     #[doc="<p> The list of HIT elements returned by the query.</p>"]
     #[serde(rename="HITs")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub hi_ts: Option<HITList>,
+    pub hi_ts: Option<Vec<HIT>>,
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
     #[doc="<p>The number of HITs on this page in the filtered results list, equivalent to the number of HITs being returned by this call.</p>"]
     #[serde(rename="NumResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub num_results: Option<Integer>,
+    pub num_results: Option<i64>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -791,29 +771,29 @@ pub struct ListQualificationRequestsRequest {
     #[doc="<p> The maximum number of results to return in a single call. </p>"]
     #[serde(rename="MaxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<ResultSize>,
+    pub max_results: Option<i64>,
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
     #[doc="<p>The ID of the QualificationType.</p>"]
     #[serde(rename="QualificationTypeId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub qualification_type_id: Option<EntityId>,
+    pub qualification_type_id: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ListQualificationRequestsResponse {
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
     #[doc="<p>The number of Qualification requests on this page in the filtered results list, equivalent to the number of Qualification requests being returned by this call.</p>"]
     #[serde(rename="NumResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub num_results: Option<Integer>,
+    pub num_results: Option<i64>,
     #[doc="<p>The Qualification request. The response includes one QualificationRequest element for each Qualification request returned by the query.</p>"]
     #[serde(rename="QualificationRequests")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub qualification_requests: Option<QualificationRequestList>,
+    pub qualification_requests: Option<Vec<QualificationRequest>>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -821,17 +801,17 @@ pub struct ListQualificationTypesRequest {
     #[doc="<p> The maximum number of results to return in a single call. </p>"]
     #[serde(rename="MaxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<ResultSize>,
+    pub max_results: Option<i64>,
     #[doc="<p> Specifies that only Qualification types that the Requester created are returned. If false, the operation returns all Qualification types. </p>"]
     #[serde(rename="MustBeOwnedByCaller")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub must_be_owned_by_caller: Option<Boolean>,
+    pub must_be_owned_by_caller: Option<bool>,
     #[doc="<p>Specifies that only Qualification types that a user can request through the Amazon Mechanical Turk web site, such as by taking a Qualification test, are returned as results of the search. Some Qualification types, such as those assigned automatically by the system, cannot be requested directly by users. If false, all Qualification types, including those managed by the system, are considered. Valid values are True | False. </p>"]
     #[serde(rename="MustBeRequestable")]
-    pub must_be_requestable: Boolean,
+    pub must_be_requestable: bool,
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
     #[doc="<p> A text query against all of the searchable attributes of Qualification types. </p>"]
     #[serde(rename="Query")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -842,42 +822,42 @@ pub struct ListQualificationTypesRequest {
 pub struct ListQualificationTypesResponse {
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
     #[doc="<p> The number of Qualification types on this page in the filtered results list, equivalent to the number of types this operation returns. </p>"]
     #[serde(rename="NumResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub num_results: Option<Integer>,
+    pub num_results: Option<i64>,
     #[doc="<p> The list of QualificationType elements returned by the query. </p>"]
     #[serde(rename="QualificationTypes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub qualification_types: Option<QualificationTypeList>,
+    pub qualification_types: Option<Vec<QualificationType>>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListReviewPolicyResultsForHITRequest {
     #[doc="<p>The unique identifier of the HIT to retrieve review results for.</p>"]
     #[serde(rename="HITId")]
-    pub hit_id: EntityId,
+    pub hit_id: String,
     #[doc="<p>Limit the number of results returned.</p>"]
     #[serde(rename="MaxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<ResultSize>,
+    pub max_results: Option<i64>,
     #[doc="<p>Pagination token</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
     #[doc="<p> The Policy Level(s) to retrieve review results for - HIT or Assignment. If omitted, the default behavior is to retrieve all data for both policy levels. For a list of all the described policies, see Review Policies. </p>"]
     #[serde(rename="PolicyLevels")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub policy_levels: Option<ReviewPolicyLevelList>,
+    pub policy_levels: Option<Vec<String>>,
     #[doc="<p> Specify if the operation should retrieve a list of the actions taken executing the Review Policies and their outcomes. </p>"]
     #[serde(rename="RetrieveActions")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub retrieve_actions: Option<Boolean>,
+    pub retrieve_actions: Option<bool>,
     #[doc="<p> Specify if the operation should retrieve a list of the results computed by the Review Policies. </p>"]
     #[serde(rename="RetrieveResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub retrieve_results: Option<Boolean>,
+    pub retrieve_results: Option<bool>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -893,7 +873,7 @@ pub struct ListReviewPolicyResultsForHITResponse {
     #[doc="<p>The HITId of the HIT for which results have been returned.</p>"]
     #[serde(rename="HITId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub hit_id: Option<EntityId>,
+    pub hit_id: Option<String>,
     #[doc="<p>The name of the HIT-level Review Policy. This contains only the PolicyName element.</p>"]
     #[serde(rename="HITReviewPolicy")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -904,7 +884,7 @@ pub struct ListReviewPolicyResultsForHITResponse {
     pub hit_review_report: Option<ReviewReport>,
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -912,19 +892,19 @@ pub struct ListReviewableHITsRequest {
     #[doc="<p> The ID of the HIT type of the HITs to consider for the query. If not specified, all HITs for the Reviewer are considered </p>"]
     #[serde(rename="HITTypeId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub hit_type_id: Option<EntityId>,
+    pub hit_type_id: Option<String>,
     #[doc="<p> Limit the number of results returned. </p>"]
     #[serde(rename="MaxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<ResultSize>,
+    pub max_results: Option<i64>,
     #[doc="<p>Pagination Token</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
     #[doc="<p> Can be either <code>Reviewable</code> or <code>Reviewing</code>. Reviewable is the default value. </p>"]
     #[serde(rename="Status")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status: Option<ReviewableHITStatus>,
+    pub status: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -932,40 +912,40 @@ pub struct ListReviewableHITsResponse {
     #[doc="<p> The list of HIT elements returned by the query.</p>"]
     #[serde(rename="HITs")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub hi_ts: Option<HITList>,
+    pub hi_ts: Option<Vec<HIT>>,
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
     #[doc="<p> The number of HITs on this page in the filtered results list, equivalent to the number of HITs being returned by this call. </p>"]
     #[serde(rename="NumResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub num_results: Option<Integer>,
+    pub num_results: Option<i64>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct ListWorkerBlocksRequest {
     #[serde(rename="MaxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<ResultSize>,
+    pub max_results: Option<i64>,
     #[doc="<p>Pagination token</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ListWorkerBlocksResponse {
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
     #[doc="<p> The number of assignments on the page in the filtered results list, equivalent to the number of assignments returned by this call.</p>"]
     #[serde(rename="NumResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub num_results: Option<Integer>,
+    pub num_results: Option<i64>,
     #[doc="<p> The list of WorkerBlocks, containing the collection of Worker IDs and reasons for blocking.</p>"]
     #[serde(rename="WorkerBlocks")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub worker_blocks: Option<WorkerBlockList>,
+    pub worker_blocks: Option<Vec<WorkerBlock>>,
 }
 
 #[derive(Default,Debug,Clone,Serialize)]
@@ -973,33 +953,33 @@ pub struct ListWorkersWithQualificationTypeRequest {
     #[doc="<p> Limit the number of results returned. </p>"]
     #[serde(rename="MaxResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub max_results: Option<ResultSize>,
+    pub max_results: Option<i64>,
     #[doc="<p>Pagination Token</p>"]
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
     #[doc="<p>The ID of the Qualification type of the Qualifications to return.</p>"]
     #[serde(rename="QualificationTypeId")]
-    pub qualification_type_id: EntityId,
+    pub qualification_type_id: String,
     #[doc="<p> The status of the Qualifications to return. Can be <code>Granted | Revoked</code>. </p>"]
     #[serde(rename="Status")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status: Option<QualificationStatus>,
+    pub status: Option<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ListWorkersWithQualificationTypeResponse {
     #[serde(rename="NextToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub next_token: Option<PaginationToken>,
+    pub next_token: Option<String>,
     #[doc="<p> The number of Qualifications on this page in the filtered results list, equivalent to the number of Qualifications being returned by this call.</p>"]
     #[serde(rename="NumResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub num_results: Option<Integer>,
+    pub num_results: Option<i64>,
     #[doc="<p> The list of Qualification elements returned by this call. </p>"]
     #[serde(rename="Qualifications")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub qualifications: Option<QualificationList>,
+    pub qualifications: Option<Vec<Qualification>>,
 }
 
 #[doc="<p>The Locale data structure represents a geographical region or location.</p>"]
@@ -1007,15 +987,13 @@ pub struct ListWorkersWithQualificationTypeResponse {
 pub struct Locale {
     #[doc="<p> The country of the locale. Must be a valid ISO 3166 country code. For example, the code US refers to the United States of America. </p>"]
     #[serde(rename="Country")]
-    pub country: CountryParameters,
+    pub country: String,
     #[doc="<p>The state or subdivision of the locale. A valid ISO 3166-2 subdivision code. For example, the code WA refers to the state of Washington.</p>"]
     #[serde(rename="Subdivision")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub subdivision: Option<CountryParameters>,
+    pub subdivision: Option<String>,
 }
 
-pub type LocaleList = Vec<Locale>;
-pub type Long = i64;
 #[doc="<p>The NotificationSpecification data structure describes a HIT event notification for a HIT type.</p>"]
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct NotificationSpecification {
@@ -1025,25 +1003,23 @@ pub struct NotificationSpecification {
     #[doc="<p> The list of events that should cause notifications to be sent. Valid Values: AssignmentAccepted | AssignmentAbandoned | AssignmentReturned | AssignmentSubmitted | AssignmentRejected | AssignmentApproved | HITCreated | HITExtended | HITDisposed | HITReviewable | HITExpired | Ping. The Ping event is only valid for the SendTestEventNotification operation. </p>"]
     #[serde(rename="EventTypes")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub event_types: Option<EventTypeList>,
+    pub event_types: Option<Vec<String>>,
     #[doc="<p> The method Amazon Mechanical Turk uses to send the notification. Valid Values: Email | SQS. </p>"]
     #[serde(rename="Transport")]
-    pub transport: NotificationTransport,
+    pub transport: String,
     #[doc="<p>The version of the Notification API to use. Valid value is 2006-05-05.</p>"]
     #[serde(rename="Version")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub version: Option<String>,
 }
 
-pub type NotificationTransport = String;
-pub type NotifyWorkersFailureCode = String;
 #[doc="<p> When MTurk encounters an issue with notifying the Workers you specified, it returns back this object with failure details. </p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct NotifyWorkersFailureStatus {
     #[doc="<p> Encoded value for the failure type. </p>"]
     #[serde(rename="NotifyWorkersFailureCode")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub notify_workers_failure_code: Option<NotifyWorkersFailureCode>,
+    pub notify_workers_failure_code: Option<String>,
     #[doc="<p> A message detailing the reason the Worker could not be notified. </p>"]
     #[serde(rename="NotifyWorkersFailureMessage")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1051,10 +1027,9 @@ pub struct NotifyWorkersFailureStatus {
     #[doc="<p> The ID of the Worker.</p>"]
     #[serde(rename="WorkerId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub worker_id: Option<CustomerId>,
+    pub worker_id: Option<String>,
 }
 
-pub type NotifyWorkersFailureStatusList = Vec<NotifyWorkersFailureStatus>;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct NotifyWorkersRequest {
     #[doc="<p>The text of the email message to send. Can include up to 4,096 characters</p>"]
@@ -1065,7 +1040,7 @@ pub struct NotifyWorkersRequest {
     pub subject: String,
     #[doc="<p>A list of Worker IDs you wish to notify. You can notify upto 100 Workers at a time.</p>"]
     #[serde(rename="WorkerIds")]
-    pub worker_ids: CustomerIdList,
+    pub worker_ids: Vec<String>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -1073,13 +1048,9 @@ pub struct NotifyWorkersResponse {
     #[doc="<p> When MTurk sends notifications to the list of Workers, it returns back any failures it encounters in this list of NotifyWorkersFailureStatus objects. </p>"]
     #[serde(rename="NotifyWorkersFailureStatuses")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub notify_workers_failure_statuses: Option<NotifyWorkersFailureStatusList>,
+    pub notify_workers_failure_statuses: Option<Vec<NotifyWorkersFailureStatus>>,
 }
 
-#[doc="<p>A string representing a numeric value.</p>"]
-pub type NumericValue = String;
-#[doc="<p>If the previous response was incomplete (because there is more data to retrieve), Amazon Mechanical Turk returns a pagination token in the response. You can use this pagination token to retrieve the next set of results. </p>"]
-pub type PaginationToken = String;
 #[doc="<p> This data structure is the data type for the AnswerKey parameter of the ScoreMyKnownAnswers/2011-09-01 Review Policy. </p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ParameterMapEntry {
@@ -1090,10 +1061,9 @@ pub struct ParameterMapEntry {
     #[doc="<p> The list of answers to the question specified in the MapEntry Key element. The Worker must match all values in order for the answer to be scored correctly. </p>"]
     #[serde(rename="Values")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub values: Option<StringList>,
+    pub values: Option<Vec<String>>,
 }
 
-pub type ParameterMapEntryList = Vec<ParameterMapEntry>;
 #[doc="<p> Name of the parameter from the Review policy. </p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct PolicyParameter {
@@ -1104,43 +1074,41 @@ pub struct PolicyParameter {
     #[doc="<p> List of ParameterMapEntry objects. </p>"]
     #[serde(rename="MapEntries")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub map_entries: Option<ParameterMapEntryList>,
+    pub map_entries: Option<Vec<ParameterMapEntry>>,
     #[doc="<p> The list of values of the Parameter</p>"]
     #[serde(rename="Values")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub values: Option<StringList>,
+    pub values: Option<Vec<String>>,
 }
 
-pub type PolicyParameterList = Vec<PolicyParameter>;
 #[doc="<p>The Qualification data structure represents a Qualification assigned to a user, including the Qualification type and the value (score).</p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct Qualification {
     #[doc="<p> The date and time the Qualification was granted to the Worker. If the Worker's Qualification was revoked, and then re-granted based on a new Qualification request, GrantTime is the date and time of the last call to the AcceptQualificationRequest operation.</p>"]
     #[serde(rename="GrantTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub grant_time: Option<Timestamp>,
+    pub grant_time: Option<f64>,
     #[doc="<p> The value (score) of the Qualification, if the Qualification has an integer value.</p>"]
     #[serde(rename="IntegerValue")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub integer_value: Option<Integer>,
+    pub integer_value: Option<i64>,
     #[serde(rename="LocaleValue")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub locale_value: Option<Locale>,
     #[doc="<p> The ID of the Qualification type for the Qualification.</p>"]
     #[serde(rename="QualificationTypeId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub qualification_type_id: Option<EntityId>,
+    pub qualification_type_id: Option<String>,
     #[doc="<p> The status of the Qualification. Valid values are Granted | Revoked.</p>"]
     #[serde(rename="Status")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status: Option<QualificationStatus>,
+    pub status: Option<String>,
     #[doc="<p> The ID of the Worker who possesses the Qualification. </p>"]
     #[serde(rename="WorkerId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub worker_id: Option<CustomerId>,
+    pub worker_id: Option<String>,
 }
 
-pub type QualificationList = Vec<Qualification>;
 #[doc="<p> The QualificationRequest data structure represents a request a Worker has made for a Qualification. </p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct QualificationRequest {
@@ -1155,11 +1123,11 @@ pub struct QualificationRequest {
     #[doc="<p> The ID of the Qualification type the Worker is requesting, as returned by the CreateQualificationType operation. </p>"]
     #[serde(rename="QualificationTypeId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub qualification_type_id: Option<EntityId>,
+    pub qualification_type_id: Option<String>,
     #[doc="<p>The date and time the Qualification request had a status of Submitted. This is either the time the Worker submitted answers for a Qualification test, or the time the Worker requested the Qualification if the Qualification type does not have a test. </p>"]
     #[serde(rename="SubmitTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub submit_time: Option<Timestamp>,
+    pub submit_time: Option<f64>,
     #[doc="<p> The contents of the Qualification test that was presented to the Worker, if the type has a test and the Worker has submitted answers. This value is identical to the QuestionForm associated with the Qualification type at the time the Worker requests the Qualification.</p>"]
     #[serde(rename="Test")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1167,35 +1135,32 @@ pub struct QualificationRequest {
     #[doc="<p> The ID of the Worker requesting the Qualification.</p>"]
     #[serde(rename="WorkerId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub worker_id: Option<CustomerId>,
+    pub worker_id: Option<String>,
 }
 
-pub type QualificationRequestList = Vec<QualificationRequest>;
 #[doc="<p> The QualificationRequirement data structure describes a Qualification that a Worker must have before the Worker is allowed to accept a HIT. A requirement may optionally state that a Worker must have the Qualification in order to preview the HIT. </p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct QualificationRequirement {
     #[doc="<p>The kind of comparison to make against a Qualification's value. You can compare a Qualification's value to an IntegerValue to see if it is LessThan, LessThanOrEqualTo, GreaterThan, GreaterThanOrEqualTo, EqualTo, or NotEqualTo the IntegerValue. You can compare it to a LocaleValue to see if it is EqualTo, or NotEqualTo the LocaleValue. You can check to see if the value is In or NotIn a set of IntegerValue or LocaleValue values. Lastly, a Qualification requirement can also test if a Qualification Exists or DoesNotExist in the user's profile, regardless of its value. </p>"]
     #[serde(rename="Comparator")]
-    pub comparator: Comparator,
+    pub comparator: String,
     #[doc="<p> The integer value to compare against the Qualification's value. IntegerValue must not be present if Comparator is Exists or DoesNotExist. IntegerValue can only be used if the Qualification type has an integer value; it cannot be used with the Worker_Locale QualificationType ID. When performing a set comparison by using the In or the NotIn comparator, you can use up to 15 IntegerValue elements in a QualificationRequirement data structure. </p>"]
     #[serde(rename="IntegerValues")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub integer_values: Option<IntegerList>,
+    pub integer_values: Option<Vec<i64>>,
     #[doc="<p> The locale value to compare against the Qualification's value. The local value must be a valid ISO 3166 country code or supports ISO 3166-2 subdivisions. LocaleValue can only be used with a Worker_Locale QualificationType ID. LocaleValue can only be used with the EqualTo, NotEqualTo, In, and NotIn comparators. You must only use a single LocaleValue element when using the EqualTo or NotEqualTo comparators. When performing a set comparison by using the In or the NotIn comparator, you can use up to 30 LocaleValue elements in a QualificationRequirement data structure. </p>"]
     #[serde(rename="LocaleValues")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub locale_values: Option<LocaleList>,
+    pub locale_values: Option<Vec<Locale>>,
     #[doc="<p> The ID of the Qualification type for the requirement.</p>"]
     #[serde(rename="QualificationTypeId")]
     pub qualification_type_id: String,
     #[doc="<p> If true, the question data for the HIT will not be shown when a Worker whose Qualifications do not meet this requirement tries to preview the HIT. That is, a Worker's Qualifications must meet all of the requirements for which RequiredToPreview is true in order to preview the HIT. If a Worker meets all of the requirements where RequiredToPreview is true (or if there are no such requirements), but does not meet all of the requirements for the HIT, the Worker will be allowed to preview the HIT's question data, but will not be allowed to accept and complete the HIT. The default is false. </p>"]
     #[serde(rename="RequiredToPreview")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub required_to_preview: Option<Boolean>,
+    pub required_to_preview: Option<bool>,
 }
 
-pub type QualificationRequirementList = Vec<QualificationRequirement>;
-pub type QualificationStatus = String;
 #[doc="<p> The QualificationType data structure represents a Qualification type, a description of a property of a Worker that must match the requirements of a HIT for the Worker to be able to accept the HIT. The type also describes how a Worker can obtain a Qualification of that type, such as through a Qualification test. </p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct QualificationType {
@@ -1206,15 +1171,15 @@ pub struct QualificationType {
     #[doc="<p>Specifies that requests for the Qualification type are granted immediately, without prompting the Worker with a Qualification test. Valid values are True | False.</p>"]
     #[serde(rename="AutoGranted")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub auto_granted: Option<Boolean>,
+    pub auto_granted: Option<bool>,
     #[doc="<p> The Qualification integer value to use for automatically granted Qualifications, if AutoGranted is true. This is 1 by default. </p>"]
     #[serde(rename="AutoGrantedValue")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub auto_granted_value: Option<Integer>,
+    pub auto_granted_value: Option<i64>,
     #[doc="<p> The date and time the Qualification type was created. </p>"]
     #[serde(rename="CreationTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub creation_time: Option<Timestamp>,
+    pub creation_time: Option<f64>,
     #[doc="<p> A long description for the Qualification type. </p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1222,7 +1187,7 @@ pub struct QualificationType {
     #[doc="<p> Specifies whether the Qualification type is one that a user can request through the Amazon Mechanical Turk web site, such as by taking a Qualification test. This value is False for Qualifications assigned automatically by the system. Valid values are True | False. </p>"]
     #[serde(rename="IsRequestable")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub is_requestable: Option<Boolean>,
+    pub is_requestable: Option<bool>,
     #[doc="<p> One or more words or phrases that describe theQualification type, separated by commas. The Keywords make the type easier to find using a search. </p>"]
     #[serde(rename="Keywords")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1234,15 +1199,15 @@ pub struct QualificationType {
     #[doc="<p> A unique identifier for the Qualification type. A Qualification type is given a Qualification type ID when you call the CreateQualificationType operation. </p>"]
     #[serde(rename="QualificationTypeId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub qualification_type_id: Option<EntityId>,
+    pub qualification_type_id: Option<String>,
     #[doc="<p> The status of the Qualification type. A Qualification type's status determines if users can apply to receive a Qualification of this type, and if HITs can be created with requirements based on this type. Valid values are Active | Inactive. </p>"]
     #[serde(rename="QualificationTypeStatus")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub qualification_type_status: Option<QualificationTypeStatus>,
+    pub qualification_type_status: Option<String>,
     #[doc="<p> The amount of time, in seconds, Workers must wait after taking the Qualification test before they can take it again. Workers can take a Qualification test multiple times if they were not granted the Qualification from a previous attempt, or if the test offers a gradient score and they want a better score. If not specified, retries are disabled and Workers can request a Qualification only once. </p>"]
     #[serde(rename="RetryDelayInSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub retry_delay_in_seconds: Option<Long>,
+    pub retry_delay_in_seconds: Option<i64>,
     #[doc="<p> The questions for a Qualification test associated with this Qualification type that a user can take to obtain a Qualification of this type. This parameter must be specified if AnswerKey is present. A Qualification type cannot have both a specified Test parameter and an AutoGranted value of true. </p>"]
     #[serde(rename="Test")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1250,16 +1215,14 @@ pub struct QualificationType {
     #[doc="<p> The amount of time, in seconds, given to a Worker to complete the Qualification test, beginning from the time the Worker requests the Qualification. </p>"]
     #[serde(rename="TestDurationInSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub test_duration_in_seconds: Option<Long>,
+    pub test_duration_in_seconds: Option<i64>,
 }
 
-pub type QualificationTypeList = Vec<QualificationType>;
-pub type QualificationTypeStatus = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct RejectAssignmentRequest {
     #[doc="<p> The ID of the assignment. The assignment must correspond to a HIT created by the Requester. </p>"]
     #[serde(rename="AssignmentId")]
-    pub assignment_id: EntityId,
+    pub assignment_id: String,
     #[doc="<p> A message for the Worker, which the Worker can see in the Status section of the web site. </p>"]
     #[serde(rename="RequesterFeedback")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1283,14 +1246,13 @@ pub struct RejectQualificationRequestRequest {
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct RejectQualificationRequestResponse;
 
-pub type ResultSize = i64;
 #[doc="<p> Both the AssignmentReviewReport and the HITReviewReport elements contains the ReviewActionDetail data structure. This structure is returned multiple times for each action specified in the Review Policy. </p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ReviewActionDetail {
     #[doc="<p>The unique identifier for the action.</p>"]
     #[serde(rename="ActionId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub action_id: Option<EntityId>,
+    pub action_id: Option<String>,
     #[doc="<p> The nature of the action itself. The Review Policy is responsible for examining the HIT and Assignments, emitting results, and deciding which other actions will be necessary. </p>"]
     #[serde(rename="ActionName")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1298,7 +1260,7 @@ pub struct ReviewActionDetail {
     #[doc="<p> The date when the action was completed.</p>"]
     #[serde(rename="CompleteTime")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub complete_time: Option<Timestamp>,
+    pub complete_time: Option<f64>,
     #[doc="<p> Present only when the Results have a FAILED Status.</p>"]
     #[serde(rename="ErrorCode")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1310,45 +1272,41 @@ pub struct ReviewActionDetail {
     #[doc="<p> The current disposition of the action: INTENDED, SUCCEEDED, FAILED, or CANCELLED. </p>"]
     #[serde(rename="Status")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub status: Option<ReviewActionStatus>,
+    pub status: Option<String>,
     #[doc="<p> The specific HITId or AssignmentID targeted by the action.</p>"]
     #[serde(rename="TargetId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub target_id: Option<EntityId>,
+    pub target_id: Option<String>,
     #[doc="<p> The type of object in TargetId.</p>"]
     #[serde(rename="TargetType")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub target_type: Option<String>,
 }
 
-pub type ReviewActionDetailList = Vec<ReviewActionDetail>;
-pub type ReviewActionStatus = String;
 #[doc="<p> HIT Review Policy data structures represent HIT review policies, which you specify when you create a HIT. </p>"]
 #[derive(Default,Debug,Clone,Serialize,Deserialize)]
 pub struct ReviewPolicy {
     #[doc="<p>Name of the parameter from the Review policy.</p>"]
     #[serde(rename="Parameters")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub parameters: Option<PolicyParameterList>,
+    pub parameters: Option<Vec<PolicyParameter>>,
     #[doc="<p> Name of a Review Policy: SimplePlurality/2011-09-01 or ScoreMyKnownAnswers/2011-09-01 </p>"]
     #[serde(rename="PolicyName")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub policy_name: Option<String>,
 }
 
-pub type ReviewPolicyLevel = String;
-pub type ReviewPolicyLevelList = Vec<ReviewPolicyLevel>;
 #[doc="<p> Contains both ReviewResult and ReviewAction elements for a particular HIT. </p>"]
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct ReviewReport {
     #[doc="<p> A list of ReviewAction objects for each action specified in the Review Policy. </p>"]
     #[serde(rename="ReviewActions")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub review_actions: Option<ReviewActionDetailList>,
+    pub review_actions: Option<Vec<ReviewActionDetail>>,
     #[doc="<p> A list of ReviewResults objects for each action specified in the Review Policy. </p>"]
     #[serde(rename="ReviewResults")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub review_results: Option<ReviewResultDetailList>,
+    pub review_results: Option<Vec<ReviewResultDetail>>,
 }
 
 #[doc="<p> This data structure is returned multiple times for each result specified in the Review Policy. </p>"]
@@ -1357,7 +1315,7 @@ pub struct ReviewResultDetail {
     #[doc="<p> A unique identifier of the Review action result. </p>"]
     #[serde(rename="ActionId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub action_id: Option<EntityId>,
+    pub action_id: Option<String>,
     #[doc="<p> Key identifies the particular piece of reviewed information. </p>"]
     #[serde(rename="Key")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1365,11 +1323,11 @@ pub struct ReviewResultDetail {
     #[doc="<p> Specifies the QuestionId the result is describing. Depending on whether the TargetType is a HIT or Assignment this results could specify multiple values. If TargetType is HIT and QuestionId is absent, then the result describes results of the HIT, including the HIT agreement score. If ObjectType is Assignment and QuestionId is absent, then the result describes the Worker's performance on the HIT. </p>"]
     #[serde(rename="QuestionId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub question_id: Option<EntityId>,
+    pub question_id: Option<String>,
     #[doc="<p>The HITID or AssignmentId about which this result was taken. Note that HIT-level Review Policies will often emit results about both the HIT itself and its Assignments, while Assignment-level review policies generally only emit results about the Assignment itself. </p>"]
     #[serde(rename="SubjectId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub subject_id: Option<EntityId>,
+    pub subject_id: Option<String>,
     #[doc="<p> The type of the object from the SubjectId field.</p>"]
     #[serde(rename="SubjectType")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1380,16 +1338,14 @@ pub struct ReviewResultDetail {
     pub value: Option<String>,
 }
 
-pub type ReviewResultDetailList = Vec<ReviewResultDetail>;
-pub type ReviewableHITStatus = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct SendBonusRequest {
     #[doc="<p>The ID of the assignment for which this bonus is paid.</p>"]
     #[serde(rename="AssignmentId")]
-    pub assignment_id: EntityId,
+    pub assignment_id: String,
     #[doc="<p> The Bonus amount is a US Dollar amount specified using a string (for example, \"5\" represents $5.00 USD and \"101.42\" represents $101.42 USD). Do not include currency symbols or currency codes. </p>"]
     #[serde(rename="BonusAmount")]
-    pub bonus_amount: NumericValue,
+    pub bonus_amount: String,
     #[doc="<p>A message that explains the reason for the bonus payment. The Worker receiving the bonus can see this message.</p>"]
     #[serde(rename="Reason")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1397,10 +1353,10 @@ pub struct SendBonusRequest {
     #[doc="<p>A unique identifier for this request, which allows you to retry the call on error without granting multiple bonuses. This is useful in cases such as network timeouts where it is unclear whether or not the call succeeded on the server. If the bonus already exists in the system from a previous call using the same UniqueRequestToken, subsequent calls will return an error with a message containing the request ID.</p>"]
     #[serde(rename="UniqueRequestToken")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub unique_request_token: Option<IdempotencyToken>,
+    pub unique_request_token: Option<String>,
     #[doc="<p>The ID of the Worker being paid the bonus.</p>"]
     #[serde(rename="WorkerId")]
-    pub worker_id: CustomerId,
+    pub worker_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -1413,24 +1369,21 @@ pub struct SendTestEventNotificationRequest {
     pub notification: NotificationSpecification,
     #[doc="<p> The event to simulate to test the notification specification. This event is included in the test message even if the notification specification does not include the event type. The notification specification does not filter out the test event. </p>"]
     #[serde(rename="TestEventType")]
-    pub test_event_type: EventType,
+    pub test_event_type: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
 pub struct SendTestEventNotificationResponse;
 
-pub type StringList = Vec<String>;
-pub type Timestamp = f64;
-pub type TurkErrorCode = String;
 #[derive(Default,Debug,Clone,Serialize)]
 pub struct UpdateExpirationForHITRequest {
     #[doc="<p> The date and time at which you want the HIT to expire </p>"]
     #[serde(rename="ExpireAt")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub expire_at: Option<Timestamp>,
+    pub expire_at: Option<f64>,
     #[doc="<p> The HIT to update. </p>"]
     #[serde(rename="HITId")]
-    pub hit_id: EntityId,
+    pub hit_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -1440,11 +1393,11 @@ pub struct UpdateExpirationForHITResponse;
 pub struct UpdateHITReviewStatusRequest {
     #[doc="<p> The ID of the HIT to update. </p>"]
     #[serde(rename="HITId")]
-    pub hit_id: EntityId,
+    pub hit_id: String,
     #[doc="<p> Specifies how to update the HIT status. Default is <code>False</code>. </p> <ul> <li> <p> Setting this to false will only transition a HIT from <code>Reviewable</code> to <code>Reviewing</code> </p> </li> <li> <p> Setting this to true will only transition a HIT from <code>Reviewing</code> to <code>Reviewable</code> </p> </li> </ul>"]
     #[serde(rename="Revert")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub revert: Option<Boolean>,
+    pub revert: Option<bool>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -1454,10 +1407,10 @@ pub struct UpdateHITReviewStatusResponse;
 pub struct UpdateHITTypeOfHITRequest {
     #[doc="<p>The HIT to update.</p>"]
     #[serde(rename="HITId")]
-    pub hit_id: EntityId,
+    pub hit_id: String,
     #[doc="<p>The ID of the new HIT type.</p>"]
     #[serde(rename="HITTypeId")]
-    pub hit_type_id: EntityId,
+    pub hit_type_id: String,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -1468,10 +1421,10 @@ pub struct UpdateNotificationSettingsRequest {
     #[doc="<p> Specifies whether notifications are sent for HITs of this HIT type, according to the notification specification. You must specify either the Notification parameter or the Active parameter for the call to UpdateNotificationSettings to succeed. </p>"]
     #[serde(rename="Active")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub active: Option<Boolean>,
+    pub active: Option<bool>,
     #[doc="<p> The ID of the HIT type whose notification specification is being updated. </p>"]
     #[serde(rename="HITTypeId")]
-    pub hit_type_id: EntityId,
+    pub hit_type_id: String,
     #[doc="<p> The notification specification for the HIT type. </p>"]
     #[serde(rename="Notification")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1490,26 +1443,26 @@ pub struct UpdateQualificationTypeRequest {
     #[doc="<p>Specifies whether requests for the Qualification type are granted immediately, without prompting the Worker with a Qualification test.</p> <p>Constraints: If the Test parameter is specified, this parameter cannot be true.</p>"]
     #[serde(rename="AutoGranted")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub auto_granted: Option<Boolean>,
+    pub auto_granted: Option<bool>,
     #[doc="<p>The Qualification value to use for automatically granted Qualifications. This parameter is used only if the AutoGranted parameter is true.</p>"]
     #[serde(rename="AutoGrantedValue")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub auto_granted_value: Option<Integer>,
+    pub auto_granted_value: Option<i64>,
     #[doc="<p>The new description of the Qualification type.</p>"]
     #[serde(rename="Description")]
     #[serde(skip_serializing_if="Option::is_none")]
     pub description: Option<String>,
     #[doc="<p>The ID of the Qualification type to update.</p>"]
     #[serde(rename="QualificationTypeId")]
-    pub qualification_type_id: EntityId,
+    pub qualification_type_id: String,
     #[doc="<p>The new status of the Qualification type - Active | Inactive</p>"]
     #[serde(rename="QualificationTypeStatus")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub qualification_type_status: Option<QualificationTypeStatus>,
+    pub qualification_type_status: Option<String>,
     #[doc="<p>The amount of time, in seconds, that Workers must wait after requesting a Qualification of the specified Qualification type before they can retry the Qualification request. It is not possible to disable retries for a Qualification type after it has been created with retries enabled. If you want to disable retries, you must dispose of the existing retry-enabled Qualification type using DisposeQualificationType and then create a new Qualification type with retries disabled using CreateQualificationType.</p>"]
     #[serde(rename="RetryDelayInSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub retry_delay_in_seconds: Option<Long>,
+    pub retry_delay_in_seconds: Option<i64>,
     #[doc="<p>The questions for the Qualification test a Worker must answer correctly to obtain a Qualification of this type. If this parameter is specified, <code>TestDurationInSeconds</code> must also be specified.</p> <p>Constraints: Must not be longer than 65535 bytes. Must be a QuestionForm data structure. This parameter cannot be specified if AutoGranted is true.</p> <p>Constraints: None. If not specified, the Worker may request the Qualification without answering any questions.</p>"]
     #[serde(rename="Test")]
     #[serde(skip_serializing_if="Option::is_none")]
@@ -1517,7 +1470,7 @@ pub struct UpdateQualificationTypeRequest {
     #[doc="<p>The number of seconds the Worker has to complete the Qualification test, starting from the time the Worker requests the Qualification.</p>"]
     #[serde(rename="TestDurationInSeconds")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub test_duration_in_seconds: Option<Long>,
+    pub test_duration_in_seconds: Option<i64>,
 }
 
 #[derive(Default,Debug,Clone,Deserialize)]
@@ -1538,10 +1491,9 @@ pub struct WorkerBlock {
     #[doc="<p> The ID of the Worker who accepted the HIT.</p>"]
     #[serde(rename="WorkerId")]
     #[serde(skip_serializing_if="Option::is_none")]
-    pub worker_id: Option<CustomerId>,
+    pub worker_id: Option<String>,
 }
 
-pub type WorkerBlockList = Vec<WorkerBlock>;
 /// Errors returned by AcceptQualificationRequest
 #[derive(Debug, PartialEq)]
 pub enum AcceptQualificationRequestError {

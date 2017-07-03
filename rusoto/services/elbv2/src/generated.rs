@@ -41,9 +41,9 @@ enum DeserializerNext {
 #[derive(Default,Debug,Clone)]
 pub struct Action {
     #[doc="<p>The Amazon Resource Name (ARN) of the target group.</p>"]
-    pub target_group_arn: TargetGroupArn,
+    pub target_group_arn: String,
     #[doc="<p>The type of action.</p>"]
-    pub type_: ActionTypeEnum,
+    pub type_: String,
 }
 
 struct ActionDeserializer;
@@ -110,13 +110,12 @@ impl ActionSerializer {
     }
 }
 
-pub type ActionTypeEnum = String;
 struct ActionTypeEnumDeserializer;
 impl ActionTypeEnumDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ActionTypeEnum, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -125,13 +124,12 @@ impl ActionTypeEnumDeserializer {
 
     }
 }
-pub type Actions = Vec<Action>;
 struct ActionsDeserializer;
 impl ActionsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Actions, XmlParseError> {
+                                       -> Result<Vec<Action>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -171,7 +169,7 @@ impl ActionsDeserializer {
 /// Serialize `Actions` contents to a `SignedRequest`.
 struct ActionsSerializer;
 impl ActionsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Actions) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<Action>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             ActionSerializer::serialize(params, &key, obj);
@@ -182,9 +180,9 @@ impl ActionsSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct AddTagsInput {
     #[doc="<p>The Amazon Resource Name (ARN) of the resource.</p>"]
-    pub resource_arns: ResourceArns,
+    pub resource_arns: Vec<String>,
     #[doc="<p>The tags. Each resource can have a maximum of 10 tags.</p>"]
-    pub tags: TagList,
+    pub tags: Vec<Tag>,
 }
 
 
@@ -228,9 +226,9 @@ impl AddTagsOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct AvailabilityZone {
     #[doc="<p>The ID of the subnet.</p>"]
-    pub subnet_id: Option<SubnetId>,
+    pub subnet_id: Option<String>,
     #[doc="<p>The name of the Availability Zone.</p>"]
-    pub zone_name: Option<ZoneName>,
+    pub zone_name: Option<String>,
 }
 
 struct AvailabilityZoneDeserializer;
@@ -279,13 +277,12 @@ impl AvailabilityZoneDeserializer {
 
     }
 }
-pub type AvailabilityZones = Vec<AvailabilityZone>;
 struct AvailabilityZonesDeserializer;
 impl AvailabilityZonesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<AvailabilityZones, XmlParseError> {
+                                       -> Result<Vec<AvailabilityZone>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -321,13 +318,12 @@ impl AvailabilityZonesDeserializer {
 
     }
 }
-pub type CanonicalHostedZoneId = String;
 struct CanonicalHostedZoneIdDeserializer;
 impl CanonicalHostedZoneIdDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CanonicalHostedZoneId, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -340,7 +336,7 @@ impl CanonicalHostedZoneIdDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct Certificate {
     #[doc="<p>The Amazon Resource Name (ARN) of the certificate.</p>"]
-    pub certificate_arn: Option<CertificateArn>,
+    pub certificate_arn: Option<String>,
 }
 
 struct CertificateDeserializer;
@@ -403,13 +399,12 @@ impl CertificateSerializer {
     }
 }
 
-pub type CertificateArn = String;
 struct CertificateArnDeserializer;
 impl CertificateArnDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CertificateArn, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -418,13 +413,12 @@ impl CertificateArnDeserializer {
 
     }
 }
-pub type CertificateList = Vec<Certificate>;
 struct CertificateListDeserializer;
 impl CertificateListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CertificateList, XmlParseError> {
+                                       -> Result<Vec<Certificate>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -464,7 +458,7 @@ impl CertificateListDeserializer {
 /// Serialize `CertificateList` contents to a `SignedRequest`.
 struct CertificateListSerializer;
 impl CertificateListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CertificateList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<Certificate>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             CertificateSerializer::serialize(params, &key, obj);
@@ -476,9 +470,9 @@ impl CertificateListSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct Cipher {
     #[doc="<p>The name of the cipher.</p>"]
-    pub name: Option<CipherName>,
+    pub name: Option<String>,
     #[doc="<p>The priority of the cipher.</p>"]
-    pub priority: Option<CipherPriority>,
+    pub priority: Option<i64>,
 }
 
 struct CipherDeserializer;
@@ -528,13 +522,12 @@ impl CipherDeserializer {
 
     }
 }
-pub type CipherName = String;
 struct CipherNameDeserializer;
 impl CipherNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CipherName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -543,13 +536,12 @@ impl CipherNameDeserializer {
 
     }
 }
-pub type CipherPriority = i64;
 struct CipherPriorityDeserializer;
 impl CipherPriorityDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CipherPriority, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -558,13 +550,12 @@ impl CipherPriorityDeserializer {
 
     }
 }
-pub type Ciphers = Vec<Cipher>;
 struct CiphersDeserializer;
 impl CiphersDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Ciphers, XmlParseError> {
+                                       -> Result<Vec<Cipher>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -600,13 +591,12 @@ impl CiphersDeserializer {
 
     }
 }
-pub type ConditionFieldName = String;
 struct ConditionFieldNameDeserializer;
 impl ConditionFieldNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ConditionFieldName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -618,17 +608,17 @@ impl ConditionFieldNameDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateListenerInput {
     #[doc="<p>The SSL server certificate. You must provide exactly one certificate if the protocol is HTTPS.</p>"]
-    pub certificates: Option<CertificateList>,
+    pub certificates: Option<Vec<Certificate>>,
     #[doc="<p>The default action for the listener.</p>"]
-    pub default_actions: Actions,
+    pub default_actions: Vec<Action>,
     #[doc="<p>The Amazon Resource Name (ARN) of the load balancer.</p>"]
-    pub load_balancer_arn: LoadBalancerArn,
+    pub load_balancer_arn: String,
     #[doc="<p>The port on which the load balancer is listening.</p>"]
-    pub port: Port,
+    pub port: i64,
     #[doc="<p>The protocol for connections from clients to the load balancer.</p>"]
-    pub protocol: ProtocolEnum,
+    pub protocol: String,
     #[doc="<p>The security policy that defines which ciphers and protocols are supported. The default is the current predefined security policy.</p>"]
-    pub ssl_policy: Option<SslPolicyName>,
+    pub ssl_policy: Option<String>,
 }
 
 
@@ -663,7 +653,7 @@ impl CreateListenerInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateListenerOutput {
     #[doc="<p>Information about the listener.</p>"]
-    pub listeners: Option<Listeners>,
+    pub listeners: Option<Vec<Listener>>,
 }
 
 struct CreateListenerOutputDeserializer;
@@ -711,17 +701,17 @@ impl CreateListenerOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateLoadBalancerInput {
     #[doc="<p>The type of IP addresses used by the subnets for your load balancer. The possible values are <code>ipv4</code> (for IPv4 addresses) and <code>dualstack</code> (for IPv4 and IPv6 addresses). Internal load balancers must use <code>ipv4</code>.</p>"]
-    pub ip_address_type: Option<IpAddressType>,
+    pub ip_address_type: Option<String>,
     #[doc="<p>The name of the load balancer.</p> <p>This name must be unique per region per account, can have a maximum of 32 characters, must contain only alphanumeric characters or hyphens, and must not begin or end with a hyphen.</p>"]
-    pub name: LoadBalancerName,
+    pub name: String,
     #[doc="<p>The nodes of an Internet-facing load balancer have public IP addresses. The DNS name of an Internet-facing load balancer is publicly resolvable to the public IP addresses of the nodes. Therefore, Internet-facing load balancers can route requests from clients over the Internet.</p> <p>The nodes of an internal load balancer have only private IP addresses. The DNS name of an internal load balancer is publicly resolvable to the private IP addresses of the nodes. Therefore, internal load balancers can only route requests from clients with access to the VPC for the load balancer.</p> <p>The default is an Internet-facing load balancer.</p>"]
-    pub scheme: Option<LoadBalancerSchemeEnum>,
+    pub scheme: Option<String>,
     #[doc="<p>The IDs of the security groups to assign to the load balancer.</p>"]
-    pub security_groups: Option<SecurityGroups>,
+    pub security_groups: Option<Vec<String>>,
     #[doc="<p>The IDs of the subnets to attach to the load balancer. You can specify only one subnet per Availability Zone. You must specify subnets from at least two Availability Zones.</p>"]
-    pub subnets: Subnets,
+    pub subnets: Vec<String>,
     #[doc="<p>One or more tags to assign to the load balancer.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 
@@ -757,7 +747,7 @@ impl CreateLoadBalancerInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateLoadBalancerOutput {
     #[doc="<p>Information about the load balancer.</p>"]
-    pub load_balancers: Option<LoadBalancers>,
+    pub load_balancers: Option<Vec<LoadBalancer>>,
 }
 
 struct CreateLoadBalancerOutputDeserializer;
@@ -806,13 +796,13 @@ impl CreateLoadBalancerOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateRuleInput {
     #[doc="<p>An action. Each action has the type <code>forward</code> and specifies a target group.</p>"]
-    pub actions: Actions,
+    pub actions: Vec<Action>,
     #[doc="<p>A condition. Each condition specifies a field name and a single value.</p> <p>If the field name is <code>host-header</code>, you can specify a single host name (for example, my.example.com). A host name is case insensitive, can be up to 128 characters in length, and can contain any of the following characters. Note that you can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>- .</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul> <p>If the field name is <code>path-pattern</code>, you can specify a single path pattern. A path pattern is case sensitive, can be up to 128 characters in length, and can contain any of the following characters. Note that you can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>_ - . $ / ~ \" ' @ : +</p> </li> <li> <p>&amp; (using &amp;amp;)</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul>"]
-    pub conditions: RuleConditionList,
+    pub conditions: Vec<RuleCondition>,
     #[doc="<p>The Amazon Resource Name (ARN) of the listener.</p>"]
-    pub listener_arn: ListenerArn,
+    pub listener_arn: String,
     #[doc="<p>The priority for the rule. A listener can't have multiple rules with the same priority.</p>"]
-    pub priority: RulePriority,
+    pub priority: i64,
 }
 
 
@@ -839,7 +829,7 @@ impl CreateRuleInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateRuleOutput {
     #[doc="<p>Information about the rule.</p>"]
-    pub rules: Option<Rules>,
+    pub rules: Option<Vec<Rule>>,
 }
 
 struct CreateRuleOutputDeserializer;
@@ -886,29 +876,29 @@ impl CreateRuleOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateTargetGroupInput {
     #[doc="<p>The approximate amount of time, in seconds, between health checks of an individual target. The default is 30 seconds.</p>"]
-    pub health_check_interval_seconds: Option<HealthCheckIntervalSeconds>,
+    pub health_check_interval_seconds: Option<i64>,
     #[doc="<p>The ping path that is the destination on the targets for health checks. The default is /.</p>"]
-    pub health_check_path: Option<Path>,
+    pub health_check_path: Option<String>,
     #[doc="<p>The port the load balancer uses when performing health checks on targets. The default is <code>traffic-port</code>, which indicates the port on which each target receives traffic from the load balancer.</p>"]
-    pub health_check_port: Option<HealthCheckPort>,
+    pub health_check_port: Option<String>,
     #[doc="<p>The protocol the load balancer uses when performing health checks on targets. The default is the HTTP protocol.</p>"]
-    pub health_check_protocol: Option<ProtocolEnum>,
+    pub health_check_protocol: Option<String>,
     #[doc="<p>The amount of time, in seconds, during which no response from a target means a failed health check. The default is 5 seconds.</p>"]
-    pub health_check_timeout_seconds: Option<HealthCheckTimeoutSeconds>,
+    pub health_check_timeout_seconds: Option<i64>,
     #[doc="<p>The number of consecutive health checks successes required before considering an unhealthy target healthy. The default is 5.</p>"]
-    pub healthy_threshold_count: Option<HealthCheckThresholdCount>,
+    pub healthy_threshold_count: Option<i64>,
     #[doc="<p>The HTTP codes to use when checking for a successful response from a target. The default is 200.</p>"]
     pub matcher: Option<Matcher>,
     #[doc="<p>The name of the target group.</p> <p>This name must be unique per region per account, can have a maximum of 32 characters, must contain only alphanumeric characters or hyphens, and must not begin or end with a hyphen.</p>"]
-    pub name: TargetGroupName,
+    pub name: String,
     #[doc="<p>The port on which the targets receive traffic. This port is used unless you specify a port override when registering the target.</p>"]
-    pub port: Port,
+    pub port: i64,
     #[doc="<p>The protocol to use for routing traffic to the targets.</p>"]
-    pub protocol: ProtocolEnum,
+    pub protocol: String,
     #[doc="<p>The number of consecutive health check failures required before considering a target unhealthy. The default is 2.</p>"]
-    pub unhealthy_threshold_count: Option<HealthCheckThresholdCount>,
+    pub unhealthy_threshold_count: Option<i64>,
     #[doc="<p>The identifier of the virtual private cloud (VPC).</p>"]
-    pub vpc_id: VpcId,
+    pub vpc_id: String,
 }
 
 
@@ -961,7 +951,7 @@ impl CreateTargetGroupInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct CreateTargetGroupOutput {
     #[doc="<p>Information about the target group.</p>"]
-    pub target_groups: Option<TargetGroups>,
+    pub target_groups: Option<Vec<TargetGroup>>,
 }
 
 struct CreateTargetGroupOutputDeserializer;
@@ -1007,13 +997,12 @@ impl CreateTargetGroupOutputDeserializer {
 
     }
 }
-pub type CreatedTime = String;
 struct CreatedTimeDeserializer;
 impl CreatedTimeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<CreatedTime, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1022,13 +1011,12 @@ impl CreatedTimeDeserializer {
 
     }
 }
-pub type DNSName = String;
 struct DNSNameDeserializer;
 impl DNSNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<DNSName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -1040,7 +1028,7 @@ impl DNSNameDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteListenerInput {
     #[doc="<p>The Amazon Resource Name (ARN) of the listener.</p>"]
-    pub listener_arn: ListenerArn,
+    pub listener_arn: String,
 }
 
 
@@ -1080,7 +1068,7 @@ impl DeleteListenerOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteLoadBalancerInput {
     #[doc="<p>The Amazon Resource Name (ARN) of the load balancer.</p>"]
-    pub load_balancer_arn: LoadBalancerArn,
+    pub load_balancer_arn: String,
 }
 
 
@@ -1121,7 +1109,7 @@ impl DeleteLoadBalancerOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteRuleInput {
     #[doc="<p>The Amazon Resource Name (ARN) of the rule.</p>"]
-    pub rule_arn: RuleArn,
+    pub rule_arn: String,
 }
 
 
@@ -1161,7 +1149,7 @@ impl DeleteRuleOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeleteTargetGroupInput {
     #[doc="<p>The Amazon Resource Name (ARN) of the target group.</p>"]
-    pub target_group_arn: TargetGroupArn,
+    pub target_group_arn: String,
 }
 
 
@@ -1202,9 +1190,9 @@ impl DeleteTargetGroupOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DeregisterTargetsInput {
     #[doc="<p>The Amazon Resource Name (ARN) of the target group.</p>"]
-    pub target_group_arn: TargetGroupArn,
+    pub target_group_arn: String,
     #[doc="<p>The targets. If you specified a port override when you registered a target, you must specify both the target ID and the port when you deregister it.</p>"]
-    pub targets: TargetDescriptions,
+    pub targets: Vec<TargetDescription>,
 }
 
 
@@ -1248,9 +1236,9 @@ impl DeregisterTargetsOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeAccountLimitsInput {
     #[doc="<p>The marker for the next set of results. (You received this marker from a previous call.)</p>"]
-    pub marker: Option<Marker>,
+    pub marker: Option<String>,
     #[doc="<p>The maximum number of results to return with this call.</p>"]
-    pub page_size: Option<PageSize>,
+    pub page_size: Option<i64>,
 }
 
 
@@ -1277,9 +1265,9 @@ impl DescribeAccountLimitsInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeAccountLimitsOutput {
     #[doc="<p>Information about the limits.</p>"]
-    pub limits: Option<Limits>,
+    pub limits: Option<Vec<Limit>>,
     #[doc="<p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>"]
-    pub next_marker: Option<Marker>,
+    pub next_marker: Option<String>,
 }
 
 struct DescribeAccountLimitsOutputDeserializer;
@@ -1331,13 +1319,13 @@ impl DescribeAccountLimitsOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeListenersInput {
     #[doc="<p>The Amazon Resource Names (ARN) of the listeners.</p>"]
-    pub listener_arns: Option<ListenerArns>,
+    pub listener_arns: Option<Vec<String>>,
     #[doc="<p>The Amazon Resource Name (ARN) of the load balancer.</p>"]
-    pub load_balancer_arn: Option<LoadBalancerArn>,
+    pub load_balancer_arn: Option<String>,
     #[doc="<p>The marker for the next set of results. (You received this marker from a previous call.)</p>"]
-    pub marker: Option<Marker>,
+    pub marker: Option<String>,
     #[doc="<p>The maximum number of results to return with this call.</p>"]
-    pub page_size: Option<PageSize>,
+    pub page_size: Option<i64>,
 }
 
 
@@ -1372,9 +1360,9 @@ impl DescribeListenersInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeListenersOutput {
     #[doc="<p>Information about the listeners.</p>"]
-    pub listeners: Option<Listeners>,
+    pub listeners: Option<Vec<Listener>>,
     #[doc="<p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>"]
-    pub next_marker: Option<Marker>,
+    pub next_marker: Option<String>,
 }
 
 struct DescribeListenersOutputDeserializer;
@@ -1426,7 +1414,7 @@ impl DescribeListenersOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeLoadBalancerAttributesInput {
     #[doc="<p>The Amazon Resource Name (ARN) of the load balancer.</p>"]
-    pub load_balancer_arn: LoadBalancerArn,
+    pub load_balancer_arn: String,
 }
 
 
@@ -1448,7 +1436,7 @@ impl DescribeLoadBalancerAttributesInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeLoadBalancerAttributesOutput {
     #[doc="<p>Information about the load balancer attributes.</p>"]
-    pub attributes: Option<LoadBalancerAttributes>,
+    pub attributes: Option<Vec<LoadBalancerAttribute>>,
 }
 
 struct DescribeLoadBalancerAttributesOutputDeserializer;
@@ -1498,13 +1486,13 @@ impl DescribeLoadBalancerAttributesOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeLoadBalancersInput {
     #[doc="<p>The Amazon Resource Names (ARN) of the load balancers. You can specify up to 20 load balancers in a single call.</p>"]
-    pub load_balancer_arns: Option<LoadBalancerArns>,
+    pub load_balancer_arns: Option<Vec<String>>,
     #[doc="<p>The marker for the next set of results. (You received this marker from a previous call.)</p>"]
-    pub marker: Option<Marker>,
+    pub marker: Option<String>,
     #[doc="<p>The names of the load balancers.</p>"]
-    pub names: Option<LoadBalancerNames>,
+    pub names: Option<Vec<String>>,
     #[doc="<p>The maximum number of results to return with this call.</p>"]
-    pub page_size: Option<PageSize>,
+    pub page_size: Option<i64>,
 }
 
 
@@ -1541,9 +1529,9 @@ impl DescribeLoadBalancersInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeLoadBalancersOutput {
     #[doc="<p>Information about the load balancers.</p>"]
-    pub load_balancers: Option<LoadBalancers>,
+    pub load_balancers: Option<Vec<LoadBalancer>>,
     #[doc="<p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>"]
-    pub next_marker: Option<Marker>,
+    pub next_marker: Option<String>,
 }
 
 struct DescribeLoadBalancersOutputDeserializer;
@@ -1596,13 +1584,13 @@ impl DescribeLoadBalancersOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeRulesInput {
     #[doc="<p>The Amazon Resource Name (ARN) of the listener.</p>"]
-    pub listener_arn: Option<ListenerArn>,
+    pub listener_arn: Option<String>,
     #[doc="<p>The marker for the next set of results. (You received this marker from a previous call.)</p>"]
-    pub marker: Option<Marker>,
+    pub marker: Option<String>,
     #[doc="<p>The maximum number of results to return with this call.</p>"]
-    pub page_size: Option<PageSize>,
+    pub page_size: Option<i64>,
     #[doc="<p>The Amazon Resource Names (ARN) of the rules.</p>"]
-    pub rule_arns: Option<RuleArns>,
+    pub rule_arns: Option<Vec<String>>,
 }
 
 
@@ -1637,9 +1625,9 @@ impl DescribeRulesInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeRulesOutput {
     #[doc="<p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>"]
-    pub next_marker: Option<Marker>,
+    pub next_marker: Option<String>,
     #[doc="<p>Information about the rules.</p>"]
-    pub rules: Option<Rules>,
+    pub rules: Option<Vec<Rule>>,
 }
 
 struct DescribeRulesOutputDeserializer;
@@ -1690,11 +1678,11 @@ impl DescribeRulesOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeSSLPoliciesInput {
     #[doc="<p>The marker for the next set of results. (You received this marker from a previous call.)</p>"]
-    pub marker: Option<Marker>,
+    pub marker: Option<String>,
     #[doc="<p>The names of the policies.</p>"]
-    pub names: Option<SslPolicyNames>,
+    pub names: Option<Vec<String>>,
     #[doc="<p>The maximum number of results to return with this call.</p>"]
-    pub page_size: Option<PageSize>,
+    pub page_size: Option<i64>,
 }
 
 
@@ -1726,9 +1714,9 @@ impl DescribeSSLPoliciesInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeSSLPoliciesOutput {
     #[doc="<p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>"]
-    pub next_marker: Option<Marker>,
+    pub next_marker: Option<String>,
     #[doc="<p>Information about the policies.</p>"]
-    pub ssl_policies: Option<SslPolicies>,
+    pub ssl_policies: Option<Vec<SslPolicy>>,
 }
 
 struct DescribeSSLPoliciesOutputDeserializer;
@@ -1781,7 +1769,7 @@ impl DescribeSSLPoliciesOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeTagsInput {
     #[doc="<p>The Amazon Resource Names (ARN) of the resources.</p>"]
-    pub resource_arns: ResourceArns,
+    pub resource_arns: Vec<String>,
 }
 
 
@@ -1804,7 +1792,7 @@ impl DescribeTagsInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeTagsOutput {
     #[doc="<p>Information about the tags.</p>"]
-    pub tag_descriptions: Option<TagDescriptions>,
+    pub tag_descriptions: Option<Vec<TagDescription>>,
 }
 
 struct DescribeTagsOutputDeserializer;
@@ -1853,7 +1841,7 @@ impl DescribeTagsOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeTargetGroupAttributesInput {
     #[doc="<p>The Amazon Resource Name (ARN) of the target group.</p>"]
-    pub target_group_arn: TargetGroupArn,
+    pub target_group_arn: String,
 }
 
 
@@ -1875,7 +1863,7 @@ impl DescribeTargetGroupAttributesInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeTargetGroupAttributesOutput {
     #[doc="<p>Information about the target group attributes</p>"]
-    pub attributes: Option<TargetGroupAttributes>,
+    pub attributes: Option<Vec<TargetGroupAttribute>>,
 }
 
 struct DescribeTargetGroupAttributesOutputDeserializer;
@@ -1925,15 +1913,15 @@ impl DescribeTargetGroupAttributesOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeTargetGroupsInput {
     #[doc="<p>The Amazon Resource Name (ARN) of the load balancer.</p>"]
-    pub load_balancer_arn: Option<LoadBalancerArn>,
+    pub load_balancer_arn: Option<String>,
     #[doc="<p>The marker for the next set of results. (You received this marker from a previous call.)</p>"]
-    pub marker: Option<Marker>,
+    pub marker: Option<String>,
     #[doc="<p>The names of the target groups.</p>"]
-    pub names: Option<TargetGroupNames>,
+    pub names: Option<Vec<String>>,
     #[doc="<p>The maximum number of results to return with this call.</p>"]
-    pub page_size: Option<PageSize>,
+    pub page_size: Option<i64>,
     #[doc="<p>The Amazon Resource Names (ARN) of the target groups.</p>"]
-    pub target_group_arns: Option<TargetGroupArns>,
+    pub target_group_arns: Option<Vec<String>>,
 }
 
 
@@ -1973,9 +1961,9 @@ impl DescribeTargetGroupsInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeTargetGroupsOutput {
     #[doc="<p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>"]
-    pub next_marker: Option<Marker>,
+    pub next_marker: Option<String>,
     #[doc="<p>Information about the target groups.</p>"]
-    pub target_groups: Option<TargetGroups>,
+    pub target_groups: Option<Vec<TargetGroup>>,
 }
 
 struct DescribeTargetGroupsOutputDeserializer;
@@ -2028,9 +2016,9 @@ impl DescribeTargetGroupsOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeTargetHealthInput {
     #[doc="<p>The Amazon Resource Name (ARN) of the target group.</p>"]
-    pub target_group_arn: TargetGroupArn,
+    pub target_group_arn: String,
     #[doc="<p>The targets.</p>"]
-    pub targets: Option<TargetDescriptions>,
+    pub targets: Option<Vec<TargetDescription>>,
 }
 
 
@@ -2057,7 +2045,7 @@ impl DescribeTargetHealthInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct DescribeTargetHealthOutput {
     #[doc="<p>Information about the health of the targets.</p>"]
-    pub target_health_descriptions: Option<TargetHealthDescriptions>,
+    pub target_health_descriptions: Option<Vec<TargetHealthDescription>>,
 }
 
 struct DescribeTargetHealthOutputDeserializer;
@@ -2101,13 +2089,12 @@ impl DescribeTargetHealthOutputDeserializer {
 
     }
 }
-pub type Description = String;
 struct DescriptionDeserializer;
 impl DescriptionDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Description, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2116,13 +2103,12 @@ impl DescriptionDeserializer {
 
     }
 }
-pub type HealthCheckIntervalSeconds = i64;
 struct HealthCheckIntervalSecondsDeserializer;
 impl HealthCheckIntervalSecondsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<HealthCheckIntervalSeconds, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -2131,13 +2117,12 @@ impl HealthCheckIntervalSecondsDeserializer {
 
     }
 }
-pub type HealthCheckPort = String;
 struct HealthCheckPortDeserializer;
 impl HealthCheckPortDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<HealthCheckPort, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2146,13 +2131,12 @@ impl HealthCheckPortDeserializer {
 
     }
 }
-pub type HealthCheckThresholdCount = i64;
 struct HealthCheckThresholdCountDeserializer;
 impl HealthCheckThresholdCountDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<HealthCheckThresholdCount, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -2161,13 +2145,12 @@ impl HealthCheckThresholdCountDeserializer {
 
     }
 }
-pub type HealthCheckTimeoutSeconds = i64;
 struct HealthCheckTimeoutSecondsDeserializer;
 impl HealthCheckTimeoutSecondsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<HealthCheckTimeoutSeconds, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -2176,13 +2159,12 @@ impl HealthCheckTimeoutSecondsDeserializer {
 
     }
 }
-pub type HttpCode = String;
 struct HttpCodeDeserializer;
 impl HttpCodeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<HttpCode, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2191,13 +2173,12 @@ impl HttpCodeDeserializer {
 
     }
 }
-pub type IpAddressType = String;
 struct IpAddressTypeDeserializer;
 impl IpAddressTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<IpAddressType, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2206,13 +2187,12 @@ impl IpAddressTypeDeserializer {
 
     }
 }
-pub type IsDefault = bool;
 struct IsDefaultDeserializer;
 impl IsDefaultDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<IsDefault, XmlParseError> {
+                                       -> Result<bool, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -2225,9 +2205,9 @@ impl IsDefaultDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct Limit {
     #[doc="<p>The maximum value of the limit.</p>"]
-    pub max: Option<Max>,
+    pub max: Option<String>,
     #[doc="<p>The name of the limit. The possible values are:</p> <ul> <li> <p>application-load-balancers</p> </li> <li> <p>listeners-per-application-load-balancer</p> </li> <li> <p>rules-per-application-load-balancer</p> </li> <li> <p>target-groups</p> </li> <li> <p>targets-per-application-load-balancer</p> </li> </ul>"]
-    pub name: Option<Name>,
+    pub name: Option<String>,
 }
 
 struct LimitDeserializer;
@@ -2274,13 +2254,12 @@ impl LimitDeserializer {
 
     }
 }
-pub type Limits = Vec<Limit>;
 struct LimitsDeserializer;
 impl LimitsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Limits, XmlParseError> {
+                                       -> Result<Vec<Limit>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -2316,13 +2295,12 @@ impl LimitsDeserializer {
 
     }
 }
-pub type ListOfString = Vec<StringValue>;
 struct ListOfStringDeserializer;
 impl ListOfStringDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ListOfString, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -2362,7 +2340,7 @@ impl ListOfStringDeserializer {
 /// Serialize `ListOfString` contents to a `SignedRequest`.
 struct ListOfStringSerializer;
 impl ListOfStringSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ListOfString) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -2374,19 +2352,19 @@ impl ListOfStringSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct Listener {
     #[doc="<p>The SSL server certificate. You must provide a certificate if the protocol is HTTPS.</p>"]
-    pub certificates: Option<CertificateList>,
+    pub certificates: Option<Vec<Certificate>>,
     #[doc="<p>The default actions for the listener.</p>"]
-    pub default_actions: Option<Actions>,
+    pub default_actions: Option<Vec<Action>>,
     #[doc="<p>The Amazon Resource Name (ARN) of the listener.</p>"]
-    pub listener_arn: Option<ListenerArn>,
+    pub listener_arn: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the load balancer.</p>"]
-    pub load_balancer_arn: Option<LoadBalancerArn>,
+    pub load_balancer_arn: Option<String>,
     #[doc="<p>The port on which the load balancer is listening.</p>"]
-    pub port: Option<Port>,
+    pub port: Option<i64>,
     #[doc="<p>The protocol for connections from clients to the load balancer.</p>"]
-    pub protocol: Option<ProtocolEnum>,
+    pub protocol: Option<String>,
     #[doc="<p>The security policy that defines which ciphers and protocols are supported. The default is the current predefined security policy.</p>"]
-    pub ssl_policy: Option<SslPolicyName>,
+    pub ssl_policy: Option<String>,
 }
 
 struct ListenerDeserializer;
@@ -2459,13 +2437,12 @@ impl ListenerDeserializer {
 
     }
 }
-pub type ListenerArn = String;
 struct ListenerArnDeserializer;
 impl ListenerArnDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ListenerArn, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2474,12 +2451,11 @@ impl ListenerArnDeserializer {
 
     }
 }
-pub type ListenerArns = Vec<ListenerArn>;
 
 /// Serialize `ListenerArns` contents to a `SignedRequest`.
 struct ListenerArnsSerializer;
 impl ListenerArnsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ListenerArns) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -2487,13 +2463,12 @@ impl ListenerArnsSerializer {
     }
 }
 
-pub type Listeners = Vec<Listener>;
 struct ListenersDeserializer;
 impl ListenersDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Listeners, XmlParseError> {
+                                       -> Result<Vec<Listener>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -2533,29 +2508,29 @@ impl ListenersDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct LoadBalancer {
     #[doc="<p>The Availability Zones for the load balancer.</p>"]
-    pub availability_zones: Option<AvailabilityZones>,
+    pub availability_zones: Option<Vec<AvailabilityZone>>,
     #[doc="<p>The ID of the Amazon Route 53 hosted zone associated with the load balancer.</p>"]
-    pub canonical_hosted_zone_id: Option<CanonicalHostedZoneId>,
+    pub canonical_hosted_zone_id: Option<String>,
     #[doc="<p>The date and time the load balancer was created.</p>"]
-    pub created_time: Option<CreatedTime>,
+    pub created_time: Option<String>,
     #[doc="<p>The public DNS name of the load balancer.</p>"]
-    pub dns_name: Option<DNSName>,
+    pub dns_name: Option<String>,
     #[doc="<p>The type of IP addresses used by the subnets for your load balancer. The possible values are <code>ipv4</code> (for IPv4 addresses) and <code>dualstack</code> (for IPv4 and IPv6 addresses).</p>"]
-    pub ip_address_type: Option<IpAddressType>,
+    pub ip_address_type: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the load balancer.</p>"]
-    pub load_balancer_arn: Option<LoadBalancerArn>,
+    pub load_balancer_arn: Option<String>,
     #[doc="<p>The name of the load balancer.</p>"]
-    pub load_balancer_name: Option<LoadBalancerName>,
+    pub load_balancer_name: Option<String>,
     #[doc="<p>The nodes of an Internet-facing load balancer have public IP addresses. The DNS name of an Internet-facing load balancer is publicly resolvable to the public IP addresses of the nodes. Therefore, Internet-facing load balancers can route requests from clients over the Internet.</p> <p>The nodes of an internal load balancer have only private IP addresses. The DNS name of an internal load balancer is publicly resolvable to the private IP addresses of the nodes. Therefore, internal load balancers can only route requests from clients with access to the VPC for the load balancer.</p>"]
-    pub scheme: Option<LoadBalancerSchemeEnum>,
+    pub scheme: Option<String>,
     #[doc="<p>The IDs of the security groups for the load balancer.</p>"]
-    pub security_groups: Option<SecurityGroups>,
+    pub security_groups: Option<Vec<String>>,
     #[doc="<p>The state of the load balancer.</p>"]
     pub state: Option<LoadBalancerState>,
     #[doc="<p>The type of load balancer.</p>"]
-    pub type_: Option<LoadBalancerTypeEnum>,
+    pub type_: Option<String>,
     #[doc="<p>The ID of the VPC for the load balancer.</p>"]
-    pub vpc_id: Option<VpcId>,
+    pub vpc_id: Option<String>,
 }
 
 struct LoadBalancerDeserializer;
@@ -2653,13 +2628,12 @@ impl LoadBalancerDeserializer {
 
     }
 }
-pub type LoadBalancerArn = String;
 struct LoadBalancerArnDeserializer;
 impl LoadBalancerArnDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LoadBalancerArn, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2668,13 +2642,12 @@ impl LoadBalancerArnDeserializer {
 
     }
 }
-pub type LoadBalancerArns = Vec<LoadBalancerArn>;
 struct LoadBalancerArnsDeserializer;
 impl LoadBalancerArnsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LoadBalancerArns, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -2714,7 +2687,7 @@ impl LoadBalancerArnsDeserializer {
 /// Serialize `LoadBalancerArns` contents to a `SignedRequest`.
 struct LoadBalancerArnsSerializer;
 impl LoadBalancerArnsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &LoadBalancerArns) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -2726,9 +2699,9 @@ impl LoadBalancerArnsSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct LoadBalancerAttribute {
     #[doc="<p>The name of the attribute.</p> <ul> <li> <p> <code>access_logs.s3.enabled</code> - Indicates whether access logs stored in Amazon S3 are enabled. The value is <code>true</code> or <code>false</code>.</p> </li> <li> <p> <code>access_logs.s3.bucket</code> - The name of the S3 bucket for the access logs. This attribute is required if access logs in Amazon S3 are enabled. The bucket must exist in the same region as the load balancer and have a bucket policy that grants Elastic Load Balancing permission to write to the bucket.</p> </li> <li> <p> <code>access_logs.s3.prefix</code> - The prefix for the location in the S3 bucket. If you don't specify a prefix, the access logs are stored in the root of the bucket.</p> </li> <li> <p> <code>deletion_protection.enabled</code> - Indicates whether deletion protection is enabled. The value is <code>true</code> or <code>false</code>.</p> </li> <li> <p> <code>idle_timeout.timeout_seconds</code> - The idle timeout value, in seconds. The valid range is 1-3600. The default is 60 seconds.</p> </li> </ul>"]
-    pub key: Option<LoadBalancerAttributeKey>,
+    pub key: Option<String>,
     #[doc="<p>The value of the attribute.</p>"]
-    pub value: Option<LoadBalancerAttributeValue>,
+    pub value: Option<String>,
 }
 
 struct LoadBalancerAttributeDeserializer;
@@ -2795,13 +2768,12 @@ impl LoadBalancerAttributeSerializer {
     }
 }
 
-pub type LoadBalancerAttributeKey = String;
 struct LoadBalancerAttributeKeyDeserializer;
 impl LoadBalancerAttributeKeyDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LoadBalancerAttributeKey, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2810,13 +2782,12 @@ impl LoadBalancerAttributeKeyDeserializer {
 
     }
 }
-pub type LoadBalancerAttributeValue = String;
 struct LoadBalancerAttributeValueDeserializer;
 impl LoadBalancerAttributeValueDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LoadBalancerAttributeValue, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2825,13 +2796,12 @@ impl LoadBalancerAttributeValueDeserializer {
 
     }
 }
-pub type LoadBalancerAttributes = Vec<LoadBalancerAttribute>;
 struct LoadBalancerAttributesDeserializer;
 impl LoadBalancerAttributesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LoadBalancerAttributes, XmlParseError> {
+                                       -> Result<Vec<LoadBalancerAttribute>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -2872,7 +2842,7 @@ impl LoadBalancerAttributesDeserializer {
 /// Serialize `LoadBalancerAttributes` contents to a `SignedRequest`.
 struct LoadBalancerAttributesSerializer;
 impl LoadBalancerAttributesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &LoadBalancerAttributes) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<LoadBalancerAttribute>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             LoadBalancerAttributeSerializer::serialize(params, &key, obj);
@@ -2880,13 +2850,12 @@ impl LoadBalancerAttributesSerializer {
     }
 }
 
-pub type LoadBalancerName = String;
 struct LoadBalancerNameDeserializer;
 impl LoadBalancerNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LoadBalancerName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2895,12 +2864,11 @@ impl LoadBalancerNameDeserializer {
 
     }
 }
-pub type LoadBalancerNames = Vec<LoadBalancerName>;
 
 /// Serialize `LoadBalancerNames` contents to a `SignedRequest`.
 struct LoadBalancerNamesSerializer;
 impl LoadBalancerNamesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &LoadBalancerNames) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -2908,13 +2876,12 @@ impl LoadBalancerNamesSerializer {
     }
 }
 
-pub type LoadBalancerSchemeEnum = String;
 struct LoadBalancerSchemeEnumDeserializer;
 impl LoadBalancerSchemeEnumDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LoadBalancerSchemeEnum, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2927,9 +2894,9 @@ impl LoadBalancerSchemeEnumDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct LoadBalancerState {
     #[doc="<p>The state code. The initial state of the load balancer is <code>provisioning</code>. After the load balancer is fully set up and ready to route traffic, its state is <code>active</code>. If the load balancer could not be set up, its state is <code>failed</code>.</p>"]
-    pub code: Option<LoadBalancerStateEnum>,
+    pub code: Option<String>,
     #[doc="<p>A description of the state.</p>"]
-    pub reason: Option<StateReason>,
+    pub reason: Option<String>,
 }
 
 struct LoadBalancerStateDeserializer;
@@ -2979,13 +2946,12 @@ impl LoadBalancerStateDeserializer {
 
     }
 }
-pub type LoadBalancerStateEnum = String;
 struct LoadBalancerStateEnumDeserializer;
 impl LoadBalancerStateEnumDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LoadBalancerStateEnum, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -2994,13 +2960,12 @@ impl LoadBalancerStateEnumDeserializer {
 
     }
 }
-pub type LoadBalancerTypeEnum = String;
 struct LoadBalancerTypeEnumDeserializer;
 impl LoadBalancerTypeEnumDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LoadBalancerTypeEnum, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3009,13 +2974,12 @@ impl LoadBalancerTypeEnumDeserializer {
 
     }
 }
-pub type LoadBalancers = Vec<LoadBalancer>;
 struct LoadBalancersDeserializer;
 impl LoadBalancersDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<LoadBalancers, XmlParseError> {
+                                       -> Result<Vec<LoadBalancer>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -3051,13 +3015,12 @@ impl LoadBalancersDeserializer {
 
     }
 }
-pub type Marker = String;
 struct MarkerDeserializer;
 impl MarkerDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Marker, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3070,7 +3033,7 @@ impl MarkerDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct Matcher {
     #[doc="<p>The HTTP codes. You can specify values between 200 and 499. The default value is 200. You can specify multiple values (for example, \"200,202\") or a range of values (for example, \"200-299\").</p>"]
-    pub http_code: HttpCode,
+    pub http_code: String,
 }
 
 struct MatcherDeserializer;
@@ -3130,13 +3093,12 @@ impl MatcherSerializer {
     }
 }
 
-pub type Max = String;
 struct MaxDeserializer;
 impl MaxDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Max, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3148,17 +3110,17 @@ impl MaxDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ModifyListenerInput {
     #[doc="<p>The SSL server certificate.</p>"]
-    pub certificates: Option<CertificateList>,
+    pub certificates: Option<Vec<Certificate>>,
     #[doc="<p>The default actions.</p>"]
-    pub default_actions: Option<Actions>,
+    pub default_actions: Option<Vec<Action>>,
     #[doc="<p>The Amazon Resource Name (ARN) of the listener.</p>"]
-    pub listener_arn: ListenerArn,
+    pub listener_arn: String,
     #[doc="<p>The port for connections from clients to the load balancer.</p>"]
-    pub port: Option<Port>,
+    pub port: Option<i64>,
     #[doc="<p>The protocol for connections from clients to the load balancer.</p>"]
-    pub protocol: Option<ProtocolEnum>,
+    pub protocol: Option<String>,
     #[doc="<p>The security policy that defines which protocols and ciphers are supported. For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies\">Security Policies</a> in the <i>Application Load Balancers Guide</i>.</p>"]
-    pub ssl_policy: Option<SslPolicyName>,
+    pub ssl_policy: Option<String>,
 }
 
 
@@ -3198,7 +3160,7 @@ impl ModifyListenerInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ModifyListenerOutput {
     #[doc="<p>Information about the modified listeners.</p>"]
-    pub listeners: Option<Listeners>,
+    pub listeners: Option<Vec<Listener>>,
 }
 
 struct ModifyListenerOutputDeserializer;
@@ -3246,9 +3208,9 @@ impl ModifyListenerOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ModifyLoadBalancerAttributesInput {
     #[doc="<p>The load balancer attributes.</p>"]
-    pub attributes: LoadBalancerAttributes,
+    pub attributes: Vec<LoadBalancerAttribute>,
     #[doc="<p>The Amazon Resource Name (ARN) of the load balancer.</p>"]
-    pub load_balancer_arn: LoadBalancerArn,
+    pub load_balancer_arn: String,
 }
 
 
@@ -3273,7 +3235,7 @@ impl ModifyLoadBalancerAttributesInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ModifyLoadBalancerAttributesOutput {
     #[doc="<p>Information about the load balancer attributes.</p>"]
-    pub attributes: Option<LoadBalancerAttributes>,
+    pub attributes: Option<Vec<LoadBalancerAttribute>>,
 }
 
 struct ModifyLoadBalancerAttributesOutputDeserializer;
@@ -3323,11 +3285,11 @@ impl ModifyLoadBalancerAttributesOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ModifyRuleInput {
     #[doc="<p>The actions.</p>"]
-    pub actions: Option<Actions>,
+    pub actions: Option<Vec<Action>>,
     #[doc="<p>The conditions.</p>"]
-    pub conditions: Option<RuleConditionList>,
+    pub conditions: Option<Vec<RuleCondition>>,
     #[doc="<p>The Amazon Resource Name (ARN) of the rule.</p>"]
-    pub rule_arn: RuleArn,
+    pub rule_arn: String,
 }
 
 
@@ -3356,7 +3318,7 @@ impl ModifyRuleInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ModifyRuleOutput {
     #[doc="<p>Information about the rule.</p>"]
-    pub rules: Option<Rules>,
+    pub rules: Option<Vec<Rule>>,
 }
 
 struct ModifyRuleOutputDeserializer;
@@ -3403,9 +3365,9 @@ impl ModifyRuleOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ModifyTargetGroupAttributesInput {
     #[doc="<p>The attributes.</p>"]
-    pub attributes: TargetGroupAttributes,
+    pub attributes: Vec<TargetGroupAttribute>,
     #[doc="<p>The Amazon Resource Name (ARN) of the target group.</p>"]
-    pub target_group_arn: TargetGroupArn,
+    pub target_group_arn: String,
 }
 
 
@@ -3430,7 +3392,7 @@ impl ModifyTargetGroupAttributesInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ModifyTargetGroupAttributesOutput {
     #[doc="<p>Information about the attributes.</p>"]
-    pub attributes: Option<TargetGroupAttributes>,
+    pub attributes: Option<Vec<TargetGroupAttribute>>,
 }
 
 struct ModifyTargetGroupAttributesOutputDeserializer;
@@ -3480,23 +3442,23 @@ impl ModifyTargetGroupAttributesOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct ModifyTargetGroupInput {
     #[doc="<p>The approximate amount of time, in seconds, between health checks of an individual target.</p>"]
-    pub health_check_interval_seconds: Option<HealthCheckIntervalSeconds>,
+    pub health_check_interval_seconds: Option<i64>,
     #[doc="<p>The ping path that is the destination for the health check request.</p>"]
-    pub health_check_path: Option<Path>,
+    pub health_check_path: Option<String>,
     #[doc="<p>The port to use to connect with the target.</p>"]
-    pub health_check_port: Option<HealthCheckPort>,
+    pub health_check_port: Option<String>,
     #[doc="<p>The protocol to use to connect with the target.</p>"]
-    pub health_check_protocol: Option<ProtocolEnum>,
+    pub health_check_protocol: Option<String>,
     #[doc="<p>The amount of time, in seconds, during which no response means a failed health check.</p>"]
-    pub health_check_timeout_seconds: Option<HealthCheckTimeoutSeconds>,
+    pub health_check_timeout_seconds: Option<i64>,
     #[doc="<p>The number of consecutive health checks successes required before considering an unhealthy target healthy.</p>"]
-    pub healthy_threshold_count: Option<HealthCheckThresholdCount>,
+    pub healthy_threshold_count: Option<i64>,
     #[doc="<p>The HTTP codes to use when checking for a successful response from a target.</p>"]
     pub matcher: Option<Matcher>,
     #[doc="<p>The Amazon Resource Name (ARN) of the target group.</p>"]
-    pub target_group_arn: TargetGroupArn,
+    pub target_group_arn: String,
     #[doc="<p>The number of consecutive health check failures required before considering the target unhealthy.</p>"]
-    pub unhealthy_threshold_count: Option<HealthCheckThresholdCount>,
+    pub unhealthy_threshold_count: Option<i64>,
 }
 
 
@@ -3547,7 +3509,7 @@ impl ModifyTargetGroupInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct ModifyTargetGroupOutput {
     #[doc="<p>Information about the target group.</p>"]
-    pub target_groups: Option<TargetGroups>,
+    pub target_groups: Option<Vec<TargetGroup>>,
 }
 
 struct ModifyTargetGroupOutputDeserializer;
@@ -3593,13 +3555,12 @@ impl ModifyTargetGroupOutputDeserializer {
 
     }
 }
-pub type Name = String;
 struct NameDeserializer;
 impl NameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Name, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3608,14 +3569,12 @@ impl NameDeserializer {
 
     }
 }
-pub type PageSize = i64;
-pub type Path = String;
 struct PathDeserializer;
 impl PathDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Path, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3624,13 +3583,12 @@ impl PathDeserializer {
 
     }
 }
-pub type Port = i64;
 struct PortDeserializer;
 impl PortDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Port, XmlParseError> {
+                                       -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
@@ -3639,13 +3597,12 @@ impl PortDeserializer {
 
     }
 }
-pub type ProtocolEnum = String;
 struct ProtocolEnumDeserializer;
 impl ProtocolEnumDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ProtocolEnum, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3657,9 +3614,9 @@ impl ProtocolEnumDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct RegisterTargetsInput {
     #[doc="<p>The Amazon Resource Name (ARN) of the target group.</p>"]
-    pub target_group_arn: TargetGroupArn,
+    pub target_group_arn: String,
     #[doc="<p>The targets. The default port for a target is the port for the target group. You can specify a port override. If a target is already registered, you can register it again using a different port.</p>"]
-    pub targets: TargetDescriptions,
+    pub targets: Vec<TargetDescription>,
 }
 
 
@@ -3703,9 +3660,9 @@ impl RegisterTargetsOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct RemoveTagsInput {
     #[doc="<p>The Amazon Resource Name (ARN) of the resource.</p>"]
-    pub resource_arns: ResourceArns,
+    pub resource_arns: Vec<String>,
     #[doc="<p>The tag keys for the tags to remove.</p>"]
-    pub tag_keys: TagKeys,
+    pub tag_keys: Vec<String>,
 }
 
 
@@ -3745,13 +3702,12 @@ impl RemoveTagsOutputDeserializer {
 
     }
 }
-pub type ResourceArn = String;
 struct ResourceArnDeserializer;
 impl ResourceArnDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ResourceArn, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3760,12 +3716,11 @@ impl ResourceArnDeserializer {
 
     }
 }
-pub type ResourceArns = Vec<ResourceArn>;
 
 /// Serialize `ResourceArns` contents to a `SignedRequest`.
 struct ResourceArnsSerializer;
 impl ResourceArnsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ResourceArns) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -3777,15 +3732,15 @@ impl ResourceArnsSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct Rule {
     #[doc="<p>The actions.</p>"]
-    pub actions: Option<Actions>,
+    pub actions: Option<Vec<Action>>,
     #[doc="<p>The conditions.</p>"]
-    pub conditions: Option<RuleConditionList>,
+    pub conditions: Option<Vec<RuleCondition>>,
     #[doc="<p>Indicates whether this is the default rule.</p>"]
-    pub is_default: Option<IsDefault>,
+    pub is_default: Option<bool>,
     #[doc="<p>The priority.</p>"]
     pub priority: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the rule.</p>"]
-    pub rule_arn: Option<RuleArn>,
+    pub rule_arn: Option<String>,
 }
 
 struct RuleDeserializer;
@@ -3847,13 +3802,12 @@ impl RuleDeserializer {
 
     }
 }
-pub type RuleArn = String;
 struct RuleArnDeserializer;
 impl RuleArnDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<RuleArn, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -3862,12 +3816,11 @@ impl RuleArnDeserializer {
 
     }
 }
-pub type RuleArns = Vec<RuleArn>;
 
 /// Serialize `RuleArns` contents to a `SignedRequest`.
 struct RuleArnsSerializer;
 impl RuleArnsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RuleArns) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -3879,9 +3832,9 @@ impl RuleArnsSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct RuleCondition {
     #[doc="<p>The name of the field. The possible values are <code>host-header</code> and <code>path-pattern</code>.</p>"]
-    pub field: Option<ConditionFieldName>,
+    pub field: Option<String>,
     #[doc="<p>The condition value.</p> <p>If the field name is <code>host-header</code>, you can specify a single host name (for example, my.example.com). A host name is case insensitive, can be up to 128 characters in length, and can contain any of the following characters. Note that you can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>- .</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul> <p>If the field name is <code>path-pattern</code>, you can specify a single path pattern (for example, /img/*). A path pattern is case sensitive, can be up to 128 characters in length, and can contain any of the following characters. Note that you can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>_ - . $ / ~ \" ' @ : +</p> </li> <li> <p>&amp; (using &amp;amp;)</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul>"]
-    pub values: Option<ListOfString>,
+    pub values: Option<Vec<String>>,
 }
 
 struct RuleConditionDeserializer;
@@ -3953,13 +3906,12 @@ impl RuleConditionSerializer {
     }
 }
 
-pub type RuleConditionList = Vec<RuleCondition>;
 struct RuleConditionListDeserializer;
 impl RuleConditionListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<RuleConditionList, XmlParseError> {
+                                       -> Result<Vec<RuleCondition>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -3999,7 +3951,7 @@ impl RuleConditionListDeserializer {
 /// Serialize `RuleConditionList` contents to a `SignedRequest`.
 struct RuleConditionListSerializer;
 impl RuleConditionListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RuleConditionList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<RuleCondition>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             RuleConditionSerializer::serialize(params, &key, obj);
@@ -4007,13 +3959,11 @@ impl RuleConditionListSerializer {
     }
 }
 
-pub type RulePriority = i64;
-pub type RulePriorityList = Vec<RulePriorityPair>;
 
 /// Serialize `RulePriorityList` contents to a `SignedRequest`.
 struct RulePriorityListSerializer;
 impl RulePriorityListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RulePriorityList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<RulePriorityPair>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             RulePriorityPairSerializer::serialize(params, &key, obj);
@@ -4025,9 +3975,9 @@ impl RulePriorityListSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct RulePriorityPair {
     #[doc="<p>The rule priority.</p>"]
-    pub priority: Option<RulePriority>,
+    pub priority: Option<i64>,
     #[doc="<p>The Amazon Resource Name (ARN) of the rule.</p>"]
-    pub rule_arn: Option<RuleArn>,
+    pub rule_arn: Option<String>,
 }
 
 
@@ -4051,13 +4001,12 @@ impl RulePriorityPairSerializer {
     }
 }
 
-pub type Rules = Vec<Rule>;
 struct RulesDeserializer;
 impl RulesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<Rules, XmlParseError> {
+                                       -> Result<Vec<Rule>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4093,13 +4042,12 @@ impl RulesDeserializer {
 
     }
 }
-pub type SecurityGroupId = String;
 struct SecurityGroupIdDeserializer;
 impl SecurityGroupIdDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SecurityGroupId, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4108,13 +4056,12 @@ impl SecurityGroupIdDeserializer {
 
     }
 }
-pub type SecurityGroups = Vec<SecurityGroupId>;
 struct SecurityGroupsDeserializer;
 impl SecurityGroupsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SecurityGroups, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4154,7 +4101,7 @@ impl SecurityGroupsDeserializer {
 /// Serialize `SecurityGroups` contents to a `SignedRequest`.
 struct SecurityGroupsSerializer;
 impl SecurityGroupsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SecurityGroups) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -4165,9 +4112,9 @@ impl SecurityGroupsSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct SetIpAddressTypeInput {
     #[doc="<p>The IP address type. The possible values are <code>ipv4</code> (for IPv4 addresses) and <code>dualstack</code> (for IPv4 and IPv6 addresses). Internal load balancers must use <code>ipv4</code>.</p>"]
-    pub ip_address_type: IpAddressType,
+    pub ip_address_type: String,
     #[doc="<p>The Amazon Resource Name (ARN) of the load balancer.</p>"]
-    pub load_balancer_arn: LoadBalancerArn,
+    pub load_balancer_arn: String,
 }
 
 
@@ -4191,7 +4138,7 @@ impl SetIpAddressTypeInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct SetIpAddressTypeOutput {
     #[doc="<p>The IP address type.</p>"]
-    pub ip_address_type: Option<IpAddressType>,
+    pub ip_address_type: Option<String>,
 }
 
 struct SetIpAddressTypeOutputDeserializer;
@@ -4240,7 +4187,7 @@ impl SetIpAddressTypeOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct SetRulePrioritiesInput {
     #[doc="<p>The rule priorities.</p>"]
-    pub rule_priorities: RulePriorityList,
+    pub rule_priorities: Vec<RulePriorityPair>,
 }
 
 
@@ -4263,7 +4210,7 @@ impl SetRulePrioritiesInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct SetRulePrioritiesOutput {
     #[doc="<p>Information about the rules.</p>"]
-    pub rules: Option<Rules>,
+    pub rules: Option<Vec<Rule>>,
 }
 
 struct SetRulePrioritiesOutputDeserializer;
@@ -4310,9 +4257,9 @@ impl SetRulePrioritiesOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct SetSecurityGroupsInput {
     #[doc="<p>The Amazon Resource Name (ARN) of the load balancer.</p>"]
-    pub load_balancer_arn: LoadBalancerArn,
+    pub load_balancer_arn: String,
     #[doc="<p>The IDs of the security groups.</p>"]
-    pub security_groups: SecurityGroups,
+    pub security_groups: Vec<String>,
 }
 
 
@@ -4337,7 +4284,7 @@ impl SetSecurityGroupsInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct SetSecurityGroupsOutput {
     #[doc="<p>The IDs of the security groups associated with the load balancer.</p>"]
-    pub security_group_ids: Option<SecurityGroups>,
+    pub security_group_ids: Option<Vec<String>>,
 }
 
 struct SetSecurityGroupsOutputDeserializer;
@@ -4386,9 +4333,9 @@ impl SetSecurityGroupsOutputDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct SetSubnetsInput {
     #[doc="<p>The Amazon Resource Name (ARN) of the load balancer.</p>"]
-    pub load_balancer_arn: LoadBalancerArn,
+    pub load_balancer_arn: String,
     #[doc="<p>The IDs of the subnets. You must specify at least two subnets. You can add only one subnet per Availability Zone.</p>"]
-    pub subnets: Subnets,
+    pub subnets: Vec<String>,
 }
 
 
@@ -4411,7 +4358,7 @@ impl SetSubnetsInputSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct SetSubnetsOutput {
     #[doc="<p>Information about the subnet and Availability Zone.</p>"]
-    pub availability_zones: Option<AvailabilityZones>,
+    pub availability_zones: Option<Vec<AvailabilityZone>>,
 }
 
 struct SetSubnetsOutputDeserializer;
@@ -4457,13 +4404,12 @@ impl SetSubnetsOutputDeserializer {
 
     }
 }
-pub type SslPolicies = Vec<SslPolicy>;
 struct SslPoliciesDeserializer;
 impl SslPoliciesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SslPolicies, XmlParseError> {
+                                       -> Result<Vec<SslPolicy>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4503,11 +4449,11 @@ impl SslPoliciesDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct SslPolicy {
     #[doc="<p>The ciphers.</p>"]
-    pub ciphers: Option<Ciphers>,
+    pub ciphers: Option<Vec<Cipher>>,
     #[doc="<p>The name of the policy.</p>"]
-    pub name: Option<SslPolicyName>,
+    pub name: Option<String>,
     #[doc="<p>The protocols.</p>"]
-    pub ssl_protocols: Option<SslProtocols>,
+    pub ssl_protocols: Option<Vec<String>>,
 }
 
 struct SslPolicyDeserializer;
@@ -4561,13 +4507,12 @@ impl SslPolicyDeserializer {
 
     }
 }
-pub type SslPolicyName = String;
 struct SslPolicyNameDeserializer;
 impl SslPolicyNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SslPolicyName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4576,12 +4521,11 @@ impl SslPolicyNameDeserializer {
 
     }
 }
-pub type SslPolicyNames = Vec<SslPolicyName>;
 
 /// Serialize `SslPolicyNames` contents to a `SignedRequest`.
 struct SslPolicyNamesSerializer;
 impl SslPolicyNamesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SslPolicyNames) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -4589,13 +4533,12 @@ impl SslPolicyNamesSerializer {
     }
 }
 
-pub type SslProtocol = String;
 struct SslProtocolDeserializer;
 impl SslProtocolDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SslProtocol, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4604,13 +4547,12 @@ impl SslProtocolDeserializer {
 
     }
 }
-pub type SslProtocols = Vec<SslProtocol>;
 struct SslProtocolsDeserializer;
 impl SslProtocolsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SslProtocols, XmlParseError> {
+                                       -> Result<Vec<String>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4646,13 +4588,12 @@ impl SslProtocolsDeserializer {
 
     }
 }
-pub type StateReason = String;
 struct StateReasonDeserializer;
 impl StateReasonDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<StateReason, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4675,13 +4616,12 @@ impl StringDeserializer {
 
     }
 }
-pub type StringValue = String;
 struct StringValueDeserializer;
 impl StringValueDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<StringValue, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4690,13 +4630,12 @@ impl StringValueDeserializer {
 
     }
 }
-pub type SubnetId = String;
 struct SubnetIdDeserializer;
 impl SubnetIdDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<SubnetId, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4705,12 +4644,11 @@ impl SubnetIdDeserializer {
 
     }
 }
-pub type Subnets = Vec<SubnetId>;
 
 /// Serialize `Subnets` contents to a `SignedRequest`.
 struct SubnetsSerializer;
 impl SubnetsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Subnets) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -4722,9 +4660,9 @@ impl SubnetsSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct Tag {
     #[doc="<p>The key of the tag.</p>"]
-    pub key: TagKey,
+    pub key: String,
     #[doc="<p>The value of the tag.</p>"]
-    pub value: Option<TagValue>,
+    pub value: Option<String>,
 }
 
 struct TagDeserializer;
@@ -4794,9 +4732,9 @@ impl TagSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct TagDescription {
     #[doc="<p>The Amazon Resource Name (ARN) of the resource.</p>"]
-    pub resource_arn: Option<ResourceArn>,
+    pub resource_arn: Option<String>,
     #[doc="<p>Information about the tags.</p>"]
-    pub tags: Option<TagList>,
+    pub tags: Option<Vec<Tag>>,
 }
 
 struct TagDescriptionDeserializer;
@@ -4845,13 +4783,12 @@ impl TagDescriptionDeserializer {
 
     }
 }
-pub type TagDescriptions = Vec<TagDescription>;
 struct TagDescriptionsDeserializer;
 impl TagDescriptionsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TagDescriptions, XmlParseError> {
+                                       -> Result<Vec<TagDescription>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4887,13 +4824,12 @@ impl TagDescriptionsDeserializer {
 
     }
 }
-pub type TagKey = String;
 struct TagKeyDeserializer;
 impl TagKeyDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TagKey, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4902,12 +4838,11 @@ impl TagKeyDeserializer {
 
     }
 }
-pub type TagKeys = Vec<TagKey>;
 
 /// Serialize `TagKeys` contents to a `SignedRequest`.
 struct TagKeysSerializer;
 impl TagKeysSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &TagKeys) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -4915,13 +4850,12 @@ impl TagKeysSerializer {
     }
 }
 
-pub type TagList = Vec<Tag>;
 struct TagListDeserializer;
 impl TagListDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TagList, XmlParseError> {
+                                       -> Result<Vec<Tag>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -4961,7 +4895,7 @@ impl TagListDeserializer {
 /// Serialize `TagList` contents to a `SignedRequest`.
 struct TagListSerializer;
 impl TagListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &TagList) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<Tag>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             TagSerializer::serialize(params, &key, obj);
@@ -4969,13 +4903,12 @@ impl TagListSerializer {
     }
 }
 
-pub type TagValue = String;
 struct TagValueDeserializer;
 impl TagValueDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TagValue, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -4988,9 +4921,9 @@ impl TagValueDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct TargetDescription {
     #[doc="<p>The ID of the target.</p>"]
-    pub id: TargetId,
+    pub id: String,
     #[doc="<p>The port on which the target is listening.</p>"]
-    pub port: Option<Port>,
+    pub port: Option<i64>,
 }
 
 struct TargetDescriptionDeserializer;
@@ -5055,12 +4988,11 @@ impl TargetDescriptionSerializer {
     }
 }
 
-pub type TargetDescriptions = Vec<TargetDescription>;
 
 /// Serialize `TargetDescriptions` contents to a `SignedRequest`.
 struct TargetDescriptionsSerializer;
 impl TargetDescriptionsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &TargetDescriptions) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<TargetDescription>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             TargetDescriptionSerializer::serialize(params, &key, obj);
@@ -5072,33 +5004,33 @@ impl TargetDescriptionsSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct TargetGroup {
     #[doc="<p>The approximate amount of time, in seconds, between health checks of an individual target.</p>"]
-    pub health_check_interval_seconds: Option<HealthCheckIntervalSeconds>,
+    pub health_check_interval_seconds: Option<i64>,
     #[doc="<p>The destination for the health check request.</p>"]
-    pub health_check_path: Option<Path>,
+    pub health_check_path: Option<String>,
     #[doc="<p>The port to use to connect with the target.</p>"]
-    pub health_check_port: Option<HealthCheckPort>,
+    pub health_check_port: Option<String>,
     #[doc="<p>The protocol to use to connect with the target.</p>"]
-    pub health_check_protocol: Option<ProtocolEnum>,
+    pub health_check_protocol: Option<String>,
     #[doc="<p>The amount of time, in seconds, during which no response means a failed health check.</p>"]
-    pub health_check_timeout_seconds: Option<HealthCheckTimeoutSeconds>,
+    pub health_check_timeout_seconds: Option<i64>,
     #[doc="<p>The number of consecutive health checks successes required before considering an unhealthy target healthy.</p>"]
-    pub healthy_threshold_count: Option<HealthCheckThresholdCount>,
+    pub healthy_threshold_count: Option<i64>,
     #[doc="<p>The Amazon Resource Names (ARN) of the load balancers that route traffic to this target group.</p>"]
-    pub load_balancer_arns: Option<LoadBalancerArns>,
+    pub load_balancer_arns: Option<Vec<String>>,
     #[doc="<p>The HTTP codes to use when checking for a successful response from a target.</p>"]
     pub matcher: Option<Matcher>,
     #[doc="<p>The port on which the targets are listening.</p>"]
-    pub port: Option<Port>,
+    pub port: Option<i64>,
     #[doc="<p>The protocol to use for routing traffic to the targets.</p>"]
-    pub protocol: Option<ProtocolEnum>,
+    pub protocol: Option<String>,
     #[doc="<p>The Amazon Resource Name (ARN) of the target group.</p>"]
-    pub target_group_arn: Option<TargetGroupArn>,
+    pub target_group_arn: Option<String>,
     #[doc="<p>The name of the target group.</p>"]
-    pub target_group_name: Option<TargetGroupName>,
+    pub target_group_name: Option<String>,
     #[doc="<p>The number of consecutive health check failures required before considering the target unhealthy.</p>"]
-    pub unhealthy_threshold_count: Option<HealthCheckThresholdCount>,
+    pub unhealthy_threshold_count: Option<i64>,
     #[doc="<p>The ID of the VPC for the targets.</p>"]
-    pub vpc_id: Option<VpcId>,
+    pub vpc_id: Option<String>,
 }
 
 struct TargetGroupDeserializer;
@@ -5194,13 +5126,12 @@ impl TargetGroupDeserializer {
 
     }
 }
-pub type TargetGroupArn = String;
 struct TargetGroupArnDeserializer;
 impl TargetGroupArnDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TargetGroupArn, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5209,12 +5140,11 @@ impl TargetGroupArnDeserializer {
 
     }
 }
-pub type TargetGroupArns = Vec<TargetGroupArn>;
 
 /// Serialize `TargetGroupArns` contents to a `SignedRequest`.
 struct TargetGroupArnsSerializer;
 impl TargetGroupArnsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &TargetGroupArns) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -5226,9 +5156,9 @@ impl TargetGroupArnsSerializer {
 #[derive(Default,Debug,Clone)]
 pub struct TargetGroupAttribute {
     #[doc="<p>The name of the attribute.</p> <ul> <li> <p> <code>deregistration_delay.timeout_seconds</code> - The amount time for Elastic Load Balancing to wait before changing the state of a deregistering target from <code>draining</code> to <code>unused</code>. The range is 0-3600 seconds. The default value is 300 seconds.</p> </li> <li> <p> <code>stickiness.enabled</code> - Indicates whether sticky sessions are enabled. The value is <code>true</code> or <code>false</code>.</p> </li> <li> <p> <code>stickiness.type</code> - The type of sticky sessions. The possible value is <code>lb_cookie</code>.</p> </li> <li> <p> <code>stickiness.lb_cookie.duration_seconds</code> - The time period, in seconds, during which requests from a client should be routed to the same target. After this time period expires, the load balancer-generated cookie is considered stale. The range is 1 second to 1 week (604800 seconds). The default value is 1 day (86400 seconds).</p> </li> </ul>"]
-    pub key: Option<TargetGroupAttributeKey>,
+    pub key: Option<String>,
     #[doc="<p>The value of the attribute.</p>"]
-    pub value: Option<TargetGroupAttributeValue>,
+    pub value: Option<String>,
 }
 
 struct TargetGroupAttributeDeserializer;
@@ -5297,13 +5227,12 @@ impl TargetGroupAttributeSerializer {
     }
 }
 
-pub type TargetGroupAttributeKey = String;
 struct TargetGroupAttributeKeyDeserializer;
 impl TargetGroupAttributeKeyDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TargetGroupAttributeKey, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5312,13 +5241,12 @@ impl TargetGroupAttributeKeyDeserializer {
 
     }
 }
-pub type TargetGroupAttributeValue = String;
 struct TargetGroupAttributeValueDeserializer;
 impl TargetGroupAttributeValueDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TargetGroupAttributeValue, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5327,13 +5255,12 @@ impl TargetGroupAttributeValueDeserializer {
 
     }
 }
-pub type TargetGroupAttributes = Vec<TargetGroupAttribute>;
 struct TargetGroupAttributesDeserializer;
 impl TargetGroupAttributesDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TargetGroupAttributes, XmlParseError> {
+                                       -> Result<Vec<TargetGroupAttribute>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5374,7 +5301,7 @@ impl TargetGroupAttributesDeserializer {
 /// Serialize `TargetGroupAttributes` contents to a `SignedRequest`.
 struct TargetGroupAttributesSerializer;
 impl TargetGroupAttributesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &TargetGroupAttributes) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<TargetGroupAttribute>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             TargetGroupAttributeSerializer::serialize(params, &key, obj);
@@ -5382,13 +5309,12 @@ impl TargetGroupAttributesSerializer {
     }
 }
 
-pub type TargetGroupName = String;
 struct TargetGroupNameDeserializer;
 impl TargetGroupNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TargetGroupName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5397,12 +5323,11 @@ impl TargetGroupNameDeserializer {
 
     }
 }
-pub type TargetGroupNames = Vec<TargetGroupName>;
 
 /// Serialize `TargetGroupNames` contents to a `SignedRequest`.
 struct TargetGroupNamesSerializer;
 impl TargetGroupNamesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &TargetGroupNames) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -5410,13 +5335,12 @@ impl TargetGroupNamesSerializer {
     }
 }
 
-pub type TargetGroups = Vec<TargetGroup>;
 struct TargetGroupsDeserializer;
 impl TargetGroupsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TargetGroups, XmlParseError> {
+                                       -> Result<Vec<TargetGroup>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5456,11 +5380,11 @@ impl TargetGroupsDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct TargetHealth {
     #[doc="<p>A description of the target health that provides additional details. If the state is <code>healthy</code>, a description is not provided.</p>"]
-    pub description: Option<Description>,
+    pub description: Option<String>,
     #[doc="<p>The reason code. If the target state is <code>healthy</code>, a reason code is not provided.</p> <p>If the target state is <code>initial</code>, the reason code can be one of the following values:</p> <ul> <li> <p> <code>Elb.RegistrationInProgress</code> - The target is in the process of being registered with the load balancer.</p> </li> <li> <p> <code>Elb.InitialHealthChecking</code> - The load balancer is still sending the target the minimum number of health checks required to determine its health status.</p> </li> </ul> <p>If the target state is <code>unhealthy</code>, the reason code can be one of the following values:</p> <ul> <li> <p> <code>Target.ResponseCodeMismatch</code> - The health checks did not return an expected HTTP code.</p> </li> <li> <p> <code>Target.Timeout</code> - The health check requests timed out.</p> </li> <li> <p> <code>Target.FailedHealthChecks</code> - The health checks failed because the connection to the target timed out, the target response was malformed, or the target failed the health check for an unknown reason.</p> </li> <li> <p> <code>Elb.InternalError</code> - The health checks failed due to an internal error.</p> </li> </ul> <p>If the target state is <code>unused</code>, the reason code can be one of the following values:</p> <ul> <li> <p> <code>Target.NotRegistered</code> - The target is not registered with the target group.</p> </li> <li> <p> <code>Target.NotInUse</code> - The target group is not used by any load balancer or the target is in an Availability Zone that is not enabled for its load balancer.</p> </li> <li> <p> <code>Target.InvalidState</code> - The target is in the stopped or terminated state.</p> </li> </ul> <p>If the target state is <code>draining</code>, the reason code can be the following value:</p> <ul> <li> <p> <code>Target.DeregistrationInProgress</code> - The target is in the process of being deregistered and the deregistration delay period has not expired.</p> </li> </ul>"]
-    pub reason: Option<TargetHealthReasonEnum>,
+    pub reason: Option<String>,
     #[doc="<p>The state of the target.</p>"]
-    pub state: Option<TargetHealthStateEnum>,
+    pub state: Option<String>,
 }
 
 struct TargetHealthDeserializer;
@@ -5520,7 +5444,7 @@ impl TargetHealthDeserializer {
 #[derive(Default,Debug,Clone)]
 pub struct TargetHealthDescription {
     #[doc="<p>The port to use to connect with the target.</p>"]
-    pub health_check_port: Option<HealthCheckPort>,
+    pub health_check_port: Option<String>,
     #[doc="<p>The description of the target.</p>"]
     pub target: Option<TargetDescription>,
     #[doc="<p>The health information for the target.</p>"]
@@ -5580,13 +5504,12 @@ impl TargetHealthDescriptionDeserializer {
 
     }
 }
-pub type TargetHealthDescriptions = Vec<TargetHealthDescription>;
 struct TargetHealthDescriptionsDeserializer;
 impl TargetHealthDescriptionsDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TargetHealthDescriptions, XmlParseError> {
+                                       -> Result<Vec<TargetHealthDescription>, XmlParseError> {
 
         let mut obj = vec![];
         try!(start_element(tag_name, stack));
@@ -5623,13 +5546,12 @@ impl TargetHealthDescriptionsDeserializer {
 
     }
 }
-pub type TargetHealthReasonEnum = String;
 struct TargetHealthReasonEnumDeserializer;
 impl TargetHealthReasonEnumDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TargetHealthReasonEnum, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5638,13 +5560,12 @@ impl TargetHealthReasonEnumDeserializer {
 
     }
 }
-pub type TargetHealthStateEnum = String;
 struct TargetHealthStateEnumDeserializer;
 impl TargetHealthStateEnumDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TargetHealthStateEnum, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5653,13 +5574,12 @@ impl TargetHealthStateEnumDeserializer {
 
     }
 }
-pub type TargetId = String;
 struct TargetIdDeserializer;
 impl TargetIdDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<TargetId, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5668,13 +5588,12 @@ impl TargetIdDeserializer {
 
     }
 }
-pub type VpcId = String;
 struct VpcIdDeserializer;
 impl VpcIdDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<VpcId, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
@@ -5683,13 +5602,12 @@ impl VpcIdDeserializer {
 
     }
 }
-pub type ZoneName = String;
 struct ZoneNameDeserializer;
 impl ZoneNameDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(tag_name: &str,
                                        stack: &mut T)
-                                       -> Result<ZoneName, XmlParseError> {
+                                       -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
