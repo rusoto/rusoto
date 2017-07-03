@@ -3,7 +3,7 @@ use inflector::Inflector;
 
 use ::Service;
 use botocore::{Member, Operation, Shape, ShapeType};
-use super::{xml_payload_parser, rest_response_parser, mutate_type_name, get_rust_type};
+use super::{xml_payload_parser, rest_response_parser, rest_request_generator, get_rust_type, mutate_type_name};
 use super::{GenerateProtocol, generate_field_name, error_type_name};
 use super::{IoResult, FileWriter};
 
@@ -86,7 +86,7 @@ impl GenerateProtocol for RestXmlGenerator {
                          .unwrap_or("".to_string()),
                      modify_uri = generate_uri_modification(service, operation)
                          .unwrap_or("".to_string()),
-                     set_headers = generate_headers(service, operation).unwrap_or("".to_string()),
+                     set_headers = rest_request_generator::generate_headers(service, operation).unwrap_or("".to_string()),
                      set_parameters = generate_parameters(service, operation)
                          .unwrap_or("".to_string()),
                      parse_non_payload =
@@ -169,10 +169,6 @@ impl GenerateProtocol for RestXmlGenerator {
     }
 }
 
-/*fn generate_response_headers_parser(service: &Service, operation: &Operation) -> Option<String> {
-
-}*/
-
 fn generate_documentation(operation: &Operation) -> String {
     match operation.documentation {
         Some(ref docs) => {
@@ -227,38 +223,6 @@ fn generate_uri_modification(service: &Service, operation: &Operation) -> Option
                     Some(format!("request_uri = request_uri.replace(\"{{{location_name}}}\", &input.{field_name}.unwrap().to_string());",
                         location_name = member.location_name.as_ref().unwrap(),
                         field_name = generate_field_name(member_name)))
-                }
-            },
-            _ => None
-        }
-    }).collect::<Vec<String>>().join("\n"))
-}
-
-fn generate_headers(service: &Service, operation: &Operation) -> Option<String> {
-    // nothing to do if there's no input type
-    if operation.input.is_none() {
-        return None;
-    }
-
-    let shape = service.get_shape(&operation.input.as_ref().unwrap().shape).unwrap();
-
-    Some(shape.members.as_ref().unwrap().iter().filter_map(|(member_name, member)| {
-        if member.location.is_none() {
-            return None;
-        }
-        match &member.location.as_ref().unwrap()[..] {
-            "header" => {
-                if shape.required(member_name) {
-                    Some(format!("request.add_header(\"{location_name}\", &input.{field_name});",
-                        location_name = member.location_name.as_ref().unwrap(),
-                        field_name = member_name.to_snake_case()))
-                } else {
-                    Some(format!("
-                        if let Some(ref {field_name}) = input.{field_name} {{
-                            request.add_header(\"{location_name}\", &{field_name}.to_string());
-                        }}",
-                        location_name = member.location_name.as_ref().unwrap(),
-                        field_name = member_name.to_snake_case()))
                 }
             },
             _ => None

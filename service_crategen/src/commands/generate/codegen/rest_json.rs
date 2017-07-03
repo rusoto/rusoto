@@ -7,7 +7,7 @@ use hyper::status::StatusCode;
 use botocore::{Member, Operation, Shape, ShapeType};
 use ::Service;
 use super::{GenerateProtocol, error_type_name, FileWriter, IoResult, rest_response_parser,
-            generate_field_name};
+            rest_request_generator, generate_field_name};
 
 pub struct RestJsonGenerator;
 
@@ -69,6 +69,7 @@ impl GenerateProtocol for RestJsonGenerator {
                     {set_headers}
                     {modify_endpoint_prefix}
                     {load_payload}
+                    {load_headers}
                     {load_params}
 
                     request.sign(&self.credentials_provider.credentials()?);
@@ -96,6 +97,7 @@ impl GenerateProtocol for RestJsonGenerator {
                 parse_body = generate_body_parser(operation, service),
                 parse_status_code = generate_status_code_parser(operation, service),
                 output_type = output_type,
+                load_headers = rest_request_generator::generate_headers(service, operation).unwrap_or("".to_string()),
                 parse_headers = rest_response_parser::generate_response_headers_parser(service, operation)
                     .unwrap_or_else(|| "".to_owned()),
                 request_uri_formatter = generate_uri_formatter(
