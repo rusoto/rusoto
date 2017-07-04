@@ -11,7 +11,7 @@
 //
 // =================================================================
 
-//! Amazon Elastic Transcoder
+//! <fullname>AWS Elastic Transcoder Service</fullname> <p>The AWS Elastic Transcoder Service.</p>
 //!
 //! If you're using the service, you're probably looking for [EtsClient](struct.EtsClient.html) and [Ets](trait.Ets.html).
 

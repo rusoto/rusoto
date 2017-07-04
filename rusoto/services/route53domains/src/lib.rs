@@ -11,7 +11,7 @@
 //
 // =================================================================
 
-//! Amazon Route 53 Domains
+//! <p>Amazon Route 53 API actions let you register domain names and perform related operations.</p>
 //!
 //! If you're using the service, you're probably looking for [Route53DomainsClient](struct.Route53DomainsClient.html) and [Route53Domains](trait.Route53Domains.html).
 

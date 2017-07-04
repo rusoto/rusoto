@@ -11,7 +11,7 @@
 //
 // =================================================================
 
-//! Amazon Machine Learning
+//! Definition of the public APIs exposed by Amazon Machine Learning
 //!
 //! If you're using the service, you're probably looking for [MachineLearningClient](struct.MachineLearningClient.html) and [MachineLearning](trait.MachineLearning.html).
 

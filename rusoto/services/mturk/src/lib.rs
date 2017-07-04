@@ -11,7 +11,7 @@
 //
 // =================================================================
 
-//! Amazon Mechanical Turk
+//! <fullname>Amazon Mechanical Turk API Reference</fullname>
 //!
 //! If you're using the service, you're probably looking for [MechanicalTurkClient](struct.MechanicalTurkClient.html) and [MechanicalTurk](trait.MechanicalTurk.html).
 

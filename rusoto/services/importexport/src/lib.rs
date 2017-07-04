@@ -11,7 +11,7 @@
 //
 // =================================================================
 
-//! AWS Import/Export
+//! <fullname>AWS Import/Export Service</fullname> AWS Import/Export accelerates transferring large amounts of data between the AWS cloud and portable storage devices that you mail to us. AWS Import/Export transfers data directly onto and off of your storage devices using Amazon's high-speed internal network and bypassing the Internet. For large data sets, AWS Import/Export is often faster than Internet transfer and more cost effective than upgrading your connectivity.
 //!
 //! If you're using the service, you're probably looking for [ImportExportClient](struct.ImportExportClient.html) and [ImportExport](trait.ImportExport.html).
 
