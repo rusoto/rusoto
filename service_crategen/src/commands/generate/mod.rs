@@ -182,7 +182,7 @@ See [LICENSE][license] for details.
 //
 // =================================================================
 
-//! {service_full_name}
+//! {service_docs}
 //!
 //! If you're using the service, you're probably looking for [{client_name}](struct.{client_name}.html) and [{trait_name}](trait.{trait_name}.html).
 
@@ -194,7 +194,7 @@ mod custom;
 pub use generated::*;
 pub use custom::*;
             "#,
-            service_full_name = service.full_name(),
+            service_docs = service.documentation().unwrap_or(&service.full_name().to_owned()),
             client_name = service.client_type_name(),
             trait_name = service.service_type_name(),
             extern_crates = extern_crates
