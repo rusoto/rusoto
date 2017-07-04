@@ -11,7 +11,7 @@
 //
 // =================================================================
 
-//! Amazon Elastic MapReduce
+//! <p>Amazon EMR is a web service that makes it easy to process large amounts of data efficiently. Amazon EMR uses Hadoop processing combined with several AWS products to do tasks such as web indexing, data mining, log file analysis, machine learning, scientific simulation, and data warehousing.</p>
 //!
 //! If you're using the service, you're probably looking for [EmrClient](struct.EmrClient.html) and [Emr](trait.Emr.html).
 

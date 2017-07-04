@@ -29,6 +29,10 @@ impl Service {
         &self.definition.metadata.service_full_name
     }
 
+    pub fn documentation(&self) -> Option<&String> {
+        self.definition.documentation.as_ref()
+    }
+
     pub fn protocol(&self) -> &str {
         &self.definition.metadata.protocol
     }

@@ -11,7 +11,7 @@
 //
 // =================================================================
 
-//! Amazon Rekognition
+//! <p>This is the Amazon Rekognition API reference.</p>
 //!
 //! If you're using the service, you're probably looking for [RekognitionClient](struct.RekognitionClient.html) and [Rekognition](trait.Rekognition.html).
 

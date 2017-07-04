@@ -11,7 +11,7 @@
 //
 // =================================================================
 
-//! AWS Marketplace Commerce Analytics
+//! Provides AWS Marketplace business intelligence data on-demand.
 //!
 //! If you're using the service, you're probably looking for [MarketplaceCommerceAnalyticsClient](struct.MarketplaceCommerceAnalyticsClient.html) and [MarketplaceCommerceAnalytics](trait.MarketplaceCommerceAnalytics.html).
 
