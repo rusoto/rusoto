@@ -30,7 +30,7 @@ after_success:
   # upload the documentation from the build if it's from Rust stable, Linux and not a pull request:
   - |
       if [[ "$TRAVIS_OS_NAME" == "linux" && "$TRAVIS_RUST_VERSION" == "stable" && "$TRAVIS_PULL_REQUEST" == false ]]; then
-        cd rusoto && echo '<meta http-equiv=refresh content=0;url=rusoto_core/index.html>' > target/doc/index.html \
+        echo '<meta http-equiv=refresh content=0;url=rusoto_core/index.html>' > target/doc/index.html \
         && mkdir target/doc/rusoto/ && echo '<meta http-equiv=refresh content=0;url=../rusoto_core/index.html>' > target/doc/rusoto/index.html \
         && sudo pip install ghp-import && ghp-import -n target/doc \
         && git push -fq https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages \
