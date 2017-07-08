@@ -60,7 +60,7 @@ impl GenerateProtocol for RestXmlGenerator {
                      endpoint_prefix = service.endpoint_prefix(),
                      method_signature = generate_method_signature(operation_name, operation),
                      error_type = error_type_name(operation_name),
-                     build_payload = generate_method_input_serialization(service, operation)
+                     build_payload = generate_payload_serialization(service, operation)
                          .unwrap_or("".to_string()),
                      modify_uri = rest_request_generator::generate_uri_formatter(&request_uri,
                                                                                  service,
@@ -159,12 +159,12 @@ fn generate_documentation(operation: &Operation) -> String {
     }
 }
 
-fn generate_method_input_serialization(service: &Service, operation: &Operation) -> Option<String> {
+fn generate_payload_serialization(service: &Service, operation: &Operation) -> Option<String> {
     // nothing to do if there's no input type
     if operation.input.is_none() {
         return None;
     }
-    "let mut payload: Option<Vec<u8>> = None;";
+
     let input_shape = service.get_shape(&operation.input.as_ref().unwrap().shape).unwrap();
 
     let mut parts: Vec<String> = Vec::new();
@@ -172,7 +172,7 @@ fn generate_method_input_serialization(service: &Service, operation: &Operation)
     // the payload field determines which member of the input shape is sent as the request body (if any)
     if input_shape.payload.is_some() {
         parts.push("let mut payload: Vec<u8>;".to_owned());
-        parts.push(generate_payload_serialization(input_shape));
+        parts.push(generate_payload_member_serialization(input_shape));
         parts.push(generate_service_specific_code(service, operation)
             .unwrap_or_else(|| "".to_owned()));
         parts.push("request.set_payload(Some(payload));".to_owned());
@@ -210,7 +210,7 @@ fn generate_service_specific_code(service: &Service, operation: &Operation) -> O
     }
 }
 
-fn generate_payload_serialization(shape: &Shape) -> String {
+fn generate_payload_member_serialization(shape: &Shape) -> String {
     let payload_field = shape.payload.as_ref().unwrap();
     let payload_member = shape.members.as_ref().unwrap().get(payload_field).unwrap();
 

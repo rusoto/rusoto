@@ -6,7 +6,7 @@ use inflector::Inflector;
 use botocore::{Operation, Shape, ShapeType};
 use ::Service;
 use super::{GenerateProtocol, error_type_name, FileWriter, IoResult, rest_response_parser,
-            rest_request_generator};
+            rest_request_generator, generate_field_name};
 
 pub struct RestJsonGenerator;
 
@@ -44,22 +44,9 @@ impl GenerateProtocol for RestJsonGenerator {
             let (request_uri, _) = rest_request_generator::parse_query_string(&operation.http
                 .request_uri);
 
-            // A boolean controlling whether or not the payload should be loaded
-            // into the request.
-            // According to the AWS SDK documentation, requests should only have
-            // a request body for operations with ANY non-URI or non-query
-            // parameters.
-            let load_payload = input_shape.members
-                .as_ref()
-                .unwrap()
-                .iter()
-                .any(|(_, member)| member.location.is_none());
-
             writeln!(writer,"
                 {documentation}
                 {method_signature} -> Result<{output_type}, {error_type}> {{
-                    {encode_input}
-
                     {request_uri_formatter}
 
                     let mut request = SignedRequest::new(\"{http_method}\", \"{endpoint_prefix}\", self.region, &request_uri);
@@ -103,9 +90,8 @@ impl GenerateProtocol for RestJsonGenerator {
                     service,
                     operation
                 ).unwrap_or("".to_string()),
-                load_payload = generate_payload_loading_string(load_payload),
+                load_payload = generate_payload(service, &input_shape).unwrap_or("".to_string()),
                 load_params = rest_request_generator::generate_params_loading_string(service, operation).unwrap_or("".to_string()),
-                encode_input = generate_encoding_string(load_payload),
                 set_headers = generate_headers(service).unwrap_or("".to_string()),
             )?
         }
@@ -200,19 +186,65 @@ fn generate_method_signature(operation: &Operation, shape: &Shape) -> String {
     }
 }
 
-fn generate_encoding_string(load_payload: bool) -> String {
-    if load_payload {
-        "let encoded = serde_json::to_string(input).unwrap();".to_owned()
+// Figure out what, if anything, should be sent as the body of the http request
+fn generate_payload(service: &Service, input_shape: &Shape) -> Option<String> {
+    let declare_payload = match input_shape.payload {
+
+        // if the input shape explicitly specifies a payload field, use that
+        Some(ref payload_member_name) => {
+            Some(declared_payload(input_shape, payload_member_name, service))
+        }
+
+        // otherwise see if the input_shape itself should be serialized as the payload
+        None => {
+            // only use the input_shape if it has non-query, non-header members
+            // (i.e., location unspecified)
+            if input_shape.members
+                .as_ref()
+                .unwrap()
+                .iter()
+                .any(|(_, member)| member.location.is_none()) {
+                Some("let encoded = Some(serde_json::to_vec(input).unwrap());".to_owned())
+            } else {
+                None
+            }
+        }
+    };
+
+    if declare_payload.is_some() {
+        Some(declare_payload.unwrap() + "request.set_payload(encoded);")
     } else {
-        "".to_owned()
+        None
     }
 }
 
-fn generate_payload_loading_string(load_payload: bool) -> String {
-    if load_payload {
-        "request.set_payload(Some(encoded.into_bytes()));".to_owned()
-    } else {
-        "".to_owned()
+fn declared_payload(input_shape: &Shape, payload_member_name: &str, service: &Service) -> String {
+    let payload_member_shape = &input_shape.members.as_ref().unwrap()[payload_member_name].shape;
+    let payload_shape = &service.get_shape(payload_member_shape)
+        .expect("Shape missing from service definition");
+
+    let field_name = generate_field_name(payload_member_name);
+
+    match payload_shape.shape_type {
+        // if it's a String or a Blob, send it as the raw payload
+        payload_type if payload_type == ShapeType::Blob || payload_type == ShapeType::String => {
+            if input_shape.required(payload_member_name) {
+                format!("let encoded = Some(input.{}.to_owned());", field_name)
+            } else {
+                format!("let encoded = if let Some(ref payload) = input.{} {{
+                            Some(payload.to_owned())
+                        }} else {{
+                            None
+                        }};",
+                        field_name)
+            }
+        }
+
+        // otherwise serialize the payload member as json and use that
+        _ => {
+            format!("let encoded = Some(serde_json::to_vec(&input.{}).unwrap());",
+                    field_name)
+        }
     }
 }
 
